@@ -21,7 +21,6 @@ return new class extends Migration
             $table->string('chassi');
             $table->string('cor');
             $table->string('ano');
-            $table->string('modelo');
             $table->string('renavam');
             $table->string('arquivo_doc');
             $table->string('arquivo_proc');

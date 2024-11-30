@@ -76,7 +76,7 @@
                             @endforeach
                         </tbody>
                     </table>
-                    @elseif($docs->total() == 0)
+                    @elseif($procs->total() == 0)
                         <div class="alert alert-warning" role="alert">
                             NENHUM RESULTADO ENCONTRADO!
                         </div>
