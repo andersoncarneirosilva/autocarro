@@ -19,7 +19,7 @@ class DocVeiculo extends Model
     protected $fillable = [
         'nome',
         'endereco',
-        'cpf'
+        'cpf',
         'marca',
         'placa',
         'chassi',

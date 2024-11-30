@@ -16,6 +16,8 @@ use App\Http\Controllers\EmployeeController;
 use App\Http\Controllers\FornecedorController;
 use App\Http\Controllers\TransportadorasController;
 use App\Http\Controllers\PedidosController;
+use App\Http\Controllers\DocVeiculoController;
+use App\Http\Controllers\ProcuracaoController;
 use Illuminate\Support\Facades\Route;
 
 
@@ -121,6 +123,10 @@ Route::middleware(['auth'])->group(function () {
     Route::post('/transportadoras', [TransportadorasController::class, 'store'])->name('transportadoras.store');
 
     Route::get('/pedidos', [PedidosController::class, 'index'])->name('pedidos.index');
+
+    Route::get('/procuracoes/create', [ProcuracaoController::class, 'create'])->name('procuracoes.create');
+    Route::get('/procuracoes', [ProcuracaoController::class, 'index'])->name('procuracoes.index');
+    Route::post('/procuracoes', [ProcuracaoController::class, 'store'])->name('procuracoes.store');
 });
 
 

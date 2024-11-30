@@ -1,6 +1,6 @@
 @extends('layouts.app')
 
-@section('title', 'Emprestimos')
+@section('title', 'Procurações')
 
 @section('content')
 
@@ -10,10 +10,10 @@
             <div class="page-title-right">
                 <ol class="breadcrumb m-0">
                     <li class="breadcrumb-item"><a href="{{ route('dashboard.index') }}">Dashboard</a></li>
-                    <li class="breadcrumb-item active">Documentos</li>
+                    <li class="breadcrumb-item active">Procurações</li>
                 </ol>
             </div>
-            <h3 class="page-title">Documentos</h3>
+            <h3 class="page-title">Procurações</h3>
         </div>
     </div>
 </div>
@@ -31,7 +31,7 @@
             @endif --}}
             <div class="col-sm-12">
                 <div class="card-header d-flex justify-content-between align-items-center">
-                    <h4 class="header-title">Documentos cadastrados</h4>
+                    <h4 class="header-title">Procurações cadastradas</h4>
                     <div class="dropdown">
                         <button type="button" class="btn btn-primary btn-sm" data-bs-toggle="modal"
                             data-bs-target="#standard-modal">Cadastrar</button>
@@ -39,7 +39,7 @@
                                 class="fa-solid fa-trash"></i></button> --}}
                     </div>
                 </div>
-                @if ($docs->total() != 0)
+                @if ($procs->total() != 0)
                     <table class="table table-centered table-nowrap table-hover mb-0">
                         <thead>
                             <tr>
@@ -54,7 +54,7 @@
                         </thead>
 
                         <tbody>
-                            @foreach ($docs as $doc)
+                            @foreach ($procs as $doc)
                                 <tr>
                                     <td>{{ $doc->nome }}</td>
                                     <td>{{ $doc->cpf }}</td>
@@ -65,8 +65,10 @@
                                     <td class="table-action">
                                         <a href="storage/{{ $doc->arquivo }}" class="action-icon" download> <i
                                                 class="mdi mdi-download"></i></a>
-                                        <a href="storage/{{ $doc->arquivo }}" class="action-icon" target="blank"> <i
-                                                class="mdi mdi-printer"></i></a>
+                                                <a href="{{ $doc->arquivo_doc }}" class="action-icon" target="blank">
+                                                    <i class="mdi mdi-printer"></i>
+                                                </a>
+                                                
                                         <a href="{{ route('documentos.destroy', $doc->id) }}"
                                             class="action-icon mdi mdi-delete" data-confirm-delete="true"></a>
                                     </td>
@@ -94,6 +96,7 @@ aria-hidden="true">
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-hidden="true"></button>
             </div>
             <div class="modal-body">
+                @include('procuracoes.create')
             </div>
         </div><!-- /.modal-content -->
     </div><!-- /.modal-dialog -->

@@ -13,7 +13,7 @@
         "mikehaertl/php-pdftk": "^0.13.0",
         "nesbot/carbon": "^2.67",
         "realrashid/sweet-alert": "^7.0",
-        "setasign/fpdf": "1.8.*",
+        "setasign/fpdf": "^1.8",
         "setasign/fpdi": "^2.3",
         "smalot/pdfparser": "^2.5",
         "spatie/pdf-to-text": "^1.52",

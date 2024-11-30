@@ -46,23 +46,9 @@
             </li>
 
             <li class="side-nav-item">
-                <a href="{{ route('adiantamento.index') }}" class="side-nav-link">
-                    <i class="uil-money-bill"></i>
-                    <span> Adiantamento </span>
-                </a>
-            </li>
-
-            <li class="side-nav-item">
-                <a href="{{ route('pagamento.index') }}" class="side-nav-link">
-                    <i class="uil-dollar-alt"></i>
-                    <span> Salário </span>
-                </a>
-            </li>
-
-            <li class="side-nav-item">
-                <a href="{{ route('emprestimos.index') }}" class="side-nav-link">
-                    <i class="uil-calender"></i>
-                    <span> Emprestimos </span>
+                <a href="{{ route('procuracoes.index') }}" class="side-nav-link">
+                    <i class="uil-file-alt"></i>
+                    <span> Procurações </span>
                 </a>
             </li>
 
