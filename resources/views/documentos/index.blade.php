@@ -129,23 +129,22 @@ aria-hidden="true">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="addressModalLabel">Digite o Endereço</h5>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
+                <h5 class="modal-title" id="addressModalLabel">Gerar procuração</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-hidden="true"></button>
             </div>
             <div class="modal-body">
                 <form id="addressForm">
                     
                     <div class="form-group">
-                        <label for="inputAddress">Endereço</label>
+                        <label for="inputAddress">Endereço: <span style="color: red;">*</span></label>
+
                         <input type="text" class="form-control" id="inputAddress" placeholder="Digite o endereço aqui" required>
                     </div>
                     <input type="hidden" id="docId">
                 </form>
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
+                <button type="button" class="btn btn-light" data-bs-dismiss="modal">Fechar</button>
                 <button type="button" class="btn btn-primary" onclick="submitAddress()">Gerar Procuração</button>
             </div>
         </div>
@@ -241,7 +240,6 @@ function openInfoModal(event) {
             $('#infoModal').modal('show');
         },
         error: function(xhr, status, error) {
-            console.error("Erro ao carregar as informações:", error); // Para depuração
             alert('Erro ao carregar as informações.');
         }
     });
@@ -253,9 +251,15 @@ function submitAddress() {
     const docId = document.getElementById('docId').value;
 
     if (!address) {
-        alert('Por favor, preencha o endereço.');
-        return;
-    }
+    Swal.fire({
+        title: 'Campo Obrigatório',
+        text: 'Por favor, preencha o endereço.',
+        icon: 'warning',
+        confirmButtonText: 'OK'
+    });
+    return;
+}
+
 
     // Redireciona para a rota com os parâmetros
     const url = `/documentos/gerarProc/${docId}/${encodeURIComponent(address)}`;

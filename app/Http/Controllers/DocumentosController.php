@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\Documento;
 use App\Models\Procuracao;
+use App\Models\ConfigProc;
 use Smalot\PdfParser\Parser;
 use FPDF;
 use Carbon\Carbon;
@@ -123,6 +124,7 @@ class DocumentosController extends Controller
     }
 
     public function gerarProc($id, Request $request) {
+        $config = ConfigProc::first();
         //dd($request);
         $dataAtual = Carbon::now();
         $dataPorExtenso = $dataAtual->translatedFormat('d \d\e F \d\e Y');
@@ -158,19 +160,19 @@ class DocumentosController extends Controller
         $pdf->SetFont('Arial', 'B', 12);
 
         $pdf->Ln(8);
-        $pdf->Cell(0, 0, utf8_decode("OUTORGADO: "), 0, 0, 'L');
+        $pdf->Cell(0, 0, utf8_decode("OUTORGADO: $config->nome_outorgado"), 0, 0, 'L');
         $pdf->Ln(5);
-        $pdf->Cell(0, 0, utf8_decode("CPF: "), 0, 0, 'L');
+        $pdf->Cell(0, 0, utf8_decode("CPF: $config->cpf_outorgado"), 0, 0, 'L');
         $pdf->Ln(5);
-        $pdf->Cell(0, 0, utf8_decode("ENDEREÇO: "), 0, 0, 'L');
+        $pdf->Cell(0, 0, utf8_decode("ENDEREÇO: $config->end_outorgado"), 0, 0, 'L');
 
         $pdf->Ln(10);
 
-        $pdf->Cell(0, 0, utf8_decode("OUTORGADO: "), 0, 0, 'L');
+        $pdf->Cell(0, 0, utf8_decode("OUTORGADO: $config->nome_testemunha"), 0, 0, 'L');
         $pdf->Ln(5);
-        $pdf->Cell(0, 0, utf8_decode("CPF: "), 0, 0, 'L');
+        $pdf->Cell(0, 0, utf8_decode("CPF: $config->cpf_testemunha"), 0, 0, 'L');
         $pdf->Ln(5);
-        $pdf->Cell(0, 0, utf8_decode("ENDEREÇO: "), 0, 0, 'L');
+        $pdf->Cell(0, 0, utf8_decode("ENDEREÇO: $config->end_testemunha"), 0, 0, 'L');
 
         $pdf->Ln(8);
         
@@ -183,7 +185,7 @@ class DocumentosController extends Controller
         $margem_direita = 10;  // Margem direita
 
         // Texto a ser inserido no PDF
-        $text = "FINS E PODERES: O OUTORGANTE confere ao OUTORGADO amplos e ilimitados poderes para o fim especial de vender a quem quiser, receber valores de venda, transferir para si próprio ou terceiros, em causa própria, locar ou de qualquer forma alienar ou onerar o veículo de sua propriedade com as seguintes características:";
+        $text = "$config->texto_poderes";
 
         // Remover quebras de linha manuais, caso existam
         $text = str_replace("\n", " ", $text);
@@ -208,25 +210,7 @@ class DocumentosController extends Controller
         $pdf->Ln(8);
         $pdf->SetFont('Arial', '', 11);
 
-        $text2 = "Assinar requerimentos , com poderes também para requerer, junto aos CRVAS/DETRAN-RS, os processos
-de 2ª vias de CRV/CRLV, Baixa Definitiva do veículo, Alterações de informações do veículo, Solicitar
-DCPPO e CRLV digital e ATPV-E, fazer declaração de residência ,fazer alteração de informações no
-veículo, fazer ocorrência policial de perca de documento do veículo, assinar termo de responsabilidade pela
-não apresentaçãode placas e lacre, fazer troca de município ,receber valores por indenização de
-Seguradoras ,Assinar contratos de. inclusão e instrumentos de liberação de Alienação e Reserva de
-Domínio para si.- próprio ou terceiros, endossar documentos, usar o veículo em apreço, manejando o
-mesmo, em qualquer parte do território nacional ou estrangeiro, ficando cível e criminalmente responsável
-por qualquer acidente ou ocorrência, pagar taxas, multas e impostos, liberar e retirar o veículo de depósitos
-do DETRAN CRD e DELEGACIAS DE POLICIA CIVIL, EPTC ,PRF E POLICIA FEDERAL,BRIGADA
-MILITAR , POLICIAL RODOVIA ESTADUAL ,assinar termos de liberação dar declarações e finalmente, usar
-e gozar do veículo como coisa sua e sem interferência ou autorização de outros, podendo ainda, requerer,
-perante autoridade alfandegária ou aduaneira de País estrangeiro, licença ou permissão de turismo pelo
-tempo e prazo que julgar conveniente, podendo substabelecer a presente no todo ou em parte O outorgante
-pelo presente instrumento declara-se responsável pelo pagamento de multas e impostos do veículo acima
-descrito e caracterizado, até a data da outorga do presente mandato. ESTA PROCURAÇÃO É
-AUTORGADA EM CARÁTER IRREVOGAVEL E IRRETRATAVEL, SEM QUALQUER PRESTAÇÃO DE
-CONTAS AO PROPRIETÁRIO E HERDEIROS E OUTROS, VISTO TER SIDO QUITADO O PREÇO DO
-VALOR DE VENDA DA TABELA DA FIPE NESTA DATA AO PROPRIETÁRIO.";
+        $text2 = "$config->texto_final";
 
         // Remover quebras de linha manuais, caso existam
         $text2 = str_replace("\n", " ", $text2);
@@ -247,10 +231,10 @@ VALOR DE VENDA DA TABELA DA FIPE NESTA DATA AO PROPRIETÁRIO.";
          $pdf->Cell(0, 5, "$documento->nome", 0, 1, 'C');
 
     // Definir o nome do arquivo do PDF
-    $nomePDF = 'nome_extraido_' . time() . '.pdf';
+    //$nomePDF = 'nome_extraido_' . time() . '.pdf';
 
     // Caminho para salvar o PDF na pasta 'procuracoes' dentro de public
-    $caminhoPDF = storage_path('app/public/procuracoes/' . $documento->nome . '.pdf'); 
+    $caminhoPDF = storage_path('app/public/procuracoes/' . $documento->placa . '.pdf'); 
     $urlPDF = asset('storage/procuracoes/' . $documento->placa . '.pdf'); 
     //dd($urlPDF);
     // Verificar se a pasta 'procuracoes' existe, se não, cria-la

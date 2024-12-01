@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Procuracao;
+use App\Models\ConfigProc;
 use Smalot\PdfParser\Parser;
 use FPDF;
 use Carbon\Carbon;
@@ -26,7 +27,8 @@ class ProcuracaoController extends Controller
         confirmDelete($title, $text);
 
         $procs = Procuracao::paginate(10);
-        //dd($procs);
+        
+        //dd($config->nome_outorgado);
         return view('procuracoes.index', compact('procs'));
     }
 
@@ -36,6 +38,9 @@ class ProcuracaoController extends Controller
     
 
     public function store(Request $request){
+
+        
+        $config = ConfigProc::first();
         //dd($request);
         $dataAtual = Carbon::now();
         $dataPorExtenso = $dataAtual->translatedFormat('d \d\e F \d\e Y');
@@ -89,113 +94,95 @@ class ProcuracaoController extends Controller
     //$pdfFpdf->SetFont('Arial', 'B', 16);  // Definir a fonte (Arial, Negrito, tamanho 16)
     $pdf->SetFont('Arial', 'B', 14);
 
-        $titulo = utf8_decode("PROCURAÇÃO");
+    $titulo = utf8_decode("PROCURAÇÃO");
+
+    $pdf->Cell(0, 10, $titulo, 0, 1, 'C');
+
+    $larguraTitulo = $pdf->GetStringWidth($titulo);
+    $pdf->Ln(8);
+    $pdf->SetFont('Arial', 'B', 12);
+    $pdf->Cell(0, 0, "OUTORGANTE: $outorgante", 0, 0, 'L');
+    $pdf->Ln(5);
+    $pdf->Cell(10, 0, "CPF: $cpf", 0, 0, 'L');
+    $pdf->Ln(5);
+    $pdf->Cell(0, 0, utf8_decode("ENDEREÇO: " . strtoupper($endereco)), 0, 0, 'L');
+
+    $pdf->Ln(5);
+
+    $pdf->SetFont('Arial', '', 11);
+    $pdf->Cell(0, 0, "________________________________________________________________________________________", 0, 0, 'L');
+    $pdf->SetFont('Arial', 'B', 12);
+
+    $pdf->Ln(8);
+    $pdf->Cell(0, 0, utf8_decode("OUTORGADO: $config->nome_outorgado"), 0, 0, 'L');
+    $pdf->Ln(5);
+    $pdf->Cell(0, 0, utf8_decode("CPF: $config->cpf_outorgado"), 0, 0, 'L');
+    $pdf->Ln(5);
+    $pdf->Cell(0, 0, utf8_decode("ENDEREÇO: $config->end_outorgado"), 0, 0, 'L');
+
+    $pdf->Ln(10);
+
+    $pdf->Cell(0, 0, utf8_decode("OUTORGADO: $config->nome_testemunha"), 0, 0, 'L');
+    $pdf->Ln(5);
+    $pdf->Cell(0, 0, utf8_decode("CPF: $config->cpf_testemunha"), 0, 0, 'L');
+    $pdf->Ln(5);
+    $pdf->Cell(0, 0, utf8_decode("ENDEREÇO: $config->end_testemunha"), 0, 0, 'L');
+
+    $pdf->Ln(8);
     
-        $pdf->Cell(0, 10, $titulo, 0, 1, 'C');
+    $pdf->SetFont('Arial', '', 11);
+    $pdf->Cell(0, 0, "________________________________________________________________________________________", 0, 0, 'L');
 
-        $larguraTitulo = $pdf->GetStringWidth($titulo);
-        $pdf->Ln(8);
-        $pdf->SetFont('Arial', 'B', 12);
-        $pdf->Cell(0, 0, "OUTORGANTE: $outorgante", 0, 0, 'L');
+    $pdf->Ln(8);
+    // Defina as margens manualmente (em mm)
+    $margem_esquerda = 10; // Margem esquerda
+    $margem_direita = 10;  // Margem direita
+
+    // Texto a ser inserido no PDF
+    $text = "$config->texto_poderes";
+
+    // Remover quebras de linha manuais, caso existam
+    $text = str_replace("\n", " ", $text);
+
+    // Calcular a largura disponível para o texto (considerando as margens)
+    $largura_disponivel = $pdf->GetPageWidth() - $margem_esquerda - $margem_direita;
+
+    // Adicionar o texto justificado, utilizando a largura calculada
+    $pdf->MultiCell($largura_disponivel, 5, utf8_decode($text), 0, 'J');
+
+    $pdf->Ln(8);
+    $pdf->SetFont('Arial', 'B', 12);
+    $pdf->Cell(120, 2, "MARCA: $marca", 0, 0, 'L');
+    $pdf->Cell(0, 2, "PLACA: $placa", 0, 1, 'L'); 
+    $pdf->Ln(5);
+    $pdf->Cell(120, 2, "CHASSI: $chassi", 0, 0, 'L');
+    $pdf->Cell(0, 2, "COR: $cor", 0, 1, 'L');
+    $pdf->Ln(5);
+    $pdf->Cell(120, 2, "ANO/MODELO: $anoModelo", 0, 0, 'L');
+    $pdf->Cell(0, 2, "RENAVAM: $renavam", 0, 1, 'L');
+
+    $pdf->Ln(8);
+    $pdf->SetFont('Arial', '', 11);
+
+    $text2 = "$config->texto_final";
+
+    // Remover quebras de linha manuais, caso existam
+    $text2 = str_replace("\n", " ", $text2);
+
+    // Calcular a largura disponível para o texto (considerando as margens)
+    $largura_disponivel2 = $pdf->GetPageWidth() - $margem_esquerda - $margem_direita;
+
+    // Adicionar o texto justificado, utilizando a largura calculada
+    $pdf->MultiCell($largura_disponivel2, 5, utf8_decode($text2), 0, 'J');
+    // Adicionando a data por extenso no PDF
+    $pdf->Cell(0, 10, "ESTEIO, $dataPorExtenso", 0, 1, 'R');  // 'R' para alinhamento à direita
+
+
+
+                                                                                        
         $pdf->Ln(5);
-        $pdf->Cell(10, 0, "CPF: $cpf", 0, 0, 'L');
-        $pdf->Ln(5);
-        $pdf->Cell(0, 0, utf8_decode("ENDEREÇO: " . strtoupper($endereco)), 0, 0, 'L');
-
-        $pdf->Ln(5);
-
-        $pdf->SetFont('Arial', '', 11);
-        $pdf->Cell(0, 0, "________________________________________________________________________________________", 0, 0, 'L');
-        $pdf->SetFont('Arial', 'B', 12);
-
-        $pdf->Ln(8);
-        $pdf->Cell(0, 0, utf8_decode("OUTORGADO: "), 0, 0, 'L');
-        $pdf->Ln(5);
-        $pdf->Cell(0, 0, utf8_decode("CPF: "), 0, 0, 'L');
-        $pdf->Ln(5);
-        $pdf->Cell(0, 0, utf8_decode("ENDEREÇO: "), 0, 0, 'L');
-
-        $pdf->Ln(10);
-
-        $pdf->Cell(0, 0, utf8_decode("OUTORGADO: "), 0, 0, 'L');
-        $pdf->Ln(5);
-        $pdf->Cell(0, 0, utf8_decode("CPF: "), 0, 0, 'L');
-        $pdf->Ln(5);
-        $pdf->Cell(0, 0, utf8_decode("ENDEREÇO: "), 0, 0, 'L');
-
-        $pdf->Ln(8);
-        
-        $pdf->SetFont('Arial', '', 11);
-        $pdf->Cell(0, 0, "________________________________________________________________________________________", 0, 0, 'L');
-
-        $pdf->Ln(8);
-        // Defina as margens manualmente (em mm)
-        $margem_esquerda = 10; // Margem esquerda
-        $margem_direita = 10;  // Margem direita
-
-        // Texto a ser inserido no PDF
-        $text = "FINS E PODERES: O OUTORGANTE confere ao OUTORGADO amplos e ilimitados poderes para o fim especial de vender a quem quiser, receber valores de venda, transferir para si próprio ou terceiros, em causa própria, locar ou de qualquer forma alienar ou onerar o veículo de sua propriedade com as seguintes características:";
-
-        // Remover quebras de linha manuais, caso existam
-        $text = str_replace("\n", " ", $text);
-
-        // Calcular a largura disponível para o texto (considerando as margens)
-        $largura_disponivel = $pdf->GetPageWidth() - $margem_esquerda - $margem_direita;
-
-        // Adicionar o texto justificado, utilizando a largura calculada
-        $pdf->MultiCell($largura_disponivel, 5, utf8_decode($text), 0, 'J');
-
-        $pdf->Ln(8);
-        $pdf->SetFont('Arial', 'B', 12);
-        $pdf->Cell(120, 2, "MARCA: $marca", 0, 0, 'L');
-        $pdf->Cell(0, 2, "PLACA: $placa", 0, 1, 'L'); 
-        $pdf->Ln(5);
-        $pdf->Cell(120, 2, "CHASSI: $chassi", 0, 0, 'L');
-        $pdf->Cell(0, 2, "COR: $cor", 0, 1, 'L');
-        $pdf->Ln(5);
-        $pdf->Cell(120, 2, "ANO/MODELO: $anoModelo", 0, 0, 'L');
-        $pdf->Cell(0, 2, "RENAVAM: $renavam", 0, 1, 'L');
-
-        $pdf->Ln(8);
-        $pdf->SetFont('Arial', '', 11);
-
-        $text2 = "Assinar requerimentos , com poderes também para requerer, junto aos CRVAS/DETRAN-RS, os processos
-de 2ª vias de CRV/CRLV, Baixa Definitiva do veículo, Alterações de informações do veículo, Solicitar
-DCPPO e CRLV digital e ATPV-E, fazer declaração de residência ,fazer alteração de informações no
-veículo, fazer ocorrência policial de perca de documento do veículo, assinar termo de responsabilidade pela
-não apresentaçãode placas e lacre, fazer troca de município ,receber valores por indenização de
-Seguradoras ,Assinar contratos de. inclusão e instrumentos de liberação de Alienação e Reserva de
-Domínio para si.- próprio ou terceiros, endossar documentos, usar o veículo em apreço, manejando o
-mesmo, em qualquer parte do território nacional ou estrangeiro, ficando cível e criminalmente responsável
-por qualquer acidente ou ocorrência, pagar taxas, multas e impostos, liberar e retirar o veículo de depósitos
-do DETRAN CRD e DELEGACIAS DE POLICIA CIVIL, EPTC ,PRF E POLICIA FEDERAL,BRIGADA
-MILITAR , POLICIAL RODOVIA ESTADUAL ,assinar termos de liberação dar declarações e finalmente, usar
-e gozar do veículo como coisa sua e sem interferência ou autorização de outros, podendo ainda, requerer,
-perante autoridade alfandegária ou aduaneira de País estrangeiro, licença ou permissão de turismo pelo
-tempo e prazo que julgar conveniente, podendo substabelecer a presente no todo ou em parte O outorgante
-pelo presente instrumento declara-se responsável pelo pagamento de multas e impostos do veículo acima
-descrito e caracterizado, até a data da outorga do presente mandato. ESTA PROCURAÇÃO É
-AUTORGADA EM CARÁTER IRREVOGAVEL E IRRETRATAVEL, SEM QUALQUER PRESTAÇÃO DE
-CONTAS AO PROPRIETÁRIO E HERDEIROS E OUTROS, VISTO TER SIDO QUITADO O PREÇO DO
-VALOR DE VENDA DA TABELA DA FIPE NESTA DATA AO PROPRIETÁRIO.";
-
-        // Remover quebras de linha manuais, caso existam
-        $text2 = str_replace("\n", " ", $text2);
-
-        // Calcular a largura disponível para o texto (considerando as margens)
-        $largura_disponivel2 = $pdf->GetPageWidth() - $margem_esquerda - $margem_direita;
-
-        // Adicionar o texto justificado, utilizando a largura calculada
-        $pdf->MultiCell($largura_disponivel2, 5, utf8_decode($text2), 0, 'J');
-        // Adicionando a data por extenso no PDF
-        $pdf->Cell(0, 10, "ESTEIO, $dataPorExtenso", 0, 1, 'R');  // 'R' para alinhamento à direita
-
-
-
-                                                                                            
-         $pdf->Ln(5);
-         $pdf->Cell(0, 10, "_________________________________________________" , 0, 1, 'C');
-         $pdf->Cell(0, 5, "$outorgante", 0, 1, 'C');
+        $pdf->Cell(0, 10, "_________________________________________________" , 0, 1, 'C');
+        $pdf->Cell(0, 5, "$outorgante", 0, 1, 'C');
 
     // Definir o nome do arquivo do PDF
     //$nomePDF = 'nome_extraido_' . time() . '.pdf';

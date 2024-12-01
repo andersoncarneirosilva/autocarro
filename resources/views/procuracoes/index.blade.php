@@ -96,7 +96,7 @@ aria-hidden="true">
     <div class="modal-dialog modal-lg">
         <div class="modal-content">
             <div class="modal-header">
-                <h4 class="modal-title" id="standard-modalLabel">Novo documento</h4>
+                <h4 class="modal-title" id="standard-modalLabel">Nova procuração</h4>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-hidden="true"></button>
             </div>
             <div class="modal-body">
@@ -106,5 +106,6 @@ aria-hidden="true">
     </div><!-- /.modal-dialog -->
 </div><!-- /.modal -->
  
+
 
     @endsection

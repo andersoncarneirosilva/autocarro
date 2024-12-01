@@ -60,14 +60,6 @@
             </li>
 
             <li class="side-nav-item">
-                <a href="{{ route('pedidos.index') }}" class="side-nav-link">
-                    <i class="uil-comments-alt"></i>
-                    <span> Pedidos </span>
-                </a>
-            </li>
-
-
-            <li class="side-nav-item">
                 <a data-bs-toggle="collapse" href="#sidebarLayouts" aria-expanded="false" aria-controls="sidebarLayouts" class="side-nav-link">
                     <i class="uil-window"></i>
                     <span> Cadastros </span>
@@ -96,7 +88,12 @@
                     </ul>
                 </div>
             </li>
-
+            <li class="side-nav-item">
+                <a href="{{ route('configuracoes.index') }}" class="side-nav-link">
+                    <i class="uil-comments-alt"></i>
+                    <span> Configurações </span>
+                </a>
+            </li>
 
 
         </ul>

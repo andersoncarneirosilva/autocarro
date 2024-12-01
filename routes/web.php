@@ -18,6 +18,7 @@ use App\Http\Controllers\TransportadorasController;
 use App\Http\Controllers\PedidosController;
 use App\Http\Controllers\DocVeiculoController;
 use App\Http\Controllers\ProcuracaoController;
+use App\Http\Controllers\ConfiguracoesController;
 use Illuminate\Support\Facades\Route;
 
 
@@ -97,10 +98,10 @@ Route::middleware(['auth'])->group(function () {
 
     //DOCUMENTOS
     Route::get('/documentos/gerarProc/{id}/{endereco}', [DocumentosController::class, 'gerarProc'])->name('documentos.gerarProc');
-Route::get('/documentos/{id}', [DocumentosController::class, 'show'])->name('documentos.show');
-Route::delete('/documentos/{id}', [DocumentosController::class, 'destroy'])->name('documentos.destroy');
-Route::get('/documentos', [DocumentosController::class, 'index'])->name('documentos.index');
-Route::post('/documentos', [DocumentosController::class, 'store'])->name('documentos.store');
+    Route::get('/documentos/{id}', [DocumentosController::class, 'show'])->name('documentos.show');
+    Route::delete('/documentos/{id}', [DocumentosController::class, 'destroy'])->name('documentos.destroy');
+    Route::get('/documentos', [DocumentosController::class, 'index'])->name('documentos.index');
+    Route::post('/documentos', [DocumentosController::class, 'store'])->name('documentos.store');
 
     
 
@@ -134,6 +135,11 @@ Route::post('/documentos', [DocumentosController::class, 'store'])->name('docume
     Route::get('/procuracoes/create', [ProcuracaoController::class, 'create'])->name('procuracoes.create');
     Route::get('/procuracoes', [ProcuracaoController::class, 'index'])->name('procuracoes.index');
     Route::post('/procuracoes', [ProcuracaoController::class, 'store'])->name('procuracoes.store');
+
+    Route::delete('/configuracoes/{id}', [ConfiguracoesController::class, 'destroy'])->name('configuracoes.destroy');
+    Route::get('/configuracoes/create', [ConfiguracoesController::class, 'create'])->name('configuracoes.create');
+    Route::get('/configuracoes', [ConfiguracoesController::class, 'index'])->name('configuracoes.index');
+    Route::post('/configuracoes', [ConfiguracoesController::class, 'store'])->name('configuracoes.store');
 });
 
 
