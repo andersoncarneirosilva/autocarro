@@ -10,18 +10,18 @@
             <div class="page-title-right">
                 <ol class="breadcrumb m-0">
                     <li class="breadcrumb-item"><a href="{{ route('dashboard.index') }}">Dashboard</a></li>
-                    <li class="breadcrumb-item active">Documentos</li>
+                    <li class="breadcrumb-item active">Procuração</li>
                 </ol>
             </div>
-            <h3 class="page-title">Documentos</h3>
+            <h3 class="page-title">Procuração</h3>
         </div>
     </div>
 </div>
-<br>
 
 <div class="card">
     <div class="card-body">
         <div class="row">
+            
             {{-- @if ($errors->any())
                 <ul class="errors">
                     @foreach ($errors->all() as $error)
@@ -33,8 +33,8 @@
                 <div class="card-header d-flex justify-content-between align-items-center">
                     <h4 class="header-title">Outorgado</h4>
                     <div class="dropdown">
-                        <button type="button" class="btn btn-primary btn-sm" data-bs-toggle="modal"
-                            data-bs-target="#standard-modal">Cadastrar</button>
+                        {{-- <button type="button" class="btn btn-primary btn-sm" data-bs-toggle="modal"
+                            data-bs-target="#standard-modal">Cadastrar</button> --}}
                         {{-- <button class="btn btn-secondary btn-sm" id="deleteAllSelectedRecord" disabled><i
                                 class="fa-solid fa-trash"></i></button> --}}
                     </div>
@@ -47,7 +47,6 @@
                                 <th>Nome</th>
                                 <th>CPF</th>
                                 <th>Endereço</th>
-                                <th>Cadastrado em</th>
                                 <th>Ações</th>
                             </tr>
                         </thead>
@@ -58,27 +57,12 @@
                                     <td>{{ $doc->nome_outorgado }}</td>
                                     <td>{{ $doc->cpf_outorgado }}</td>
                                     <td>{{ $doc->end_outorgado }}</td>
-                                    <td>{{ Carbon\Carbon::parse($doc->create_at)->format('d/m') }}</td>
                                     <td class="table-action">
 
-                                        <a href="#"
-                                            class="action-icon"
-                                            data-id="{{ $doc->id }}"
-                                            onclick="openInfoModal(event)">
-                                            <i class="mdi mdi-eye" title="Visualizar"></i>
+                                        <a href="#" class="action-icon" data-id="{{ $doc->id }}" onclick="openEditModalOutorgado(event)">
+                                            <i class="mdi mdi-clipboard-edit-outline" title="Editar"></i>
                                         </a>
-
-                                        <a href="{{ $doc->arquivo_doc }}" class="action-icon" target="blank"> <i
-                                                class="mdi mdi-printer" title="Imprimir"></i></a>
-
-                                        <a href="{{ route('documentos.destroy', $doc->id) }}"
-                                            class="action-icon mdi mdi-delete" data-confirm-delete="true" title="Excluir"></a>
-                                            <a href="#" 
-                                            class="action-icon mdi mdi-share-all" 
-                                            data-id="{{ $doc->id }}" 
-                                            title="Gerar procuração"
-                                            onclick="openAddressModal(event)">
-                                         </a>
+                                        
 
                                     </td>
                                 </tr>
@@ -110,8 +94,8 @@
                 <div class="card-header d-flex justify-content-between align-items-center">
                     <h4 class="header-title">Testemunha</h4>
                     <div class="dropdown">
-                        <button type="button" class="btn btn-primary btn-sm" data-bs-toggle="modal"
-                            data-bs-target="#standard-modal">Cadastrar</button>
+                        {{-- <button type="button" class="btn btn-primary btn-sm" data-bs-toggle="modal"
+                            data-bs-target="#standard-modal">Cadastrar</button> --}}
 
                     </div>
                 </div>
@@ -123,7 +107,6 @@
                                 <th>Nome</th>
                                 <th>CPF</th>
                                 <th>Endereço</th>
-                                <th>Cadastrado em</th>
                                 <th>Ações</th>
                             </tr>
                         </thead>
@@ -134,27 +117,11 @@
                                     <td>{{ $doc->nome_testemunha }}</td>
                                     <td>{{ $doc->cpf_testemunha }}</td>
                                     <td>{{ $doc->end_testemunha }}</td>
-                                    <td>{{ Carbon\Carbon::parse($doc->create_at)->format('d/m') }}</td>
                                     <td class="table-action">
 
-                                        <a href="#"
-                                            class="action-icon"
-                                            data-id="{{ $doc->id }}"
-                                            onclick="openInfoModal(event)">
-                                            <i class="mdi mdi-eye" title="Visualizar"></i>
+                                        <a href="#" class="action-icon" data-id="{{ $doc->id }}" onclick="openEditModalTestemunha(event)">
+                                            <i class="mdi mdi-clipboard-edit-outline" title="Editar"></i>
                                         </a>
-
-                                        <a href="{{ $doc->arquivo_doc }}" class="action-icon" target="blank"> <i
-                                                class="mdi mdi-printer" title="Imprimir"></i></a>
-
-                                        <a href="{{ route('documentos.destroy', $doc->id) }}"
-                                            class="action-icon mdi mdi-delete" data-confirm-delete="true" title="Excluir"></a>
-                                            <a href="#" 
-                                            class="action-icon mdi mdi-share-all" 
-                                            data-id="{{ $doc->id }}" 
-                                            title="Gerar procuração"
-                                            onclick="openAddressModal(event)">
-                                         </a>
 
                                     </td>
                                 </tr>
@@ -186,8 +153,8 @@
                 <div class="card-header d-flex justify-content-between align-items-center">
                     <h4 class="header-title">Fins e Poderes</h4>
                     <div class="dropdown">
-                        <button type="button" class="btn btn-primary btn-sm" data-bs-toggle="modal"
-                            data-bs-target="#standard-modal">Cadastrar</button>
+                        {{-- <button type="button" class="btn btn-primary btn-sm" data-bs-toggle="modal"
+                            data-bs-target="#standard-modal">Cadastrar</button> --}}
 
                     </div>
                 </div>
@@ -197,7 +164,6 @@
                         <thead>
                             <tr>
                                 <th>Texto</th>
-                                <th>Cadastrado em</th>
                                 <th>Ações</th>
                             </tr>
                         </thead>
@@ -206,27 +172,11 @@
                             @foreach ($procs as $doc)
                                 <tr>
                                     <td>{{ $doc->texto_poderes }}</td>
-                                    <td>{{ Carbon\Carbon::parse($doc->create_at)->format('d/m') }}</td>
                                     <td class="table-action">
 
-                                        <a href="#"
-                                            class="action-icon"
-                                            data-id="{{ $doc->id }}"
-                                            onclick="openInfoModal(event)">
-                                            <i class="mdi mdi-eye" title="Visualizar"></i>
+                                        <a href="#" class="action-icon" data-id="{{ $doc->id }}" onclick="openEditModalPoderes(event)">
+                                            <i class="mdi mdi-clipboard-edit-outline" title="Editar"></i>
                                         </a>
-
-                                        <a href="{{ $doc->arquivo_doc }}" class="action-icon" target="blank"> <i
-                                                class="mdi mdi-printer" title="Imprimir"></i></a>
-
-                                        <a href="{{ route('documentos.destroy', $doc->id) }}"
-                                            class="action-icon mdi mdi-delete" data-confirm-delete="true" title="Excluir"></a>
-                                            <a href="#" 
-                                            class="action-icon mdi mdi-share-all" 
-                                            data-id="{{ $doc->id }}" 
-                                            title="Gerar procuração"
-                                            onclick="openAddressModal(event)">
-                                         </a>
 
                                     </td>
                                 </tr>
@@ -259,8 +209,8 @@
                 <div class="card-header d-flex justify-content-between align-items-center">
                     <h4 class="header-title">Texto final</h4>
                     <div class="dropdown">
-                        <button type="button" class="btn btn-primary btn-sm" data-bs-toggle="modal"
-                            data-bs-target="#standard-modal">Cadastrar</button>
+                        {{-- <button type="button" class="btn btn-primary btn-sm" data-bs-toggle="modal"
+                            data-bs-target="#standard-modal">Cadastrar</button> --}}
 
                     </div>
                 </div>
@@ -270,7 +220,6 @@
                         <thead>
                             <tr>
                                 <th>Texto</th>
-                                <th>Cadastrado em</th>
                                 <th>Ações</th>
                             </tr>
                         </thead>
@@ -278,28 +227,12 @@
                         <tbody>
                             @foreach ($procs as $doc)
                                 <tr>
-                                    <td>{{ $doc->texto_final }}</td>
-                                    <td>{{ Carbon\Carbon::parse($doc->create_at)->format('d/m') }}</td>
-                                    <td class="table-action">
+                                    <td style="width: 85%;">{{ $doc->texto_final }}</td>
+                                    <td  style="width: 15%;">
 
-                                        <a href="#"
-                                            class="action-icon"
-                                            data-id="{{ $doc->id }}"
-                                            onclick="openInfoModal(event)">
-                                            <i class="mdi mdi-eye" title="Visualizar"></i>
+                                        <a href="#" class="action-icon" data-id="{{ $doc->id }}" onclick="openEditModalFinal(event)">
+                                            <i class="mdi mdi-clipboard-edit-outline" title="Editar"></i>
                                         </a>
-
-                                        <a href="{{ $doc->arquivo_doc }}" class="action-icon" target="blank"> <i
-                                                class="mdi mdi-printer" title="Imprimir"></i></a>
-
-                                        <a href="{{ route('documentos.destroy', $doc->id) }}"
-                                            class="action-icon mdi mdi-delete" data-confirm-delete="true" title="Excluir"></a>
-                                            <a href="#" 
-                                            class="action-icon mdi mdi-share-all" 
-                                            data-id="{{ $doc->id }}" 
-                                            title="Gerar procuração"
-                                            onclick="openAddressModal(event)">
-                                         </a>
 
                                     </td>
                                 </tr>
@@ -395,8 +328,259 @@ aria-hidden="true">
     </div>
 </div>
 
+<div class="modal fade" id="editInfoModal" tabindex="-1" aria-labelledby="editInfoModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="editInfoModalLabel">Editar Informações</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <form id="editForm" method="POST">
+                @csrf
+                @method('PUT') <!-- Usado para edições -->
+                <div class="modal-body">
+                    <div class="mb-3">
+                        <label for="nome_outorgado" class="form-label">Nome do Outorgado</label>
+                        <input type="text" class="form-control" id="nome_outorgado" name="nome_outorgado" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="cpf_outorgado" class="form-label">CPF do Outorgado</label>
+                        <input type="text" class="form-control" id="cpf_outorgado" name="cpf_outorgado" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="end_outorgado" class="form-label">Endereço do Outorgado</label>
+                        <input type="text" class="form-control" id="end_outorgado" name="end_outorgado" required>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fechar</button>
+                    <button type="submit" class="btn btn-primary">Salvar Alterações</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
 
+<div class="modal fade" id="editTestemunhaModal" tabindex="-1" aria-labelledby="editInfoModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="editInfoModalLabel">Editar Informações</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <form id="editFormTestemunha" method="POST">
+                @csrf
+                @method('PUT') <!-- Usado para edições -->
+                <div class="modal-body">
+                    <div class="mb-3">
+                        <label for="nome_outorgado" class="form-label">Nome</label>
+                        <input type="text" class="form-control" id="nome_testemunha" name="nome_testemunha" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="cpf_outorgado" class="form-label">CPF</label>
+                        <input type="text" class="form-control" id="cpf_testemunha" name="cpf_testemunha" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="end_outorgado" class="form-label">Endereço</label>
+                        <input type="text" class="form-control" id="end_testemunha" name="end_testemunha" required>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fechar</button>
+                    <button type="submit" class="btn btn-primary">Salvar Alterações</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="editPoderesModal" tabindex="-1" aria-labelledby="editInfoModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="editInfoModalLabel">Editar Informações</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <form id="editFormPoderes" method="POST">
+                @csrf
+                @method('PUT') <!-- Usado para edições -->
+                <div class="modal-body">
+                    <div class="mb-3">
+                        <label for="nome_outorgado" class="form-label">Texto </label>
+                        <textarea class="form-control" id="texto_poderes" name="texto_poderes" rows="6" cols="150"></textarea>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fechar</button>
+                    <button type="submit" class="btn btn-primary">Salvar Alterações</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="editFinalModal" tabindex="-1" aria-labelledby="editInfoModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="editInfoModalLabel">Editar Informações</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <form id="editFormFinal" method="POST">
+                @csrf
+                @method('PUT') <!-- Usado para edições -->
+                <div class="modal-body">
+                    <div class="mb-3">
+                        <label for="nome_outorgado" class="form-label">Texto </label>
+                        <textarea class="form-control" id="texto_final" name="texto_final" rows="6" cols="150"></textarea>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fechar</button>
+                    <button type="submit" class="btn btn-primary">Salvar Alterações</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<a href="{{ route('procuracoes.destroy', $doc->id) }}"
+    class="btn btn-primary btn-sm" target="_blank" data-confirm-delete="true">Visualizar procuração</a>
+
+    
 <script>
+function openEditModalOutorgado(event) {
+    event.preventDefault();
+
+    // Obtenha o ID do documento
+    //const docId = event.currentTarget.getAttribute('data-id');
+    const docId = event.target.closest('a').getAttribute('data-id');
+    // Faça uma requisição AJAX para buscar os dados
+    //console.log(docId);
+    $.ajax({
+        url: `/configuracoes/${docId}`,
+        method: 'GET',
+        success: function(response) {
+            // Preencha os campos do modal com os dados do documento
+            $('#nome_outorgado').val(response.nome_outorgado);
+            $('#cpf_outorgado').val(response.cpf_outorgado);
+            $('#end_outorgado').val(response.end_outorgado);
+
+            // Atualize a ação do formulário para apontar para a rota de edição
+            $('#editForm').attr('action', `/configuracoes/${docId}`);
+
+            // Exiba o modal
+            $('#editInfoModal').modal('show');
+        },
+        error: function() {
+            Swal.fire({
+                title: 'Erro!',
+                text: 'Não foi possível carregar os dados.',
+                icon: 'error',
+                confirmButtonText: 'OK'
+            });
+        }
+    });
+}
+
+function openEditModalTestemunha(event) {
+    event.preventDefault();
+
+    // Obtenha o ID do documento
+    //const docId = event.currentTarget.getAttribute('data-id');
+    const docId = event.target.closest('a').getAttribute('data-id');
+    // Faça uma requisição AJAX para buscar os dados
+    //console.log(docId);
+    $.ajax({
+        url: `/configuracoes/${docId}`,
+        method: 'GET',
+        success: function(response) {
+            // Preencha os campos do modal com os dados do documento
+            $('#nome_testemunha').val(response.nome_testemunha);
+            $('#cpf_testemunha').val(response.cpf_testemunha);
+            $('#end_testemunha').val(response.end_testemunha);
+
+            // Atualize a ação do formulário para apontar para a rota de edição
+            $('#editFormTestemunha').attr('action', `/configuracoes/${docId}`);
+
+            // Exiba o modal
+            $('#editTestemunhaModal').modal('show');
+        },
+        error: function() {
+            Swal.fire({
+                title: 'Erro!',
+                text: 'Não foi possível carregar os dados.',
+                icon: 'error',
+                confirmButtonText: 'OK'
+            });
+        }
+    });
+}
+
+function openEditModalPoderes(event) {
+    event.preventDefault();
+
+    // Obtenha o ID do documento
+    //const docId = event.currentTarget.getAttribute('data-id');
+    const docId = event.target.closest('a').getAttribute('data-id');
+    // Faça uma requisição AJAX para buscar os dados
+    //console.log(docId);
+    $.ajax({
+        url: `/configuracoes/${docId}`,
+        method: 'GET',
+        success: function(response) {
+            // Preencha os campos do modal com os dados do documento
+            $('#texto_poderes').val(response.texto_poderes);
+
+            // Atualize a ação do formulário para apontar para a rota de edição
+            $('#editFormPoderes').attr('action', `/configuracoes/${docId}`);
+
+            // Exiba o modal
+            $('#editPoderesModal').modal('show');
+        },
+        error: function() {
+            Swal.fire({
+                title: 'Erro!',
+                text: 'Não foi possível carregar os dados.',
+                icon: 'error',
+                confirmButtonText: 'OK'
+            });
+        }
+    });
+}
+
+function openEditModalFinal(event) {
+    event.preventDefault();
+
+    // Obtenha o ID do documento
+    //const docId = event.currentTarget.getAttribute('data-id');
+    const docId = event.target.closest('a').getAttribute('data-id');
+    // Faça uma requisição AJAX para buscar os dados
+    //console.log(docId);
+    $.ajax({
+        url: `/configuracoes/${docId}`,
+        method: 'GET',
+        success: function(response) {
+            // Preencha os campos do modal com os dados do documento
+            $('#texto_final').val(response.texto_final);
+
+            // Atualize a ação do formulário para apontar para a rota de edição
+            $('#editFormFinal').attr('action', `/configuracoes/${docId}`);
+
+            // Exiba o modal
+            $('#editFinalModal').modal('show');
+        },
+        error: function() {
+            Swal.fire({
+                title: 'Erro!',
+                text: 'Não foi possível carregar os dados.',
+                icon: 'error',
+                confirmButtonText: 'OK'
+            });
+        }
+    });
+}
+
 
     function openAddressModal(event) {
     event.preventDefault(); // Evita o comportamento padrão do link

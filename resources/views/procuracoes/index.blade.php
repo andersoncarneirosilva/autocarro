@@ -89,6 +89,7 @@
             'search' => request()->get('search', '')
         ])->links('components.pagination') }}
     </div>
+    
 </div>
 <!-- Standard modal -->
 <div id="standard-modal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="standard-modalLabel"

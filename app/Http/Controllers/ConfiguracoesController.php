@@ -26,6 +26,25 @@ class ConfiguracoesController extends Controller
         return view('configuracoes.index', compact('procs'));
     }
 
+    public function update(Request $request, $id){
+        $doc = ConfigProc::findOrFail($id);
+    
+        $doc->update($request->all());
+    
+        alert()->success('Procuração editada com sucesso!');
+        return redirect()->route('configuracoes.index');
+    }
+
+    public function show($id){
+    $configuracao = ConfigProc::find($id);
+
+    if (!$configuracao) {
+        return response()->json(['error' => 'Configuração não encontrada'], 404);
+    }
+
+    return response()->json($configuracao);
+}
+
     // public function create(){
     //     return view('category.create');
     // }

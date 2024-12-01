@@ -26,6 +26,8 @@ class ConfigProcController extends Controller
         return view('configuracoes.index');
     }
 
+    
+    
     // public function create(){
     //     return view('category.create');
     // }

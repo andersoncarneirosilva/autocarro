@@ -136,7 +136,9 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/procuracoes', [ProcuracaoController::class, 'index'])->name('procuracoes.index');
     Route::post('/procuracoes', [ProcuracaoController::class, 'store'])->name('procuracoes.store');
 
+    Route::get('/configuracoes/{id}', [ConfiguracoesController::class, 'show'])->name('configuracoes.show');
     Route::delete('/configuracoes/{id}', [ConfiguracoesController::class, 'destroy'])->name('configuracoes.destroy');
+    Route::put('/configuracoes/{id}', [ConfiguracoesController::class, 'update'])->name('configuracoes.update');
     Route::get('/configuracoes/create', [ConfiguracoesController::class, 'create'])->name('configuracoes.create');
     Route::get('/configuracoes', [ConfiguracoesController::class, 'index'])->name('configuracoes.index');
     Route::post('/configuracoes', [ConfiguracoesController::class, 'store'])->name('configuracoes.store');
