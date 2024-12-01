@@ -70,6 +70,7 @@ class DocumentosController extends Controller
 
         // Garante que a pasta "procuracoes" existe
         $pastaDestino = storage_path('app/public/documentos');
+        $urlPDF = asset('storage/documentos/' . $nomeOriginal); 
         if (!file_exists($pastaDestino)) {
             mkdir($pastaDestino, 0777, true); // Cria a pasta
         }
@@ -99,7 +100,7 @@ class DocumentosController extends Controller
             'motor' => $motor,
             'combustivel' => $combustivel,
             'infos' => $infos,
-            'arquivo_doc' => $caminhoPDF,
+            'arquivo_doc' => $urlPDF,
         ];
 
 

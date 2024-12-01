@@ -40,7 +40,8 @@
                     </div>
                 </div>
                 @if ($procs->total() != 0)
-                    <table class="table table-centered table-nowrap table-hover mb-0">
+                <div class="table-responsive-sm">
+                    <table class="table table-centered table-borderless mb-0">
                         <thead>
                             <tr>
                                 <th>Nome</th>
@@ -63,8 +64,6 @@
                                     <td>{{ $doc->ano }}</td>
                                     <td>{{ Carbon\Carbon::parse($doc->create_at)->format('d/m') }}</td>
                                     <td class="table-action">
-                                        <a href="storage/{{ $doc->arquivo }}" class="action-icon" download> <i
-                                                class="mdi mdi-download"></i></a>
                                                 <a href="{{ $doc->arquivo_doc }}" class="action-icon" target="blank">
                                                     <i class="mdi mdi-printer"></i>
                                                 </a>
@@ -76,6 +75,7 @@
                             @endforeach
                         </tbody>
                     </table>
+                </div>
                     @elseif($procs->total() == 0)
                         <div class="alert alert-warning" role="alert">
                             NENHUM RESULTADO ENCONTRADO!

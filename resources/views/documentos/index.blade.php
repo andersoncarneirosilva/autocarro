@@ -40,7 +40,8 @@
                     </div>
                 </div>
                 @if ($docs->total() != 0)
-                    <table class="table table-centered table-nowrap table-hover mb-0">
+                <div class="table-responsive-sm">
+                    <table class="table table-centered table-borderless mb-0">
                         <thead>
                             <tr>
                                 <th>#</th>
@@ -73,10 +74,7 @@
                                             <i class="mdi mdi-eye" title="Visualizar"></i>
                                         </a>
 
-                                        <a href="storage/{{ $doc->arquivo }}" class="action-icon" download> <i
-                                                class="mdi mdi-download" title="Baixar"></i></a>
-
-                                        <a href="storage/{{ $doc->arquivo }}" class="action-icon" target="blank"> <i
+                                        <a href="{{ $doc->arquivo_doc }}" class="action-icon" target="blank"> <i
                                                 class="mdi mdi-printer" title="Imprimir"></i></a>
 
                                         <a href="{{ route('documentos.destroy', $doc->id) }}"
@@ -93,6 +91,7 @@
                             @endforeach
                         </tbody>
                     </table>
+                </div>
                     @elseif($docs->total() == 0)
                         <div class="alert alert-warning" role="alert">
                             NENHUM RESULTADO ENCONTRADO!

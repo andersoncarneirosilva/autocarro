@@ -198,7 +198,7 @@ VALOR DE VENDA DA TABELA DA FIPE NESTA DATA AO PROPRIETÁRIO.";
          $pdf->Cell(0, 5, "$outorgante", 0, 1, 'C');
 
     // Definir o nome do arquivo do PDF
-    $nomePDF = 'nome_extraido_' . time() . '.pdf';
+    //$nomePDF = 'nome_extraido_' . time() . '.pdf';
 
     // Caminho para salvar o PDF na pasta 'procuracoes' dentro de public
     $caminhoPDF = storage_path('app/public/procuracoes/' . $placa . '.pdf'); 
