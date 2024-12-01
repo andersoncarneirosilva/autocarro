@@ -19,12 +19,12 @@ class DashModel extends Model
         return $users;
     } */
 
-    public function getCountAdDash(){
-
-        //$countAd = Adiantamento::count();
-        $mytime = date('m');
-        //dd("DATA - " . $mytime);
-        $countAd = DB::table('adiantamentos')->where('numeromes', $mytime)->count();
+    public function getCountDocs(){
+        $countAd = DB::table('documentos')->count();
+        return $countAd;
+    }
+    public function getCountProcs(){
+        $countAd = DB::table('procuracaos')->count();
         return $countAd;
     }
 }

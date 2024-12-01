@@ -47,14 +47,14 @@
 
             <li class="side-nav-item">
                 <a href="{{ route('procuracoes.index') }}" class="side-nav-link">
-                    <i class="uil-file-alt"></i>
+                    <i class="uil-file"></i>
                     <span> Procurações </span>
                 </a>
             </li>
 
             <li class="side-nav-item">
                 <a href="{{ route('documentos.index') }}" class="side-nav-link">
-                    <i class="uil-comments-alt"></i>
+                    <i class="uil-file-alt"></i>
                     <span> Documentos </span>
                 </a>
             </li>

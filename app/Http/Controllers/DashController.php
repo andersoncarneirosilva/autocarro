@@ -4,7 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\DashModel;
 use Illuminate\Http\Request;
-use App\Models\Emprestimo;
+use App\Models\Documento;
 class DashController extends Controller
 {
     protected $model;
@@ -19,12 +19,13 @@ class DashController extends Controller
         
 
         $search = $request->search;
-        $emprestimos = Emprestimo::take(5)->get();
+        //$emprestimos = Documento::take(5)->get();
         //$users = $this->model->getUsersDash();
-        $countAd = $this->model->getCountAdDash();
-        //dd($emprestimos);
+        $countDocs = $this->model->getCountDocs();
+        $countProcs = $this->model->getCountProcs();
+        //dd($countAd);
         
         //dd($users);
-        return view('dashboard.index', compact(['countAd','emprestimos']));
+        return view('dashboard.index', compact(['countDocs', 'countProcs']));
     }
 }
