@@ -88,11 +88,20 @@
                     </ul>
                 </div>
             </li>
+
             <li class="side-nav-item">
-                <a href="{{ route('configuracoes.index') }}" class="side-nav-link">
-                    <i class="uil-comments-alt"></i>
+                <a data-bs-toggle="collapse" href="#sidebarLayoutss" aria-expanded="false" aria-controls="sidebarLayouts" class="side-nav-link">
+                    <i class="uil-cog"></i>
                     <span> Configurações </span>
+                    <span class="menu-arrow"></span>
                 </a>
+                <div class="collapse" id="sidebarLayoutss">
+                    <ul class="side-nav-second-level">
+                        <li>
+                            <a href="{{ route('configuracoes.index') }}">Procuração</a>
+                        </li>
+                    </ul>
+                </div>
             </li>
 
 
