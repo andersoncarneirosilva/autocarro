@@ -22,7 +22,7 @@ class ProcuracaoController extends Controller
     public function index(Request $request){
 
         $title = 'Excluir!';
-        $text = "Deseja excluir essa categoria?";
+        $text = "Deseja excluir essa procuração?";
         confirmDelete($title, $text);
 
         $procs = Procuracao::paginate(10);
@@ -253,15 +253,14 @@ VALOR DE VENDA DA TABELA DA FIPE NESTA DATA AO PROPRIETÁRIO.";
     //     }
     // }
 
-    // public function destroy($id){
-    //     if(!$doc = $this->model->find($id)){
-    //         alert()->error('Erro ao excluír o pagamento!');
-    //     }
+     public function destroy($id){
+         if(!$doc = $this->model->find($id)){
+             alert()->error('Erro ao excluír a procuração!');
+         }
         
-    //     if($doc->delete()){
-    //         alert()->success('Categoria excluída com sucesso!');
-    //     }
-
-    //     return redirect()->route('category.index');
-    // }
+         if($doc->delete()){
+             alert()->success('Procuração excluída com sucesso!');
+         }
+          return redirect()->route('procuracoes.index');
+     }
 }

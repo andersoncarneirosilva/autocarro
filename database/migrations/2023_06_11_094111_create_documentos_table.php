@@ -13,10 +13,23 @@ return new class extends Migration
     {
         Schema::create('documentos', function (Blueprint $table) {
             $table->id();
-            $table->string('colaborador');
-            $table->string('documento');
-            $table->string('subdocumento');
-            $table->string('arquivo');
+            
+            $table->string('marca');
+            $table->string('placa');
+            $table->string('chassi');
+            $table->string('cor');
+            $table->string('ano');
+            $table->string('renavam');
+            $table->string('nome');
+            $table->string('cpf');
+            $table->string('cidade');
+            $table->string('crv');
+            $table->string('placaAnterior');
+            $table->string('categoria');
+            $table->string('motor');
+            $table->string('combustivel');
+            $table->string('infos');
+            $table->string('arquivo_doc');
             $table->timestamps();
         });
     }

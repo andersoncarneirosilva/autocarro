@@ -2,7 +2,7 @@
   <div class="container-fluid">
       <div class="row">
           <div class="col-md-6">
-              <script>document.write(new Date().getFullYear())</script> © Gestão Saes - saes.com.br
+              <script>document.write(new Date().getFullYear())</script> © ProcOnline - proconline.com.br
           </div>
       </div>
   </div>

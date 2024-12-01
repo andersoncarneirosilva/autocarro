@@ -45,7 +45,7 @@
                             <tr>
                                 <th>Nome</th>
                                 <th>CPF</th>
-                                <th>Marca</th>
+                                <th>Veículo</th>
                                 <th>Placa</th>
                                 <th>Ano/Modelo</th>
                                 <th>Cadastrado em</th>
@@ -60,7 +60,7 @@
                                     <td>{{ $doc->cpf }}</td>
                                     <td>{{ $doc->marca }}</td>
                                     <td>{{ $doc->placa }}</td>
-                                    <td>{{ $doc->ano }}/{{ $doc->modelo }}</td>
+                                    <td>{{ $doc->ano }}</td>
                                     <td>{{ Carbon\Carbon::parse($doc->create_at)->format('d/m') }}</td>
                                     <td class="table-action">
                                         <a href="storage/{{ $doc->arquivo }}" class="action-icon" download> <i
@@ -69,7 +69,7 @@
                                                     <i class="mdi mdi-printer"></i>
                                                 </a>
                                                 
-                                        <a href="{{ route('documentos.destroy', $doc->id) }}"
+                                        <a href="{{ route('procuracoes.destroy', $doc->id) }}"
                                             class="action-icon mdi mdi-delete" data-confirm-delete="true"></a>
                                     </td>
                                 </tr>

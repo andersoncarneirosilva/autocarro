@@ -97,6 +97,7 @@ class Procuracao extends Model
         if (isset($word_anoModelo[0]) && isset($word_anoModelo[1])) {
             // Formatar o resultado como "2010/2010"
             $anoModelo = $word_anoModelo[0] . '/' . $word_anoModelo[1];
+            //dd($anoModelo);
         } else {
             $anoModelo = ''; // Caso não consiga extrair os dois anos, retorna uma string vazia
         }

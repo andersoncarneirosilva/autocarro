@@ -96,9 +96,14 @@ Route::middleware(['auth'])->group(function () {
     Route::post('/emprestimos', [EmprestimosController::class, 'store'])->name('emprestimos.store');
 
     //DOCUMENTOS
-    Route::delete('/documentos/{id}', [DocumentosController::class, 'destroy'])->name('documentos.destroy');
-    Route::get('/documentos', [DocumentosController::class, 'index'])->name('documentos.index');
-    Route::post('/documentos', [DocumentosController::class, 'store'])->name('documentos.store');
+    Route::get('/documentos/gerarProc/{id}/{endereco}', [DocumentosController::class, 'gerarProc'])->name('documentos.gerarProc');
+Route::get('/documentos/{id}', [DocumentosController::class, 'show'])->name('documentos.show');
+Route::delete('/documentos/{id}', [DocumentosController::class, 'destroy'])->name('documentos.destroy');
+Route::get('/documentos', [DocumentosController::class, 'index'])->name('documentos.index');
+Route::post('/documentos', [DocumentosController::class, 'store'])->name('documentos.store');
+
+    
+
 
     //PARCELAS
     Route::delete('/parcelas/delete/{id}', [ParcelaController::class, 'destroy'])->name('parcelas.destroy');
@@ -124,6 +129,8 @@ Route::middleware(['auth'])->group(function () {
 
     Route::get('/pedidos', [PedidosController::class, 'index'])->name('pedidos.index');
 
+    
+    Route::delete('/procuracoes/{id}', [ProcuracaoController::class, 'destroy'])->name('procuracoes.destroy');
     Route::get('/procuracoes/create', [ProcuracaoController::class, 'create'])->name('procuracoes.create');
     Route::get('/procuracoes', [ProcuracaoController::class, 'index'])->name('procuracoes.index');
     Route::post('/procuracoes', [ProcuracaoController::class, 'store'])->name('procuracoes.store');
