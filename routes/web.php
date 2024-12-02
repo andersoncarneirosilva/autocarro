@@ -155,7 +155,7 @@ Route::get('/login', function () {
 
 // INDEX SITE
 Route::get('/', function () {
-    return view('site.welcome');
+    return view('auth.login');
 });
 
 require __DIR__.'/auth.php';

@@ -60,36 +60,6 @@
             </li>
 
             <li class="side-nav-item">
-                <a data-bs-toggle="collapse" href="#sidebarLayouts" aria-expanded="false" aria-controls="sidebarLayouts" class="side-nav-link">
-                    <i class="uil-window"></i>
-                    <span> Cadastros </span>
-                    <span class="menu-arrow"></span>
-                </a>
-                <div class="collapse" id="sidebarLayouts">
-                    <ul class="side-nav-second-level">
-                        <li>
-                            <a href="{{ route('employees.index') }}">Colaboradores</a>
-                        </li>
-                        <li>
-                            <a href="{{ route('fornecedores.index') }}">Fornecedores</a>
-                        </li>
-                        <li>
-                            <a href="{{ route('transportadoras.index') }}">Transportadoras</a>
-                        </li>
-                        <li>
-                            <a href="{{ route('category.index') }}">Categorias</a>
-                        </li>
-                        <li>
-                            <a href="{{ route('subcategory.index') }}">Subcategorias</a>
-                        </li>
-                        <li>
-                            <a href="{{ route('users.index') }}">Usuários</a>
-                        </li>
-                    </ul>
-                </div>
-            </li>
-
-            <li class="side-nav-item">
                 <a data-bs-toggle="collapse" href="#sidebarLayoutss" aria-expanded="false" aria-controls="sidebarLayouts" class="side-nav-link">
                     <i class="uil-cog"></i>
                     <span> Configurações </span>
@@ -99,6 +69,9 @@
                     <ul class="side-nav-second-level">
                         <li>
                             <a href="{{ route('configuracoes.index') }}">Procuração</a>
+                        </li>
+                        <li>
+                            <a href="{{ route('users.index') }}">Usuários</a>
                         </li>
                     </ul>
                 </div>
