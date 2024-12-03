@@ -2,7 +2,7 @@
 
 namespace App\Mail;
 
-use App\Models\Adiantamento;
+use App\Models\Procuracao;
 use Illuminate\Bus\Queueable;
 use Illuminate\Mail\Mailable;
 use Illuminate\Mail\Mailables\Attachment;
@@ -19,11 +19,11 @@ class SendEmail extends Mailable
      */
     public $pags;
 
-    public function __construct($pags)
+    public function __construct($pags, $filePath)
     {
         //
         $this->pags = $pags;
-
+        $this->filePath = $filePath;
         //dd($pags);
     }
 
@@ -62,8 +62,11 @@ class SendEmail extends Mailable
      */
     public function attachments(): array
     {
+        $fileName = $this->pags['placa'] . '.pdf'; // Nome do arquivo baseado na placa
         return [
-            //Attachment::fromPath('public/storage/contracheques/contracheque-Anderson.pdf'),
+            Attachment::fromPath($this->filePath)
+                ->as($fileName) // Nomeia o anexo com a placa
+                ->withMime('application/pdf'),
         ];
     }
 }

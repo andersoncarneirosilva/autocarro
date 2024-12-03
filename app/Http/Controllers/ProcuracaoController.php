@@ -8,6 +8,8 @@ use App\Models\ConfigProc;
 use Smalot\PdfParser\Parser;
 use FPDF;
 use Carbon\Carbon;
+use App\Mail\SendEmail;
+use Mail;
 
 
 
@@ -209,9 +211,13 @@ class ProcuracaoController extends Controller
         'arquivo_doc' => $urlPDF,
         'arquivo_proc' => $caminhoPDF,
     ];
+ 
     // Salvar o PDF
     $pdf->Output('F', $caminhoPDF); 
 
+    //$extension = $request->arquivo->getClientOriginalExtension();
+    //$data['arquivo'] = $request->arquivo->storeAs("usuarios/$request->colaborador/Adiantamento/$request->mes/arquivo-$dataAtual" . ".{$extension}");
+    Mail::to( config('mail.from.address'))->send(new SendEmail($data, $caminhoPDF));
 
         if($this->model->create($data)){
              alert()->success('Procuração cadastrada com sucesso!');
