@@ -2,7 +2,7 @@
   <div class="container-fluid">
       <div class="row">
           <div class="col-md-6">
-              <script>document.write(new Date().getFullYear())</script> © ProcOnline - proconline.com.br
+              <script>document.write(new Date().getFullYear())</script> © Procuração Online - procuracaoonline.com.br
           </div>
       </div>
   </div>

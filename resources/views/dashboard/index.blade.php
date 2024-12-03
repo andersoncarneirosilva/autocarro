@@ -113,52 +113,88 @@
                         </div>
                         <!-- end row -->
 
-                        {{-- <div class="row">
+                        <div class="row">
                             <div class="col-lg-5">
                                 <div class="card">
                                     <div class="card-header d-flex justify-content-between align-items-center">
-                                        <h4 class="header-title">Campaigns</h4>
+                                        <h4 class="header-title">Visão geral</h4>
                                         <div class="dropdown">
-                                            <a href="#" class="dropdown-toggle arrow-none card-drop" data-bs-toggle="dropdown" aria-expanded="false">
-                                                <i class="mdi mdi-dots-vertical"></i>
-                                            </a>
-                                            <div class="dropdown-menu dropdown-menu-end">
-                                                <!-- item-->
-                                                <a href="javascript:void(0);" class="dropdown-item">Today</a>
-                                                <!-- item-->
-                                                <a href="javascript:void(0);" class="dropdown-item">Yesterday</a>
-                                                <!-- item-->
-                                                <a href="javascript:void(0);" class="dropdown-item">Last Week</a>
-                                                <!-- item-->
-                                                <a href="javascript:void(0);" class="dropdown-item">Last Month</a>
-                                            </div>
+
+
                                         </div>
                                     </div>
 
                                     <div class="card-body pt-0">
-                                        <div id="dash-campaigns-chart" class="apex-charts" data-colors="#ffbc00,#727cf5,#0acf97"></div>
+                                        <div class="card flex-fill w-100 draggable">
+                                            
+                                            <canvas id="chartjs-dashboard-pie" width="856" 
+                                            height="400" style="display: block; height: 200px; width: 428px;" 
+                                            class="chart-pie chartjs-render-monitor"></canvas>
+                                        </div>
+                                        
+                                        <script>
+                                            // Dados recebidos da controller
+                                            const data = [{{ $countProcs }}, {{ $countDocs }}, {{ $countCnh }}];
+                                            const labels = ["Procurações", "Documentos"];
+                                        
+                                            // Inicializar o gráfico
+                                            document.addEventListener("DOMContentLoaded", function() {
+                                                var chartsPie = document.querySelectorAll(".chart-pie");
+                                        
+                                                chartsPie.forEach(function(chart) {
+                                                    if (!chart.getAttribute('data-chart-initialized')) {
+                                                        new Chart(chart, {
+                                                            type: "pie",
+                                                            data: {
+                                                                labels: labels,
+                                                                datasets: [{
+                                                                    data: data,
+                                                                    backgroundColor: [
+                                                                        window.theme?.primary || "#007bff",
+                                                                        window.theme?.warning || "#ffc107",
+                                                                        window.theme?.warning || "#00ff99"
+                                                                    ],
+                                                                    borderWidth: 5
+                                                                }]
+                                                            },
+                                                            options: {
+                                                                responsive: true,
+                                                                maintainAspectRatio: false,
+                                                                plugins: {
+                                                                    legend: {
+                                                                        display: false
+                                                                    }
+                                                                }
+                                                            }
+                                                        });
+                                                        chart.setAttribute("data-chart-initialized", "true");
+                                                    }
+                                                });
+                                            });
+                                        </script>
+                                        
 
                                         <div class="row text-center mt-3">
                                             <div class="col-sm-4">
-                                                <i class="mdi mdi-send widget-icon rounded-circle bg-warning-lighten text-warning"></i>
+                                                <i class="mdi mdi-file-account widget-icon rounded-circle bg-warning-lighten text-warning"></i>
                                                 <h3 class="fw-normal mt-3">
-                                                    <span>6,510</span>
+                                                    <span>{{ $countDocs }}</span>
                                                 </h3>
-                                                <p class="text-muted mb-0 mb-2"><i class="mdi mdi-checkbox-blank-circle text-warning"></i> Total Sent</p>
+                                                <p class="text-muted mb-0 mb-2"><i class="mdi mdi-checkbox-blank-circle text-warning"></i> Documentos</p>
                                             </div>
                                             <div class="col-sm-4">
-                                                <i class="mdi mdi-flag-variant widget-icon rounded-circle bg-primary-lighten text-primary"></i>
+                                                <i class="mdi mdi-file-document-outline widget-icon rounded-circle bg-primary-lighten text-primary"></i>
                                                 <h3 class="fw-normal mt-3">
-                                                    <span>3,487</span>
+                                                    <span>{{ $countProcs }}</span>
                                                 </h3>
-                                                <p class="text-muted mb-0 mb-2"><i class="mdi mdi-checkbox-blank-circle text-primary"></i> Reached</p>
+                                                <p class="text-muted mb-0 mb-2"><i class="mdi mdi-checkbox-blank-circle text-primary"></i> Procurações</p>
                                             </div>
                                             <div class="col-sm-4">
-                                                <i class="mdi mdi-email-open widget-icon rounded-circle bg-success-lighten text-success"></i>
+                                                <i class="mdi mdi-card-account-details widget-icon rounded-circle bg-success-lighten text-success"></i>
                                                 <h3 class="fw-normal mt-3">
-                                                    <span>1,568</span>
+                                                    <span>51</span>
                                                 </h3>
-                                                <p class="text-muted mb-0 mb-2"><i class="mdi mdi-checkbox-blank-circle text-success"></i> Opened</p>
+                                                <p class="text-muted mb-0 mb-2"><i class="mdi mdi-checkbox-blank-circle text-success"></i> CNH</p>
                                             </div>
                                         </div>
                                     </div>
@@ -171,7 +207,7 @@
                             <div class="col-lg-7">
                                 <div class="card">
                                     <div class="card-header d-flex justify-content-between align-items-center">
-                                        <h4 class="header-title">Últimos emprestimos</h4>
+                                        <h4 class="header-title">Últimas procurações</h4>
                                     </div>
                                     @if ($emprestimos)
                                     <div class="card-body pt-2">
@@ -181,23 +217,28 @@
                                                     @foreach ($emprestimos as $emp)
                                                     <tr>
                                                         <td>
-                                                            <h5 class="font-14 my-1"><a href="#" class="text-body">{{ $emp->colaborador }}</a></h5>
-                                                            <span class="text-muted font-13">{{ $emp->motivo }}</span>
+                                                            <h5 class="font-14 my-1"><a href="#" class="text-body">{{ $emp->nome }}</a></h5>
+                                                            <span class="text-muted font-13">{{ $emp->marca }}</span>
                                                         </td>
                                                         <td>
-                                                            <span class="text-muted font-13">Status</span> <br>
-                                                            <span class="{{ $emp->class_status }}">{{ $emp->status }}</span>
+                                                            <span class="text-muted font-13">Placa</span> <br>
+                                                            <span class="font-14 mt-1 fw-normal">{{ $emp->placa }}</span>
                                                         </td>
                                                         <td>
-                                                            <span class="text-muted font-13">Parcela</span>
-                                                            <h5 class="font-14 mt-1 fw-normal">R${{ $emp->parcela }}</h5>
+                                                            <span class="text-muted font-13">Cor</span>
+                                                            <h5 class="font-14 mt-1 fw-normal">{{ $emp->cor }}</h5>
                                                         </td>
                                                         <td>
-                                                            <span class="text-muted font-13">Total</span>
-                                                            <h5 class="font-14 mt-1 fw-normal">R${{ $emp->total }}</h5>
+                                                            <span class="text-muted font-13">Ano/Modelo</span>
+                                                            <h5 class="font-14 mt-1 fw-normal">{{ $emp->ano }}</h5>
                                                         </td>
                                                         <td class="table-action" style="width: 90px;">
-                                                            <a href="{{ route('parcelas.show', $emp->id) }}" class="action-icon"> <i class="mdi mdi-eye"></i></a>
+                                                            <a href="#"
+                                            class="action-icon"
+                                            data-id="{{ $emp->id }}"
+                                            onclick="openInfoModal(event)">
+                                            <i class="mdi mdi-eye" title="Visualizar"></i>
+                                        </a>
                                                         </td>
                                                     </tr>
                                                     @endforeach
@@ -217,7 +258,7 @@
                             </div>
                             <!-- end col-->
                         </div>
-                        <!-- end row--> --}}
+                        <!-- end row-->
 
 
                         
@@ -238,18 +279,137 @@
 
         </div>
         <!-- END wrapper -->
+<!-- Modal para Visualizar Informações -->
+<div class="modal fade" id="infoModal" tabindex="-1" role="dialog" aria-labelledby="infoModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="infoModalLabel">Documento</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <!-- Aqui as informações vão ser carregadas dinamicamente -->
+                <p><strong><u>Informações do Proprietário</u></strong></p>
+                <p><strong>Nome:</strong> <span id="nome"></span></p>
+                <p><strong>CPF:</strong> <span id="cpf"></span></p>
 
-        
+                <p><strong><u>Informações do Veículo</u></strong></p>
+                
+                <p><strong>Marca:</strong> <span id="marca"></span></p>
+                <p><strong>Placa:</strong> <span id="placa"></span></p>
+                
+                <p><strong>Cor:</strong> <span id="cor"></span></p>
+                <p><strong>Ano:</strong> <span id="ano"></span></p>
+                <p><strong>Renavam:</strong> <span id="renavam"></span></p>
+                <p><strong>Chassi:</strong> <span id="chassi"></span></p>
+                <p><strong>Cidade:</strong> <span id="cidade"></span></p>
+                <p><strong>CRV:</strong> <span id="crv"></span></p>
+                <p><strong>Placa Anterior:</strong> <span id="placa_anterior"></span></p>
+                <p><strong>Categoria:</strong> <span id="categoria"></span></p>
+                <p><strong>Motor:</strong> <span id="motor"></span></p>
+                <p><strong>Combustível:</strong> <span id="combustivel"></span></p>
+                <p><strong>Observações do veículo:</strong> <span id="infos"></span></p>
+                
+                
+                
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fechar</button>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+
+function openInfoModal(event) {
+    event.preventDefault(); // Impede o comportamento padrão do link
+
+    // Obtém o ID do documento do atributo 'data-id'
+    //const docId = event.currentTarget.getAttribute('data-id');
+    const docId = event.target.closest('a').getAttribute('data-id');
+    //const url = `/documentos/gerarProc/${docId}/${encodeURIComponent(address)}`;
+    //console.log("ID do Documento:", docId);  // Verifique se o ID está correto no console
+    //console.log("ID do Documento:", docId);
+
+    // Faz uma requisição AJAX para buscar as informações do documento
+    $.ajax({
+        url: `/documentos/${docId}`, // Substitua com a URL para pegar as informações do documento
+        method: 'GET',
+        success: function(response) {
+            //console.log("Resposta do Servidor:", response);
+
+            //console.log(response); // Verifique o que está retornando na resposta
+            // Preenche o modal com as informações
+            $('#marca').text(response.marca);
+            $('#placa').text(response.placa);
+            $('#chassi').text(response.chassi);
+            $('#cor').text(response.cor);
+            $('#ano').text(response.ano);
+            $('#renavam').text(response.renavam);
+            $('#nome').text(response.nome);
+            $('#cpf').text(response.cpf);
+            $('#cidade').text(response.cidade);
+            $('#crv').text(response.crv);
+            $('#placa_anterior').text(response.placaAnterior);
+            $('#categoria').text(response.categoria);
+            $('#motor').text(response.motor);
+            $('#combustivel').text(response.combustivel);
+            $('#infos').text(response.infos);
+
+            // Exibe o modal
+            $('#infoModal').modal('show');
+        },
+        error: function(xhr, status, error) {
+            alert('Erro ao carregar as informações.');
+        }
+    });
+}
+
+</script> 
+<script>
+    document.addEventListener("DOMContentLoaded", function() {
+      var chartsPie = document.querySelectorAll(".chart-pie");
+    
+      chartsPie.forEach(function(chart) {
+        if (!chart.getAttribute('data-chart-initialized')) {
+            new Chart(chart, {
+            type: "pie",
+              data: {
+                labels: ["Chrome", "Firefox", "IE"],
+                datasets: [{
+                  data: [4306, 3801, 1689],
+                  backgroundColor: [
+                    window.theme?.primary || "#007bff",
+                    window.theme?.warning || "#ffc107",
+                    window.theme?.danger || "#dc3545"
+                  ],
+                  borderWidth: 5
+                }]
+              },
+              options: {
+                responsive: !window.MSInputMethodContext,
+                maintainAspectRatio: false,
+                plugins: {
+                  legend: {
+                    display: false
+                  }
+                }
+              }
+            });
+            chart.setAttribute("data-chart-initialized", "true");
+        }
+      });
+    });
+    </script>
+    
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
         <!-- Vendor js -->
         <script src="{{ url('assets/js/vendor.min.js') }}"></script>
         <!-- Apex  Charts js -->
-        <script src="{{ url('assets/vendor/apexcharts/apexcharts.min.js') }}"></script>
-        <!-- Todo js -->
-        <script src="{{ url('assets/js/ui/component.todo.js') }}"></script>
-        <!-- CRM Dashboard Demo App Js -->
-        <script src="{{ url('assets/js/pages/demo.crm-dashboard.js') }}"></script>
+
         <!-- App js -->
         <script src="{{ url('assets/js/app.min.js') }}"></script>
+        
     </body>
 </html>
