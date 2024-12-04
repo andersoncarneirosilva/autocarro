@@ -29,17 +29,18 @@
                     @endforeach
                 </ul>
             @endif --}}
+            @if ($outs->total() != 0)
             <div class="col-sm-12">
                 <div class="card-header d-flex justify-content-between align-items-center">
                     <h4 class="header-title">Outorgado</h4>
                     <div class="dropdown">
-                        {{-- <button type="button" class="btn btn-primary btn-sm" data-bs-toggle="modal"
-                            data-bs-target="#standard-modal">Cadastrar</button> --}}
+                        <button type="button" class="btn btn-primary btn-sm" data-bs-toggle="modal"
+                            data-bs-target="#standard-modal">Cadastrar</button>
                         {{-- <button class="btn btn-secondary btn-sm" id="deleteAllSelectedRecord" disabled><i
                                 class="fa-solid fa-trash"></i></button> --}}
                     </div>
                 </div>
-                @if ($procs->total() != 0)
+                
                 <div class="table-responsive-sm">
                     <table class="table table-centered table-borderless mb-0">
                         <thead>
@@ -52,14 +53,14 @@
                         </thead>
 
                         <tbody>
-                            @foreach ($procs as $doc)
+                            @foreach ($outs as $out)
                                 <tr>
-                                    <td>{{ $doc->nome_outorgado }}</td>
-                                    <td>{{ $doc->cpf_outorgado }}</td>
-                                    <td>{{ $doc->end_outorgado }}</td>
+                                    <td>{{ $out->nome_outorgado }}</td>
+                                    <td>{{ $out->cpf_outorgado }}</td>
+                                    <td>{{ $out->end_outorgado }}</td>
                                     <td class="table-action">
 
-                                        <a href="#" class="action-icon" data-id="{{ $doc->id }}" onclick="openEditModalOutorgado(event)">
+                                        <a href="#" class="action-icon" data-id="{{ $out->id }}" onclick="openEditModalOutorgado(event)">
                                             <i class="mdi mdi-clipboard-edit-outline" title="Editar"></i>
                                         </a>
                                         
@@ -70,7 +71,7 @@
                         </tbody>
                     </table>
                 </div>
-                    @elseif($procs->total() == 0)
+                    @elseif($outs->total() == 0)
                         <div class="alert alert-warning" role="alert">
                             NENHUM RESULTADO ENCONTRADO!
                         </div>
@@ -99,7 +100,7 @@
 
                     </div>
                 </div>
-                @if ($procs->total() != 0)
+                @if ($teste->total() != 0)
                 <div class="table-responsive-sm">
                     <table class="table table-centered table-borderless mb-0">
                         <thead>
@@ -112,14 +113,14 @@
                         </thead>
 
                         <tbody>
-                            @foreach ($procs as $doc)
+                            @foreach ($teste as $test)
                                 <tr>
-                                    <td>{{ $doc->nome_testemunha }}</td>
-                                    <td>{{ $doc->cpf_testemunha }}</td>
-                                    <td>{{ $doc->end_testemunha }}</td>
+                                    <td>{{ $test->nome_testemunha }}</td>
+                                    <td>{{ $test->cpf_testemunha }}</td>
+                                    <td>{{ $test->end_testemunha }}</td>
                                     <td class="table-action">
 
-                                        <a href="#" class="action-icon" data-id="{{ $doc->id }}" onclick="openEditModalTestemunha(event)">
+                                        <a href="#" class="action-icon" data-id="{{ $test->id }}" onclick="openEditModalTestemunha(event)">
                                             <i class="mdi mdi-clipboard-edit-outline" title="Editar"></i>
                                         </a>
 
@@ -129,7 +130,7 @@
                         </tbody>
                     </table>
                 </div>
-                    @elseif($procs->total() == 0)
+                    @elseif($teste->total() == 0)
                         <div class="alert alert-warning" role="alert">
                             NENHUM RESULTADO ENCONTRADO!
                         </div>

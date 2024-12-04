@@ -3,16 +3,13 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use App\Models\Configuracao;
-use App\Models\ConfigProc;
 use App\Models\Outorgado;
-use App\Models\Testemunha;
 
-class ConfiguracoesController extends Controller
+class OutorgadoController extends Controller
 {
     protected $model;
 
-    public function __construct(Configuracao $docs)
+    public function __construct(Outorgado $docs)
     {
         $this->model = $docs;
     }
@@ -23,15 +20,13 @@ class ConfiguracoesController extends Controller
         $text = "Deseja excluir essa categoria?";
         confirmDelete($title, $text);
 
-        $procs = ConfigProc::paginate(10);
-        $outs = Outorgado::paginate(10);
-        $teste = Testemunha::paginate(10);
-        //dd($outs);
-        return view('configuracoes.index', compact(['procs', 'outs', 'teste']));
+        $procs = Outorgado::paginate(10);
+        //dd($docs);
+        return view('configuracoes.index', compact('procs'));
     }
 
     public function update(Request $request, $id){
-        $doc = ConfigProc::findOrFail($id);
+        $doc = Outorgado::findOrFail($id);
     
         $doc->update($request->all());
     
@@ -40,7 +35,7 @@ class ConfiguracoesController extends Controller
     }
 
     public function show($id){
-    $configuracao = ConfigProc::find($id);
+    $configuracao = Outorgado::find($id);
 
     if (!$configuracao) {
         return response()->json(['error' => 'Configuração não encontrada'], 404);

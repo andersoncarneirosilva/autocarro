@@ -62,7 +62,7 @@
                                     <td>{{ $doc->marca }}</td>
                                     <td>{{ $doc->placa }}</td>
                                     <td>{{ $doc->ano }}</td>
-                                    <td>{{ Carbon\Carbon::parse($doc->create_at)->format('d/m') }}</td>
+                                    <td>{{ Carbon\Carbon::parse($doc->created_at)->format('d/m') }}</td>
                                     <td class="table-action">
                                                 <a href="{{ $doc->arquivo_doc }}" class="action-icon" target="blank">
                                                     <i class="mdi mdi-printer"></i>

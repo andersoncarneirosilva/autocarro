@@ -11,16 +11,11 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('pagamentos', function (Blueprint $table) {
+        Schema::create('outorgados', function (Blueprint $table) {
             $table->id();
-            $table->string('colaborador');
-            $table->string('email');
-            $table->string('arquivo');
-            $table->string('mes');
-            $table->string('numeromes');
-            $table->string('status');
-            $table->string('class_status');
-            $table->string('foto');
+            $table->string('nome_outorgado');
+            $table->string('cpf_outorgado');
+            $table->string('end_outorgado');
             $table->timestamps();
         });
     }
@@ -30,6 +25,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('pagamentos');
+        Schema::dropIfExists('outorgados');
     }
 };

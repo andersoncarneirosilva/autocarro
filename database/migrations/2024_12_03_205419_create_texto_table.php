@@ -11,9 +11,9 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('cat_docs', function (Blueprint $table) {
+        Schema::create('textos', function (Blueprint $table) {
             $table->id();
-            $table->string('nome_doc');
+            $table->string('texto_poderes');
             $table->timestamps();
         });
     }
@@ -23,6 +23,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('cat_docs');
+        Schema::dropIfExists('texto');
     }
 };

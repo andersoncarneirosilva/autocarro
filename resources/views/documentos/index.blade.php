@@ -64,7 +64,7 @@
                                     <td>{{ $doc->ano }}</td>
                                     <td>{{ $doc->cor }}</td>
                                     <td>{{ $doc->nome }}</td>
-                                    <td>{{ Carbon\Carbon::parse($doc->create_at)->format('d/m') }}</td>
+                                    <td>{{ Carbon\Carbon::parse($doc->created_at)->format('d/m') }}</td>
                                     <td class="table-action">
 
                                         <a href="#"

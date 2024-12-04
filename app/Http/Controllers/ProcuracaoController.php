@@ -29,7 +29,7 @@ class ProcuracaoController extends Controller
         confirmDelete($title, $text);
 
         $procs = Procuracao::paginate(10);
-        
+        //d($procs);
         //dd($config->nome_outorgado);
         return view('procuracoes.index', compact('procs'));
     }
@@ -141,7 +141,7 @@ class ProcuracaoController extends Controller
     $margem_direita = 10;  // Margem direita
 
     // Texto a ser inserido no PDF
-    $text = "$config->texto_poderes";
+    $text = "FINS E PODERES: O OUTORGANTE confere ao OUTORGADO amplos e ilimitados poderes para o fim especial de vender a quem quiser, receber valores de venda, transferir para si próprio ou terceiros, em causa própria, locar ou de qualquer forma alienar ou onerar o veículo de sua propriedade com as seguintes características:";
 
     // Remover quebras de linha manuais, caso existam
     $text = str_replace("\n", " ", $text);
