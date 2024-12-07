@@ -11,6 +11,7 @@ use App\Http\Controllers\DocVeiculoController;
 use App\Http\Controllers\ProcuracaoController;
 use App\Http\Controllers\ConfiguracoesController;
 use App\Http\Controllers\OutorgadoController;
+use App\Http\Controllers\TextoPoderesController;
 use Illuminate\Support\Facades\Route;
 
 
@@ -75,6 +76,11 @@ Route::middleware(['auth'])->group(function () {
     Route::put('/outorgados/{id}', [OutorgadoController::class, 'update'])->name('outorgados.update');
     Route::delete('/outorgados/{id}', [OutorgadoController::class, 'destroy'])->name('outorgados.destroy');
     Route::post('/outorgados', [OutorgadoController::class, 'store'])->name('outorgados.store');
+
+    Route::get('/poderes/{id}', [TextoPoderesController::class, 'show'])->name('poderes.show');
+    Route::put('/poderes/{id}', [TextoPoderesController::class, 'update'])->name('poderes.update');
+    Route::delete('/poderes/{id}', [TextoPoderesController::class, 'destroy'])->name('poderes.destroy');
+    Route::post('/poderes', [TextoPoderesController::class, 'store'])->name('poderes.store');
 
 });
 

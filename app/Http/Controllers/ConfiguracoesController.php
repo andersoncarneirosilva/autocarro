@@ -7,6 +7,7 @@ use App\Models\Configuracao;
 use App\Models\ConfigProc;
 use App\Models\Outorgado;
 use App\Models\Testemunha;
+use App\Models\TextoPoder;
 
 class ConfiguracoesController extends Controller
 {
@@ -20,14 +21,15 @@ class ConfiguracoesController extends Controller
     public function index(Request $request){
 
         $title = 'Excluir!';
-        $text = "Deseja excluir esse outorgado?";
+        $text = "Tem certeza que deseja excluir?";
         confirmDelete($title, $text);
 
         $procs = ConfigProc::paginate(10);
         $outs = Outorgado::paginate(10);
         $teste = Testemunha::paginate(10);
+        $texts = TextoPoder::paginate(10);
         //dd($outs);
-        return view('configuracoes.index', compact(['procs', 'outs', 'teste']));
+        return view('configuracoes.index', compact(['procs', 'outs', 'teste','texts']));
     }
 
     public function update(Request $request, $id){
