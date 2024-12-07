@@ -20,7 +20,7 @@ class ConfiguracoesController extends Controller
     public function index(Request $request){
 
         $title = 'Excluir!';
-        $text = "Deseja excluir essa categoria?";
+        $text = "Deseja excluir esse outorgado?";
         confirmDelete($title, $text);
 
         $procs = ConfigProc::paginate(10);

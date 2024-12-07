@@ -34,8 +34,16 @@
                 <div class="card-header d-flex justify-content-between align-items-center">
                     <h4 class="header-title">Outorgado</h4>
                     <div class="dropdown">
+                        @if ($outs->total() >= 3)
+                        <button type="button" class="btn btn-primary btn-sm" onclick="verificarLimite()">Cadastrar</button>
+
+                        @else
                         <button type="button" class="btn btn-primary btn-sm" data-bs-toggle="modal"
-                            data-bs-target="#standard-modal">Cadastrar</button>
+                            data-bs-target="#modalCadastroOut">Cadastrar</button>
+                        {{-- <button class="btn btn-secondary btn-sm" id="deleteAllSelectedRecord" disabled><i
+                                class="fa-solid fa-trash"></i></button> --}}
+                        @endif
+                        
                         {{-- <button class="btn btn-secondary btn-sm" id="deleteAllSelectedRecord" disabled><i
                                 class="fa-solid fa-trash"></i></button> --}}
                     </div>
@@ -45,6 +53,7 @@
                     <table class="table table-centered table-borderless mb-0">
                         <thead>
                             <tr>
+                                <th>ID</th>
                                 <th>Nome</th>
                                 <th>CPF</th>
                                 <th>Endereço</th>
@@ -55,6 +64,7 @@
                         <tbody>
                             @foreach ($outs as $out)
                                 <tr>
+                                    <td>{{ $out->id }}</td>
                                     <td>{{ $out->nome_outorgado }}</td>
                                     <td>{{ $out->cpf_outorgado }}</td>
                                     <td>{{ $out->end_outorgado }}</td>
@@ -63,7 +73,8 @@
                                         <a href="#" class="action-icon" data-id="{{ $out->id }}" onclick="openEditModalOutorgado(event)">
                                             <i class="mdi mdi-clipboard-edit-outline" title="Editar"></i>
                                         </a>
-                                        
+                                        <a href="{{ route('outorgados.destroy', $out->id) }}"
+                                            class="action-icon mdi mdi-delete" data-confirm-delete="true"></a>
 
                                     </td>
                                 </tr>
@@ -246,27 +257,12 @@
                             NENHUM RESULTADO ENCONTRADO!
                         </div>
                     @endif
+                   
             </div>
         </div>
     </div>
 </div>
 
-
-<!-- Standard modal -->
-<div id="standard-modal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="standard-modalLabel"
-aria-hidden="true">
-    <div class="modal-dialog modal-lg">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h4 class="modal-title" id="standard-modalLabel">Novo documento</h4>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-hidden="true"></button>
-            </div>
-            <div class="modal-body">
-                @include('documentos.create')
-            </div>
-        </div><!-- /.modal-content -->
-    </div><!-- /.modal-dialog -->
-</div><!-- /.modal -->
 
 <!-- Modal para Digitar o Endereço -->
 <div class="modal fade" id="addressModal" tabindex="-1" role="dialog" aria-labelledby="addressModalLabel" aria-hidden="true">
@@ -295,6 +291,12 @@ aria-hidden="true">
         </div>
     </div>
 </div>
+
+
+<!-- Modal Cadastro outorgado-->
+@include('configuracoes._partials.form-cad-outorgado')
+
+
 
 <!-- Modal para Visualizar Informações -->
 <div class="modal fade" id="infoModal" tabindex="-1" role="dialog" aria-labelledby="infoModalLabel" aria-hidden="true">
@@ -341,16 +343,16 @@ aria-hidden="true">
                 @method('PUT') <!-- Usado para edições -->
                 <div class="modal-body">
                     <div class="mb-3">
-                        <label for="nome_outorgado" class="form-label">Nome do Outorgado</label>
-                        <input type="text" class="form-control" id="nome_outorgado" name="nome_outorgado" required>
+                        <label for="nome_outorgado" class="form-label">Nome</label>
+                        <input type="text" class="form-control" id="edit_nome_outorgado" name="nome_outorgado" required>
                     </div>
                     <div class="mb-3">
-                        <label for="cpf_outorgado" class="form-label">CPF do Outorgado</label>
-                        <input type="text" class="form-control" id="cpf_outorgado" name="cpf_outorgado" required>
+                        <label for="cpf_outorgado" class="form-label">CPF</label>
+                        <input type="text" class="form-control" id="edit_cpf_outorgado" name="cpf_outorgado" required>
                     </div>
                     <div class="mb-3">
-                        <label for="end_outorgado" class="form-label">Endereço do Outorgado</label>
-                        <input type="text" class="form-control" id="end_outorgado" name="end_outorgado" required>
+                        <label for="end_outorgado" class="form-label">Endereço</label>
+                        <input type="text" class="form-control" id="edit_end_outorgado" name="end_outorgado" required>
                     </div>
                 </div>
                 <div class="modal-footer">
@@ -449,7 +451,29 @@ aria-hidden="true">
     class="btn btn-primary btn-sm" target="_blank" data-confirm-delete="true">Visualizar procuração</a>
 
     
+    
 <script>
+
+function verificarLimite() {
+    const limiteExcedido = true; // Substitua por sua lógica de verificação real.
+    
+    if (limiteExcedido) {
+        Swal.fire({
+            icon: 'warning',
+            title: 'Limite Excedido',
+            text: 'Não é possível cadastrar mais outorgados.',
+            confirmButtonText: 'Entendido',
+        });
+    } else {
+        // Se o limite não estiver excedido, abre o modal.
+        const modal = new bootstrap.Modal(document.getElementById('modalLimiteOut'));
+        modal.show();
+    }
+}
+
+
+
+
 function openEditModalOutorgado(event) {
     event.preventDefault();
 
@@ -457,18 +481,19 @@ function openEditModalOutorgado(event) {
     //const docId = event.currentTarget.getAttribute('data-id');
     const docId = event.target.closest('a').getAttribute('data-id');
     // Faça uma requisição AJAX para buscar os dados
-    //console.log(docId);
+    console.log(docId);
     $.ajax({
-        url: `/configuracoes/${docId}`,
+        url: `/outorgados/${docId}`,
         method: 'GET',
         success: function(response) {
+            console.log(response);
             // Preencha os campos do modal com os dados do documento
-            $('#nome_outorgado').val(response.nome_outorgado);
-            $('#cpf_outorgado').val(response.cpf_outorgado);
-            $('#end_outorgado').val(response.end_outorgado);
+            $('#edit_nome_outorgado').val(response.nome_outorgado);
+            $('#edit_cpf_outorgado').val(response.cpf_outorgado);
+            $('#edit_end_outorgado').val(response.end_outorgado);
 
             // Atualize a ação do formulário para apontar para a rota de edição
-            $('#editForm').attr('action', `/configuracoes/${docId}`);
+            $('#editForm').attr('action', `/outorgados/${docId}`);
 
             // Exiba o modal
             $('#editInfoModal').modal('show');
@@ -491,7 +516,7 @@ function openEditModalTestemunha(event) {
     //const docId = event.currentTarget.getAttribute('data-id');
     const docId = event.target.closest('a').getAttribute('data-id');
     // Faça uma requisição AJAX para buscar os dados
-    //console.log(docId);
+    console.log(docId);
     $.ajax({
         url: `/configuracoes/${docId}`,
         method: 'GET',

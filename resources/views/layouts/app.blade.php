@@ -9,6 +9,8 @@
         <meta content="A fully featured admin theme which can be used to build CRM, CMS, etc." name="description" />
         <meta content="Coderthemes" name="author" />
         <!-- App favicon -->
+        <meta name="csrf-token" content="{{ csrf_token() }}">
+
         <link rel="shortcut icon" href="{{ url('images/favicon.png') }}">
         <!-- Daterangepicker css -->
         <link rel="stylesheet" href="{{ url('assets/vendor/daterangepicker/daterangepicker.css') }}">

@@ -17,7 +17,7 @@ class OutorgadoController extends Controller
     public function index(Request $request){
 
         $title = 'Excluir!';
-        $text = "Deseja excluir essa categoria?";
+        $text = "Deseja tests excluir esse outorgado?";
         confirmDelete($title, $text);
 
         $procs = Outorgado::paginate(10);
@@ -26,6 +26,7 @@ class OutorgadoController extends Controller
     }
 
     public function update(Request $request, $id){
+
         $doc = Outorgado::findOrFail($id);
     
         $doc->update($request->all());
@@ -36,7 +37,7 @@ class OutorgadoController extends Controller
 
     public function show($id){
     $configuracao = Outorgado::find($id);
-
+//dd($configuracao);
     if (!$configuracao) {
         return response()->json(['error' => 'Configuração não encontrada'], 404);
     }
@@ -48,45 +49,27 @@ class OutorgadoController extends Controller
     //     return view('category.create');
     // }
 
-    // public function store(Request $request){
-    //     $data = $request->all();
-    //     //dd($data);
-    //     if($this->model->create($data)){
-    //         alert()->success('Categoria cadastrada com sucesso!');
+     public function store(Request $request){
+         $data = $request->all();
+         //dd($data);
+         if($this->model->create($data)){
+             alert()->success('Outorgado cadastrado com sucesso!');
+         }   
 
-    //         return redirect()->route('category.index');
-    //     }   
-    // }
+         return redirect()->route('configuracoes.index');
+     }
+     
 
-    // public function edit($id){
-    //     if(!$cats = $this->model->find($id)){
-    //         return redirect()->route('category.index');
-    //     }
-    //     return view('category.edit', compact('cats'));
-    // }
+     public function destroy($id){
+        if(!$docs = $this->model->find($id)){
+            alert()->error('Erro ao excluír o pagamento!');
+        }
+    
+        if($docs->delete()){
+            alert()->success('Outorgado excluído com sucesso!');
+        }
 
-    // public function update(Request $request, $id){
-    //     //dd($request);
-    //     //dd($data);
-    //     $data = $request->all();
-    //     if(!$cats = $this->model->find($id))
-    //         return redirect()->route('category.index');
+        return redirect()->route('configuracoes.index');
+    }
 
-    //     if($cats->update($data)){
-    //         alert()->success('Categoria editada com sucesso!');
-    //         return redirect()->route('category.index');
-    //     }
-    // }
-
-    // public function destroy($id){
-    //     if(!$doc = $this->model->find($id)){
-    //         alert()->error('Erro ao excluír o pagamento!');
-    //     }
-        
-    //     if($doc->delete()){
-    //         alert()->success('Categoria excluída com sucesso!');
-    //     }
-
-    //     return redirect()->route('category.index');
-    // }
 }
