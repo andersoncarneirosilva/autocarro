@@ -4,7 +4,8 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Procuracao;
-use App\Models\ConfigProc;
+use App\Models\Outorgado;
+use App\Models\TextoPoder;
 use Smalot\PdfParser\Parser;
 use FPDF;
 use Carbon\Carbon;
@@ -29,8 +30,8 @@ class ProcuracaoController extends Controller
         confirmDelete($title, $text);
 
         $procs = Procuracao::paginate(10);
-        //d($procs);
-        //dd($config->nome_outorgado);
+        
+        
         return view('procuracoes.index', compact('procs'));
     }
 
@@ -41,8 +42,8 @@ class ProcuracaoController extends Controller
 
     public function store(Request $request){
 
-        
-        $config = ConfigProc::first();
+        $outorgados = Outorgado::all();
+        $config = TextoPoder::first();
         //dd($request);
         $dataAtual = Carbon::now();
         $dataPorExtenso = $dataAtual->translatedFormat('d \d\e F \d\e Y');
@@ -103,6 +104,7 @@ class ProcuracaoController extends Controller
     $larguraTitulo = $pdf->GetStringWidth($titulo);
     $pdf->Ln(8);
     $pdf->SetFont('Arial', 'B', 12);
+
     $pdf->Cell(0, 0, "OUTORGANTE: $outorgante", 0, 0, 'L');
     $pdf->Ln(5);
     $pdf->Cell(10, 0, "CPF: $cpf", 0, 0, 'L');
@@ -116,21 +118,19 @@ class ProcuracaoController extends Controller
     $pdf->SetFont('Arial', 'B', 12);
 
     $pdf->Ln(8);
-    $pdf->Cell(0, 0, utf8_decode("OUTORGADO: $config->nome_outorgado"), 0, 0, 'L');
-    $pdf->Ln(5);
-    $pdf->Cell(0, 0, utf8_decode("CPF: $config->cpf_outorgado"), 0, 0, 'L');
-    $pdf->Ln(5);
-    $pdf->Cell(0, 0, utf8_decode("ENDEREÇO: $config->end_outorgado"), 0, 0, 'L');
 
-    $pdf->Ln(10);
+    foreach ($outorgados as $outorgado) {
+        // Adicionar informações ao PDF
+        $pdf->Cell(0, 0, utf8_decode("OUTORGADO: {$outorgado->nome_outorgado}"), 0, 0, 'L');
+        $pdf->Ln(5);
+        $pdf->Cell(0, 0, utf8_decode("CPF: {$outorgado->cpf_outorgado}"), 0, 0, 'L');
+        $pdf->Ln(5);
+        $pdf->Cell(0, 0, utf8_decode("ENDEREÇO: {$outorgado->end_outorgado}"), 0, 0, 'L');
+        $pdf->Ln(10); // Espaço extra entre cada outorgado
+    }
 
-    $pdf->Cell(0, 0, utf8_decode("OUTORGADO: $config->nome_testemunha"), 0, 0, 'L');
-    $pdf->Ln(5);
-    $pdf->Cell(0, 0, utf8_decode("CPF: $config->cpf_testemunha"), 0, 0, 'L');
-    $pdf->Ln(5);
-    $pdf->Cell(0, 0, utf8_decode("ENDEREÇO: $config->end_testemunha"), 0, 0, 'L');
 
-    $pdf->Ln(8);
+    //$pdf->Ln(8);
     
     $pdf->SetFont('Arial', '', 11);
     $pdf->Cell(0, 0, "________________________________________________________________________________________", 0, 0, 'L');
@@ -217,7 +217,7 @@ class ProcuracaoController extends Controller
 
     //$extension = $request->arquivo->getClientOriginalExtension();
     //$data['arquivo'] = $request->arquivo->storeAs("usuarios/$request->colaborador/Adiantamento/$request->mes/arquivo-$dataAtual" . ".{$extension}");
-    Mail::to( config('mail.from.address'))->send(new SendEmail($data, $caminhoPDF));
+    //Mail::to( config('mail.from.address'))->send(new SendEmail($data, $caminhoPDF));
 
         if($this->model->create($data)){
              alert()->success('Procuração cadastrada com sucesso!');

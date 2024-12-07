@@ -22,6 +22,13 @@ class Outorgado extends Model
         'end_outorgado',
     ];
 
+
+    public function getCountOutorgados(){
+        $countOut = DB::table('outorgados')->count();
+        //dd($countAd);
+        return $countOut;
+    }
+
     
 
     
