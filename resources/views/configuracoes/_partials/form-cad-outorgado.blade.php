@@ -25,6 +25,21 @@
                         <button type="submit" class="btn btn-primary">Salvar</button>
                     </div>
                 </form>
+                <script>
+                    document.addEventListener('DOMContentLoaded', () => {
+                        // Seleciona todos os campos de entrada no formulário
+                        const campos = document.querySelectorAll('#nome_outorgado, #cpf_outorgado, #end_outorgado');
+                
+                        // Adiciona um ouvinte de evento em cada campo
+                        campos.forEach(campo => {
+                            campo.addEventListener('input', (event) => {
+                                // Força o valor para maiúsculas
+                                event.target.value = event.target.value.toUpperCase();
+                            });
+                        });
+                    });
+                </script>
+                
             </div>
         </div>
     </div>
