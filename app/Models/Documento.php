@@ -49,6 +49,20 @@ class Documento extends Model
         return $pags;
     }
 
+    public function validaDoc($textoPagina){
+        // Suposição: O nome do usuário está precedido pela palavra "Nome:" ou "Nome do usuário:"
+        
+        $linhas = explode("\n", $textoPagina);
+                //dd($linhas);
+                $nome = explode("\t", $linhas[3]);
+                //dd($nome);
+                $validador = implode(', ', $nome);
+            //dd($outorgante);
+
+        // Caso nenhum nome de usuário seja encontrado
+        return $validador ;
+    }
+
     public function extrairNome($textoPagina){
         // Suposição: O nome do usuário está precedido pela palavra "Nome:" ou "Nome do usuário:"
         

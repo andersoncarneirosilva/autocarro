@@ -52,11 +52,29 @@
                 </a>
             </li>
 
-            <li class="side-nav-item">
+            {{-- <li class="side-nav-item">
                 <a href="{{ route('documentos.index') }}" class="side-nav-link">
                     <i class="uil-file-alt"></i>
                     <span> Documentos </span>
                 </a>
+            </li> --}}
+
+            <li class="side-nav-item">
+                <a data-bs-toggle="collapse" href="#sideCad" aria-expanded="false" aria-controls="sidebarLayouts" class="side-nav-link">
+                    <i class="uil-folder-medical"></i>
+                    <span> Cadastros </span>
+                    <span class="menu-arrow"></span>
+                </a>
+                <div class="collapse" id="sideCad">
+                    <ul class="side-nav-second-level">
+                        <li>
+                            <a href="{{ route('clientes.index') }}">Clientes</a>
+                        </li>
+                        <li>
+                            <a href="{{ route('documentos.index') }}">Veículos</a>
+                        </li>
+                    </ul>
+                </div>
             </li>
 
             <li class="side-nav-item">

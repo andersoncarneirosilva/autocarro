@@ -10,10 +10,10 @@
             <div class="page-title-right">
                 <ol class="breadcrumb m-0">
                     <li class="breadcrumb-item"><a href="{{ route('dashboard.index') }}">Dashboard</a></li>
-                    <li class="breadcrumb-item active">Documentos</li>
+                    <li class="breadcrumb-item active">Veículos</li>
                 </ol>
             </div>
-            <h3 class="page-title">Documentos</h3>
+            <h3 class="page-title">Veículos</h3>
         </div>
     </div>
 </div>
@@ -31,7 +31,7 @@
             @endif --}}
             <div class="col-sm-12">
                 <div class="card-header d-flex justify-content-between align-items-center">
-                    <h4 class="header-title">Documentos cadastrados</h4>
+                    <h4 class="header-title">Veículos cadastrados</h4>
                     <div class="dropdown">
                         <button type="button" class="btn btn-primary btn-sm" data-bs-toggle="modal"
                             data-bs-target="#standard-modal">Cadastrar</button>
@@ -49,7 +49,7 @@
                                 <th>Placa</th>
                                 <th>Ano/Modelo</th>
                                 <th>Cor</th>
-                                <th>Nome</th>
+                                <th>Proprietário</th>
                                 <th>Cadastrado em</th>
                                 <th>Ações</th>
                             </tr>
@@ -163,11 +163,11 @@ aria-hidden="true">
             </div>
             <div class="modal-body">
                 <!-- Aqui as informações vão ser carregadas dinamicamente -->
-                <p><strong><u>Informações do Proprietário</u></strong></p>
+                <p><strong><u>INFORMAÇÕES DO PROPRIETÁRIO</u></strong></p>
                 <p><strong>Nome:</strong> <span id="nome"></span></p>
                 <p><strong>CPF:</strong> <span id="cpf"></span></p>
 
-                <p><strong><u>Informações do Veículo</u></strong></p>
+                <p><strong><u>INFORMAÇÕES DO VEÍCULO</u></strong></p>
                 
                 <p><strong>Marca:</strong> <span id="marca"></span></p>
                 <p><strong>Placa:</strong> <span id="placa"></span></p>

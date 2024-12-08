@@ -12,6 +12,7 @@ use App\Http\Controllers\ProcuracaoController;
 use App\Http\Controllers\ConfiguracoesController;
 use App\Http\Controllers\OutorgadoController;
 use App\Http\Controllers\TextoPoderesController;
+use App\Http\Controllers\ClientesController;
 use Illuminate\Support\Facades\Route;
 
 
@@ -82,6 +83,11 @@ Route::middleware(['auth'])->group(function () {
     Route::put('/poderes/{id}', [TextoPoderesController::class, 'update'])->name('poderes.update');
     Route::delete('/poderes/{id}', [TextoPoderesController::class, 'destroy'])->name('poderes.destroy');
     Route::post('/poderes', [TextoPoderesController::class, 'store'])->name('poderes.store');
+
+
+    Route::get('/clientes', [ClientesController::class, 'index'])->name('clientes.index');
+    Route::post('/clientes', [ClientesController::class, 'store'])->name('clientes.store');
+    Route::get('/buscar-clientes', [ClientesController::class, 'buscarClientes']);
 
 });
 

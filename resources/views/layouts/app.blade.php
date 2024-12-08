@@ -13,6 +13,7 @@
 
         <link rel="shortcut icon" href="{{ url('images/favicon.png') }}">
         <!-- Daterangepicker css -->
+        <link href="{{ url('assets/vendor/select2/css/select2.min.css')}}" rel="stylesheet" type="text/css" />
         <link rel="stylesheet" href="{{ url('assets/vendor/daterangepicker/daterangepicker.css') }}">
         <!-- Vector Map css -->
         <link rel="stylesheet" href="{{ url('assets/vendor/admin-resources/jquery.vectormap/jquery-jvectormap-1.2.2.css') }}">
@@ -22,6 +23,8 @@
         <link href="{{ url('assets/css/app-saas.min.css') }}" rel="stylesheet" type="text/css" id="app-style" />
         <!-- Icons css -->
         <link href="{{ url('assets/css/icons.min.css') }}" rel="stylesheet" type="text/css" />
+
+        <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
         <!-- Script -->
         <script src="https://kit.fontawesome.com/6c4df5f46b.js" crossorigin="anonymous"></script>
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
@@ -34,10 +37,9 @@
         <script src="{{ url('js/mask-phone.js') }}"></script>
         
         <!-- Select2 css -->
-        <link href="{{ url('assets/vendor/select2/css/select2.min.css')}}" rel="stylesheet" type="text/css" />
 
         <!--  Select2 Js -->
-        <script src="{{ url('assets/vendor/select2/js/select2.min.js')}}"></script>
+        
         
         <style>
             
@@ -85,7 +87,10 @@
                 align-items: center;
                 gap: 0.5rem;
             }
-    
+            .select2-container {
+    z-index: 1055 !important; /* Certifique-se de que o z-index é maior que o do modal */
+}
+
         </style>
 
     </head>
@@ -122,23 +127,25 @@
 
             </div>
         </div> 
-
         <!-- Chart js --> 
         <script src="{{ url('assets/vendor/chart.js/chart.min.js') }}"></script>
         <!-- Vendor js -->
         <script src="{{ url('assets/js/vendor.min.js') }}"></script>   
+        <script src="{{ url('assets/vendor/select2/js/select2.min.js')}}"></script>
         <!-- Bootstrap Wizard Form js -->
+
         <script src="{{ url('assets/vendor/twitter-bootstrap-wizard/jquery.bootstrap.wizard.min.js') }}"></script>
         <!-- Wizard Form Demo js -->
         <script src="{{ url('assets/js/pages/demo.form-wizard.js') }}"></script>
         <!-- Input Mask js -->
-<script src="{{ url('assets/vendor/jquery-mask-plugin/jquery.mask.min.js')}}"></script>
+        <script src="{{ url('assets/vendor/jquery-mask-plugin/jquery.mask.min.js')}}"></script>
         <!-- plugin js -->
         <script src="{{ url('assets/vendor/dropzone/min/dropzone.min.js') }}"></script>
         <!-- init js -->
         <script src="{{ url('assets/js/ui/component.fileupload.js') }}"></script>
         <!-- App js -->
         <script src="{{ url('assets/js/app.min.js') }}"></script>
+        <!-- Script do Select2 -->
         
     </body>
 </html> 

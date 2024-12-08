@@ -34,7 +34,7 @@
                     <h4 class="header-title">Procurações cadastradas</h4>
                     <div class="dropdown">
                         <button type="button" class="btn btn-primary btn-sm" data-bs-toggle="modal"
-                            data-bs-target="#standard-modal">Cadastrar</button>
+                            data-bs-target="#modalID">Cadastrar</button>
                         {{-- <button class="btn btn-secondary btn-sm" id="deleteAllSelectedRecord" disabled><i
                                 class="fa-solid fa-trash"></i></button> --}}
                     </div>
@@ -89,24 +89,149 @@
             'search' => request()->get('search', '')
         ])->links('components.pagination') }}
     </div>
+    <!-- Single Select -->
+
     
+    
+
+    
+   
+    
+
+
+                                                
+
 </div>
-<!-- Standard modal -->
-<div id="standard-modal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="standard-modalLabel"
-aria-hidden="true">
-    <div class="modal-dialog modal-lg">
+<div class="modal fade" id="modalID" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <h4 class="modal-title" id="standard-modalLabel">Nova procuração</h4>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-hidden="true"></button>
+                <h5 class="modal-title" id="exampleModalLabel">Modal title</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
-                @include('procuracoes.create')
+                <form action="{{ route('procuracoes.store') }}" method="POST" enctype="multipart/form-data" id="formProc">
+                    @csrf
+                    <h4 class="header-title">Informações pessoais</h4>
+                    <div class="row">
+                        <div class="col-lg-12">
+                            <div class="mb-3">
+                                <label>Cliente: <span style="color: red;">*</span></label>
+                                {{-- <input class="form-control" type="text" name="endereco" id="idEndereco"> --}}
+                                {{-- <select id="select-timezone" class="form-control select2" data-toggle="select2"> --}}
+                                    {{-- <select id="select-timezone" class="form-control select2" data-toggle="select2" style="width: 100%;"> --}}
+                                        <select class="select2 form-control select2-multiple" name="cliente[]" data-toggle="select2" multiple="multiple" >
+                                        <option value="">Selecione um cliente</option>
+                                        @foreach ($clientes as $cliente)
+                                            <option value="{{ $cliente->endereco }}">{{ $cliente->nome }}</option>
+                                        @endforeach
+                                    </select>
+                                    
+                            </div>
+                        </div>
+                        <div class="col-lg-12">
+                            <div class="mb-3">
+                                <label for="inputAddress">Documento: <span style="color: red;">*</span></label>
+                                <div class="col-lg">
+                                    <input class="form-control" type="file" name="arquivo_doc" id="arquivo_doc">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <br>
+                    <div class="row">
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-light" data-bs-dismiss="modal">Fechar</button>
+                            <button type="submit" class="btn btn-primary">Cadastrar</button>
+                        </div>
+                    </div>
+                </form>
             </div>
-        </div><!-- /.modal-content -->
-    </div><!-- /.modal-dialog -->
-</div><!-- /.modal -->
- 
+        </div>
+    </div>
+</div>
 
+
+<script>
+    
+  $(document).ready(function() {
+    $('#select-timezone').select2({
+        placeholder: "Digite para buscar clientes",
+        allowClear: true,
+        ajax: {
+            url: '/buscar-clientes',
+            dataType: 'json',
+            delay: 250,
+            data: function(params) {
+                return {
+                    term: params.term // Termo digitado
+                };
+            },
+            processResults: function(data) {
+                return {
+                    results: data // [{id: '1', text: 'Cliente 1'}, {id: '2', text: 'Cliente 2'}]
+                };
+            },
+            cache: true
+        }
+    });
+});
+
+
+</script>
+<script>
+
+
+
+
+    // Obtenha o formulário
+    const form = document.getElementById('formProc');
+
+    // Obtenha os inputs do arquivo e do endereço
+    const arquivoInput = document.getElementById('arquivo_doc');
+    //const endInput = document.getElementById('idEndereco');
+    
+    // Adicionando um evento de submit para o formulário
+    form.addEventListener('submit', function(event) {
+        // Impede o comportamento padrão do formulário
+        event.preventDefault();
+
+        // Verifica se o endereço foi preenchido
+        // const endereco = endInput.value.trim();
+        // if (!endereco) {
+        //     Swal.fire({
+        //         title: 'Erro!',
+        //         text: 'Por favor, preencha o endereço.',
+        //         icon: 'error',
+        //         confirmButtonText: 'OK'
+        //     });
+        //     return;  // Impede o envio do formulário
+        // }
+        
+        // Obtém o arquivo
+        const arquivo = arquivoInput.files[0]; 
+
+        // Verifica se o arquivo foi selecionado
+        if (!arquivo) {
+            Swal.fire({
+                title: 'Erro!',
+                text: 'Por favor, selecione um arquivo.',
+                icon: 'error',
+                confirmButtonText: 'OK'
+            });
+            return;  // Impede o envio do formulário
+        }
+
+        
+
+        // Se o arquivo e o endereço estiverem presentes, envie o formulário
+        form.submit();
+    });
+
+    
+
+
+
+</script>
 
     @endsection

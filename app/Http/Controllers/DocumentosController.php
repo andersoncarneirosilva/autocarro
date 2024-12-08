@@ -5,7 +5,9 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\Documento;
 use App\Models\Procuracao;
+use App\Models\Outorgado;
 use App\Models\ConfigProc;
+use App\Models\TextoPoder;
 use Smalot\PdfParser\Parser;
 use FPDF;
 use Carbon\Carbon;
@@ -47,9 +49,12 @@ class DocumentosController extends Controller
         $parser = new Parser();
 
         $pdf = $parser->parseFile($arquivo);
+        
         foreach ($pdf->getPages() as $numeroPagina => $pagina) {
             $textoPagina = $pagina->getText();
 
+            $validador = $this->model->validaDoc($textoPagina);
+            //dd($validador);
             $marca = $this->model->extrairMarca($textoPagina);
             $placa = $this->model->extrairPlaca($textoPagina);
             $chassi = $this->model->extrairChassi($textoPagina);
@@ -69,47 +74,53 @@ class DocumentosController extends Controller
             //dd($placaAnterior);
         }
 
-        // Garante que a pasta "procuracoes" existe
-        $pastaDestino = storage_path('app/public/documentos');
-        $urlPDF = asset('storage/documentos/' . $nomeOriginal); 
-        if (!file_exists($pastaDestino)) {
-            mkdir($pastaDestino, 0777, true); // Cria a pasta
-        }
-
-        // Salva o arquivo na pasta
-        $caminhoPDF = $pastaDestino . '/' . $nomeOriginal;
-        $arquivo->move($pastaDestino, $nomeOriginal);
-
-        // Verifica se o arquivo foi salvo
-        if (!file_exists($caminhoPDF)) {
-            return response()->json(['error' => 'Erro ao salvar o arquivo.'], 500);
-        }
-
-        $data = [
-            'marca' => $marca,
-            'placa' => $placa,
-            'chassi' => $chassi,
-            'cor' => $cor,
-            'ano' => $anoModelo,
-            'renavam' => $renavam,
-            'nome' => $nome,
-            'cpf' => $cpf,
-            'cidade' => $cidade,
-            'crv' => $crv,
-            'placaAnterior' => $placaAnterior,
-            'categoria' => $categoria,
-            'motor' => $motor,
-            'combustivel' => $combustivel,
-            'infos' => $infos,
-            'arquivo_doc' => $urlPDF,
-        ];
-
-
-        if($this->model->create($data)){
-            alert()->success('Documento cadastrado com sucesso!');
-
+        if($validador == "DEPARTAMENTO NACIONAL DE TRÂNSITO - DENATRAN"){
+            alert()->error('Selecione um documento ano 2024!');
             return redirect()->route('documentos.index');
-        } 
+        }else{
+            // Garante que a pasta "procuracoes" existe
+            $pastaDestino = storage_path('app/public/documentos');
+            $urlPDF = asset('storage/documentos/' . $nomeOriginal); 
+            if (!file_exists($pastaDestino)) {
+                mkdir($pastaDestino, 0777, true); // Cria a pasta
+            }
+
+            // Salva o arquivo na pasta
+            $caminhoPDF = $pastaDestino . '/' . $nomeOriginal;
+            $arquivo->move($pastaDestino, $nomeOriginal);
+
+            // Verifica se o arquivo foi salvo
+            if (!file_exists($caminhoPDF)) {
+                return response()->json(['error' => 'Erro ao salvar o arquivo.'], 500);
+            }
+
+            $data = [
+                'marca' => $marca,
+                'placa' => $placa,
+                'chassi' => $chassi,
+                'cor' => $cor,
+                'ano' => $anoModelo,
+                'renavam' => $renavam,
+                'nome' => $nome,
+                'cpf' => $cpf,
+                'cidade' => $cidade,
+                'crv' => $crv,
+                'placaAnterior' => $placaAnterior,
+                'categoria' => $categoria,
+                'motor' => $motor,
+                'combustivel' => $combustivel,
+                'infos' => $infos,
+                'arquivo_doc' => $urlPDF,
+            ];
+
+
+            if($this->model->create($data)){
+                alert()->success('Documento cadastrado com sucesso!');
+
+                return redirect()->route('documentos.index');
+            } 
+        }
+        
     }
 
     public function destroy($id){
@@ -124,8 +135,10 @@ class DocumentosController extends Controller
     }
 
     public function gerarProc($id, Request $request) {
-        $config = ConfigProc::first();
+        //$config = ConfigProc::first();
         //dd($request);
+        $outorgados = Outorgado::all();
+        $config = TextoPoder::first();
         $dataAtual = Carbon::now();
         $dataPorExtenso = $dataAtual->translatedFormat('d \d\e F \d\e Y');
         $endereco = $request->endereco; // Captura o endereço
@@ -160,21 +173,18 @@ class DocumentosController extends Controller
         $pdf->SetFont('Arial', 'B', 12);
 
         $pdf->Ln(8);
-        $pdf->Cell(0, 0, utf8_decode("OUTORGADO: $config->nome_outorgado"), 0, 0, 'L');
-        $pdf->Ln(5);
-        $pdf->Cell(0, 0, utf8_decode("CPF: $config->cpf_outorgado"), 0, 0, 'L');
-        $pdf->Ln(5);
-        $pdf->Cell(0, 0, utf8_decode("ENDEREÇO: $config->end_outorgado"), 0, 0, 'L');
 
-        $pdf->Ln(10);
+        foreach ($outorgados as $outorgado) {
+            // Adicionar informações ao PDF
+            $pdf->Cell(0, 0, utf8_decode("OUTORGADO: {$outorgado->nome_outorgado}"), 0, 0, 'L');
+            $pdf->Ln(5);
+            $pdf->Cell(0, 0, utf8_decode("CPF: {$outorgado->cpf_outorgado}"), 0, 0, 'L');
+            $pdf->Ln(5);
+            $pdf->Cell(0, 0, utf8_decode("ENDEREÇO: {$outorgado->end_outorgado}"), 0, 0, 'L');
+            $pdf->Ln(10); // Espaço extra entre cada outorgado
+        }
 
-        $pdf->Cell(0, 0, utf8_decode("OUTORGADO: $config->nome_testemunha"), 0, 0, 'L');
-        $pdf->Ln(5);
-        $pdf->Cell(0, 0, utf8_decode("CPF: $config->cpf_testemunha"), 0, 0, 'L');
-        $pdf->Ln(5);
-        $pdf->Cell(0, 0, utf8_decode("ENDEREÇO: $config->end_testemunha"), 0, 0, 'L');
-
-        $pdf->Ln(8);
+        //$pdf->Ln(8);
         
         $pdf->SetFont('Arial', '', 11);
         $pdf->Cell(0, 0, "________________________________________________________________________________________", 0, 0, 'L');
@@ -185,7 +195,7 @@ class DocumentosController extends Controller
         $margem_direita = 10;  // Margem direita
 
         // Texto a ser inserido no PDF
-        $text = "$config->texto_poderes";
+        $text = "FINS E PODERES: O OUTORGANTE confere ao OUTORGADO amplos e ilimitados poderes para o fim especial de vender a quem quiser, receber valores de venda, transferir para si próprio ou terceiros, em causa própria, locar ou de qualquer forma alienar ou onerar o veículo de sua propriedade com as seguintes características:";
 
         // Remover quebras de linha manuais, caso existam
         $text = str_replace("\n", " ", $text);

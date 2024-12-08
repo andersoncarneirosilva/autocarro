@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\Models\Procuracao;
 use App\Models\Outorgado;
 use App\Models\TextoPoder;
+use App\Models\Cliente;
 use Smalot\PdfParser\Parser;
 use FPDF;
 use Carbon\Carbon;
@@ -29,12 +30,12 @@ class ProcuracaoController extends Controller
         $text = "Deseja excluir essa procuração?";
         confirmDelete($title, $text);
 
-        //$procs = Procuracao::paginate(10);
+        $clientes = Cliente::all();
 
         $procs = $this->model->getSearch(search: $request->search ?? '');
         
         
-        return view('procuracoes.index', compact('procs'));
+        return view('procuracoes.index', compact(['procs', 'clientes']));
     }
 
      public function create(){
@@ -44,6 +45,7 @@ class ProcuracaoController extends Controller
 
     public function store(Request $request){
 
+        
         $outorgados = Outorgado::all();
         $config = TextoPoder::first();
         //dd($request);
@@ -53,8 +55,10 @@ class ProcuracaoController extends Controller
         //$arquivo = $request->file('arquivo_doc')->getRealPath();
         // Obter o arquivo enviado
         $arquivo = $request->file('arquivo_doc');
-        $endereco = $request->input('endereco');
-//dd($endereco);
+        //$endereco = $request->input('endereco');
+        $enderecos = $request->input('cliente');
+        $endereco = strtoupper(implode(', ', $enderecos)); // Concatena os endereços em uma string
+        //dd($endereco[0]);
          // Obter o nome original do arquivo
     $nomeOriginal = $arquivo->getClientOriginalName();
 
