@@ -6,7 +6,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
-
+use Illuminate\Support\Facades\DB;
 class TextoPoder extends Model
 {
     use HasApiTokens, HasFactory, Notifiable;
@@ -20,7 +20,10 @@ class TextoPoder extends Model
         'texto_final',
     ];
 
-    
+    public static function getTextoFinal()
+    {
+        return DB::table('texto_poders')->get();
+    }
 
     
 }

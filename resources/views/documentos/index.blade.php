@@ -77,14 +77,16 @@
                                         <a href="{{ $doc->arquivo_doc }}" class="action-icon" target="blank"> <i
                                                 class="mdi mdi-printer" title="Imprimir"></i></a>
 
-                                        <a href="{{ route('documentos.destroy', $doc->id) }}"
-                                            class="action-icon mdi mdi-delete" data-confirm-delete="true" title="Excluir"></a>
-                                            <a href="#" 
+                                                <a href="#" 
                                             class="action-icon mdi mdi-share-all" 
                                             data-id="{{ $doc->id }}" 
                                             title="Gerar procuração"
                                             onclick="openAddressModal(event)">
                                          </a>
+
+                                        <a href="{{ route('documentos.destroy', $doc->id) }}"
+                                            class="action-icon mdi mdi-delete text-danger" data-confirm-delete="true" title="Excluir"></a>
+                                            
 
                                     </td>
                                 </tr>

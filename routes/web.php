@@ -71,6 +71,7 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/configuracoes/create', [ConfiguracoesController::class, 'create'])->name('configuracoes.create');
     Route::get('/configuracoes', [ConfiguracoesController::class, 'index'])->name('configuracoes.index');
     Route::post('/configuracoes', [ConfiguracoesController::class, 'store'])->name('configuracoes.store');
+    Route::post('/configuracoes/gerarProc/{id}', [ConfiguracoesController::class, 'gerarProc'])->name('configuracoes.gerarProc');
 
     Route::get('/outorgados/{id}', [OutorgadoController::class, 'show'])->name('outorgados.show');
     Route::put('/outorgados/{id}', [OutorgadoController::class, 'update'])->name('outorgados.update');

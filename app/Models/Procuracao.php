@@ -31,6 +31,18 @@ class Procuracao extends Model
         'arquivo_proc',
     ];
 
+    //Pesquisar colaboradores
+    public function getSearch(string|null $search = null){
+
+        $procs = $this->where(function ($query) use ($search) {
+            if($search){
+                $query->where('placa', 'LIKE', "%{$search}%");
+                $query->orWhere('nome', 'LIKE', "%{$search}%");
+            }
+        })->paginate(10);
+        return $procs;
+    }
+
     public function extrairNomeOutorgado($textoPagina){
         // Suposição: O nome do usuário está precedido pela palavra "Nome:" ou "Nome do usuário:"
         

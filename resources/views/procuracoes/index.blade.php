@@ -69,7 +69,7 @@
                                                 </a>
                                                 
                                         <a href="{{ route('procuracoes.destroy', $doc->id) }}"
-                                            class="action-icon mdi mdi-delete" data-confirm-delete="true"></a>
+                                            class="action-icon mdi mdi-delete text-danger" data-confirm-delete="true"></a>
                                     </td>
                                 </tr>
                             @endforeach
@@ -77,7 +77,7 @@
                     </table>
                 </div>
                     @elseif($procs->total() == 0)
-                        <div class="alert alert-warning" role="alert">
+                        <div class="alert alert-warning bg-transparent text-warning" role="alert">
                             NENHUM RESULTADO ENCONTRADO!
                         </div>
                     @endif

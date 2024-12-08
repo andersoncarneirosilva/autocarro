@@ -6,7 +6,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
-
+use Illuminate\Support\Facades\DB;
 class Outorgado extends Model
 {
     use HasApiTokens, HasFactory, Notifiable;
@@ -23,10 +23,9 @@ class Outorgado extends Model
     ];
 
 
-    public function getCountOutorgados(){
-        $countOut = DB::table('outorgados')->count();
-        //dd($countAd);
-        return $countOut;
+    public static function getOutorgados()
+    {
+        return DB::table('outorgados')->get();
     }
 
     

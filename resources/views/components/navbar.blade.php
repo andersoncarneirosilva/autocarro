@@ -40,9 +40,9 @@
             </button>
             
             <!-- Verifica se estamos na página de usuários antes de mostrar o formulário -->
-            @if(request()->routeIs('employees.index'))
+            @if(request()->routeIs('procuracoes.index'))
                 <div class="app-search dropdown d-none d-lg-block">
-                    <form action="{{ route('employees.index') }}" method="GET">
+                    <form action="{{ route('procuracoes.index') }}" method="GET">
                         <div class="input-group">
                             <input type="text" name="search" placeholder="Pesquisar" class="form-control">
                             <button type="submit" class="btn btn-primary">Pesquisar</button>

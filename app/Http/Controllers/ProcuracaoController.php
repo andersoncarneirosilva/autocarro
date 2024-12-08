@@ -29,7 +29,9 @@ class ProcuracaoController extends Controller
         $text = "Deseja excluir essa procuração?";
         confirmDelete($title, $text);
 
-        $procs = Procuracao::paginate(10);
+        //$procs = Procuracao::paginate(10);
+
+        $procs = $this->model->getSearch(search: $request->search ?? '');
         
         
         return view('procuracoes.index', compact('procs'));
