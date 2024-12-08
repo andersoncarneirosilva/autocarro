@@ -70,6 +70,7 @@
         }
     };
 
+
     </script>
 
 <script>
@@ -95,7 +96,7 @@
         });
     });
 </script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/inputmask/5.0.6/inputmask.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.inputmask/5.0.9/jquery.inputmask.min.js"></script>
 <script>
     document.addEventListener('DOMContentLoaded', function() {
         const cpfInput = document.getElementById('cpf');
@@ -179,27 +180,12 @@
                                     <td>{{ Carbon\Carbon::parse($cli->created_at)->format('d/m') }}</td>
                                     <td class="table-action">
 
-                                        <a href="#"
-                                            class="action-icon"
-                                            data-id="{{ $cli->id }}"
-                                            onclick="openInfoModal(event)">
-                                            <i class="mdi mdi-eye" title="Visualizar"></i>
-                                        </a>
+                                        <a href="#" class="action-icon" data-id="{{ $cli->id }}" onclick="openEditTextModal(event)">
+                                            <i class="mdi mdi-clipboard-edit-outline" title="Editar"></i>
 
-                                        <a href="{{ $cli->arquivo_doc }}" class="action-icon" target="blank"> <i
-                                                class="mdi mdi-printer" title="Imprimir"></i></a>
-
-                                                <a href="#" 
-                                            class="action-icon mdi mdi-share-all" 
-                                            data-id="{{ $cli->id }}" 
-                                            title="Gerar procuração"
-                                            onclick="openAddressModal(event)">
-                                         </a>
-
-                                        <a href="{{ route('documentos.destroy', $cli->id) }}"
+                                        <a href="{{ route('clientes.destroy', $cli->id) }}"
                                             class="action-icon mdi mdi-delete text-danger" data-confirm-delete="true" title="Excluir"></a>
                                             
-
                                     </td>
                                 </tr>
                             @endforeach
@@ -322,6 +308,99 @@ aria-hidden="true">
     </div>
 </div>
 
+<div class="modal fade" id="editClienteModal" tabindex="-1" aria-labelledby="dadosModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="dadosModalLabel">Cadastro de Dados</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <form action="#" id="idFormCliente" method="POST" enctype="multipart/form-data">
+                @csrf
+                @method('PUT')
+                <div class="modal-body">
+                    <div class="mb-3">
+                        <label for="nome" class="form-label">Nome</label>
+                        <input type="text" class="form-control" id="idNome" name="nome" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="cpf" class="form-label">CPF</label>
+                        <input type="text" class="form-control" id="idCpf" name="cpf" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="fone" class="form-label">Fone/Whatsapp</label>
+                        <input type="text" class="form-control" id="idFone" name="fone" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="cep" class="form-label">CEP</label>
+                        <input name="cep" class="form-control" type="text" id="idCep" value="" size="10" maxlength="9"/>
+                    </div>
+                    <div class="mb-3">
+                        <label for="endereco" class="form-label">Endereço</label>
+                        <input type="text" class="form-control" id="idRua" name="endereco" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="bairro" class="form-label">Bairro</label>
+                        <input type="text" class="form-control" id="idBairro" name="bairro" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="cidade" class="form-label">Cidade</label>
+                        <input type="text" class="form-control" id="idCidade" name="cidade" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="estado" class="form-label">Estado</label>
+                        <input type="text" class="form-control" id="idEstado" name="estado" required>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                    <button type="submit" class="btn btn-primary">Salvar</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
 
+<script>
+    function openEditTextModal(event) {
+    event.preventDefault();
 
+    // Obtenha o ID do documento
+    //const docId = event.currentTarget.getAttribute('data-id');
+    const docId = event.target.closest('a').getAttribute('data-id');
+    // Faça uma requisição AJAX para buscar os dados
+    
+    $.ajax({
+        url: `/clientes/${docId}`,
+        method: 'GET',
+        success: function(response) {
+            //console.log(response);
+            // Preencha os campos do modal com os dados do documento
+            $('#idNome').val(response.nome);
+            $('#idCpf').val(response.cpf);
+            $('#idFone').val(response.fone);
+            $('#idCep').val(response.cep);
+            $('#idRua').val(response.endereco);
+            $('#idBairro').val(response.bairro);
+            $('#idCidade').val(response.cidade);
+            $('#idEstado').val(response.estado);
+
+            // Atualize a ação do formulário para apontar para a rota de edição
+            $('#idFormCliente').attr('action', `/clientes/${docId}`);
+
+            // Exiba o modal
+            $('#editClienteModal').modal('show');
+        },
+        error: function() {
+            Swal.fire({
+                title: 'Erro!',
+                text: 'Não foi possível carregar os dados.',
+                icon: 'error',
+                confirmButtonText: 'OK'
+            });
+        }
+    });
+}
+
+</script>
     @endsection

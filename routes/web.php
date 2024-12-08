@@ -84,9 +84,11 @@ Route::middleware(['auth'])->group(function () {
     Route::delete('/poderes/{id}', [TextoPoderesController::class, 'destroy'])->name('poderes.destroy');
     Route::post('/poderes', [TextoPoderesController::class, 'store'])->name('poderes.store');
 
-
-    Route::get('/clientes', [ClientesController::class, 'index'])->name('clientes.index');
+    Route::get('/clientes/{id}', [ClientesController::class, 'show'])->name('clientes.show');
+    Route::put('/clientes/{id}', [ClientesController::class, 'update'])->name('clientes.update');
+    Route::delete('/clientes/{id}', [ClientesController::class, 'destroy'])->name('clientes.destroy');
     Route::post('/clientes', [ClientesController::class, 'store'])->name('clientes.store');
+    Route::get('/clientes', [ClientesController::class, 'index'])->name('clientes.index');
     Route::get('/buscar-clientes', [ClientesController::class, 'buscarClientes']);
 
 });

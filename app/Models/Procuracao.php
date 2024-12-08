@@ -31,6 +31,20 @@ class Procuracao extends Model
         'arquivo_proc',
     ];
 
+    public function validaDoc($textoPagina){
+        // Suposição: O nome do usuário está precedido pela palavra "Nome:" ou "Nome do usuário:"
+        
+        $linhas = explode("\n", $textoPagina);
+                //dd($linhas);
+                $nome = explode("\t", $linhas[3]);
+                //dd($nome);
+                $validador = implode(', ', $nome);
+            //dd($outorgante);
+
+        // Caso nenhum nome de usuário seja encontrado
+        return $validador ;
+    }
+    
     //Pesquisar colaboradores
     public function getSearch(string|null $search = null){
 

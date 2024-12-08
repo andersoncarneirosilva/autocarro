@@ -73,6 +73,7 @@ class ProcuracaoController extends Controller
         foreach ($pdf->getPages() as $numeroPagina => $pagina) {
             $textoPagina = $pagina->getText();
 
+            $validador = $this->model->validaDoc($textoPagina);
             $outorgante = $this->model->extrairNomeOutorgado($textoPagina);
             $cpf = $this->model->extrairCpfOutorgado($textoPagina);
             $marca = $this->model->extrairMarca($textoPagina);
@@ -94,96 +95,99 @@ class ProcuracaoController extends Controller
 
         }
 
-        
+        if($validador == "DEPARTAMENTO NACIONAL DE TRÂNSITO - DENATRAN"){
+            alert()->error('Selecione um documento ano 2024!');
+            return redirect()->route('documentos.index');
+        }else{
 
         // Gerar o PDF com FPDF
-    $pdf = new FPDF();
-    $pdf->SetMargins(10, 10, 10);
-    $pdf->AddPage();  // Adicionar uma página ao PDF
-    //$pdfFpdf->SetFont('Arial', 'B', 16);  // Definir a fonte (Arial, Negrito, tamanho 16)
-    $pdf->SetFont('Arial', 'B', 14);
+        $pdf = new FPDF();
+        $pdf->SetMargins(10, 10, 10);
+        $pdf->AddPage();  // Adicionar uma página ao PDF
+        //$pdfFpdf->SetFont('Arial', 'B', 16);  // Definir a fonte (Arial, Negrito, tamanho 16)
+        $pdf->SetFont('Arial', 'B', 14);
 
-    $titulo = utf8_decode("PROCURAÇÃO");
+        $titulo = utf8_decode("PROCURAÇÃO");
 
-    $pdf->Cell(0, 10, $titulo, 0, 1, 'C');
+        $pdf->Cell(0, 10, $titulo, 0, 1, 'C');
 
-    $larguraTitulo = $pdf->GetStringWidth($titulo);
-    $pdf->Ln(8);
-    $pdf->SetFont('Arial', 'B', 12);
+        $larguraTitulo = $pdf->GetStringWidth($titulo);
+        $pdf->Ln(8);
+        $pdf->SetFont('Arial', 'B', 12);
 
-    $pdf->Cell(0, 0, "OUTORGANTE: $outorgante", 0, 0, 'L');
-    $pdf->Ln(5);
-    $pdf->Cell(10, 0, "CPF: $cpf", 0, 0, 'L');
-    $pdf->Ln(5);
-    $pdf->Cell(0, 0, utf8_decode("ENDEREÇO: " . strtoupper($endereco)), 0, 0, 'L');
-
-    $pdf->Ln(5);
-
-    $pdf->SetFont('Arial', '', 11);
-    $pdf->Cell(0, 0, "________________________________________________________________________________________", 0, 0, 'L');
-    $pdf->SetFont('Arial', 'B', 12);
-
-    $pdf->Ln(8);
-
-    foreach ($outorgados as $outorgado) {
-        // Adicionar informações ao PDF
-        $pdf->Cell(0, 0, utf8_decode("OUTORGADO: {$outorgado->nome_outorgado}"), 0, 0, 'L');
+        $pdf->Cell(0, 0, "OUTORGANTE: $outorgante", 0, 0, 'L');
         $pdf->Ln(5);
-        $pdf->Cell(0, 0, utf8_decode("CPF: {$outorgado->cpf_outorgado}"), 0, 0, 'L');
+        $pdf->Cell(10, 0, "CPF: $cpf", 0, 0, 'L');
         $pdf->Ln(5);
-        $pdf->Cell(0, 0, utf8_decode("ENDEREÇO: {$outorgado->end_outorgado}"), 0, 0, 'L');
-        $pdf->Ln(10); // Espaço extra entre cada outorgado
-    }
+        $pdf->Cell(0, 0, utf8_decode("ENDEREÇO: " . strtoupper($endereco)), 0, 0, 'L');
+
+        $pdf->Ln(5);
+
+        $pdf->SetFont('Arial', '', 11);
+        $pdf->Cell(0, 0, "________________________________________________________________________________________", 0, 0, 'L');
+        $pdf->SetFont('Arial', 'B', 12);
+
+        $pdf->Ln(8);
+
+        foreach ($outorgados as $outorgado) {
+            // Adicionar informações ao PDF
+            $pdf->Cell(0, 0, utf8_decode("OUTORGADO: {$outorgado->nome_outorgado}"), 0, 0, 'L');
+            $pdf->Ln(5);
+            $pdf->Cell(0, 0, utf8_decode("CPF: {$outorgado->cpf_outorgado}"), 0, 0, 'L');
+            $pdf->Ln(5);
+            $pdf->Cell(0, 0, utf8_decode("ENDEREÇO: {$outorgado->end_outorgado}"), 0, 0, 'L');
+            $pdf->Ln(10); // Espaço extra entre cada outorgado
+        }
 
 
-    //$pdf->Ln(8);
-    
-    $pdf->SetFont('Arial', '', 11);
-    $pdf->Cell(0, 0, "________________________________________________________________________________________", 0, 0, 'L');
+        //$pdf->Ln(8);
+        
+        $pdf->SetFont('Arial', '', 11);
+        $pdf->Cell(0, 0, "________________________________________________________________________________________", 0, 0, 'L');
 
-    $pdf->Ln(8);
-    // Defina as margens manualmente (em mm)
-    $margem_esquerda = 10; // Margem esquerda
-    $margem_direita = 10;  // Margem direita
+        $pdf->Ln(8);
+        // Defina as margens manualmente (em mm)
+        $margem_esquerda = 10; // Margem esquerda
+        $margem_direita = 10;  // Margem direita
 
-    // Texto a ser inserido no PDF
-    $text = "FINS E PODERES: O OUTORGANTE confere ao OUTORGADO amplos e ilimitados poderes para o fim especial de vender a quem quiser, receber valores de venda, transferir para si próprio ou terceiros, em causa própria, locar ou de qualquer forma alienar ou onerar o veículo de sua propriedade com as seguintes características:";
+        // Texto a ser inserido no PDF
+        $text = "FINS E PODERES: O OUTORGANTE confere ao OUTORGADO amplos e ilimitados poderes para o fim especial de vender a quem quiser, receber valores de venda, transferir para si próprio ou terceiros, em causa própria, locar ou de qualquer forma alienar ou onerar o veículo de sua propriedade com as seguintes características:";
 
-    // Remover quebras de linha manuais, caso existam
-    $text = str_replace("\n", " ", $text);
+        // Remover quebras de linha manuais, caso existam
+        $text = str_replace("\n", " ", $text);
 
-    // Calcular a largura disponível para o texto (considerando as margens)
-    $largura_disponivel = $pdf->GetPageWidth() - $margem_esquerda - $margem_direita;
+        // Calcular a largura disponível para o texto (considerando as margens)
+        $largura_disponivel = $pdf->GetPageWidth() - $margem_esquerda - $margem_direita;
 
-    // Adicionar o texto justificado, utilizando a largura calculada
-    $pdf->MultiCell($largura_disponivel, 5, utf8_decode($text), 0, 'J');
+        // Adicionar o texto justificado, utilizando a largura calculada
+        $pdf->MultiCell($largura_disponivel, 5, utf8_decode($text), 0, 'J');
 
-    $pdf->Ln(8);
-    $pdf->SetFont('Arial', 'B', 12);
-    $pdf->Cell(120, 2, "MARCA: $marca", 0, 0, 'L');
-    $pdf->Cell(0, 2, "PLACA: $placa", 0, 1, 'L'); 
-    $pdf->Ln(5);
-    $pdf->Cell(120, 2, "CHASSI: $chassi", 0, 0, 'L');
-    $pdf->Cell(0, 2, "COR: $cor", 0, 1, 'L');
-    $pdf->Ln(5);
-    $pdf->Cell(120, 2, "ANO/MODELO: $anoModelo", 0, 0, 'L');
-    $pdf->Cell(0, 2, "RENAVAM: $renavam", 0, 1, 'L');
+        $pdf->Ln(8);
+        $pdf->SetFont('Arial', 'B', 12);
+        $pdf->Cell(120, 2, "MARCA: $marca", 0, 0, 'L');
+        $pdf->Cell(0, 2, "PLACA: $placa", 0, 1, 'L'); 
+        $pdf->Ln(5);
+        $pdf->Cell(120, 2, "CHASSI: $chassi", 0, 0, 'L');
+        $pdf->Cell(0, 2, "COR: $cor", 0, 1, 'L');
+        $pdf->Ln(5);
+        $pdf->Cell(120, 2, "ANO/MODELO: $anoModelo", 0, 0, 'L');
+        $pdf->Cell(0, 2, "RENAVAM: $renavam", 0, 1, 'L');
 
-    $pdf->Ln(8);
-    $pdf->SetFont('Arial', '', 11);
+        $pdf->Ln(8);
+        $pdf->SetFont('Arial', '', 11);
 
-    $text2 = "$config->texto_final";
+        $text2 = "$config->texto_final";
 
-    // Remover quebras de linha manuais, caso existam
-    $text2 = str_replace("\n", " ", $text2);
+        // Remover quebras de linha manuais, caso existam
+        $text2 = str_replace("\n", " ", $text2);
 
-    // Calcular a largura disponível para o texto (considerando as margens)
-    $largura_disponivel2 = $pdf->GetPageWidth() - $margem_esquerda - $margem_direita;
+        // Calcular a largura disponível para o texto (considerando as margens)
+        $largura_disponivel2 = $pdf->GetPageWidth() - $margem_esquerda - $margem_direita;
 
-    // Adicionar o texto justificado, utilizando a largura calculada
-    $pdf->MultiCell($largura_disponivel2, 5, utf8_decode($text2), 0, 'J');
-    // Adicionando a data por extenso no PDF
-    $pdf->Cell(0, 10, "ESTEIO, $dataPorExtenso", 0, 1, 'R');  // 'R' para alinhamento à direita
+        // Adicionar o texto justificado, utilizando a largura calculada
+        $pdf->MultiCell($largura_disponivel2, 5, utf8_decode($text2), 0, 'J');
+        // Adicionando a data por extenso no PDF
+        $pdf->Cell(0, 10, "ESTEIO, $dataPorExtenso", 0, 1, 'R');  // 'R' para alinhamento à direita
 
 
 
@@ -192,44 +196,45 @@ class ProcuracaoController extends Controller
         $pdf->Cell(0, 10, "_________________________________________________" , 0, 1, 'C');
         $pdf->Cell(0, 5, "$outorgante", 0, 1, 'C');
 
-    // Definir o nome do arquivo do PDF
-    //$nomePDF = 'nome_extraido_' . time() . '.pdf';
+        // Definir o nome do arquivo do PDF
+        //$nomePDF = 'nome_extraido_' . time() . '.pdf';
 
-    // Caminho para salvar o PDF na pasta 'procuracoes' dentro de public
-    $caminhoPDF = storage_path('app/public/procuracoes/' . $placa . '.pdf'); 
-    $urlPDF = asset('storage/procuracoes/' . $placa . '.pdf'); 
-    //dd($urlPDF);
-    // Verificar se a pasta 'procuracoes' existe, se não, cria-la
-    if (!file_exists(storage_path('app/public/procuracoes'))) {
-        mkdir(storage_path('app/public/procuracoes'), 0777, true); // Cria a pasta se ela não existir
-    }
-    $data = [
-        'nome' => $outorgante,
-        'endereco' => strtoupper($endereco),  // Endereço em maiúsculas
-          // Caminho do arquivo salvo
-        'cpf' => $cpf,
-        'marca' => $marca,
-        'placa' => $placa,
-        'chassi' => $chassi,
-        'cor' => $cor,
-        'ano' => $anoModelo,
-        'renavam' => $renavam,
-        'arquivo_doc' => $urlPDF,
-        'arquivo_proc' => $caminhoPDF,
-    ];
- 
-    // Salvar o PDF
-    $pdf->Output('F', $caminhoPDF); 
+        // Caminho para salvar o PDF na pasta 'procuracoes' dentro de public
+        $caminhoPDF = storage_path('app/public/procuracoes/' . $placa . '.pdf'); 
+        $urlPDF = asset('storage/procuracoes/' . $placa . '.pdf'); 
+        //dd($urlPDF);
+        // Verificar se a pasta 'procuracoes' existe, se não, cria-la
+        if (!file_exists(storage_path('app/public/procuracoes'))) {
+            mkdir(storage_path('app/public/procuracoes'), 0777, true); // Cria a pasta se ela não existir
+        }
+        $data = [
+            'nome' => $outorgante,
+            'endereco' => strtoupper($endereco),  // Endereço em maiúsculas
+            // Caminho do arquivo salvo
+            'cpf' => $cpf,
+            'marca' => $marca,
+            'placa' => $placa,
+            'chassi' => $chassi,
+            'cor' => $cor,
+            'ano' => $anoModelo,
+            'renavam' => $renavam,
+            'arquivo_doc' => $urlPDF,
+            'arquivo_proc' => $caminhoPDF,
+        ];
+    
+        // Salvar o PDF
+        $pdf->Output('F', $caminhoPDF); 
 
-    //$extension = $request->arquivo->getClientOriginalExtension();
-    //$data['arquivo'] = $request->arquivo->storeAs("usuarios/$request->colaborador/Adiantamento/$request->mes/arquivo-$dataAtual" . ".{$extension}");
-    //Mail::to( config('mail.from.address'))->send(new SendEmail($data, $caminhoPDF));
+        //$extension = $request->arquivo->getClientOriginalExtension();
+        //$data['arquivo'] = $request->arquivo->storeAs("usuarios/$request->colaborador/Adiantamento/$request->mes/arquivo-$dataAtual" . ".{$extension}");
+        //Mail::to( config('mail.from.address'))->send(new SendEmail($data, $caminhoPDF));
 
         if($this->model->create($data)){
              alert()->success('Procuração cadastrada com sucesso!');
 
              return redirect()->route('procuracoes.index');
-         }   
+         }
+        }   
      }
 
     // public function edit($id){

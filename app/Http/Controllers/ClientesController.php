@@ -17,7 +17,7 @@ class ClientesController extends Controller
     public function index(Request $request){
 
         $title = 'Excluir!';
-        $text = "Deseja excluir essa categoria?";
+        $text = "Deseja excluir esse cliente?";
         confirmDelete($title, $text);
 
         $clientes = Cliente::paginate(10);
@@ -56,28 +56,37 @@ class ClientesController extends Controller
     //     return view('category.edit', compact('cats'));
     // }
 
-    // public function update(Request $request, $id){
-    //     //dd($request);
-    //     //dd($data);
-    //     $data = $request->all();
-    //     if(!$cats = $this->model->find($id))
-    //         return redirect()->route('category.index');
-
-    //     if($cats->update($data)){
-    //         alert()->success('Categoria editada com sucesso!');
-    //         return redirect()->route('category.index');
-    //     }
-    // }
-
-    // public function destroy($id){
-    //     if(!$doc = $this->model->find($id)){
-    //         alert()->error('Erro ao excluír o pagamento!');
-    //     }
+    public function show($id){
+        $configuracao = Cliente::find($id);
         
-    //     if($doc->delete()){
-    //         alert()->success('Categoria excluída com sucesso!');
-    //     }
+        if (!$configuracao) {
+            return response()->json(['error' => 'Configuração não encontrada'], 404);
+        }
+    
+        return response()->json($configuracao);
+    }
 
-    //     return redirect()->route('category.index');
-    // }
+     public function update(Request $request, $id){
+         //dd($request);
+         //dd($data);
+         $data = $request->all();
+         if(!$cats = $this->model->find($id))
+             return redirect()->route('clientes.index');
+
+         if($cats->update($data)){
+             alert()->success('Cliente editado com sucesso!');
+             return redirect()->route('clientes.index');
+         }
+     }
+
+     public function destroy($id){
+         if(!$doc = $this->model->find($id)){
+             alert()->error('Erro ao excluír o cliente!');
+         }
+        
+         if($doc->delete()){
+             alert()->success('Cliente excluído com sucesso!');
+         }
+         return redirect()->route('clientes.index');
+     }
 }
