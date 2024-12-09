@@ -63,7 +63,6 @@
                                     <td>{{ Carbon\Carbon::parse($serv->created_at)->format('d/m') }}</td>
                                     <td class="table-action">
                                                
-                                                
                                         <a href="{{ route('servicos.destroy', $serv->id) }}"
                                             class="action-icon mdi mdi-delete text-danger" data-confirm-delete="true"></a>
                                     </td>

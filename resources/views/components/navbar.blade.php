@@ -236,7 +236,7 @@
                 <div class="dropdown-menu dropdown-menu-end dropdown-menu-animated profile-dropdown">
                     <!-- item-->
                     <div class=" dropdown-header noti-title">
-                        <h6 class="text-overflow m-0">Bem-vindo!</h6>
+                        <h6 class="text-overflow m-0">Bem-vindo, {{ Auth::user()->name }}!</h6>
                     </div>
 
                     <!-- item-->

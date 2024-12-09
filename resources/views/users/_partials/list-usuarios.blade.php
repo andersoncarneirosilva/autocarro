@@ -10,7 +10,9 @@
                             <th>E-mail</th>
                             <th>Telefone</th>
                             <th>Acesso</th>
+                            @can('access') 
                             <th>Ações</th>
+                            @endcan
                         </tr>
                     </thead>
                     <tbody id="table-body">
@@ -28,7 +30,7 @@
                             <td>{{ $user->telefone }}</td>
                             <td>{{ $user->perfil }}</td>
                             <td class="table-action">
-
+                                @can('access') 
                                 <a href="{{ route('users.edit', $user->id) }}"
                                     data-bs-toggle="tooltip"
                                     data-bs-target="#standard-modal-edit"
@@ -36,12 +38,14 @@
                                     data-bs-placement="top"
                                     aria-label="Edit"
                                     data-bs-original-title="Editar"><i class="uil uil-pen"></i></a>
+                                   
                                 <a href="{{ route('users.destroy', $user->id) }}"
                                     class="mdi mdi-delete font-18 text-danger" 
                                     data-bs-toggle="tooltip"
                                     data-bs-placement="top"
                                     aria-label="Delete"
                                     data-bs-original-title="Excluír" data-confirm-delete="true"></a>
+                                @endcan
                             </td>
                         </tr>
                         @endforeach
