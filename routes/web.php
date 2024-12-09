@@ -13,6 +13,7 @@ use App\Http\Controllers\ConfiguracoesController;
 use App\Http\Controllers\OutorgadoController;
 use App\Http\Controllers\TextoPoderesController;
 use App\Http\Controllers\ClientesController;
+use App\Http\Controllers\ServicosController;
 use Illuminate\Support\Facades\Route;
 
 
@@ -90,6 +91,10 @@ Route::middleware(['auth'])->group(function () {
     Route::post('/clientes', [ClientesController::class, 'store'])->name('clientes.store');
     Route::get('/clientes', [ClientesController::class, 'index'])->name('clientes.index');
     Route::get('/buscar-clientes', [ClientesController::class, 'buscarClientes']);
+
+    Route::delete('/servicos/{id}', [ServicosController::class, 'destroy'])->name('servicos.destroy');
+    Route::post('/servicos', [ServicosController::class, 'store'])->name('servicos.store');
+    Route::get('/servicos', [ServicosController::class, 'index'])->name('servicos.index');
 
 });
 

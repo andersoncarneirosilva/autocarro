@@ -73,6 +73,9 @@
                         <li>
                             <a href="{{ route('documentos.index') }}">Veículos</a>
                         </li>
+                        <li>
+                            <a href="{{ route('servicos.index') }}">Serviços</a>
+                        </li>
                     </ul>
                 </div>
             </li>

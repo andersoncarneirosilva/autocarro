@@ -45,7 +45,7 @@ class ProcuracaoController extends Controller
 
     public function store(Request $request){
 
-        
+        //dd($request);
         $outorgados = Outorgado::all();
         $config = TextoPoder::first();
         //dd($request);
