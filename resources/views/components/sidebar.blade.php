@@ -52,12 +52,19 @@
                 </a>
             </li>
 
-            {{-- <li class="side-nav-item">
+            <li class="side-nav-item">
                 <a href="{{ route('documentos.index') }}" class="side-nav-link">
-                    <i class="uil-file-alt"></i>
-                    <span> Documentos </span>
+                    <i class="uil-car"></i>
+                    <span> Veículos </span>
                 </a>
-            </li> --}}
+            </li>
+
+            <li class="side-nav-item">
+                <a href="{{ route('clientes.index') }}" class="side-nav-link">
+                    <i class="uil-users-alt"></i>
+                    <span> Clientes </span>
+                </a>
+            </li>
 
             <li class="side-nav-item">
                 <a data-bs-toggle="collapse" href="#sideCad" aria-expanded="false" aria-controls="sidebarLayouts" class="side-nav-link">
@@ -67,12 +74,6 @@
                 </a>
                 <div class="collapse" id="sideCad">
                     <ul class="side-nav-second-level">
-                        <li>
-                            <a href="{{ route('clientes.index') }}">Clientes</a>
-                        </li>
-                        <li>
-                            <a href="{{ route('documentos.index') }}">Veículos</a>
-                        </li>
                         <li>
                             <a href="{{ route('servicos.index') }}">Serviços</a>
                         </li>
