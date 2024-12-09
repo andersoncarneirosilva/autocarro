@@ -11,7 +11,7 @@
         <!-- App favicon -->
         <meta name="csrf-token" content="{{ csrf_token() }}">
 
-        <link rel="shortcut icon" href="{{ url('images/favicon.png') }}">
+        <link rel="shortcut icon" href="{{ url('images/favicon.ico') }}">
         <!-- Daterangepicker css -->
         <link href="{{ url('assets/vendor/select2/css/select2.min.css')}}" rel="stylesheet" type="text/css" />
         <link rel="stylesheet" href="{{ url('assets/vendor/daterangepicker/daterangepicker.css') }}">
