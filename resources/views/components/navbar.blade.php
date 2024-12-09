@@ -44,7 +44,7 @@
                 <div class="app-search dropdown d-none d-lg-block">
                     <form action="{{ route('procuracoes.index') }}" method="GET">
                         <div class="input-group">
-                            <input type="text" name="search" placeholder="Pesquisar" class="form-control">
+                            <input type="text" name="search" placeholder="Pesquisar procuração" class="form-control">
                             <button type="submit" class="btn btn-primary">Pesquisar</button>
                         </div>
                     </form>
@@ -58,6 +58,15 @@
                         </div>
                     </form>
                 </div>
+            @elseif(request()->routeIs('clientes.index'))
+            <div class="app-search dropdown d-none d-lg-block">
+                <form action="{{ route('clientes.index') }}" method="GET">
+                    <div class="input-group">
+                        <input type="text" name="search" placeholder="Pesquisar clientes" class="form-control">
+                        <button type="submit" class="btn btn-primary">Pesquisar</button>
+                    </div>
+                </form>
+            </div>
             @endif
 
         </div>

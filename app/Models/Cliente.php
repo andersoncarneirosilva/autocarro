@@ -27,16 +27,16 @@ class Cliente extends Model
         'estado',
     ];
 
-    public function getCatDoc(string|null $search = null){
+    public function getClientes(string|null $search = null){
 
-        $cat = $this->where(function ($query) use ($search) {
+        $users = $this->where(function ($query) use ($search) {
             if($search){
-                $query->where('email', $search);
-                $query->orWhere('name', 'LIKE', "%{$search}%");
+                $query->where('nome', 'LIKE', "%{$search}%");
+                $query->orWhere('cpf', 'LIKE', "%{$search}%");
             }
         })->paginate(10);
-
-        return $cat;
+        //dd($users);
+        return $users;
     }
 
 }

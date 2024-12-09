@@ -106,13 +106,12 @@
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="exampleModalLabel">Modal title</h5>
+                <h5 class="modal-title" id="exampleModalLabel">Cadastrar procuração</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
                 <form action="{{ route('procuracoes.store') }}" method="POST" enctype="multipart/form-data" id="formProc">
                     @csrf
-                    <h4 class="header-title">Informações pessoais</h4>
                     <div class="row">
                         <div class="col-lg-12">
                             <div class="mb-3">
@@ -120,7 +119,7 @@
                                 {{-- <input class="form-control" type="text" name="endereco" id="idEndereco"> --}}
                                 {{-- <select id="select-timezone" class="form-control select2" data-toggle="select2"> --}}
                                     {{-- <select id="select-timezone" class="form-control select2" data-toggle="select2" style="width: 100%;"> --}}
-                                        <select class="select2 form-control select2-multiple" name="cliente[]" data-toggle="select2" multiple="multiple" >
+                                        <select class="select2 form-control select2-multiple" name="cliente[]" id="idCliente" data-toggle="select2" multiple="multiple" >
                                         <option value="">Selecione um cliente</option>
                                         @foreach ($clientes as $cliente)
                                             <option value="{{ $cliente->endereco }}">{{ $cliente->nome }}</option>
@@ -189,7 +188,7 @@
 
     // Obtenha os inputs do arquivo e do endereço
     const arquivoInput = document.getElementById('arquivo_doc');
-    //const endInput = document.getElementById('idEndereco');
+    const cliente = document.getElementById('idCliente');
     
     // Adicionando um evento de submit para o formulário
     form.addEventListener('submit', function(event) {
@@ -197,16 +196,16 @@
         event.preventDefault();
 
         // Verifica se o endereço foi preenchido
-        // const endereco = endInput.value.trim();
-        // if (!endereco) {
-        //     Swal.fire({
-        //         title: 'Erro!',
-        //         text: 'Por favor, preencha o endereço.',
-        //         icon: 'error',
-        //         confirmButtonText: 'OK'
-        //     });
-        //     return;  // Impede o envio do formulário
-        // }
+         const endereco = cliente.value.trim();
+         if (!endereco) {
+             Swal.fire({
+                 title: 'Erro!',
+                 text: 'Por favor, selecione o cliente.',
+                 icon: 'error',
+                 confirmButtonText: 'OK'
+             });
+             return;  // Impede o envio do formulário
+         }
         
         // Obtém o arquivo
         const arquivo = arquivoInput.files[0]; 

@@ -20,7 +20,8 @@ class ClientesController extends Controller
         $text = "Deseja excluir esse cliente?";
         confirmDelete($title, $text);
 
-        $clientes = Cliente::paginate(10);
+        //$clientes = Cliente::paginate(10);
+        $clientes = $this->model->getClientes(search: $request->search ?? '');
         //dd($docs);
         return view('clientes.index', compact('clientes'));
     }
