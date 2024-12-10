@@ -41,8 +41,8 @@
                 </div>
                 @if ($servs->total() != 0)
                 <div class="table-responsive-sm">
-                    <table class="table table-centered table-borderless mb-0">
-                        <thead>
+                    <table class="table table-hover table-centered mb-0">
+                        <thead class="table-dark">
                             <tr>
                                 <th>Serviço</th>
                                 <th>Valor do Serviço</th>

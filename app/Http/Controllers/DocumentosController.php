@@ -27,8 +27,6 @@ class DocumentosController extends Controller
         $text = "Deseja excluir esse veículo?";
         confirmDelete($title, $text);
 
-        //$docs = $this->model->getDocumentos(colaborador: $request->colaborador, documento: $request->documento ?? '');
-        //$docs = Documento::paginate(10);
         $docs = $this->model->getDocs(search: $request->search ?? '');
 
         return view('documentos.index', compact('docs'));

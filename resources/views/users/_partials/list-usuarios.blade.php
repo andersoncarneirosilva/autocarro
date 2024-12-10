@@ -3,8 +3,8 @@
         <div class="row">
             <div class="col-sm-12">
                 
-                <table class="table table-striped table-centered mb-0">
-                    <thead>
+                <table class="table table-hover table-centered mb-0">
+                    <thead class="table-dark">
                         <tr>
                             <th>Nome</th>
                             <th>E-mail</th>
