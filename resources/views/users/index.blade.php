@@ -47,9 +47,7 @@
                                 <th>E-mail</th>
                                 <th>Telefone</th>
                                 <th>Acesso</th>
-                                @can('access') 
                                 <th>Ações</th>
-                                @endcan
                             </tr>
                         </thead>
                         <tbody id="table-body">
@@ -67,7 +65,7 @@
                                 <td>{{ $user->telefone }}</td>
                                 <td>{{ $user->perfil }}</td>
                                 <td class="table-action">
-                                    @can('access') 
+                                    
                                     <a href="{{ route('users.edit', $user->id) }}"
                                         data-bs-toggle="tooltip"
                                         data-bs-target="#standard-modal-edit"
@@ -82,7 +80,7 @@
                                         data-bs-placement="top"
                                         aria-label="Delete"
                                         data-bs-original-title="Excluír" data-confirm-delete="true"></a>
-                                    @endcan
+                                    
                                 </td>
                             </tr>
                             @endforeach

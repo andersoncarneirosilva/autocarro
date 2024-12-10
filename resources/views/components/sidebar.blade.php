@@ -92,9 +92,11 @@
                         <li>
                             <a href="{{ route('configuracoes.index') }}">Procuração</a>
                         </li>
+                        @can('access') 
                         <li>
                             <a href="{{ route('users.index') }}">Usuários</a>
                         </li>
+                        @endcan
                     </ul>
                 </div>
             </li>
