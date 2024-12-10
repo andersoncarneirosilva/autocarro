@@ -67,6 +67,15 @@
                     </div>
                 </form>
             </div>
+            @elseif(request()->routeIs('documentos.index'))
+            <div class="app-search dropdown d-none d-lg-block">
+                <form action="{{ route('documentos.index') }}" method="GET">
+                    <div class="input-group">
+                        <input type="text" name="search" placeholder="Pesquisar veículos..." class="form-control">
+                        <button type="submit" class="btn btn-primary">Pesquisar</button>
+                    </div>
+                </form>
+            </div>
             @endif
 
         </div>

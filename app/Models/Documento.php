@@ -37,16 +37,15 @@ class Documento extends Model
 
     ];
 
-    public function getDocumentos(string|null $colaborador = null, string|null $documento = null){
-        $pags = $this->where(function ($query) use ($colaborador, $documento) {
-            if($colaborador){
-                $query->where('colaborador', $colaborador);
-            }
-            if($documento){
-                $query->where('documento', $documento);
+    public function getDocs(string|null $search = null){
+
+        $docs = $this->where(function ($query) use ($search) {
+            if($search){
+                $query->where('placa', 'LIKE', "%{$search}%");
+                $query->orWhere('nome', 'LIKE', "%{$search}%");
             }
         })->paginate(10);
-        return $pags;
+        return $docs;
     }
 
     public function validaDoc($textoPagina){
