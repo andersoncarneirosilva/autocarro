@@ -104,6 +104,9 @@
                         <label for="serviceValue" class="form-label">Valor do Serviço</label>
                         <input type="text" class="form-control money" id="val_servico" name="valor_servico" placeholder="R$ 0,00">
                     </div>
+
+                    
+
                     <div class="mb-3">
                         <label for="collectionValue" class="form-label">Valor de Arrecadação</label>
                         <input type="text" class="form-control money" id="val_arrec" name="arrecadacao_servico" placeholder="R$ 0,00">

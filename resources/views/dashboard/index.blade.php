@@ -91,7 +91,7 @@
                                 <div class="card tilebox-one">
                                     <div class="card-body">
                                         <i class="uil uil-postcard float-end"></i>
-                                        <h2 class="my-2" id="active-users-count">{{ $countProcs }}</h2>
+                                        <h2 class="my-2" id="active-users-count">{{ $countCnh }}</h2>
                                         <p class="mb-0 text-muted">
                                             <span class="text-nowrap">CNH</span>
                                         </p>
