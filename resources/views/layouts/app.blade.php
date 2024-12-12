@@ -15,6 +15,8 @@
         <!-- Daterangepicker css -->
         <link href="{{ url('assets/vendor/select2/css/select2.min.css')}}" rel="stylesheet" type="text/css" />
         <link rel="stylesheet" href="{{ url('assets/vendor/daterangepicker/daterangepicker.css') }}">
+
+        
         <!-- Vector Map css -->
         <link rel="stylesheet" href="{{ url('assets/vendor/admin-resources/jquery.vectormap/jquery-jvectormap-1.2.2.css') }}">
         <!-- Theme Config Js -->
@@ -23,7 +25,7 @@
         <link href="{{ url('assets/css/app-saas.min.css') }}" rel="stylesheet" type="text/css" id="app-style" />
         <!-- Icons css -->
         <link href="{{ url('assets/css/icons.min.css') }}" rel="stylesheet" type="text/css" />
-
+        
         <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
         <!-- Script -->
         <script src="https://kit.fontawesome.com/6c4df5f46b.js" crossorigin="anonymous"></script>
@@ -33,10 +35,13 @@
         
         <script src="https://cdnjs.cloudflare.com/ajax/libs/sweetalert/2.1.0/sweetalert.min.js"></script>
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/inputmask/5.0.8/jquery.inputmask.min.js"></script>
+
         <script src="{{ url('js/mask-cep.js') }}"></script>
         <script src="{{ url('js/mask-phone.js') }}"></script>
         
         <!-- Select2 css -->
+        
 
         <!--  Select2 Js -->
         
@@ -146,6 +151,5 @@
         <!-- App js -->
         <script src="{{ url('assets/js/app.min.js') }}"></script>
         <!-- Script do Select2 -->
-        
     </body>
 </html> 

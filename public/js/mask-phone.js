@@ -11,8 +11,8 @@ const phoneMask = (value) => {
 
   // Limitar o número de dígitos para código de área (DDD), prefixo e número propriamente dito
   const ddd = value.slice(0, 2);
-  const prefix = value.slice(2, 6);
-  const number = value.slice(6, 11);
+  const prefix = value.slice(2, 7);
+  const number = value.slice(7, 11);
 
   // Aplicar a máscara
   if (ddd && prefix && number) {

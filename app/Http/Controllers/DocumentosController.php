@@ -8,6 +8,7 @@ use App\Models\Procuracao;
 use App\Models\Outorgado;
 use App\Models\ConfigProc;
 use App\Models\TextoPoder;
+use App\Models\Cliente;
 use Smalot\PdfParser\Parser;
 use FPDF;
 use Carbon\Carbon;
@@ -26,10 +27,10 @@ class DocumentosController extends Controller
         $title = 'Excluir!';
         $text = "Deseja excluir esse veículo?";
         confirmDelete($title, $text);
-
+        $clientes = Cliente::all();
         $docs = $this->model->getDocs(search: $request->search ?? '');
 
-        return view('documentos.index', compact('docs'));
+        return view('documentos.index', compact(['docs', 'clientes']));
     }
 
     // public function create(){
@@ -134,23 +135,26 @@ class DocumentosController extends Controller
     }
 
     public function gerarProc($id, Request $request) {
-        //$config = ConfigProc::first();
-        //dd($request);
+
         $outorgados = Outorgado::all();
-        $config = TextoPoder::first();
+        $config = TextoPoder::get()->first();
         $dataAtual = Carbon::now();
         $dataPorExtenso = $dataAtual->translatedFormat('d \d\e F \d\e Y');
-        $endereco = $request->endereco; // Captura o endereço
-        $documento = Documento::findOrFail($id);
-        //$outorgante = $request->nome; 
-    //dd($documento->ano);
+        //$endereco = $request->endereco;
+        $documento = Documento::where('id', $id)->first(); 
+        $doc_id = $documento->id;
 
+        $cliente = Cliente::where('doc_id', $doc_id)->first(); 
+
+        if ($cliente) {
+            $endereco = $cliente->endereco;
+        }
         
-    $pdf = new FPDF();
-    $pdf->SetMargins(10, 10, 10);
-    $pdf->AddPage();  // Adicionar uma página ao PDF
-    //$pdfFpdf->SetFont('Arial', 'B', 16);  // Definir a fonte (Arial, Negrito, tamanho 16)
-    $pdf->SetFont('Arial', 'B', 14);
+        $pdf = new FPDF();
+        $pdf->SetMargins(10, 10, 10);
+        $pdf->AddPage();  // Adicionar uma página ao PDF
+        //$pdfFpdf->SetFont('Arial', 'B', 16);  // Definir a fonte (Arial, Negrito, tamanho 16)
+        $pdf->SetFont('Arial', 'B', 14);
 
         $titulo = utf8_decode("PROCURAÇÃO");
     
@@ -218,9 +222,9 @@ class DocumentosController extends Controller
 
         $pdf->Ln(8);
         $pdf->SetFont('Arial', '', 11);
-
-        $text2 = "$config->texto_final";
-
+        
+        $text2 = $config->texto_final;
+        //dd($text2);
         // Remover quebras de linha manuais, caso existam
         $text2 = str_replace("\n", " ", $text2);
 

@@ -85,12 +85,13 @@ Route::middleware(['auth'])->group(function () {
     Route::delete('/poderes/{id}', [TextoPoderesController::class, 'destroy'])->name('poderes.destroy');
     Route::post('/poderes', [TextoPoderesController::class, 'store'])->name('poderes.store');
 
-    Route::get('/clientes/{id}', [ClientesController::class, 'show'])->name('clientes.show');
     Route::put('/clientes/{id}', [ClientesController::class, 'update'])->name('clientes.update');
     Route::delete('/clientes/{id}', [ClientesController::class, 'destroy'])->name('clientes.destroy');
     Route::post('/clientes', [ClientesController::class, 'store'])->name('clientes.store');
+    Route::get('/clientes/create', [ClientesController::class, 'create'])->name('clientes.create');
     Route::get('/clientes', [ClientesController::class, 'index'])->name('clientes.index');
     Route::get('/buscar-clientes', [ClientesController::class, 'buscarClientes']);
+    Route::get('/clientes/{id}', [ClientesController::class, 'show'])->name('clientes.show');
 
     Route::delete('/servicos/{id}', [ServicosController::class, 'destroy'])->name('servicos.destroy');
     Route::post('/servicos', [ServicosController::class, 'store'])->name('servicos.store');

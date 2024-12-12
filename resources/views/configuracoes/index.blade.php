@@ -167,11 +167,14 @@
         </div>
     </div>
 </div>
+@if($texts->total() == 0)
+
+@else
 <form action="{{ route('configuracoes.gerarProc', $text->id) }}" method="POST" enctype="multipart/form-data" target="_blank">
     @csrf
     <button type="submit" class="btn btn-primary">Visualizar modelo</button>
 </form>
-
+@endif
 
 <!-- Modal Cadastro outorgado-->
 @include('configuracoes._partials.form-cad-outorgado')

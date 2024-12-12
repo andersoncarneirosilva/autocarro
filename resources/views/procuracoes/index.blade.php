@@ -18,7 +18,49 @@
     </div>
 </div>
 <br>
+<div class="card">
+    <div class="card-body">
+        <div class="row">
+            <div class="col-md-6">
+                <form action="{{ route('clientes.index') }}" method="GET">
+                    <div class="filter-select-container">
+                        <select class="filter-select select-arrow-animation" name="colaborador" id="colaborador-select" data-toggle="select2">
+                            <option value="" selected>Colaborador</option>
+                            @foreach ($clientes as $cliente)
+                            <option value="{{ $cliente->nome }}">{{ $cliente->nome }}</option>
+                            @endforeach
+                        </select>
+                        <select class="filter-select" id="mes-select" name="mes" data-toggle="select2">
+                            <option value="" selected>Mês referente</option>
+                            <option value="Janeiro">Janeiro</option>
+                            <option value="Fevereiro">Fevereiro</option>
+                            <option value="Março">Março</option>
+                            <option value="Abril">Abril</option>
+                            <option value="Maio">Maio</option>
+                            <option value="Junho">Junho</option>
+                            <option value="Julho">Julho</option>
+                            <option value="Agosto">Agosto</option>
+                            <option value="Setembro">Setembro</option>
+                            <option value="Outubro">Outubro</option>
+                            <option value="Novembro">Novembro</option>
+                            <option value="Dezembro">Dezembro</option>
+                        </select>
+                        <select class="filter-select" id="status-select" name="status" data-toggle="select2">
+                            <option value="" selected>Status</option>
+                            <option value="A confirmar">A confirmar</option>
+                            <option value="Recebido">Recebido</option>
+                            <option value="Arquivado">Arquivado</option>
+                        </select>
+                    </div>
+            </div>
 
+            <div class="col-md-6 text-end">
+                <button type="submit" class="filter-btn btn-light">Filtrar</button>
+            </div>
+            </form>
+        </div>
+    </div>
+</div>
 <div class="card">
     <div class="card-body">
         <div class="row">

@@ -138,9 +138,14 @@ aria-hidden="true">
                 <form id="addressForm">
                     
                     <div class="form-group">
-                        <label for="inputAddress">Endereço: <span style="color: red;">*</span></label>
+                        <label for="inputAddress">Selecione o cliente: <span style="color: red;">*</span></label>
 
-                        <input type="text" class="form-control" id="inputAddress" placeholder="Digite o endereço aqui" required>
+                        <select class="select2 form-control select2-multiple" name="cliente[]" id="inputAddress" data-toggle="select2" multiple="multiple" >
+                            <option value="">Selecione um cliente</option>
+                            @foreach ($clientes as $cliente)
+                                <option value="{{ $cliente->endereco }}">{{ $cliente->nome }}</option>
+                            @endforeach
+                        </select>
                     </div>
                     <input type="hidden" id="docId">
                 </form>
@@ -195,6 +200,7 @@ aria-hidden="true">
 </div>
 
 
+
 <script>
 
     function openAddressModal(event) {
@@ -202,7 +208,7 @@ aria-hidden="true">
 
     // Obtém o ID do documento do atributo data-id
     const docId = event.target.getAttribute('data-id');
- 
+ console.log(docId);
     // Define o ID do documento no campo oculto do formulário
     document.getElementById('docId').value = docId;
 
@@ -263,7 +269,7 @@ function submitAddress() {
     if (!address) {
     Swal.fire({
         title: 'Campo Obrigatório',
-        text: 'Por favor, preencha o endereço.',
+        text: 'Por favor, selecione o cliente.',
         icon: 'warning',
         confirmButtonText: 'OK'
     });

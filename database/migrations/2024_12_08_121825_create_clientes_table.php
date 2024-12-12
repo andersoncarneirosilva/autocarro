@@ -16,11 +16,14 @@ return new class extends Migration
             $table->string('nome');
             $table->string('cpf');
             $table->string('fone');
+            $table->string('email');
             $table->string('cep');
             $table->string('endereco');
             $table->string('bairro');
             $table->string('cidade');
             $table->string('estado');
+            $table->string('arquivo_doc_veiculo');
+            $table->string('doc_id');
             $table->timestamps();
         });
     }
