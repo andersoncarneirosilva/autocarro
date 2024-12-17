@@ -27,7 +27,8 @@
         <link href="{{ url('assets/css/icons.min.css') }}" rel="stylesheet" type="text/css" />
         
         <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
-        <!-- Script -->
+
+        <link href="{{ url('assets/vendor/daterangepicker/daterangepicker.css') }}" rel="stylesheet" type="text/css" />
         <script src="https://kit.fontawesome.com/6c4df5f46b.js" crossorigin="anonymous"></script>
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
         <script src='https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js' type='text/javascript'></script>
@@ -39,6 +40,8 @@
 
         <script src="{{ url('js/mask-cep.js') }}"></script>
         <script src="{{ url('js/mask-phone.js') }}"></script>
+
+        
         
         <!-- Select2 css -->
         
@@ -138,7 +141,8 @@
         <script src="{{ url('assets/js/vendor.min.js') }}"></script>   
         <script src="{{ url('assets/vendor/select2/js/select2.min.js')}}"></script>
         <!-- Bootstrap Wizard Form js -->
-
+        <script src="{{ url('assets/vendor/daterangepicker/moment.min.js') }}"></script>
+        <script src="{{ url('assets/vendor/daterangepicker/daterangepicker.js') }}"></script>
         <script src="{{ url('assets/vendor/twitter-bootstrap-wizard/jquery.bootstrap.wizard.min.js') }}"></script>
         <!-- Wizard Form Demo js -->
         <script src="{{ url('assets/js/pages/demo.form-wizard.js') }}"></script>

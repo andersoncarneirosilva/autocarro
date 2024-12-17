@@ -66,6 +66,13 @@
                 </a>
             </li>
 
+            {{-- <li class="side-nav-item">
+                <a href="{{ route('relatorios.index') }}" class="side-nav-link">
+                    <i class="uil-file-info-alt"></i>
+                    <span> Relatórios </span>
+                </a>
+            </li> --}}
+
             <li class="side-nav-item">
                 <a data-bs-toggle="collapse" href="#sideCad" aria-expanded="false" aria-controls="sidebarLayouts" class="side-nav-link">
                     <i class="uil-folder-medical"></i>

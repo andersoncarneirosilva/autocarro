@@ -14,6 +14,7 @@ use App\Http\Controllers\OutorgadoController;
 use App\Http\Controllers\TextoPoderesController;
 use App\Http\Controllers\ClientesController;
 use App\Http\Controllers\ServicosController;
+use App\Http\Controllers\RelatoriosController;
 use Illuminate\Support\Facades\Route;
 
 
@@ -96,6 +97,9 @@ Route::middleware(['auth'])->group(function () {
     Route::delete('/servicos/{id}', [ServicosController::class, 'destroy'])->name('servicos.destroy');
     Route::post('/servicos', [ServicosController::class, 'store'])->name('servicos.store');
     Route::get('/servicos', [ServicosController::class, 'index'])->name('servicos.index');
+
+    Route::get('/relatorios', [RelatoriosController::class, 'index'])->name('relatorios.index');
+    Route::get('/relatorios/clientes/exportar-pdf', [RelatoriosController::class, 'exportarPdf'])->name('relatorios.clientes.pdf');
 
 });
 

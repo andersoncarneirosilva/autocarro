@@ -1,90 +1,19 @@
 @extends('layouts.app')
 
-@section('title', 'ProcOnline - Clientes')
+@section('title', 'Procurações')
 
 @section('content')
-<script>
-    
-    function limpa_formulário_cep() {
-            //Limpa valores do formulário de cep.
-            document.getElementById('rua').value=("");
-            document.getElementById('bairro').value=("");
-            document.getElementById('cidade').value=("");
-            document.getElementById('uf').value=("");
-    }
 
-    function meu_callback(conteudo) {
-        if (!("erro" in conteudo)) {
-            //Atualiza os campos com os valores.
-            document.getElementById('rua').value=(conteudo.logradouro);
-            document.getElementById('bairro').value=(conteudo.bairro);
-            document.getElementById('cidade').value=(conteudo.localidade);
-            document.getElementById('uf').value=(conteudo.uf);
-        } //end if.
-        else {
-            //CEP não Encontrado.
-            limpa_formulário_cep();
-            alert("CEP não encontrado.");
-        }
-    }
-        
-    function pesquisacep(valor) {
-
-        //Nova variável "cep" somente com dígitos.
-        var cep = valor.replace(/\D/g, '');
-
-        //Verifica se campo cep possui valor informado.
-        if (cep != "") {
-
-            //Expressão regular para validar o CEP.
-            var validacep = /^[0-9]{8}$/;
-
-            //Valida o formato do CEP.
-            if(validacep.test(cep)) {
-
-                //Preenche os campos com "..." enquanto consulta webservice.
-                document.getElementById('rua').value="...";
-                document.getElementById('bairro').value="...";
-                document.getElementById('cidade').value="...";
-                document.getElementById('uf').value="...";
-
-                //Cria um elemento javascript.
-                var script = document.createElement('script');
-
-                //Sincroniza com o callback.
-                script.src = 'https://viacep.com.br/ws/'+ cep + '/json/?callback=meu_callback';
-
-                //Insere script no documento e carrega o conteúdo.
-                document.body.appendChild(script);
-
-            } //end if.
-            else {
-                //cep é inválido.
-                limpa_formulário_cep();
-                alert("Formato de CEP inválido.");
-            }
-        } //end if.
-        else {
-            //cep sem valor, limpa formulário.
-            limpa_formulário_cep();
-        }
-    };
-
-
-    </script>
-
-
-  
 <div class="row">
     <div class="col-12">
         <div class="page-title-box">
             <div class="page-title-right">
                 <ol class="breadcrumb m-0">
-                    <li class="breadcrumb-item"><a href="{{ route('dashboard.index') }}">Dashboard</a></li>
-                    <li class="breadcrumb-item active">Clientes</li>
+                    <li class="breadcrumb-item"><a href="{{ route('servicos.index') }}">Dashboard</a></li>
+                    <li class="breadcrumb-item active">Serviços</li>
                 </ol>
             </div>
-            <h3 class="page-title">Clientes</h3>
+            <h3 class="page-title">Serviços</h3>
         </div>
     </div>
 </div>
@@ -102,15 +31,14 @@
             @endif --}}
             <div class="col-sm-12">
                 <div class="card-header d-flex justify-content-between align-items-center">
-                    <h4 class="header-title">Clientes cadastrados</h4>
+                    <h4 class="header-title">Serviços cadastradas</h4>
                     <div class="dropdown">
-                        <a href="{{ route('clientes.create')}}" class="btn btn-primary btn-sm">Cadastrar</a>
-                        <a href="{{ route('relatorios.clientes.pdf')}}" target="_blank" class="btn btn-danger btn-sm">Relatório</a>
+                        <button type="button" class="btn btn-primary btn-sm" data-bs-toggle="modal"
+                            data-bs-target="#serviceModal">Cadastrar</button>
                         {{-- <button class="btn btn-secondary btn-sm" id="deleteAllSelectedRecord" disabled><i
                                 class="fa-solid fa-trash"></i></button> --}}
                     </div>
                 </div>
-                @if ($clientes->total() != 0)
                 <div class="table-responsive-sm">
                     <table class="table table-hover table-centered mb-0">
                         <thead class="table-dark">
@@ -149,19 +77,62 @@
                             @endforeach
                         </tbody>
                     </table>
+                        <a href="{{ route('relatorios.clientes.pdf') }}">Exportar para PDF</a>
                 </div>
-                    @elseif($clientes->total() == 0)
-                        <div class="alert alert-warning" role="alert">
+                    {{-- @elseif($servs->total() == 0)
+                        <div class="alert alert-warning bg-transparent text-warning" role="alert">
                             NENHUM RESULTADO ENCONTRADO!
                         </div>
-                    @endif
+                    @endif --}}
             </div>
         </div>
     </div>
-    <div class="row">
-        {{ $clientes->appends([
+    {{-- <div class="row">
+        {{ $servs->appends([
             'search' => request()->get('search', '')
         ])->links('components.pagination') }}
+    </div> --}}
+    <!-- Single Select -->
+<!-- Modal -->
+<div class="modal fade" id="serviceModal" tabindex="-1" aria-labelledby="serviceModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="serviceModalLabel">Detalhes do Serviço</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <form action="{{ route('servicos.store') }}" method="POST">
+                    @csrf
+                    <div class="mb-3">
+                        <label for="serviceName" class="form-label">Serviço</label>
+                        <input type="text" class="form-control" id="nome_servico" name="nome_servico">
+                    </div>
+                    <div class="mb-3">
+                        <label for="serviceValue" class="form-label">Valor do Serviço</label>
+                        <input type="text" class="form-control money" id="val_servico" name="valor_servico" placeholder="R$ 0,00">
+                    </div>
+
+                    
+
+                    <div class="mb-3">
+                        <label for="collectionValue" class="form-label">Valor de Arrecadação</label>
+                        <input type="text" class="form-control money" id="val_arrec" name="arrecadacao_servico" placeholder="R$ 0,00">
+                    </div>
+                    <div class="mb-3">
+                        <label for="laborCost" class="form-label">Mão de Obra</label>
+                        <input type="text" class="form-control money" id="val_mao" name="maodeobra_servico" placeholder="R$ 0,00">
+                    </div>
+                    <div class="row">
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-light" data-bs-dismiss="modal">Fechar</button>
+                            <button type="submit" class="btn btn-primary">Cadastrar</button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            
+        </div>
     </div>
 </div>
 
