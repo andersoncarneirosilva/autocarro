@@ -17,7 +17,6 @@
         "setasign/fpdf": "^1.8",
         "setasign/fpdi": "^2.3",
         "smalot/pdfparser": "^2.5",
-        "spatie/browsershot": "^5.0",
         "spatie/pdf-to-text": "^1.52",
         "tecnickcom/tcpdf": "^6.6"
     },
