@@ -101,6 +101,16 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/relatorios', [RelatoriosController::class, 'index'])->name('relatorios.index');
     Route::get('/relatorios/clientes/exportar-pdf', [RelatoriosController::class, 'exportarPdf'])->name('relatorios.clientes.pdf');
 
+    Route::get('/relatorio-clientes', [RelatoriosController::class, 'gerarRelatorioClientes'])->name('relatorio-clientes');
+
+
+    Route::get('/teste-pdfteste', function () {
+        $pdf = PDF::loadHTML('<h1>Testando PDF com Facade</h1>');
+        return $pdf->stream();
+    });
+    
+
+
 });
 
 

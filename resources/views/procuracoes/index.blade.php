@@ -18,7 +18,7 @@
     </div>
 </div>
 <br>
-<div class="card">
+{{-- <div class="card">
     <div class="card-body">
         <div class="row">
             <div class="col-md-6">
@@ -31,7 +31,7 @@
                             @endforeach
                         </select>
                         
-                            <input type="text" class="form-control date" id="birthdatepicker" data-toggle="date-picker" data-single-date-picker="true">
+                            <input type="text" class="form-control" id="" data-toggle="date-picker" data-single-date-picker="true" placeholder="Date and Time">
                          
                     </div>
             </div>
@@ -42,7 +42,7 @@
             </form>
         </div>
     </div>
-</div>
+</div> --}}
 <div class="card">
     <div class="card-body">
         <div class="row">
