@@ -35,6 +35,7 @@
                     <div class="dropdown">
                         <button type="button" class="btn btn-primary btn-sm" data-bs-toggle="modal"
                             data-bs-target="#standard-modal">Cadastrar</button>
+                            <a href="{{ route('relatorio-veiculos')}}" target="_blank" class="btn btn-danger btn-sm">Relatório</a>
                         {{-- <button class="btn btn-secondary btn-sm" id="deleteAllSelectedRecord" disabled><i
                                 class="fa-solid fa-trash"></i></button> --}}
                     </div>

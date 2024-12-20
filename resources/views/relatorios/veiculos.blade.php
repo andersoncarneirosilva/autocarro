@@ -9,7 +9,6 @@
             font-family: Arial, sans-serif;
             margin: 0;
             padding: 0;
-            background-color: #f4f4f9;
             color: #333;
             width: 100%;
             height: 100%;
@@ -38,8 +37,8 @@
         }
 
         .logo img {
-            max-width: 100px; /* Limita o tamanho do logo */
-            height: auto; /* Garante que a imagem preserve a proporção */
+            max-width: 100px;
+            height: auto;
         }
 
         .header-title {
@@ -73,13 +72,13 @@
         table th {
             text-align: left;
             padding: 12px;
-            font-size: 12px; /* Tamanho da fonte para os cabeçalhos */
+            font-size: 12px;
         }
 
         table td {
             text-align: left;
             padding: 10px;
-            font-size: 14px; /* Tamanho da fonte para as células de dados */
+            font-size: 14px;
         }
 
         table tr:nth-child(even) {
@@ -91,6 +90,9 @@
             margin-top: 20px;
             font-size: 12px;
             color: #777;
+        }
+        .site{
+            background: none
         }
     </style>
 </head>
@@ -104,14 +106,14 @@
                         <img src="images/relatorio/logo-top.png" alt="Logo">
                     </td>
                     <td class="header-title">
-                        <h1>Relatório de Clientes</h1>
+                        <h1>Relatório de Veículos</h1>
                     </td>
                     <td class="date">
                         <p>Gerado em: {{ date('d/m/Y') }}</p>
                     </td>
                 </tr>
                 <tr>
-                    <td>
+                    <td class="site">
                         www.proconline.com.br
                     </td>
                 </tr>
@@ -121,23 +123,23 @@
         <table>
             <thead>
                 <tr>
-                    <th>Nome</th>
-                    <th>CPF</th>
-                    <th>Fone</th>
-                    <th>Email</th>
-                    <th>CEP</th>
-                    <th>Endereço</th>
+                    <th>Veículo</th>
+                    <th>Placa</th>
+                    <th>Ano/Modelo</th>
+                    <th>Renavam</th>
+                    <th>Cor</th>
+                    <th>Proprietário</th>
                 </tr>
             </thead>
             <tbody>
-                @foreach ($clientes as $cliente)
+                @foreach ($veiculos as $cliente)
                 <tr>
+                    <td>{{ $cliente->marca }}</td>
+                    <td>{{ $cliente->placa }}</td>
+                    <td>{{ $cliente->ano }}</td>
+                    <td>{{ $cliente->renavam }}</td>
+                    <td>{{ $cliente->cor }}</td>
                     <td>{{ $cliente->nome }}</td>
-                    <td>{{ $cliente->cpf }}</td>
-                    <td>{{ $cliente->fone }}</td>
-                    <td>{{ $cliente->email }}</td>
-                    <td>{{ $cliente->cep }}</td>
-                    <td>{{ $cliente->endereco }}</td>
                 </tr>
                 @endforeach
             </tbody>
