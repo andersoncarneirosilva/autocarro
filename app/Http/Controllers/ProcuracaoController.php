@@ -46,6 +46,16 @@ class ProcuracaoController extends Controller
     public function store(Request $request){
 
         //dd($request);
+        if(!$request->texto_final){
+            alert()->error('Por favor, configure a procuração!');
+
+             return redirect()->route('procuracoes.index');
+        }
+        if(!$request->outorgante){
+            alert()->error('Por favor, configure a procuração!');
+
+             return redirect()->route('procuracoes.index');
+        }
         $outorgados = Outorgado::all();
         $config = TextoPoder::first();
         //dd($request);
