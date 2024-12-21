@@ -1,26 +1,20 @@
 
-# Setup Docker Para Projetos Laravel (8, 9 ou 10)
+# Setup ProcOnline
 
 ### Passo a passo
-Clonar repositório das config docker
+Rodar o comando ssh-keygen no linux
 ```sh
-git clone https://github.com/andersonseidler/setup-docker-laravel.git
+ssh-keygen
+```
+Acessar o diretório para copiar a chave
+```sh
+cat ~/.ssh/ida_rsa.pub
 ```
 
-Clonar os arquivos do Laravel
+Clonar repositório do projeto
 ```sh
-git clone https://github.com/andersonseidler/laravel.git laradoc
+git clone git@github.com:andersonseidler/proconline.git proconline
 ```
-
-
-Copie os arquivos docker-compose.yml, Dockerfile e o diretório docker/ para a pasta laradoc
-```sh
-cp -rf setup-docker-laravel/* laradoc/
-```
-```sh
-cd laradoc/
-```
-
 
 Criar uma cópia do arquivo .env
 ```sh
@@ -57,13 +51,13 @@ REDIS_PORT=6379
 
 Suba os containers do projeto
 ```sh
-docker-compose up -d
+docker compose up -d
 ```
 
 
 Acessar o container
 ```sh
-docker-compose exec app bash
+docker compose exec app bash
 ```
 
 
@@ -88,7 +82,7 @@ php artisan migrate
 
 Rodas as Seeders necessárias
 ```sh
-php artisan db:seed UserSeeder
+php artisan db:seed DatabaseSeeder
 ```
 
 Criar um link para a pasta storage na public. Caso já exista, desconsidere o comando.
@@ -100,4 +94,4 @@ Utilizar o comando para dar permissão ao user
 sudo chown -R "${USER:-$(id -un)}" .
 ```
 Acessar o projeto
-[http://localhost:8989](http://localhost:8989)# proconline
+[http://localhost:8989](http://localhost:8989)
