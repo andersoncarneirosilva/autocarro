@@ -160,6 +160,16 @@ class ClientesController extends Controller
     //     return response()->json($configuracao);
     // }
 
+    public function edit($id){
+        
+        if(!$cliente = $this->model->find($id)){
+            return redirect()->route('clientes.index');
+        }
+        //dd($cliente);
+
+        return view('clientes.edit', compact('cliente'));
+    }
+
      public function update(Request $request, $id){
          //dd($request);
          //dd($data);

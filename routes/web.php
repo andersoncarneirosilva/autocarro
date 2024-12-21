@@ -88,8 +88,9 @@ Route::middleware(['auth'])->group(function () {
 
     Route::put('/clientes/{id}', [ClientesController::class, 'update'])->name('clientes.update');
     Route::delete('/clientes/{id}', [ClientesController::class, 'destroy'])->name('clientes.destroy');
-    Route::post('/clientes', [ClientesController::class, 'store'])->name('clientes.store');
+    Route::post('/clientes', [ClientesController::class, 'store'])->name('clientes.store')->middleware('uppercase');
     Route::get('/clientes/create', [ClientesController::class, 'create'])->name('clientes.create');
+    Route::get('/clientes/{id}/edit', [ClientesController::class, 'edit'])->name('clientes.edit');
     Route::get('/clientes', [ClientesController::class, 'index'])->name('clientes.index');
     Route::get('/buscar-clientes', [ClientesController::class, 'buscarClientes']);
     Route::get('/clientes/{id}', [ClientesController::class, 'show'])->name('clientes.show');
@@ -103,6 +104,7 @@ Route::middleware(['auth'])->group(function () {
 
     Route::get('/relatorio-clientes', [RelatoriosController::class, 'gerarRelatorioClientes'])->name('relatorio-clientes');
     Route::get('/relatorio-veiculos', [RelatoriosController::class, 'gerarRelatorioVeiculos'])->name('relatorio-veiculos');
+    Route::get('/relatorio-procuracoes', [RelatoriosController::class, 'gerarRelatorioProc'])->name('relatorio-procuracoes');
 
 
     Route::get('/teste-pdfteste', function () {

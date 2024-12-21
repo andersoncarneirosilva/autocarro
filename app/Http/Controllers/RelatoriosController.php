@@ -7,6 +7,7 @@ use Barryvdh\DomPDF\Facade as PDF;
 
 use App\Models\Cliente;
 use App\Models\Documento;
+use App\Models\Procuracao;
 
 class RelatoriosController extends Controller
 {
@@ -45,5 +46,22 @@ class RelatoriosController extends Controller
 
         // Retorna o PDF para download
         return $pdf->stream('relatorio_veiculos.pdf');
+    }
+
+    public function gerarRelatorioProc()
+    {
+        // Obtém os dados dos clientes do banco de dados
+        $procs = Procuracao::all();
+
+        // Renderiza a view com os dados
+        //$pdf = PDF::loadView('relatorios.clientes', compact('clientes'));
+
+        $view = view('relatorios.procuracoes', compact('procs'))->render();
+        $pdf = app('dompdf.wrapper');
+        $pdf->loadHTML($view)
+        ->setPaper('a4', 'landscape');
+
+        // Retorna o PDF para download
+        return $pdf->stream('relatorio_procuracoes.pdf');
     }
 }

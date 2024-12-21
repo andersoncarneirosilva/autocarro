@@ -1,6 +1,6 @@
 @extends('layouts.app')
 
-@section('title', 'ProcOnline - Clientes')
+@section('title', 'Clientes')
 
 @section('content')
 <script>
@@ -138,7 +138,7 @@
                                     <td>{{ Carbon\Carbon::parse($cli->created_at)->format('d/m') }}</td>
                                     <td class="table-action">
 
-                                        <a href="#" class="action-icon" data-id="{{ $cli->id }}" onclick="openEditTextModal(event)">
+                                        <a href="{{ route('clientes.edit', $cli->id) }}" class="action-icon" data-id="{{ $cli->id }}" onclick="openEditTextModal(event)">
                                             <i class="mdi mdi-clipboard-edit-outline" title="Editar"></i>
 
                                         <a href="{{ route('clientes.destroy', $cli->id) }}"

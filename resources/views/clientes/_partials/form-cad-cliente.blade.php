@@ -1,3 +1,16 @@
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        document.getElementById('cpf').addEventListener('input', function (e) {
+            let value = e.target.value.replace(/\D/g, ''); // Remove caracteres não numéricos
+            if (value.length > 11) value = value.slice(0, 11); // Limita ao tamanho máximo do CPF
+            value = value.replace(/(\d{3})(\d)/, '$1.$2'); // Adiciona o primeiro ponto
+            value = value.replace(/(\d{3})(\d)/, '$1.$2'); // Adiciona o segundo ponto
+            value = value.replace(/(\d{3})(\d{1,2})$/, '$1-$2'); // Adiciona o hífen
+            e.target.value = value;
+        });
+    });
+</script>
+
 <div class="row">
     <div class="col">
         <div class="card">
@@ -7,13 +20,13 @@
                         <div class="col-md-6">
                             <div class="mb-3">
                                 <label class="form-label">Nome</label>
-                                <input type="text" class="form-control" name="nome">
+                                <input type="text" class="form-control" name="nome" id="nome_cliente">
                             </div>
                         </div>
                         <div class="col-md-6">
                             <div class="mb-3">
                                 <label class="form-label">CPF</label>
-                                <input type="text" class="form-control" name="cpf" id="cpf">
+                                <input type="text" class="form-control" name="cpf" id="cpf" maxlength="14">
                             </div>
                         </div> <!-- end col -->
                     </div> <!-- end row -->
@@ -22,7 +35,7 @@
                         <div class="col-md-6">
                             <div class="mb-3">
                                 <label class="form-label">Fone/Whatsapp</label>
-                                <input type="text" class="form-control" name="fone" id="fone" />
+                                <input type="text" class="form-control" name="fone" id="fone" onkeyup="handlePhone(event)"/>
                             </div>
                         </div>
                         <div class="col-md-6">

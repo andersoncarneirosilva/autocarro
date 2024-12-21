@@ -4,12 +4,7 @@
 
 @section('content')
 
-<script>
-    $(document).ready(function () {
-  $("#cpf").inputmask("999.999.999-99");
-});
 
-  </script>
 
 <div class="row">
     <div class="col-12">

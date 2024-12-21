@@ -136,16 +136,16 @@ class DocumentosController extends Controller
 
     public function gerarProc($id, Request $request) {
         //dd($request->texto_final);
-        if(!$request->texto_final){
-            alert()->error('Por favor, configure a procuração!');
+        // if(!$request->texto_final){
+        //     alert()->error('Por favor, configure o texto final!');
 
-             return redirect()->route('documentos.index');
-        }
-        if(!$request->outorgante){
-            alert()->error('Por favor, configure a procuração!');
+        //      return redirect()->route('documentos.index');
+        // }
+        // if(!$request->outorgante){
+        //     alert()->error('Por favor, configure o outorgado!');
 
-             return redirect()->route('documentos.index');
-        }
+        //      return redirect()->route('documentos.index');
+        // }
         $outorgados = Outorgado::all();
         $config = TextoPoder::get()->first();
         $dataAtual = Carbon::now();
