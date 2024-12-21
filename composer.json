@@ -72,6 +72,11 @@
             "php-http/discovery": true
         }
     },
+    "config2": {
+
+    },
+    
     "minimum-stability": "stable",
     "prefer-stable": true
+    
 }
