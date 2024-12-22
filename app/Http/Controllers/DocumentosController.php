@@ -134,8 +134,8 @@ class DocumentosController extends Controller
         return redirect()->route('documentos.index');
     }
 
-    public function gerarProc($id, Request $request) {
-        //dd($request->texto_final);
+    public function gerarProc($id, $doc, Request $request) {
+        //dd($doc);
         // if(!$request->texto_final){
         //     alert()->error('Por favor, configure o texto final!');
 
@@ -151,10 +151,11 @@ class DocumentosController extends Controller
         $dataAtual = Carbon::now();
         $dataPorExtenso = $dataAtual->translatedFormat('d \d\e F \d\e Y');
         //$endereco = $request->endereco;
-        $documento = Documento::where('id', $id)->first(); 
-        $doc_id = $documento->id;
 
-        $cliente = Cliente::where('doc_id', $doc_id)->first(); 
+        $documento = Documento::where('id', $doc)->first(); 
+        //$doc_id = $documento->id;
+
+        $cliente = Cliente::where('id', $id)->first(); 
 
         if ($cliente) {
             $endereco = $cliente->endereco;

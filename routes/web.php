@@ -54,7 +54,7 @@ Route::middleware(['auth'])->group(function () {
  
 
     //DOCUMENTOS
-    Route::get('/documentos/gerarProc/{id}/{endereco}', [DocumentosController::class, 'gerarProc'])->name('documentos.gerarProc');
+    Route::post('documentos/gerarProc/{id}/{doc}', [DocumentosController::class, 'gerarProc'])->name('documentos.gerarProc');
     Route::get('/documentos/{id}', [DocumentosController::class, 'show'])->name('documentos.show');
     Route::delete('/documentos/{id}', [DocumentosController::class, 'destroy'])->name('documentos.destroy');
     Route::get('/documentos', [DocumentosController::class, 'index'])->name('documentos.index');

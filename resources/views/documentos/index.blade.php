@@ -1,6 +1,6 @@
 @extends('layouts.app')
 
-@section('title', 'Documentos')
+@section('title', 'Veículos')
 
 @section('content')
 
@@ -79,11 +79,12 @@
                                                 class="mdi mdi-printer" title="Imprimir"></i></a>
 
                                                 <a href="#" 
-                                            class="action-icon mdi mdi-share-all" 
-                                            data-id="{{ $doc->id }}" 
-                                            title="Gerar procuração"
-                                            onclick="openAddressModal(event)">
-                                         </a>
+                                                class="action-icon mdi mdi-share-all" 
+                                                title="Gerar procuração"
+                                                data-id="{{ $doc->id }}" 
+                                                onclick="openAddressModal(event, '{{ $doc->id }}')">
+                                             </a>
+                                             
 
                                         <a href="{{ route('documentos.destroy', $doc->id) }}"
                                             class="action-icon mdi mdi-delete text-danger" data-confirm-delete="true" title="Excluir"></a>
@@ -127,7 +128,6 @@ aria-hidden="true">
     </div><!-- /.modal-dialog -->
 </div><!-- /.modal -->
 
-<!-- Modal para Digitar o Endereço -->
 <div class="modal fade" id="addressModal" tabindex="-1" role="dialog" aria-labelledby="addressModalLabel" aria-hidden="true">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
@@ -136,19 +136,18 @@ aria-hidden="true">
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-hidden="true"></button>
             </div>
             <div class="modal-body">
-                <form id="addressForm">
-                    
+                <form id="addressForm" method="POST">
+                    @csrf <!-- Necessário para o Laravel validar a requisição -->
                     <div class="form-group">
-                        <label for="inputAddress">Selecione o cliente: <span style="color: red;">*</span></label>
-
-                        <select class="select2 form-control select2-multiple" name="cliente[]" id="inputAddress" data-toggle="select2" multiple="multiple" >
+                        <label>Selecione o cliente: <span style="color: red;">*</span></label>
+                        <select class="select2 form-control select2-multiple" name="cliente[]" id="inputAddress" data-toggle="select2" multiple="multiple">
                             <option value="">Selecione um cliente</option>
                             @foreach ($clientes as $cliente)
-                                <option value="{{ $cliente->endereco }}">{{ $cliente->nome }}</option>
+                                <option value="{{ $cliente->id }}">{{ $cliente->nome }}</option>
                             @endforeach
                         </select>
                     </div>
-                    <input type="hidden" id="docId">
+                    <input type="hidden" id="docId" name="docId">
                 </form>
             </div>
             <div class="modal-footer">
@@ -159,65 +158,55 @@ aria-hidden="true">
     </div>
 </div>
 
+@include('documentos._partials.visualizar-doc')
 <!-- Modal para Visualizar Informações -->
-<div class="modal fade" id="infoModal" tabindex="-1" role="dialog" aria-labelledby="infoModalLabel" aria-hidden="true">
-    <div class="modal-dialog" role="document">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="infoModalLabel">Documento</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-            </div>
-            <div class="modal-body">
-                <!-- Aqui as informações vão ser carregadas dinamicamente -->
-                <p><strong><u>INFORMAÇÕES DO PROPRIETÁRIO</u></strong></p>
-                <p><strong>Nome:</strong> <span id="nome"></span></p>
-                <p><strong>CPF:</strong> <span id="cpf"></span></p>
-
-                <p><strong><u>INFORMAÇÕES DO VEÍCULO</u></strong></p>
-                
-                <p><strong>Marca:</strong> <span id="marca"></span></p>
-                <p><strong>Placa:</strong> <span id="placa"></span></p>
-                
-                <p><strong>Cor:</strong> <span id="cor"></span></p>
-                <p><strong>Ano:</strong> <span id="ano"></span></p>
-                <p><strong>Renavam:</strong> <span id="renavam"></span></p>
-                <p><strong>Chassi:</strong> <span id="chassi"></span></p>
-                <p><strong>Cidade:</strong> <span id="cidade"></span></p>
-                <p><strong>CRV:</strong> <span id="crv"></span></p>
-                <p><strong>Placa Anterior:</strong> <span id="placa_anterior"></span></p>
-                <p><strong>Categoria:</strong> <span id="categoria"></span></p>
-                <p><strong>Motor:</strong> <span id="motor"></span></p>
-                <p><strong>Combustível:</strong> <span id="combustivel"></span></p>
-                <p><strong>Observações do veículo:</strong> <span id="infos"></span></p>
-                
-                
-                
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fechar</button>
-            </div>
-        </div>
-    </div>
-</div>
 
 
 
 <script>
+    function openAddressModal(event, docId) {
+    // Armazene o ID do documento globalmente ou dentro do modal
+    window.selectedDocId = docId;  // Salva o docId globalmente
 
-    function openAddressModal(event) {
-    event.preventDefault(); // Evita o comportamento padrão do link
-
-    // Obtém o ID do documento do atributo data-id
-    const docId = event.target.getAttribute('data-id');
- console.log(docId);
-    // Define o ID do documento no campo oculto do formulário
-    document.getElementById('docId').value = docId;
-
-    // Abre o modal
     $('#addressModal').modal('show');
 }
 
+</script>
 
+
+
+<script>
+ function submitAddress() {
+    const selectedClient = $('#inputAddress').val(); // Retorna um array para múltiplos valores
+
+    if (!selectedClient || selectedClient.length === 0) {
+        Swal.fire('Erro', 'Você precisa selecionar um cliente antes de continuar.', 'error');
+        return;
+    }
+
+    // Usando o doc_id armazenado globalmente
+    const doc_id = window.selectedDocId;
+
+    console.log('Doc ID:', doc_id);  // Exibe o ID do documento
+    console.log('Selected Client:', selectedClient);  // Exibe o ID do cliente
+
+    // Atualiza a rota do formulário com o ID do cliente e o ID do documento
+    const form = document.getElementById('addressForm');
+    form.action = `{{ url('documentos/gerarProc') }}/${selectedClient}/${doc_id}`;
+
+    // Enviar o formulário
+    form.submit();
+}
+
+</script>
+
+
+
+
+
+
+
+<script>
 function openInfoModal(event) {
     event.preventDefault(); // Impede o comportamento padrão do link
 
@@ -261,28 +250,6 @@ function openInfoModal(event) {
         }
     });
 }
-
-
-function submitAddress() {
-    const address = document.getElementById('inputAddress').value;
-    const docId = document.getElementById('docId').value;
-
-    if (!address) {
-    Swal.fire({
-        title: 'Campo Obrigatório',
-        text: 'Por favor, selecione o cliente.',
-        icon: 'warning',
-        confirmButtonText: 'OK'
-    });
-    return;
-}
-
-
-    // Redireciona para a rota com os parâmetros
-    const url = `/documentos/gerarProc/${docId}/${encodeURIComponent(address)}`;
-    window.location.href = url;
-}
-
 </script>
 
     @endsection
