@@ -18,7 +18,12 @@ if (!("erro" in conteudo)) {
 else {
     //CEP não Encontrado.
     limpa_formulário_cep();
-    alert("CEP não encontrado.");
+    Swal.fire({
+        icon: 'error',
+        title: 'CEP não encontrado!',
+        text: 'Por favor, insira um CEP válido!',
+        confirmButtonText: 'Ok'
+    });
 }
 }
 function formatCEP(cep) {
@@ -59,7 +64,12 @@ function pesquisacep(valor) {
         else {
             //cep é inválido.
             limpa_formulário_cep();
-            alert("Formato de CEP inválido.");
+            Swal.fire({
+                icon: 'error',
+                title: 'Formato de CEP inválido!',
+                text: 'Por favor, insira um CEP válido!',
+                confirmButtonText: 'Ok'
+            });
         }
     } //end if.
     else {

@@ -88,7 +88,7 @@ Route::middleware(['auth'])->group(function () {
 
     Route::put('/clientes/{id}', [ClientesController::class, 'update'])->name('clientes.update');
     Route::delete('/clientes/{id}', [ClientesController::class, 'destroy'])->name('clientes.destroy');
-    Route::post('/clientes', [ClientesController::class, 'store'])->name('clientes.store')->middleware('uppercase');
+    Route::post('/clientes', [ClientesController::class, 'store'])->name('clientes.store');
     Route::get('/clientes/create', [ClientesController::class, 'create'])->name('clientes.create');
     Route::get('/clientes/{id}/edit', [ClientesController::class, 'edit'])->name('clientes.edit');
     Route::get('/clientes', [ClientesController::class, 'index'])->name('clientes.index');

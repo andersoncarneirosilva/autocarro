@@ -3,78 +3,7 @@
 @section('title', 'Clientes')
 
 @section('content')
-<script>
-    
-    function limpa_formulário_cep() {
-            //Limpa valores do formulário de cep.
-            document.getElementById('rua').value=("");
-            document.getElementById('bairro').value=("");
-            document.getElementById('cidade').value=("");
-            document.getElementById('uf').value=("");
-    }
 
-    function meu_callback(conteudo) {
-        if (!("erro" in conteudo)) {
-            //Atualiza os campos com os valores.
-            document.getElementById('rua').value=(conteudo.logradouro);
-            document.getElementById('bairro').value=(conteudo.bairro);
-            document.getElementById('cidade').value=(conteudo.localidade);
-            document.getElementById('uf').value=(conteudo.uf);
-        } //end if.
-        else {
-            //CEP não Encontrado.
-            limpa_formulário_cep();
-            alert("CEP não encontrado.");
-        }
-    }
-        
-    function pesquisacep(valor) {
-
-        //Nova variável "cep" somente com dígitos.
-        var cep = valor.replace(/\D/g, '');
-
-        //Verifica se campo cep possui valor informado.
-        if (cep != "") {
-
-            //Expressão regular para validar o CEP.
-            var validacep = /^[0-9]{8}$/;
-
-            //Valida o formato do CEP.
-            if(validacep.test(cep)) {
-
-                //Preenche os campos com "..." enquanto consulta webservice.
-                document.getElementById('rua').value="...";
-                document.getElementById('bairro').value="...";
-                document.getElementById('cidade').value="...";
-                document.getElementById('uf').value="...";
-
-                //Cria um elemento javascript.
-                var script = document.createElement('script');
-
-                //Sincroniza com o callback.
-                script.src = 'https://viacep.com.br/ws/'+ cep + '/json/?callback=meu_callback';
-
-                //Insere script no documento e carrega o conteúdo.
-                document.body.appendChild(script);
-
-            } //end if.
-            else {
-                //cep é inválido.
-                limpa_formulário_cep();
-                alert("Formato de CEP inválido.");
-            }
-        } //end if.
-        else {
-            //cep sem valor, limpa formulário.
-            limpa_formulário_cep();
-        }
-    };
-
-
-    </script>
-
-
-  
 <div class="row">
     <div class="col-12">
         <div class="page-title-box">
@@ -88,18 +17,10 @@
         </div>
     </div>
 </div>
-<br>
 
 <div class="card">
     <div class="card-body">
         <div class="row">
-            {{-- @if ($errors->any())
-                <ul class="errors">
-                    @foreach ($errors->all() as $error)
-                        <div class="alert alert-danger" role="alert">{{ $error }}</div>
-                    @endforeach
-                </ul>
-            @endif --}}
             <div class="col-sm-12">
                 <div class="card-header d-flex justify-content-between align-items-center">
                     <h4 class="header-title">Clientes cadastrados</h4>
@@ -125,14 +46,23 @@
                                 <th>Ações</th>
                             </tr>
                         </thead>
-
+                        
                         <tbody>
                             @foreach ($clientes as $cli)
+                            <?php 
+                        $fone = $cli->fone;
+                        // Formatar o telefone
+                        $fone_formatado = preg_replace('/(\d{2})(\d{5})(\d{4})/', '($1) $2.$3', $fone);
+                        // Gerar o link com o número sem formatação
+                        $link_whatsapp = "https://wa.me/" . preg_replace('/\D/', '', $fone); 
+                        ?>
                                 <tr>
                                     <td>{{ $cli->id }}</td>
                                     <td>{{ $cli->nome }}</td>
                                     <td>{{ $cli->cpf }}</td>
-                                    <td><i class="uil uil-whatsapp"></i> {{ $cli->fone }}</td>
+                                    <td><a href="<?= $link_whatsapp ?>" target="_blank" style="color: #0b8638;">
+                                        <i class="uil uil-whatsapp"></i> <?= $fone_formatado ?>
+                                    </a></td>
                                     <td>{{ $cli->endereco }}</td>
                                     <td>{{ $cli->cidade }}</td>
                                     <td>{{ Carbon\Carbon::parse($cli->created_at)->format('d/m') }}</td>

@@ -10,7 +10,20 @@
         });
     });
 </script>
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        document.getElementById('cep').addEventListener('input', function (e) {
+            let value = e.target.value.replace(/\D/g, ''); // Remove caracteres não numéricos
+            if (value.length > 8) value = value.slice(0, 8); // Limita ao tamanho do CEP
 
+            // Adiciona o ponto e o hífen no formato 00.000-000
+            value = value.replace(/(\d{2})(\d)/, '$1.$2');
+            value = value.replace(/(\d{3})(\d{1,3})$/, '$1-$2');
+
+            e.target.value = value;
+        });
+    });
+</script>
 <div class="row">
     <div class="col">
         <div class="card">
@@ -53,8 +66,7 @@
                             <div class="mb-3">
                                 <label for="social-fb" class="form-label">CEP</label>
                                 <div class="input-group">
-                                    <input name="cep" class="form-control" type="text" id="cep" value="" size="10" maxlength="9"
-               onblur="pesquisacep(this.value);" />
+                                    <input type="text" class="form-control" name="cep" id="cep" onblur="pesquisacep(this.value);">
                                 </div>
                             </div>
                         </div>
