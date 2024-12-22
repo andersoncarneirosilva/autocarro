@@ -121,23 +121,25 @@
         <table>
             <thead>
                 <tr>
+                    <th>#</th>
                     <th>Nome</th>
                     <th>CPF</th>
                     <th>Fone</th>
-                    <th>Email</th>
-                    <th>CEP</th>
                     <th>Endereço</th>
+                    <th>Cidade</th>
+                    <th>Cadastrado em</th>
                 </tr>
             </thead>
             <tbody>
-                @foreach ($clientes as $cliente)
+                @foreach ($clientes as $cli)
                 <tr>
-                    <td>{{ $cliente->nome }}</td>
-                    <td>{{ $cliente->cpf }}</td>
-                    <td>{{ $cliente->fone }}</td>
-                    <td>{{ $cliente->email }}</td>
-                    <td>{{ $cliente->cep }}</td>
-                    <td>{{ $cliente->endereco }}</td>
+                    <td>{{ $cli->id }}</td>
+                    <td>{{ $cli->nome }}</td>
+                    <td>{{ $cli->cpf }}</td>
+                    <td>{{ $cli->fone }}</td>
+                    <td>{{ $cli->endereco }}, {{ $cli->numero }}</td>
+                    <td>{{ $cli->cidade }}/{{ $cli->estado }}</td>
+                    <td>{{ Carbon\Carbon::parse($cli->created_at)->format('d/m/Y') }}</td>
                 </tr>
                 @endforeach
             </tbody>

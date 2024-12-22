@@ -63,9 +63,9 @@
                                     <td><a href="<?= $link_whatsapp ?>" target="_blank" style="color: #0b8638;">
                                         <i class="uil uil-whatsapp"></i> <?= $fone_formatado ?>
                                     </a></td>
-                                    <td>{{ $cli->endereco }}</td>
-                                    <td>{{ $cli->cidade }}</td>
-                                    <td>{{ Carbon\Carbon::parse($cli->created_at)->format('d/m') }}</td>
+                                    <td>{{ $cli->endereco }}, {{ $cli->numero }}</td>
+                                    <td>{{ $cli->cidade }}/{{ $cli->estado }}</td>
+                                    <td>{{ Carbon\Carbon::parse($cli->created_at)->format('d/m/Y') }}</td>
                                     <td class="table-action">
 
                                         <a href="{{ route('clientes.edit', $cli->id) }}" class="action-icon" data-id="{{ $cli->id }}" onclick="openEditTextModal(event)">

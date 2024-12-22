@@ -70,11 +70,19 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="col-md-4">
-                            <div class="mb-3">
+                        <div class="col-md-2">
+                            <div class="mb-2">
                                 <label for="social-fb" class="form-label">Logradouro</label>
                                 <div class="input-group">
                                     <input type="text" name="endereco" id="rua" class="form-control" value="{{ $cliente->endereco ?? old('endereco') }}"/>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-2">
+                            <div class="mb-2">
+                                <label for="social-insta" class="form-label">Número</label>
+                                <div class="input-group">
+                                    <input type="text" name="numero" id="numero" class="form-control" value="{{ $cliente->numero ?? old('numero') }}"/>
                                 </div>
                             </div>
                         </div>
@@ -103,27 +111,14 @@
                             </div>
                         </div>
                     </div> <!-- end row -->
-
-
-                    <h5 class="mb-3 text-uppercase bg-light p-2"><i class="mdi mdi-account-box me-1"></i> Documento veícular</h5>
-                    <div class="row">
-                        <div class="col">
-                            <label class="form-label">Arquivo</label>
-                            <div class="input-group">
-                                
-                                <input class="form-control" type="file" name="arquivo_doc_veiculo">
-                            </div>
-                        </div>
-                    </div> <!-- end row -->
                     <br>                    
                     
                     <div class="row">
                         <div class="col-lg-6">
                         </div>
                         <div class="col-lg-6 text-end">
-                            <button type="button" class="btn btn-secondary btn-sm" data-bs-dismiss="modal">Cancelar</button>
-                        <button type="button" onclick="form.reset();" class="btn btn-warning btn-sm">Limpar</button>
-                        <button type="submit" class="btn btn-success btn-sm">Cadastrar</button>
+                            <a href="{{ route('clientes.index')}}" class="btn btn-secondary btn-sm">Cancelar</a>
+                            <button type="submit" class="btn btn-success btn-sm">Salvar</button>
                         </div>
                     </div>
             </div> <!-- end card body -->
