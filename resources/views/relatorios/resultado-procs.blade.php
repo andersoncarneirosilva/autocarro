@@ -21,7 +21,6 @@
 
 <div class="card">
     <div class="card-body">
-       
         <form id="formRel" action="{{ route('relatorio.gerar') }}" method="POST">
             @csrf
             <div class="row align-items-end gy-3">
@@ -47,10 +46,47 @@
                 </div>
             </div>
         </form>
-        
     </div>
 </div>
 
-
-
-    @endsection
+<div class="card">
+    <div class="card-body">
+        <div class="row">
+            <h3 class="page-title">Relatório de {{ $tipo }}</h3>
+            <p>Período: {{ Carbon\Carbon::parse($dataInicial)->format('d/m/Y') }} a {{ Carbon\Carbon::parse($dataFinal)->format('d/m/Y') }}</p>
+            <div class="table-responsive-sm">
+                <table class="table table-hover table-centered mb-0">
+                    <thead class="table-dark">
+                        <tr>
+                            <th>#</th>
+                            <th>Nome</th>
+                            <th>CPF</th>
+                            <th>Marca</th>
+                            <th>Placa</th>
+                            <th>Cor</th>
+                            <th>Data de Criação</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @forelse($dados as $item)
+                            <tr>
+                                <td>{{ $item->id }}</td>
+                                <td>{{ $item->nome }}</td>
+                                <td>{{ $item->cpf }}</td>
+                                <td>{{ $item->marca }}</td>
+                                <td>{{ $item->placa }}</td>
+                                <td>{{ $item->cor }}</td>
+                                <td>{{ Carbon\Carbon::parse($item->created_at)->format('d/m/Y') }}</td>
+                            </tr>
+                        @empty
+                            <tr>
+                                <td colspan="3">Nenhum registro encontrado.</td>
+                            </tr>
+                        @endforelse
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+@endsection

@@ -131,7 +131,7 @@
                 </tr>
             </thead>
             <tbody>
-                @foreach ($clientes as $cli)
+                @foreach ($dados as $cli)
                 <tr>
                     <td>{{ $cli->id }}</td>
                     <td>{{ $cli->nome }}</td>

@@ -99,6 +99,13 @@ Route::middleware(['auth'])->group(function () {
     Route::post('/servicos', [ServicosController::class, 'store'])->name('servicos.store');
     Route::get('/servicos', [ServicosController::class, 'index'])->name('servicos.index');
 
+    Route::POST('/rel-clientes', [RelatoriosController::class, 'gerarPdf'])->name('rel-clientes');
+
+
+
+
+    Route::post('/relatorios', [RelatoriosController::class, 'gerarRelatoriosSelect'])->name('relatorio.gerar');
+
     Route::get('/relatorios', [RelatoriosController::class, 'index'])->name('relatorios.index');
     Route::get('/relatorios/clientes/exportar-pdf', [RelatoriosController::class, 'exportarPdf'])->name('relatorios.clientes.pdf');
 
@@ -106,11 +113,6 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/relatorio-veiculos', [RelatoriosController::class, 'gerarRelatorioVeiculos'])->name('relatorio-veiculos');
     Route::get('/relatorio-procuracoes', [RelatoriosController::class, 'gerarRelatorioProc'])->name('relatorio-procuracoes');
 
-
-    Route::get('/teste-pdfteste', function () {
-        $pdf = PDF::loadHTML('<h1>Testando PDF com Facade</h1>');
-        return $pdf->stream();
-    });
     
 
 

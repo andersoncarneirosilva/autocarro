@@ -1,7 +1,5 @@
-version: "3.7"
-
 services:
-    # image project
+    # imagem do projeto
     app:
         build:
             context: .
@@ -43,7 +41,7 @@ services:
         networks:
             - laravel
 
-    # queue
+    # fila (queue)
     queue:
         image: especializati/laravel9-app
         restart: unless-stopped
