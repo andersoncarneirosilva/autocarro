@@ -126,20 +126,20 @@
                     <th>Veículo</th>
                     <th>Placa</th>
                     <th>Ano/Modelo</th>
-                    <th>Renavam</th>
                     <th>Cor</th>
+                    <th>Renavam</th>
                     <th>Proprietário</th>
                 </tr>
             </thead>
             <tbody>
-                @foreach ($veiculos as $cliente)
+                @foreach ($dados as $item)
                 <tr>
-                    <td>{{ $cliente->marca }}</td>
-                    <td>{{ $cliente->placa }}</td>
-                    <td>{{ $cliente->ano }}</td>
-                    <td>{{ $cliente->renavam }}</td>
-                    <td>{{ $cliente->cor }}</td>
-                    <td>{{ $cliente->nome }}</td>
+                    <td>{{ $item->marca }}</td>
+                    <td>{{ $item->placa }}</td>
+                    <td>{{ $item->ano }}</td>
+                    <td>{{ $item->cor }}</td>
+                    <td>{{ $item->renavam }}</td>
+                    <td>{{ $item->nome }}</td>
                 </tr>
                 @endforeach
             </tbody>

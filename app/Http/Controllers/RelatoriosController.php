@@ -21,22 +21,7 @@ class RelatoriosController extends Controller
         return view('relatorios.index');
     }
 
-    public function gerarRelatorioClientes()
-    {
-        // Obtém os dados dos clientes do banco de dados
-        $clientes = Cliente::all();
-
-        // Renderiza a view com os dados
-        //$pdf = PDF::loadView('relatorios.clientes', compact('clientes'));
-
-        $view = view('relatorios.clientes', compact('clientes'))->render();
-        $pdf = app('dompdf.wrapper');
-        $pdf->loadHTML($view)
-        ->setPaper('a4', 'landscape');
-
-        // Retorna o PDF para download
-        return $pdf->stream('relatorio_clientes.pdf');
-    }
+    
 
     public function gerarRelatoriosSelect(Request $request)
     {
@@ -54,30 +39,104 @@ class RelatoriosController extends Controller
         // Lógica para gerar o relatório com base no tipo e intervalo de datas
         switch ($tipo) {
             case 'Clientes':
-                $dados = Cliente::whereBetween('created_at', [$dataInicial, $dataFinal])->get();
+                $dados = Cliente::whereBetween('created_at', [
+                    $dataInicial . ' 00:00:00',
+                    $dataFinal . ' 23:59:59'
+                ])->get();
                 //dd($dados);
                 return view('relatorios.resultado-clientes', compact('dados', 'tipo', 'dataInicial', 'dataFinal'));
                 break;
             case 'Procurações':
-                $dados = Procuracao::whereBetween('created_at', [$dataInicial, $dataFinal])->get();
+                $dados = Procuracao::whereBetween('created_at', [
+                    $dataInicial . ' 00:00:00',
+                    $dataFinal . ' 23:59:59'
+                ])->get();
                 return view('relatorios.resultado-procs', compact('dados', 'tipo', 'dataInicial', 'dataFinal'));
                 break;
             case 'Veículos':
-                $dados = Documento::whereBetween('created_at', [$dataInicial, $dataFinal])->get();
+                $dados = Documento::whereBetween('created_at', [
+                    $dataInicial . ' 00:00:00',
+                    $dataFinal . ' 23:59:59'
+                ])->get();
+                return view('relatorios.resultado-veiculos', compact('dados', 'tipo', 'dataInicial', 'dataFinal'));
                 break;
             default:
                 return back()->withErrors(['tipo-relatorio' => 'Tipo de relatório inválido.']);
         }      
     }
 
-    public function gerarPdf(Request $request){
+    public function gerarPdfClientes(Request $request){
 
         $data = $request->all();
         //dd($data);
         $dataI = $request['dataInicial'];
         $dataF = $request['dataFinal'];
 
-        $dados = Cliente::whereBetween('created_at', [$dataI, $dataF])->get();
+        $dados = Cliente::whereBetween('created_at', [
+            $dataI . ' 00:00:00',
+            $dataF . ' 23:59:59'
+        ])->get();
+        
+
+        $view = view('relatorios.rel-clientes', compact('dados', 'dataI', 'dataF'))->render();
+        $pdf = app('dompdf.wrapper');
+        $pdf->loadHTML($view)
+        ->setPaper('a4', 'landscape');
+
+        // Retorna o PDF para download
+        return $pdf->stream('relatorio_clientes.pdf');
+    }
+
+    public function gerarPdfProcs(Request $request){
+
+        $data = $request->all();
+        //dd($data);
+        $dataI = $request['dataInicial'];
+        $dataF = $request['dataFinal'];
+
+        $procs = Procuracao::whereBetween('created_at', [
+            $dataI . ' 00:00:00',
+            $dataF . ' 23:59:59'
+        ])->get();
+
+        $view = view('relatorios.procuracoes', compact('procs'))->render();
+        $pdf = app('dompdf.wrapper');
+        $pdf->loadHTML($view)
+        ->setPaper('a4', 'landscape');
+
+        // Retorna o PDF para download
+        return $pdf->stream('relatorio_procuracoes.pdf');
+    }
+
+    public function gerarPdfVeiculos(Request $request){
+
+        $data = $request->all();
+        //dd($data);
+        $dataI = $request['dataInicial'];
+        $dataF = $request['dataFinal'];
+
+        $dados = Documento::whereBetween('created_at', [
+            $dataI . ' 00:00:00',
+            $dataF . ' 23:59:59'
+        ])->get();
+
+        $view = view('relatorios.veiculos', compact('dados'))->render();
+        $pdf = app('dompdf.wrapper');
+        $pdf->loadHTML($view)
+        ->setPaper('a4', 'landscape');
+
+        // Retorna o PDF para download
+        return $pdf->stream('relatorio_veiculos.pdf');
+    }
+
+
+    public function gerarRelatorioClientes()
+    {
+        // Obtém os dados dos clientes do banco de dados
+        $dados = Cliente::all();
+
+        // Renderiza a view com os dados
+        //$pdf = PDF::loadView('relatorios.clientes', compact('clientes'));
 
         $view = view('relatorios.clientes', compact('dados'))->render();
         $pdf = app('dompdf.wrapper');
@@ -91,12 +150,12 @@ class RelatoriosController extends Controller
     public function gerarRelatorioVeiculos()
     {
         // Obtém os dados dos clientes do banco de dados
-        $veiculos = Documento::all();
+        $dados = Documento::all();
 
         // Renderiza a view com os dados
         //$pdf = PDF::loadView('relatorios.clientes', compact('clientes'));
 
-        $view = view('relatorios.veiculos', compact('veiculos'))->render();
+        $view = view('relatorios.veiculos', compact('dados'))->render();
         $pdf = app('dompdf.wrapper');
         $pdf->loadHTML($view)
         ->setPaper('a4', 'landscape');

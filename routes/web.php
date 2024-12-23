@@ -99,7 +99,9 @@ Route::middleware(['auth'])->group(function () {
     Route::post('/servicos', [ServicosController::class, 'store'])->name('servicos.store');
     Route::get('/servicos', [ServicosController::class, 'index'])->name('servicos.index');
 
-    Route::POST('/rel-clientes', [RelatoriosController::class, 'gerarPdf'])->name('rel-clientes');
+    Route::POST('/rel-procs', [RelatoriosController::class, 'gerarPdfProcs'])->name('rel-procs');
+    Route::POST('/rel-clientes', [RelatoriosController::class, 'gerarPdfClientes'])->name('rel-clientes');
+    Route::POST('/rel-veiculos', [RelatoriosController::class, 'gerarPdfVeiculos'])->name('rel-veiculos');
 
 
 

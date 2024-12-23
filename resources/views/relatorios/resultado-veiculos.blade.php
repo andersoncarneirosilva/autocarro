@@ -1,6 +1,6 @@
 @extends('layouts.app')
 
-@section('title', 'Relatórios')
+@section('title', 'Veículos')
 
 @section('content')
 
@@ -39,7 +39,7 @@
                 </div>
                 <div class="col-sm-3">
                     <label for="data-final" class="form-label">Data Final</label>
-                    <input class="form-control" id="data-final" name="data-final" type="date" required>
+                    <input class="form-control" id="data-final" name="data-final" type="date">
                 </div>
                 <div class="col-sm-3 d-flex justify-content-end">
                     <button type="submit" class="btn btn-primary btn-sm">Gerar relatório</button>
@@ -54,7 +54,7 @@
         <div class="row">
             <div class="col-md-12 d-flex justify-content-between align-items-center">
                 <h3 class="page-title">Relatório de {{ $tipo }}</h3>
-                <form action="{{ route('rel-clientes') }}" method="POST" target="_blank">
+                <form action="{{ route('rel-veiculos') }}" method="POST" target="_blank">
                     @csrf
                     <input type="hidden" name="tipo" value="{{ $tipo }}">
                     <input type="hidden" name="dataInicial" value="{{ $dataInicial }}">
@@ -71,29 +71,29 @@
                 <table class="table table-hover table-centered mb-0">
                     <thead class="table-dark">
                         <tr>
-                            <th>#</th>
-                            <th>Nome</th>
-                            <th>CPF</th>
-                            <th>Telefone</th>
-                            <th>Endereço</th>
-                            <th>Cidade</th>
-                            <th>Data de Criação</th>
+                            <th>Veículo</th>
+                            <th>Placa</th>
+                            <th>Ano/Modelo</th>
+                            <th>Cor</th>
+                            <th>Renavam</th>
+                            <th>Proprietário</th>
+                            <th>Cadastrado em</th>
                         </tr>
                     </thead>
                     <tbody>
                         @forelse($dados as $item)
                             <tr>
-                                <td>{{ $item->id }}</td>
+                                <td>{{ $item->marca }}</td>
+                                <td>{{ $item->placa }}</td>
+                                <td>{{ $item->ano }}</td>
+                                <td>{{ $item->cor }}</td>
+                                <td>{{ $item->renavam }}</td>
                                 <td>{{ $item->nome }}</td>
-                                <td>{{ $item->cpf }}</td>
-                                <td>{{ $item->fone }}</td>
-                                <td>{{ $item->endereco }}, {{ $item->numero }}</td>
-                                <td>{{ $item->cidade }}/{{ $item->estado }}</td>
                                 <td>{{ Carbon\Carbon::parse($item->created_at)->format('d/m/Y') }}</td>
                             </tr>
                         @empty
                             <tr>
-                                <td colspan="7" class="text-center">Nenhum registro encontrado.</td>
+                                <td colspan="3">Nenhum registro encontrado.</td>
                             </tr>
                         @endforelse
                     </tbody>
@@ -102,6 +102,4 @@
         </div>
     </div>
 </div>
-
-
 @endsection

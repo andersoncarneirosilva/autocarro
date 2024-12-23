@@ -1,6 +1,6 @@
 @extends('layouts.app')
 
-@section('title', 'Procurações')
+@section('title', 'Relatórios')
 
 @section('content')
 
@@ -52,7 +52,20 @@
 <div class="card">
     <div class="card-body">
         <div class="row">
-            <h3 class="page-title">Relatório de {{ $tipo }}</h3>
+            <div class="col-md-12 d-flex justify-content-between align-items-center">
+                <h3 class="page-title">Relatório de {{ $tipo }}</h3>
+                <form action="{{ route('rel-procs') }}" method="POST" target="_blank">
+                    @csrf
+                    <input type="hidden" name="tipo" value="{{ $tipo }}">
+                    <input type="hidden" name="dataInicial" value="{{ $dataInicial }}">
+                    <input type="hidden" name="dataFinal" value="{{ $dataFinal }}">
+                    <button type="submit" class="btn btn-danger btn-sm">
+                        <i class="fas fa-file-pdf"></i> Gerar PDF
+                    </button>
+                </form>
+                
+                
+            </div>
             <p>Período: {{ Carbon\Carbon::parse($dataInicial)->format('d/m/Y') }} a {{ Carbon\Carbon::parse($dataFinal)->format('d/m/Y') }}</p>
             <div class="table-responsive-sm">
                 <table class="table table-hover table-centered mb-0">
@@ -64,7 +77,7 @@
                             <th>Marca</th>
                             <th>Placa</th>
                             <th>Cor</th>
-                            <th>Data de Criação</th>
+                            <th>Gerado em</th>
                         </tr>
                     </thead>
                     <tbody>

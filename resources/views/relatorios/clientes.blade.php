@@ -9,7 +9,6 @@
             font-family: Arial, sans-serif;
             margin: 0;
             padding: 0;
-            background-color: #f4f4f9;
             color: #333;
             width: 100%;
             height: 100%;
@@ -80,6 +79,7 @@
             text-align: left;
             padding: 10px;
             font-size: 14px; /* Tamanho da fonte para as células de dados */
+            background: none;
         }
 
         table tr:nth-child(even) {

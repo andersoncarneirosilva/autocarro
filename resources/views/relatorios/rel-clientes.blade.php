@@ -3,8 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    
-    <title>Relatório de Procurações</title>
+    <title>Relatório de Clientes</title>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -38,8 +37,8 @@
         }
 
         .logo img {
-            max-width: 100px;
-            height: auto;
+            max-width: 100px; /* Limita o tamanho do logo */
+            height: auto; /* Garante que a imagem preserve a proporção */
         }
 
         .header-title {
@@ -73,13 +72,14 @@
         table th {
             text-align: left;
             padding: 12px;
-            font-size: 12px;
+            font-size: 12px; /* Tamanho da fonte para os cabeçalhos */
         }
 
         table td {
             text-align: left;
             padding: 10px;
-            font-size: 14px;
+            font-size: 14px; /* Tamanho da fonte para as células de dados */
+            background: none;
         }
 
         table tr:nth-child(even) {
@@ -91,9 +91,6 @@
             margin-top: 20px;
             font-size: 12px;
             color: #777;
-        }
-        .site{
-            background: none
         }
     </style>
 </head>
@@ -107,15 +104,21 @@
                         <img src="images/relatorio/logo-top.png" alt="Logo">
                     </td>
                     <td class="header-title">
-                        <h1>Relatório de Procurações</h1>
+                        <h1>Relatório de Clientes</h1>
                     </td>
                     <td class="date">
                         <p>Gerado em: {{ date('d/m/Y') }}</p>
                     </td>
                 </tr>
                 <tr>
-                    <td class="site">
+                    <td>
                         www.proconline.com.br
+                    </td>
+                    <td>
+
+                    </td>
+                    <td class="date">
+                        Período: {{ Carbon\Carbon::parse($dataI)->format('d/m/Y') }} a {{ Carbon\Carbon::parse($dataF)->format('d/m/Y') }}
                     </td>
                 </tr>
             </table>
@@ -124,25 +127,25 @@
         <table>
             <thead>
                 <tr>
-                    <th>Proprietário</th>
+                    <th>#</th>
+                    <th>Nome</th>
                     <th>CPF</th>
-                    <th>Veículo</th>
-                    <th>Placa</th>
-                    <th>Ano/Modelo</th>
-                    <th>Cor</th>
-                    <th>Gerado em</th>
+                    <th>Fone</th>
+                    <th>Endereço</th>
+                    <th>Cidade</th>
+                    <th>Cadastrado em</th>
                 </tr>
             </thead>
             <tbody>
-                @foreach ($procs as $proc)
+                @foreach ($dados as $cli)
                 <tr>
-                    <td>{{ $proc->nome }}</td>
-                    <td>{{ $proc->cpf }}</td>
-                    <td>{{ $proc->marca }}</td>
-                    <td>{{ $proc->placa }}</td>
-                    <td>{{ $proc->ano }}</td>
-                    <td>{{ $proc->cor }}</td>
-                    <td>{{ Carbon\Carbon::parse($proc->created_at)->format('d/m/Y') }}</td>
+                    <td>{{ $cli->id }}</td>
+                    <td>{{ $cli->nome }}</td>
+                    <td>{{ $cli->cpf }}</td>
+                    <td>{{ $cli->fone }}</td>
+                    <td>{{ $cli->endereco }}, {{ $cli->numero }}</td>
+                    <td>{{ $cli->cidade }}/{{ $cli->estado }}</td>
+                    <td>{{ Carbon\Carbon::parse($cli->created_at)->format('d/m/Y') }}</td>
                 </tr>
                 @endforeach
             </tbody>
