@@ -20,8 +20,8 @@ class ClientesController extends Controller
 
     public function index(Request $request){
 
-        $title = 'A ação irá excluir o cliente e o veículo!';
-        $text = "Deseja continuar?";
+        $title = 'Atenção';
+        $text = "Deseja excluir esse cliente?";
         confirmDelete($title, $text);
 
         //$clientes = Cliente::paginate(10);
@@ -37,14 +37,33 @@ class ClientesController extends Controller
      }
 
      public function store(Request $request){
-
         $data = $request->all();
+        //dd($data);
+        // Validação dos campos do formulário
+        $validatedData = $request->validate([
+            'nome' => 'required|string|max:255',
+            'cpf' => 'required|string|max:255',
+            'fone' => 'required|string|max:255',
+            'email' => 'required|email|max:255',
+            'cep' => 'required|string|max:255',
+            'endereco' => 'required|string|max:255',
+            'numero' => 'required|string|max:255',
+            'bairro' => 'required|string|max:255',
+            'cidade' => 'required|string|max:255',
+            'estado' => 'required|string|max:255',
+        ], [
+            // Mensagens personalizadas
+            'required' => 'Todos os campos são obrigatórios.', // Mensagem genérica
+        ]);
+        
 
-        $cliente = $this->model->create($data);
+        // Criação do cliente no banco de dados
+        $cliente = $this->model->create($validatedData);
 
-        if($cliente){
+        if ($cliente) {
             alert()->success('Cliente cadastrado com sucesso!');
-        } 
+        }
+
         return redirect()->route('clientes.index');
     }
 
@@ -81,17 +100,24 @@ class ClientesController extends Controller
          }
      }
 
-    public function destroy($id){
-
-        $cli = $this->model->find($id);
-        if (!$cli) {
-            alert()->error('Erro ao excluir: Cliente não encontrado!');
-            return redirect()->route('clientes.index');
-        }
-
-        alert()->success('Cliente excluído com sucesso!');
-        return redirect()->route('clientes.index');
-
-    }
+     public function destroy($id)
+     {
+         // Procura o cliente pelo ID
+         $cli = $this->model->find($id);
+     
+         // Verifica se o cliente existe
+         if (!$cli) {
+             alert()->error('Erro ao excluir: Cliente não encontrado!');
+             return redirect()->route('clientes.index');
+         }
+     
+         // Exclui o cliente
+         $cli->delete();
+     
+         // Retorna com mensagem de sucesso
+         alert()->success('Cliente excluído com sucesso!');
+         return redirect()->route('clientes.index');
+     }
+     
 
 }

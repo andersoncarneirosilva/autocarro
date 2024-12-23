@@ -32,13 +32,13 @@
                     <div class="row">
                         <div class="col-md-6">
                             <div class="mb-3">
-                                <label class="form-label">Nome</label>
+                                <label class="form-label">Nome: <span style="color: red;">*</span></label>
                                 <input type="text" class="form-control" name="nome" id="nome_cliente">
                             </div>
                         </div>
                         <div class="col-md-6">
                             <div class="mb-3">
-                                <label class="form-label">CPF</label>
+                                <label class="form-label">CPF: <span style="color: red;">*</span></label>
                                 <input type="text" class="form-control" name="cpf" id="cpf" maxlength="14">
                             </div>
                         </div> <!-- end col -->
@@ -47,13 +47,13 @@
                     <div class="row">
                         <div class="col-md-6">
                             <div class="mb-3">
-                                <label class="form-label">Fone/Whatsapp</label>
+                                <label class="form-label">Fone/Whatsapp: <span style="color: red;">*</span></label>
                                 <input type="text" class="form-control" name="fone" id="fone" onkeyup="handlePhone(event)"/>
                             </div>
                         </div>
                         <div class="col-md-6">
                             <div class="mb-3">
-                                <label class="form-label">Email</label>
+                                <label class="form-label">Email: <span style="color: red;">*</span></label>
                                 <input type="text" class="form-control" name="email">
                             </div>
                         </div>
@@ -64,7 +64,7 @@
                     <div class="row">
                         <div class="col-md">
                             <div class="mb-2">
-                                <label for="social-fb" class="form-label">CEP</label>
+                                <label for="social-fb" class="form-label">CEP: <span style="color: red;">*</span></label>
                                 <div class="input-group">
                                     <input type="text" class="form-control" name="cep" id="cep" onblur="pesquisacep(this.value);">
                                 </div>
@@ -72,7 +72,7 @@
                         </div>
                         <div class="col-md-2">
                             <div class="mb-2">
-                                <label for="social-fb" class="form-label">Logradouro</label>
+                                <label for="social-fb" class="form-label">Logradouro: <span style="color: red;">*</span></label>
                                 <div class="input-group">
                                     <input type="text" name="endereco" id="rua" class="form-control"/>
                                 </div>
@@ -80,7 +80,7 @@
                         </div>
                         <div class="col-md-2">
                             <div class="mb-2">
-                                <label for="social-insta" class="form-label">Número</label>
+                                <label for="social-insta" class="form-label">Número: <span style="color: red;">*</span></label>
                                 <div class="input-group">
                                     <input type="text" name="numero" id="numero" class="form-control"/>
                                 </div>
@@ -88,7 +88,7 @@
                         </div>
                         <div class="col-md-2">
                             <div class="mb-3">
-                                <label for="social-insta" class="form-label">Bairro</label>
+                                <label for="social-insta" class="form-label">Bairro: <span style="color: red;">*</span></label>
                                 <div class="input-group">
                                     <input type="text" name="bairro" id="bairro" class="form-control"/>
                                 </div>
@@ -96,7 +96,7 @@
                         </div>
                         <div class="col-md-2">
                             <div class="mb-3">
-                                <label for="social-insta" class="form-label">Cidade</label>
+                                <label for="social-insta" class="form-label">Cidade: <span style="color: red;">*</span></label>
                                 <div class="input-group">
                                     <input type="text" name="cidade" id="cidade" class="form-control"/>
                                 </div>
@@ -104,7 +104,7 @@
                         </div>
                         <div class="col-md-2">
                             <div class="mb-3">
-                                <label for="social-insta" class="form-label">Estado</label>
+                                <label for="social-insta" class="form-label">Estado: <span style="color: red;">*</span></label>
                                 <div class="input-group">
                                     <input type="text" name="estado" id="uf" class="form-control"/>
                                 </div>
@@ -129,3 +129,4 @@
     </div>
     
 </div>
+
