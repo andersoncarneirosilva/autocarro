@@ -19,7 +19,7 @@
             <h3 class="page-title">Cadastrar cliente</h3>
         </div>
     </div>
-</div><br>
+</div>
 @if ($errors->any())
     <div class="alert alert-warning alert-dismissible fade show" role="alert">
         <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>

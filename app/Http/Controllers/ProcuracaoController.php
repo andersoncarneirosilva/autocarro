@@ -45,70 +45,11 @@ class ProcuracaoController extends Controller
 
     public function store(Request $request){
 
-        //dd($request);
-        if(!$request->texto_final){
-            alert()->error('Por favor, configure a procuração!');
-
-             return redirect()->route('procuracoes.index');
-        }
-        if(!$request->outorgante){
-            alert()->error('Por favor, configure a procuração!');
-
-             return redirect()->route('procuracoes.index');
-        }
         $outorgados = Outorgado::all();
         $config = TextoPoder::first();
-        //dd($request);
+        
         $dataAtual = Carbon::now();
         $dataPorExtenso = $dataAtual->translatedFormat('d \d\e F \d\e Y');
-        // Obter o arquivo PDF
-        //$arquivo = $request->file('arquivo_doc')->getRealPath();
-        // Obter o arquivo enviado
-        $arquivo = $request->file('arquivo_doc');
-        //$endereco = $request->input('endereco');
-        $enderecos = $request->input('cliente');
-        $endereco = strtoupper(implode(', ', $enderecos)); // Concatena os endereços em uma string
-        //dd($endereco[0]);
-         // Obter o nome original do arquivo
-    $nomeOriginal = $arquivo->getClientOriginalName();
-
-    // Definir o caminho onde o arquivo será salvo, mantendo o nome original
-    $caminhoDestino = $arquivo->storeAs('uploads', $nomeOriginal, 'public');  // Salva em storage/app/public/uploads
-
-        // Obter o caminho absoluto do arquivo salvo
-        $caminhoCompleto = storage_path('app/public/' . $caminhoDestino);
-        $parser = new Parser();
-
-        $pdf = $parser->parseFile($arquivo);
-        foreach ($pdf->getPages() as $numeroPagina => $pagina) {
-            $textoPagina = $pagina->getText();
-
-            $validador = $this->model->validaDoc($textoPagina);
-            $outorgante = $this->model->extrairNomeOutorgado($textoPagina);
-            $cpf = $this->model->extrairCpfOutorgado($textoPagina);
-            $marca = $this->model->extrairMarca($textoPagina);
-            $chassi = $this->model->extrairChassi($textoPagina);
-            $anoModelo = $this->model->extrairAnoModelo($textoPagina);
-            $placa = $this->model->extrairPlaca($textoPagina);
-            $cor = $this->model->extrairCor($textoPagina);
-            $renavam = $this->model->extrairRevanam($textoPagina);
-            //dd($renavam);
-            
-
-        }
-        
-        $text = $pdf->getText();
-        $pages = $pdf->getPages();
-        foreach ($pages as $page) {
-
-            $texto = $page->getText();
-
-        }
-
-        if($validador == "DEPARTAMENTO NACIONAL DE TRÂNSITO - DENATRAN"){
-            alert()->error('Selecione um documento ano 2024!');
-            return redirect()->route('documentos.index');
-        }else{
 
         // Gerar o PDF com FPDF
         $pdf = new FPDF();
@@ -125,11 +66,11 @@ class ProcuracaoController extends Controller
         $pdf->Ln(8);
         $pdf->SetFont('Arial', 'B', 12);
 
-        $pdf->Cell(0, 0, "OUTORGANTE: $outorgante", 0, 0, 'L');
+        $pdf->Cell(0, 0, "OUTORGANTE: ". strtoupper($request->nome), 0, 0, 'L');
         $pdf->Ln(5);
-        $pdf->Cell(10, 0, "CPF: $cpf", 0, 0, 'L');
+        $pdf->Cell(10, 0, "CPF: $request->cpf", 0, 0, 'L');
         $pdf->Ln(5);
-        $pdf->Cell(0, 0, utf8_decode("ENDEREÇO: " . strtoupper($endereco)), 0, 0, 'L');
+        $pdf->Cell(0, 0, utf8_decode("ENDEREÇO: " . strtoupper($request->endereco)) . ", " . $request->numero . ", " . strtoupper($request->bairro) . ", " . strtoupper($request->cidade) . "/" . strtoupper($request->estado), 0, 0, 'L');
 
         $pdf->Ln(5);
 
@@ -151,7 +92,7 @@ class ProcuracaoController extends Controller
 
 
         //$pdf->Ln(8);
-        
+
         $pdf->SetFont('Arial', '', 11);
         $pdf->Cell(0, 0, "________________________________________________________________________________________", 0, 0, 'L');
 
@@ -174,14 +115,15 @@ class ProcuracaoController extends Controller
 
         $pdf->Ln(8);
         $pdf->SetFont('Arial', 'B', 12);
-        $pdf->Cell(120, 2, "MARCA: $marca", 0, 0, 'L');
-        $pdf->Cell(0, 2, "PLACA: $placa", 0, 1, 'L'); 
+        $pdf->Cell(120, 2, "MARCA: " . strtoupper($request->marca), 0, 0, 'L');
+        $pdf->Cell(0, 2, "PLACA: " . strtoupper($request->placa), 0, 1, 'L');
         $pdf->Ln(5);
-        $pdf->Cell(120, 2, "CHASSI: $chassi", 0, 0, 'L');
-        $pdf->Cell(0, 2, "COR: $cor", 0, 1, 'L');
+        $pdf->Cell(120, 2, "CHASSI: " . strtoupper($request->chassi), 0, 0, 'L');
+        $pdf->Cell(0, 2, "COR: " . strtoupper($request->cor), 0, 1, 'L');
         $pdf->Ln(5);
-        $pdf->Cell(120, 2, "ANO/MODELO: $anoModelo", 0, 0, 'L');
-        $pdf->Cell(0, 2, "RENAVAM: $renavam", 0, 1, 'L');
+        $pdf->Cell(120, 2, "ANO/MODELO: " . strtoupper($request->ano_modelo), 0, 0, 'L');
+        $pdf->Cell(0, 2, "RENAVAM: " . strtoupper($request->renavam), 0, 1, 'L');
+
 
         $pdf->Ln(8);
         $pdf->SetFont('Arial', '', 11);
@@ -204,34 +146,33 @@ class ProcuracaoController extends Controller
                                                                                         
         $pdf->Ln(5);
         $pdf->Cell(0, 10, "_________________________________________________" , 0, 1, 'C');
-        $pdf->Cell(0, 5, "$outorgante", 0, 1, 'C');
+        $pdf->Cell(0, 5, "$request->nome", 0, 1, 'C');
 
         // Definir o nome do arquivo do PDF
         //$nomePDF = 'nome_extraido_' . time() . '.pdf';
 
         // Caminho para salvar o PDF na pasta 'procuracoes' dentro de public
-        $caminhoPDF = storage_path('app/public/procuracoes/' . $placa . '.pdf'); 
-        $urlPDF = asset('storage/procuracoes/' . $placa . '.pdf'); 
-        //dd($urlPDF);
+        $caminhoPDF = storage_path('app/public/procuracoes/' . strtoupper($request->placa) . '.pdf'); 
+        $urlPDF = asset('storage/procuracoes/' . strtoupper($request->placa) . '.pdf'); 
         // Verificar se a pasta 'procuracoes' existe, se não, cria-la
         if (!file_exists(storage_path('app/public/procuracoes'))) {
             mkdir(storage_path('app/public/procuracoes'), 0777, true); // Cria a pasta se ela não existir
         }
         $data = [
-            'nome' => $outorgante,
-            'endereco' => strtoupper($endereco),  // Endereço em maiúsculas
+            'nome' => strtoupper($request->nome),
+            'endereco' => strtoupper($request->endereco),  // Endereço em maiúsculas
             // Caminho do arquivo salvo
-            'cpf' => $cpf,
-            'marca' => $marca,
-            'placa' => $placa,
-            'chassi' => $chassi,
-            'cor' => $cor,
-            'ano' => $anoModelo,
-            'renavam' => $renavam,
+            'cpf' => $request->cpf,
+            'marca' => strtoupper($request->marca),
+            'placa' => strtoupper($request->placa),
+            'chassi' => strtoupper($request->chassi),
+            'cor' => strtoupper($request->cor),
+            'ano' => $request->ano_modelo,
+            'renavam' => $request->renavam,
             'arquivo_doc' => $urlPDF,
             'arquivo_proc' => $caminhoPDF,
         ];
-    
+
         // Salvar o PDF
         $pdf->Output('F', $caminhoPDF); 
 
@@ -240,41 +181,22 @@ class ProcuracaoController extends Controller
         //Mail::to( config('mail.from.address'))->send(new SendEmail($data, $caminhoPDF));
 
         if($this->model->create($data)){
-             alert()->success('Procuração cadastrada com sucesso!');
+            alert()->success('Procuração cadastrada com sucesso!');
 
-             return redirect()->route('procuracoes.index');
-         }
-        }   
-     }
+            return redirect()->route('procuracoes.index');
+        }
+    } 
 
-    // public function edit($id){
-    //     if(!$cats = $this->model->find($id)){
-    //         return redirect()->route('category.index');
-    //     }
-    //     return view('category.edit', compact('cats'));
-    // }
+          
 
-    // public function update(Request $request, $id){
-    //     //dd($request);
-    //     //dd($data);
-    //     $data = $request->all();
-    //     if(!$cats = $this->model->find($id))
-    //         return redirect()->route('category.index');
-
-    //     if($cats->update($data)){
-    //         alert()->success('Categoria editada com sucesso!');
-    //         return redirect()->route('category.index');
-    //     }
-    // }
-
-     public function destroy($id){
-         if(!$doc = $this->model->find($id)){
-             alert()->error('Erro ao excluír a procuração!');
-         }
-        
-         if($doc->delete()){
-             alert()->success('Procuração excluída com sucesso!');
-         }
-          return redirect()->route('procuracoes.index');
-     }
+    public function destroy($id){
+        if(!$doc = $this->model->find($id)){
+            alert()->error('Erro ao excluír a procuração!');
+        }
+    
+        if($doc->delete()){
+            alert()->success('Procuração excluída com sucesso!');
+        }
+        return redirect()->route('procuracoes.index');
+    }
 }

@@ -13,11 +13,16 @@
                     <li class="breadcrumb-item active">Editar</li>
                 </ol>
             </div>
-            <h3 class="page-title">{{ $cliente->name }}</h3>
+            <h3 class="page-title">{{ $cliente->nome }}</h3>
         </div>
     </div>
 </div>
-<br>
+@if ($errors->any())
+    <div class="alert alert-warning alert-dismissible fade show" role="alert">
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        <strong>Atenção - </strong>Todos os campos são obrigatórios.
+    </div>
+@endif
 
 @include('includes/validations-form')
 

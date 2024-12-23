@@ -20,7 +20,7 @@ class DashController extends Controller
         
 
         $search = $request->search;
-        $emprestimos = Documento::take(4)->get();
+        $emprestimos = Procuracao::orderBy('created_at', 'desc')->take(4)->get();
         //$users = $this->model->getUsersDash();
         $countDocs = $this->model->getCountDocs();
         $countProcs = $this->model->getCountProcs();

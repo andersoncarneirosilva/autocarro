@@ -57,8 +57,7 @@
                 <div class="card-header d-flex justify-content-between align-items-center">
                     <h4 class="header-title">Procurações cadastradas</h4>
                     <div class="dropdown">
-                        <button type="button" class="btn btn-primary btn-sm" data-bs-toggle="modal"
-                            data-bs-target="#modalID">Cadastrar</button>
+                        <a href="{{ route('procuracoes.create')}}" class="btn btn-primary btn-sm">Cadastro manual</a>
                         <a href="{{ route('relatorio-procuracoes')}}" target="_blank" class="btn btn-danger btn-sm">Relatório</a>
                         {{-- <button class="btn btn-secondary btn-sm" id="deleteAllSelectedRecord" disabled><i
                                 class="fa-solid fa-trash"></i></button> --}}
@@ -74,7 +73,8 @@
                                 <th>Veículo</th>
                                 <th>Placa</th>
                                 <th>Ano/Modelo</th>
-                                <th>Cadastrado em</th>
+                                <th>Renavam</th>
+                                <th>Gerado em</th>
                                 <th>Ações</th>
                             </tr>
                         </thead>
@@ -87,6 +87,7 @@
                                     <td>{{ $doc->marca }}</td>
                                     <td>{{ $doc->placa }}</td>
                                     <td>{{ $doc->ano }}</td>
+                                    <td>{{ $doc->renavam }}</td>
                                     <td>{{ Carbon\Carbon::parse($doc->created_at)->format('d/m/Y') }}</td>
                                     <td class="table-action">
                                                 <a href="{{ $doc->arquivo_doc }}" class="action-icon" target="blank">

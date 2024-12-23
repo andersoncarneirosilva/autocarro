@@ -87,18 +87,41 @@ class ClientesController extends Controller
         return view('clientes.edit', compact('cliente'));
     }
 
-     public function update(Request $request, $id){
-         //dd($request);
-         //dd($data);
-         $data = $request->all();
-         if(!$cats = $this->model->find($id))
-             return redirect()->route('clientes.index');
-
-         if($cats->update($data)){
-             alert()->success('Cliente editado com sucesso!');
-             return redirect()->route('clientes.index');
-         }
-     }
+    public function update(Request $request, $id)
+    {
+        // Validação dos dados
+        $validatedData = $request->validate([
+            'nome' => 'required|string|max:255',
+            'cpf' => 'required|string|max:255',
+            'fone' => 'required|string|max:255',
+            'email' => 'required|email|max:255',
+            'cep' => 'required|string|max:255',
+            'endereco' => 'required|string|max:255',
+            'numero' => 'required|string|max:255',
+            'bairro' => 'required|string|max:255',
+            'cidade' => 'required|string|max:255',
+            'estado' => 'required|string|max:255',
+        ], [
+            'required' => 'Todos os campos são obrigatórios.', // Mensagem genérica
+        ]);
+    
+        // Busca o cliente pelo ID
+        $cliente = $this->model->find($id);
+    
+        // Verifica se o cliente existe
+        if (!$cliente) {
+            alert()->error('Erro: Cliente não encontrado!');
+            return redirect()->route('clientes.index');
+        }
+    
+        // Atualiza o cliente com os dados validados
+        $cliente->update($validatedData);
+    
+        // Mensagem de sucesso
+        alert()->success('Cliente atualizado com sucesso!');
+        return redirect()->route('clientes.index');
+    }
+    
 
      public function destroy($id)
      {
