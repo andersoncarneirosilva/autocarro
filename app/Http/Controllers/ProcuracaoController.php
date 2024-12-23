@@ -49,6 +49,7 @@ class ProcuracaoController extends Controller
         $config = TextoPoder::first();
         
         $dataAtual = Carbon::now();
+        
         $dataPorExtenso = $dataAtual->translatedFormat('d \d\e F \d\e Y');
 
         // Gerar o PDF com FPDF
@@ -187,16 +188,32 @@ class ProcuracaoController extends Controller
         }
     } 
 
-          
 
     public function destroy($id){
-        if(!$doc = $this->model->find($id)){
-            alert()->error('Erro ao excluír a procuração!');
+        // Tenta localizar o documento no banco de dados
+        if (!$doc = $this->model->find($id)) {
+            alert()->error('Erro ao excluir a procuração!');
+            return redirect()->route('procuracoes.index');
         }
-    
-        if($doc->delete()){
+
+        // Extrai apenas o nome do arquivo da URL completa
+        $nomeArquivo = basename($doc->arquivo_doc); // Retorna "DOC-2024-MARILENE.pdf"
+        //dd($nomeArquivo); // Verifique se o nome está correto
+
+        // Monta o caminho completo para o arquivo no servidor
+        $arquivo = storage_path('app/public/procuracoes/' . $nomeArquivo);
+
+        // Verifica se o arquivo existe e o exclui
+        if (file_exists($arquivo)) {
+            unlink($arquivo);
+        }
+
+        // Exclui o registro do banco de dados
+        if ($doc->delete()) {
             alert()->success('Procuração excluída com sucesso!');
         }
+
         return redirect()->route('procuracoes.index');
     }
+
 }

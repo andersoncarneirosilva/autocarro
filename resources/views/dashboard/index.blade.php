@@ -232,14 +232,7 @@
                                                             <span class="text-muted font-13">Ano/Modelo</span>
                                                             <h5 class="font-14 mt-1 fw-normal">{{ $emp->ano }}</h5>
                                                         </td>
-                                                        <td class="table-action" style="width: 90px;">
-                                                            <a href="#"
-                                            class="action-icon"
-                                            data-id="{{ $emp->id }}"
-                                            onclick="openInfoModal(event)">
-                                            <i class="mdi mdi-eye" title="Visualizar"></i>
-                                        </a>
-                                                        </td>
+                                                        
                                                     </tr>
                                                     @endforeach
                                                 </tbody>

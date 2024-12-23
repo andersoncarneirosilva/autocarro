@@ -79,8 +79,8 @@ class DocumentosController extends Controller
             return redirect()->route('documentos.index');
         }else{
             // Garante que a pasta "procuracoes" existe
-            $pastaDestino = storage_path('app/public/documentos');
-            $urlPDF = asset('storage/documentos/' . $nomeOriginal); 
+            $pastaDestino = storage_path('app/public/veiculos');
+            $urlPDF = asset('storage/veiculos/' . $nomeOriginal); 
             if (!file_exists($pastaDestino)) {
                 mkdir($pastaDestino, 0777, true); // Cria a pasta
             }
@@ -123,16 +123,34 @@ class DocumentosController extends Controller
         
     }
 
-    public function destroy($id){
-        if(!$user = $this->model->find($id)){
-            return redirect()->route('documentos.index');
-        }
-        
-        if($user->delete()){
-            alert()->success('Documento excluído com sucesso!');
-        }
+    public function destroy($id)
+{
+    // Tenta localizar o registro no banco de dados
+    if (!$doc = $this->model->find($id)) {
         return redirect()->route('documentos.index');
     }
+
+    // Extrai apenas o nome do arquivo da URL completa
+    $nomeArquivo = basename($doc->arquivo_doc); // Retorna "DOC-2024-MARILENE.pdf"
+    //dd($nomeArquivo); // Verifique se o nome está correto
+
+    // Monta o caminho completo para o arquivo no servidor
+    $arquivo = storage_path('app/public/veiculos/' . $nomeArquivo);
+
+    // Verifica se o arquivo existe e o exclui
+    if (file_exists($arquivo)) {
+        unlink($arquivo);
+    }
+
+    // Exclui o registro no banco de dados
+    if ($doc->delete()) {
+        alert()->success('Documento excluído com sucesso!');
+    }
+
+    return redirect()->route('documentos.index');
+}
+
+
 
     public function gerarProc($id, $doc, Request $request) {
         //dd($doc);
@@ -149,6 +167,9 @@ class DocumentosController extends Controller
         $outorgados = Outorgado::all();
         $config = TextoPoder::get()->first();
         $dataAtual = Carbon::now();
+        $dataFormatada = $dataAtual->translatedFormat('d-m-Y-H-i-s');
+
+        //dd($dataFormatada);
         $dataPorExtenso = $dataAtual->translatedFormat('d \d\e F \d\e Y');
         //$endereco = $request->endereco;
 
@@ -258,8 +279,8 @@ class DocumentosController extends Controller
     //$nomePDF = 'nome_extraido_' . time() . '.pdf';
 
     // Caminho para salvar o PDF na pasta 'procuracoes' dentro de public
-    $caminhoPDF = storage_path('app/public/procuracoes/' . $documento->placa . '.pdf'); 
-    $urlPDF = asset('storage/procuracoes/' . $documento->placa . '.pdf'); 
+    $caminhoPDF = storage_path('app/public/procuracoes/' . $documento->placa . "-" . $dataFormatada . '.pdf'); 
+    $urlPDF = asset('storage/procuracoes/' . $documento->placa . "-" . $dataFormatada . '.pdf'); 
     //dd($urlPDF);
     // Verificar se a pasta 'procuracoes' existe, se não, cria-la
     if (!file_exists(storage_path('app/public/procuracoes'))) {
