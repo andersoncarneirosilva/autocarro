@@ -117,7 +117,13 @@
     </div>
     <!-- Single Select -->
 
-    
+    {{-- <form action="{{ url('upload-image') }}" method="POST" enctype="multipart/form-data">
+        @csrf
+        <label for="image">Escolha uma imagem (JPG, PNG):</label>
+        <input type="file" name="image" id="image" required>
+        <button type="submit">Enviar</button>
+    </form> --}}
+       
     
 
     

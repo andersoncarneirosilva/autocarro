@@ -15,8 +15,9 @@ use App\Http\Controllers\TextoPoderesController;
 use App\Http\Controllers\ClientesController;
 use App\Http\Controllers\ServicosController;
 use App\Http\Controllers\RelatoriosController;
+use App\Http\Controllers\PdfController;
 use Illuminate\Support\Facades\Route;
-
+use App\Http\Controllers\OcrController;
 
 
 Route::middleware(['auth'])->group(function () {
@@ -115,7 +116,19 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/relatorio-veiculos', [RelatoriosController::class, 'gerarRelatorioVeiculos'])->name('relatorio-veiculos');
     Route::get('/relatorio-procuracoes', [RelatoriosController::class, 'gerarRelatorioProc'])->name('relatorio-procuracoes');
 
+
+    Route::get('/upload', function () {
+        return view('upload'); // Retorna a view do formulário de upload
+    })->name('upload.form'); // Nomeie a rota para o formulário de upload
     
+    Route::get('/upload', function () {
+        return view('upload'); // Sua página de upload
+    })->name('upload.form'); // Nomeia a rota para o formulário de upload
+    
+    Route::post('/upload', [PdfController::class, 'uploadPdf'])->name('upload.pdf'); // Rota para o processamento do PDF
+    Route::post('/show-text', [PdfController::class, 'showExtractedText']); // Rota para exibir o texto extraído
+
+    Route::post('upload-image', [OcrController::class, 'uploadAndExtractText']);
 
 
 });

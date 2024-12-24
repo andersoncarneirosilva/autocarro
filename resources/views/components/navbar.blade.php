@@ -210,6 +210,11 @@
                     </a>
                     
                 </div> --}}
+                @if(auth()->user()->credito <= 5)
+                <span class="link-danger">Créditos: R${{ auth()->user()->credito }},00</span>
+                @else
+                <span>Créditos: R${{ auth()->user()->credito }},00</span>
+                @endif
             </li>
             <li class="d-none d-sm-inline-block">
                 <div class="nav-link" id="light-dark-mode" data-bs-toggle="tooltip" data-bs-placement="left"

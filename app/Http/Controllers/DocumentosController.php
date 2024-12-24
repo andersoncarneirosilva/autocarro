@@ -10,6 +10,8 @@ use App\Models\ConfigProc;
 use App\Models\TextoPoder;
 use App\Models\Cliente;
 use Smalot\PdfParser\Parser;
+use Illuminate\Support\Facades\Auth;
+use App\Models\User;
 use FPDF;
 use Carbon\Carbon;
 
@@ -305,7 +307,20 @@ class DocumentosController extends Controller
         // Salvar o PDF
         $pdf->Output('F', $caminhoPDF); 
 
+        $userId = Auth::id(); // Obtém o ID do usuário autenticado
+
+        // Localiza o usuário logado
+        $user = User::find($userId);
+
+        if (!$user) {
+            alert()->error('Usuário não encontrado.');
+            return redirect()->back();
+        }
+        
         if(Procuracao::create($data)){
+            // Obter o ID do usuário logado
+            
+            $user->decrement('credito');
             alert()->success('Procuração gerada com sucesso!');
 
             return redirect()->route('procuracoes.index');

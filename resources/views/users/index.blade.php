@@ -47,6 +47,8 @@
                                 <th>E-mail</th>
                                 <th>Telefone</th>
                                 <th>Acesso</th>
+                                <th>Status</th>
+                                <th>Crédito</th>
                                 <th>Ações</th>
                             </tr>
                         </thead>
@@ -64,6 +66,8 @@
                                 <td>{{ $user->email }}</td>
                                 <td>{{ $user->telefone }}</td>
                                 <td>{{ $user->perfil }}</td>
+                                <td><span class="{{ $user->classe }}">{{ $user->status }}</span></td>
+                                <td>R${{ $user->credito }}</td>
                                 <td class="table-action">
                                     
                                     <a href="{{ route('users.edit', $user->id) }}"

@@ -19,6 +19,9 @@ class UserSeeder extends Seeder
             'telefone' => '(51)9.99137.7276',
             'perfil' => 'Administrador',
             'password' => bcrypt('12345678'),
+            'classe' => '10',
+            'status' => 'Ativo',
+            'credito' => '10',
         ]);
     }
 }

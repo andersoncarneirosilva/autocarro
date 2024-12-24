@@ -12,7 +12,7 @@ use FPDF;
 use Carbon\Carbon;
 use App\Mail\SendEmail;
 use Mail;
-
+use TesseractOCR;
 
 
 class ProcuracaoController extends Controller
@@ -23,6 +23,7 @@ class ProcuracaoController extends Controller
     {
         $this->model = $procs;
     }
+
 
     public function index(Request $request){
 
@@ -182,6 +183,7 @@ class ProcuracaoController extends Controller
         //Mail::to( config('mail.from.address'))->send(new SendEmail($data, $caminhoPDF));
 
         if($this->model->create($data)){
+            
             alert()->success('Procuração cadastrada com sucesso!');
 
             return redirect()->route('procuracoes.index');

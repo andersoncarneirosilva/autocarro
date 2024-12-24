@@ -19,6 +19,9 @@ return new class extends Migration
             $table->string('perfil');
             $table->string('password');
             $table->string('image')->nullable();
+            $table->string('classe');
+            $table->string('status');
+            $table->string('credito');
             $table->timestamp('email_verified_at')->nullable();
             $table->rememberToken();
             $table->timestamps();

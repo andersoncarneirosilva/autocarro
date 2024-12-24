@@ -48,6 +48,7 @@
                     <div class="container-fluid">
 
                         <!-- start page title -->
+                        
                         <div class="row">
                             <div class="col-12">
                                 <div class="page-title-box">
@@ -61,57 +62,88 @@
                             </div>
                         </div>
                         <!-- end page title -->
-
                         <div class="row">
-                            <div class="col-md-6 col-xl-3">
-                                <div class="card tilebox-one">
+                            <div class="col-sm-6 col-xl-3">
+                                <div class="card">
                                     <div class="card-body">
-                                        <i class="uil uil-file-alt float-end"></i>
-                                        <h2 class="my-2" id="active-users-count">{{ $countDocs }}</h2>
-                                        <p class="mb-0 text-muted">
-                                            <span class="text-nowrap">Documentos</span>
-                                        </p>
-                                    </div> <!-- end card-body-->
+                                        <div class="d-flex align-items-center">
+                                            <div class="flex-shrink-0 me-3">
+                                                <div class="avatar-sm">
+                                                    <span class="avatar-title bg-primary-lighten text-primary rounded">
+                                                        <i class="mdi mdi-car font-24"></i>
+                                                    </span>
+                                                </div>
+                                            </div>
+                                            <div class="flex-grow-1">
+                                                <h5 class="mt-0 mb-1">Veículos</h5>
+                                                <p class="mb-0">{{ $countDocs }}</p>
+                                            </div>
+                                        </div>
+                                    </div>
                                 </div>
-                            </div> <!-- end col -->
+                            </div>
     
-                            <div class="col-md-6 col-xl-3">
-                                <div class="card tilebox-one">
+                            <div class="col-sm-6 col-xl-3">
+                                <div class="card">
                                     <div class="card-body">
-                                        <i class="uil uil-file float-end"></i>
-                                        <h2 class="my-2" id="active-users-count">{{ $countProcs }}</h2>
-                                        <p class="mb-0 text-muted">
-                                            <span class="text-nowrap">Procurações</span>
-                                        </p>
-                                    </div> <!-- end card-body-->
+                                        <div class="d-flex align-items-center">
+                                            <div class="flex-shrink-0 me-3">
+                                                <div class="avatar-sm">
+                                                    <span class="avatar-title bg-success-lighten text-success rounded">
+                                                        <i class="mdi mdi-file-account-outline font-24"></i>
+                                                    </span>
+                                                </div>
+                                            </div>
+                                            <div class="flex-grow-1">
+                                                <h5 class="mt-0 mb-1">Procurações</h5>
+                                                <p class="mb-0">{{ $countProcs }}</p>
+                                            </div>
+                                        </div>
+                                    </div>
                                 </div>
-                            </div> <!-- end col -->
+                            </div>
     
-                            <div class="col-md-6 col-xl-3">
-                                <div class="card tilebox-one">
+                            <div class="col-sm-6 col-xl-3">
+                                <div class="card">
                                     <div class="card-body">
-                                        <i class="uil uil-postcard float-end"></i>
-                                        <h2 class="my-2" id="active-users-count">{{ $countCnh }}</h2>
-                                        <p class="mb-0 text-muted">
-                                            <span class="text-nowrap">CNH</span>
-                                        </p>
-                                    </div> <!-- end card-body-->
+                                        <div class="d-flex align-items-center">
+                                            <div class="flex-shrink-0 me-3">
+                                                <div class="avatar-sm">
+                                                    <span class="avatar-title bg-info-lighten text-info rounded">
+                                                        <i class="mdi mdi-account-multiple font-24"></i>
+                                                    </span>
+                                                </div>
+                                            </div>
+                                            <div class="flex-grow-1">
+                                                <h5 class="mt-0 mb-1">Clientes</h5>
+                                                <p class="mb-0">{{ $countProcs }}</p>
+                                            </div>
+                                        </div>
+                                    </div>
                                 </div>
-                            </div> <!-- end col -->
+                            </div>
     
-                            <div class="col-md-6 col-xl-3">
-                                <div class="card tilebox-one">
+                            <div class="col-sm-6 col-xl-3">
+                                <div class="card">
                                     <div class="card-body">
-                                        <i class="uil uil-users-alt float-end"></i>
-                                        <h2 class="my-2" id="active-users-count">{{ $countProcs }}</h2>
-                                        <p class="mb-0 text-muted">
-                                            <span class="text-nowrap">Clientes</span>
-                                        </p>
-                                    </div> <!-- end card-body-->
+                                        <div class="d-flex align-items-center">
+                                            <div class="flex-shrink-0 me-3">
+                                                <div class="avatar-sm">
+                                                    <span class="avatar-title bg-warning-lighten text-warning rounded">
+                                                        <i class="mdi mdi-card-account-details-outline font-24"></i>
+                                                    </span>
+                                                </div>
+                                            </div>
+                                            <div class="flex-grow-1">
+                                                <h5 class="mt-0 mb-1">CNH</h5>
+                                                <p class="mb-0">25</p>
+                                            </div>
+                                        </div>
+                                    </div>
                                 </div>
-                            </div> <!-- end col -->
+                            </div>
                         </div>
-                        <!-- end row -->
+                        
 
                         <div class="row">
                             <div class="col-lg-5">
