@@ -143,8 +143,12 @@ Route::get('/login', function () {
 });
 
 // INDEX SITE
+// Route::get('/', function () {
+//     return view('auth.login');
+// });
+
 Route::get('/', function () {
-    return view('auth.login');
+    return view('site.index');
 });
 
 require __DIR__.'/auth.php';
