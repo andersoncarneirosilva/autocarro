@@ -69,7 +69,7 @@
                         </p>
 
                         <a href="" target="_blank" class="btn btn-lg font-16 btn-success">Teste grátis <i class="mdi mdi-arrow-right ms-1"></i></a>
-                        <a href="" target="_blank" class="btn btn-lg font-16 btn-info">Check Demos</a>
+                        {{-- <a href="" target="_blank" class="btn btn-lg font-16 btn-info">Check Demos</a> --}}
                     </div>
                 </div>
                 <div class="col-md-5 offset-md-2">
@@ -89,10 +89,9 @@
                 <div class="col-lg-12">
                     <div class="text-center">
                         <h1 class="mt-0"><i class="mdi mdi-infinity"></i></h1>
-                        <h3>The admin is fully <span class="text-primary">responsive</span> and easy to <span class="text-primary">customize</span></h3>
-                        <p class="text-muted mt-2">The clean and well commented code allows easy customization of the
-                            theme.It's designed for
-                            <br>describing your app, agency or business.
+                        <h3>Confira as características, benefícios</span> e vantagens</h3>
+                        <p class="text-muted mt-2">Sistema de fácil utilização sem a 
+                            necessidade de instalações.
                         </p>
                     </div>
                 </div>
@@ -106,9 +105,9 @@
                                 <i class="uil uil-desktop text-primary font-24"></i>
                             </span>
                         </div>
-                        <h4 class="mt-3">Responsive Layouts</h4>
-                        <p class="text-muted mt-2 mb-0">Et harum quidem rerum as expedita distinctio nam libero tempore
-                            cum soluta nobis est cumque quo.
+                        <h4 class="mt-3">Layout responsivo</h4>
+                        <p class="text-muted mt-2 mb-0">Um layout responsivo garante que seu site se adapte perfeitamente a qualquer 
+                            dispositivo, proporcionando uma experiência otimizada para todos os usuários.
                         </p>
                     </div>
                 </div>
@@ -120,9 +119,9 @@
                                 <i class="uil uil-vector-square text-primary font-24"></i>
                             </span>
                         </div>
-                        <h4 class="mt-3">Based on Bootstrap UI</h4>
-                        <p class="text-muted mt-2 mb-0">Temporibus autem quibusdam et aut officiis necessitatibus saepe
-                            eveniet ut sit et recusandae.
+                        <h4 class="mt-3">Agilidade</h4>
+                        <p class="text-muted mt-2 mb-0">Agilidade na geração de documentos economiza tempo e 
+                            aumenta a produtividade, garantindo entregas rápidas e eficientes.
                         </p>
                     </div>
                 </div>
@@ -131,12 +130,11 @@
                     <div class="text-center p-2 p-sm-3">
                         <div class="avatar-sm m-auto">
                             <span class="avatar-title bg-primary-lighten rounded-circle">
-                                <i class="uil uil-presentation text-primary font-24"></i>
+                                <i class="uil uil-file-times-alt text-primary font-24"></i>
                             </span>
                         </div>
-                        <h4 class="mt-3">Creative Design</h4>
-                        <p class="text-muted mt-2 mb-0">Nam libero tempore, cum soluta a est eligendi minus id quod
-                            maxime placeate facere assumenda est.
+                        <h4 class="mt-3">Evite erros</h4>
+                        <p class="text-muted mt-2 mb-0">Evite erros na geração de procurações com processos automatizados e maior precisão.
                         </p>
                     </div>
                 </div>
@@ -145,12 +143,12 @@
                     <div class="text-center p-2 p-sm-3">
                         <div class="avatar-sm m-auto">
                             <span class="avatar-title bg-primary-lighten rounded-circle">
-                                <i class="uil uil-apps text-primary font-24"></i>
+                                <i class="uil uil-users-alt text-primary font-24"></i>
                             </span>
                         </div>
-                        <h4 class="mt-3">Multiple Applications</h4>
-                        <p class="text-muted mt-2 mb-0">Et harum quidem rerum as expedita distinctio nam libero tempore
-                            cum soluta nobis est cumque quo.
+                        <h4 class="mt-3">Cadastros</h4>
+                        <p class="text-muted mt-2 mb-0">Cadastros simples de clientes e veículos, facilitando o gerencimento
+                            de procurações e documentos.
                         </p>
                     </div>
                 </div>
@@ -159,12 +157,11 @@
                     <div class="text-center p-2 p-sm-3">
                         <div class="avatar-sm m-auto">
                             <span class="avatar-title bg-primary-lighten rounded-circle">
-                                <i class="uil uil-shopping-cart-alt text-primary font-24"></i>
+                                <i class="uil uil-file-plus-alt text-primary font-24"></i>
                             </span>
                         </div>
-                        <h4 class="mt-3">Ecommerce Pages</h4>
-                        <p class="text-muted mt-2 mb-0">Temporibus autem quibusdam et aut officiis necessitatibus saepe
-                            eveniet ut sit et recusandae.
+                        <h4 class="mt-3">Procuração avulsa</h4>
+                        <p class="text-muted mt-2 mb-0">Gere uma procuração avulsa caso o cliente não tenha o documento em pdf.
                         </p>
                     </div>
                 </div>
@@ -173,12 +170,12 @@
                     <div class="text-center p-2 p-sm-3">
                         <div class="avatar-sm m-auto">
                             <span class="avatar-title bg-primary-lighten rounded-circle">
-                                <i class="uil uil-grids text-primary font-24"></i>
+                                <i class="uil uil-file-copy-alt text-primary font-24"></i>
                             </span>
                         </div>
-                        <h4 class="mt-3">Multiple Layouts</h4>
-                        <p class="text-muted mt-2 mb-0">Nam libero tempore, cum soluta a est eligendi minus id quod
-                            maxime placeate facere assumenda est.
+                        <h4 class="mt-3">Arquivos em pdf</h4>
+                        <p class="text-muted mt-2 mb-0">O sistema gera arquivos e relatórios em pdf para facilitar
+                             o manuseio e impressão.
                         </p>
                     </div>
                 </div>
@@ -189,7 +186,7 @@
     <!-- END SERVICES -->
 
     <!-- START FEATURES 1 -->
-    <section class="py-5 bg-light-lighten border-top border-bottom border-light">
+    {{-- <section class="py-5 bg-light-lighten border-top border-bottom border-light">
         <div class="container">
             <div class="row">
                 <div class="col-lg-12">
@@ -246,11 +243,11 @@
                 </div>
             </div>
         </div>
-    </section>
+    </section> --}}
     <!-- END FEATURES 1 -->
 
     <!-- START FEATURES 2 -->
-    <section class="py-5">
+    {{-- <section class="py-5">
         <div class="container">
             <div class="row">
                 <div class="col-lg-12">
@@ -303,7 +300,7 @@
             </div>
 
         </div>
-    </section>
+    </section> --}}
     <!-- END FEATURES 2 -->
 
     <!-- START PRICING -->
@@ -313,76 +310,68 @@
                 <div class="col-lg-12">
                     <div class="text-center">
                         <h1 class="mt-0"><i class="mdi mdi-tag-multiple"></i></h1>
-                        <h3>Choose Simple <span class="text-primary">Pricing</span></h3>
-                        <p class="text-muted mt-2">The clean and well commented code allows easy customization of the
-                            theme.It's designed for
-                            <br>describing your app, agency or business.
+                        <h3>Escolha do <span class="text-primary">Plano</span></h3>
+                        <p class="text-muted mt-2">Você tem a opção de utilizar o sistema sem limites ou por créditos.
+                            <br>Escolha a melhor forma para usar no seu negócio.
                         </p>
                     </div>
                 </div>
             </div>
 
             <div class="row mt-5 pt-3">
-                <div class="col-md-4">
-                    <div class="card card-pricing">
-                        <div class="card-body text-center">
-                            <p class="card-pricing-plan-name fw-bold text-uppercase">Standard License </p>
-                            <i class="card-pricing-icon ri-user-line text-primary"></i>
-                            <h2 class="card-pricing-price">$49 <span>/ License</span></h2>
-                            <ul class="card-pricing-features">
-                                <li>10 GB Storage</li>
-                                <li>500 GB Bandwidth</li>
-                                <li>No Domain</li>
-                                <li>1 User</li>
-                                <li>Email Support</li>
-                                <li>24x7 Support</li>
-                            </ul>
-                            <button class="btn btn-primary mt-4 mb-2 rounded-pill">Choose Plan</button>
+                <div class="row">
+                    <div class="col-md-4">
+                        <div class="card card-pricing">
+                            <div class="card-body text-center">
+                                <p class="card-pricing-plan-name fw-bold text-uppercase">Licença Padrão</p>
+                                <i class="card-pricing-icon ri-user-line text-primary"></i>
+                                <h2 class="card-pricing-price">R$25 <span>/ mês</span></h2>
+                                <ul class="card-pricing-features">
+                                    <li>10 documentos</li>
+                                    <li>1 usuário</li>
+                                    <li>512 MB de armazenamento</li>
+                                    <li>Suporte 24/7</li>
+                                </ul>
+                                <button class="btn btn-primary mt-4 mb-2 rounded-pill">Escolher plano</button>
+                            </div>
                         </div>
                     </div>
-                    <!-- end Pricing_card -->
+                
+                    <div class="col-md-4">
+                        <div class="card card-pricing">
+                            <div class="card-body text-center">
+                                <p class="card-pricing-plan-name fw-bold text-uppercase">Licença Profissional</p>
+                                <i class="card-pricing-icon ri-briefcase-line text-success"></i>
+                                <h2 class="card-pricing-price">R$50 <span>/ mês</span></h2>
+                                <ul class="card-pricing-features">
+                                    <li>50 documentos</li>
+                                    <li>2 usuários</li>
+                                    <li>2 GB de armazenamento</li>
+                                    <li>Suporte dedicado</li>
+                                </ul>
+                                <button class="btn btn-success mt-4 mb-2 rounded-pill">Escolher plano</button>
+                            </div>
+                        </div>
+                    </div>
+                
+                    <div class="col-md-4">
+                        <div class="card card-pricing">
+                            <div class="card-body text-center">
+                                <p class="card-pricing-plan-name fw-bold text-uppercase">Licença Avançada</p>
+                                <i class="card-pricing-icon ri-shield-star-line text-danger"></i>
+                                <h2 class="card-pricing-price">R$100 <span>/ mês</span></h2>
+                                <ul class="card-pricing-features">
+                                    <li>Documentos ilimitados</li>
+                                    <li>Usuários ilimitados</li>
+                                    <li>10 GB de armazenamento</li>
+                                    <li>Gerente de conta dedicado</li>
+                                </ul>
+                                <button class="btn btn-danger mt-4 mb-2 rounded-pill">Escolher plano</button>
+                            </div>
+                        </div>
+                    </div>
                 </div>
-                <!-- end col -->
-
-                <div class="col-md-4">
-                    <div class="card card-pricing card-pricing-recommended">
-                        <div class="card-body text-center">
-                            <div class="card-pricing-plan-tag">Recommended</div>
-                            <p class="card-pricing-plan-name fw-bold text-uppercase">Multiple License</p>
-                            <i class="card-pricing-icon ri-briefcase-line text-primary"></i>
-                            <h2 class="card-pricing-price">$99 <span>/ License</span></h2>
-                            <ul class="card-pricing-features">
-                                <li>50 GB Storage</li>
-                                <li>900 GB Bandwidth</li>
-                                <li>2 Domain</li>
-                                <li>10 User</li>
-                                <li>Email Support</li>
-                                <li>24x7 Support</li>
-                            </ul>
-                            <button class="btn btn-primary mt-4 mb-2 rounded-pill">Choose Plan</button>
-                        </div>
-                    </div>
-                    <!-- end Pricing_card -->
-                </div>
-                <!-- end col -->
-
-                <div class="col-md-4">
-                    <div class="card card-pricing">
-                        <div class="card-body text-center">
-                            <p class="card-pricing-plan-name fw-bold text-uppercase">Extended License</p>
-                            <i class="card-pricing-icon ri-store-2-line text-primary"></i>
-                            <h2 class="card-pricing-price">$599 <span>/ License</span></h2>
-                            <ul class="card-pricing-features">
-                                <li>100 GB Storege</li>
-                                <li>Unlimited Bandwidth</li>
-                                <li>10 Domain</li>
-                                <li>Unlimited User</li>
-                                <li>Email Support</li>
-                                <li>24x7 Support</li>
-                            </ul>
-                            <button class="btn btn-primary mt-4 mb-2 rounded-pill">Choose Plan</button>
-                        </div>
-                    </div>
+                
                     <!-- end Pricing_card -->
                 </div>
                 <!-- end col -->
@@ -400,13 +389,13 @@
                 <div class="col-lg-12">
                     <div class="text-center">
                         <h1 class="mt-0"><i class="mdi mdi-frequently-asked-questions"></i></h1>
-                        <h3>Frequently Asked <span class="text-primary">Questions</span></h3>
-                        <p class="text-muted mt-2">Here are some of the basic types of questions for our customers. For more
-                            <br>information please contact us.
+                        <h3>Perguntas <span class="text-primary">frequentes</span></h3>
+                        <p class="text-muted mt-2">Aqui estão alguns dos tipos básicos de perguntas para nossos clientes.
+                            <br>Para mais informações entre em contato conosco.
                         </p>
 
-                        <button type="button" class="btn btn-success btn-sm mt-2"><i class="mdi mdi-email-outline me-1"></i> Email us your question</button>
-                        <button type="button" class="btn btn-info btn-sm mt-2 ms-1"><i class="mdi mdi-twitter me-1"></i> Send us a tweet</button>
+                        <button type="button" class="btn btn-success btn-sm mt-2"><i class="mdi mdi-whatsapp me-1"></i> (51)99486.7806</button>
+                        <button type="button" class="btn btn-info btn-sm mt-2 ms-1"><i class="mdi mdi-email me-1"></i> Enviar email</button>
                     </div>
                 </div>
             </div>
@@ -416,17 +405,19 @@
                     <!-- Question/Answer -->
                     <div>
                         <div class="faq-question-q-box">Q.</div>
-                        <h4 class="faq-question text-body">Can I use this template for my client?</h4>
-                        <p class="faq-answer mb-4 pb-1 text-muted">Yup, the marketplace license allows you to use this theme
-                            in any end products.
-                            For more information on licenses, please refere <a href="https://themes.getbootstrap.com/licenses/" target="_blank">here</a>.</p>
+                        <h4 class="faq-question text-body">Posso testar o sistema sem pagar?</h4>
+                        <p class="faq-answer mb-4 pb-1 text-muted">Sim, o período de testes é 100% gratuíto, 
+                            Você tem um limite de 10 procurações para gerar, não precisando cadastrar
+                            qualquer forma de pagamento antecipado.
+                        </p>
                     </div>
 
                     <!-- Question/Answer -->
                     <div>
                         <div class="faq-question-q-box">Q.</div>
-                        <h4 class="faq-question text-body">How do I get help with the theme?</h4>
-                        <p class="faq-answer mb-4 pb-1 text-muted">Use our dedicated support email (support@coderthemes.com) to send your issues or feedback. We are here to help anytime.</p>
+                        <h4 class="faq-question text-body">Como obtenho ajuda para o sistema?</h4>
+                        <p class="faq-answer mb-4 pb-1 text-muted">Nosso suporte funciona 24/7 por email ou whatsapp. 
+                            <br>Não deixe de entrar em contato.</p>
                     </div>
 
                 </div>
@@ -436,17 +427,17 @@
                     <!-- Question/Answer -->
                     <div>
                         <div class="faq-question-q-box">Q.</div>
-                        <h4 class="faq-question text-body">Can this theme work with Wordpress?</h4>
-                        <p class="faq-answer mb-4 pb-1 text-muted">No. This is a HTML template. It won't directly with
-                            wordpress, though you can convert this into wordpress compatible theme.</p>
+                        <h4 class="faq-question text-body">Como faço para testar o ProcOnline?</h4>
+                        <p class="faq-answer mb-4 pb-1 text-muted"><a href="">Clique aqui</a> e faça um simples cadastro para acessar o sistema.</p>
                     </div>
 
                     <!-- Question/Answer -->
                     <div>
                         <div class="faq-question-q-box">Q.</div>
-                        <h4 class="faq-question text-body">Will you regularly give updates of Hyper?</h4>
-                        <p class="faq-answer mb-4 pb-1 text-muted">Yes, We will update the Hyper regularly. All the
-                            future updates would be available without any cost.</p>
+                        <h4 class="faq-question text-body">O sistema gera procurações automaticamente?</h4>
+                        <p class="faq-answer mb-4 pb-1 text-muted">Sim, após cadastrar o veículo do cliente, 
+                            <br>é gerado uma procuração preenchida automaticamente, evitando erros na digitação. 
+                        </p>
                     </div>
 
                 </div>
@@ -465,9 +456,9 @@
             <div class="row">
                 <div class="col-lg-12">
                     <div class="text-center">
-                        <h3>Get In <span class="text-primary">Touch</span></h3>
-                        <p class="text-muted mt-2">Please fill out the following form and we will get back to you shortly. For more
-                            <br>information please contact us.
+                        <h3>Entre em <span class="text-primary">Contato</span></h3>
+                        <p class="text-muted mt-2">Por favor preencha o seguinte formulário e entraremos em contato com você em breve.
+                            <br>Para mais informações entre em contato conosco.
                         </p>
                     </div>
                 </div>
@@ -475,10 +466,9 @@
 
             <div class="row align-items-center mt-3">
                 <div class="col-md-4">
-                    <p class="text-muted"><span class="fw-bold">Customer Support:</span><br> <span class="d-block mt-1">+1 234 56 7894</span></p>
-                    <p class="text-muted mt-4"><span class="fw-bold">Email Address:</span><br> <span class="d-block mt-1">info@gmail.com</span></p>
-                    <p class="text-muted mt-4"><span class="fw-bold">Office Address:</span><br> <span class="d-block mt-1">4461 Cedar Street Moro, AR 72368</span></p>
-                    <p class="text-muted mt-4"><span class="fw-bold">Office Time:</span><br> <span class="d-block mt-1">9:00AM To 6:00PM</span></p>
+                    <p class="text-muted"><span class="fw-bold">Suporte 24/7:</span><br> <span class="d-block mt-1">51 994867806</span></p>
+                    <p class="text-muted mt-4"><span class="fw-bold">Email:</span><br> <span class="d-block mt-1">suporte@proconline.com.br</span></p>
+                    <p class="text-muted mt-4"><span class="fw-bold">Atendimento:</span><br> <span class="d-block mt-1">Seg. a Sex. - 9:00AM as 6:00PM</span></p>
                 </div>
 
                 <div class="col-md-7">
@@ -486,14 +476,14 @@
                         <div class="row mt-4">
                             <div class="col-lg-6">
                                 <div class="mb-2">
-                                    <label for="fullname" class="form-label">Your Name</label>
-                                    <input class="form-control form-control-light py-2" type="text" id="fullname" placeholder="Name...">
+                                    <label for="fullname" class="form-label">Nome</label>
+                                    <input class="form-control form-control-light py-2" type="text" id="fullname" placeholder="Seu nome...">
                                 </div>
                             </div>
                             <div class="col-lg-6">
                                 <div class="mb-2">
-                                    <label for="emailaddress" class="form-label">Your Email</label>
-                                    <input class="form-control form-control-light py-2" type="email" required="" id="emailaddress" placeholder="Enter you email...">
+                                    <label for="emailaddress" class="form-label">Email</label>
+                                    <input class="form-control form-control-light py-2" type="email" required="" id="emailaddress" placeholder="Seu melhor email...">
                                 </div>
                             </div>
                         </div>
@@ -501,24 +491,15 @@
                         <div class="row mt-1">
                             <div class="col-lg-12">
                                 <div class="mb-2">
-                                    <label for="subject" class="form-label">Your Subject</label>
-                                    <input class="form-control form-control-light py-2" type="text" id="subject" placeholder="Enter subject...">
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="row mt-1">
-                            <div class="col-lg-12">
-                                <div class="mb-2">
-                                    <label for="comments" class="form-label">Message</label>
-                                    <textarea id="comments" rows="4" class="form-control form-control-light" placeholder="Type your message here..."></textarea>
+                                    <label for="comments" class="form-label">Mensagem</label>
+                                    <textarea id="comments" rows="4" class="form-control form-control-light" placeholder="Deixe sua mensagem aqui..."></textarea>
                                 </div>
                             </div>
                         </div>
 
                         <div class="row mt-2">
                             <div class="col-12 text-end">
-                                <button class="btn btn-primary">Send a Message <i class="mdi mdi-telegram ms-1"></i> </button>
+                                <button class="btn btn-primary">Enviar <i class="mdi mdi-telegram ms-1"></i> </button>
                             </div>
                         </div>
                     </form>
@@ -592,9 +573,8 @@
             <div class="row">
                 <div class="col-lg-12">
                     <div class="mt-5">
-                        <p class="text-light text-opacity-50 mt-4 text-center mb-0">© 2018 -
-                            <script>document.write(new Date().getFullYear())</script> Hyper. Design and coded by
-                            Coderthemes
+                        <p class="text-light text-opacity-50 mt-4 text-center mb-0">©
+                            <script>document.write(new Date().getFullYear())</script> ProcOnline. www.proconline.com.br
                         </p>
                     </div>
                 </div>
