@@ -13,7 +13,7 @@ services:
         networks:
             - laravel
 
-    # nginx
+    # nginx 0805bc8b129335e7306fbdcb19
     nginx:
         image: nginx:alpine
         restart: unless-stopped
