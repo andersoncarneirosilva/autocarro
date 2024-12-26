@@ -1,5 +1,12 @@
 <?php
 
+declare(strict_types=1);
+
+use Illuminate\Support\Facades\Route;
+use Stancl\Tenancy\Middleware\InitializeTenancyByDomain;
+use Stancl\Tenancy\Middleware\PreventAccessFromCentralDomains;
+use App\Http\Controllers\Auth\AuthenticatedSessionController;
+
 use App\Http\Controllers\PerfilController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\DocumentosController;
@@ -18,13 +25,28 @@ use App\Http\Controllers\RelatoriosController;
 use App\Http\Controllers\PdfController;
 use App\Http\Controllers\TenantController;
 use App\Http\Controllers\OcrController;
-use Illuminate\Support\Facades\Route;
+/*
+|--------------------------------------------------------------------------
+| Tenant Routes
+|--------------------------------------------------------------------------
+|
+| Here you can register the tenant routes for your application.
+| These routes are loaded by the TenantRouteServiceProvider.
+|
+| Feel free to customize them however you want. Good luck!
+|
+*/
 
+Route::middleware([
+    'web',
+    InitializeTenancyByDomain::class,
+    PreventAccessFromCentralDomains::class,
+])->group(function () {
+   
+    require __DIR__.'/auth.php';
 
-Route::middleware(['auth'])->group(function () {
+    
 
-    //USUARIOS
-    /* Route::delete('/users', [UserController::class, 'deleteAll'])->name('users.delete'); */
     Route::delete('/users/{id}', [UserController::class, 'destroy'])->name('users.destroy');
     Route::put('/users/{id}', [UserController::class, 'update'])->name('users.update');
     Route::get('/users/{id}/edit', [UserController::class, 'edit'])->name('users.edit');
@@ -41,7 +63,6 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/perfil/{id}/edit', [PerfilController::class, 'edit'])->name('perfil.edit');
     Route::get('/perfil', [PerfilController::class, 'index'])->name('perfil.index');
 
- 
 
     //DOCUMENTOS
     Route::post('documentos/gerarProc/{id}/{doc}', [DocumentosController::class, 'gerarProc'])->name('documentos.gerarProc');
@@ -105,34 +126,9 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/relatorio-veiculos', [RelatoriosController::class, 'gerarRelatorioVeiculos'])->name('relatorio-veiculos');
     Route::get('/relatorio-procuracoes', [RelatoriosController::class, 'gerarRelatorioProc'])->name('relatorio-procuracoes');
 
-
-    Route::get('/upload', function () {
-        return view('upload'); // Retorna a view do formulário de upload
-    })->name('upload.form'); // Nomeie a rota para o formulário de upload
     
-    Route::get('/upload', function () {
-        return view('upload'); // Sua página de upload
-    })->name('upload.form'); // Nomeia a rota para o formulário de upload
-    
-    Route::post('/upload', [PdfController::class, 'uploadPdf'])->name('upload.pdf'); // Rota para o processamento do PDF
-    Route::post('/show-text', [PdfController::class, 'showExtractedText']); // Rota para exibir o texto extraído
-
-    Route::post('upload-image', [OcrController::class, 'uploadAndExtractText']);
-
-    
-
 });
-
-
-
-
-
-Route::post('/registerCompany', [TenantController::class, 'store'])->name('register.store');
-Route::get('/registerCompany/create', [TenantController::class, 'create'])->name('register.create');
-Route::get('/registerCompany', [TenantController::class, 'index'])->name('site.index');
 
 Route::get('/', function () {
     return view('site.index');
 });
-
-require __DIR__.'/auth.php';

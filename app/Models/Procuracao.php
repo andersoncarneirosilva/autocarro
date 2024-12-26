@@ -16,6 +16,9 @@ class Procuracao extends Model
      *
      * @var array<int, string>
      */
+    //protected $connection = 'tenant';  // Configuração da conexão do banco de dados do tenant
+    protected $table = 'procuracaos';   // Defina o nome da tabela explicitamente, se necessário
+    
     protected $fillable = [
         'nome',
         'endereco',

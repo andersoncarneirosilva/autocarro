@@ -36,6 +36,11 @@ class Kernel extends HttpKernel
             \Illuminate\View\Middleware\ShareErrorsFromSession::class,
             \App\Http\Middleware\VerifyCsrfToken::class,
             \Illuminate\Routing\Middleware\SubstituteBindings::class,
+             //\App\Http\Middleware\SetTenantDatabase::class,
+            //\App\Http\Middleware\InitializeTenantDatabase::class,
+            //\Stancl\Tenancy\Middleware\InitializeTenancyByDomain::class,
+            // $tenant = Tenant::create(['id' => 'anderson', 'plan' => 'Free']);
+            //$tenant->domains()->create(['domain' => 'anderson.localhost']);
         ],
 
         'api' => [
@@ -68,6 +73,7 @@ class Kernel extends HttpKernel
     protected $routeMiddleware = [
         // Outros middlewares
         'uppercase' => \App\Http\Middleware\UppercaseInput::class,
+        //'tenant.database' => \App\Http\Middleware\InitializeTenantDatabase::class,
     ];
     
 }

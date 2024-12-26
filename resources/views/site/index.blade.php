@@ -67,8 +67,16 @@
                             ferramentas práticas, você pode criar, gerenciar e organizar procurações de maneira ágil e segura. 
                             Tudo que você precisa para centralizar e otimizar seus processos está aqui!
                         </p>
-
-                        <a href="" target="_blank" class="btn btn-lg font-16 btn-success">Teste grátis <i class="mdi mdi-arrow-right ms-1"></i></a>
+                        @if(session('success'))
+                        <div class="alert alert-success">
+                            {{ session('success') }}
+                        </div>
+                        @elseif(session('error'))
+                        <div class="alert alert-danger">
+                            {{ session('error') }}
+                        </div>
+                    @endif
+                        <a href="{{ route('register.create') }}" target="_blank" class="btn btn-lg font-16 btn-success">Teste grátis <i class="mdi mdi-arrow-right ms-1"></i></a>
                         {{-- <a href="" target="_blank" class="btn btn-lg font-16 btn-info">Check Demos</a> --}}
                     </div>
                 </div>

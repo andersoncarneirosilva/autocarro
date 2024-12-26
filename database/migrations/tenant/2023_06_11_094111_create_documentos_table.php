@@ -11,20 +11,25 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('doc_veiculos', function (Blueprint $table) {
+        Schema::create('documentos', function (Blueprint $table) {
             $table->id();
-            $table->string('nome');
-            $table->string('endereco');
-            $table->string('cpf');
+            
             $table->string('marca');
             $table->string('placa');
             $table->string('chassi');
             $table->string('cor');
             $table->string('ano');
-            $table->string('modelo');
             $table->string('renavam');
+            $table->string('nome');
+            $table->string('cpf');
+            $table->string('cidade');
+            $table->string('crv');
+            $table->string('placaAnterior');
+            $table->string('categoria');
+            $table->string('motor');
+            $table->string('combustivel');
+            $table->string('infos');
             $table->string('arquivo_doc');
-            $table->string('arquivo_proc');
             $table->timestamps();
         });
     }
@@ -34,6 +39,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('_doc_veiculo');
+        Schema::dropIfExists('documentos');
     }
 };

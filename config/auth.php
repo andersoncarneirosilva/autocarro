@@ -40,6 +40,10 @@ return [
             'driver' => 'session',
             'provider' => 'users',
         ],
+        // 'tenant' => [
+        //     'driver' => 'session',
+        //     'provider' => 'users',
+        // ],
     ],
 
     /*
@@ -64,7 +68,12 @@ return [
             'driver' => 'eloquent',
             'model' => App\Models\User::class,
         ],
-
+        'tenant' => [
+                'driver' => 'eloquent',
+                'model' => App\Models\User::class,
+                'table' => 'users', // Certifique-se de que esta é a tabela correta no contexto do tenant
+                'connection' => 'tenant', // A conexão com o banco de dados do tenant
+            ],
         // 'users' => [
         //     'driver' => 'database',
         //     'table' => 'users',

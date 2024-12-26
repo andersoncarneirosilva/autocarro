@@ -31,7 +31,7 @@
                                 <select class="form-select" name="perfil">
                                     <option value="">Selecione o perfil</option>
                                     <option value="Administrador">Administrador</option>
-                                    <option value="Usuário">Usuário</option>
+                                    <option value="Usuario">Usuário</option>
                                   </select>
                             </div>
                         </div>

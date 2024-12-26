@@ -6,6 +6,8 @@ use App\Models\DashModel;
 use App\Models\Procuracao;
 use Illuminate\Http\Request;
 use App\Models\Documento;
+use Illuminate\Support\Facades\Auth;
+
 class DashController extends Controller
 {
     protected $model;
@@ -17,8 +19,8 @@ class DashController extends Controller
 
     public function index(Request $request){
 
-        
-
+        //$user = Auth::guard('tenant')->user(); // Use o guard 'tenant'
+        //dd($user); 
         $search = $request->search;
         $emprestimos = Procuracao::orderBy('created_at', 'desc')->take(4)->get();
         //$users = $this->model->getUsersDash();
