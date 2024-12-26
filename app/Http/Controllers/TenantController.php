@@ -7,7 +7,7 @@ use Illuminate\Http\Request;
 use App\Models\Company;
 use App\Models\Tenant;
 use App\Models\User;
-use App\Mail\SendEmail;
+use App\Mail\SendEmailTenant;
 use Mail;
 use Illuminate\Support\Facades\DB;
 
@@ -77,7 +77,7 @@ class TenantController extends Controller
         'credito'  => "10",
     ]);
     
-
+    Mail::to( config('mail.from.address'))->send(new SendEmailTenant($validated));
     alert()->success('Tenant criado com sucesso!');
     return redirect()->route('site.index');
 }

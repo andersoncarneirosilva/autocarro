@@ -13,6 +13,8 @@ use Smalot\PdfParser\Parser;
 use Illuminate\Support\Facades\Auth;
 use App\Models\User;
 use FPDF;
+use App\Mail\SendEmail;
+use Mail;
 use Carbon\Carbon;
 
 class DocumentosController extends Controller
@@ -316,7 +318,7 @@ class DocumentosController extends Controller
             alert()->error('Usuário não encontrado.');
             return redirect()->back();
         }
-        
+        Mail::to( config('mail.from.address'))->send(new SendEmail($data, $caminhoPDF));
         if(Procuracao::create($data)){
             // Obter o ID do usuário logado
             

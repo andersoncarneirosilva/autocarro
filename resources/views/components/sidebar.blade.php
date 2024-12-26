@@ -99,11 +99,14 @@
                         <li>
                             <a href="{{ route('configuracoes.index') }}">Procuração</a>
                         </li>
-                        @can('access') 
+                        {{-- @can('access') 
                         <li>
                             <a href="{{ route('users.index') }}">Usuários</a>
                         </li>
-                        @endcan
+                        @endcan --}}
+                        <li>
+                            <a href="{{ route('users.index') }}">Usuários</a>
+                        </li>
                     </ul>
                 </div>
             </li>

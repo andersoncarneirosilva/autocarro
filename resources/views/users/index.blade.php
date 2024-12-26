@@ -33,7 +33,9 @@
                 <div class="card-header d-flex justify-content-between align-items-center">
                     <h4 class="header-title">Serviços cadastradas</h4>
                     <div class="dropdown">
+                        @can('access') 
                     <a href="{{ route('users.create')}}" class="btn btn-primary btn-sm">Cadastrar</a>
+                    @endcan
                         {{-- <button class="btn btn-secondary btn-sm" id="deleteAllSelectedRecord" disabled><i
                                 class="fa-solid fa-trash"></i></button> --}}
                     </div>
