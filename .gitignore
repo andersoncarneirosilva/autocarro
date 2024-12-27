@@ -14,4 +14,4 @@ yarn-error.log
 /.idea
 /.vscode
 /.docker
-config/tenancy.php
+/config/tenancy.php
