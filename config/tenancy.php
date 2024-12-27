@@ -17,8 +17,13 @@ return [
      *
      * Only relevant if you're using the domain or subdomain identification middleware.
      */
+    // 'central_domains' => [
+    //     '127.0.0.1',
+    //     'localhost',
+    // ],
+
     'central_domains' => [
-        '143.1140.148.157',
+        '143.140.148.157',
         'webprosites.com.br',
     ],
 
