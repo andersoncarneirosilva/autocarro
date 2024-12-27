@@ -198,8 +198,7 @@ return [
         App\Providers\TenancyServiceProvider::class,
         RealRashid\SweetAlert\SweetAlertServiceProvider::class,
         Barryvdh\DomPDF\ServiceProvider::class,
-        Intervention\Image\ImageServiceProvider::class,
-
+        
         
     ],
 
@@ -217,8 +216,6 @@ return [
 
     'aliases' => Facade::defaultAliases()->merge([
         'PDF' => Barryvdh\DomPDF\Facade::class,
-        'Image' => Intervention\Image\Facades\Image::class,
-
     ])->toArray(),
     
 ];
