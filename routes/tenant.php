@@ -43,13 +43,9 @@ Route::middleware([
     PreventAccessFromCentralDomains::class,
 ])->group(function () {
    
-    Route::get('login', [AuthenticatedSessionController::class, 'create'])
-                ->name('login');
-    Route::post('login', [AuthenticatedSessionController::class, 'store']);
-    Route::get('/dashboard', [DashController::class, 'index'])->name('dashboard.index');
-    Route::post('logout', [AuthenticatedSessionController::class, 'destroy'])
-                ->name('logout');
-    
+    require __DIR__.'/auth.php';
+
+   
 
     Route::delete('/users/{id}', [UserController::class, 'destroy'])->name('users.destroy');
     Route::put('/users/{id}', [UserController::class, 'update'])->name('users.update');
