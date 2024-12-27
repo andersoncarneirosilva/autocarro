@@ -18,7 +18,7 @@ class TenantDomainMiddleware
         // Verifica se o domínio está na lista
         if (!in_array($tenantDomain, $centralDomains)) {
             // Se o domínio não estiver na lista, aborta e retorna um erro
-            abort(404, 'Tenant could not be identified on domain ' . $tenantDomain);
+            abort(404, 'Não foi possível identificar o locatário no domínio ' . $tenantDomain);
         }
 
         return $next($request); // Continua a execução da requisição
