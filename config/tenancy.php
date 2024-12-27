@@ -20,12 +20,11 @@ return [
     'central_domains' => [
         '143.1140.148.157',
         'webprosites.com.br',
-        '*.webprosites.com.br',
     ],
 
     
 
-    /**asdasdasd
+    /**
      * Tenancy bootstrappers are executed when tenancy is initialized.
      * Their responsibility is making Laravel features tenant-aware.
      *
