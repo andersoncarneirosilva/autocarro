@@ -19,8 +19,8 @@ return [
      */
     'central_domains' => [
         '143.1140.148.157',
-        'webprosites.com.br'
-        '*.webprosites.com.br'
+        'webprosites.com.br',
+        '*.webprosites.com.br',
     ],
 
     
