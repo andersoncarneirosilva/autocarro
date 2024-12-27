@@ -128,11 +128,6 @@ Route::middleware([
 
     
 });
-Route::middleware(['tenant.domain'])->group(function () {
-    Route::domain('{tenant}.webprosites.com.br')->group(function () {
-        Route::get('/', [TenantController::class, 'index'])->name('tenant.home');
-    });
-});
 
 Route::get('/', function () {
     return view('site.index');
