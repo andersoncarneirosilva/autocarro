@@ -108,7 +108,7 @@ public function createTenant($tenantData)
         protected function migrateTenantDatabase($tenant)
         {
             // Alterar a configuração de conexão para o banco do tenant
-            //dd($tenant);
+            //dd($tenant->tenancy_db_name);
             config([
                 'database.connections.tenant' => [
                     'driver' => 'mysql',

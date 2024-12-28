@@ -17,8 +17,9 @@ use App\Http\Controllers\ServicosController;
 use App\Http\Controllers\RelatoriosController;
 use App\Http\Controllers\PdfController;
 use App\Http\Controllers\TenantController;
-use App\Http\Controllers\OcrController;
 use Illuminate\Support\Facades\Route;
+
+
 
 
 Route::middleware(['auth'])->group(function () {
@@ -117,7 +118,7 @@ Route::middleware(['auth'])->group(function () {
     Route::post('/upload', [PdfController::class, 'uploadPdf'])->name('upload.pdf'); // Rota para o processamento do PDF
     Route::post('/show-text', [PdfController::class, 'showExtractedText']); // Rota para exibir o texto extraído
 
-    Route::post('upload-image', [OcrController::class, 'uploadAndExtractText']);
+
 
     
 

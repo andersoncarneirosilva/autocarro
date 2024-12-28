@@ -1,6 +1,7 @@
 <?php
 
 namespace App\Http\Controllers\Auth;
+namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Auth\LoginRequest;
@@ -17,7 +18,7 @@ class AuthenticatedSessionController extends Controller
      */
     public function create(): View
     {
-        return view('auth.login');
+        return view('login.index');
     }
 
     /**
@@ -25,11 +26,19 @@ class AuthenticatedSessionController extends Controller
      */
     public function store(LoginRequest $request): RedirectResponse
     {
-        $request->authenticate();
+        // Tentar autenticar o usuário com o guard 'web' ou o guard do tenant
+        if (Auth::guard('web')->attempt($request->only('email', 'password'))) {
+            // Regenerar a sessão para segurança
+            $request->session()->regenerate();
 
-        $request->session()->regenerate();
+            // Redirecionar para a página inicial após o login bem-sucedido
+            return redirect()->intended(RouteServiceProvider::HOME);
+        }
 
-        return redirect()->intended(RouteServiceProvider::HOME);
+        // Se a autenticação falhar, redirecionar com erros
+        return back()->withErrors([
+            'email' => 'As credenciais fornecidas são incorretas.',
+        ]);
     }
 
     /**
@@ -37,13 +46,13 @@ class AuthenticatedSessionController extends Controller
      */
     public function destroy(Request $request): RedirectResponse
     {
-        
+        // Realizar o logout do usuário
         Auth::guard('web')->logout();
 
+        // Invalidar a sessão e regenerar o token
         $request->session()->invalidate();
-
         $request->session()->regenerateToken();
 
-        return redirect('/');
+        return redirect('/login');
     }
 }

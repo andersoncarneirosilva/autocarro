@@ -24,7 +24,6 @@ use App\Http\Controllers\ServicosController;
 use App\Http\Controllers\RelatoriosController;
 use App\Http\Controllers\PdfController;
 use App\Http\Controllers\TenantController;
-use App\Http\Controllers\OcrController;
 /*
 |--------------------------------------------------------------------------
 | Tenant Routes
@@ -36,6 +35,16 @@ use App\Http\Controllers\OcrController;
 | Feel free to customize them however you want. Good luck!
 |
 */
+Route::middleware([
+    'guest', // Garante que apenas usuários não autenticados possam acessar
+    InitializeTenancyByDomain::class, // Inicializa o tenant com base no domínio
+    PreventAccessFromCentralDomains::class, // Impede acesso de domínios centrais
+])->group(function () {
+    Route::get('/login', [AuthenticatedSessionController::class, 'create'])->name('login');
+    Route::post('/login', [AuthenticatedSessionController::class, 'store']);
+});
+
+
 
 Route::middleware([
     'web',

@@ -73,8 +73,7 @@ class Kernel extends HttpKernel
     protected $routeMiddleware = [
         // Outros middlewares
         'uppercase' => \App\Http\Middleware\UppercaseInput::class,
-        //'tenant.database' => \App\Http\Middleware\InitializeTenantDatabase::class,
-        //'tenant.domain' => \App\Http\Middleware\TenantDomainMiddleware::class,
+        'tenant' => \App\Http\Middleware\InitializeTenantByDomain::class,
     ];
     
 }

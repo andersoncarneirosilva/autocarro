@@ -17,15 +17,14 @@ return [
      *
      * Only relevant if you're using the domain or subdomain identification middleware.
      */
-    //  'central_domains' => [
-    //      '127.0.0.1',
-    //      'localhost',
-    //  ],
-
      'central_domains' => [
-         '143.140.148.157',
-         'webprosites.com.br',
+         'localhost',
      ],
+
+    // 'central_domains' => [
+    //     '143.140.148.157',
+    //     'webprosites.com.br',
+    // ],
 
     
 
@@ -52,7 +51,7 @@ return [
          * Connection used as a "template" for the dynamically created tenant database connection.
          * Note: don't name your template connection tenant. That name is reserved by package.
          */
-        'template_tenant_connection' => null,
+        
 
         /**
          * Tenant database names are created like this:
