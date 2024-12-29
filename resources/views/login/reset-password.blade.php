@@ -21,23 +21,26 @@
                     <img src="{{ url('assets/images/logo-dark.png') }}" alt="">
 		      	</div>
 		      	{{-- <h3 class="text-center mb-4">Have an account?</h3> --}}
-                  <form method="POST" action="{{ route('login') }}">
+                  <form method="POST" action="{{ route('password.store') }}">
                     @csrf
+                    
 		      		<div class="form-group">
-		      			<input type="text" class="form-control rounded-left" name="email" placeholder="Email" required>
+		      			<input type="text" class="form-control rounded-left" type="email" name="email" :value="old('email', $request->email)" required autofocus>
+                          <x-input-error :messages="$errors->get('email')" class="mt-2" />  
+                        
 		      		</div>
 	            <div class="form-group d-flex">
-	              <input type="password" class="form-control rounded-left" name="password" placeholder="Senha" required>
+	              <input type="password" class="form-control rounded-left" name="password" placeholder="Nova senha" required>
 	            </div>
-	            <div class="form-group d-md-flex">
-                    <div class="w-100 text-center">
-                        <a href="{{ route('password.request') }}">Esqueceu a senha</a>
-                    </div>
-	            </div> 
-                <x-input-error :messages="$errors->get('email')" class="mt-2" />
+                <x-input-error :messages="$errors->get('password')" class="mt-2" />
+                <div class="form-group d-flex">
+                    <input type="password" class="form-control rounded-left" name="password_confirmation" placeholder="Confirme a senha" required>
+                </div>
+                
 	            <div class="form-group">
-	            	<button type="submit" class="btn btn-primary rounded submit p-3 px-5">Acessar</button>
+                    <button type="submit" class="btn btn-primary rounded submit p-3 px-5">Acessar</button>
 	            </div>
+                <x-input-error :messages="$errors->get('password_confirmation')" class="mt-2" />
 	          </form>
 	        </div>
 				</div>
