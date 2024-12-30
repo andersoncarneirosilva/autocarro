@@ -22,7 +22,7 @@
         if (!arquivo) {
             Swal.fire({
                 title: 'Erro!',
-                text: 'Por favor, selecione um arquivo.',
+                text: 'Por favor, selecione um arquivo em pdf.',
                 icon: 'error',
                 confirmButtonText: 'OK'
             });

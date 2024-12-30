@@ -43,7 +43,7 @@
             <div class="row">
                 <div class="col-lg-6"></div>
                 <div class="col-lg-6 text-end">
-                    <button type="submit" class="btn btn-primary btn-sm">Gerar relatório</button>
+                    <button type="submit" class="btn btn-primary btn-sm">Pesquisar</button>
                 </div>
             </div>
         </form>

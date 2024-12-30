@@ -44,6 +44,22 @@ class DocumentosController extends Controller
 
     public function store(Request $request){
 
+        
+        try {
+            $validated = $request->validate([
+                'arquivo_doc' => 'required|mimes:pdf|max:10240',
+            ], [
+                'arquivo_doc.mimes' => 'O arquivo deve ser um PDF.',
+                'arquivo_doc.required' => 'O arquivo é obrigatório.',
+                'arquivo_doc.max' => 'O arquivo não pode ultrapassar 10MB.',
+            ]);
+            //dd($validated);
+        } catch (\Illuminate\Validation\ValidationException $e) {
+            alert()->error('Selecione o documento em pdf!');
+            return redirect()->route('documentos.index');
+        }
+        
+
         $arquivo = $request->file('arquivo_doc');
         
         $nomeOriginal = $arquivo->getClientOriginalName();

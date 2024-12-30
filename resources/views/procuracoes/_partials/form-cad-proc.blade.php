@@ -151,7 +151,7 @@
                         <div class="col-lg-6">
                         </div>
                         <div class="col-lg-6 text-end">
-                            <a href="{{ route('clientes.index')}}" class="btn btn-secondary btn-sm">Cancelar</a>
+                            <a href="{{ route('procuracoes.index')}}" class="btn btn-secondary btn-sm">Cancelar</a>
                             <button type="button" onclick="form.reset();" class="btn btn-warning btn-sm">Limpar</button>
                             <button type="submit" class="btn btn-success btn-sm">Cadastrar</button>
                         </div>

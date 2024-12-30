@@ -81,7 +81,7 @@
                     </table>
                 </div>
                     @elseif($clientes->total() == 0)
-                        <div class="alert alert-warning" role="alert">
+                        <div class="alert alert-danger bg-transparent text-danger" role="alert">
                             NENHUM RESULTADO ENCONTRADO!
                         </div>
                     @endif

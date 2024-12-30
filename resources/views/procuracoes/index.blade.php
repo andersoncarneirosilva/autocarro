@@ -57,7 +57,9 @@
                 <div class="card-header d-flex justify-content-between align-items-center">
                     <h4 class="header-title">Procurações cadastradas</h4>
                     <div class="dropdown">
+                        @if(auth()->user()->credito > 0)
                         <a href="{{ route('procuracoes.create')}}" class="btn btn-primary btn-sm">Cadastro manual</a>
+                        @endif
                         <a href="{{ route('relatorio-procuracoes')}}" target="_blank" class="btn btn-danger btn-sm">Relatório</a>
                         {{-- <button class="btn btn-secondary btn-sm" id="deleteAllSelectedRecord" disabled><i
                                 class="fa-solid fa-trash"></i></button> --}}
@@ -103,7 +105,7 @@
                     </table>
                 </div>
                     @elseif($procs->total() == 0)
-                        <div class="alert alert-warning bg-transparent text-warning" role="alert">
+                        <div class="alert alert-danger bg-transparent text-danger" role="alert">
                             NENHUM RESULTADO ENCONTRADO!
                         </div>
                     @endif

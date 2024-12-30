@@ -42,7 +42,7 @@
                     <input class="form-control" id="data-final" name="data-final" type="date">
                 </div>
                 <div class="col-sm-3 d-flex justify-content-end">
-                    <button type="submit" class="btn btn-primary btn-sm">Gerar relatório</button>
+                    <button type="submit" class="btn btn-primary btn-sm">Pesquisar</button>
                 </div>
             </div>
         </form>

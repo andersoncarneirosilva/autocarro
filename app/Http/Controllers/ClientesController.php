@@ -38,24 +38,25 @@ class ClientesController extends Controller
 
      public function store(Request $request){
         $data = $request->all();
-        //dd($data);
-        // Validação dos campos do formulário
-        $validatedData = $request->validate([
-            'nome' => 'required|string|max:255',
-            'cpf' => 'required|string|max:255',
-            'fone' => 'required|string|max:255',
-            'email' => 'required|email|max:255',
-            'cep' => 'required|string|max:255',
-            'endereco' => 'required|string|max:255',
-            'numero' => 'required|string|max:255',
-            'bairro' => 'required|string|max:255',
-            'cidade' => 'required|string|max:255',
-            'estado' => 'required|string|max:255',
-        ], [
-            // Mensagens personalizadas
-            'required' => 'Todos os campos são obrigatórios.', // Mensagem genérica
-        ]);
-        
+
+        try {
+            $validatedData = $request->validate([
+                'nome' => 'required|string|max:255',
+                'cpf' => 'required|string|max:255',
+                'fone' => 'required|string|max:255',
+                'email' => 'required|email|max:255',
+                'cep' => 'required|string|max:255',
+                'endereco' => 'required|string|max:255',
+                'numero' => 'required|string|max:255',
+                'bairro' => 'required|string|max:255',
+                'cidade' => 'required|string|max:255',
+                'estado' => 'required|string|max:255',
+            ]);
+            //dd($validated);
+        } catch (\Illuminate\Validation\ValidationException $e) {
+            alert()->error('Todos os campos são obrigatórios!');
+            return redirect()->route('clientes.index');
+        }
 
         // Criação do cliente no banco de dados
         $cliente = $this->model->create($validatedData);

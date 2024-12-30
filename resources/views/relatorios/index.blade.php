@@ -27,8 +27,8 @@
             <div class="row align-items-end gy-3">
                 <div class="col-sm-3">
                     <label for="tipo-relatorio" class="form-label">Tipo de relatório</label>
-                    <select class="form-select" id="tipo-relatorio" name="tipo-relatorio">
-                        <option selected>-- Selecione o tipo --</option>
+                    <select class="form-select" id="tipo-relatorio" name="tipo-relatorio" required>
+                        <option value="" selected>-- Selecione o tipo --</option>
                         <option value="Clientes">Clientes</option>
                         <option value="Procurações">Procurações</option>
                         <option value="Veículos">Veículos</option>
@@ -43,7 +43,7 @@
                     <input class="form-control" id="data-final" name="data-final" type="date" required>
                 </div>
                 <div class="col-sm-3 d-flex justify-content-end">
-                    <button type="submit" class="btn btn-primary btn-sm">Gerar relatório</button>
+                    <button type="submit" class="btn btn-primary btn-sm">Pesquisar</button>
                 </div>
             </div>
         </form>

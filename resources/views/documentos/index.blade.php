@@ -33,8 +33,10 @@
                 <div class="card-header d-flex justify-content-between align-items-center">
                     <h4 class="header-title">Veículos cadastrados</h4>
                     <div class="dropdown">
+                        @if(auth()->user()->credito > 0)
                         <button type="button" class="btn btn-primary btn-sm" data-bs-toggle="modal"
                             data-bs-target="#standard-modal">Cadastrar</button>
+                            @endif
                             <a href="{{ route('relatorio-veiculos')}}" target="_blank" class="btn btn-danger btn-sm">Relatório</a>
                         {{-- <button class="btn btn-secondary btn-sm" id="deleteAllSelectedRecord" disabled><i
                                 class="fa-solid fa-trash"></i></button> --}}
@@ -74,7 +76,7 @@
                                             onclick="openInfoModal(event)">
                                             <i class="mdi mdi-eye" title="Visualizar"></i>
                                         </a>
-
+                                        @if(auth()->user()->credito > 0)
                                         <a href="{{ $doc->arquivo_doc }}" class="action-icon" target="blank"> <i
                                                 class="mdi mdi-printer" title="Imprimir"></i></a>
 
@@ -83,7 +85,8 @@
                                                 title="Gerar procuração"
                                                 data-id="{{ $doc->id }}" 
                                                 onclick="openAddressModal(event, '{{ $doc->id }}')">
-                                             </a>
+                                        </a>
+                                        @endif
                                              
 
                                         <a href="{{ route('documentos.destroy', $doc->id) }}"
@@ -97,7 +100,7 @@
                     </table>
                 </div>
                     @elseif($docs->total() == 0)
-                        <div class="alert alert-warning" role="alert">
+                        <div class="alert alert-danger bg-transparent text-danger" role="alert">
                             NENHUM RESULTADO ENCONTRADO!
                         </div>
                     @endif

@@ -210,11 +210,7 @@
                     </a>
                     
                 </div> --}}
-                @if(auth()->user()->credito <= 5)
-                <span class="link-danger">Créditos: R${{ auth()->user()->credito }},00</span>
-                @else
-                <span>Créditos: R${{ auth()->user()->credito }},00</span>
-                @endif
+
             </li>
             <li class="d-none d-sm-inline-block">
                 <div class="nav-link" id="light-dark-mode" data-bs-toggle="tooltip" data-bs-placement="left"
@@ -250,7 +246,7 @@
                 <div class="dropdown-menu dropdown-menu-end dropdown-menu-animated profile-dropdown">
                     <!-- item-->
                     <div class=" dropdown-header noti-title">
-                        <h6 class="text-overflow m-0">Bem-vindo, {{ Auth::user()->name }}!</h6>
+                        {{-- <h6 class="text-overflow m-0">Bem-vindo, {{ Auth::user()->name }}!</h6> --}}
                     </div>
 
                     <!-- item-->
