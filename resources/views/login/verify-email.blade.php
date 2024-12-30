@@ -21,9 +21,9 @@
                     <img src="{{ url('assets/images/logo-dark.png') }}" alt="">
 		      	</div>
 		      	{{-- <h3 class="text-center mb-4">Have an account?</h3> --}}
-                  <form method="POST" action="{{ route('password.store') }}">
+                  <form method="POST" action="{{ route('verification.send') }}">
                     @csrf
-                    <input type="hidden" name="token" value="{{ $request->route('token') }}">
+                    
 		      		<div class="form-group">
 		      			<input type="text" class="form-control rounded-left" type="email" name="email" :value="old('email', $request->email)" required autofocus>
                           <x-input-error :messages="$errors->get('email')" class="mt-2" />  

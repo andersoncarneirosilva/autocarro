@@ -6,6 +6,7 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 	<link href="{{ url('assets/style.css') }}" rel="stylesheet" type="text/css" id="app-style" />
+	<link rel="shortcut icon" href="{{ url('images/favicon.ico') }}">
 <style>
     
 </style>
