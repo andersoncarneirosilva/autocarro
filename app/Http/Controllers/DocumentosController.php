@@ -7,6 +7,7 @@ use App\Models\Documento;
 use App\Models\Procuracao;
 use App\Models\Outorgado;
 use App\Models\ConfigProc;
+use App\Models\Cidade;
 use App\Models\TextoPoder;
 use App\Models\Cliente;
 use Smalot\PdfParser\Parser;
@@ -44,7 +45,8 @@ class DocumentosController extends Controller
 
     public function store(Request $request){
 
-        
+        $cidade = Cidade::first();
+
         try {
             $validated = $request->validate([
                 'arquivo_doc' => 'required|mimes:pdf|max:10240',
@@ -173,19 +175,10 @@ class DocumentosController extends Controller
 
 
     public function gerarProc($id, $doc, Request $request) {
-        //dd($doc);
-        // if(!$request->texto_final){
-        //     alert()->error('Por favor, configure o texto final!');
 
-        //      return redirect()->route('documentos.index');
-        // }
-        // if(!$request->outorgante){
-        //     alert()->error('Por favor, configure o outorgado!');
+        $outorgados = Outorgado::all();
+        $cidade = Cidade::first();
 
-        //      return redirect()->route('documentos.index');
-        // }
-        $outorgados = Outorgado::get()->first();
-        //dd($outorgados);
         $config = TextoPoder::get()->first();
         //dd($config);
         if($outorgados == null){
@@ -296,14 +289,14 @@ class DocumentosController extends Controller
         // Adicionar o texto justificado, utilizando a largura calculada
         $pdf->MultiCell($largura_disponivel2, 5, utf8_decode($text2), 0, 'J');
         // Adicionando a data por extenso no PDF
-        $pdf->Cell(0, 10, "ESTEIO, $dataPorExtenso", 0, 1, 'R');  // 'R' para alinhamento à direita
+        $pdf->Cell(0, 10, utf8_decode("$cidade->cidade , $dataPorExtenso"), 0, 1, 'R');  // 'R' para alinhamento à direita
 
 
 
                                                                                             
          $pdf->Ln(5);
          $pdf->Cell(0, 10, "_________________________________________________" , 0, 1, 'C');
-         $pdf->Cell(0, 5, "$documento->nome", 0, 1, 'C');
+         $pdf->Cell(0, 5, utf8_decode("$request->nome"), 0, 1, 'C');
 
     // Definir o nome do arquivo do PDF
     //$nomePDF = 'nome_extraido_' . time() . '.pdf';

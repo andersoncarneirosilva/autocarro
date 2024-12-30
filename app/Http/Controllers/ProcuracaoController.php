@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\Procuracao;
 use App\Models\Outorgado;
+use App\Models\Cidade;
 use App\Models\TextoPoder;
 use App\Models\Cliente;
 use Smalot\PdfParser\Parser;
@@ -47,7 +48,9 @@ class ProcuracaoController extends Controller
     public function store(Request $request){
 
         $outorgados = Outorgado::all();
+        //dd($outorgados);
         $config = TextoPoder::first();
+        $cidade = Cidade::first();
         
         $dataAtual = Carbon::now();
         
@@ -141,14 +144,14 @@ class ProcuracaoController extends Controller
         // Adicionar o texto justificado, utilizando a largura calculada
         $pdf->MultiCell($largura_disponivel2, 5, utf8_decode($text2), 0, 'J');
         // Adicionando a data por extenso no PDF
-        $pdf->Cell(0, 10, "ESTEIO, $dataPorExtenso", 0, 1, 'R');  // 'R' para alinhamento à direita
+        $pdf->Cell(0, 10, utf8_decode("$cidade->cidade , $dataPorExtenso"), 0, 1, 'R');  // 'R' para alinhamento à direita
 
 
 
                                                                                         
         $pdf->Ln(5);
         $pdf->Cell(0, 10, "_________________________________________________" , 0, 1, 'C');
-        $pdf->Cell(0, 5, "$request->nome", 0, 1, 'C');
+        $pdf->Cell(0, 5, utf8_decode("$request->nome"), 0, 1, 'C');
 
         // Definir o nome do arquivo do PDF
         //$nomePDF = 'nome_extraido_' . time() . '.pdf';

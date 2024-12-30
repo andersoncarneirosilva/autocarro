@@ -204,10 +204,10 @@
                                     <td >{{ $cidade->cidade }}</td>
                                     <td >
 
-                                        <a href="#" class="action-icon" data-id="{{ $text->id }}" onclick="openEditTextModal(event)">
+                                        <a href="#" class="action-icon" data-id="{{ $cidade->id }}" onclick="openEditCidadeModal(event)">
                                             <i class="mdi mdi-clipboard-edit-outline" title="Editar"></i>
                                         </a>
-                                        <a href="{{ route('cidades.destroy', $text->id) }}"
+                                        <a href="{{ route('cidades.destroy', $cidade->id) }}"
                                             class="action-icon mdi mdi-delete" data-confirm-delete="true"></a>
 
                                     </td>
@@ -261,6 +261,8 @@
 
 <!-- Modal Cadastro outorgado-->
 @include('configuracoes._partials.form-cad-cidade')
+
+@include('configuracoes._partials.form-edit-cidade')
 
 
 
@@ -392,6 +394,38 @@ function openEditTextModal(event) {
 
             // Exiba o modal
             $('#editTextModal').modal('show');
+        },
+        error: function() {
+            Swal.fire({
+                title: 'Erro!',
+                text: 'Não foi possível carregar os dados.',
+                icon: 'error',
+                confirmButtonText: 'OK'
+            });
+        }
+    });
+}
+
+function openEditCidadeModal(event) {
+    event.preventDefault();
+
+    // Obtenha o ID do documento
+    //const docId = event.currentTarget.getAttribute('data-id');
+    const docId = event.target.closest('a').getAttribute('data-id');
+    // Faça uma requisição AJAX para buscar os dados
+    //console.log(docId);
+    $.ajax({
+        url: `/cidades/${docId}`,
+        method: 'GET',
+        success: function(response) {
+            // Preencha os campos do modal com os dados do documento
+            $('#edit_cidade').val(response.cidade);
+
+            // Atualize a ação do formulário para apontar para a rota de edição
+            $('#editFormCidade').attr('action', `/cidades/${docId}`);
+
+            // Exiba o modal
+            $('#editCidadeModal').modal('show');
         },
         error: function() {
             Swal.fire({

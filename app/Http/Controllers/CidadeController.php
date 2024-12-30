@@ -49,14 +49,35 @@ class CidadeController extends Controller
         }
      }
 
+     public function show($id){
+        
+        $cidade = Cidade::find($id);
+        
+        if (!$cidade) {
+            return response()->json(['error' => 'Configuração não encontrada'], 404);
+        }
+    
+        return response()->json($cidade);
+    }
+
+     public function update(Request $request, $id){
+
+        $doc = Cidade::findOrFail($id);
+    
+        $doc->update($request->all());
+    
+        alert()->success('Cidade editada com sucesso!');
+        return redirect()->route('configuracoes.index');
+    }
+
     public function destroy($id){
         if(!$doc = $this->model->find($id)){
             alert()->error('Erro ao excluír o serviço!');
         }
        
         if($doc->delete()){
-            alert()->success('Serviço excluído com sucesso!');
+            alert()->success('Cidade excluída com sucesso!');
         }
-         return redirect()->route('servicos.index');
+         return redirect()->route('configuracoes.index');
     }
 }

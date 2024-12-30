@@ -37,6 +37,8 @@ class ConfiguracoesController extends Controller
         return view('configuracoes.index', compact(['procs', 'outs', 'teste','texts','cidades']));
     }
 
+    
+
     public function update(Request $request, $id){
         $doc = ConfigProc::findOrFail($id);
     

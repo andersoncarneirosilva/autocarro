@@ -118,7 +118,9 @@ Route::middleware(['auth'])->group(function () {
     
     Route::post('/upload', [PdfController::class, 'uploadPdf'])->name('upload.pdf'); // Rota para o processamento do PDF
     Route::post('/show-text', [PdfController::class, 'showExtractedText']); // Rota para exibir o texto extraído
-
+    
+    Route::get('/cidades/{id}', [CidadeController::class, 'show'])->name('cidades.show');
+    Route::put('/cidades/{id}', [CidadeController::class, 'update'])->name('cidades.update');
     Route::delete('/cidades/{id}', [CidadeController::class, 'destroy'])->name('cidades.destroy');
     Route::post('/cidades', [CidadeController::class, 'store'])->name('cidades.store');
     Route::get('/cidades', [CidadeController::class, 'index'])->name('cidades.index');
