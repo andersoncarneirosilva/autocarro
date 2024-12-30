@@ -69,7 +69,7 @@
                                 <td>{{ $user->telefone }}</td>
                                 <td>{{ $user->perfil }}</td>
                                 <td><span class="{{ $user->classe }}">{{ $user->status }}</span></td>
-                                <td>R${{ $user->credito }}</td>
+                                <td>R${{ $user->credito }},00</td>
                                 <td class="table-action">
                                     
                                     <a href="{{ route('users.edit', $user->id) }}"
@@ -106,7 +106,6 @@
     </div>
 </div>
 <br>
-
 
 
 @endsection

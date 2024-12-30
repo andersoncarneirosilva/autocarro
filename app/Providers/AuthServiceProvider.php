@@ -23,12 +23,12 @@ class AuthServiceProvider extends ServiceProvider
     {
         // Definindo a política de acesso
         Gate::define('access', function (User $user) {
-            dd($user);
+            //dd($user);
             return $user->perfil == 'Administrador';
         });
 
         Gate::define('access-user', function (User $user) {
-            dd($user);
+            //dd($user);
             return $user->perfil == 'Usuário';
         });
 

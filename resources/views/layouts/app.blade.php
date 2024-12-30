@@ -16,7 +16,7 @@
         <link href="{{ url('assets/vendor/select2/css/select2.min.css')}}" rel="stylesheet" type="text/css" />
         <link rel="stylesheet" href="{{ url('assets/vendor/daterangepicker/daterangepicker.css') }}">
 
-        
+        <script src="https://sdk.mercadopago.com/js/v2"></script>
         <!-- Vector Map css -->
         <link rel="stylesheet" href="{{ url('assets/vendor/admin-resources/jquery.vectormap/jquery-jvectormap-1.2.2.css') }}">
         <!-- Theme Config Js -->
