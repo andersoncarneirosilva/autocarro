@@ -26,79 +26,81 @@
             <div id="paymentBrick_container">
             </div>
             <script>
-            const mp = new MercadoPago('TEST-83c1af18-f3a5-4077-bc98-e72379b980b1', {
-              locale: 'pt'
-            });
-            const bricksBuilder = mp.bricks();
-              const renderPaymentBrick = async (bricksBuilder) => {
-                const settings = {
-                  initialization: {
-                    /*
-                      "amount" é a quantia total a pagar por todos os meios de pagamento com exceção da Conta Mercado Pago e Parcelas sem cartão de crédito, que têm seus valores de processamento determinados no backend através do "preferenceId"
-                    */
-                    amount: 10000,
-                    preferenceId: "<PREFERENCE_ID>",
-                    payer: {
-                      firstName: "",
-                      lastName: "",
-                      email: "",
-                    },
-                  },
-                  customization: {
-                    visual: {
-                      hideFormTitle: true,
-                      hidePaymentButton: true,
-                      style: {
-                        theme: "default",
+                const mp = new MercadoPago('TEST-83c1af18-f3a5-4077-bc98-e72379b980b1', {
+                  locale: 'pt'
+                });
+                const bricksBuilder = mp.bricks();
+                
+                const renderPaymentBrick = async (bricksBuilder) => {
+                  const settings = {
+                    initialization: {
+                      amount: 10000,
+                      preferenceId: "<PREFERENCE_ID>",
+                      payer: {
+                        firstName: "",
+                        lastName: "",
+                        email: "",
                       },
                     },
-                    paymentMethods: {
-                      atm: "all",
-                      maxInstallments: 1
+                    customization: {
+                      visual: {
+                        style: {
+                          theme: "default",
+                        },
+                      },
+                      paymentMethods: {
+                        creditCard: "all",
+                        debitCard: "all",
+                        atm: "all",
+                        bankTransfer: "all",
+                        maxInstallments: 1
+                      },
                     },
-                  },
-                  callbacks: {
-                    onReady: () => {
-                      /*
-                       Callback chamado quando o Brick está pronto.
-                       Aqui, você pode ocultar seu site, por exemplo.
-                      */
-                    },
-                    onSubmit: ({ selectedPaymentMethod, formData }) => {
-                      // callback chamado quando há click no botão de envio de dados
-                      return new Promise((resolve, reject) => {
-                        fetch("/process_payment", {
-                          method: "POST",
-                          headers: {
-                            "Content-Type": "application/json",
-                          },
-                          body: JSON.stringify(formData),
-                        })
-                          .then((response) => response.json())
-                          .then((response) => {
-                            // receber o resultado do pagamento
-                            resolve();
+                    callbacks: {
+                      onReady: () => {
+                        // Callback chamado quando o Brick está pronto.
+                      },
+                      onSubmit: ({ selectedPaymentMethod, formData }) => {
+                        return new Promise((resolve, reject) => {
+                          // Obtém o token CSRF do meta tag
+                          const csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
+                
+                          fetch("/createPayment", {
+                            method: "POST",
+                            headers: {
+                              "Content-Type": "application/json",
+                              "X-CSRF-TOKEN": csrfToken, // Adiciona o token CSRF aqui
+                            },
+                            body: JSON.stringify(formData),
                           })
-                          .catch((error) => {
-                            // manejar a resposta de erro ao tentar criar um pagamento
-                            reject();
-                          });
-                      });
+                            .then((response) => response.json())
+                            .then((response) => {
+                              // Receber o resultado do pagamento
+                              resolve(response);
+                            })
+                            .catch((error) => {
+                              // Manejar a resposta de erro ao tentar criar um pagamento
+                              console.error("Erro ao criar o pagamento:", error);
+                              reject(error);
+                            });
+                        });
+                      },
+                      onError: (error) => {
+                        // Callback chamado para todos os casos de erro do Brick
+                        console.error(error);
+                      },
                     },
-                    onError: (error) => {
-                      // callback chamado para todos os casos de erro do Brick
-                      console.error(error);
-                    },
-                  },
+                  };
+                  window.paymentBrickController = await bricksBuilder.create(
+                    "payment",
+                    "paymentBrick_container",
+                    settings
+                  );
                 };
-                window.paymentBrickController = await bricksBuilder.create(
-                  "payment",
-                  "paymentBrick_container",
-                  settings
-                );
-              };
-              renderPaymentBrick(bricksBuilder);
-            </script>
+                
+                renderPaymentBrick(bricksBuilder);
+                </script>
+                
         </div>
     </div>
     
