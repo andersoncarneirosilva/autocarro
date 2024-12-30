@@ -72,7 +72,7 @@
                     </table>
                 </div>
                     @elseif($servs->total() == 0)
-                        <div class="alert alert-warning bg-transparent text-warning" role="alert">
+                        <div class="alert alert-danger bg-transparent text-danger" role="alert">
                             NENHUM RESULTADO ENCONTRADO!
                         </div>
                     @endif
@@ -97,22 +97,22 @@
                 <form action="{{ route('servicos.store') }}" method="POST">
                     @csrf
                     <div class="mb-3">
-                        <label for="serviceName" class="form-label">Serviço</label>
+                        <label for="serviceName" class="form-label">Serviço: <span style="color: red;">*</span></label>
                         <input type="text" class="form-control" id="nome_servico" name="nome_servico">
                     </div>
                     <div class="mb-3">
-                        <label for="serviceValue" class="form-label">Valor do Serviço</label>
+                        <label for="serviceValue" class="form-label">Valor do Serviço: <span style="color: red;">*</span></label>
                         <input type="text" class="form-control money" id="val_servico" name="valor_servico" placeholder="R$ 0,00">
                     </div>
 
                     
 
                     <div class="mb-3">
-                        <label for="collectionValue" class="form-label">Valor de Arrecadação</label>
+                        <label for="collectionValue" class="form-label">Valor de Arrecadação: <span style="color: red;">*</span></label>
                         <input type="text" class="form-control money" id="val_arrec" name="arrecadacao_servico" placeholder="R$ 0,00">
                     </div>
                     <div class="mb-3">
-                        <label for="laborCost" class="form-label">Mão de Obra</label>
+                        <label for="laborCost" class="form-label">Mão de Obra: <span style="color: red;">*</span></label>
                         <input type="text" class="form-control money" id="val_mao" name="maodeobra_servico" placeholder="R$ 0,00">
                     </div>
                     <div class="row">

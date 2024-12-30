@@ -184,8 +184,18 @@ class DocumentosController extends Controller
 
         //      return redirect()->route('documentos.index');
         // }
-        $outorgados = Outorgado::all();
+        $outorgados = Outorgado::get()->first();
+        //dd($outorgados);
         $config = TextoPoder::get()->first();
+        //dd($config);
+        if($outorgados == null){
+            alert()->error('Por favor, configure a procuração!');
+            return redirect()->route('documentos.index');
+        }
+        if($config == null){
+            alert()->error('Por favor, configure a procuração!');
+            return redirect()->route('documentos.index');
+        }
         $dataAtual = Carbon::now();
         $dataFormatada = $dataAtual->translatedFormat('d-m-Y-H-i-s');
 

@@ -51,6 +51,17 @@ class OutorgadoController extends Controller
 
      public function store(Request $request){
          $data = $request->all();
+        
+         $outorgados = Outorgado::get()->first();
+         //dd($outorgados);
+         if($outorgados->nome_outorgado == $request->nome_outorgado){
+            alert()->error('Outorgado já cadastrado!');
+            return redirect()->route('configuracoes.index');
+         }
+         if($outorgados->cpf_outorgado == $request->cpf_outorgado){
+            alert()->error('Outorgado já cadastrado!');
+            return redirect()->route('configuracoes.index');
+         }
          //dd($data);
          if($this->model->create($data)){
              alert()->success('Outorgado cadastrado com sucesso!');

@@ -3,26 +3,26 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use App\Models\Servico;
+use App\Models\Cidade;
 
-class ServicosController extends Controller
+class CidadeController extends Controller
 {
     protected $model;
 
-    public function __construct(Servico $serv)
+    public function __construct(Cidade $cidade)
     {
-        $this->model = $serv;
+        $this->model = $cidade;
     }
 
     public function index(Request $request){
 
         $title = 'Excluir!';
-        $text = "Deseja excluir esse serviço?";
+        $text = "Deseja excluir esse item?";
         confirmDelete($title, $text);
 
-        $servs = Servico::paginate(10);
+        $cidade = Cidade::paginate(10);
         //dd($servs);
-        return view('servicos.index', compact('servs'));
+        return view('configuracoes.index', compact('cidade'));
     }
 
     // public function create(){
@@ -34,21 +34,18 @@ class ServicosController extends Controller
          //dd($data);
          try {
             $validated = $request->validate([
-                'nome_servico' => 'required|string|max:255',
-                'valor_servico' => 'required|string|max:255',
-                'arrecadacao_servico' => 'required|string|max:255',
-                'maodeobra_servico' => 'required|string|max:255',
+                'cidade' => 'required|string|max:255',
             ]);
             //dd($validated);
         } catch (\Illuminate\Validation\ValidationException $e) {
-            alert()->error('Todos os campos são obrigatórios!');
-            return redirect()->route('servicos.index');
+            alert()->error('Campo cidade é obrigatórios!');
+            return redirect()->route('configuracoes.index');
         }
 
          if($this->model->create($data)){
-            alert()->success('Serviço cadastrado com sucesso!');
+            alert()->success('Cidade cadastrada com sucesso!');
 
-            return redirect()->route('servicos.index');
+            return redirect()->route('configuracoes.index');
         }
      }
 

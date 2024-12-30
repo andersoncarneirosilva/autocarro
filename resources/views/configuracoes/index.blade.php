@@ -39,8 +39,8 @@
                 </div>
                 
                 <div class="table-responsive-sm">
-                    <table class="table table-centered table-borderless mb-0">
-                        <thead>
+                    <table class="table table-hover table-centered mb-0">
+                        <thead class="table-dark">
                             <tr>
                                 <th>Nome</th>
                                 <th>CPF</th>
@@ -78,12 +78,13 @@
                                 data-bs-target="#modalCadastroOut">Cadastrar</button>
                     </div>
                         </div>
-                        <div class="alert alert-warning bg-transparent text-warning" role="alert">
+                        <div class="alert alert-danger bg-transparent text-danger" role="alert">
                             NENHUM RESULTADO ENCONTRADO!
                         </div>
                     </div>
                         
                     @endif
+                
             </div>
         </div>
     </div>
@@ -121,8 +122,8 @@
                 </div>
                 
                 <div class="table-responsive-sm">
-                    <table class="table table-centered table-borderless mb-0">
-                        <thead>
+                    <table class="table table-hover table-centered mb-0">
+                        <thead class="table-dark">
                             <tr>
                                 <th>Texto</th>
                                 <th>Ações</th>
@@ -150,13 +151,13 @@
                 @elseif($texts->total() == 0)
                 <div class="col-sm-12">
                     <div class="card-header d-flex justify-content-between align-items-center">
-                <h4 class="header-title">Texto final</h4>
+                <h4 class="header-title">Texto</h4>
                 <div class="dropdown">
                     <button type="button" class="btn btn-primary btn-sm" data-bs-toggle="modal"
                             data-bs-target="#modalCadastroTexto">Cadastrar</button>
                 </div>
                     </div>
-                    <div class="alert alert-warning bg-transparent text-warning" role="alert">
+                    <div class="alert alert-danger bg-transparent text-danger" role="alert">
                         NENHUM RESULTADO ENCONTRADO!
                     </div>
                 </div>
@@ -167,6 +168,76 @@
         </div>
     </div>
 </div>
+
+
+<div class="card">
+    <div class="card-body">
+        <div class="row">
+            @if ($cidades->total() != 0)
+            <div class="col-sm-12">
+                <div class="card-header d-flex justify-content-between align-items-center">
+                    <h4 class="header-title">Data da procuração</h4>
+                    <div class="dropdown">
+                        @if ($cidades->total() <= 1)
+                        <button type="button" class="btn btn-primary btn-sm" onclick="verificarLimiteTexto()">Cadastrar</button>
+
+                        @else
+                        <button type="button" class="btn btn-primary btn-sm" data-bs-toggle="modal"
+                            data-bs-target="#modalCadastroCidade">Cadastrar</button>
+                        @endif
+
+                    </div>
+                </div>
+                
+                <div class="table-responsive-sm">
+                    <table class="table table-hover table-centered mb-0">
+                        <thead class="table-dark">
+                            <tr>
+                                <th>Cidade</th>
+                                <th>Ações</th>
+                            </tr>
+                        </thead>
+
+                        <tbody>
+                            @foreach ($cidades as $cidade)
+                                <tr>
+                                    <td >{{ $cidade->cidade }}</td>
+                                    <td >
+
+                                        <a href="#" class="action-icon" data-id="{{ $text->id }}" onclick="openEditTextModal(event)">
+                                            <i class="mdi mdi-clipboard-edit-outline" title="Editar"></i>
+                                        </a>
+                                        <a href="{{ route('cidades.destroy', $text->id) }}"
+                                            class="action-icon mdi mdi-delete" data-confirm-delete="true"></a>
+
+                                    </td>
+                                </tr>
+                            @endforeach
+                        </tbody>
+                    </table>
+                </div>
+                @elseif($cidades->total() == 0)
+                <div class="col-sm-12">
+                    <div class="card-header d-flex justify-content-between align-items-center">
+                <h4 class="header-title">Data da procuração</h4>
+                <div class="dropdown">
+                    <button type="button" class="btn btn-primary btn-sm" data-bs-toggle="modal"
+                            data-bs-target="#modalCadastroCidade">Cadastrar</button>
+                </div>
+                    </div>
+                    <div class="alert alert-danger bg-transparent text-danger" role="alert">
+                        NENHUM RESULTADO ENCONTRADO!
+                    </div>
+                </div>
+                    
+                @endif
+                   
+            </div>
+        </div>
+    </div>
+</div>
+
+
 @if($texts->total() == 0)
 
 @else
@@ -188,8 +259,8 @@
 <!-- Modal Editar texto poderes-->
 @include('configuracoes._partials.form-edit-texto')
 
-
-
+<!-- Modal Cadastro outorgado-->
+@include('configuracoes._partials.form-cad-cidade')
 
 
 
@@ -268,40 +339,6 @@ function openEditModalOutorgado(event) {
         }
     });
 }
-
-// function openEditModalTestemunha(event) {
-//     event.preventDefault();
-
-//     // Obtenha o ID do documento
-//     //const docId = event.currentTarget.getAttribute('data-id');
-//     const docId = event.target.closest('a').getAttribute('data-id');
-//     // Faça uma requisição AJAX para buscar os dados
-//     console.log(docId);
-//     $.ajax({
-//         url: `/configuracoes/${docId}`,
-//         method: 'GET',
-//         success: function(response) {
-//             // Preencha os campos do modal com os dados do documento
-//             $('#nome_testemunha').val(response.nome_testemunha);
-//             $('#cpf_testemunha').val(response.cpf_testemunha);
-//             $('#end_testemunha').val(response.end_testemunha);
-
-//             // Atualize a ação do formulário para apontar para a rota de edição
-//             $('#editFormTestemunha').attr('action', `/configuracoes/${docId}`);
-
-//             // Exiba o modal
-//             $('#editTestemunhaModal').modal('show');
-//         },
-//         error: function() {
-//             Swal.fire({
-//                 title: 'Erro!',
-//                 text: 'Não foi possível carregar os dados.',
-//                 icon: 'error',
-//                 confirmButtonText: 'OK'
-//             });
-//         }
-//     });
-// }
 
 function openEditModalPoderes(event) {
     event.preventDefault();

@@ -7,6 +7,7 @@ use App\Models\Configuracao;
 use App\Models\ConfigProc;
 use App\Models\Outorgado;
 use App\Models\Testemunha;
+use App\Models\Cidade;
 use App\Models\TextoPoder;
 use Smalot\PdfParser\Parser;
 use Carbon\Carbon;
@@ -31,8 +32,9 @@ class ConfiguracoesController extends Controller
         $outs = Outorgado::paginate(10);
         $teste = Testemunha::paginate(10);
         $texts = TextoPoder::paginate(10);
+        $cidades = Cidade::paginate(10);
         //dd($outs);
-        return view('configuracoes.index', compact(['procs', 'outs', 'teste','texts']));
+        return view('configuracoes.index', compact(['procs', 'outs', 'teste','texts','cidades']));
     }
 
     public function update(Request $request, $id){
