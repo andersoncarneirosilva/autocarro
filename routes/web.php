@@ -106,6 +106,7 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/relatorios', [RelatoriosController::class, 'index'])->name('relatorios.index');
     Route::get('/relatorios/clientes/exportar-pdf', [RelatoriosController::class, 'exportarPdf'])->name('relatorios.clientes.pdf');
 
+    Route::get('/relatorio-ordens', [RelatoriosController::class, 'gerarRelatorioOrdens'])->name('relatorio-ordens');
     Route::get('/relatorio-clientes', [RelatoriosController::class, 'gerarRelatorioClientes'])->name('relatorio-clientes');
     Route::get('/relatorio-veiculos', [RelatoriosController::class, 'gerarRelatorioVeiculos'])->name('relatorio-veiculos');
     Route::get('/relatorio-procuracoes', [RelatoriosController::class, 'gerarRelatorioProc'])->name('relatorio-procuracoes');
@@ -140,7 +141,7 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/ordensdeservicos/{id}/edit', [OrdemController::class, 'edit'])->name('ordensdeservicos.edit');
     Route::get('/ordensdeservicos', [OrdemController::class, 'index'])->name('ordensdeservicos.index');
     Route::get('/ordensdeservicos/create', [OrdemController::class, 'create'])->name('ordensdeservicos.create');
-    //Route::post('/ordensdeservicos', [OrdemController::class, 'store'])->name('ordensdeservicos.store');
+    Route::post('/ordensdeservicos', [OrdemController::class, 'store'])->name('ordensdeservicos.store');
     Route::get('/ordensdeservicos/{id}', [OrdemController::class, 'show'])->name('ordensdeservicos.show');
 
     Route::resource('ordensdeservicos', OrdemController::class);

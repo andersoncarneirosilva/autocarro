@@ -14,9 +14,8 @@ return new class extends Migration
         Schema::create('servicos', function (Blueprint $table) {
             $table->id();
             $table->string('nome_servico');
-            $table->string('valor_servico');
-            $table->string('arrecadacao_servico');
-            $table->string('maodeobra_servico');
+            $table->decimal('valor_servico', 10, 2);
+            $table->decimal('taxa_servico', 10, 2);
             $table->timestamps();
         });
     }

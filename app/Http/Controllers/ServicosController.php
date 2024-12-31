@@ -29,28 +29,28 @@ class ServicosController extends Controller
     //     return view('subcategory.create');
     // }
 
-     public function store(Request $request){
-         $data = $request->all();
-         //dd($data);
-         try {
+    public function store(Request $request){
+        
+        try {
             $validated = $request->validate([
                 'nome_servico' => 'required|string|max:255',
-                'valor_servico' => 'required|string|max:255',
-                'arrecadacao_servico' => 'required|string|max:255',
-                'maodeobra_servico' => 'required|string|max:255',
+                'valor_servico' => 'required|numeric|min:0',
+                'taxa_servico' => 'required|numeric|min:0',
             ]);
-            //dd($validated);
         } catch (\Illuminate\Validation\ValidationException $e) {
             alert()->error('Todos os campos são obrigatórios!');
             return redirect()->route('servicos.index');
         }
-
-         if($this->model->create($data)){
+    
+        if ($this->model->create($validated)) {
             alert()->success('Serviço cadastrado com sucesso!');
-
             return redirect()->route('servicos.index');
         }
-     }
+    
+        alert()->error('Erro ao cadastrar o serviço!');
+        return redirect()->route('servicos.index');
+    }
+    
 
     public function destroy($id){
         if(!$doc = $this->model->find($id)){

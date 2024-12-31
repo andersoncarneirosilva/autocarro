@@ -8,6 +8,7 @@ use Barryvdh\DomPDF\Facade as PDF;
 use App\Models\Cliente;
 use App\Models\Documento;
 use App\Models\Procuracao;
+use App\Models\Ordem;
 
 class RelatoriosController extends Controller
 {
@@ -107,6 +108,27 @@ class RelatoriosController extends Controller
         // Retorna o PDF para download
         return $pdf->stream('relatorio_procuracoes.pdf');
     }
+    
+    public function gerarPdfOrdens(Request $request){
+
+        $data = $request->all();
+        //dd($data);
+        $dataI = $request['dataInicial'];
+        $dataF = $request['dataFinal'];
+
+        $ordem = Ordem::whereBetween('created_at', [
+            $dataI . ' 00:00:00',
+            $dataF . ' 23:59:59'
+        ])->get();
+
+        $view = view('relatorios.ordens', compact('ordem'))->render();
+        $pdf = app('dompdf.wrapper');
+        $pdf->loadHTML($view)
+        ->setPaper('a4', 'landscape');
+
+        // Retorna o PDF para download
+        return $pdf->stream('relatorio_ordens_de_servico.pdf');
+    }
 
     public function gerarPdfVeiculos(Request $request){
 
@@ -145,6 +167,23 @@ class RelatoriosController extends Controller
 
         // Retorna o PDF para download
         return $pdf->stream('relatorio_clientes.pdf');
+    }
+
+    public function gerarRelatorioOrdens()
+    {
+        // Obtém os dados dos clientes do banco de dados
+        //$dados = Ordem::all();
+        $dados = Ordem::with('cliente')->paginate(10);
+        // Renderiza a view com os dados
+        //$pdf = PDF::loadView('relatorios.clientes', compact('clientes'));
+
+        $view = view('relatorios.ordens', compact('dados'))->render();
+        $pdf = app('dompdf.wrapper');
+        $pdf->loadHTML($view)
+        ->setPaper('a4', 'landscape');
+
+        // Retorna o PDF para download
+        return $pdf->stream('relatorio_orden_de_servico.pdf');
     }
 
     public function gerarRelatorioVeiculos()

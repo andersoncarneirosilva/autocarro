@@ -14,7 +14,6 @@ class Ordem extends Model
         'tipo_servico',
         'servico',
         'valor_total',
-        'prazo',
         'classe_status',
         'status',
     ];

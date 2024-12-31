@@ -58,7 +58,7 @@
                     <h4 class="header-title">Ordens cadastradas</h4>
                     <div class="dropdown">
                         <a href="{{ route('ordensdeservicos.create')}}" class="btn btn-primary btn-sm">Cadastrar Ordem</a>
-                        <a href="{{ route('relatorio-procuracoes')}}" target="_blank" class="btn btn-danger btn-sm">Relatório</a>
+                        <a href="{{ route('relatorio-ordens')}}" target="_blank" class="btn btn-danger btn-sm">Relatório</a>
                         {{-- <button class="btn btn-secondary btn-sm" id="deleteAllSelectedRecord" disabled><i
                                 class="fa-solid fa-trash"></i></button> --}}
                     </div>
@@ -68,7 +68,8 @@
                     <table class="table table-hover table-centered mb-0">
                         <thead class="table-dark">
                             <tr>
-                                <th>Nome</th>
+                                <th>#</th>
+                                <th>Cliente</th>
                                 <th>Tipo de Serviço</th>
                                 <th>Serviço</th>
                                 <th>Valor</th>
@@ -81,19 +82,20 @@
                         <tbody>
                             @foreach ($ordens as $orden)
                                 <tr>
+                                    <td>{{ $orden->cliente->id }}</td>
                                     <td>{{ $orden->cliente->nome }}</td>
                                     <td>{{ $orden->tipo_servico }}</td>
                                     <td>{{ $orden->servico }}</td>
-                                    <td>R${{ $orden->valor_total }}</td>
+                                    <td>R$ {{ number_format($orden->valor_total, 2, ',', '.') }}</td>
                                     <td><span class="{{ $orden->classe_status }}">{{ $orden->status }}</span></td>
 
                                     <td>{{ Carbon\Carbon::parse($orden->created_at)->format('d/m/Y') }}</td>
                                     <td class="table-action">
-                                                <a href="#" class="action-icon" target="blank">
+                                                <a href="{{ $orden->id }}" class="action-icon" target="blank">
                                                     <i class="mdi mdi-printer"></i>
                                                 </a>
                                                 
-                                        <a href="{{ route('procuracoes.destroy', $orden->id) }}"
+                                        <a href="{{ route('ordensdeservicos.destroy', $orden->id) }}"
                                             class="action-icon mdi mdi-delete text-danger" data-confirm-delete="true"></a>
                                     </td>
                                 </tr>

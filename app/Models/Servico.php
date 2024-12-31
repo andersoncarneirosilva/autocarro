@@ -19,8 +19,7 @@ class Servico extends Model
     protected $fillable = [
         'nome_servico',
         'valor_servico',
-        'arrecadacao_servico',
-        'maodeobra_servico'
+        'taxa_servico',
     ];
 
     /*public static function pesquisaStatus($id)

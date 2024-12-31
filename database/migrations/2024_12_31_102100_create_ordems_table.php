@@ -17,7 +17,6 @@ return new class extends Migration
         $table->string('tipo_servico'); // Serviço resumido
         $table->text('servico'); // Descrição detalhada do serviço
         $table->decimal('valor_total', 10, 2); // Valor monetário (R$99999999.99)
-        $table->date('prazo')->nullable(); // Prazo em formato de data
         $table->text('classe_status');
         $table->text('status'); // Descrição detalhada do serviço
         $table->timestamps(); // Timestamps padrão para created_at e updated_at

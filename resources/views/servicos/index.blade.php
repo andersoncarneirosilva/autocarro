@@ -1,6 +1,6 @@
 @extends('layouts.app')
 
-@section('title', 'Procurações')
+@section('title', 'Serviços')
 
 @section('content')
 
@@ -44,10 +44,10 @@
                     <table class="table table-hover table-centered mb-0">
                         <thead class="table-dark">
                             <tr>
+                                <th>#</th>
                                 <th>Serviço</th>
                                 <th>Valor do Serviço</th>
-                                <th>Valor de Arrecadação</th>
-                                <th>Mão de Obra</th>
+                                <th>Taxa administrativa</th>
                                 <th>Cadastrado em</th>
                                 <th>Ações</th>
                             </tr>
@@ -56,10 +56,10 @@
                         <tbody>
                             @foreach ($servs as $serv)
                                 <tr>
+                                    <td>{{ $serv->id }}</td>
                                     <td>{{ $serv->nome_servico }}</td>
-                                    <td>{{ $serv->valor_servico }}</td>
-                                    <td>{{ $serv->arrecadacao_servico }}</td>
-                                    <td>{{ $serv->maodeobra_servico }}</td>
+                                    <td>R${{ number_format($serv->valor_servico, 2, ',', '.') }}</td>
+                                    <td>R${{ number_format($serv->taxa_servico, 2, ',', '.') }}</td>
                                     <td>{{ Carbon\Carbon::parse($serv->created_at)->format('d/m') }}</td>
                                     <td class="table-action">
                                                
@@ -102,18 +102,11 @@
                     </div>
                     <div class="mb-3">
                         <label for="serviceValue" class="form-label">Valor do Serviço: <span style="color: red;">*</span></label>
-                        <input type="text" class="form-control money" id="val_servico" name="valor_servico" placeholder="R$ 0,00">
-                    </div>
-
-                    
-
-                    <div class="mb-3">
-                        <label for="collectionValue" class="form-label">Valor de Arrecadação: <span style="color: red;">*</span></label>
-                        <input type="text" class="form-control money" id="val_arrec" name="arrecadacao_servico" placeholder="R$ 0,00">
+                        <input type="text" class="form-control" id="valor_servico" name="valor_servico" placeholder="R$ 0,00">
                     </div>
                     <div class="mb-3">
-                        <label for="laborCost" class="form-label">Mão de Obra: <span style="color: red;">*</span></label>
-                        <input type="text" class="form-control money" id="val_mao" name="maodeobra_servico" placeholder="R$ 0,00">
+                        <label for="collectionValue" class="form-label">Taxa administrativa: <span style="color: red;">*</span></label>
+                        <input type="text" class="form-control" id="taxa_servico" name="taxa_servico" placeholder="R$ 0,00">
                     </div>
                     <div class="row">
                         <div class="modal-footer">
@@ -127,7 +120,7 @@
         </div>
     </div>
 </div>
-<script>
+{{-- <script>
     // Função para formatar valores em reais
     function formatToBRL(value) {
         // Remove caracteres não numéricos
@@ -157,7 +150,7 @@
             input.setSelectionRange(cursorPosition + (newLength - oldLength), cursorPosition + (newLength - oldLength));
         });
     });
-</script>
+</script> --}}
 
 
     @endsection

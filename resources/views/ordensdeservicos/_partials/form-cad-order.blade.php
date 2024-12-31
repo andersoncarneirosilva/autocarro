@@ -41,6 +41,7 @@ $(document).ready(function () {
         $('#bairro').val(data.bairro);
         $('#cidade').val(data.cidade);
         $('#uf').val(data.estado);
+        $('#cliente_id').val(data.id);
     });
 });
 
@@ -49,49 +50,61 @@ $(document).ready(function () {
 </script>
 
 <script>
-    $(document).ready(function () {
-        // Inicializa o Bloodhound para buscar os clientes
-        var servicos = new Bloodhound({
-            datumTokenizer: Bloodhound.tokenizers.obj.whitespace('nome'),
-            queryTokenizer: Bloodhound.tokenizers.whitespace,
-            remote: {
-                url: '/ordensdeservicos/buscarservicos?query=%QUERY', // Rota que processa a busca
-                wildcard: '%QUERY'
-            }
+    $(document).ready(function() {
+        // Inicializa o select2
+        $('.select2').select2();
+
+        // Função para formatar valores em reais
+        function formatarReal(valor) {
+            return new Intl.NumberFormat('pt-BR', {
+                style: 'currency',
+                currency: 'BRL'
+            }).format(valor);
+        }
+
+        // Função para extrair valores numéricos de strings formatadas
+        function extrairNumero(valor) {
+            return parseFloat(valor.replace(/[^\d,.-]/g, '').replace(',', '.')) || 0;
+        }
+
+        // Função para atualizar o valor total
+        function atualizarValorTotal() {
+            const valorServico = extrairNumero($('#valor_servico').val());
+            const taxaServico = extrairNumero($('#taxa_servico').val());
+            const valorTotal = valorServico + taxaServico;
+
+            $('#valor_total').val(formatarReal(valorTotal));
+        }
+
+        // Evento de mudança no select
+        $('#idCliente').on('change', function() {
+            let totalValor = 0;
+            let totalTaxa = 0;
+
+            // Itera por todas as opções selecionadas
+            $(this).find('option:selected').each(function() {
+                const valorServico = parseFloat($(this).data('valor')) || 0;
+                const taxaServico = parseFloat($(this).data('taxa')) || 0;
+
+                // Soma os valores
+                totalValor += valorServico;
+                totalTaxa += taxaServico;
+            });
+
+            // Atualiza os campos com os valores somados e formatados
+            $('#valor_servico').val(formatarReal(totalValor));
+            $('#taxa_servico').val(formatarReal(totalTaxa));
+
+            // Atualiza o valor total
+            atualizarValorTotal();
         });
-    
-        // Inicializa o Typeahead para o campo de busca
-        $('#tipo_servico_search').typeahead(
-            {
-                hint: true,
-                highlight: true,
-                minLength: 1
-            },
-            {
-                name: 'servicos',
-                display: 'nome_servico',
-                source: servicos,
-                templates: {
-                    empty: [
-                        '<div class="typeahead-empty-message">',
-                        'Nenhum serviço encontrado.',
-                        '</div>'
-                    ].join('\n'),
-                    suggestion: function (data) {
-                        return '<div>' + data.nome_servico + ' - ' + data.valor_servico + '</div>';
-                    }
-                }
-            }
-        ).on('typeahead:select', function (event, data) {
-            $('#valor_servico').val(data.valor_servico);
-            $('#valor_arrecad').val(data.arrecadacao_servico);
-            $('#valor_obra').val(data.maodeobra_servico);
+
+        // Eventos de input nos campos de valor e taxa
+        $('#valor_servico, #taxa_servico').on('input', function() {
+            atualizarValorTotal();
         });
     });
-    
-    
-    
-    </script>
+</script>
 
 <script>
     document.addEventListener('DOMContentLoaded', function () {
@@ -194,47 +207,65 @@ $(document).ready(function () {
                     </div> <!-- end row -->
                     <h5 class="mb-3 text-uppercase bg-light p-2"><i class="mdi mdi-earth me-1"></i> Informações do serviço</h5>
                     <div class="row">
-                        <div class="col-md-6">
+                        <div class="col-md-3">
                             <div class="mb-3">
-                                <div class="mb-3">
-                                    <label class="form-label">Tipo de Serviço <span style="color: red;">*</span></label>
-                                    <input type="text" class="form-control" data-provide="typeahead" id="tipo_servico_search" name="tipo_servico" placeholder="Selecione o serviço">
-                                </div> 
+                                <label class="form-label">Tipo de serviço: <span style="color: red;">*</span></label>
+                                <select class="select2 form-control select2-multiple" name="tipo_servico[]" id="idCliente" data-toggle="select2" multiple="multiple" >
+                                    <option value="">Selecione o serviço</option>
+                                    @foreach ($servicos as $servico)
+                                        <option value="{{ $servico->nome_servico }}" data-valor="{{ $servico->valor_servico }}" data-taxa="{{ $servico->taxa_servico }}">
+                                            {{ $servico->nome_servico }}
+                                        </option>
+                                    @endforeach
+                                </select>
                             </div>
                         </div>
-                        <div class="col-md-6">
+                        <div class="col-md-3">
                             <div class="mb-3">
-                                <label for="social-insta" class="form-label">Valor do serviço: <span style="color: red;">*</span></label>
+                                <label for="social-insta" class="form-label">Valor do serviço:</label>
                                 <div class="input-group">
-                                    <input type="text" name="valor_servico" id="valor_servico" class="form-control" required/>
+                                    <input type="text" name="valor_servico" id="valor_servico" class="form-control form-control-sm" required/>
                                 </div>
                             </div>
                         </div>
-                        <div class="col-md-6">
+                        <div class="col-md-3">
                             <div class="mb-3">
-                                <label for="social-insta" class="form-label">Valor de arrecadação: <span style="color: red;">*</span></label>
+                                <label for="social-insta" class="form-label">Taxa administrativa:</label>
                                 <div class="input-group">
-                                    <input type="text" name="valor_arrecad" id="valor_arrecad" class="form-control" required/>
+                                    <input type="text" name="taxa_servico" id="taxa_servico" class="form-control form-control-sm" required/>
                                 </div>
                             </div>
                         </div>
-                        <div class="col-md-6">
+                        <div class="col-md-3">
                             <div class="mb-3">
-                                <label for="social-insta" class="form-label">Mão de obra: <span style="color: red;">*</span></label>
+                                <label for="social-insta" class="form-label">Valor total:</label>
                                 <div class="input-group">
-                                    <input type="text" name="valor_obra" id="valor_obra" class="form-control" required/>
+                                    <input type="text" name="valor_total" id="valor_total" class="form-control form-control-sm" required/>
                                 </div>
                             </div>
                         </div>
+                        
+
                        
-                    </div>       
-                    
+                    </div>
+                    <div class="row">
+                        <div class="col-md-12">
+                            <label for="social-insta" class="form-label">Descrição do serviço: <span style="color: red;">*</span></label>
+                            <textarea class="form-control" name="servico" id="servico" cols="30" rows="5"></textarea>   
+                        </div> 
+                    </div>
+                    <br>    
+                    <!-- CAMPOS HIDDEN -->
+                    <input type="hidden" name="classe_status" value="badge badge-outline-warning"/>
+                    <input type="hidden" name="status" value="PENDENTE"/>
+                    <input type="hidden" name="cliente_id" id="cliente_id" value=""/>
+
+
                     <div class="row">
                         <div class="col-lg-6">
                         </div>
                         <div class="col-lg-6 text-end">
                             <a href="{{ route('procuracoes.index')}}" class="btn btn-secondary btn-sm">Cancelar</a>
-                            <button type="button" onclick="form.reset();" class="btn btn-warning btn-sm">Limpar</button>
                             <button type="submit" class="btn btn-success btn-sm">Cadastrar</button>
                         </div>
                     </div>
