@@ -152,6 +152,10 @@
         <script src="{{ url('assets/js/ui/component.fileupload.js') }}"></script>
         <!-- App js -->
         <script src="{{ url('assets/js/app.min.js') }}"></script>
+
+        
+        <script src="{{ url('assets/vendor/handlebars/handlebars.min.js') }}"></script>
+        <script src="{{ url('assets/vendor/typeahead.js/typeahead.bundle.min.js') }}"></script>
         <!-- Script do Select2 -->
     </body>
 </html> 

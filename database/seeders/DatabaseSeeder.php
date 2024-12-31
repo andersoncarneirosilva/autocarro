@@ -5,6 +5,7 @@ namespace Database\Seeders;
 // use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 use App\Models\User;
+use App\Models\Ordem;
 class DatabaseSeeder extends Seeder
 {
     /**
@@ -19,6 +20,7 @@ class DatabaseSeeder extends Seeder
             DocSeeder::class, // Adicione outros seeders conforme necessário
             ProcuracaoSeeder::class,
             ConfigProcSeeder::class,
+            OrdemSeeder::class,
         ]);
         
     }

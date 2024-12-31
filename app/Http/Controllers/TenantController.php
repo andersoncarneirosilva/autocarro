@@ -48,7 +48,8 @@ class TenantController extends Controller
         ]);
         //dd($validated);
     } catch (\Illuminate\Validation\ValidationException $e) {
-        dd($e->errors());
+        alert()->error('Todos os campos são obrigatórios!');
+            return redirect()->route('documentos.index');
     }
 
     // Criar o tenant

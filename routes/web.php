@@ -20,6 +20,7 @@ use App\Http\Controllers\TenantController;
 use App\Http\Controllers\CidadeController;
 use App\Http\Controllers\PaymentController;
 use App\Http\Controllers\PasswordResetController;
+use App\Http\Controllers\OrdemController;
 use Illuminate\Support\Facades\Route;
 
 
@@ -130,9 +131,21 @@ Route::middleware(['auth'])->group(function () {
     Route::post('/pagamentos', [PaymentController::class, 'createPayment'])->name('pagamentos.store');
     Route::get('/pagamentos', [PaymentController::class, 'index'])->name('pagamentos.index');
 
+
+    Route::get('/ordensdeservicos/buscar', [OrdemController::class, 'buscarClientes'])->name('ordensdeservicos.buscar');
+    Route::get('/ordensdeservicos', [OrdemController::class, 'index'])->name('ordensdeservicos.index');
     
+    Route::delete('/ordensdeservicos/{id}', [OrdemController::class, 'destroy'])->name('ordensdeservicos.destroy');
+    Route::put('/ordensdeservicos/{id}', [OrdemController::class, 'update'])->name('ordensdeservicos.update');
+    Route::get('/ordensdeservicos/{id}/edit', [OrdemController::class, 'edit'])->name('ordensdeservicos.edit');
+    Route::get('/ordensdeservicos', [OrdemController::class, 'index'])->name('ordensdeservicos.index');
+    Route::get('/ordensdeservicos/create', [OrdemController::class, 'create'])->name('ordensdeservicos.create');
+    Route::post('/ordensdeservicos', [OrdemController::class, 'store'])->name('ordensdeservicos.store');
+    Route::get('/ordensdeservicos/{id}', [OrdemController::class, 'show'])->name('ordensdeservicos.show');
 
-
+    Route::resource('ordensdeservicos', OrdemController::class);
+    // Rota específica para busca
+    // Rotas de recurso para clientes
 });
 
 

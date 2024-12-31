@@ -41,6 +41,11 @@ class Cliente extends Model
         return $users;
     }
 
+    public function ordens()
+    {
+        return $this->hasMany(Ordem::class);
+    }
+
     
     
 }

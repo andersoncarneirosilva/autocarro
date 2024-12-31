@@ -49,30 +49,24 @@ class UserController extends Controller
     public function store(Request $request){
         $data = $request->all();
         //dd($data);
-        $data['password'] = bcrypt($request->password);
-
-        if(!$request->name){
-            alert()->error('Campo nome é obrigatório!');
-            return redirect()->route('users.create');
-        }elseif(!$request->email){
-            alert()->error('Campo email é obrigatório!');
-            return redirect()->route('users.create');
-        }elseif(!$request->telefone){
-            alert()->error('Campo telefone é obrigatório!');
-            return redirect()->route('users.create');
-        }elseif(!$request->perfil){
-            alert()->error('Campo perfil é obrigatório!');
-            return redirect()->route('users.create');
-        }elseif(!$request->password){
-            alert()->error('Campo senha é obrigatório!');
-            return redirect()->route('users.create');
-        }elseif(!$request->password_confirm){
-            alert()->error('Campo confirmar senha é obrigatório!');
-            return redirect()->route('users.create');
-        }elseif($request->password != $request->password_confirm){
-            alert()->error('Senhas não coicidem!');
-            return redirect()->route('users.create');
+        try {
+            $validated = $request->validate([
+                'name'     => 'required|string|max:255',
+                'email'    => 'required|email|unique:users,email',
+                'telefone' => 'required|string|max:15', 
+                'perfil'     => 'required|string|max:255',
+                'password' => 'required|string|min:6|confirmed',
+                'classe' => 'required|string|max:255',
+                'status' => 'required|string|max:255',
+                'credito' => 'required|string|max:255',
+            ]);
+            //dd($validated);
+        } catch (\Illuminate\Validation\ValidationException $e) {
+            alert()->error('Todos os campos são obrigatórios!');
+                //return redirect()->route('users.create');
         }
+
+        $data['password'] = bcrypt($request->password);
 
         // Verifica se o email já existe no sistema
         $existingUser = User::where('email', $request->email)->first();

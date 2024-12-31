@@ -56,6 +56,12 @@
                                 </div>
                             </div>
                         </div>
+
+                        <input type="hidden" name="classe" value="badge badge-outline-success" class="form-control"/>
+                        <input type="hidden" name="status" value="Ativo" class="form-control"/>
+                        <input type="hidden" name="credito" value="10" class="form-control"/>
+
+
                     </div> <!-- end row -->
 
 

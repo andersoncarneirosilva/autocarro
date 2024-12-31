@@ -60,6 +60,13 @@
             </li>
 
             <li class="side-nav-item">
+                <a href="{{ route('ordensdeservicos.index') }}" class="side-nav-link">
+                    <i class="uil-clipboard-notes"></i>
+                    <span> Ordens de Serviços </span>
+                </a>
+            </li>
+
+            <li class="side-nav-item">
                 <a href="{{ route('clientes.index') }}" class="side-nav-link">
                     <i class="uil-users-alt"></i>
                     <span> Clientes </span>

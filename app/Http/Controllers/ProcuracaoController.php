@@ -144,7 +144,7 @@ class ProcuracaoController extends Controller
         // Adicionar o texto justificado, utilizando a largura calculada
         $pdf->MultiCell($largura_disponivel2, 5, utf8_decode($text2), 0, 'J');
         // Adicionando a data por extenso no PDF
-        $pdf->Cell(0, 10, utf8_decode("$cidade->cidade , $dataPorExtenso"), 0, 1, 'R');  // 'R' para alinhamento à direita
+        $pdf->Cell(0, 10, utf8_decode("$cidade->cidade, $dataPorExtenso"), 0, 1, 'R');  // 'R' para alinhamento à direita
 
 
 
