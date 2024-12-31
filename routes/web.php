@@ -18,8 +18,8 @@ use App\Http\Controllers\RelatoriosController;
 use App\Http\Controllers\PdfController;
 use App\Http\Controllers\TenantController;
 use App\Http\Controllers\CidadeController;
-use App\Http\Controllers\PagamentosController;
 use App\Http\Controllers\PaymentController;
+use App\Http\Controllers\PasswordResetController;
 use Illuminate\Support\Facades\Route;
 
 
@@ -127,10 +127,12 @@ Route::middleware(['auth'])->group(function () {
     Route::post('/cidades', [CidadeController::class, 'store'])->name('cidades.store');
     Route::get('/cidades', [CidadeController::class, 'index'])->name('cidades.index');
 
-    Route::POST('/createPayment', [PaymentController::class, 'createPayment']);
-    Route::get('/pagamentos', [PagamentosController::class, 'index'])->name('pagamentos.index');
+    Route::post('/pagamentos', [PaymentController::class, 'createPayment'])->name('pagamentos.store');
+    Route::get('/pagamentos', [PaymentController::class, 'index'])->name('pagamentos.index');
 
-    
+    Route::get('/reset-password/{token}', [PasswordResetController::class, 'showResetForm'])->name('password.reset');
+    Route::post('/reset-password', [PasswordResetController::class, 'reset'])->name('password.update');
+
 
 });
 

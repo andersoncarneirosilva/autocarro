@@ -4,39 +4,60 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use MercadoPago\SDK;
-use MercadoPago\Preference;
-use MercadoPago\Item;
+use MercadoPago\Payment;
+use MercadoPago\PaymentMethod;
+use MercadoPago\MPRequestOptions;
 
 class PaymentController extends Controller
 {
+    public function index(Request $request){
+
+     
+        return view('pagamentos.index');
+    }
+
+
     public function createPayment(Request $request)
     {
+        // Definindo o token de acesso do Mercado Pago
+        SDK::setAccessToken(env('MERCADOPAGO_ACCESS_TOKEN'));
+
+        // Criação de um objeto MPRequestOptions para customizar a requisição
+        $requestOptions = new MPRequestOptions();
+        $requestOptions->setCustomHeaders(["X-Idempotency-Key: " . uniqid()]);
+
+        // Dados de pagamento recebidos via POST (ou outra fonte)
+        $paymentData = [
+            "payment_method_id" => $request->input('paymentMethodId'),
+            "transaction_amount" => (float) $request->input('transactionAmount'),
+            "payer" => [
+                "email" => $request->input('email'),
+            ]
+        ];
+
+        // Criando o pagamento via MercadoPago
+        $payment = new Payment();
+        $payment->transaction_amount = $paymentData['transaction_amount'];
+        $payment->payment_method_id = $paymentData['payment_method_id'];
+        $payment->payer = $paymentData['payer'];
+        
+        // Enviando a requisição com os parâmetros configurados
         try {
-            // Inicializar o SDK do Mercado Pago
-            SDK::setAccessToken(env('MERCADO_PAGO_ACCESS_TOKEN')); // Certifique-se de configurar o token no .env
-
-            // Dados recebidos do cliente
-            $formData = $request->all();
-
-            // Criar uma preferência de pagamento
-            $preference = new Preference();
-
-            $item = new Item();
-            $item->title = $formData['title'] ?? 'Produto Padrão';
-            $item->quantity = $formData['quantity'] ?? 1;
-            $item->unit_price = $formData['unit_price'] ?? 0.0;
-
-            $preference->items = [$item];
-            $preference->save();
-
-            // Retornar o link para iniciar o pagamento
+            $payment->save(null, $requestOptions);
+            
+            // Retornar a resposta do pagamento
             return response()->json([
-                'init_point' => $preference->init_point,
+                'status' => 'success',
+                'message' => 'Pagamento criado com sucesso!',
+                'payment' => $payment
             ]);
         } catch (\Exception $e) {
-            // Registrar o erro no log e retornar uma mensagem de erro
-            \Log::error('Erro ao criar o pagamento: ' . $e->getMessage());
-            return response()->json(['error' => 'Erro ao processar o pagamento'], 500);
+            return response()->json([
+                'status' => 'error',
+                'message' => 'Erro ao processar o pagamento: ' . $e->getMessage()
+            ], 500);
         }
     }
+
+
 }

@@ -39,7 +39,7 @@ class SendEmailTenant extends Mailable
     public function content(): Content
     {
         return new Content(
-            view: 'Mails.send-email-tenant',
+            view: 'emails.send-email-tenant',
         );
     }
 
@@ -47,7 +47,7 @@ class SendEmailTenant extends Mailable
     {
         return $this->from( config('mail.from.address') )
                     ->subject('Contato do site')
-                    ->view('Mails.send-email-tenant')
+                    ->view('emails.send-email-tenant')
                     ->with('data', $this->pags);
     }
 

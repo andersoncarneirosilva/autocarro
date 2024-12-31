@@ -43,7 +43,7 @@ class SendEmail extends Mailable
     public function content(): Content
     {
         return new Content(
-            view: 'Mails.send-email',
+            view: 'emails.send-email',
         );
     }
 
@@ -51,7 +51,7 @@ class SendEmail extends Mailable
     {
         return $this->from( config('mail.from.address') )
                     ->subject('Contato do site')
-                    ->view('Mails.send-email')
+                    ->view('emails.send-email')
                     ->with('data', $this->pags);
     }
 
