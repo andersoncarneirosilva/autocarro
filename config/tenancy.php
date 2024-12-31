@@ -17,14 +17,14 @@ return [
      *
      * Only relevant if you're using the domain or subdomain identification middleware.
      */
-     'central_domains' => [
-         'localhost',
-     ],
-
     //  'central_domains' => [
-    //      '143.140.148.157',
-    //      'webprosites.com.br',
+    //      'localhost',
     //  ],
+
+     'central_domains' => [
+         '143.140.148.157',
+         'webprosites.com.br',
+     ],
 
     
 
