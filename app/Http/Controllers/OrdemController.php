@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\Ordem;
 use App\Models\Cliente;
+use App\Models\Servico;
 class OrdemController extends Controller
 {
     protected $model;
@@ -50,16 +51,27 @@ class OrdemController extends Controller
     $query = $request->get('query', '');
 
     $clientes = Cliente::where('nome', 'like', '%' . $query . '%')
-        ->select('id', 'nome', 'email', 'cpf', 'cep', 'endereco', 'numero', 'bairro', 'cidade', 'estado') // Inclui o CPF
+        ->select('id', 'nome', 'email', 'cpf', 'cep', 'endereco', 'numero', 'bairro', 'cidade', 'estado')
         ->get();
 
     return response()->json($clientes);
 }
 
+    public function buscarServicos(Request $request)
+    {
+        $query = $request->get('query', '');
+
+        $servicos = Servico::where('nome_servico', 'like', '%' . $query . '%')
+            ->select('id', 'nome_servico', 'valor_servico', 'arrecadacao_servico', 'maodeobra_servico')
+            ->get();
+
+        return response()->json($servicos);
+    }
+
 
 
     public function store(Request $request){
-        
+        //dd($request->nome_cliente);
     }
 
 }

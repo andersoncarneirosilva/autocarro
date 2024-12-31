@@ -48,6 +48,50 @@ $(document).ready(function () {
 
 </script>
 
+<script>
+    $(document).ready(function () {
+        // Inicializa o Bloodhound para buscar os clientes
+        var servicos = new Bloodhound({
+            datumTokenizer: Bloodhound.tokenizers.obj.whitespace('nome'),
+            queryTokenizer: Bloodhound.tokenizers.whitespace,
+            remote: {
+                url: '/ordensdeservicos/buscarservicos?query=%QUERY', // Rota que processa a busca
+                wildcard: '%QUERY'
+            }
+        });
+    
+        // Inicializa o Typeahead para o campo de busca
+        $('#tipo_servico_search').typeahead(
+            {
+                hint: true,
+                highlight: true,
+                minLength: 1
+            },
+            {
+                name: 'servicos',
+                display: 'nome_servico',
+                source: servicos,
+                templates: {
+                    empty: [
+                        '<div class="typeahead-empty-message">',
+                        'Nenhum serviço encontrado.',
+                        '</div>'
+                    ].join('\n'),
+                    suggestion: function (data) {
+                        return '<div>' + data.nome_servico + ' - ' + data.valor_servico + '</div>';
+                    }
+                }
+            }
+        ).on('typeahead:select', function (event, data) {
+            $('#valor_servico').val(data.valor_servico);
+            $('#valor_arrecad').val(data.arrecadacao_servico);
+            $('#valor_obra').val(data.maodeobra_servico);
+        });
+    });
+    
+    
+    
+    </script>
 
 <script>
     document.addEventListener('DOMContentLoaded', function () {
@@ -71,7 +115,7 @@ $(document).ready(function () {
             value = value.replace(/(\d{2})(\d)/, '$1.$2');
             value = value.replace(/(\d{3})(\d{1,3})$/, '$1-$2');
 
-            e.target.value = value;
+            e.target.value = value;buscarservicos
         });
     });
 </script>
@@ -85,7 +129,7 @@ $(document).ready(function () {
                             <div class="mb-3">
                                 <div class="mb-3">
                                     <label class="form-label">Cliente <span style="color: red;">*</span></label>
-                                    <input type="text" class="form-control" data-provide="typeahead" id="cliente-search" placeholder="Selecione o cliente">
+                                    <input type="text" class="form-control" data-provide="typeahead" id="cliente-search" name="nome_cliente" placeholder="Selecione o cliente">
                                 </div>                                   
                             </div>
                         </div>
@@ -148,56 +192,41 @@ $(document).ready(function () {
                             </div>
                         </div>
                     </div> <!-- end row -->
-                    <h5 class="mb-3 text-uppercase bg-light p-2"><i class="mdi mdi-earth me-1"></i> Informações do veículo</h5>
+                    <h5 class="mb-3 text-uppercase bg-light p-2"><i class="mdi mdi-earth me-1"></i> Informações do serviço</h5>
                     <div class="row">
                         <div class="col-md-6">
                             <div class="mb-3">
-                                <label for="social-insta" class="form-label">Marca: <span style="color: red;">*</span></label>
+                                <div class="mb-3">
+                                    <label class="form-label">Tipo de Serviço <span style="color: red;">*</span></label>
+                                    <input type="text" class="form-control" data-provide="typeahead" id="tipo_servico_search" name="tipo_servico" placeholder="Selecione o serviço">
+                                </div> 
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="mb-3">
+                                <label for="social-insta" class="form-label">Valor do serviço: <span style="color: red;">*</span></label>
                                 <div class="input-group">
-                                    <input type="text" name="marca" id="marca" class="form-control" required/>
+                                    <input type="text" name="valor_servico" id="valor_servico" class="form-control" required/>
                                 </div>
                             </div>
                         </div>
                         <div class="col-md-6">
                             <div class="mb-3">
-                                <label for="social-insta" class="form-label">Placa: <span style="color: red;">*</span></label>
+                                <label for="social-insta" class="form-label">Valor de arrecadação: <span style="color: red;">*</span></label>
                                 <div class="input-group">
-                                    <input type="text" name="placa" id="placa" class="form-control" required/>
+                                    <input type="text" name="valor_arrecad" id="valor_arrecad" class="form-control" required/>
                                 </div>
                             </div>
                         </div>
                         <div class="col-md-6">
                             <div class="mb-3">
-                                <label for="social-insta" class="form-label">Chassi: <span style="color: red;">*</span></label>
+                                <label for="social-insta" class="form-label">Mão de obra: <span style="color: red;">*</span></label>
                                 <div class="input-group">
-                                    <input type="text" name="chassi" id="chassi" class="form-control" required/>
+                                    <input type="text" name="valor_obra" id="valor_obra" class="form-control" required/>
                                 </div>
                             </div>
                         </div>
-                        <div class="col-md-6">
-                            <div class="mb-3">
-                                <label for="social-insta" class="form-label">Cor: <span style="color: red;">*</span></label>
-                                <div class="input-group">
-                                    <input type="text" name="cor" id="cor" class="form-control" required/>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-md-6">
-                            <div class="mb-3">
-                                <label for="social-insta" class="form-label">Ano/Modelo: <span style="color: red;">*</span></label>
-                                <div class="input-group">
-                                    <input type="text" name="ano_modelo" id="ano_modelo" class="form-control" required/>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-md-6">
-                            <div class="mb-3">
-                                <label for="social-insta" class="form-label">Renavam: <span style="color: red;">*</span></label>
-                                <div class="input-group">
-                                    <input type="text" name="renavam" id="renavam" class="form-control" required/>
-                                </div>
-                            </div>
-                        </div>
+                       
                     </div>       
                     
                     <div class="row">

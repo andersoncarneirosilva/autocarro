@@ -131,7 +131,7 @@ Route::middleware(['auth'])->group(function () {
     Route::post('/pagamentos', [PaymentController::class, 'createPayment'])->name('pagamentos.store');
     Route::get('/pagamentos', [PaymentController::class, 'index'])->name('pagamentos.index');
 
-
+    Route::get('/ordensdeservicos/buscarservicos', [OrdemController::class, 'buscarServicos'])->name('ordensdeservicos.buscarservicos');
     Route::get('/ordensdeservicos/buscar', [OrdemController::class, 'buscarClientes'])->name('ordensdeservicos.buscar');
     Route::get('/ordensdeservicos', [OrdemController::class, 'index'])->name('ordensdeservicos.index');
     
@@ -140,7 +140,7 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/ordensdeservicos/{id}/edit', [OrdemController::class, 'edit'])->name('ordensdeservicos.edit');
     Route::get('/ordensdeservicos', [OrdemController::class, 'index'])->name('ordensdeservicos.index');
     Route::get('/ordensdeservicos/create', [OrdemController::class, 'create'])->name('ordensdeservicos.create');
-    Route::post('/ordensdeservicos', [OrdemController::class, 'store'])->name('ordensdeservicos.store');
+    //Route::post('/ordensdeservicos', [OrdemController::class, 'store'])->name('ordensdeservicos.store');
     Route::get('/ordensdeservicos/{id}', [OrdemController::class, 'show'])->name('ordensdeservicos.show');
 
     Route::resource('ordensdeservicos', OrdemController::class);

@@ -57,7 +57,7 @@
                 <div class="card-header d-flex justify-content-between align-items-center">
                     <h4 class="header-title">Ordens cadastradas</h4>
                     <div class="dropdown">
-                        <a href="{{ route('ordensdeservicos.create')}}" class="btn btn-primary btn-sm">Cadastro manual</a>
+                        <a href="{{ route('ordensdeservicos.create')}}" class="btn btn-primary btn-sm">Cadastrar Ordem</a>
                         <a href="{{ route('relatorio-procuracoes')}}" target="_blank" class="btn btn-danger btn-sm">Relatório</a>
                         {{-- <button class="btn btn-secondary btn-sm" id="deleteAllSelectedRecord" disabled><i
                                 class="fa-solid fa-trash"></i></button> --}}

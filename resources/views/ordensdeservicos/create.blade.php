@@ -27,29 +27,6 @@
     @include('ordensdeservicos._partials.form-cad-order')
 </form>
 
-<script>
-    document.addEventListener('DOMContentLoaded', function () {
-        const form = document.getElementById('formProc');
-        const nome = document.getElementById('nome_cliente');
-        
-        form.addEventListener('submit', function(event) {
-            event.preventDefault();
-
-            const nomeInp = nome.value.trim();
-            if (!nomeInp) {
-                Swal.fire({
-                    title: 'Erro!',
-                    text: 'Por favor, preencha o nome.',
-                    icon: 'error',
-                    confirmButtonText: 'OK'
-                });
-                return;
-            }
-
-            form.submit();
-        });
-    });
-</script>
 
 @endsection
 
