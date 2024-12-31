@@ -14,6 +14,14 @@ yarn-error.log
 /.idea
 /.vscode
 /.docker
-.docker-compose.yml
-/config/tenancy.php
-#arquivos ignorados
+
+#IGNORAR ARQUIVOS
+#git update-index --assume-unchanged .docker-compose.yml
+#git update-index --assume-unchanged config/tenancy.php
+
+#VERIFICAR ARQUIVOS IGNORADOS
+#git ls-files -v | grep '^h'
+
+#REVERTER IGNORANCIA
+#git update-index --no-assume-unchanged .docker-compose.yml
+#git update-index --no-assume-unchanged config/tenancy.php

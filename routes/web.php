@@ -130,14 +130,14 @@ Route::middleware(['auth'])->group(function () {
     Route::post('/pagamentos', [PaymentController::class, 'createPayment'])->name('pagamentos.store');
     Route::get('/pagamentos', [PaymentController::class, 'index'])->name('pagamentos.index');
 
-    Route::get('/reset-password/{token}', [PasswordResetController::class, 'showResetForm'])->name('password.reset');
-    Route::post('/reset-password', [PasswordResetController::class, 'reset'])->name('password.update');
+    
 
 
 });
 
 
-
+Route::get('/reset-password/{token}', [PasswordResetController::class, 'showResetForm'])->name('password.reset');
+Route::post('/reset-password', [PasswordResetController::class, 'reset'])->name('password.update');
 
 
 Route::post('/registerCompany', [TenantController::class, 'store'])->name('register.store');
