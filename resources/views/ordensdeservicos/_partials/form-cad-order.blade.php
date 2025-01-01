@@ -1,3 +1,4 @@
+{{-- BUSCAR CLIENTES --}}
 <script>
 $(document).ready(function () {
     // Inicializa o Bloodhound para buscar os clientes
@@ -44,9 +45,6 @@ $(document).ready(function () {
         $('#cliente_id').val(data.id);
     });
 });
-
-
-
 </script>
 
 <script>
@@ -107,6 +105,41 @@ $(document).ready(function () {
 </script>
 
 <script>
+$(document).ready(function () {
+    // Função para preencher os campos com os dados do veículo selecionado
+    $('#idVeiculo').on('change', function () {
+        const selectedOption = $(this).find('option:selected'); // Obtém a opção selecionada
+        const veiculoId = $(this).val(); // Obtém o value (ID do veículo)
+
+        // Verifica se existe uma seleção válida
+        if (selectedOption.length > 0) {
+            const nome = selectedOption.data('nome') || '';
+            const marca = selectedOption.data('marca') || '';
+            const ano = selectedOption.data('ano') || '';
+            const cor = selectedOption.data('cor') || '';
+            const cidade = selectedOption.data('cidade') || '';
+
+            // Preenche os campos com os dados
+            $('#proprietario').val(nome);
+            $('#marca').val(marca);
+            $('#ano').val(ano);
+            $('#cor').val(cor);
+            $('#cidade_veiculo').val(cidade);
+            $('#documento_id').val(veiculoId); // Preenche o campo com o ID do veículo
+        } else {
+            // Limpa os campos caso nenhuma opção seja selecionada
+            $('#proprietario').val('');
+            $('#marca').val('');
+            $('#ano').val('');
+            $('#cor').val('');
+            $('#cidade_veiculo').val('');
+            $('#documento_id').val(''); // Limpa o campo de ID do veículo
+        }
+    });
+});
+
+</script>
+<script>
     document.addEventListener('DOMContentLoaded', function () {
         document.getElementById('cpf').addEventListener('input', function (e) {
             let value = e.target.value.replace(/\D/g, ''); // Remove caracteres não numéricos
@@ -131,6 +164,11 @@ $(document).ready(function () {
             e.target.value = value;buscarservicos
         });
     });
+</script>
+<script>
+$(document).ready(function() {
+    $('.js-example-basic-single').select2();
+});
 </script>
 <div class="row">
     <div class="col">
@@ -205,6 +243,64 @@ $(document).ready(function () {
                             </div>
                         </div>
                     </div> <!-- end row -->
+                    <h5 class="mb-3 text-uppercase bg-light p-2"><i class="mdi mdi-earth me-1"></i> Informações do veículo</h5>
+                    <div class="row">
+                        <div class="col-md">
+                            <div class="mb-2">
+                                <label class="form-label">Placa <span style="color: red;">*</span></label>
+                                <select class="js-example-basic-single" name="veiculo[]" id="idVeiculo" data-placeholder="Selecione o veículo">
+                                    <option value="">Selecione a placa</option>
+                                    @foreach ($veiculos as $veiculo)
+                                    <option value="{{ $veiculo->id }}" data-nome="{{ $veiculo->nome }}" data-marca="{{ $veiculo->marca }}" data-ano="{{ $veiculo->ano }}" data-cor="{{ $veiculo->cor }}" data-cidade="{{ $veiculo->cidade }}">
+                                        {{ $veiculo->placa }}
+                                    </option>
+                                    @endforeach
+                                  </select>
+                            </div> 
+                        </div>
+                        <div class="col-md-2">
+                            <div class="mb-3">
+                                <label for="social-insta" class="form-label">Proprietário:</label>
+                                <div class="input-group">
+                                    <input type="text" name="estproprietarioado" id="proprietario" class="form-control form-control-sm" readonly/>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-2">
+                            <div class="mb-2">
+                                <label for="social-fb" class="form-label">Marca:</label>
+                                <div class="input-group">
+                                    <input type="text" name="marca" id="marca" class="form-control form-control-sm" readonly/>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-2">
+                            <div class="mb-3">
+                                <label for="social-insta" class="form-label">Ano/Modelo:</label>
+                                <div class="input-group">
+                                    <input type="text" name="ano" id="ano" class="form-control form-control-sm" readonly/>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-2">
+                            <div class="mb-2">
+                                <label for="social-insta" class="form-label">Cor:</label>
+                                <div class="input-group">
+                                    <input type="text" name="cor" id="cor" class="form-control form-control-sm" readonly/>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="col-md-2">
+                            <div class="mb-3">
+                                <label for="social-insta" class="form-label">Cidade:</label>
+                                <div class="input-group">
+                                    <input type="text" name="cidade" id="cidade_veiculo" class="form-control form-control-sm" readonly/>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div> <!-- end row -->
                     <h5 class="mb-3 text-uppercase bg-light p-2"><i class="mdi mdi-earth me-1"></i> Informações do serviço</h5>
                     <div class="row">
                         <div class="col-md-3">
@@ -259,13 +355,15 @@ $(document).ready(function () {
                     <input type="hidden" name="classe_status" value="badge badge-outline-warning"/>
                     <input type="hidden" name="status" value="PENDENTE"/>
                     <input type="hidden" name="cliente_id" id="cliente_id" value=""/>
+                    <input type="text" name="documento_id" id="documento_id" value=""/>
+
 
 
                     <div class="row">
                         <div class="col-lg-6">
                         </div>
                         <div class="col-lg-6 text-end">
-                            <a href="{{ route('procuracoes.index')}}" class="btn btn-secondary btn-sm">Cancelar</a>
+                            <a href="{{ route('ordensdeservicos.index')}}" class="btn btn-secondary btn-sm">Cancelar</a>
                             <button type="submit" class="btn btn-success btn-sm">Cadastrar</button>
                         </div>
                     </div>

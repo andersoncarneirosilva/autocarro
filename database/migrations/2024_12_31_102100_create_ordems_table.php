@@ -14,6 +14,8 @@ return new class extends Migration
     Schema::create('ordems', function (Blueprint $table) {
         $table->id(); // ID único para a tabela
         $table->foreignId('cliente_id')->constrained()->cascadeOnDelete(); // Relacionamento com a tabela de clientes
+        $table->foreignId('documento_id')->constrained()->cascadeOnDelete(); // Relacionamento com a tabela de clientes
+        //$table->string('veiculo_id'); // Serviço resumido
         $table->string('tipo_servico'); // Serviço resumido
         $table->text('servico'); // Descrição detalhada do serviço
         $table->decimal('valor_total', 10, 2); // Valor monetário (R$99999999.99)

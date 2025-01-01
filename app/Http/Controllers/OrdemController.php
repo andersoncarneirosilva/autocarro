@@ -6,6 +6,11 @@ use Illuminate\Http\Request;
 use App\Models\Ordem;
 use App\Models\Cliente;
 use App\Models\Servico;
+use App\Models\Documento;
+use Smalot\PdfParser\Parser;
+use Illuminate\Support\Facades\Auth;
+use App\Models\User;
+use FPDF;
 class OrdemController extends Controller
 {
     protected $model;
@@ -41,9 +46,10 @@ class OrdemController extends Controller
 
     public function create(){
         $clientes = Cliente::all();
+        $veiculos = Documento::all();
         $servicos = Servico::all();
         //dd($clientes);
-        return view('ordensdeservicos.create', compact(['clientes','servicos']));
+        return view('ordensdeservicos.create', compact(['clientes','servicos','veiculos']));
 
     }
 
@@ -73,7 +79,7 @@ class OrdemController extends Controller
 
     public function store(Request $request){
         // Obtendo dados específicos do request
-        $data = $request->only(['cliente_id', 'tipo_servico', 'servico', 'valor_servico', 'classe_status', 'status']);
+        $data = $request->only(['cliente_id', 'tipo_servico', 'documento_id', 'servico', 'valor_servico', 'classe_status', 'status']);
 
         // Garantir que 'cliente_id' seja um valor único
         if (is_array($data['cliente_id'])) {
@@ -110,6 +116,37 @@ class OrdemController extends Controller
         }
         return redirect()->route('ordensdeservicos.index');
     }
+
+    public function gerarPDFOrdemServico(Request $request, $id)
+{
+    // Obtém os dados da ordem de serviço com o relacionamento do cliente
+    $ordemServico = Ordem::with('cliente')->find($id);
+    $veiculo = Ordem::with('documento')->find($id);
+    //dd($veiculo);
+
+    // Verifica se a ordem de serviço foi encontrada
+    if (!$ordemServico) {
+        return redirect()->back()->with('error', 'Ordem de serviço não encontrada');
+    }
+
+    // Carregar a data inicial e final, caso precise filtrar ou exibir no relatório
+    $dataI = $request->input('dataInicial');
+    $dataF = $request->input('dataFinal');
+    
+    // Aqui você pode aplicar algum filtro se necessário, como:
+    // $ordemServico = Ordem::whereBetween('created_at', [$dataI . ' 00:00:00', $dataF . ' 23:59:59'])->get();
+
+    // Carrega a view com os dados da ordem de serviço
+    $view = view('relatorios.ordem-de-servico', compact('ordemServico', 'dataI', 'dataF', 'veiculo'))->render();
+
+    // Criação do PDF utilizando o DomPDF
+    $pdf = app('dompdf.wrapper');
+    $pdf->loadHTML($view)->setPaper('a4', 'portrait'); // Se preferir 'landscape' pode ser ajustado aqui
+
+    // Retorna o PDF para download
+    return $pdf->stream('relatorio_ordem_servico.pdf');
+}
+
 
 
 }

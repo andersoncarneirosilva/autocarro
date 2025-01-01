@@ -136,6 +136,7 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/ordensdeservicos/buscar', [OrdemController::class, 'buscarClientes'])->name('ordensdeservicos.buscar');
     Route::get('/ordensdeservicos', [OrdemController::class, 'index'])->name('ordensdeservicos.index');
     
+    Route::get('/ordem-servico/{id}/rel-ordem', [OrdemController::class, 'gerarPDFOrdemServico'])->name('rel-ordem');
     Route::delete('/ordensdeservicos/{id}', [OrdemController::class, 'destroy'])->name('ordensdeservicos.destroy');
     Route::put('/ordensdeservicos/{id}', [OrdemController::class, 'update'])->name('ordensdeservicos.update');
     Route::get('/ordensdeservicos/{id}/edit', [OrdemController::class, 'edit'])->name('ordensdeservicos.edit');

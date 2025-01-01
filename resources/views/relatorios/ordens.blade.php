@@ -123,8 +123,9 @@
                 <tr>
                     <th>#</th>
                     <th>Cliente</th>
-                    <th>Tipo de Serviço</th>
-                    <th>Serviço</th>
+                    <th>Serviços</th>
+                    <th>Valor</th>
+                    <th>Status</th>
                     <th>Cadastrado em</th>
                 </tr>
             </thead>
@@ -135,7 +136,8 @@
                     <td>{{ $cli->cliente->nome }}</td>
                     <td>{{ $cli->tipo_servico }}</td>
                     <td>R$ {{ number_format($cli->valor_total, 2, ',', '.') }}</td>
-                    <td>{{ Carbon\Carbon::parse($cli->created_at)->format('d/m/Y') }}</td>
+                    <td>{{ $cli->status }}</td>
+                    <td>{{ Carbon\Carbon::parse($cli->created_at)->format('d/m/Y - H:i') }}</td>
                 </tr>
                 @endforeach
             </tbody>

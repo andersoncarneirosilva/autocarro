@@ -70,8 +70,7 @@
                             <tr>
                                 <th>#</th>
                                 <th>Cliente</th>
-                                <th>Tipo de Serviço</th>
-                                <th>Serviço</th>
+                                <th>Serviços</th>
                                 <th>Valor</th>
                                 <th>Status</th>
                                 <th>Gerado em</th>
@@ -82,18 +81,17 @@
                         <tbody>
                             @foreach ($ordens as $orden)
                                 <tr>
-                                    <td>{{ $orden->cliente->id }}</td>
+                                    <td>{{ $orden->id }}</td>
                                     <td>{{ $orden->cliente->nome }}</td>
                                     <td>{{ $orden->tipo_servico }}</td>
-                                    <td>{{ $orden->servico }}</td>
                                     <td>R$ {{ number_format($orden->valor_total, 2, ',', '.') }}</td>
                                     <td><span class="{{ $orden->classe_status }}">{{ $orden->status }}</span></td>
 
                                     <td>{{ Carbon\Carbon::parse($orden->created_at)->format('d/m/Y') }}</td>
                                     <td class="table-action">
-                                                <a href="{{ $orden->id }}" class="action-icon" target="blank">
-                                                    <i class="mdi mdi-printer"></i>
-                                                </a>
+                                        <a href="{{ route('rel-ordem', $orden->id) }}" class="action-icon" target="_blank"/>
+                                            <i class="mdi mdi-printer"></i>
+                                        </a>
                                                 
                                         <a href="{{ route('ordensdeservicos.destroy', $orden->id) }}"
                                             class="action-icon mdi mdi-delete text-danger" data-confirm-delete="true"></a>

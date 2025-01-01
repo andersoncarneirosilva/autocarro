@@ -37,7 +37,7 @@
                         <button type="button" class="btn btn-primary btn-sm" data-bs-toggle="modal"
                             data-bs-target="#standard-modal">Cadastrar</button>
                             @endif
-                            <a href="{{ route('relatorio-veiculos')}}" target="_blank" class="btn btn-danger btn-sm">Relatório</a>
+                            <a href="{{ route('relatorio-veiculos') }}" target="_blank" class="btn btn-danger btn-sm">Relatório</a>
                         {{-- <button class="btn btn-secondary btn-sm" id="deleteAllSelectedRecord" disabled><i
                                 class="fa-solid fa-trash"></i></button> --}}
                     </div>

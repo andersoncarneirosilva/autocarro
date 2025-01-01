@@ -11,6 +11,7 @@ class Ordem extends Model
 
     protected $fillable = [
         'cliente_id',
+        'documento_id',
         'tipo_servico',
         'servico',
         'valor_total',
@@ -21,5 +22,10 @@ class Ordem extends Model
     public function cliente()
     {
         return $this->belongsTo(Cliente::class);
+    }
+
+    public function documento()
+    {
+        return $this->belongsTo(Documento::class, 'documento_id', 'id');
     }
 }
