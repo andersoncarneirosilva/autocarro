@@ -3,8 +3,8 @@
 namespace Database\Seeders;
 
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
-use Illuminate\Database\Cliente;
-use App\Models\Documento;
+use Illuminate\Database\Seeder;
+use App\Models\Cliente;
 
 class ClienteSeeder extends Seeder
 {
@@ -20,11 +20,10 @@ class ClienteSeeder extends Seeder
             'email' => 'mari@gmail.com',
             'cep' => '92.035-580',
             'endereco' => 'Rua Santa Tereza',
-            'numero' => '214'
+            'numero' => '214',
             'bairro' => 'Olaria',
             'cidade' => 'Canoas',
             'estado' => 'RS',
-
         ]);
     }
 }

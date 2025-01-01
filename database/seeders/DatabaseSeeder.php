@@ -20,6 +20,8 @@ class DatabaseSeeder extends Seeder
             DocSeeder::class, // Adicione outros seeders conforme necessário
             ProcuracaoSeeder::class,
             ConfigProcSeeder::class,
+            ServicoSeeder::class,
+            ClienteSeeder::class,
         ]);
         
     }

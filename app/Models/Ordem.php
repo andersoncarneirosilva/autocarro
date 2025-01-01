@@ -13,8 +13,11 @@ class Ordem extends Model
         'cliente_id',
         'documento_id',
         'tipo_servico',
-        'servico',
+        'descricao',
+        'valor_servico',
+        'taxa_administrativa',
         'valor_total',
+        'forma_pagamento',
         'classe_status',
         'status',
     ];

@@ -17,8 +17,11 @@ return new class extends Migration
         $table->foreignId('documento_id')->constrained()->cascadeOnDelete(); // Relacionamento com a tabela de clientes
         //$table->string('veiculo_id'); // Serviço resumido
         $table->string('tipo_servico'); // Serviço resumido
-        $table->text('servico'); // Descrição detalhada do serviço
-        $table->decimal('valor_total', 10, 2); // Valor monetário (R$99999999.99)
+        $table->text('descricao');
+        $table->decimal('valor_servico', 10, 2);
+        $table->decimal('taxa_administrativa', 10, 2);
+        $table->decimal('valor_total', 10, 2);
+        $table->string('forma_pagamento');
         $table->text('classe_status');
         $table->text('status'); // Descrição detalhada do serviço
         $table->timestamps(); // Timestamps padrão para created_at e updated_at
