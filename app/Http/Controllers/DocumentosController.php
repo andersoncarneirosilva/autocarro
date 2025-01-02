@@ -339,7 +339,7 @@ class DocumentosController extends Controller
             alert()->error('Usuário não encontrado.');
             return redirect()->back();
         }
-        Mail::to( config('mail.from.address'))->send(new SendEmail($data, $caminhoPDF));
+        //Mail::to( config('mail.from.address'))->send(new SendEmail($data, $caminhoPDF));
         if(Procuracao::create($data)){
             // Obter o ID do usuário logado
             

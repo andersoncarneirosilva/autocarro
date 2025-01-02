@@ -21,7 +21,8 @@
         <script src="{{ url('assets/js/hyper-config.js') }}"></script>
         <!-- App css -->
         <link href="{{ url('assets/css/app-saas.css') }}" rel="stylesheet" type="text/css" id="app-style" />
-        
+        <script src="https://cdn.jsdelivr.net/npm/apexcharts@3.41.0"></script>
+
         <!-- Icons css -->
         <link href="{{ url('assets/css/icons.min.css') }}" rel="stylesheet" type="text/css" />
         
@@ -157,5 +158,7 @@
         <script src="{{ url('assets/vendor/handlebars/handlebars.min.js') }}"></script>
         <script src="{{ url('assets/vendor/typeahead.js/typeahead.bundle.min.js') }}"></script>
         <!-- Script do Select2 -->
+
+        
     </body>
 </html> 
