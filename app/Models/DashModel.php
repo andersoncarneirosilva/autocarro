@@ -27,4 +27,8 @@ class DashModel extends Model
         $countAd = DB::table('procuracaos')->count();
         return $countAd;
     }
+    public function getCountOrdens(){
+        $countOrder = DB::table('ordems')->count();
+        return $countOrder;
+    }
 }

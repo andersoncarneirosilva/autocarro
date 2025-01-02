@@ -27,6 +27,7 @@ class DashController extends Controller
         //$users = $this->model->getUsersDash();
         $countDocs = $this->model->getCountDocs();
         $countProcs = $this->model->getCountProcs();
+        $countOrder = $this->model->getCountOrdens();
         $countCnh = 12;
 
         // Pega o mês e ano atual
@@ -62,6 +63,14 @@ class DashController extends Controller
         
         //return view('sua-view', compact('today'));
 
-        return view('dashboard.index', compact(['countDocs', 'countProcs', 'countCnh', 'emprestimos', 'today', 'totalOrdensAtual','totalOrdensAnterior','porcentagem']));
+        return view('dashboard.index', compact(['countDocs', 
+                                                'countProcs', 
+                                                'countOrder', 
+                                                'countCnh', 
+                                                'emprestimos', 
+                                                'today', 
+                                                'totalOrdensAtual',
+                                                'totalOrdensAnterior',
+                                                'porcentagem']));
     }
 }
