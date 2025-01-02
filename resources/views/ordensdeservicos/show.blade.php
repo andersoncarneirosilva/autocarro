@@ -40,12 +40,15 @@
                     <div class="col-sm-6">
                         <div class="float-start mt-3">
                             <p><b>Serviço: </b>
-                                @if(is_array($ordens->tipo_servico))
-                                    {{ implode(' / ', $ordens->tipo_servico) }}
-                                @else
-                                    {{ $ordens->tipo_servico }}
-                                @endif
+                                @php
+                                $tiposServico = ''; // Inicializa uma variável para acumular os tipos
+                                foreach ($valoresServicos as $index => $servico) {
+                                    $tiposServico .= $servico['tipo'] . ' - '; // Adiciona o tipo com o traço
+                                }
+                                echo rtrim($tiposServico, ' - '); // Remove o último traço
+                            @endphp
                             </p>
+                            
                             <p class="text-muted font-13">Descrição: {{ $ordens->descricao }} </p>
                         </div>
 
@@ -55,7 +58,7 @@
                             <p class="font-13"><strong>Ordem: </strong> <span class="float-end">OS: 195{{ $order->id }}</span></p>
                             <p class="font-13"><strong>Data: </strong> {{ Carbon\Carbon::parse($order->created_at)->format('d/m') }}
                                 as {{ Carbon\Carbon::parse($order->created_at)->format('H:i') }}</p>
-                            <p class="font-13"><strong>Status: </strong> <span class="{{ $order->classe_status }} float-end">{{ $order->status }}</span></p>
+                            <p class="font-13"><strong>Status: </strong><span class="{{ $order->classe_status }} float-end">{{ $order->status }}</span></p>
                         </div>
                     </div><!-- end col -->
                 </div>
@@ -159,5 +162,11 @@
     </div> <!-- end col-->
 </div>
 
+<div class="d-print-none mt-4">
+    <div class="text-end">
+        <a href="javascript:void(0);" class="btn btn-primary" onclick="window.print();"><i class="mdi mdi-printer"></i> Print</a>
+        <a href="javascript: void(0);" class="btn btn-info">Submit</a>
+    </div>
+</div>
 
-    @endsection
+@endsection

@@ -52,11 +52,16 @@ public function show($id)
         return redirect()->route('ordensdeservicos.index');
     }
 
-    // Carregar dados da ordem
-    $ordens = Ordem::with('cliente')->find($id);
+    // Carregar dados da ordem com os relacionamentos necessários
+    $ordens = Ordem::with(['cliente', 'documento'])->find($id); // Melhor carregar cliente e documento ao mesmo tempo
 
     // Decodificar o tipo_servico em array, se for um JSON
     $tiposServico = json_decode($ordens->tipo_servico, true);
+
+    // Verifique se tipo_servico foi decodificado corretamente
+    if (!is_array($tiposServico)) {
+        $tiposServico = []; // Se não for um array válido, defina como array vazio
+    }
 
     // Obter os valores para cada tipo de serviço
     $valoresServicos = [];
@@ -74,8 +79,6 @@ public function show($id)
             'valor_total' => $valor_total
         ];
     }
-
-    // Carrega o veículo e serviços
     $veiculo = Ordem::with('documento')->find($id);
     $servicos = Servico::all();
 
@@ -184,7 +187,7 @@ public function show($id)
 //
         // Salvando no banco de dados
         //dd($data);
-        //Ordem::create($data);
+        Ordem::create($data);
 
         alert()->success('Ordem cadastrada com sucesso!');
         return redirect()->route('ordensdeservicos.index');
