@@ -7,7 +7,9 @@ use MercadoPago\SDK;
 use MercadoPago\Payment;
 use MercadoPago\PaymentMethod;
 use MercadoPago\MPRequestOptions;
-
+use MercadoPago\Client\Payment\PaymentClient;
+use MercadoPago\Client\Common\RequestOptions;
+use MercadoPago\MercadoPagoConfig;
 class PaymentController extends Controller
 {
     public function index(Request $request){
@@ -18,46 +20,51 @@ class PaymentController extends Controller
 
 
     public function createPayment(Request $request)
-    {
-        // Definindo o token de acesso do Mercado Pago
-        SDK::setAccessToken(env('MERCADOPAGO_ACCESS_TOKEN'));
+{
+    //dd($request);
+    // Configuração do token de acesso
+    MercadoPagoConfig::setAccessToken("TEST-2084613033449498-123021-969ac33b8b6dc086af4603bc3bbde743-168922160");
 
-        // Criação de um objeto MPRequestOptions para customizar a requisição
-        $requestOptions = new MPRequestOptions();
-        $requestOptions->setCustomHeaders(["X-Idempotency-Key: " . uniqid()]);
+    // Instância do cliente e opções de requisição
+    $client = new PaymentClient();
+    $request_options = new RequestOptions();
 
-        // Dados de pagamento recebidos via POST (ou outra fonte)
-        $paymentData = [
-            "payment_method_id" => $request->input('paymentMethodId'),
-            "transaction_amount" => (float) $request->input('transactionAmount'),
+    // Gerar uma chave única para evitar duplicidades
+    $idempotencyKey = "0d5020ed-1af6-469c-ae06-c3bec19954bb";
+
+    $request_options->setCustomHeaders([
+        "X-Idempotency-Key: $idempotencyKey"
+    ]);
+
+    // Criar pagamento
+    try {
+        $payment = $client->create([
+            "transaction_amount" => $request->transaction_amount,
+            "payment_method_id" => $request->payment_method_id,
             "payer" => [
-                "email" => $request->input('email'),
-            ]
-        ];
-
-        // Criando o pagamento via MercadoPago
-        $payment = new Payment();
-        $payment->transaction_amount = $paymentData['transaction_amount'];
-        $payment->payment_method_id = $paymentData['payment_method_id'];
-        $payment->payer = $paymentData['payer'];
-        
-        // Enviando a requisição com os parâmetros configurados
-        try {
-            $payment->save(null, $requestOptions);
-            
-            // Retornar a resposta do pagamento
-            return response()->json([
-                'status' => 'success',
-                'message' => 'Pagamento criado com sucesso!',
-                'payment' => $payment
-            ]);
-        } catch (\Exception $e) {
-            return response()->json([
-                'status' => 'error',
-                'message' => 'Erro ao processar o pagamento: ' . $e->getMessage()
-            ], 500);
+                "email" => $request->email,
+            ],
+        ], $request_options);
+    } catch (\MercadoPago\Exceptions\MPApiException $e) {
+        // Obtenha a mensagem do erro
+        echo "Erro na API: " . $e->getMessage() . "\n";
+    
+        // Se disponível, obtenha o código HTTP e os detalhes da resposta
+        if (method_exists($e, 'getHttpStatusCode')) {
+            echo "Código HTTP: " . $e->getHttpStatusCode() . "\n";
         }
+        if (method_exists($e, 'getApiResponse')) {
+            echo "Detalhes da Resposta: " . json_encode($e->getApiResponse(), JSON_PRETTY_PRINT) . "\n";
+        }
+    
+        exit;
     }
+    
+
+    // Retornar resposta ou depuração
+    return response()->json($payment);
+}
+
 
 
 }

@@ -16,7 +16,7 @@ return new class extends Migration
         $table->foreignId('cliente_id')->constrained()->cascadeOnDelete(); // Relacionamento com a tabela de clientes
         $table->foreignId('documento_id')->constrained()->cascadeOnDelete(); // Relacionamento com a tabela de clientes
         //$table->string('veiculo_id'); // Serviço resumido
-        $table->string('tipo_servico'); // Serviço resumido
+        $table->json('tipo_servico'); // Serviço resumido
         $table->text('descricao');
         $table->decimal('valor_servico', 10, 2);
         $table->decimal('taxa_administrativa', 10, 2);

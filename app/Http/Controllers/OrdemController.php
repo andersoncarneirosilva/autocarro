@@ -20,30 +20,69 @@ class OrdemController extends Controller
         $this->model = $order;
     }
 
-    public function index(Request $request){
-        $title = 'Excluir!';
-        $text = "Deseja excluir essa ordem?";
-        confirmDelete($title, $text);
+    public function index(Request $request)
+{
+    $title = 'Excluir!';
+    $text = "Deseja excluir essa ordem?";
+    confirmDelete($title, $text);
 
-        // Carrega as ordens com os clientes relacionados
-        $ordens = Ordem::with('cliente')->paginate(10);
-        $clientes = Cliente::all();
-        $servs = Servico::all();
-        
-        return view('ordensdeservicos.index', compact(['ordens', 'clientes']));
-    }
+    // Carrega as ordens com os clientes relacionados
+    $ordens = Ordem::with('cliente')->paginate(10);
+    $clientes = Cliente::all();
+    $servs = Servico::all();
 
-    public function show($id){
-        if(!$order = $this->model->find($id)){
-            return redirect()->route('ordensdeservicos.index');
+    // Manipula o campo tipo_servico para garantir que seja um array
+    foreach ($ordens as $orden) {
+        // Decodifica o campo tipo_servico para um array se for um JSON
+        if ($orden->tipo_servico) {
+            $orden->tipo_servico = json_decode($orden->tipo_servico, true); // Converte para array
         }
-
-        $title = 'Excluir!';
-        $text = "Deseja excluir esse usuário?";
-        confirmDelete($title, $text);
-        
-        return view('ordensdeservicos.show', compact('order'));
     }
+
+    // Passa os dados para a view
+    return view('ordensdeservicos.index', compact(['ordens', 'clientes']));
+}
+
+
+public function show($id)
+{
+    // Encontre a ordem
+    $order = $this->model->find($id);
+    if (!$order) {
+        return redirect()->route('ordensdeservicos.index');
+    }
+
+    // Carregar dados da ordem
+    $ordens = Ordem::with('cliente')->find($id);
+
+    // Decodificar o tipo_servico em array, se for um JSON
+    $tiposServico = json_decode($ordens->tipo_servico, true);
+
+    // Obter os valores para cada tipo de serviço
+    $valoresServicos = [];
+    foreach ($tiposServico as $tipo) {
+        // Obter valor e taxa de cada tipo de serviço
+        $valor_servico = $this->getValorServico($tipo);
+        $taxa_administrativa = $this->getTaxaAdministrativa($tipo);
+        $valor_total = $valor_servico + $taxa_administrativa;
+
+        // Adicionando os valores ao array
+        $valoresServicos[] = [
+            'tipo' => $tipo,
+            'valor_servico' => $valor_servico,
+            'taxa_administrativa' => $taxa_administrativa,
+            'valor_total' => $valor_total
+        ];
+    }
+
+    // Carrega o veículo e serviços
+    $veiculo = Ordem::with('documento')->find($id);
+    $servicos = Servico::all();
+
+    return view('ordensdeservicos.show', compact(['order', 'ordens', 'veiculo', 'servicos','valoresServicos']));
+}
+
+
 
     public function create(){
         $clientes = Cliente::all();
@@ -78,53 +117,115 @@ class OrdemController extends Controller
 
 
 
-    public function store(Request $request){
+    public function store(Request $request)
+{
+    try {
         // Obtendo dados específicos do request
         $data = $request->only([
             'cliente_id', 
             'documento_id',
             'tipo_servico',
             'descricao',
-            'valor_servico',
-            'taxa_administrativa',
-            'valor_total',
             'forma_pagamento',
             'classe_status',
             'status',
         ]);
-        
-        // Tratamento dos valores monetários para remover qualquer caractere não visível (como espaços não quebráveis) e símbolos de moeda
+        //$valor_servico = $this->getValorServico($request->tipo_servico);
+       
+
+        // Verificar se tipo_servico é um array
+        if (is_array($data['tipo_servico'])) {
+            // Inicializando os valores totais para acumular
+            $valor_servico_total = 0;
+            $taxa_administrativa_total = 0;
+            $valor_total_total = 0;
+            
+            // Array para armazenar os valores dos serviços
+            $valores_servicos = [];
+
+            // Processar os tipos de serviço e calcular os valores
+            foreach ($data['tipo_servico'] as $tipo) {
+                // Aqui você chama as funções para obter os valores de cada tipo de serviço
+                $valor_servico = $this->getValorServico($tipo);  // Função para obter o valor
+                $taxa_administrativa = $this->getTaxaAdministrativa($tipo);  // Função para obter a taxa
+                $valor_total = $valor_servico + $taxa_administrativa;
+                
+                // Armazenar os valores para cada tipo de serviço
+                $valores_servicos[] = [
+                    'tipo' => $tipo,
+                    'valor_servico' => $valor_servico,
+                    'taxa_administrativa' => $taxa_administrativa,
+                    'valor_total' => $valor_total
+                ];
+
+                // Acumulando os totais
+                $valor_servico_total += $valor_servico;
+                $taxa_administrativa_total += $taxa_administrativa;
+                $valor_total_total += $valor_total;
+            }
+
+            // Armazenando os valores dos serviços no array $data
+            $data['valores_servicos'] = $valores_servicos;
+            //dd($data['valores_servicos']);
+            
+            // Convertendo tipo_servico em JSON (já que pode ser um array)
+            $data['tipo_servico'] = json_encode($data['tipo_servico']);
+
+
+
+        } else {
+            throw new \Exception("O campo 'tipo_servico' precisa ser um array.");
+        }
+
+        // Remover formatação de R$ e valores extra
         $data['valor_servico'] = str_replace(['R$', '.', ',', "\u{A0}"], ['', '', '.', ''], $request->valor_servico);
         $data['taxa_administrativa'] = str_replace(['R$', '.', ',', "\u{A0}"], ['', '', '.', ''], $request->taxa_administrativa);
         $data['valor_total'] = str_replace(['R$', '.', ',', "\u{A0}"], ['', '', '.', ''], $request->valor_total);
-    
-        // Garantir que 'cliente_id' seja um valor único
-        if (is_array($data['cliente_id'])) {
-            $data['cliente_id'] = $data['cliente_id'][0]; // Pegando o primeiro valor do array
-        }
-    
-        // Se 'tipo_servico' for um array, vamos transformar em uma string
-        if (is_array($data['tipo_servico'])) {
-            $data['tipo_servico'] = implode(',', $data['tipo_servico']); // Transforma o array em uma string separada por vírgulas
-        }
-    
-        // Tente criar o registro
-        try {
-            $ordemServico = $this->model->create($data);
-    
-            if ($ordemServico) {
-                alert()->success('Ordem cadastrada com sucesso!');
-                return redirect()->route('ordensdeservicos.index');
-            }
-    
-            alert()->error('Erro ao cadastrar a ordem!');
-            return redirect()->route('ordensdeservicos.index');
-        } catch (\Exception $e) {
-            // Caso ocorra algum erro, captura e exibe mensagem
-            alert()->error('Erro ao cadastrar a ordem: ' . $e->getMessage());
-            return redirect()->route('ordensdeservicos.index');
-        }
+//
+        // Salvando no banco de dados
+        //dd($data);
+        //Ordem::create($data);
+
+        alert()->success('Ordem cadastrada com sucesso!');
+        return redirect()->route('ordensdeservicos.index');
+
+    } catch (\Exception $e) {
+        alert()->error('Erro ao cadastrar a ordem!')->persistent('Fechar');
+        return redirect()->route('ordensdeservicos.index');
     }
+}
+
+private function getValorServico($tipo)
+{
+    //dd($tipo);
+    // Função para buscar o valor do serviço, baseado no tipo
+    $servico = Servico::where('nome_servico', $tipo)->first();
+    $valor_servico = $servico->valor_servico;
+    //dd("Valor servico: " . $valor_servico);
+    
+    if ($servico) {
+        return $servico->valor_servico; // Retorna o valor do serviço
+    }
+
+    return 0; // Retorna 0 caso o serviço não seja encontrado
+}
+
+private function getTaxaAdministrativa($tipo)
+{
+    //dd("Tipo:" . $tipo);
+    // Função para buscar a taxa administrativa, baseado no tipo
+    $servico = Servico::where('nome_servico', $tipo)->first(); // Ajuste conforme o nome da coluna 'tipo'
+    
+    if ($servico) {
+        return $servico->taxa_servico; // Retorna a taxa administrativa do serviço
+    }
+
+    return 0; // Retorna 0 caso o serviço não seja encontrado
+}
+
+
+    
+        
     
 
     public function destroy($id){

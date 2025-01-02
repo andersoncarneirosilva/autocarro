@@ -89,10 +89,11 @@
                                             <div class="flex-shrink-0 me-3">
                                                 <div class="avatar-sm">
                                                     <span class="avatar-title bg-success-lighten text-success rounded">
-                                                        <i class="mdi mdi-file-account-outline font-24"></i>
+                                                        <i class="mdi mdi-credit-card-chip-outline font-24"></i>
                                                     </span>
                                                 </div>
                                             </div>
+                                            
                                             <div class="flex-grow-1">
                                                 <h5 class="mt-0 mb-1">Seu saldo: 
                                                     @if(auth()->user()->credito <= 2)
@@ -102,7 +103,9 @@
                                                     @endif
                                                 </h5>
                                                     @if(auth()->user()->credito <= 2)
-                                                    <a href="#">Solicitar créditos</a>
+                                                    <a href="https://api.whatsapp.com/send/?phone=51994867806" target="_blank" style="color: #0b8638;">
+                                                        <i class="uil uil-whatsapp"></i> Solicitar créditos
+                                                    </a>
                                                     @endif
                                                 
                                             </div>

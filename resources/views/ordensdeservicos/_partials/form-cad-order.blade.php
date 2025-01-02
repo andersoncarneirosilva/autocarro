@@ -360,7 +360,7 @@ $(document).ready(function() {
                     <br>    
                     <!-- CAMPOS HIDDEN -->
                     <input type="hidden" name="classe_status" value="badge badge-outline-warning"/>
-                    <input type="hidden" name="status" value="PENDENTE"/>
+                    <input type="hidden" name="status" value="EM ANDAMENTO"/>
                     <input type="hidden" name="cliente_id" id="cliente_id" value=""/>
                     <input type="hidden" name="documento_id" id="documento_id" value=""/>
 

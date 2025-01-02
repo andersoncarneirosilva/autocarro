@@ -19,79 +19,27 @@
 </div>
 <br>
 
-<script>
-  const mp = new MercadoPago("TEST-3161681d-97f2-493c-a588-0f70752b1c5c");
-</script>
-<script>
 
-(async function getIdentificationTypes() {
-      try {
-        const identificationTypes = await mp.getIdentificationTypes();
-        const identificationTypeElement = document.getElementById('form-checkout__identificationType');
+<?php
+  use MercadoPago\Client\Payment\PaymentClient;
+  use MercadoPago\Client\Common\RequestOptions;
+  use MercadoPago\MercadoPagoConfig;
 
-        createSelectOptions(identificationTypeElement, identificationTypes);
-      } catch (e) {
-        return console.error('Error getting identificationTypes: ', e);
-      }
-    })();
+  MercadoPagoConfig::setAccessToken("TEST-2084613033449498-123021-969ac33b8b6dc086af4603bc3bbde743-168922160");
 
-    function createSelectOptions(elem, options, labelsAndKeys = { label: "name", value: "id" }) {
-      const { label, value } = labelsAndKeys;
+  $client = new PaymentClient();
+  $request_options = new RequestOptions();
+  $request_options->setCustomHeaders(["X-Idempotency-Key: <SOME_UNIQUE_VALUE>"]);
 
-      elem.options.length = 0;
-
-      const tempOptions = document.createDocumentFragment();
-
-      options.forEach(option => {
-        const optValue = option[value];
-        const optLabel = option[label];
-
-        const opt = document.createElement('option');
-        opt.value = optValue;
-        opt.textContent = optLabel;
-
-        tempOptions.appendChild(opt);
-      });
-
-      elem.appendChild(tempOptions);
-    }
-
-</script>
-<form id="form-checkout" action="{{ route('pagamentos.store') }}" method="post">
-  @csrf
-  <div>
-    <div>
-      <label for="payerFirstName">Nome</label>
-      <input id="form-checkout__payerFirstName" name="payerFirstName" type="text">
-    </div>
-    <div>
-      <label for="payerLastName">Sobrenome</label>
-      <input id="form-checkout__payerLastName" name="payerLastName" type="text">
-    </div>
-    <div>
-      <label for="email">E-mail</label>
-      <input id="form-checkout__email" name="email" type="text">
-    </div>
-    <div>
-      <label for="identificationType">Tipo de documento</label>
-      <select id="form-checkout__identificationType" name="identificationType" type="text"></select>
-    </div>
-    <div>
-      <label for="identificationNumber">Número do documento</label>
-      <input id="form-checkout__identificationNumber" name="identificationNumber" type="text">
-    </div>
-  </div>
-
-  <div>
-    <div>
-      <input type="hidden" name="transactionAmount" id="transactionAmount" value="100">
-      <input type="hidden" name="description" id="description" value="Nome do Produto">
-      <input type="hidden" name="payment_method_id" id="payment_method_id" value="PIX">
-      <br>
-      <button type="submit">Pagar</button>
-    </div>
-  </div>
-</form>
+  $payment = $client->create([
+ "transaction_amount" => (float) $_POST['75'],
+    "payment_method_id" => $_POST['PIX'],
+    "payer" => [
+      "email" => $_POST['<EMAIL>']
+    ]
+  ], $request_options);
+  echo implode($payment);
+?>
 
 {{-- <div class="card">
     <div class="card-body">

@@ -81,20 +81,47 @@
                         <tbody>
                             @foreach ($ordens as $orden)
                                 <tr>
-                                    <td>{{ $orden->id }}</td>
+                                    <td><a href="{{ route('ordensdeservicos.show', $orden->id) }}"
+                                            class="">{{ $orden->id }}
+                                        </a>
+                                    </td>
                                     <td>{{ $orden->cliente->nome }}</td>
-                                    <td>{{ $orden->tipo_servico }}</td>
+                                    <td>
+                                        @if(is_array($orden->tipo_servico))
+                                            {{ implode(' / ', $orden->tipo_servico) }}
+                                        @else
+                                            {{ $orden->tipo_servico }}
+                                        @endif
+                                    </td>
+                                    
                                     <td>R$ {{ number_format($orden->valor_total, 2, ',', '.') }}</td>
                                     <td><span class="{{ $orden->classe_status }}">{{ $orden->status }}</span></td>
 
                                     <td>{{ Carbon\Carbon::parse($orden->created_at)->format('d/m/Y') }}</td>
                                     <td class="table-action">
+                                        <a href="{{ route('ordensdeservicos.show', $orden->id) }}" class="action-icon">
+                                            <i class="mdi mdi-eye" title="Visualizar"></i>
+                                        </a>
                                         <a href="{{ route('rel-ordem', $orden->id) }}" class="action-icon" target="_blank"/>
                                             <i class="mdi mdi-printer"></i>
                                         </a>
                                                 
                                         <a href="{{ route('ordensdeservicos.destroy', $orden->id) }}"
                                             class="action-icon mdi mdi-delete text-danger" data-confirm-delete="true"></a>
+
+                                                <a href="#" class="dropdown-toggle arrow-none card-drop" data-bs-toggle="dropdown" aria-expanded="false">
+                                                    <i class="mdi mdi-dots-vertical"></i>
+                                                </a>
+                                                <div class="dropdown-menu dropdown-menu-end" style="">
+                                                    <!-- item-->
+                                                    <a href="javascript:void(0);" class="dropdown-item">Sales Report</a>
+                                                    <!-- item-->
+                                                    <a href="javascript:void(0);" class="dropdown-item">Export Report</a>
+                                                    <!-- item-->
+                                                    <a href="javascript:void(0);" class="dropdown-item">Profit</a>
+                                                    <!-- item-->
+                                                    <a href="javascript:void(0);" class="dropdown-item">Action</a>
+                                                </div>
                                     </td>
                                 </tr>
                             @endforeach
