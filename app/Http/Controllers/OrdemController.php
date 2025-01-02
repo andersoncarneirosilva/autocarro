@@ -227,6 +227,25 @@ private function getTaxaAdministrativa($tipo)
 }
 
 
+    public function marcarpago($id){
+
+        //dd($id);
+        $ordem = Ordem::find($id);
+
+        if (!$ordem) {
+            // Se não encontrar a ordem, redireciona com uma mensagem de erro
+            alert()->error('Ordem não encontrada!');
+            return redirect()->route('ordensdeservicos.index');
+        }
+
+        // Atualiza o status da ordem para 'pago' ou outro valor que você deseje
+        $ordem->classe_status = "badge badge-outline-success";
+        $ordem->status = 'PAGO'; // ou qualquer valor que represente o pagamento
+        $ordem->save();
+        alert()->success('Ordem alterada para pago!');
+        return redirect()->route('ordensdeservicos.index');
+        
+    }
     
         
     
@@ -244,8 +263,7 @@ private function getTaxaAdministrativa($tipo)
         return redirect()->route('ordensdeservicos.index');
     }
 
-    public function gerarPDFOrdemServico(Request $request, $id)
-{
+    public function gerarPDFOrdemServico(Request $request, $id){
     // Obtém os dados da ordem de serviço com o relacionamento do cliente
     $ordemServico = Ordem::with('cliente')->find($id);
     $veiculo = Ordem::with('documento')->find($id);

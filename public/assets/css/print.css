@@ -1,0 +1,11 @@
+@media print {
+    /* Garantir que a navbar, sidebar e outros elementos não apareçam */
+    .navbar, .sidebar, .footer {
+        display: none !important;
+    }
+
+    /* Tornar o conteúdo principal visível */
+    .content-container, .card-body, .row, .col-12 {
+        display: block !important;
+    }
+}

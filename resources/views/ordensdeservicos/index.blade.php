@@ -109,18 +109,20 @@
                                         <a href="{{ route('ordensdeservicos.destroy', $orden->id) }}"
                                             class="action-icon mdi mdi-delete text-danger" data-confirm-delete="true"></a>
 
-                                                <a href="#" class="dropdown-toggle arrow-none card-drop" data-bs-toggle="dropdown" aria-expanded="false">
-                                                    <i class="mdi mdi-dots-vertical"></i>
-                                                </a>
-                                                <div class="dropdown-menu dropdown-menu-end" style="">
-                                                    <!-- item-->
-                                                    <a href="javascript:void(0);" class="dropdown-item">Sales Report</a>
-                                                    <!-- item-->
-                                                    <a href="javascript:void(0);" class="dropdown-item">Export Report</a>
-                                                    <!-- item-->
-                                                    <a href="javascript:void(0);" class="dropdown-item">Profit</a>
-                                                    <!-- item-->
-                                                    <a href="javascript:void(0);" class="dropdown-item">Action</a>
+                                                <div class="dropdown btn-group">
+                                                    <button class="btn btn-primary btn-sm dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                                        Ações
+                                                    </button>
+                                                    <div class="dropdown-menu dropdown-menu-animated">
+                                                        <a href="javascript:void(0);" 
+                                                        onclick="confirmarPagamento({{ $orden->id }})" 
+                                                        class="dropdown-item" 
+                                                        @if($orden->status == 'PAGO') 
+                                                            style="pointer-events: none; opacity: 0.5;" 
+                                                        @endif>
+                                                        Marcar como pago
+                                                        </a>
+                                                    </div>
                                                 </div>
                                     </td>
                                 </tr>
@@ -141,24 +143,26 @@
             'search' => request()->get('search', '')
         ])->links('components.pagination') }}
     </div>
-    <!-- Single Select -->
-
-    {{-- <form action="{{ url('upload-image') }}" method="POST" enctype="multipart/form-data">
-        @csrf
-        <label for="image">Escolha uma imagem (JPG, PNG):</label>
-        <input type="file" name="image" id="image" required>
-        <button type="submit">Enviar</button>
-    </form> --}}
-       
-    
-    
-    
-   
-    
-
-
-                                                
-
 </div>
+
+<script>
+    function confirmarPagamento(id) {
+        Swal.fire({
+            title: 'Você tem certeza?',
+            text: "Deseja marcar esta ordem como paga?",
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonText: 'Sim, marcar como pago!',
+            cancelButtonText: 'Cancelar',
+            reverseButtons: true
+        }).then((result) => {
+            if (result.isConfirmed) {
+                // Se o usuário confirmar, redireciona para a rota de marcar pago
+                window.location.href = "{{ url('ordensdeservicos') }}/" + id + "/marcar-pago";
+            }
+        });
+    }
+</script>
+
 
     @endsection

@@ -15794,8 +15794,44 @@ select.form-control-sm:not([size]):not([multiple]) {
   --ct-popover-body-padding-x: 1rem !important;
   --ct-popover-body-padding-y: .5rem !important;
 }
-
 @media print {
+  /* Oculta os elementos que não são necessários para impressão */
+  .leftside-menu, .navbar-custom, .footer {
+      display: none !important;
+  }
+
+  /* Garante que o conteúdo do .card-body seja visível */
+  .card-body {
+      display: block !important;
+      visibility: visible !important;
+      opacity: 1 !important;
+  }
+
+  /* Remover margens e padding extras na impressão */
+  .content, .content-page, .container, .row {
+      padding: 0 !important;
+      margin: 0 !important;
+  }
+
+  /* Remover a sombra do card */
+  .card {
+      box-shadow: none !important;
+  }
+
+  /* Ajustar o tamanho da fonte para uma impressão mais legível */
+  body {
+      font-size: 14px !important;
+      line-height: 1.5 !important;
+  }
+
+  /* Garantir que o conteúdo dentro do .card-body seja visível */
+  .card-body p, .card-body h1, .card-body h2, .card-body h3, .card-body h4 {
+      visibility: visible !important;
+  }
+}
+
+
+/* @media print {
   .leftside-menu,
 .end-bar,
 .page-title-box,
@@ -15815,7 +15851,7 @@ body {
     -webkit-box-shadow: none;
             box-shadow: none;
   }
-}
+} */
 .progress-sm {
   height: 5px;
 }
