@@ -33,13 +33,13 @@
                         <div class="col-md-6">
                             <div class="mb-3">
                                 <label class="form-label">Nome: <span style="color: red;">*</span></label>
-                                <input type="text" class="form-control" name="nome" id="nome_cliente">
+                                <input type="text" class="form-control" name="nome" id="nome_cliente" required>
                             </div>
                         </div>
                         <div class="col-md-6">
                             <div class="mb-3">
                                 <label class="form-label">CPF: <span style="color: red;">*</span></label>
-                                <input type="text" class="form-control" name="cpf" id="cpf" maxlength="14">
+                                <input type="text" class="form-control" name="cpf" id="cpf" maxlength="14" required>
                             </div>
                         </div> <!-- end col -->
                     </div> <!-- end row -->
@@ -48,13 +48,13 @@
                         <div class="col-md-6">
                             <div class="mb-3">
                                 <label class="form-label">Fone/Whatsapp: <span style="color: red;">*</span></label>
-                                <input type="text" class="form-control" name="fone" id="fone" onkeyup="handlePhone(event)"/>
+                                <input type="text" class="form-control" name="fone" id="fone" onkeyup="handlePhone(event)" required/>
                             </div>
                         </div>
                         <div class="col-md-6">
                             <div class="mb-3">
                                 <label class="form-label">Email: <span style="color: red;">*</span></label>
-                                <input type="text" class="form-control" name="email">
+                                <input type="text" class="form-control" name="email" required>
                             </div>
                         </div>
                     </div> <!-- end row -->
@@ -66,7 +66,7 @@
                             <div class="mb-2">
                                 <label for="social-fb" class="form-label">CEP: <span style="color: red;">*</span></label>
                                 <div class="input-group">
-                                    <input type="text" class="form-control" name="cep" id="cep" onblur="pesquisacep(this.value);">
+                                    <input type="text" class="form-control" name="cep" id="cep" onblur="pesquisacep(this.value);" required>
                                 </div>
                             </div>
                         </div>
@@ -74,7 +74,7 @@
                             <div class="mb-2">
                                 <label for="social-fb" class="form-label">Logradouro: <span style="color: red;">*</span></label>
                                 <div class="input-group">
-                                    <input type="text" name="endereco" id="rua" class="form-control"/>
+                                    <input type="text" name="endereco" id="rua" class="form-control" required/>
                                 </div>
                             </div>
                         </div>
@@ -82,7 +82,7 @@
                             <div class="mb-2">
                                 <label for="social-insta" class="form-label">Número: <span style="color: red;">*</span></label>
                                 <div class="input-group">
-                                    <input type="text" name="numero" id="numero" class="form-control"/>
+                                    <input type="text" name="numero" id="numero" class="form-control" required/>
                                 </div>
                             </div>
                         </div>
@@ -90,7 +90,7 @@
                             <div class="mb-3">
                                 <label for="social-insta" class="form-label">Bairro: <span style="color: red;">*</span></label>
                                 <div class="input-group">
-                                    <input type="text" name="bairro" id="bairro" class="form-control"/>
+                                    <input type="text" name="bairro" id="bairro" class="form-control" required/>
                                 </div>
                             </div>
                         </div>
@@ -98,7 +98,7 @@
                             <div class="mb-3">
                                 <label for="social-insta" class="form-label">Cidade: <span style="color: red;">*</span></label>
                                 <div class="input-group">
-                                    <input type="text" name="cidade" id="cidade" class="form-control"/>
+                                    <input type="text" name="cidade" id="cidade" class="form-control" required/>
                                 </div>
                             </div>
                         </div>
@@ -106,7 +106,7 @@
                             <div class="mb-3">
                                 <label for="social-insta" class="form-label">Estado: <span style="color: red;">*</span></label>
                                 <div class="input-group">
-                                    <input type="text" name="estado" id="uf" class="form-control"/>
+                                    <input type="text" name="estado" id="uf" class="form-control" required/>
                                 </div>
                             </div>
                         </div>
@@ -119,7 +119,6 @@
                         </div>
                         <div class="col-lg-6 text-end">
                             <a href="{{ route('clientes.index')}}" class="btn btn-secondary btn-sm">Cancelar</a>
-                            <button type="button" onclick="form.reset();" class="btn btn-warning btn-sm">Limpar</button>
                             <button type="submit" class="btn btn-success btn-sm">Cadastrar</button>
                         </div>
                     </div>

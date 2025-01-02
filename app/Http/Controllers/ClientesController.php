@@ -57,7 +57,7 @@ class ClientesController extends Controller
             //dd($validated);
         } catch (\Illuminate\Validation\ValidationException $e) {
             alert()->error('Todos os campos são obrigatórios!');
-            return redirect()->route('clientes.index');
+            return redirect()->route('clientes.create');
         }
 
         // Criação do cliente no banco de dados

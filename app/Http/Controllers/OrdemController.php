@@ -29,7 +29,7 @@ class OrdemController extends Controller
         $ordens = Ordem::with('cliente')->paginate(10);
         $clientes = Cliente::all();
         $servs = Servico::all();
-        dd($ordens);
+        
         return view('ordensdeservicos.index', compact(['ordens', 'clientes']));
     }
 

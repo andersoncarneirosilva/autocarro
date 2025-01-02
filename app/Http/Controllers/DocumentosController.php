@@ -30,7 +30,7 @@ class DocumentosController extends Controller
     public function index(Request $request){
 
         $title = 'Excluir!';
-        $text = "Deseja excluir esse veículo?";
+        $text = "Deseja excluir esse documento?";
         confirmDelete($title, $text);
         $clientes = Cliente::all();
         $docs = $this->model->getDocs(search: $request->search ?? '');
@@ -72,11 +72,17 @@ class DocumentosController extends Controller
 
         $pdf = $parser->parseFile($arquivo);
         
+        
         foreach ($pdf->getPages() as $numeroPagina => $pagina) {
             $textoPagina = $pagina->getText();
+            
+            $linhas = explode("\n", $textoPagina);
 
-            $validador = $this->model->validaDoc($textoPagina);
-            //dd($validador);
+            if ($linhas[3] != "SECRETARIA NACIONAL DE TRÂNSITO - SENATRAN") {
+                alert()->error('Selecione um documento 2024.');
+                return redirect()->route('documentos.index');
+            }
+
             $marca = $this->model->extrairMarca($textoPagina);
             $placa = $this->model->extrairPlaca($textoPagina);
             $chassi = $this->model->extrairChassi($textoPagina);
@@ -96,10 +102,6 @@ class DocumentosController extends Controller
             //dd($placaAnterior);
         }
 
-        if($validador == "DEPARTAMENTO NACIONAL DE TRÂNSITO - DENATRAN"){
-            alert()->error('Selecione um documento ano 2024!');
-            return redirect()->route('documentos.index');
-        }else{
             // Garante que a pasta "procuracoes" existe
             $pastaDestino = storage_path('app/public/veiculos');
             $urlPDF = asset('storage/veiculos/' . $nomeOriginal); 
@@ -141,7 +143,7 @@ class DocumentosController extends Controller
 
                 return redirect()->route('documentos.index');
             } 
-        }
+        
         
     }
 

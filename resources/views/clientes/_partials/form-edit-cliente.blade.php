@@ -118,7 +118,7 @@
                         </div>
                         <div class="col-lg-6 text-end">
                             <a href="{{ route('clientes.index')}}" class="btn btn-secondary btn-sm">Cancelar</a>
-                            <button type="submit" class="btn btn-success btn-sm">Salvar</button>
+                            <button type="submit" class="btn btn-success btn-sm">Atualizar</button>
                         </div>
                     </div>
             </div> <!-- end card body -->

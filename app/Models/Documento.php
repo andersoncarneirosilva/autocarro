@@ -49,17 +49,22 @@ class Documento extends Model
     }
 
     public function validaDoc($textoPagina){
-        // Suposição: O nome do usuário está precedido pela palavra "Nome:" ou "Nome do usuário:"
-        
-        $linhas = explode("\n", $textoPagina);
-                //dd($linhas);
-                $nome = explode("\t", $linhas[3]);
-                //dd($nome);
-                $validador = implode(', ', $nome);
-            //dd($outorgante);
 
-        // Caso nenhum nome de usuário seja encontrado
-        return $validador ;
+        $linhas = explode("\n", $textoPagina);
+
+        // Verifique se o índice 53 existe no array
+        if (isset($linhas[3])) {
+            // Se o índice existir, divida a linha
+            $nome = explode("\t", $linhas[3]);
+                    //dd($nome);
+            $validador = implode(', ', $nome);
+        } else {
+            // Se o índice não existir, lance um erro ou retorne uma mensagem específica
+            return "Erro: A linha esperada (53) não foi encontrada no texto.";
+        }
+
+        // Retorne a marca extraída ou a mensagem de erro
+        return $validador;
     }
 
     public function extrairNome($textoPagina){
