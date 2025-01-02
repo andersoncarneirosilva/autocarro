@@ -303,7 +303,7 @@ $(document).ready(function() {
                     </div> <!-- end row -->
                     <h5 class="mb-3 text-uppercase bg-light p-2"><i class="mdi mdi-earth me-1"></i> Informações do serviço</h5>
                     <div class="row">
-                        <div class="col-md-3">
+                        <div class="col-md-2">
                             <div class="mb-3">
                                 <label class="form-label">Tipo de serviço: <span style="color: red;">*</span></label>
                                 <select class="select2 form-control select2-multiple" name="tipo_servico[]" id="idCliente" data-toggle="select2" multiple="multiple" >
@@ -316,7 +316,7 @@ $(document).ready(function() {
                                 </select>
                             </div>
                         </div>
-                        <div class="col-md-3">
+                        <div class="col-md-2">
                             <div class="mb-3">
                                 <label for="social-insta" class="form-label">Valor do serviço:</label>
                                 <div class="input-group">
@@ -324,11 +324,11 @@ $(document).ready(function() {
                                 </div>
                             </div>
                         </div>
-                        <div class="col-md-3">
+                        <div class="col-md-2">
                             <div class="mb-3">
                                 <label for="social-insta" class="form-label">Taxa administrativa:</label>
                                 <div class="input-group">
-                                    <input type="text" name="taxa_servico" id="taxa_servico" class="form-control form-control-sm" required/>
+                                    <input type="text" name="taxa_administrativa" id="taxa_servico" class="form-control form-control-sm" required/>
                                 </div>
                             </div>
                         </div>
@@ -340,14 +340,21 @@ $(document).ready(function() {
                                 </div>
                             </div>
                         </div>
-                        
+                        <div class="col-md-3">
+                            <div class="mb-3">
+                                <label for="social-insta" class="form-label">Forma de pagamento:</label>
+                                <div class="input-group">
+                                    <input type="text" name="forma_pagamento" id="valor_total" class="form-control form-control-sm" required/>
+                                </div>
+                            </div>
+                        </div>
 
                        
                     </div>
                     <div class="row">
                         <div class="col-md-12">
                             <label for="social-insta" class="form-label">Descrição do serviço: <span style="color: red;">*</span></label>
-                            <textarea class="form-control" name="servico" id="servico" cols="30" rows="5"></textarea>   
+                            <textarea class="form-control" name="descricao" id="descricao" cols="30" rows="5"></textarea>   
                         </div> 
                     </div>
                     <br>    
@@ -355,7 +362,7 @@ $(document).ready(function() {
                     <input type="hidden" name="classe_status" value="badge badge-outline-warning"/>
                     <input type="hidden" name="status" value="PENDENTE"/>
                     <input type="hidden" name="cliente_id" id="cliente_id" value=""/>
-                    <input type="text" name="documento_id" id="documento_id" value=""/>
+                    <input type="hidden" name="documento_id" id="documento_id" value=""/>
 
 
 

@@ -28,7 +28,8 @@ class OrdemController extends Controller
         // Carrega as ordens com os clientes relacionados
         $ordens = Ordem::with('cliente')->paginate(10);
         $clientes = Cliente::all();
-        //dd($clientes);
+        $servs = Servico::all();
+        dd($ordens);
         return view('ordensdeservicos.index', compact(['ordens', 'clientes']));
     }
 
@@ -79,30 +80,52 @@ class OrdemController extends Controller
 
     public function store(Request $request){
         // Obtendo dados específicos do request
-        $data = $request->only(['cliente_id', 'tipo_servico', 'documento_id', 'servico', 'valor_servico', 'classe_status', 'status']);
-
+        $data = $request->only([
+            'cliente_id', 
+            'documento_id',
+            'tipo_servico',
+            'descricao',
+            'valor_servico',
+            'taxa_administrativa',
+            'valor_total',
+            'forma_pagamento',
+            'classe_status',
+            'status',
+        ]);
+        
+        // Tratamento dos valores monetários para remover qualquer caractere não visível (como espaços não quebráveis) e símbolos de moeda
+        $data['valor_servico'] = str_replace(['R$', '.', ',', "\u{A0}"], ['', '', '.', ''], $request->valor_servico);
+        $data['taxa_administrativa'] = str_replace(['R$', '.', ',', "\u{A0}"], ['', '', '.', ''], $request->taxa_administrativa);
+        $data['valor_total'] = str_replace(['R$', '.', ',', "\u{A0}"], ['', '', '.', ''], $request->valor_total);
+    
         // Garantir que 'cliente_id' seja um valor único
         if (is_array($data['cliente_id'])) {
             $data['cliente_id'] = $data['cliente_id'][0]; // Pegando o primeiro valor do array
         }
-
+    
         // Se 'tipo_servico' for um array, vamos transformar em uma string
         if (is_array($data['tipo_servico'])) {
             $data['tipo_servico'] = implode(',', $data['tipo_servico']); // Transforma o array em uma string separada por vírgulas
         }
-
-        // Caso precise calcular o valor_total, aqui está o exemplo:
-        $data['valor_total'] = str_replace(['R$', ' ', ','], ['', '', '.'], $data['valor_servico']); // Converte o valor de 'valor_servico' para número
-
+    
         // Tente criar o registro
-        if ($this->model->create($data)) {
-            alert()->success('Ordem cadastrada com sucesso!');
+        try {
+            $ordemServico = $this->model->create($data);
+    
+            if ($ordemServico) {
+                alert()->success('Ordem cadastrada com sucesso!');
+                return redirect()->route('ordensdeservicos.index');
+            }
+    
+            alert()->error('Erro ao cadastrar a ordem!');
+            return redirect()->route('ordensdeservicos.index');
+        } catch (\Exception $e) {
+            // Caso ocorra algum erro, captura e exibe mensagem
+            alert()->error('Erro ao cadastrar a ordem: ' . $e->getMessage());
             return redirect()->route('ordensdeservicos.index');
         }
-
-        alert()->error('Erro ao cadastrar a ordem!');
-        return redirect()->route('ordensdeservicos.index');
     }
+    
 
     public function destroy($id){
 
@@ -123,7 +146,7 @@ class OrdemController extends Controller
     $ordemServico = Ordem::with('cliente')->find($id);
     $veiculo = Ordem::with('documento')->find($id);
     //dd($veiculo);
-
+    $servicos = Servico::all();
     // Verifica se a ordem de serviço foi encontrada
     if (!$ordemServico) {
         return redirect()->back()->with('error', 'Ordem de serviço não encontrada');
@@ -137,7 +160,7 @@ class OrdemController extends Controller
     // $ordemServico = Ordem::whereBetween('created_at', [$dataI . ' 00:00:00', $dataF . ' 23:59:59'])->get();
 
     // Carrega a view com os dados da ordem de serviço
-    $view = view('relatorios.ordem-de-servico', compact('ordemServico', 'dataI', 'dataF', 'veiculo'))->render();
+    $view = view('relatorios.ordem-de-servico', compact('ordemServico', 'dataI', 'dataF', 'veiculo', 'servicos'))->render();
 
     // Criação do PDF utilizando o DomPDF
     $pdf = app('dompdf.wrapper');
