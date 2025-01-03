@@ -60,12 +60,36 @@
             slotMinTime: "08:00:00",
             slotMaxTime: "19:00:00",
             themeSystem: "bootstrap",
-            bootstrapFontAwesome: false,
-            buttonText: { today: "Today", month: "Month", week: "Week", day: "Day", list: "List", prev: "Prev", next: "Next" },
-            initialView: "dayGridMonth",
-            handleWindowResize: true,
-            height: l(window).height() - 200,
+            editable: true,  // Permite mover os eventos
+            droppable: true,  // Permite soltar eventos (se necessário)
+            selectable: true,
             headerToolbar: { left: "prev,next today", center: "title", right: "dayGridMonth,timeGridWeek,timeGridDay,listMonth" },
+
+            // Função chamada quando o evento é movido
+            eventDrop: function(info) {
+                // Obtém os dados do evento movido
+                var eventData = {
+                    title: info.event.title,  // Título do evento
+                    category: info.event.classNames[0],  // Preserva a categoria do evento
+                    event_date: info.event.start.toISOString().slice(0, 19).replace("T", " "),  // Formatação correta da data
+                    allDay: info.event.allDay  // Verifica se o evento é de dia inteiro
+                };
+            
+                // Envia a requisição de atualização para o backend
+                fetch(`/calendar/update/${info.event.id}`, {
+                    method: 'PUT',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
+                    },
+                    body: JSON.stringify(eventData),
+                })
+                .then(response => response.json())
+                .then(data => {
+                    console.log('Evento movido com sucesso:', data);
+                })
+                .catch(error => console.error('Erro ao mover o evento:', error));
+            },
             events: function(fetchInfo, successCallback, failureCallback) {
                 fetch('/calendar/events', {
                     method: 'GET',
