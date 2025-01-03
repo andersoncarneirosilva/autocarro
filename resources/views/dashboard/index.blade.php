@@ -135,7 +135,7 @@
                                     <div class="card widget-flat">
                                         <div class="card-body">
                                             <div class="float-end">
-                                                <i class="mdi mdi-pulse widget-icon"></i>
+                                                <i class="mdi mdi-cart-arrow-down widget-icon"></i>
                                             </div>
                                             <h5 class="text-muted fw-normal mt-0" title="Growth">Despesas</h5>
                                             <h3 class="mt-3 mb-3">R$ 760</h3>

@@ -75,7 +75,7 @@
                                     <a href="{{ route('users.edit', $user->id) }}"
                                         data-bs-toggle="tooltip"
                                         data-bs-target="#standard-modal-edit"
-                                        class="font-18 text-info me-2"
+                                        class="font-18 text-secondary me-2"
                                         data-bs-placement="top"
                                         aria-label="Edit"
                                         data-bs-original-title="Editar"><i class="uil uil-pen"></i></a>

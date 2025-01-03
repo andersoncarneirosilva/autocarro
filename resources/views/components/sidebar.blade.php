@@ -74,6 +74,13 @@
             </li>
 
             <li class="side-nav-item">
+                <a href="{{ route('calendar.index') }}" class="side-nav-link">
+                    <i class="uil-file"></i>
+                    <span> Calendário </span>
+                </a>
+            </li>
+
+            <li class="side-nav-item">
                 <a href="{{ route('relatorios.index') }}" class="side-nav-link">
                     <i class="uil-file-info-alt"></i>
                     <span> Relatórios </span>

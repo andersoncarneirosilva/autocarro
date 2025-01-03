@@ -55,7 +55,12 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/documentos', [DocumentosController::class, 'index'])->name('documentos.index');
     Route::post('/documentos', [DocumentosController::class, 'store'])->name('documentos.store');
 
+    
+    Route::put('/calendar/{id}', [CalendarController::class, 'update']);
+    Route::delete('/calendar/delete/{id}', [CalendarController::class, 'destroy'])->name('calendar.destroy');
     Route::get('/calendar', [CalendarController::class, 'index'])->name('calendar.index');
+    Route::get('/calendar/events', [CalendarController::class, 'getEvents']);
+    Route::post('/calendar', [CalendarController::class, 'store']);
 
     
     Route::delete('/procuracoes/{id}', [ProcuracaoController::class, 'destroy'])->name('procuracoes.destroy');
@@ -147,8 +152,7 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/ordensdeservicos/{id}', [OrdemController::class, 'show'])->name('ordensdeservicos.show');
 
     Route::resource('ordensdeservicos', OrdemController::class);
-    // Rota específica para busca
-    // Rotas de recurso para clientes
+    
 });
 
 

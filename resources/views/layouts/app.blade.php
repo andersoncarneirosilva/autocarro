@@ -14,11 +14,14 @@
         <link href="{{ url('assets/vendor/select2/css/select2.min.css')}}" rel="stylesheet" type="text/css" />
         <link rel="stylesheet" href="{{ url('assets/vendor/daterangepicker/daterangepicker.css') }}">
 
-        <script src="https://sdk.mercadopago.com/js/v2"></script>
         <!-- Vector Map css -->
         <link rel="stylesheet" href="{{ url('assets/vendor/admin-resources/jquery.vectormap/jquery-jvectormap-1.2.2.css') }}">
         <!-- Theme Config Js -->
         <script src="{{ url('assets/js/hyper-config.js') }}"></script>
+        <link href="https://cdn.jsdelivr.net/npm/fullcalendar@5.11.0/main.min.css" rel="stylesheet">
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+
+        
         <!-- App css -->
         <link href="{{ url('assets/css/app-saas.css') }}" rel="stylesheet" type="text/css" id="app-style" />
         <script src="https://cdn.jsdelivr.net/npm/apexcharts@3.41.0"></script>
@@ -159,6 +162,7 @@
         <script src="{{ url('assets/vendor/typeahead.js/typeahead.bundle.min.js') }}"></script>
         <!-- Script do Select2 -->
 
-        
+<script src="https://cdn.jsdelivr.net/npm/fullcalendar@5.11.0/main.min.js"></script>
+<script src="{{ url('assets/js/calendar.js') }}"></script>
     </body>
 </html> 
