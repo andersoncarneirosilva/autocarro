@@ -57,20 +57,23 @@ public function update(Request $request, $id)
     }
  
 
-    // Validação dos dados do evento
     $validated = $request->validate([
         'title' => 'required|string',
         'category' => 'required|string',
         'event_date' => 'required|date',
-        'allDay' => 'required|boolean',
+        'allDay' => 'required|boolean', // Certifique-se de que este nome corresponda ao banco de dados
     ]);
+    
+    // Atualiza os dados do evento
+    $event->update([
+        'title' => $validated['title'],
+        'category' => $validated['category'],
+        'event_date' => $validated['event_date'],
+        'all_day' => $validated['allDay'], // Certifique-se de que a coluna no banco é `all_day` ou `allDay`
+    ]);
+    
 
-
-
-    // Atualize o evento
-    $event->update($validated);
-
-    return response()->json($event, 200);  // Retorna o evento atualizado
+    return response()->json($event);  // Retorna o evento atualizado
 }
 
     public function getEvents()
@@ -90,13 +93,15 @@ public function destroy($id)
 {
     $event = Event::find($id);
 
-    if ($event) {
-        $event->delete();  // Exclui o evento
-        return response()->json(['message' => 'Event deleted successfully']);
+    if (!$event) {
+        return response()->json(['success' => false, 'message' => 'Evento não encontrado'], 404);
     }
 
-    return response()->json(['message' => 'Event not found'], 404);
+    $event->delete();
+
+    return response()->json(['success' => true, 'message' => 'Evento excluído com sucesso'], 200);
 }
+
 
 
 

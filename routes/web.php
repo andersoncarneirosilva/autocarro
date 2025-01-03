@@ -56,7 +56,7 @@ Route::middleware(['auth'])->group(function () {
     Route::post('/documentos', [DocumentosController::class, 'store'])->name('documentos.store');
 
     
-    Route::put('/calendar/{id}', [CalendarController::class, 'update']);
+    Route::put('/calendar/update/{id}', [CalendarController::class, 'update']);
     Route::delete('/calendar/delete/{id}', [CalendarController::class, 'destroy'])->name('calendar.destroy');
     Route::get('/calendar', [CalendarController::class, 'index'])->name('calendar.index');
     Route::get('/calendar/events', [CalendarController::class, 'getEvents']);

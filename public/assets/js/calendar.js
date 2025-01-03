@@ -123,7 +123,7 @@
                 if (a.$selectedEvent) {
                     console.log('ID DO SELECTED EVENT:', a.$selectedEvent.id);
                     // Atualizar evento existente
-                    fetch(`/calendar/${a.$selectedEvent.id}`, {
+                    fetch(`/calendar/update/${a.$selectedEvent.id}`, {
                         method: 'PUT',
                         headers: {
                             'Content-Type': 'application/json',
@@ -190,45 +190,39 @@
 
 
         // Função para excluir um evento
-a.$btnDeleteEvent.on("click", function(e) {
-    e.preventDefault();
-
-    if (a.$selectedEvent && a.$selectedEvent.id) {
-        // Confirmar a exclusão
-        if (confirm("Você tem certeza que deseja excluir este evento?")) {
-            // Enviar a requisição DELETE para o servidor
-            fetch(`/calendar/${a.$selectedEvent.id}`, {
-                method: 'DELETE',
-                headers: {
-                    'Content-Type': 'application/json',
-                    'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')  // CSRF token
+        a.$btnDeleteEvent.on("click", function(e) {
+            e.preventDefault();
+        
+            if (a.$selectedEvent && a.$selectedEvent.id) {
+                if (confirm("Você tem certeza que deseja excluir este evento?")) {
+                    fetch(`/calendar/delete/${a.$selectedEvent.id}`, {
+                        method: 'DELETE',
+                        headers: {
+                            'Content-Type': 'application/json',
+                            'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
+                        }
+                    })
+                    .then(response => response.json())
+                    .then(data => {
+                        if (data.success) {
+                            // Remove o evento do calendário
+                            const eventToDelete = a.$calendarObj.getEventById(a.$selectedEvent.id);
+                            if (eventToDelete) {
+                                eventToDelete.remove();
+                                console.log(data.message); // Log de sucesso
+                            }
+                            a.$modal.hide(); // Fecha o modal
+                        } else {
+                            console.error('Erro ao excluir o evento:', data.message); // Log de erro
+                        }
+                    })
+                    .catch(error => console.error('Erro ao tentar excluir o evento:', error));
                 }
-            })
-            .then(response => response.json())
-            .then(data => {
-                // Verifica se a exclusão foi bem-sucedida
-                if (data.success) {
-                    // Remove o evento do calendário
-                    var eventToDelete = a.$calendarObj.getEventById(a.$selectedEvent.id);
-                    if (eventToDelete) {
-                        eventToDelete.remove();
-                        console.log('Evento excluído com sucesso.');
-                    } else {
-                        console.error('Evento não encontrado para excluir.');
-                    }
-
-                    // Fecha o modal
-                    a.$modal.hide();
-                } else {
-                    console.error('Erro ao excluir o evento:', data.message);
-                }
-            })
-            .catch(error => console.error('Erro ao tentar excluir o evento:', error));
-        }
-    } else {
-        console.error('Nenhum evento selecionado para excluir.');
-    }
-});
+            } else {
+                console.error('Nenhum evento selecionado para excluir.');
+            }
+        });
+        
 
 
 

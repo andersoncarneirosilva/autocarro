@@ -13,5 +13,6 @@ class Event extends Model
         'title',
         'category',
         'event_date',
+        'allDay',
     ];
 }

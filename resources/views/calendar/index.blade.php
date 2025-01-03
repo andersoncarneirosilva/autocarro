@@ -239,7 +239,8 @@ console.log('ID EVENTO: ', eventId);
                     </div>
                 </div>
                 <div class="modal-footer">
-                    <button type="button" id="btn-delete-event" class="btn btn-danger d-none">Delete</button>
+                    
+                    <button type="button" id="btn-delete-event" class="btn btn-danger">Delete</button>
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
                     <button type="submit" id="btn-save-event" class="btn btn-primary">Save</button>
                 </div>
