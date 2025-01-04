@@ -161,8 +161,8 @@
         <script src="{{ url('assets/vendor/handlebars/handlebars.min.js') }}"></script>
         <script src="{{ url('assets/vendor/typeahead.js/typeahead.bundle.min.js') }}"></script>
         <!-- Script do Select2 -->
-
-<script src="https://cdn.jsdelivr.net/npm/fullcalendar@5.11.0/main.min.js"></script>
-<script src="{{ url('assets/js/calendar.js') }}"></script>
+        <script src="{{ url('assets/vendor/fullcalendar/index.global.min.js') }}"></script>
+        <script src="https://cdn.jsdelivr.net/npm/fullcalendar@5.11.0/main.min.js"></script>
+        <script src="{{ url('assets/js/calendar.js') }}"></script>
     </body>
 </html> 

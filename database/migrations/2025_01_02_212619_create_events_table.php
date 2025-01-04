@@ -15,10 +15,10 @@ return new class extends Migration
         $table->id();
         $table->string('title');
         $table->string('category'); // Adicionando a categoria
-        $table->date('event_date');  // A data do evento
-        $table->boolean('all_day');  // Se o evento é de dia inteiro
+        $table->dateTime('event_date');  // A data e hora do evento
         $table->timestamps();
     });
+    
     
 }
 

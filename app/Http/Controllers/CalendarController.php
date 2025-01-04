@@ -14,67 +14,60 @@ class CalendarController extends Controller
         return view('calendar.index', compact('events'));
     }
 
-    public function store(Request $request)
+    
+public function store(Request $request)
 {
-    // Log para depuração
     \Log::debug($request->all());
-
-    // Validação dos dados recebidos
-    $validated = $request->validate([
-        'title' => 'required|string|max:255',
-        'event_date' => 'required|date',
-        'category' => 'required|string',
-        'allDay' => 'required|boolean',
-    ]);
-
     try {
-        // Converte a data para o formato correto 'YYYY-MM-DD'
-        $eventDate = Carbon::parse($validated['event_date'])->toDateString();
+        $validated = $request->validate([
+            'title' => 'required|string|max:255',
+            'event_date' => 'required|date_format:Y-m-d H:i:s',
+            'category' => 'required|string',
+        ]);
 
-        // Criação do novo evento
-        $event = new Event();
-        $event->title = $validated['title'];
-        $event->event_date = $eventDate;  // Usa a data formatada
-        $event->category = $validated['category'];
-        $event->all_day = $validated['allDay'];
-        $event->save();
+        $event = Event::create([
+            'title' => $validated['title'],
+            'event_date' => $validated['event_date'],
+            'category' => $validated['category'],
+        ]);
 
-        return response()->json($event);
+        return response()->json($event); // Retorna JSON
     } catch (\Exception $e) {
-        // Log do erro
-        \Log::error('Error saving event: ' . $e->getMessage());
-        return response()->json(['error' => 'Error saving event'], 500);
+        \Log::error('Erro ao adicionar evento: ' . $e->getMessage());
+        return response()->json(['error' => 'Erro ao adicionar evento'], 500); // Retorna JSON de erro
     }
 }
+
 
 public function update(Request $request, $id)
 {
+    \Log::debug($request->all());
+
     $event = Event::find($id);  // Encontre o evento com o ID passado
 
-    
     if (!$event) {
         return response()->json(['error' => 'Evento não encontrado'], 404);  // Retorna 404 caso o evento não exista
     }
- 
-
-    $validated = $request->validate([
-        'title' => 'required|string',
-        'category' => 'required|string',
-        'event_date' => 'required|date',
-        'allDay' => 'required|boolean', // Certifique-se de que este nome corresponda ao banco de dados
-    ]);
+    try {
+        $validated = $request->validate([
+            'title' => 'required|string|max:255',
+            'event_date' => 'required|date_format:Y-m-d H:i:s',
+            'category' => 'required|string',
+        ]);
+        // Atualiza os dados do evento
+        $event->update([
+            'title' => $validated['title'],
+            'category' => $validated['category'],
+            'event_date' => $validated['event_date'],
+        ]);
+        return response()->json($event); // Retorna JSON
+    } catch (\Exception $e) {
+        \Log::error('CONTROLLER: Erro ao atualizar evento: ' . $e->getMessage());
+        return response()->json(['error' => 'CONTROLLER: Erro ao atualizar evento'], 500); // Retorna JSON de erro
+    }
     
-    // Atualiza os dados do evento
-    $event->update([
-        'title' => $validated['title'],
-        'category' => $validated['category'],
-        'event_date' => $validated['event_date'],
-        'all_day' => $validated['allDay'], // Certifique-se de que a coluna no banco é `all_day` ou `allDay`
-    ]);
-    
-
-    return response()->json($event);  // Retorna o evento atualizado
 }
+
 
     public function getEvents()
     {

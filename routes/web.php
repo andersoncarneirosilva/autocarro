@@ -57,6 +57,7 @@ Route::middleware(['auth'])->group(function () {
 
     
     Route::put('/calendar/update/{id}', [CalendarController::class, 'update']);
+    Route::put('/calendar/move/{id}', [CalendarController::class, 'update']);
     Route::delete('/calendar/delete/{id}', [CalendarController::class, 'destroy'])->name('calendar.destroy');
     Route::get('/calendar', [CalendarController::class, 'index'])->name('calendar.index');
     Route::get('/calendar/events', [CalendarController::class, 'getEvents']);

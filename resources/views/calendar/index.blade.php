@@ -154,38 +154,38 @@ console.log('ID EVENTO: ', eventId);
                         <div class="col-lg-3">
                             <div class="d-grid">
                                 <button class="btn btn-lg font-16 btn-danger" data-bs-toggle="modal" data-bs-target="#event-modal" id="btn-new-event">
-                                    <i class="mdi mdi-plus-circle-outline"></i> Create New Event
+                                    <i class="mdi mdi-plus-circle-outline"></i> Criar novo evento
                                 </button>
                             </div>
-                            <div id="external-events" class="mt-3">
-                                <p class="text-muted">Drag and drop your event or click in the calendar</p>
-                                <div class="external-event bg-success-lighten text-success" data-class="bg-success"><i
-                                        class="mdi mdi-checkbox-blank-circle me-2 vertical-middle"></i>New Theme Release
+                            <div id="" class="mt-3">
+                                <p class="text-muted">Dica para uma melhor organização.</p>
+                                <div class="external-event bg-success-lighten text-success" data-class="bg-success">
+                                    <i class="mdi mdi-checkbox-blank-circle me-2 vertical-middle"></i>Finalizados
                                 </div>
-                                <div class="external-event bg-info-lighten text-info" data-class="bg-info"><i
-                                        class="mdi mdi-checkbox-blank-circle me-2 vertical-middle"></i>My Event</div>
-                                <div class="external-event bg-warning-lighten text-warning" data-class="bg-warning"><i
-                                        class="mdi mdi-checkbox-blank-circle me-2 vertical-middle"></i>Meet manager</div>
-                                <div class="external-event bg-danger-lighten text-danger" data-class="bg-danger"><i
-                                        class="mdi mdi-checkbox-blank-circle me-2 vertical-middle"></i>Create New theme
+                                <div class="external-event bg-info-lighten text-info" data-class="bg-info">
+                                    <i class="mdi mdi-checkbox-blank-circle me-2 vertical-middle"></i>A fazer
+                                </div>
+                                <div class="external-event bg-warning-lighten text-warning" data-class="bg-warning">
+                                    <i class="mdi mdi-checkbox-blank-circle me-2 vertical-middle"></i>Em andamento
+                                </div>
+                                <div class="external-event bg-danger-lighten text-danger" data-class="bg-danger">
+                                    <i class="mdi mdi-checkbox-blank-circle me-2 vertical-middle"></i>Urgente
                                 </div>
                             </div>
+                            
 
                             <div class="mt-5 d-none d-xl-block">
-                                <h5 class="text-center">How It Works ?</h5>
+                                <h5 class="text-center">Como funciona?</h5>
 
                                 <ul class="ps-3">
                                     <li class="text-muted mb-3">
-                                        It has survived not only five centuries, but also the leap into electronic
-                                        typesetting, remaining essentially unchanged.
+                                        O calendário é uma ferramenta interativa que permite visualizar e gerenciar seus eventos de forma prática.
                                     </li>
                                     <li class="text-muted mb-3">
-                                        Richard McClintock, a Latin professor at Hampden-Sydney College in Virginia, looked
-                                        up one of the more obscure Latin words, consectetur, from a Lorem Ipsum passage.
+                                        Você pode adicionar, editar ou excluir eventos diretamente no calendário, escolhendo a data e a hora que deseja.
                                     </li>
                                     <li class="text-muted mb-3">
-                                        It has survived not only five centuries, but also the leap into electronic
-                                        typesetting, remaining essentially unchanged.
+                                        Além disso, é possível mover eventos de uma data para outra simplesmente arrastando-os, tornando o processo mais ágil e fácil de usar.
                                     </li>
                                 </ul>
                             </div>
@@ -208,77 +208,43 @@ console.log('ID EVENTO: ', eventId);
         <div class="modal-content">
             <form id="form-event" class="needs-validation" novalidate>
                 <div class="modal-header">
-                    <h5 class="modal-title" id="modal-title">Add/Edit Event</h5>
+                    <h5 class="modal-title" id="modal-title">Criar/Editar Event</h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
                     <div class="mb-3">
-                        <label for="event-title" class="form-label">Event Title</label>
+                        <label for="event-title" class="form-label">Título do evento</label>
                         <input type="text" class="form-control" id="event-title" required>
-                        <div class="invalid-feedback">Please provide a title for the event.</div>
+                        <div class="invalid-feedback">Por favor, preencha o nome do evento.</div>
                     </div>
                     <div class="mb-3">
-                        <label for="event-title" class="form-label">ID</label>
-                        <input type="text" class="form-control" id="event-id-hidden">
-                    </div>
-                    <div class="mb-3">
-                        <label for="event-category-label" class="form-label">Event Category</label>
+                        <label for="event-category-label" class="form-label">Status do evento</label>
                         <select id="event-category" class="form-select" required>
-                            <option value="" selected disabled>Select Category</option>
-                            <option value="bg-primary">Primary</option>
-                            <option value="bg-success">Success</option>
-                            <option value="bg-danger">Danger</option>
-                            <option value="bg-warning">Warning</option>
-                            <option value="bg-info">Info</option>
+                            <option value="" selected disabled>Selecione o status</option>
+                            <option value="bg-primary">A fazer</option>
+                            <option value="bg-warning">Em andamento</option>
+                            <option value="bg-danger">Urgente</option>
+                            <option value="bg-success">Finalizado</option>
+                            <option value="bg-info">Outros</option>
                         </select>
-                        <div class="invalid-feedback">Please select a category.</div>
+                        <div class="invalid-feedback">Por favor, selecione o status.</div>
                     </div>
                     <div class="mb-3">
                         <label for="event-date" class="form-label">Data</label>
-                        <input type="text" class="form-control" id="event-date">
+                        <input type="datetime-local" class="form-control" id="event-date">
                     </div>
                 </div>
                 <div class="modal-footer">
                     
-                    <button type="button" id="btn-delete-event" class="btn btn-danger">Delete</button>
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
-                    <button type="submit" id="btn-save-event" class="btn btn-primary">Save</button>
+                    <button type="button" id="btn-delete-event" class="btn btn-danger">Excluir</button>
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                    <button type="submit" id="btn-save-event" class="btn btn-primary">Salvar</button>
                 </div>
             </form>
         </div>
     </div>
 </div>
-            <!-- Bootstrap 5 Modal -->
-            {{-- <div class="modal fade" id="event-modal" tabindex="-1"  aria-hidden="true">
-                <div class="modal-dialog">
-                <div class="modal-content">
-                    <div class="modal-header">
-                    <h5 class="modal-title" >Cadastrar Evento</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                    </div>
-                    <div class="modal-body">
-                    <form id="form-event">
-                        
-                        <div class="mb-3">
-                        <label for="eventTitle" class="form-label">Título do Evento</label>
-                        <input type="text" class="form-control" id="eventTitle" placeholder="Digite o título do evento">
-                        </div>
-                        <div class="mb-3">
-                        <label for="eventDescription" class="form-label">Descrição</label>
-                        <textarea class="form-control" id="eventDescription" rows="3" placeholder="Digite a descrição do evento"></textarea>
-                        </div>
-                        <input type="hidden" id="eventDate" value="">
-                    </form>
-                    </div>
-                    <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fechar</button>
-                    <button type="button" class="btn btn-primary" id="btn-new-event">Salvar Evento</button>
-                    </div>
-                </div>
-                </div>
-            </div> --}}
 
-            <!-- Modal para Editar ou Excluir Evento -->
             <!-- Modal de Edição de Evento -->
 <div class="modal fade" id="editEventModal" tabindex="-1" aria-labelledby="editEventModalLabel" aria-hidden="true">
     <div class="modal-dialog">

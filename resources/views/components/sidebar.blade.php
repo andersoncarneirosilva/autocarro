@@ -75,7 +75,7 @@
 
             <li class="side-nav-item">
                 <a href="{{ route('calendar.index') }}" class="side-nav-link">
-                    <i class="uil-file"></i>
+                    <i class="uil-calender"></i>
                     <span> Calendário </span>
                 </a>
             </li>

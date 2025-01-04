@@ -13,6 +13,7 @@ class Event extends Model
         'title',
         'category',
         'event_date',
-        'allDay',
     ];
+
+    protected $dates = ['event_date']; 
 }
