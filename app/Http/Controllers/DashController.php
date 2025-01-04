@@ -42,7 +42,9 @@ class DashController extends Controller
         $totalOrdensAtual = DB::table('ordems')
                                     ->whereMonth('created_at', $currentMonth)
                                     ->whereYear('created_at', $currentYear)
+                                    ->where('status', 'PAGO')
                                     ->sum('valor_total');
+
 
         // Soma o valor total da coluna "valor" na tabela "ordens" para o mês anterior
         $totalOrdensAnterior = DB::table('ordems')

@@ -19,7 +19,6 @@
         <!-- Theme Config Js -->
         <script src="{{ url('assets/js/hyper-config.js') }}"></script>
         <link href="https://cdn.jsdelivr.net/npm/fullcalendar@5.11.0/main.min.css" rel="stylesheet">
-<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
 
         
         <!-- App css -->
@@ -33,7 +32,6 @@
 
         <script src="https://kit.fontawesome.com/6c4df5f46b.js" crossorigin="anonymous"></script>
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
-        <script src='https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js' type='text/javascript'></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/vanilla-masker/1.1.0/vanilla-masker.min.js"></script>
         
         <script src="https://cdnjs.cloudflare.com/ajax/libs/sweetalert/2.1.0/sweetalert.min.js"></script>
@@ -142,10 +140,8 @@
         <!-- Vendor js -->
         <script src="{{ url('assets/js/vendor.min.js') }}"></script>   
         <script src="{{ url('assets/vendor/select2/js/select2.min.js')}}"></script>
-        <!-- Bootstrap Wizard Form js -->
         <script src="{{ url('assets/vendor/daterangepicker/moment.min.js') }}"></script>
         <script src="{{ url('assets/vendor/daterangepicker/daterangepicker.js') }}"></script>
-        <script src="{{ url('assets/vendor/twitter-bootstrap-wizard/jquery.bootstrap.wizard.min.js') }}"></script>
         <!-- Wizard Form Demo js -->
         <script src="{{ url('assets/js/pages/demo.form-wizard.js') }}"></script>
         <!-- Input Mask js -->

@@ -46,7 +46,7 @@
             
             // Formatar a data para datetime-local (YYYY-MM-DDTHH:MM)
             let formattedDate = `${year}-${month}-${day}T${hours}:${minutes}`;
-            console.log("Data atual:", formattedDate);
+            //console.log("Data atual:", formattedDate);
             
             // Preenche o campo com a data formatada corretamente
             l("#event-date").val(formattedDate);
@@ -54,7 +54,7 @@
 
 
         } else {
-            console.error("Evento não encontrado ou 'e.event' está indefinido.");
+            //console.error("Evento não encontrado ou 'e.event' está indefinido.");
         }
     };
     
@@ -125,8 +125,7 @@ let eventData = {
 
                 .then(response => response.json())
                 .then(data => {
-                    //console.log(text);
-                    console.log('Evento atualizado com sucesso:', data);
+                    //console.log('Evento atualizado com sucesso:', data);
 
                 })
                 .catch(error => console.error('Erro ao tentar mover o evento:', error));
@@ -156,7 +155,7 @@ let eventData = {
                     }));
                 })
                 .catch(error => {
-                    console.error('Error fetching events:', error);
+                    //console.error('Error fetching events:', error);
                     failureCallback(error);
                 });
             },
@@ -196,12 +195,12 @@ let eventData = {
                     if (!isNaN(saoPauloDate.getTime())) {
                         // Formatar a data para o formato correto 'YYYY-MM-DD HH:mm:ss'
                         let formattedDate = saoPauloDate.toISOString().slice(0, 19).replace('T', ' ');
-                        console.log("DATA formatada CADASTRO:", formattedDate);  // Verifique a data formatada
+                        //console.log("DATA formatada CADASTRO:", formattedDate);  // Verifique a data formatada
                     } else {
-                        console.error("Data inválida fornecida:", eventData.event_date);
+                        //console.error("Data inválida fornecida:", eventData.event_date);
                     }
                 } else {
-                    console.error("Data não fornecida ou inválida.");
+                    //console.error("Data não fornecida ou inválida.");
                 }
                 
 
@@ -247,14 +246,14 @@ let eventData = {
                                 eventToUpdate.setStart(data.event_date); 
                                 eventToUpdate.setAllDay(data.all_day === 1);  // Atualiza o status de 'allDay' (1 é verdadeiro, 0 é falso)
                             } else {
-                                console.error('Evento não encontrado no calendário para atualizar');
+                                //console.error('Evento não encontrado no calendário para atualizar');
                             }
                         } else {
-                            console.error("Erro ao atualizar o evento. Resposta inesperada:", data);  // Log caso a resposta não tenha os dados esperados
+                            //console.error("Erro ao atualizar o evento. Resposta inesperada:", data);  // Log caso a resposta não tenha os dados esperados
                         }
                     })
                     .catch(error => {
-                        console.error('Erro ao tentar atualizar o evento:', error);  // Log de erro
+                        //console.error('Erro ao tentar atualizar o evento:', error);  // Log de erro
                     });
                     
                 } else {
@@ -345,11 +344,11 @@ let eventData = {
                                         'O evento foi excluído com sucesso.',
                                         'success'
                                     );
-                                    console.log(data.message); // Log de sucesso
+                                    //console.log(data.message); // Log de sucesso
                                 }
                                 a.$modal.hide(); // Fecha o modal
                             } else {
-                                console.error('Erro ao excluir o evento:', data.message); // Log de erro
+                                //console.error('Erro ao excluir o evento:', data.message); // Log de erro
                                 Swal.fire(
                                     'Erro!',
                                     'Não foi possível excluir o evento.',
@@ -358,7 +357,7 @@ let eventData = {
                             }
                         })
                         .catch(error => {
-                            console.error('Erro ao tentar excluir o evento:', error);
+                            //console.error('Erro ao tentar excluir o evento:', error);
                             Swal.fire(
                                 'Erro!',
                                 'Ocorreu um erro ao excluir o evento.',
@@ -368,7 +367,7 @@ let eventData = {
                     }
                 });
             } else {
-                console.error('Nenhum evento selecionado para excluir.');
+               // console.error('Nenhum evento selecionado para excluir.');
                 Swal.fire(
                     'Erro!',
                     'Nenhum evento selecionado para exclusão.',

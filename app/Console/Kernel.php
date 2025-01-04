@@ -18,8 +18,8 @@ class Kernel extends ConsoleKernel
         // $schedule->command('inspire')->hourly();
         //$schedule->command('VerificarParcelaVencida:verificar')->hourly();
         //$schedule->command('VerificarParcelaVencida:verificar')->dailyAt('14:48');
-        $schedule->command('VerificarParcelaVencida:verificar')->everyMinute();
-        
+        //$schedule->command('VerificarParcelaVencida:verificar')->everyMinute();
+        $schedule->command('events:notify-upcoming')->everyMinute(); // Executa a cada minuto
     }
 
     /**
