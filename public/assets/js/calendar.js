@@ -24,17 +24,35 @@
     
         // Verifique se e.event existe
         if (e.event) {
-            console.log('Analisar E: ',e);
             this.$selectedEvent = e.event;
-    
+
             // Preenche o formulário com os dados do evento
             l("#event-title").val(this.$selectedEvent.title);
             l("#event-id-hidden").val(this.$selectedEvent.id);  // Certifique-se que o ID esteja disponível
             l("#event-category").val(this.$selectedEvent.classNames[0]); // Categoria do evento
-            l("#event-date").val(this.$selectedEvent.startStr); // Categoria do evento
-    
-            //console.log('ID do evento selecionado:', this.$selectedEvent.id);
-            console.log('Data do EVENTO: ', this.$selectedEvent.startStr);
+            
+            // Cria um objeto Date a partir da data ISO 8601 (em UTC)
+            let utcDate = new Date(this.$selectedEvent.startStr); 
+            
+            // Ajuste manual para o horário de São Paulo (GMT-3) (subtrai 3 horas do UTC)
+            let saoPauloDate = new Date(utcDate.getTime() - (0 * 60 * 60 * 1000)); // Subtrai 3 horas em milissegundos
+            
+            // Ajusta para o formato necessário (YYYY-MM-DDTHH:MM)
+            let year = saoPauloDate.getFullYear();
+            let month = ('0' + (saoPauloDate.getMonth() + 1)).slice(-2); // Adiciona zero à esquerda
+            let day = ('0' + saoPauloDate.getDate()).slice(-2); // Adiciona zero à esquerda
+            let hours = ('0' + saoPauloDate.getHours()).slice(-2); // Adiciona zero à esquerda
+            let minutes = ('0' + saoPauloDate.getMinutes()).slice(-2); // Adiciona zero à esquerda
+            
+            // Formatar a data para datetime-local (YYYY-MM-DDTHH:MM)
+            let formattedDate = `${year}-${month}-${day}T${hours}:${minutes}`;
+            console.log("Data atual:", formattedDate);
+            
+            // Preenche o campo com a data formatada corretamente
+            l("#event-date").val(formattedDate);
+            
+
+
         } else {
             console.error("Evento não encontrado ou 'e.event' está indefinido.");
         }
@@ -77,18 +95,25 @@
 
             // Função chamada quando o evento é movido
             eventDrop: function(info) {
-                //console.log(info);
-                let rawDate = info.event.start.toISOString();
-                let formattedDate = rawDate.replace('T', ' ').slice(0, 19); // Mantém a data no formato correto
+                // Obtemos a data do evento
+let rawDate = info.event.start.toISOString(); 
 
-            
-                let eventData = {
-                    id: info.event.id,
-                    title: info.event.title, // Certifique-se de usar `info.event.title`
-                    event_date: formattedDate,
-                    category: info.event.classNames[0] // Adicione a categoria do evento
-                };
-                //console.log(eventData);
+// Convertemos a data para um objeto Date
+let localDate = new Date(rawDate);
+
+// Ajusta para o fuso horário de São Paulo (GMT-3), subtraindo 3 horas em milissegundos
+localDate.setHours(localDate.getHours() - 3);
+
+// Formata para o formato Y-m-d H:i:s (sem o "T" e sem o "Z")
+let formattedDate = localDate.toISOString().replace('T', ' ').slice(0, 19); 
+
+// Dados do evento
+let eventData = {
+    id: info.event.id,
+    title: info.event.title, // Certifique-se de usar info.event.title
+    event_date: formattedDate, // Data ajustada corretamente
+    category: info.event.classNames[0] // Categoria do evento
+};
                 fetch(`/calendar/move/${eventData.id}`, {
                     method: 'PUT',
                     headers: {
@@ -97,7 +122,6 @@
                     },
                     body: JSON.stringify(eventData)
                 })
-                //console.log('Dados enviados para o backend:', eventData)
 
                 .then(response => response.json())
                 .then(data => {
@@ -127,8 +151,7 @@
                             id: event.id, 
                             title: event.title,
                             start: event.event_date,
-                            className: event.category,  // Aplique a classe de cor do evento
-                            allDay: event.all_day
+                            className: event.category
                         };
                     }));
                 })
@@ -156,34 +179,45 @@
                 var eventData = {
                     title: document.getElementById("event-title").value, // Título do evento
                     category: document.getElementById("event-category").value, // Categoria do evento
-                    event_date:  document.getElementById("event-date").value, 
+                    event_date: document.getElementById("event-date").value, // Data do evento
                 };
                 
                 // Verificar se a data fornecida não está vazia
                 if (eventData.event_date) {
-                    // Tentar criar uma data válida
-                    let parsedDate = new Date(eventData.event_date);
+                    // Criar um objeto Date a partir da data do evento (no formato YYYY-MM-DDTHH:MM)
+                    let localDate = new Date(eventData.event_date);
+                
+                    // Ajuste para o horário de São Paulo (fuso horário GMT-3)
+                    // O getTimezoneOffset retorna a diferença entre o horário local e UTC em minutos
+                    let timezoneOffset = localDate.getTimezoneOffset() * 60000; // Convertendo minutos para milissegundos
+                    let saoPauloDate = new Date(localDate.getTime() - timezoneOffset); // Ajustando para GMT-3 (São Paulo)
                 
                     // Verificar se a data foi criada corretamente
-                    if (!isNaN(parsedDate.getTime())) {
+                    if (!isNaN(saoPauloDate.getTime())) {
                         // Formatar a data para o formato correto 'YYYY-MM-DD HH:mm:ss'
-                        let formattedDate = parsedDate.toISOString().slice(0, 19).replace('T', ' ');
-                        console.log("DATA formatada:", formattedDate);
+                        let formattedDate = saoPauloDate.toISOString().slice(0, 19).replace('T', ' ');
+                        console.log("DATA formatada CADASTRO:", formattedDate);  // Verifique a data formatada
                     } else {
                         console.error("Data inválida fornecida:", eventData.event_date);
                     }
                 } else {
                     console.error("Data não fornecida ou inválida.");
                 }
+                
 
                 // Atualize eventData com a data formatada
-                //eventData.event_date = formattedDate;
                 if (a.$selectedEvent) {
                     let rawDate = document.getElementById("event-date").value;
 
-                    // Formata a data para o formato "YYYY-MM-DD HH:mm:ss"
-                    let formattedDate = new Date(rawDate).toISOString().slice(0, 19).replace('T', ' ');
+                    // Criar a data local com a hora fornecida pelo campo datetime-local
+                    let localDate = new Date(rawDate);
 
+                    // Ajuste manual para o horário de São Paulo (GMT-3)
+                    let timezoneOffset = localDate.getTimezoneOffset() * 60000; // Diferença de minutos para milissegundos
+                    let saoPauloDate = new Date(localDate.getTime() - timezoneOffset); // Ajusta para GMT-3
+
+                    // Formata a data para o formato "YYYY-MM-DD HH:mm:ss"
+                    let formattedDate = saoPauloDate.toISOString().slice(0, 19).replace('T', ' ');
                     // Cria os dados do evento
                     let eventData = {
                         title: document.getElementById("event-title").value, // Título do evento
@@ -210,8 +244,7 @@
                             if (eventToUpdate) {
                                 eventToUpdate.setProp("title", eventData.title);  // Atualiza o título do evento
                                 eventToUpdate.setProp("classNames", [eventData.category]);  // Atualiza a categoria
-                                eventToUpdate.setStart(data.event_date);  // Atualiza a data de início
-                                console.log(data.event_date);
+                                eventToUpdate.setStart(data.event_date); 
                                 eventToUpdate.setAllDay(data.all_day === 1);  // Atualiza o status de 'allDay' (1 é verdadeiro, 0 é falso)
                             } else {
                                 console.error('Evento não encontrado no calendário para atualizar');
@@ -225,18 +258,25 @@
                     });
                     
                 } else {
-                    // Obtém a data do formulário
+
                     let rawDate = document.getElementById("event-date").value;
 
-                    // Formata a data para o formato "YYYY-MM-DD HH:mm:ss"
-                    let formattedDate = new Date(rawDate).toISOString().slice(0, 19).replace('T', ' ');
+// Criar a data local com a hora fornecida pelo campo datetime-local
+let localDate = new Date(rawDate);
 
-                    // Cria os dados do evento
-                    let eventData = {
-                        title: document.getElementById("event-title").value, // Título do evento
-                        category: document.getElementById("event-category").value, // Categoria do evento
-                        event_date: formattedDate // Data formatada corretamente
-                    };
+// Ajuste manual para o horário de São Paulo (GMT-3)
+let timezoneOffset = localDate.getTimezoneOffset() * 60000; // Diferença de minutos para milissegundos
+let saoPauloDate = new Date(localDate.getTime() - timezoneOffset); // Ajusta para GMT-3
+
+// Formata a data para o formato "YYYY-MM-DD HH:mm:ss"
+let formattedDate = saoPauloDate.toISOString().slice(0, 19).replace('T', ' ');
+
+// Cria os dados do evento
+let eventData = {
+    title: document.getElementById("event-title").value, // Título do evento
+    category: document.getElementById("event-category").value, // Categoria do evento
+    event_date: formattedDate // Data formatada corretamente
+};
                     // Adicionar novo evento
                     fetch('/calendar', {
                         method: 'POST',
@@ -254,7 +294,6 @@
                             id: data.id,  // ID do evento retornado pelo backend
                             title: eventData.title,
                             start: eventData.event_date,  // Data correta para o novo evento
-                            allDay: eventData.allDay,
                             className: eventData.category
                         });
                     })
