@@ -6,12 +6,15 @@
         <meta charset="utf-8" />
         <title>Proc Online</title>
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
+        <script src="https://js.pusher.com/8.2.0/pusher.min.js"></script>
         <!-- App favicon -->
         <link rel="shortcut icon" href="assets/images/favicon.ico">
-
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/pusher/7.0.3/pusher.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/laravel-echo/1.11.3/echo.iife.min.js"></script>
+        
         <!-- Theme Config Js -->
         <script src="assets/js/hyper-config.js"></script>
+
 
         <!-- App css -->
         <link href="assets/css/app-saas.min.css" rel="stylesheet" type="text/css" id="app-style" />
@@ -64,6 +67,7 @@
                         <!-- end page title -->
                         <div class="row">
                         <div class="col-xl-5 col-lg-6">
+                            <div id="notifications"></div>
 
                             <div class="row">
                                 <div class="col-sm-6">
@@ -205,7 +209,7 @@
 
                         </div> <!-- end col -->
                     </div>
-                        
+                    
                         <div class="row">
                             <div class="col-lg-5">
                                 <div class="card">
@@ -404,6 +408,9 @@
         </div>
     </div>
 </div>
+
+
+
 <script>
 
 function openInfoModal(event) {

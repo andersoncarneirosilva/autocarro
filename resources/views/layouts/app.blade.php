@@ -37,10 +37,57 @@
         <script src="https://cdnjs.cloudflare.com/ajax/libs/sweetalert/2.1.0/sweetalert.min.js"></script>
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/inputmask/5.0.8/jquery.inputmask.min.js"></script>
-
+<!-- Incluindo o jQuery Toast -->
         <script src="{{ url('js/mask-cep.js') }}"></script>
         <script src="{{ url('js/mask-phone.js') }}"></script>
+        
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/jquery-toast-plugin/dist/jquery.toast.min.css">
 
+        <script>
+            document.addEventListener('DOMContentLoaded', function () {
+                // Função para buscar as notificações
+                function getNotifications() {
+                    fetch('/notifications', {
+                        method: 'GET',
+                        headers: {
+                            'Content-Type': 'application/json',
+                            'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
+                        }
+                    })
+                    .then(response => response.json())
+                    .then(data => {
+                        console.log(data); // Exibe as notificações no console
+        
+                        const notificationsList = document.getElementById('notifications-list');
+        
+                        // Verifica se o elemento existe
+                        if (!notificationsList) {
+                            console.error('Elemento #notifications-list não encontrado.');
+                            return;
+                        }
+        
+                        notificationsList.innerHTML = ''; // Limpa as notificações anteriores
+        
+                        // Adiciona cada notificação à lista
+                        data.forEach(notification => {
+                            const notificationItem = document.createElement('li');
+                            notificationItem.textContent = notification.data.message; // A mensagem da notificação
+        
+                            // Exibe a notificação na lista
+                            notificationsList.appendChild(notificationItem);
+                        });
+                    })
+                    .catch(error => console.error('Erro ao buscar notificações:', error));
+                }
+        
+                // Chama a função para buscar as notificações
+                getNotifications();
+        
+                // Opcional: Recarregar as notificações a cada 10 segundos
+                setInterval(getNotifications, 10000);
+            });
+        </script>
+        
         
         
         <!-- Select2 css -->
@@ -121,6 +168,16 @@
                             <div class="col-12">
                                 <div class="page-title-box">
                                     
+
+                                    <div id="notifications">
+                                        <h2>Notificações</h2>
+                                        <ul id="notifications-list">
+                                            <!-- As notificações serão exibidas aqui -->
+                                        </ul>
+                                    </div>
+                                    
+
+                                    
                                     @include('sweetalert::alert')
                                     @yield('content')
                                 </div>
@@ -128,11 +185,11 @@
                         </div>
                     </div>
                 </div>
-
+                
                 <!-- Footer Start -->
                 @include('components.footer')
                 <!-- end Footer -->
-
+                
             </div>
         </div> 
         <!-- Chart js --> 
@@ -142,8 +199,6 @@
         <script src="{{ url('assets/vendor/select2/js/select2.min.js')}}"></script>
         <script src="{{ url('assets/vendor/daterangepicker/moment.min.js') }}"></script>
         <script src="{{ url('assets/vendor/daterangepicker/daterangepicker.js') }}"></script>
-        <!-- Wizard Form Demo js -->
-        <script src="{{ url('assets/js/pages/demo.form-wizard.js') }}"></script>
         <!-- Input Mask js -->
         <script src="{{ url('assets/vendor/jquery-mask-plugin/jquery.mask.min.js')}}"></script>
         <!-- plugin js -->
@@ -152,11 +207,14 @@
         <script src="{{ url('assets/js/ui/component.fileupload.js') }}"></script>
         <!-- App js -->
         <script src="{{ url('assets/js/app.min.js') }}"></script>
-
+        
         
         <script src="{{ url('assets/vendor/handlebars/handlebars.min.js') }}"></script>
         <script src="{{ url('assets/vendor/typeahead.js/typeahead.bundle.min.js') }}"></script>
         <!-- Script do Select2 -->
+        <script src="{{ url('assets/vendor/jquery-toast-plugin/jquery.toast.min.js') }}"></script>
+        <!-- Toastr Demo js -->
+    <script src="assets/js/pages/demo.toastr.js"></script>
         <script src="{{ url('assets/vendor/fullcalendar/index.global.min.js') }}"></script>
         <script src="https://cdn.jsdelivr.net/npm/fullcalendar@5.11.0/main.min.js"></script>
         <script src="{{ url('assets/js/calendar.js') }}"></script>

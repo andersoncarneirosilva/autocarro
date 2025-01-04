@@ -3,8 +3,11 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use App\Jobs\CreateEventJob;
 use App\Models\Event;
 use Carbon\Carbon;
+use App\Jobs\SendEventNotificationJob;
+
 class CalendarController extends Controller
 {
     public function index(){
@@ -15,9 +18,10 @@ class CalendarController extends Controller
     }
 
     
-public function store(Request $request)
+    public function store(Request $request)
 {
     \Log::debug($request->all());
+    
     try {
         $validated = $request->validate([
             'title' => 'required|string|max:255',
@@ -31,12 +35,20 @@ public function store(Request $request)
             'category' => $validated['category'],
         ]);
 
-        return response()->json($event); // Retorna JSON
+        // Enviar o Job para a fila
+        SendEventNotificationJob::dispatch($event); // Aqui você passa o evento completo
+        \Log::info('Notificação disparada');
+        // Retorna a resposta JSON para o frontend
+        return response()->json([
+            'message' => 'Novo evento criado e notificação em processo de envio!',
+            'event' => $event,
+        ], 202); // 202 indica que a requisição foi aceita para processamento
     } catch (\Exception $e) {
         \Log::error('Erro ao adicionar evento: ' . $e->getMessage());
-        return response()->json(['error' => 'Erro ao adicionar evento'], 500); // Retorna JSON de erro
+        return response()->json(['error' => 'Erro ao adicionar evento'], 500);
     }
 }
+
 
 
 public function update(Request $request, $id)

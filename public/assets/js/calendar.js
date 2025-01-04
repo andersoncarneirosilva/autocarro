@@ -1,3 +1,38 @@
+function showNotification(message, eventTitle, eventDate) {
+    $.toast({
+        heading: false, // Remove o cabeçalho do toast
+        text: `
+            <p>${message}</p>
+            <p><strong>Evento:</strong> ${eventTitle}</p>
+            <p><strong>Data:</strong> ${eventDate}</p>
+        `,
+        position: 'top-right',  // Posiciona a notificação no canto superior direito
+        stack: false,           // Não empilha notificações
+        icon: 'success',        // Ícone de sucesso
+        showHideTransition: 'fade',  // Efeito de fade ao aparecer/desaparecer
+        hideAfter: 3000          // A notificação desaparecerá após 3 segundos
+    });
+}
+
+// Exemplo de invocação da função
+// Exemplo: Exibe a notificação apenas quando o botão for clicado
+$('#show-toast-btn').on('click', () => {
+    const eventData = {
+        title: 'Licenciamento',
+        event_date: '2025-01-04 13:52:00',
+        category: 'bg-warning',
+    };
+
+    showToast(
+        "Seu evento foi criado com sucesso!",
+        eventData.title,
+        eventData.event_date,
+        eventData.category
+    );
+});
+
+
+
 !function(l) {
     "use strict";
     let globalEventId = null;
@@ -295,6 +330,14 @@ let eventData = {
                             start: eventData.event_date,  // Data correta para o novo evento
                             className: eventData.category
                         });
+
+                        // Exibir a notificação
+                        showNotification(
+                            "Evento Criado com Sucesso!",
+                            data.event.title,
+                            data.event.event_date,
+                            data.event.category
+                        );
                     })
                     .catch(error => console.error('Error adding new event:', error));
                 }

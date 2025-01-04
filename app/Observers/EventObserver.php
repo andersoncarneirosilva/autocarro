@@ -3,15 +3,18 @@
 namespace App\Observers;
 
 use App\Models\Event;
+use App\Events\NewEventCreated; // Adicionar a importação do evento
 
 class EventObserver
 {
     /**
      * Handle the Event "created" event.
      */
-    public function created(Event $event): void
+    public function created(Event $event)
     {
-        //
+        // Disparar o evento de broadcast
+        \Log::info("Novo evento criado: " . $event->name);
+        broadcast(new NewEventCreated($event));
     }
 
     /**

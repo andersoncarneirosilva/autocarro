@@ -4,8 +4,7 @@ namespace App\Console\Commands;
 
 use Illuminate\Console\Command;
 use App\Models\Event; // Seu modelo de eventos
-use Illuminate\Support\Facades\Notification;
-use App\Notifications\EventReminderNotification;
+use App\Events\EventReminderBroadcast; // O evento de broadcast que será emitido
 use Carbon\Carbon;
 
 class NotificaEvents extends Command
@@ -18,18 +17,22 @@ class NotificaEvents extends Command
     {
         // Obtém a hora atual
         $now = Carbon::now();
-        $oneHourLater = $now->copy()->addHour();
 
-        // Busca eventos com horário entre agora e uma hora no futuro
-        $events = Event::whereBetween('event_date', [$now, $oneHourLater])->get();
+        // Calcula o intervalo de uma hora no futuro
+        $oneHourFromNow = $now->copy()->addHour();
 
-        foreach ($events as $event) {
-            // Notifica o usuário associado ao evento (ajuste conforme seu modelo)
-            if ($event->user) {
-                Notification::send($event->user, new EventReminderNotification($event));
-            }
+        // Busca eventos que acontecerão dentro de uma hora
+        $events = Event::whereBetween('event_date', [$now, $oneHourFromNow])->get();
+
+        if ($events->isEmpty()) {
+            $this->info('Nenhum evento para notificar.');
+            return;
         }
 
-        $this->info('Notificações enviadas para eventos futuros.');
+        foreach ($events as $event) {
+            // Emite o evento de broadcast
+            event(new EventReminderBroadcast($event));
+            $this->info("Notificação emitida para o evento: {$event->title} às {$event->event_date}");
+        }
     }
 }
