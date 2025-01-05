@@ -5,7 +5,7 @@ namespace App\Notifications;
 use Illuminate\Bus\Queueable;
 use Illuminate\Notifications\Notification;
 use Illuminate\Notifications\Messages\MailMessage;
-
+use Carbon\Carbon;
 class EventCreatedNotification extends Notification
 {
     use Queueable;
@@ -25,12 +25,14 @@ class EventCreatedNotification extends Notification
 
     public function toDatabase($notifiable)
     {
-        \Log::debug($this->event); // Verifique o conteúdo no log
+        
         return [
-            'message' => 'Novo evento criado: ' . $this->event['title'], // Substitua 'name' por 'title'
+            'message' => $this->event['title'],
             'event_id' => $this->event['id'],
             'event_date' => $this->event['event_date'],
+            'created_at' => $this->event['created_at'],
         ];
+        \Log::debug("ENVIADO PARA A TABLE: " . $this->event); // Verifique o conteúdo no log
     }
 
     // Se desejar enviar a notificação por email, use este método:

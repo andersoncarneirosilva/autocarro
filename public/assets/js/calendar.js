@@ -19,15 +19,13 @@ function showNotification(message, eventTitle, eventDate) {
 $('#show-toast-btn').on('click', () => {
     const eventData = {
         title: 'Licenciamento',
-        event_date: '2025-01-04 13:52:00',
-        category: 'bg-warning',
+        event_date: '2025-01-04 13:52:00'
     };
 
     showToast(
         "Seu evento foi criado com sucesso!",
         eventData.title,
-        eventData.event_date,
-        eventData.category
+        eventData.event_date
     );
 });
 
@@ -178,7 +176,7 @@ let eventData = {
                 })
                 .then(response => response.json())
                 .then(events => {
-                    
+                    //console.log(events);
                     // Passe cada evento para o FullCalendar
                     successCallback(events.map(event => {
                         return {
@@ -309,7 +307,7 @@ let formattedDate = saoPauloDate.toISOString().slice(0, 19).replace('T', ' ');
 let eventData = {
     title: document.getElementById("event-title").value, // Título do evento
     category: document.getElementById("event-category").value, // Categoria do evento
-    event_date: formattedDate // Data formatada corretamente
+    event_date: document.getElementById("event-date").value,
 };
                     // Adicionar novo evento
                     fetch('/calendar', {

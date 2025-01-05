@@ -32,7 +32,7 @@ class NewEventCreated implements ShouldBroadcast
     public function broadcastWith()
     {
         return [
-            'message' => 'Novo evento criado: ' . $this->event->name
+            'title' => 'Novo evento criado: ' . $this->event->title
         ];
     }
 }

@@ -25,7 +25,7 @@ class CalendarController extends Controller
     try {
         $validated = $request->validate([
             'title' => 'required|string|max:255',
-            'event_date' => 'required|date_format:Y-m-d H:i:s',
+            'event_date' => 'required|date',
             'category' => 'required|string',
         ]);
 
@@ -53,31 +53,43 @@ class CalendarController extends Controller
 
 public function update(Request $request, $id)
 {
-    \Log::debug($request->all());
+    \Log::debug('Requisição recebida para atualizar evento:', $request->all());
 
-    $event = Event::find($id);  // Encontre o evento com o ID passado
+    // Tenta encontrar o evento pelo ID
+    $event = Event::find($id);
 
     if (!$event) {
-        return response()->json(['error' => 'Evento não encontrado'], 404);  // Retorna 404 caso o evento não exista
+        \Log::warning('Evento não encontrado. ID:', ['id' => $id]);
+        return response()->json(['error' => 'Evento não encontrado'], 404);
     }
+
     try {
+        // Valida os dados da requisição
         $validated = $request->validate([
             'title' => 'required|string|max:255',
             'event_date' => 'required|date_format:Y-m-d H:i:s',
             'category' => 'required|string',
         ]);
+
         // Atualiza os dados do evento
         $event->update([
             'title' => $validated['title'],
             'category' => $validated['category'],
             'event_date' => $validated['event_date'],
         ]);
-        return response()->json($event); // Retorna JSON
+
+        \Log::info('Evento atualizado com sucesso:', ['id' => $event->id]);
+
+        // Dispara o evento de broadcast
+        // Enviar o Job para a fila
+        SendEventNotificationJob::dispatch($event); // Aqui você passa o evento completo
+
+        // Retorna o evento atualizado como resposta JSON
+        return response()->json($event);
     } catch (\Exception $e) {
-        \Log::error('CONTROLLER: Erro ao atualizar evento: ' . $e->getMessage());
-        return response()->json(['error' => 'CONTROLLER: Erro ao atualizar evento'], 500); // Retorna JSON de erro
+        \Log::error('Erro ao atualizar evento:', ['id' => $id, 'error' => $e->getMessage()]);
+        return response()->json(['error' => 'Erro ao atualizar evento'], 500);
     }
-    
 }
 
 

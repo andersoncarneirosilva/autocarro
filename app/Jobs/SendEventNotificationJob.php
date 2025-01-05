@@ -41,12 +41,13 @@ class SendEventNotificationJob implements ShouldQueue
                 'id' => $this->event->id,
                 'title' => $this->event->title,
                 'event_date' => $this->event->event_date,
+                'created_at' => $this->event->created_at,
                 'category' => $this->event->category,
             ];
 
             $user->notify(new EventCreatedNotification($eventData));
         }
 
-        \Log::info('Notificação enviada para todos os usuários sobre o evento: ' . $this->event->title);
+        \Log::info('Notificação enviada para todos os usuários sobre o evento: ' . $this->event->created_at);
     }
 }
