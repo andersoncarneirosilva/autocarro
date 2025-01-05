@@ -12,6 +12,7 @@ use App\Models\TextoPoder;
 use Smalot\PdfParser\Parser;
 use Carbon\Carbon;
 use FPDF;
+use Parsedown;
 
 class ConfiguracoesController extends Controller
 {
@@ -22,20 +23,30 @@ class ConfiguracoesController extends Controller
         $this->model = $docs;
     }
 
-    public function index(Request $request){
+    public function index(Request $request)
+{
+    $title = 'Excluir!';
+    $text = "Tem certeza que deseja excluir?";
+    confirmDelete($title, $text);
 
-        $title = 'Excluir!';
-        $text = "Tem certeza que deseja excluir?";
-        confirmDelete($title, $text);
+    $procs = ConfigProc::paginate(10);
+    $outs = Outorgado::paginate(10);
+    $teste = Testemunha::paginate(10);
+    $texts = TextoPoder::paginate(10);
+    $cidades = Cidade::paginate(10);
 
-        $procs = ConfigProc::paginate(10);
-        $outs = Outorgado::paginate(10);
-        $teste = Testemunha::paginate(10);
-        $texts = TextoPoder::paginate(10);
-        $cidades = Cidade::paginate(10);
-        //dd($outs);
-        return view('configuracoes.index', compact(['procs', 'outs', 'teste','texts','cidades']));
-    }
+    $parsedown = new Parsedown();
+
+    // Processa o texto Markdown para HTML mantendo a paginação
+    $texts->getCollection()->transform(function ($text) use ($parsedown) {
+        $text->html = $parsedown->text($text->texto_final); // Adiciona o HTML processado ao item
+        return $text;
+    });
+
+    return view('configuracoes.index', compact('procs', 'outs', 'teste', 'texts', 'cidades'));
+}
+
+
 
     
 

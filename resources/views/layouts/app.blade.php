@@ -40,7 +40,12 @@
 <!-- Incluindo o jQuery Toast -->
         <script src="{{ url('js/mask-cep.js') }}"></script>
         <script src="{{ url('js/mask-phone.js') }}"></script>
-        
+        <!-- SimpleMDE css -->                                                 
+<link href="{{ url('assets/vendor/simplemde/simplemde.min.css') }}" rel="stylesheet" />                                    
+<!-- SimpleMDE js -->
+
+
+
         <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/jquery-toast-plugin/dist/jquery.toast.min.css">
 
         <script>
@@ -303,5 +308,8 @@
         <script src="{{ url('assets/vendor/fullcalendar/index.global.min.js') }}"></script>
         <script src="https://cdn.jsdelivr.net/npm/fullcalendar@5.11.0/main.min.js"></script>
         <script src="{{ url('assets/js/calendar.js') }}"></script>
+        <script src="{{ url('assets/vendor/simplemde/simplemde.min.js') }}"></script>
+<!-- SimpleMDE demo -->
+<script src="{{ url('assets/js/pages/demo.simplemde.js') }}"></script>
     </body>
 </html> 

@@ -10,7 +10,7 @@
                 <div class="modal-body">
                     <div class="mb-3">
                         <label for="nome_outorgado" class="form-label">Texto </label>
-                        <textarea class="form-control" id="texto_final" name="texto_final" rows="6" cols="150"></textarea>
+                        <textarea  id="texto_final"  name="texto_final"> </textarea>
                     </div>
                 </div>
                 <div class="modal-footer">

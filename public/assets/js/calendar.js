@@ -33,11 +33,11 @@ $('#show-toast-btn').on('click', () => {
 
 !function(l) {
     "use strict";
-    let globalEventId = null;
 
     function e() {
         this.$body = l("body"),
         this.$modal = new bootstrap.Modal(document.getElementById("event-modal")),
+        
         this.$calendar = l("#calendar"),
         this.$formEvent = l("#form-event"),
         this.$btnNewEvent = l("#btn-new-event"),
@@ -431,5 +431,7 @@ let eventData = {
 // Start Calendar App
 (function() {
     "use strict";
-    window.jQuery.CalendarApp.init();
+    if (document.getElementById("calendar")) { // Verifica se o calendário existe no DOM antes de inicializar
+        window.jQuery.CalendarApp.init();
+    }
 })();

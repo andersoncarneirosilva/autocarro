@@ -4,7 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\TextoPoder;
-
+use Parsedown;
 class TextoPoderesController extends Controller
 {
     protected $model;
@@ -46,8 +46,11 @@ class TextoPoderesController extends Controller
     }
 
     public function show($id){
+
         $configuracao = TextoPoder::find($id);
-        
+        $parsedown = new Parsedown();
+        $html = $parsedown->text($dados->texto_final);
+
         if (!$configuracao) {
             return response()->json(['error' => 'Configuração não encontrada'], 404);
         }

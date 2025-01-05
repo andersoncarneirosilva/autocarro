@@ -104,65 +104,60 @@
                 </ul>
             @endif --}}
             @if ($texts->total() != 0)
-            <div class="col-sm-12">
-                <div class="card-header d-flex justify-content-between align-items-center">
-                    <h4 class="header-title">Texto</h4>
-                    <div class="dropdown">
-                        @if ($texts->total() <= 1)
-                        <button type="button" class="btn btn-primary btn-sm" onclick="verificarLimiteTexto()">Cadastrar</button>
-
-                        @else
-                        <button type="button" class="btn btn-primary btn-sm" data-bs-toggle="modal"
-                            data-bs-target="#modalCadastroTexto">Cadastrar</button>
-                        {{-- <button class="btn btn-secondary btn-sm" id="deleteAllSelectedRecord" disabled><i
-                                class="fa-solid fa-trash"></i></button> --}}
-                        @endif
-
-                    </div>
-                </div>
-                
-                <div class="table-responsive-sm">
-                    <table class="table table-hover table-centered mb-0">
-                        <thead class="table-dark">
-                            <tr>
-                                <th>Texto</th>
-                                <th>Ações</th>
-                            </tr>
-                        </thead>
-
-                        <tbody>
-                            @foreach ($texts as $text)
-                                <tr>
-                                    <td >{{ $text->texto_final }}</td>
-                                    <td >
-
-                                        <a href="#" class="action-icon" data-id="{{ $text->id }}" onclick="openEditTextModal(event)">
-                                            <i class="mdi mdi-clipboard-edit-outline" title="Editar"></i>
-                                        </a>
-                                        <a href="{{ route('poderes.destroy', $text->id) }}"
-                                            class="action-icon mdi mdi-delete" data-confirm-delete="true"></a>
-
-                                    </td>
-                                </tr>
-                            @endforeach
-                        </tbody>
-                    </table>
-                </div>
-                @elseif($texts->total() == 0)
-                <div class="col-sm-12">
-                    <div class="card-header d-flex justify-content-between align-items-center">
-                <h4 class="header-title">Texto</h4>
-                <div class="dropdown">
-                    <button type="button" class="btn btn-primary btn-sm" data-bs-toggle="modal"
-                            data-bs-target="#modalCadastroTexto">Cadastrar</button>
-                </div>
-                    </div>
-                    <div class="alert alert-danger bg-transparent text-danger" role="alert">
-                        NENHUM RESULTADO ENCONTRADO!
-                    </div>
-                </div>
-                    
+    <div class="col-sm-12">
+        <div class="card-header d-flex justify-content-between align-items-center">
+            <h4 class="header-title">Texto</h4>
+            <div class="dropdown">
+                @if ($texts->total() <= 1)
+                    <button type="button" class="btn btn-primary btn-sm" onclick="verificarLimiteTexto()">Cadastrar</button>
+                @else
+                    <button type="button" class="btn btn-primary btn-sm" data-bs-toggle="modal" data-bs-target="#modalCadastroTexto">Cadastrar</button>
                 @endif
+            </div>
+        </div>
+        
+        <div class="table-responsive-sm">
+            <table class="table table-hover table-centered mb-0">
+                <thead class="table-dark">
+                    <tr>
+                        <th>Texto</th>
+                        <th>Ações</th>
+                    </tr>
+                </thead>
+
+                <tbody>
+                    @foreach ($texts as $text)
+                        <tr>
+                            <td>{!! $text->html !!}</td> <!-- Exibe o texto renderizado -->
+                            <td>
+                                <a href="#" class="action-icon" data-id="{{ $text->id }}" onclick="openEditTextModal(event)">
+                                    <i class="mdi mdi-clipboard-edit-outline" title="Editar"></i>
+                                </a>
+                                <a href="{{ route('poderes.destroy', $text->id) }}" class="action-icon mdi mdi-delete" data-confirm-delete="true"></a>
+                            </td>
+                        </tr>
+                    @endforeach
+                </tbody>
+            </table>
+        </div>
+
+        <!-- Paginação -->
+        {{ $texts->links() }}
+    </div>
+@else
+    <div class="col-sm-12">
+        <div class="card-header d-flex justify-content-between align-items-center">
+            <h4 class="header-title">Texto</h4>
+            <div class="dropdown">
+                <button type="button" class="btn btn-primary btn-sm" data-bs-toggle="modal" data-bs-target="#modalCadastroTexto">Cadastrar</button>
+            </div>
+        </div>
+        <div class="alert alert-danger bg-transparent text-danger" role="alert">
+            NENHUM RESULTADO ENCONTRADO!
+        </div>
+    </div>
+@endif
+
                    
             </div>
         </div>
