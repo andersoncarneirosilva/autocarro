@@ -1,16 +1,23 @@
 function showNotification(message, eventTitle, eventDate) {
+    // Converter eventDate para um objeto Date
+    const date = new Date(eventDate);
+    
+    // Formatar data para formato brasileiro (DD/MM/YYYY)
+    const formattedDate = `${String(date.getDate()).padStart(2, '0')}/${String(date.getMonth() + 1).padStart(2, '0')}/${date.getFullYear()}`;
+    
     $.toast({
         heading: false, // Remove o cabeçalho do toast
         text: `
             <p>${message}</p>
             <p><strong>Evento:</strong> ${eventTitle}</p>
-            <p><strong>Data:</strong> ${eventDate}</p>
+            <p><strong>Data:</strong> ${formattedDate}</p>
         `,
         position: 'top-right',  // Posiciona a notificação no canto superior direito
         stack: false,           // Não empilha notificações
         icon: 'success',        // Ícone de sucesso
         showHideTransition: 'fade',  // Efeito de fade ao aparecer/desaparecer
-        hideAfter: 3000          // A notificação desaparecerá após 3 segundos
+        hideAfter: 5000,          // A notificação desaparecerá após 3 segundos
+        close: false
     });
 }
 
@@ -22,7 +29,7 @@ $('#show-toast-btn').on('click', () => {
         event_date: '2025-01-04 13:52:00'
     };
 
-    showToast(
+    showNotification(
         "Seu evento foi criado com sucesso!",
         eventData.title,
         eventData.event_date
@@ -31,13 +38,14 @@ $('#show-toast-btn').on('click', () => {
 
 
 
+
 !function(l) {
     "use strict";
 
     function e() {
         this.$body = l("body"),
-        this.$modal = new bootstrap.Modal(document.getElementById("event-modal")),
-        
+        //this.$modal = new bootstrap.Modal(document.getElementById("event-modal")),
+        this.$modal = document.getElementById("event-modal") ? new bootstrap.Modal(document.getElementById("event-modal")) : null,
         this.$calendar = l("#calendar"),
         this.$formEvent = l("#form-event"),
         this.$btnNewEvent = l("#btn-new-event"),
@@ -49,20 +57,24 @@ $('#show-toast-btn').on('click', () => {
     }
 
     e.prototype.onEventClick = function(e) {
+        if (!this.$modal || !this.$formEvent.length) return; // Verifica se elementos necessários existem
+
         this.$formEvent[0].reset();
         this.$formEvent.removeClass("was-validated");
-        this.$btnDeleteEvent.show();
-        this.$modalTitle.text("Editar evento");
+        if (this.$btnDeleteEvent.length) this.$btnDeleteEvent.show();
+        if (this.$modalTitle.length) this.$modalTitle.text("Editar evento");
+
         this.$modal.show();
+
     
         // Verifique se e.event existe
         if (e.event) {
             this.$selectedEvent = e.event;
 
             // Preenche o formulário com os dados do evento
-            l("#event-title").val(this.$selectedEvent.title);
-            l("#event-id-hidden").val(this.$selectedEvent.id);  // Certifique-se que o ID esteja disponível
-            l("#event-category").val(this.$selectedEvent.classNames[0]); // Categoria do evento
+            l("#event-title").val(this.$selectedEvent.title || "");
+            l("#event-id-hidden").val(this.$selectedEvent.id || "");
+            l("#event-category").val(this.$selectedEvent.classNames[0] || "");
             
             // Cria um objeto Date a partir da data ISO 8601 (em UTC)
             let utcDate = new Date(this.$selectedEvent.startStr); 
@@ -92,16 +104,20 @@ $('#show-toast-btn').on('click', () => {
     };
     
     e.prototype.onSelect = function(e) {
-        this.$formEvent[0].reset(),
-        this.$formEvent.removeClass("was-validated"),
-        this.$selectedEvent = null,
-        this.$btnDeleteEvent.hide(),
-        this.$modalTitle.text("Criar novo evento"),
-        this.$modal.show(),
+        if (!this.$modal || !this.$formEvent.length) return;
+
+        this.$formEvent[0].reset();
+        this.$formEvent.removeClass("was-validated");
+        this.$selectedEvent = null;
+        if (this.$btnDeleteEvent.length) this.$btnDeleteEvent.hide();
+        if (this.$modalTitle.length) this.$modalTitle.text("Criar novo evento");
+        this.$modal.show();
         this.$calendarObj.unselect();
     };
 
     e.prototype.init = function() {
+        if (!this.$calendar.length) return;
+
         var a = this;
 
         // Initialize FullCalendar

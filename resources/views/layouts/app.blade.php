@@ -43,10 +43,8 @@
         <!-- SimpleMDE css -->                                                 
 <link href="{{ url('assets/vendor/simplemde/simplemde.min.css') }}" rel="stylesheet" />                                    
 <!-- SimpleMDE js -->
-
-
-
-        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/jquery-toast-plugin/dist/jquery.toast.min.css">
+<!-- Plugin css -->
+<link rel="stylesheet" href="{{ url('assets/vendor/jquery-toast-plugin/jquery.toast.min.css') }}">
 
         <script>
             document.addEventListener('DOMContentLoaded', function () {
@@ -304,12 +302,11 @@
         <!-- Script do Select2 -->
         <script src="{{ url('assets/vendor/jquery-toast-plugin/jquery.toast.min.js') }}"></script>
         <!-- Toastr Demo js -->
-    <script src="assets/js/pages/demo.toastr.js"></script>
         <script src="{{ url('assets/vendor/fullcalendar/index.global.min.js') }}"></script>
         <script src="https://cdn.jsdelivr.net/npm/fullcalendar@5.11.0/main.min.js"></script>
         <script src="{{ url('assets/js/calendar.js') }}"></script>
         <script src="{{ url('assets/vendor/simplemde/simplemde.min.js') }}"></script>
 <!-- SimpleMDE demo -->
-<script src="{{ url('assets/js/pages/demo.simplemde.js') }}"></script>
+<script src="{{ url('assets/js/editor-texto.js') }}"></script>
     </body>
 </html> 

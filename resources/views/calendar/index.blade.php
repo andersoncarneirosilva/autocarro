@@ -4,139 +4,14 @@
 
 @section('content')
 
-
-
-{{-- <script src='https://cdn.jsdelivr.net/npm/fullcalendar@6.1.15/index.global.min.js'></script>
-
-<script>
-document.addEventListener('DOMContentLoaded', function() {
-    var calendarEl = document.getElementById('calendar');
-    var calendar = new FullCalendar.Calendar(calendarEl, {
-        initialView: 'dayGridMonth',
-        themeSystem: 'bootstrap5',
-        locale: 'pt-br',
-        events: function(info, successCallback, failureCallback) {
-            // Requisição AJAX para carregar eventos
-            fetch('/calendar/events')
-                .then(response => response.json())
-                .then(data => successCallback(data))
-                .catch(error => failureCallback(error));
-        },
-        dateClick: function(info) {
-            document.getElementById('eventDate').value = info.dateStr;
-            $('#eventModal').modal('show');
-        },
-        eventClick: function(info) {
-            console.log("Evento ID: " . info); // Verifique o objeto completo do evento
-            console.log(info.event.id); // Verifique se o ID está correto
-            // Preenche os campos do modal de edição com os dados do evento
-            document.getElementById('editEventTitle').value = info.event.title;
-            document.getElementById('editEventDescription').value = info.event.extendedProps.description;
-            document.getElementById('editEventDate').value = info.event.start.toISOString().slice(0, 16); // Formata a data para o input "datetime-local"
-            document.getElementById('editEventId').value = info.event.id;
-
-            // Exibe o modal de edição
-            $('#editEventModal').modal('show');
-        }
-    });
-    calendar.render();
-    calendar.refetchEvents();  // Recarrega todos os eventos do servidor
-
-    // Evento para salvar o novo evento
-    document.getElementById('saveEventBtn').addEventListener('click', function() {
-        var eventTitle = document.getElementById('eventTitle').value;
-        var eventDescription = document.getElementById('eventDescription').value;
-        var eventDate = document.getElementById('eventDate').value;
-
-        if (eventTitle && eventDate) {
-            // Enviar dados via AJAX para o backend
-            fetch('/calendar', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                    'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
-                },
-                body: JSON.stringify({
-                    title: eventTitle,
-                    description: eventDescription,
-                    event_date: eventDate
-                })
-            })
-            .then(response => response.json()) // Espera a resposta JSON do backend
-            .then(data => {
-                
-                if (data) {
-                    // Adicionar evento ao FullCalendar
-                    calendar.addEvent({
-                        id: data.eventId,
-                        title: data.title,
-                        start: data.event_date,
-                        description: data.description
-                    });
-
-                    // Fecha o modal
-                    $('#eventModal').modal('hide');
-
-                    // Limpar o formulário
-                    document.getElementById('eventForm').reset();
-                }
-            })
-            .catch(error => {
-                console.error('Erro ao salvar evento:', error);
-            });
-        } else {
-            alert('Por favor, preencha todos os campos.');
-        }
-    });
-
-
-
-// Para excluir evento
-document.getElementById('deleteEventBtn').addEventListener('click', function(event) {
-    event.preventDefault(); // Previne a navegação padrão
-    var eventId = 13;
-console.log('ID EVENTO: ', eventId);
-    fetch('/calendar/delete/' + eventId, {
-        method: 'DELETE',
-        headers: {
-            'Content-Type': 'application/json',
-                    'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
-        }
-    })
-    .then(response => response.json())
-    .then(data => {
-        if (data.success) {
-            var event = calendar.getEventById(eventId);
-            event.remove();
-            $('#editEventModal').modal('hide');
-        } else {
-            console.error('Erro ao excluir o evento:', data.message || 'Resposta inválida do servidor.');
-        }
-    })
-    .catch(error => {
-        console.error('Erro ao excluir o evento:', error);
-    });
-});
-
-
-
-
- });
-
-
-
-
-
-</script> --}}
     <!-- start page title -->
     <div class="row">
         <div class="col-12">
             <div class="page-title-box">
                 <div class="page-title-right">
                     <ol class="breadcrumb m-0">
-                        <li class="breadcrumb-item"><a href="javascript: void(0);">Hyper</a></li>
-                        <li class="breadcrumb-item"><a href="javascript: void(0);">Apps</a></li>
-                        <li class="breadcrumb-item active">Calendar</li>
+                        <li class="breadcrumb-item"><a href="{{ route('dashboard.index') }}">Dashboard</a></li>
+                        <li class="breadcrumb-item active">Calendário</li>
                     </ol>
                 </div>
                 <h4 class="page-title">Calendar</h4>
