@@ -3,13 +3,13 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use App\Models\TextoPoder;
+use App\Models\TextoInicio;
 use Parsedown;
-class TextoPoderesController extends Controller
+class TextoInicioController extends Controller
 {
     protected $model;
 
-    public function __construct(TextoPoder $texts)
+    public function __construct(TextoInicio $texts)
     {
         $this->model = $texts;
     }
@@ -20,7 +20,7 @@ class TextoPoderesController extends Controller
         $text = "Deseja excluir essa categoria?";
         confirmDelete($title, $text);
 
-        $texts = TextoPoder::paginate(10);
+        $texts = TextoInicio::paginate(10);
         //dd($docs);
         return view('configuracoes.index', compact('texts'));
     }
@@ -37,7 +37,7 @@ class TextoPoderesController extends Controller
 
     public function update(Request $request, $id){
 
-        $doc = TextoPoder::findOrFail($id);
+        $doc = TextoInicio::findOrFail($id);
     
         $doc->update($request->all());
     
@@ -48,7 +48,7 @@ class TextoPoderesController extends Controller
     public function show($id)
 {
     // Tente encontrar o documento pelo ID
-    $configuracao = TextoPoder::find($id);
+    $configuracao = TextoInicio::find($id);
 
     // Verifique se o documento foi encontrado
     if (!$configuracao) {

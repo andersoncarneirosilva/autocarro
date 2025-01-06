@@ -9,6 +9,7 @@ use App\Models\Outorgado;
 use App\Models\Testemunha;
 use App\Models\Cidade;
 use App\Models\TextoPoder;
+use App\Models\TextoInicio;
 use Smalot\PdfParser\Parser;
 use Carbon\Carbon;
 use FPDF;
@@ -33,6 +34,7 @@ class ConfiguracoesController extends Controller
     $outs = Outorgado::paginate(10);
     $teste = Testemunha::paginate(10);
     $texts = TextoPoder::paginate(10);
+    $texts_starts = TextoInicio::paginate(10);
     $cidades = Cidade::paginate(10);
 
     $parsedown = new Parsedown();
@@ -43,7 +45,7 @@ class ConfiguracoesController extends Controller
         return $text;
     });
 
-    return view('configuracoes.index', compact('procs', 'outs', 'teste', 'texts', 'cidades'));
+    return view('configuracoes.index', compact('procs', 'outs', 'teste', 'texts', 'cidades', 'texts_starts'));
 }
 
 

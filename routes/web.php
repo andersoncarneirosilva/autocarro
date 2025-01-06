@@ -21,6 +21,7 @@ use App\Http\Controllers\CidadeController;
 use App\Http\Controllers\PaymentController;
 use App\Http\Controllers\PasswordResetController;
 use App\Http\Controllers\NotificationController;
+use App\Http\Controllers\TextoInicioController;
 use App\Http\Controllers\OrdemController;
 use Illuminate\Support\Facades\Route;
 use App\Events\EventReminderBroadcast;
@@ -100,9 +101,14 @@ Route::middleware(['auth'])->group(function () {
     Route::post('/outorgados', [OutorgadoController::class, 'store'])->name('outorgados.store');
 
     Route::get('/poderes/{id}', [TextoPoderesController::class, 'show'])->name('poderes.show');
-    Route::put('/poderes/{id}', [TextoPoderesController::class, 'update'])->name('poderes.update');
     Route::delete('/poderes/{id}', [TextoPoderesController::class, 'destroy'])->name('poderes.destroy');
+    Route::put('/poderes/{id}', [TextoPoderesController::class, 'update'])->name('poderes.update');
     Route::post('/poderes', [TextoPoderesController::class, 'store'])->name('poderes.store');
+
+    Route::get('/textoinicial/{id}', [TextoInicioController::class, 'show'])->name('textoinicial.show');
+    Route::delete('/textoinicial/{id}', [TextoInicioController::class, 'destroy'])->name('textoinicial.destroy');
+    Route::put('/textoinicial/{id}', [TextoInicioController::class, 'update'])->name('textoinicial.update');
+    Route::post('/textoinicial', [TextoInicioController::class, 'store'])->name('textoinicial.store');
 
     Route::put('/clientes/{id}', [ClientesController::class, 'update'])->name('clientes.update');
     Route::delete('/clientes/{id}', [ClientesController::class, 'destroy'])->name('clientes.destroy');

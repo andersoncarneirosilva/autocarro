@@ -1,16 +1,17 @@
-<div class="modal fade" id="modalCadastroTexto" tabindex="-1" aria-hidden="true">
-    <div class="modal-dialog modal-lg">
+<!-- Modal -->
+<div class="modal fade" id="modalCadTextoInicial" tabindex="-1" aria-labelledby="modalCadTextoInicialLabel" aria-hidden="true">
+    <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title">Cadastrar texto final</h5>
+                <h5 class="modal-title" id="modalCadTextoInicialLabel">Cadastrar texto inicial</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
-            <form action="{{ route('poderes.store') }}" method="POST" enctype="multipart/form-data">
+            <form action="{{ route('textoinicial.store') }}" method="POST" enctype="multipart/form-data">
                 @csrf
                 <div class="modal-body">
                     <div class="mb-3">
-                        <label for="nome_outorgado" class="form-label">Texto </label>
-                        <textarea  id="texto_final"  name="texto_final"></textarea>
+                        <label for="texto_inicial" class="form-label">Texto inicial</label>
+                        <textarea id="texto_inicial" name="texto_inicio" class="form-control"></textarea>
                     </div>
                 </div>
                 <div class="modal-footer">

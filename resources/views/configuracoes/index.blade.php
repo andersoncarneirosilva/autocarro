@@ -4,6 +4,7 @@
 
 @section('content')
 
+
 <div class="row">
     <div class="col-12">
         <div class="page-title-box">
@@ -18,229 +19,35 @@
     </div>
 </div>
 
-<div class="card">
-    <div class="card-body">
-        <div class="row">
-            @if ($outs->total() != 0)
-            <div class="col-sm-12">
-                <div class="card-header d-flex justify-content-between align-items-center">
-                    <h4 class="header-title">Outorgado</h4>
-                    <div class="dropdown">
-                        @if ($outs->total() >= 3)
-                        <button type="button" class="btn btn-primary btn-sm" onclick="verificarLimite()">Cadastrar</button>
-
-                        @else
-                        <button type="button" class="btn btn-primary btn-sm" data-bs-toggle="modal"
-                            data-bs-target="#modalCadastroOut">Cadastrar</button>
-                        {{-- <button class="btn btn-secondary btn-sm" id="deleteAllSelectedRecord" disabled><i
-                                class="fa-solid fa-trash"></i></button> --}}
-                        @endif
-                    </div>
-                </div>
-                
-                <div class="table-responsive-sm">
-                    <table class="table table-hover table-centered mb-0">
-                        <thead class="table-dark">
-                            <tr>
-                                <th>Nome</th>
-                                <th>CPF</th>
-                                <th>Endereço</th>
-                                <th>Ações</th>
-                            </tr>
-                        </thead>
-
-                        <tbody>
-                            @foreach ($outs as $out)
-                                <tr>
-                                    <td>{{ $out->nome_outorgado }}</td>
-                                    <td>{{ $out->cpf_outorgado }}</td>
-                                    <td>{{ $out->end_outorgado }}</td>
-                                    <td class="table-action">
-
-                                        <a href="#" class="action-icon" data-id="{{ $out->id }}" onclick="openEditModalOutorgado(event)">
-                                            <i class="mdi mdi-clipboard-edit-outline" title="Editar"></i>
-                                        </a>
-                                        <a href="{{ route('outorgados.destroy', $out->id) }}"
-                                            class="action-icon mdi mdi-delete" data-confirm-delete="true"></a>
-
-                                    </td>
-                                </tr>
-                            @endforeach
-                        </tbody>
-                    </table>
-                </div>
-                    @elseif($outs->total() == 0)
-                    <div class="col-sm-12">
-                        <div class="card-header d-flex justify-content-between align-items-center">
-                    <h4 class="header-title">Outorgado</h4>
-                    <div class="dropdown">
-                        <button type="button" class="btn btn-primary btn-sm" data-bs-toggle="modal"
-                                data-bs-target="#modalCadastroOut">Cadastrar</button>
-                    </div>
-                        </div>
-                        <div class="alert alert-danger bg-transparent text-danger" role="alert">
-                            NENHUM RESULTADO ENCONTRADO!
-                        </div>
-                    </div>
-                        
-                    @endif
-                
-            </div>
-        </div>
-    </div>
-</div>
-
-
-
-
-<div class="card">
-    <div class="card-body">
-        <div class="row">
-            {{-- @if ($errors->any())
-                <ul class="errors">
-                    @foreach ($errors->all() as $error)
-                        <div class="alert alert-danger" role="alert">{{ $error }}</div>
-                    @endforeach
-                </ul>
-            @endif --}}
-            @if ($texts->total() != 0)
-    <div class="col-sm-12">
-        <div class="card-header d-flex justify-content-between align-items-center">
-            <h4 class="header-title">Texto</h4>
-            <div class="dropdown">
-                @if ($texts->total() <= 1)
-                    <button type="button" class="btn btn-primary btn-sm" onclick="verificarLimiteTexto()">Cadastrar</button>
-                @else
-                    <button type="button" class="btn btn-primary btn-sm" data-bs-toggle="modal" data-bs-target="#modalCadastroTexto">Cadastrar</button>
-                @endif
-            </div>
-        </div>
+<div class="row">
+    <div class="col-sm-6">
         
-        <div class="table-responsive-sm">
-            <table class="table table-hover table-centered mb-0">
-                <thead class="table-dark">
-                    <tr>
-                        <th>Texto</th>
-                        <th>Ações</th>
-                    </tr>
-                </thead>
+        @include('configuracoes._partials.list-outorgado')
+        
+        @include('configuracoes._partials.list-texto-inicial')
 
-                <tbody>
-                    @foreach ($texts as $text)
-                        <tr>
-                            <td>{!! $text->html !!}</td> <!-- Exibe o texto renderizado -->
-                            <td>
-                                <a href="#" class="action-icon" data-id="{{ $text->id }}" onclick="openEditTextModal(event)">
-                                    <i class="mdi mdi-clipboard-edit-outline" title="Editar"></i>
-                                </a>
-                                <a href="{{ route('poderes.destroy', $text->id) }}" class="action-icon mdi mdi-delete" data-confirm-delete="true"></a>
-                            </td>
-                        </tr>
-                    @endforeach
-                </tbody>
-            </table>
-        </div>
+        @include('configuracoes._partials.list-texto-final')
 
-        <!-- Paginação -->
-        {{ $texts->links() }}
-    </div>
-@else
-    <div class="col-sm-12">
-        <div class="card-header d-flex justify-content-between align-items-center">
-            <h4 class="header-title">Texto</h4>
-            <div class="dropdown">
-                <button type="button" class="btn btn-primary btn-sm" data-bs-toggle="modal" data-bs-target="#modalCadastroTexto">Cadastrar</button>
-            </div>
-        </div>
-        <div class="alert alert-danger bg-transparent text-danger" role="alert">
-            NENHUM RESULTADO ENCONTRADO!
-        </div>
-    </div>
-@endif
+        @include('configuracoes._partials.list-cidade')
 
-                   
-            </div>
-        </div>
     </div>
+    @include('configuracoes._partials.list-previsualizacao')
 </div>
+<!-- Modal -->
 
 
-<div class="card">
-    <div class="card-body">
-        <div class="row">
-            @if ($cidades->total() != 0)
-            <div class="col-sm-12">
-                <div class="card-header d-flex justify-content-between align-items-center">
-                    <h4 class="header-title">Cidade da procuração</h4>
-                    <div class="dropdown">
-                        @if ($cidades->total() <= 1)
-                        <button type="button" class="btn btn-primary btn-sm" onclick="verificarLimiteTexto()">Cadastrar</button>
-
-                        @else
-                        <button type="button" class="btn btn-primary btn-sm" data-bs-toggle="modal"
-                            data-bs-target="#modalCadastroCidade">Cadastrar</button>
-                        @endif
-
-                    </div>
-                </div>
-                
-                <div class="table-responsive-sm">
-                    <table class="table table-hover table-centered mb-0">
-                        <thead class="table-dark">
-                            <tr>
-                                <th>Cidade</th>
-                                <th>Ações</th>
-                            </tr>
-                        </thead>
-
-                        <tbody>
-                            @foreach ($cidades as $cidade)
-                                <tr>
-                                    <td >{{ $cidade->cidade }}</td>
-                                    <td >
-
-                                        <a href="#" class="action-icon" data-id="{{ $cidade->id }}" onclick="openEditCidadeModal(event)">
-                                            <i class="mdi mdi-clipboard-edit-outline" title="Editar"></i>
-                                        </a>
-                                        <a href="{{ route('cidades.destroy', $cidade->id) }}"
-                                            class="action-icon mdi mdi-delete" data-confirm-delete="true"></a>
-
-                                    </td>
-                                </tr>
-                            @endforeach
-                        </tbody>
-                    </table>
-                </div>
-                @elseif($cidades->total() == 0)
-                <div class="col-sm-12">
-                    <div class="card-header d-flex justify-content-between align-items-center">
-                <h4 class="header-title">Data da procuração</h4>
-                <div class="dropdown">
-                    <button type="button" class="btn btn-primary btn-sm" data-bs-toggle="modal"
-                            data-bs-target="#modalCadastroCidade">Cadastrar</button>
-                </div>
-                    </div>
-                    <div class="alert alert-danger bg-transparent text-danger" role="alert">
-                        NENHUM RESULTADO ENCONTRADO!
-                    </div>
-                </div>
-                    
-                @endif
-                   
-            </div>
-        </div>
-    </div>
-</div>
-
-
-@if($texts->total() == 0)
+{{-- @if($texts->total() == 0)
 
 @else
 <form action="{{ route('configuracoes.gerarProc', $text->id) }}" method="POST" enctype="multipart/form-data" target="_blank">
     @csrf
     <button type="submit" class="btn btn-primary">Visualizar modelo</button>
 </form>
-@endif
+@endif --}}
+<!-- Modal Cadastrar/Editar texto inicial-->
+@include('configuracoes._partials.form-cad-texto-inicial')
+
+@include('configuracoes._partials.form-edit-texto-inicial')
 
 <!-- Modal Cadastro outorgado-->
 @include('configuracoes._partials.form-cad-outorgado')
@@ -261,8 +68,13 @@
 
 
 
+
     
-    
+{{-- <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+<script>
+    const markdown = document.getElementById('markdown-content').innerText;
+    document.getElementById('html-output').innerHTML = marked(markdown);
+</script>   --}}
 <script>
 
 function verificarLimite() {
@@ -337,26 +149,28 @@ function openEditModalOutorgado(event) {
     });
 }
 
-function openEditModalPoderes(event) {
+function openEditTextoInicial(event) {
     event.preventDefault();
 
     // Obtenha o ID do documento
     //const docId = event.currentTarget.getAttribute('data-id');
     const docId = event.target.closest('a').getAttribute('data-id');
     // Faça uma requisição AJAX para buscar os dados
-    //console.log(docId);
+    console.log(docId);
     $.ajax({
-        url: `/configuracoes/${docId}`,
+        url: `/textoinicial/${docId}`,
         method: 'GET',
         success: function(response) {
+            console.log(response);
             // Preencha os campos do modal com os dados do documento
-            $('#texto_poderes').val(response.texto_poderes);
+            $('#edit_texto_inicial').val(response.texto_inicial); // Preenche o valor no textarea (usado para inicialização)
 
             // Atualize a ação do formulário para apontar para a rota de edição
-            $('#editFormPoderes').attr('action', `/configuracoes/${docId}`);
+            $('#editFormTextoInicial').attr('action', `/textoinicial/${docId}`);
 
             // Exiba o modal
-            $('#editPoderesModal').modal('show');
+            $('#editTextInicialModal').modal('show');
+            
         },
         error: function() {
             Swal.fire({
@@ -369,28 +183,42 @@ function openEditModalPoderes(event) {
     });
 }
 
+
+
+// Após a inicialização, use o método value para preencher o editor
 function openEditTextModal(event) {
     event.preventDefault();
 
-    // Obtenha o ID do documento
-    //const docId = event.currentTarget.getAttribute('data-id');
     const docId = event.target.closest('a').getAttribute('data-id');
-    // Faça uma requisição AJAX para buscar os dados
-    //console.log(docId);
+
     $.ajax({
         url: `/poderes/${docId}`,
-        method: 'GET',
+        method: 'GET',  // Use GET para buscar dados
         success: function(response) {
-            // Preencha os campos do modal com os dados do documento
-            $('#edit_texto_final').val(response.texto_final);
+            // Preenche o campo do textarea com o conteúdo da resposta
+            $('#texto_final').val(response.texto_final); // Preenche o valor no textarea (usado para inicialização)
 
-            // Atualize a ação do formulário para apontar para a rota de edição
-            $('#editFormPoderes').attr('action', `/poderes/${docId}`);
+            $('#editFormTextoFinal').attr('action', `/poderes/${docId}`);
+            // Exibe o modal
+            $('#editTextoFinalModal').modal('show');
+            // Inicializa o SimpleMDE apenas depois que o modal for exibido
+            setTimeout(function() {
+                // Inicializa o SimpleMDE
+                const simpleMDE = new SimpleMDE({
+                    element: document.getElementById('texto_final'),
+                    spellChecker: false,
+                    autosave: {
+                        enabled: true,
+                        unique_id: "simplemde1"
+                    }
+                });
 
-            // Exiba o modal
-            $('#editTextModal').modal('show');
+                // Preenche o conteúdo do SimpleMDE com o texto retornado pela requisição
+                simpleMDE.value(response.texto_final);
+            }, 3000); // Aguarda um pouco para garantir que o modal foi exibido
         },
-        error: function() {
+        error: function(xhr, status, error) {
+            console.log('Erro AJAX:', error);
             Swal.fire({
                 title: 'Erro!',
                 text: 'Não foi possível carregar os dados.',
@@ -400,6 +228,7 @@ function openEditTextModal(event) {
         }
     });
 }
+
 
 function openEditCidadeModal(event) {
     event.preventDefault();
