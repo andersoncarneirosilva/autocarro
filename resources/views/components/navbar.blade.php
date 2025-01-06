@@ -82,8 +82,7 @@
 
         <ul class="topbar-menu d-flex align-items-center gap-3">
             <li class="dropdown notification-list">
-                <a class="nav-link dropdown-toggle arrow-none" data-bs-toggle="dropdown" href="#" role="button"
-                    aria-haspopup="false" aria-expanded="false">
+                <a class="nav-link dropdown-toggle arrow-none" data-bs-toggle="dropdown" href="#" role="button" aria-haspopup="false" aria-expanded="false">
                     <i class="ri-notification-3-line font-22"></i>
                     <span class="noti-icon-badge"></span>
                 </a>
@@ -95,20 +94,29 @@
                             </div>
                             <div class="col-auto">
                                 <a href="javascript: void(0);" class="text-dark text-decoration-underline">
-                                    <small>Marcar como lido</small>
+                                    {{-- <small>Clear All</small> --}}
                                 </a>
                             </div>
                         </div>
                     </div>
-                    <div class="simplebar-content" style="padding: 0px 24px;">
-                                <br>
+
+                    <div class="px-2" style="max-height: 300px;" data-simplebar>
+
                         {{-- <h5 class="text-muted font-13 fw-normal mt-2">Today</h5> --}}
                         <!-- item-->
-                        <div id="notifications-list"></div>
+
+                        <a href="javascript:void(0);" class="dropdown-item p-0 notify-item card unread-noti shadow-none mb-2">
+                            <div id="notifications-list"></div>
+                        </a>
                         
                     </div>
-                </div>
 
+                    <!-- All-->
+                    {{-- <a href="javascript:void(0);" class="dropdown-item text-center text-primary notify-item border-top py-2">
+                        View All
+                    </a> --}}
+
+                </div>
             </li>
             <li class="d-none d-sm-inline-block">
                 <div class="nav-link" id="light-dark-mode" data-bs-toggle="tooltip" data-bs-placement="left"

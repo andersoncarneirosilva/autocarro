@@ -142,7 +142,7 @@
             
                                 notificationItem.innerHTML = `
                                     <div class="card-body">
-                                        <span class="float-end noti-close-btn text-muted"><i class="mdi mdi-close"></i></span>
+                                        
                                         <div class="d-flex align-items-center">
                                             <div class="flex-shrink-0">
                                                 <div class="notify-icon bg-primary">
