@@ -326,34 +326,41 @@ let eventData = {
     event_date: document.getElementById("event-date").value,
 };
                     // Adicionar novo evento
-                    fetch('/calendar', {
-                        method: 'POST',
-                        headers: {
-                            'Content-Type': 'application/json',
-                            'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
-                        },
-                        body: JSON.stringify(eventData),
-                    })
-                    .then(response => response.json())
-                    .then(data => {
-                        //console.log(text);
-                        // Adiciona o novo evento ao calendário
-                        a.$calendarObj.addEvent({
-                            id: data.id,  // ID do evento retornado pelo backend
-                            title: eventData.title,
-                            start: eventData.event_date,  // Data correta para o novo evento
-                            className: eventData.category
-                        });
+// Adicionar novo evento
+fetch('/calendar', {
+    method: 'POST',
+    headers: {
+        'Content-Type': 'application/json',
+        'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
+    },
+    body: JSON.stringify(eventData),
+})
+.then(response => response.json())
+.then(data => {
+    // Adiciona o novo evento ao calendário
+    a.$calendarObj.addEvent({
+        id: data.id, // ID do evento retornado pelo backend
+        title: eventData.title,
+        start: eventData.event_date, // Data correta para o novo evento
+        className: eventData.category
+    });
 
-                        // Exibir a notificação
-                        showNotification(
-                            "Evento Criado com Sucesso!",
-                            data.event.title,
-                            data.event.event_date,
-                            data.event.category
-                        );
-                    })
-                    .catch(error => console.error('Error adding new event:', error));
+    // Exibir a notificação
+    showNotification(
+        "Evento Criado com Sucesso!",
+        data.event.title,
+        data.event.event_date,
+        data.event.category
+    );
+
+    // Adiciona a classe "noti-icon-badge" ao span do navbar
+    const navbarBadge = document.querySelector('.noti-icon-badge');
+    if (navbarBadge) {
+        navbarBadge.classList.add('noti-icon-badge');
+    }
+})
+.catch(error => console.error('Error adding new event:', error));
+
                 }
 
                 // Fecha o modal

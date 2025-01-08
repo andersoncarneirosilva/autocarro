@@ -30,21 +30,6 @@ use App\Events\EventReminderBroadcast;
 
 Route::middleware(['auth'])->group(function () {
     Route::get('/notifications', [NotificationController::class, 'getNotifications'])->middleware('auth');
-    Route::get('/test-notification', function () {
-        $user = \App\Models\User::find(1); // Substitua pelo ID de um usuário existente
-        $eventData = [
-            'title' => 'Licenciamento',
-            'date' => '2025-01-04 13:52:00',
-            'category' => 'bg-warning',
-        ];
-    
-        if ($user) {
-            $user->notify(new \App\Notifications\EventCreatedNotification($eventData));
-            return 'Notificação enviada!';
-        }
-    
-        return 'Usuário não encontrado.';
-    });
     
     //USUARIOS
     /* Route::delete('/users', [UserController::class, 'deleteAll'])->name('users.delete'); */
