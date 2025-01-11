@@ -194,7 +194,7 @@ class ProcRapidaController extends Controller
 
         // Caminho para salvar o PDF na pasta 'procuracoes' dentro de public
         $caminhoPDF = storage_path('app/public/procuracoes/' . 'proc_' . strtoupper($placa) . '.pdf'); 
-        $urlPDF = asset('storage/procuracoes/' . strtoupper($placa) . '.pdf'); 
+        $urlPDF = asset('storage/procuracoes/' . 'proc_' . strtoupper($placa) . '.pdf'); 
         // Verificar se a pasta 'procuracoes' existe, se não, cria-la
         if (!file_exists(storage_path('app/public/procuracoes'))) {
             mkdir(storage_path('app/public/procuracoes'), 0777, true); // Cria a pasta se ela não existir
@@ -224,14 +224,14 @@ class ProcRapidaController extends Controller
             ];
 
             if ($this->model->create($data)) {
-                alert()->success('Doc rápido cadastrado com sucesso!');
+                alert()->success('Procuração gerada com sucesso!');
             
                 // Retornar os links para visualização e download
                 $linkVisualizar = "<a href='$urlPDF' class='btn btn-success btn-sm' target='_blank'>Visualizar PDF</a>";
                 $linkBaixar = "<a href='$urlPDF' class='btn btn-primary btn-sm' download>Baixar PDF</a>";
             
                 return redirect()->route('dashboard.index')
-                    ->with('success', 'Doc rápido cadastrado com sucesso!')
+                    ->with('success', 'Procuração gerada com sucesso!')
                     ->with('links', compact('linkVisualizar', 'linkBaixar'));
             }
         
