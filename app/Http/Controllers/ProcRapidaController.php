@@ -193,7 +193,7 @@ class ProcRapidaController extends Controller
         //$nomePDF = 'nome_extraido_' . time() . '.pdf';
 
         // Caminho para salvar o PDF na pasta 'procuracoes' dentro de public
-        $caminhoPDF = storage_path('app/public/procuracoes/' . strtoupper($placa) . '.pdf'); 
+        $caminhoPDF = storage_path('app/public/procuracoes/' . 'proc_' . strtoupper($placa) . '.pdf'); 
         $urlPDF = asset('storage/procuracoes/' . strtoupper($placa) . '.pdf'); 
         // Verificar se a pasta 'procuracoes' existe, se não, cria-la
         if (!file_exists(storage_path('app/public/procuracoes'))) {
@@ -589,7 +589,7 @@ $pdf->Ln(10); // Linha em branco após o texto
     $fileUrl = asset('storage/atpves/' . basename($filePath));
 
     if ($filePath) {
-        alert()->success('Doc rápido cadastrado com sucesso!');
+        alert()->success('ATPVe gerada com sucesso!');
     
         // Retornar os links para visualização e download
         $linkVisualizar = "<a href='$fileUrl' class='btn btn-success btn-sm' target='_blank'>Visualizar PDF</a>";

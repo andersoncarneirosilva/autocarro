@@ -37,67 +37,75 @@
             <div class="card-body">
                 <form action="{{ route('gerar.atpve') }}" method="POST" enctype="multipart/form-data" id="formProc">
                     @csrf
-                    <div class="col-md">
-                        <div class="mb-2">
-                            <label for="social-fb" class="form-label">CEP: <span style="color: red;">*</span></label>
-                            <div class="input-group">
-                                <input type="text" class="form-control" name="cep" id="cep" onblur="pesquisacep(this.value);" required>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="mb-3">
+                                <label for="social-fb" class="form-label">CEP: <span style="color: red;">*</span></label>
+                                <div class="input-group">
+                                    <input type="text" class="form-control" name="cep" id="cep" onblur="pesquisacep(this.value);" required>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="mb-3">
+                                <label for="social-fb" class="form-label">Logradouro: <span style="color: red;">*</span></label>
+                                <div class="input-group">
+                                    <input type="text" name="endereco" id="rua" class="form-control" required/>
+                                </div>
                             </div>
                         </div>
                     </div>
-                    <div class="col-md-2">
-                        <div class="mb-2">
-                            <label for="social-fb" class="form-label">Logradouro: <span style="color: red;">*</span></label>
-                            <div class="input-group">
-                                <input type="text" name="endereco" id="rua" class="form-control" required/>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="mb-3">
+                                <label for="social-insta" class="form-label">Número: <span style="color: red;">*</span></label>
+                                <div class="input-group">
+                                    <input type="text" name="numero" id="numero" class="form-control" required/>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="mb-3">
+                                <label for="social-insta" class="form-label">Bairro: <span style="color: red;">*</span></label>
+                                <div class="input-group">
+                                    <input type="text" name="bairro" id="bairro" class="form-control" required/>
+                                </div>
                             </div>
                         </div>
                     </div>
-                    <div class="col-md-2">
-                        <div class="mb-2">
-                            <label for="social-insta" class="form-label">Número: <span style="color: red;">*</span></label>
-                            <div class="input-group">
-                                <input type="text" name="numero" id="numero" class="form-control" required/>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="mb-3">
+                                <label for="social-insta" class="form-label">Cidade: <span style="color: red;">*</span></label>
+                                <div class="input-group">
+                                    <input type="text" name="cidade" id="cidade" class="form-control" required/>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="mb-3">
+                                <label for="social-insta" class="form-label">Estado: <span style="color: red;">*</span></label>
+                                <div class="input-group">
+                                    <input type="text" name="estado" id="uf" class="form-control" required/>
+                                </div>
                             </div>
                         </div>
                     </div>
-                    <div class="col-md-2">
-                        <div class="mb-3">
-                            <label for="social-insta" class="form-label">Bairro: <span style="color: red;">*</span></label>
-                            <div class="input-group">
-                                <input type="text" name="bairro" id="bairro" class="form-control" required/>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="mb-3">
+                                <label for="social-insta" class="form-label">Complemento: <span style="color: red;">*</span></label>
+                                <div class="input-group">
+                                    <input type="text" name="complemento" class="form-control" required/>
+                                </div>
                             </div>
                         </div>
-                    </div>
-                    <div class="col-md-2">
-                        <div class="mb-3">
-                            <label for="social-insta" class="form-label">Cidade: <span style="color: red;">*</span></label>
-                            <div class="input-group">
-                                <input type="text" name="cidade" id="cidade" class="form-control" required/>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-md-2">
-                        <div class="mb-3">
-                            <label for="social-insta" class="form-label">Estado: <span style="color: red;">*</span></label>
-                            <div class="input-group">
-                                <input type="text" name="estado" id="uf" class="form-control" required/>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-md-2">
-                        <div class="mb-3">
-                            <label for="social-insta" class="form-label">Complemento: <span style="color: red;">*</span></label>
-                            <div class="input-group">
-                                <input type="text" name="complemento" class="form-control" required/>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-md-2">
-                        <div class="mb-3">
-                            <label for="social-insta" class="form-label">Valor: <span style="color: red;">*</span></label>
-                            <div class="input-group">
-                                <input type="text" name="valor" class="form-control" required/>
+                        <div class="col-md-6">
+                            <div class="mb-3">
+                                <label for="social-insta" class="form-label">Valor: <span style="color: red;">*</span></label>
+                                <div class="input-group">
+                                    <input type="text" name="valor" class="form-control" required/>
+                                </div>
                             </div>
                         </div>
                     </div>
