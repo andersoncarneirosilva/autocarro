@@ -52,6 +52,15 @@
                 </a>
             </li>
 
+            @can('access-perfil')
+            <li class="side-nav-item">
+                <a href="{{ route('procrapida.index') }}" class="side-nav-link">
+                    <i class="uil-file"></i>
+                    <span> Doc rápido </span>
+                </a>
+            </li>
+            @endcan
+
             <li class="side-nav-item">
                 <a href="{{ route('documentos.index') }}" class="side-nav-link">
                     <i class="uil-car"></i>

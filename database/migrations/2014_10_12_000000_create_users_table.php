@@ -16,7 +16,9 @@ return new class extends Migration
             $table->string('name');
             $table->string('email')->unique();
             $table->string('telefone');
+            $table->string('nivel_acesso');
             $table->string('perfil');
+            $table->string('plano');
             $table->string('password');
             $table->string('image')->nullable();
             $table->string('classe');

@@ -23,6 +23,8 @@ use App\Http\Controllers\PasswordResetController;
 use App\Http\Controllers\NotificationController;
 use App\Http\Controllers\TextoInicioController;
 use App\Http\Controllers\OrdemController;
+use App\Http\Controllers\ProcRapidaController;
+
 use Illuminate\Support\Facades\Route;
 use App\Events\EventReminderBroadcast;
 
@@ -161,6 +163,12 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/ordensdeservicos/{id}', [OrdemController::class, 'show'])->name('ordensdeservicos.show');
 
     Route::resource('ordensdeservicos', OrdemController::class);
+
+
+    //DOC RAPIDO
+    Route::post('/gerar-atpve', [ProcRapidaController::class, 'gerarAtpve'])->name('gerar.atpve');
+    Route::get('/procrapida', [ProcRapidaController::class, 'index'])->name('procrapida.index');
+    Route::post('/procrapida', [ProcRapidaController::class, 'store'])->name('procrapida.store');
     
 });
 

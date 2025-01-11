@@ -24,14 +24,22 @@ class AuthServiceProvider extends ServiceProvider
         // Definindo a política de acesso
         Gate::define('access', function (User $user) {
             //dd($user);
-            return $user->perfil == 'Administrador';
+            return $user->nivel_acesso == 'Administrador';
         });
 
         Gate::define('access-user', function (User $user) {
             //dd($user);
-            return $user->perfil == 'Usuário';
+            return $user->nivel_acesso == 'Usuário';
         });
 
+        Gate::define('access-lojista', function (User $user) {
+            //dd($user);
+            return $user->perfil == 'Lojista';
+        });
 
+        Gate::define('access-despachante', function (User $user) {
+            //dd($user);
+            return $user->perfil == 'Despachante';
+        });
     }
 }

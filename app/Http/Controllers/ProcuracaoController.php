@@ -193,6 +193,8 @@ class ProcuracaoController extends Controller
         }
     } 
 
+    
+
 
     public function destroy($id){
         // Tenta localizar o documento no banco de dados

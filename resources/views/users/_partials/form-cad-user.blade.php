@@ -19,19 +19,40 @@
                     </div> <!-- end row -->
 
                     <div class="row">
-                        <div class="col-md-6">
+                        <div class="col-md-3">
                             <div class="mb-3">
                                 <label class="form-label">Telefone</label>
                                 <input type="tel" class="form-control" name="telefone" onkeyup="handlePhone(event)" />
                             </div>
                         </div>
-                        <div class="col-md-6">
+                        <div class="col-md-3">
+                            <div class="mb-3">
+                                <label for="useremail" class="form-label">Nível de acesso</label>
+                                <select class="form-select" name="nivel_acesso">
+                                    <option value="">Selecione o nível</option>
+                                    <option value="Administrador">Administrador</option>
+                                    <option value="Usuario">Usuário</option>
+                                    
+                                  </select>
+                            </div>
+                        </div>
+                        <div class="col-md-3">
                             <div class="mb-3">
                                 <label for="useremail" class="form-label">Perfil</label>
                                 <select class="form-select" name="perfil">
                                     <option value="">Selecione o perfil</option>
-                                    <option value="Administrador">Administrador</option>
-                                    <option value="Usuario">Usuário</option>
+                                    <option value="Despachante">Despachante</option>
+                                    <option value="Lojista">Lojista</option>
+                                  </select>
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="mb-3">
+                                <label for="useremail" class="form-label">Plano</label>
+                                <select class="form-select" name="plano">
+                                    <option value="">Selecione o plano</option>
+                                    <option value="Mensal">Mensal</option>
+                                    <option value="Crédito">Crédito</option>
                                   </select>
                             </div>
                         </div>

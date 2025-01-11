@@ -17,9 +17,11 @@ class UserSeeder extends Seeder
             'name' => 'Anderson',
             'email' => 'andersonqipoa@gmail.com',
             'telefone' => '(51)9.99137.7276',
-            'perfil' => 'Administrador',
+            'nivel_acesso' => 'Administrador',
+            'perfil' => 'Lojista',
+            'plano' => 'Mensal',
             'password' => bcrypt('12345678'),
-            'classe' => '10',
+            'classe' => 'badge badge-outline-success',
             'status' => 'Ativo',
             'credito' => '10',
         ]);

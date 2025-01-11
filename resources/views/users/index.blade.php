@@ -48,7 +48,9 @@
                                 <th>Nome</th>
                                 <th>E-mail</th>
                                 <th>Telefone</th>
-                                <th>Acesso</th>
+                                <th>Nícel de acesso</th>
+                                <th>Perfil</th>
+                                <th>Plano</th>
                                 <th>Status</th>
                                 <th>Crédito</th>
                                 <th>Ações</th>
@@ -67,7 +69,9 @@
                                 </td>
                                 <td>{{ $user->email }}</td>
                                 <td>{{ $user->telefone }}</td>
+                                <td>{{ $user->nivel_acesso }}</td>
                                 <td>{{ $user->perfil }}</td>
+                                <td>{{ $user->plano }}</td>
                                 <td><span class="{{ $user->classe }}">{{ $user->status }}</span></td>
                                 <td>R${{ $user->credito }},00</td>
                                 <td class="table-action">

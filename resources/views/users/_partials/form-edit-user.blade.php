@@ -52,14 +52,45 @@
                         </div>
                         <div class="col-md-6">
                             <div class="mb-3">
-                                <label for="useremail" class="form-label">Perfil:</label>
-                                <select class="form-select" name="perfil" >
-                                    @if($user->perfil == "Administrador")
+                                <label for="useremail" class="form-label">Nícel de acesso:</label>
+                                <select class="form-select" name="nivel_acesso" >
+                                    @if($user->nivel_acesso == "Administrador")
                                     <option value="Administrador">Administrador</option>
                                     <option value="Usuário">Usuário</option>
                                     @else
                                     <option value="Usuário">Usuário</option>
                                     <option value="Administrador">Administrador</option>
+                                    @endif
+                                  </select>
+                            </div>
+                        </div>
+                    </div> <!-- end row -->
+
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="mb-3">
+                                <label for="useremail" class="form-label">Perfil:</label>
+                                <select class="form-select" name="perfil" >
+                                    @if($user->perfil == "Despachante")
+                                    <option value="Despachante" selected>Despachante</option>
+                                    <option value="Logista">Logista</option>
+                                    @else
+                                    <option value="Logista">Logista</option>
+                                    <option value="Despachante">Despachante</option>
+                                    @endif
+                                  </select>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="mb-3">
+                                <label for="useremail" class="form-label">Plano:</label>
+                                <select class="form-select" name="plano" >
+                                    @if($user->plano == "Mensal")
+                                    <option value="Mensal" selected>Mensal</option>
+                                    <option value="Credito">Crédito</option>
+                                    @else
+                                    <option value="Credito">Crédito</option>
+                                    <option value="Mensal">Mensal</option>
                                     @endif
                                   </select>
                             </div>
@@ -102,7 +133,6 @@
                         </div>
                         <div class="col-lg-6 text-end">
                             <a href="{{ url()->previous() }}"><button type="button" class="btn btn-secondary btn-sm">Voltar</button></a>
-                        <button type="button" onclick="form.reset();" class="btn btn-warning btn-sm">Limpar</button>
                         <button type="submit" class="btn btn-success btn-sm">Atualizar</button>
                         </div>
                     </div>
