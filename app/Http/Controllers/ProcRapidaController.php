@@ -562,7 +562,7 @@ $x += $pdf->GetStringWidth(" / "); // Move o cursor após o "/"
 $this->desenharSublinhado($pdf, $x, 231, $dataAno, 10); // Campo do ano sublinhado
 $x += 15; // Ajusta após o sublinhado do ano
 
-$pdf->Ln(10); // Linha em branco após o texto
+$pdf->Ln(20); // Linha em branco após o texto
 
 
 
