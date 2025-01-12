@@ -23,6 +23,7 @@ use App\Http\Controllers\NotificationController;
 use App\Http\Controllers\TextoInicioController;
 use App\Http\Controllers\OrdemController;
 use App\Http\Controllers\ProcRapidaController;
+use App\Http\Controllers\EstoqueController;
 
 use Illuminate\Support\Facades\Route;
 use App\Events\EventReminderBroadcast;
@@ -169,6 +170,11 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/procrapida', [ProcRapidaController::class, 'index'])->name('procrapida.index');
     Route::post('/procrapida', [ProcRapidaController::class, 'store'])->name('procrapida.store');
     
+    Route::get('/estoque/{id}', [EstoqueController::class, 'show'])->name('estoque.show');
+    Route::put('/estoque/{id}', [EstoqueController::class, 'update'])->name('estoque.update');
+    Route::delete('/estoque/{id}', [EstoqueController::class, 'destroy'])->name('estoque.destroy');
+    Route::post('/estoque', [EstoqueController::class, 'store'])->name('estoque.store');
+    Route::get('/estoque', [EstoqueController::class, 'index'])->name('estoque.index');
 });
 
 
