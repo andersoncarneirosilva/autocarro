@@ -76,7 +76,7 @@
                             {{ session('error') }}
                         </div>
                     @endif
-                        <a href="{{ route('register.create') }}" target="_blank" class="btn btn-lg font-16 btn-success">Teste grátis <i class="mdi mdi-arrow-right ms-1"></i></a>
+                        <a href="#" target="_blank" class="btn btn-lg font-16 btn-success">Teste grátis <i class="mdi mdi-arrow-right ms-1"></i></a>
                         {{-- <a href="" target="_blank" class="btn btn-lg font-16 btn-info">Check Demos</a> --}}
                     </div>
                 </div>

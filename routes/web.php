@@ -16,7 +16,6 @@ use App\Http\Controllers\ClientesController;
 use App\Http\Controllers\ServicosController;
 use App\Http\Controllers\RelatoriosController;
 use App\Http\Controllers\PdfController;
-use App\Http\Controllers\TenantController;
 use App\Http\Controllers\CidadeController;
 use App\Http\Controllers\PaymentController;
 use App\Http\Controllers\PasswordResetController;
@@ -177,9 +176,6 @@ Route::get('/reset-password/{token}', [PasswordResetController::class, 'showRese
 Route::post('/reset-password', [PasswordResetController::class, 'reset'])->name('password.update');
 
 
-Route::post('/registerCompany', [TenantController::class, 'store'])->name('register.store');
-Route::get('/registerCompany/create', [TenantController::class, 'create'])->name('register.create');
-Route::get('/registerCompany', [TenantController::class, 'index'])->name('site.index');
 
 Route::get('/', function () {
     return view('site.index');

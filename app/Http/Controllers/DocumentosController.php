@@ -38,6 +38,36 @@ class DocumentosController extends Controller
         return view('documentos.index', compact(['docs', 'clientes']));
     }
 
+    function forcarAcentosMaiusculos($texto)
+{
+    // Mapeia as letras acentuadas minúsculas para suas versões maiúsculas
+    $mapaAcentos = [
+        'á' => 'Á', 'à' => 'À', 'ã' => 'Ã', 'â' => 'Â', 'é' => 'É', 
+        'è' => 'È', 'ê' => 'Ê', 'í' => 'Í', 'ó' => 'Ó', 'ò' => 'Ò',
+        'õ' => 'Õ', 'ô' => 'Ô', 'ú' => 'Ú', 'ù' => 'Ù', 'ç' => 'Ç'
+    ];
+    
+    // Substitui as letras minúsculas acentuadas pelas versões maiúsculas
+    $texto = strtr($texto, $mapaAcentos);
+
+    // Substituições de caracteres "estranhos" causados por problemas de codificação
+    $substituicoesCodificacao = [
+        'Ã' => 'Á',   // Para corrigir "Ã" que deveria ser "Á"
+        'Ã‘' => 'Ñ',   // Para corrigir "Ã‘" que deveria ser "Ñ"
+        'Ã©' => 'é',   // Para corrigir "Ã©" que deveria ser "é"
+        'Ã´' => 'ô',   // Para corrigir "Ã´" que deveria ser "ô"
+        'Ã•' => 'Á',
+        // Adicione outras substituições conforme necessário
+    ];
+
+    // Realiza as substituições
+    $texto = strtr($texto, $substituicoesCodificacao);
+
+    // Retorna o texto já com as letras acentuadas forçadas para maiúsculas e a correção de codificação
+    return $texto;
+}
+
+
     // public function create(){
     //     $users = User::all();
     //     return view('documentos.create', compact('users'));
@@ -217,6 +247,8 @@ class DocumentosController extends Controller
     
         $pdf->Cell(0, 10, $titulo, 0, 1, 'C');
 
+        $enderecoFormatado = $this->forcarAcentosMaiusculos($endereco);
+
         $larguraTitulo = $pdf->GetStringWidth($titulo);
         $pdf->Ln(8);
         $pdf->SetFont('Arial', 'B', 12);
@@ -224,7 +256,8 @@ class DocumentosController extends Controller
         $pdf->Ln(5);
         $pdf->Cell(10, 0, "CPF: $documento->cpf", 0, 0, 'L');
         $pdf->Ln(5);
-        $pdf->Cell(0, 0, utf8_decode("ENDEREÇO: " . strtoupper($endereco)), 0, 0, 'L');
+        $pdf->Cell(0, 0, iconv("UTF-8", "ISO-8859-1", "ENDEREÇO: ") . iconv("UTF-8", "ISO-8859-1", $enderecoFormatado), 0, 0, 'L');
+
 
         $pdf->Ln(5);
 
@@ -349,6 +382,8 @@ class DocumentosController extends Controller
             return redirect()->route('procuracoes.index');
         } 
     }
+
+    
 
     public function show($id)
 {

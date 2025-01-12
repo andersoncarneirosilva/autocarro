@@ -50,18 +50,24 @@ class OutorgadoController extends Controller
     // }
 
      public function store(Request $request){
-         $data = $request->all();
+        $data = $request->all();
         
-         $outorgados = Outorgado::get()->first();
-         //dd($outorgados);
-         if($outorgados->nome_outorgado == $request->nome_outorgado){
-            alert()->error('Outorgado já cadastrado!');
-            return redirect()->route('configuracoes.index');
-         }
-         if($outorgados->cpf_outorgado == $request->cpf_outorgado){
-            alert()->error('Outorgado já cadastrado!');
-            return redirect()->route('configuracoes.index');
-         }
+        // Buscando o primeiro registro (se houver)
+        $outorgados = Outorgado::first();
+
+        // Verifica se já existe um registro de outorgado no banco de dados
+        if ($outorgados) {
+            // Se encontrar um registro, verifica se o nome ou CPF já estão cadastrados
+            if ($outorgados->nome_outorgado == $request->nome_outorgado) {
+                alert()->error('Outorgado já cadastrado!');
+                return redirect()->route('configuracoes.index');
+            }
+            
+            if ($outorgados->cpf_outorgado == $request->cpf_outorgado) {
+                alert()->error('Outorgado já cadastrado!');
+                return redirect()->route('configuracoes.index');
+            }
+        }
          //dd($data);
          if($this->model->create($data)){
              alert()->success('Outorgado cadastrado com sucesso!');

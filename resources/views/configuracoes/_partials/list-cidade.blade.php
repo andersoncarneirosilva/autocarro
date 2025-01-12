@@ -7,7 +7,7 @@
                     <h4 class="header-title">Cidade da procuração</h4>
                     <div class="dropdown">
                         @if ($cidades->total() <= 1)
-                        <button type="button" class="btn btn-primary btn-sm" onclick="verificarLimiteTexto()">Cadastrar</button>
+                        <button type="button" class="btn btn-primary btn-sm" disabled>Cadastrar</button>
 
                         @else
                         <button type="button" class="btn btn-primary btn-sm" data-bs-toggle="modal"
@@ -35,8 +35,8 @@
                                         <a href="#" class="action-icon" data-id="{{ $cidade->id }}" onclick="openEditCidadeModal(event)">
                                             <i class="mdi mdi-clipboard-edit-outline" title="Editar"></i>
                                         </a>
-                                        <a href="{{ route('cidades.destroy', $cidade->id) }}"
-                                            class="action-icon mdi mdi-delete" data-confirm-delete="true"></a>
+                                        {{-- <a href="{{ route('cidades.destroy', $cidade->id) }}"
+                                            class="action-icon mdi mdi-delete" data-confirm-delete="true"></a> --}}
 
                                     </td>
                                 </tr>
