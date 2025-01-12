@@ -71,11 +71,17 @@ class ProcuracaoController extends Controller
         $pdf->Ln(8);
         $pdf->SetFont('Arial', 'B', 12);
 
-        $pdf->Cell(0, 0, "OUTORGANTE: ". strtoupper($request->nome), 0, 0, 'L');
+        $enderecoFormatado = $this->forcarAcentosMaiusculos($request->endereco);
+
+        $nomeFormatado = $this->forcarAcentosMaiusculos($request->nome);
+
+        //dd($nomeFormatado);
+
+        $pdf->Cell(0, 0, "OUTORGANTE: ". strtoupper(iconv("UTF-8", "ISO-8859-1", $nomeFormatado)), 0, 0, 'L');
         $pdf->Ln(5);
         $pdf->Cell(10, 0, "CPF: $request->cpf", 0, 0, 'L');
         $pdf->Ln(5);
-        $pdf->Cell(0, 0, utf8_decode("ENDEREÇO: " . strtoupper($request->endereco)) . ", " . $request->numero . ", " . strtoupper($request->bairro) . ", " . strtoupper($request->cidade) . "/" . strtoupper($request->estado), 0, 0, 'L');
+        $pdf->Cell(0, 0, utf8_decode("ENDEREÇO: " . strtoupper($enderecoFormatado)) . ", " . $request->numero . ", " . strtoupper($request->bairro) . ", " . strtoupper($request->cidade) . "/" . strtoupper($request->estado), 0, 0, 'L');
 
         $pdf->Ln(5);
 
@@ -164,8 +170,8 @@ class ProcuracaoController extends Controller
             mkdir(storage_path('app/public/procuracoes'), 0777, true); // Cria a pasta se ela não existir
         }
         $data = [
-            'nome' => strtoupper($request->nome),
-            'endereco' => strtoupper($request->endereco),  // Endereço em maiúsculas
+            'nome' => strtoupper($nomeFormatado),
+            'endereco' => strtoupper($enderecoFormatado),  // Endereço em maiúsculas
             // Caminho do arquivo salvo
             'cpf' => $request->cpf,
             'marca' => strtoupper($request->marca),
@@ -193,7 +199,32 @@ class ProcuracaoController extends Controller
         }
     } 
 
-    
+    function forcarAcentosMaiusculos($texto){
+        // Mapeia as letras acentuadas minúsculas para suas versões maiúsculas
+        $mapaAcentos = [
+            'á' => 'Á', 'à' => 'À', 'ã' => 'Ã', 'â' => 'Â', 'é' => 'É', 
+            'è' => 'È', 'ê' => 'Ê', 'í' => 'Í', 'ó' => 'Ó', 'ò' => 'Ò',
+            'õ' => 'Õ', 'ô' => 'Ô', 'ú' => 'Ú', 'ù' => 'Ù', 'ç' => 'Ç'
+        ];
+        
+        // Substitui as letras minúsculas acentuadas pelas versões maiúsculas
+        $texto = strtr($texto, $mapaAcentos);
+
+        // Substituições de caracteres "estranhos" causados por problemas de codificação
+        $substituicoesCodificacao = [
+            'Ã‘' => 'Ñ',   // Para corrigir "Ã‘" que deveria ser "Ñ"
+            'Ã©' => 'é',   // Para corrigir "Ã©" que deveria ser "é"
+            'Ã´' => 'ô',   // Para corrigir "Ã´" que deveria ser "ô"
+            'Ã•' => 'Á',
+            // Adicione outras substituições conforme necessário
+        ];
+
+        // Realiza as substituições
+        $texto = strtr($texto, $substituicoesCodificacao);
+
+        // Retorna o texto já com as letras acentuadas forçadas para maiúsculas e a correção de codificação
+        return $texto;
+    }
 
 
     public function destroy($id){
