@@ -333,59 +333,58 @@ $x += $pdf->GetStringWidth("Eu, "); // Ajusta o X para o nome
 $x += 0; // Ajuste fino para aproximar o nome de "Eu,"
 
 // Sublinha apenas o nome do outorgado
-$this->desenharSublinhado($pdf, $x, 59, $outorgados->nome_outorgado, 140); // Chama o método dentro do controlador
+$this->desenharSublinhado($pdf, $x, 60, $outorgados->nome_outorgado, 140); // Chama o método dentro do controlador
 $x += 140; // Ajuste após o nome sublinhado
 
 
 // Continua o texto após o nome
 $pdf->Text($x, $y, ", ");
-$pdf->Ln(10); // Faz a quebra de linha
+$pdf->Ln(10);
 
 // Agora começa uma nova linha para o "CPF/CNPJ"
-$pdf->Text($x = 30, $y = $pdf->GetY(), "CPF/CNPJ ");
-$x += $pdf->GetStringWidth("CPF/CNPJ "); // Ajusta o X para o CPF/CNPJ
+$pdf->Text($x = 30, $y = $pdf->GetY(), "CPF/CNPJ:");
+$x += $pdf->GetStringWidth("CPF/CNPJ:"); // Ajusta o X para o CPF/CNPJ
 
 // Sublinha apenas o CPF/CNPJ
-$this->desenharSublinhado($pdf, $x, 68, $outorgados->cpf_outorgado, 56); // Chama o método dentro do controlador para o CPF/CNPJ
+$this->desenharSublinhado($pdf, $x, 69, $outorgados->cpf_outorgado, 56); // Chama o método dentro do controlador para o CPF/CNPJ
 $x += 56; // Ajuste após o CPF/CNPJ sublinhado
 
 // Continua o texto após o CPF/CNPJ
 $pdf->Text($x, $y, ", requeiro ao DETRAN/RS, o preenchimento da");
 $pdf->Ln(10); // Faz a quebra de linha para a próxima parte do texto
 
-// Agora, para a linha "ATPV-e, relativo ao veículo Placa: {$placa}. Chassi {$chassi}"
 
 $pdf->Text($x = 30, $y = $pdf->GetY(), iconv('UTF-8', 'ISO-8859-1', "ATPV-e, relativo ao veículo Placa:"));
-$x += $pdf->GetStringWidth("ATPV-e, relativo ao veículo Placa:"); // Ajuste para "Placa"
+$x += $pdf->GetStringWidth("ATPV-e, relativo ao veículo Placa:");
 
 // Sublinha a "Placa"
-$this->desenharSublinhado($pdf, $x, 77, $placa, 30); // Sublinha a "Placa"
-$x += 30; // Ajuste após a "Placa" sublinhada
+$this->desenharSublinhado($pdf, 84, 78, $placa, 20); // Sublinha a "Placa"
+$x += 20; // Ajuste após a "Placa" sublinhada
 
 // Continua o texto após a "Placa"
-$pdf->Text($x, $y, ". Chassi ");
-$x += $pdf->GetStringWidth(". Chassi "); // Ajuste para "Chassi"
+$pdf->Text($x, $y, ". Chassi:");
+$x += $pdf->GetStringWidth(". Chassi:"); // Ajuste para "Chassi"
 
 // Sublinha o "Chassi"
-$this->desenharSublinhado($pdf, $x, 77, $chassi, 45); // Sublinha o "Chassi"
-$x += 45; // Ajuste após o "Chassi" sublinhado
+$this->desenharSublinhado($pdf, $x, 78, $chassi, 57); // Sublinha o "Chassi"
+$x += 57; // Ajuste após o "Chassi" sublinhado
 
 $pdf->Ln(10); // Linha em branco após o texto
 
 // Linha com "Renavam {$renavam} Marca/Modelo {$marca}"
-$pdf->Text($x = 30, $y = $pdf->GetY(), "Renavam ");
-$x += $pdf->GetStringWidth("Renavam "); // Ajuste para "Renavam"
+$pdf->Text($x = 30, $y = $pdf->GetY(), "Renavam:");
+$x += $pdf->GetStringWidth("Renavam:"); // Ajuste para "Renavam"
 
 // Sublinha o "Renavam"
-$this->desenharSublinhado($pdf, $x, 86, $renavam, 53); // Sublinha o "Renavam"
-$x += 53; // Ajuste após o "Renavam" sublinhado
+$this->desenharSublinhado($pdf, $x, 87, $renavam, 54); // Sublinha o "Renavam"
+$x += 54; // Ajuste após o "Renavam" sublinhado
 
 // Continua o texto após "Renavam"
 $pdf->Text($x, $y, " Marca/Modelo ");
 $x += $pdf->GetStringWidth(" Marca/Modelo "); // Ajuste para "Marca/Modelo"
 
 // Sublinha o "Marca/Modelo"
-$this->desenharSublinhado($pdf, $x, 86, $marca, 53); // Sublinha o "Marca/Modelo"
+$this->desenharSublinhado($pdf, $x, 87, $marca, 53); // Sublinha o "Marca/Modelo"
 $x += 53; // Ajuste após o "Marca/Modelo" sublinhado
 
 $pdf->Ln(10); // Linha em branco após o texto
@@ -394,7 +393,7 @@ $pdf->Ln(10); // Linha em branco após o texto
 $pdf->SetFont('Arial', 'B', 10);
 $pdf->Text($x = 30, $y = $pdf->GetY(), iconv('UTF-8', 'ISO-8859-1', "PROPRIETÁRIO VENDEDOR:"));
 $x += $pdf->GetStringWidth(iconv('UTF-8', 'ISO-8859-1', "PROPRIETÁRIO VENDEDOR:"));  // Ajusta o X para "PROPRIETÁRIO VENDEDOR:"
-
+$pdf->SetFont('Arial', '', 10);
 $pdf->Ln(7);
 
 // Posição do texto "e-mail: despachanteluis@hotmail.com"
@@ -405,7 +404,7 @@ $emailText = "e-mail: ";
 $x += $pdf->GetStringWidth($emailText); // Atualiza a posição X após o texto
 
 // Sublinha o email
-$this->desenharSublinhado($pdf, 42, 102, "despachanteluis@hotmail.com", 80); // Sublinha apenas o email
+$this->desenharSublinhado($pdf, 42, 103, "fernandofantinel@hotmail.com", 80); // Sublinha apenas o email
 $x += 80; // Ajuste após o "Marca/Modelo" sublinhado
 
 $pdf->Ln(20); // Linha em branco após o texto
@@ -415,69 +414,63 @@ $pdf->Ln(20); // Linha em branco após o texto
 $pdf->SetFont('Arial', 'B', 10);
 $pdf->Text($x = 30, $y = $pdf->GetY(), iconv('UTF-8', 'ISO-8859-1', "IDENTIFICAÇÃO DO ADQUIRENTE"));
 $x += $pdf->GetStringWidth(iconv('UTF-8', 'ISO-8859-1', "IDENTIFICAÇÃO DO ADQUIRENTE"));  // Ajusta o X para "IDENTIFICAÇÃO DO ADQUIRENTE"
-
+$pdf->SetFont('Arial', '', 10);
 // Linha em branco após o título
 $pdf->Ln(8);
 
-// Continua o texto após "CPF/CNPJ:" em uma nova linha
-$pdf->SetFont('Arial', 'B', 10);
 $pdf->Text($x = 30, $y = $pdf->GetY(), "CPF/CNPJ:");
 $x += $pdf->GetStringWidth("CPF/CNPJ:"); // Ajuste para "CPF/CNPJ:"
 
 // Sublinha o CPF
-$this->desenharSublinhado($pdf, $x, 128, $cpf, 93); // Sublinha o CPF
+$this->desenharSublinhado($pdf, $x, 130, $cpf, 93); // Sublinha o CPF
 $x += 93; // Ajuste após o CPF sublinhado
 
-$pdf->Ln(10); // Linha em branco após o CPF
+$pdf->Ln(10);
 
-$pdf->SetFont('Arial', 'B', 10);
 $pdf->Text($x = 30, $y = $pdf->GetY(), "Nome:");
-$x += $pdf->GetStringWidth("Nome:"); // Ajuste para "CPF/CNPJ:"
+$x += $pdf->GetStringWidth("Nome:");
 
-// Sublinha o CPF
-$this->desenharSublinhado($pdf, 41, 136, $nome, 100); // Sublinha o CPF
+$this->desenharSublinhado($pdf, 41, 139, $nome, 100); 
 $x += 100;
 
-$pdf->Ln(10); // Linha em branco após o CPF
+$pdf->Ln(10);
 
-$pdf->SetFont('Arial', 'B', 10);
 $pdf->Text($x = 30, $y = $pdf->GetY(), "e-mail: ");
 $x += $pdf->GetStringWidth("e-mail:"); // Ajuste para "CPF/CNPJ:"
 
 // Sublinha o CPF
-$this->desenharSublinhado($pdf, 41, 144, "email_adquirente@gmail.com", 100); // Sublinha o CPF
+$this->desenharSublinhado($pdf, 41, 148, "email_adquirente@gmail.com", 100); // Sublinha o CPF
 $x += 100;
 
 $pdf->Ln(20); // Linha em branco após o CPF
 
 
-// Agora vai para a nova linha para "IDENTIFICAÇÃO DO ADQUIRENTE"
 $pdf->SetFont('Arial', 'B', 10);
 $pdf->Text($x = 30, $y = $pdf->GetY(), iconv('UTF-8', 'ISO-8859-1', "ENDEREÇO DO ADQUIRENTE"));
 $x += $pdf->GetStringWidth(iconv('UTF-8', 'ISO-8859-1', "ENDEREÇO DO ADQUIRENTE"));
+$pdf->SetFont('Arial', '', 10);
 $pdf->Ln(10); // Linha em branco após o CPF
 $pdf->Text($x = 30, $y = $pdf->GetY(), "CEP:");
 $x += $pdf->GetStringWidth("CEP:"); // Ajuste para "Renavam"
 
 // Sublinha o "Renavam"
-$this->desenharSublinhado($pdf, $x, 172, $request['cep'], 40); // Sublinha o "Renavam"
+$this->desenharSublinhado($pdf, $x, 177, $request['cep'], 40); // Sublinha o "Renavam"
 $x += 40;
 
 $pdf->Text($x, $y, " UF:");
 $x += $pdf->GetStringWidth(" UF:");
 
-$this->desenharSublinhado($pdf, $x, 172, $request['estado'], 40);
+$this->desenharSublinhado($pdf, $x, 177, $request['estado'], 40);
 $x += 40;
 
 $pdf->Text($x, $y, iconv('UTF-8', 'ISO-8859-1', " MUNICÍPIO:"));
 $x += $pdf->GetStringWidth(" MUNICÍPIO:");
 
-$this->desenharSublinhado($pdf, $x, 172, $request['cidade'], 40);
+$this->desenharSublinhado($pdf, 146, 177, $request['cidade'], 40);
 $x += 40;
 
 $pdf->Ln(10);
 
-$pdf->SetFont('Arial', 'B', 10);
 
 // Posição inicial do texto
 $x = 30;
@@ -486,30 +479,26 @@ $pdf->Text($x, $y, "Logradouro:Rua/Av.");
 
 // Ajusta posição para o endereço e sublinha
 $x += $pdf->GetStringWidth("Logradouro:Rua/Av.");
-$this->desenharSublinhado($pdf, $x, 181, $request['endereco'], 40);
-$x += 40;
+$this->desenharSublinhado($pdf, $x, 186, $request['endereco'], 80);
+$x += 80;
 
 // Texto "N."
-$pdf->Text($x, $y, " N.");
+$pdf->Text(142, $y, " N.");
 $x += $pdf->GetStringWidth(" N.");
 
 // Ajusta para o número e sublinha
-$this->desenharSublinhado($pdf, $x, 181, $request['numero'], 40);
+$this->desenharSublinhado($pdf, 146, 186, $request['numero'], 40);
 $x += 100;
 
 $pdf->Ln(10); // Linha em branco após o texto
 
 
-$pdf->SetFont('Arial', 'B', 10);
-
 // Posição inicial do texto
 $x = 30;
 $y = $pdf->GetY();
 $pdf->Text($x, $y, "Complemento:");
-
-// Ajusta posição para o endereço e sublinha
 $x += $pdf->GetStringWidth("Complemento:");
-$this->desenharSublinhado($pdf, $x, 190, $request['complemento'], 40);
+$this->desenharSublinhado($pdf, $x, 195, $request['complemento'], 40);
 $x += 40;
 
 // Texto "N."
@@ -517,7 +506,7 @@ $pdf->Text($x, $y, " Bairro:");
 $x += $pdf->GetStringWidth(" Bairro:");
 
 // Ajusta para o número e sublinha
-$this->desenharSublinhado($pdf, $x, 190, $request['bairro'], 40);
+$this->desenharSublinhado($pdf, $x, 195, $request['bairro'], 40);
 $x += 100;
 
 $pdf->Ln(10); // Linha em branco após o texto
@@ -530,7 +519,7 @@ $y = $pdf->GetY();
 $pdf->Text($x, $y, "Valor:");
 // Ajusta posição para o endereço e sublinha
 $x += $pdf->GetStringWidth("Valor:");
-$this->desenharSublinhado($pdf, $x, 199, number_format($request['valor']), 40);
+$this->desenharSublinhado($pdf, $x, 204, "R$ " . number_format($request['valor']), 40);
 $x += 40;
 
 $pdf->Ln(10);
@@ -548,27 +537,27 @@ $y = $pdf->GetY();
 
 // Exibe o texto fixo "Data"
 $pdf->SetFont('Arial', '', 10);
-$pdf->Text($x, $y, "Data:");
+$pdf->Text($x, $y, "Data: ");
 
 // Ajusta a posição para o primeiro campo (dia)
-$x += $pdf->GetStringWidth("Data:"); // Move o cursor para a direita
-$this->desenharSublinhado($pdf, $x, 226, $dataDia, 10); // Campo do dia sublinhado
-$x += 10; // Ajusta após o sublinhado do dia
+$x += $pdf->GetStringWidth("Data: "); // Move o cursor para a direita
+$this->desenharSublinhado($pdf, $x, 231, $dataDia, 8); // Campo do dia sublinhado
+$x += 8; // Ajusta após o sublinhado do dia
 
 // Adiciona o separador "/"
 $pdf->Text($x, $y, " / ");
 $x += $pdf->GetStringWidth(" / "); // Move o cursor após o "/"
 
 // Sublinha o campo do mês
-$this->desenharSublinhado($pdf, $x, 226, $dataMes, 10); // Campo do mês sublinhado
-$x += 10; // Ajusta após o sublinhado do mês
+$this->desenharSublinhado($pdf, $x, 231, $dataMes, 8); // Campo do mês sublinhado
+$x += 8; // Ajusta após o sublinhado do mês
 
 // Adiciona o separador "/"
 $pdf->Text($x, $y, " / ");
 $x += $pdf->GetStringWidth(" / "); // Move o cursor após o "/"
 
 // Sublinha o campo do ano (20____)
-$this->desenharSublinhado($pdf, $x, 226, $dataAno, 15); // Campo do ano sublinhado
+$this->desenharSublinhado($pdf, $x, 231, $dataAno, 10); // Campo do ano sublinhado
 $x += 15; // Ajusta após o sublinhado do ano
 
 $pdf->Ln(10); // Linha em branco após o texto
@@ -588,27 +577,27 @@ $pdf->Ln(10); // Linha em branco após o texto
     // Retornar o link do PDF para download/visualização
     $fileUrl = asset('storage/atpves/' . basename($filePath));
 
-    if ($filePath) {
-        alert()->success('ATPVe gerada com sucesso!');
+    // if ($filePath) {
+    //     alert()->success('ATPVe gerada com sucesso!');
     
-        // Retornar os links para visualização e download
-        $linkVisualizar = "<a href='$fileUrl' class='btn btn-success btn-sm' target='_blank'>Visualizar PDF</a>";
-        $linkBaixar = "<a href='$fileUrl' class='btn btn-primary btn-sm' download>Baixar PDF</a>";
+    //     // Retornar os links para visualização e download
+    //     $linkVisualizar = "<a href='$fileUrl' class='btn btn-success btn-sm' target='_blank'>Visualizar PDF</a>";
+    //     $linkBaixar = "<a href='$fileUrl' class='btn btn-primary btn-sm' download>Baixar PDF</a>";
     
-        return redirect()->route('dashboard.index')
-            ->with('success-atpve', 'ATPVe gerada com sucesso!')
-            ->with('links', compact('linkVisualizar', 'linkBaixar'));
-    }
+    //     return redirect()->route('dashboard.index')
+    //         ->with('success-atpve', 'ATPVe gerada com sucesso!')
+    //         ->with('links', compact('linkVisualizar', 'linkBaixar'));
+    // }
 
-    // return response()->json([
-    //     'message' => 'PDF gerado com sucesso!',
-    //     'file_url' => $fileUrl,
-    // ]);
+    return response()->json([
+        'message' => 'PDF gerado com sucesso!',
+        'file_url' => $fileUrl,
+    ]);
 }
 
 function desenharSublinhado($pdf, $x, $y, $texto, $largura) {
     $pdf->SetXY($x, $y);
-    $pdf->Cell($largura, 0, $texto, 0, 0, 'C');
+    $pdf->Cell($largura, 0, $texto, 0, 0, 'L');
     $pdf->Line($x, $y + 2, $x + $largura, $y + 2); // Linha sublinhada
 }
 
