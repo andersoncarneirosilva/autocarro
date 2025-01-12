@@ -578,22 +578,22 @@ $pdf->Ln(20); // Linha em branco após o texto
     // Retornar o link do PDF para download/visualização
     $fileUrl = asset('storage/atpves/' . basename($filePath));
 
-    // if ($filePath) {
-    //     alert()->success('ATPVe gerada com sucesso!');
+    if ($filePath) {
+        alert()->success('ATPVe gerada com sucesso!');
     
-    //     // Retornar os links para visualização e download
-    //     $linkVisualizar = "<a href='$fileUrl' class='btn btn-success btn-sm' target='_blank'>Visualizar PDF</a>";
-    //     $linkBaixar = "<a href='$fileUrl' class='btn btn-primary btn-sm' download>Baixar PDF</a>";
+        // Retornar os links para visualização e download
+        $linkVisualizar = "<a href='$fileUrl' class='btn btn-success btn-sm' target='_blank'>Visualizar PDF</a>";
+        $linkBaixar = "<a href='$fileUrl' class='btn btn-primary btn-sm' download>Baixar PDF</a>";
     
-    //     return redirect()->route('dashboard.index')
-    //         ->with('success-atpve', 'ATPVe gerada com sucesso!')
-    //         ->with('links', compact('linkVisualizar', 'linkBaixar'));
-    // }
+        return redirect()->route('dashboard.index')
+            ->with('success-atpve', 'ATPVe gerada com sucesso!')
+            ->with('links', compact('linkVisualizar', 'linkBaixar'));
+    }
 
-    return response()->json([
-        'message' => 'PDF gerado com sucesso!',
-        'file_url' => $fileUrl,
-    ]);
+    // return response()->json([
+    //     'message' => 'PDF gerado com sucesso!',
+    //     'file_url' => $fileUrl,
+    // ]);
 }
 
 function desenharSublinhado($pdf, $x, $y, $texto, $largura) {
