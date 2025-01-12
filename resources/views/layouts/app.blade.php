@@ -36,16 +36,13 @@
         
         <script src="https://cdnjs.cloudflare.com/ajax/libs/sweetalert/2.1.0/sweetalert.min.js"></script>
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/inputmask/5.0.8/jquery.inputmask.min.js"></script>
-<!-- Incluindo o jQuery Toast -->
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/inputmask/5.0.8/jquery.inputmask.min.js"></script>
+        <!-- Incluindo o jQuery Toast -->
         <script src="{{ url('js/mask-cep.js') }}"></script>
         <script src="{{ url('js/mask-phone.js') }}"></script>
-        <!-- SimpleMDE css -->                                                 
-<link href="{{ url('assets/vendor/simplemde/simplemde.min.css') }}" rel="stylesheet" />                                    
-<!-- SimpleMDE js -->
-<!-- Plugin css -->
-<link rel="stylesheet" href="{{ url('assets/vendor/jquery-toast-plugin/jquery.toast.min.css') }}">
-<script src="{{ url('assets/js/notificacoes.js') }}"></script>
+        <!-- Plugin css -->
+        <link rel="stylesheet" href="{{ url('assets/vendor/jquery-toast-plugin/jquery.toast.min.css') }}">
+        <script src="{{ url('assets/js/notificacoes.js') }}"></script>
         
             
         
@@ -176,8 +173,6 @@
         <script src="{{ url('assets/vendor/fullcalendar/index.global.min.js') }}"></script>
         <script src="https://cdn.jsdelivr.net/npm/fullcalendar@5.11.0/main.min.js"></script>
         <script src="{{ url('assets/js/calendar.js') }}"></script>
-        <script src="{{ url('assets/vendor/simplemde/simplemde.min.js') }}"></script>
-<!-- SimpleMDE demo -->
-<script src="{{ url('assets/js/editor-texto.js') }}"></script>
+
     </body>
 </html> 

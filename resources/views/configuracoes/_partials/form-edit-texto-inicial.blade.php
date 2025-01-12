@@ -12,7 +12,7 @@
                     <div class="mb-3">
                         <label for="nome_outorgado" class="form-label">Texto </label>
                         {{-- <textarea class="form-control" id="edit_texto_final" name="texto_final" rows="6" cols="150"></textarea> --}}
-                        <textarea  id="edit_texto_inicial"  name="texto_inicio"></textarea>
+                        <textarea name="texto_inicio" id="edit_text_inicial" class="form-control"  rows="5"></textarea>
                     </div>
                 </div>
                 <div class="modal-footer">

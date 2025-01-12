@@ -7,7 +7,7 @@
                     <h4 class="header-title">Outorgado</h4>
                     <div class="dropdown">
                         @if ($outs->total() >= 3)
-                        <button type="button" class="btn btn-primary btn-sm" onclick="verificarLimite()">Cadastrar</button>
+                        <button type="button" class="btn btn-primary btn-sm" disabled>Cadastrar</button>
 
                         @else
                         <button type="button" class="btn btn-primary btn-sm" data-bs-toggle="modal"

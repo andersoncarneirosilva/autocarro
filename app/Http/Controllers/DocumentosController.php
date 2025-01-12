@@ -298,7 +298,7 @@ class DocumentosController extends Controller
                                                                                             
          $pdf->Ln(5);
          $pdf->Cell(0, 10, "_________________________________________________" , 0, 1, 'C');
-         $pdf->Cell(0, 5, utf8_decode("$request->nome"), 0, 1, 'C');
+         $pdf->Cell(0, 5, utf8_decode("$documento->nome"), 0, 1, 'C');
 
     // Definir o nome do arquivo do PDF
     //$nomePDF = 'nome_extraido_' . time() . '.pdf';

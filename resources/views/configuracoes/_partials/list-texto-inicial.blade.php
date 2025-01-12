@@ -14,7 +14,7 @@
                     <h4 class="header-title">Texto Inicial</h4>
                     <div class="dropdown">
                         @if ($texts_starts->total() <= 1)
-                            <button type="button" class="btn btn-primary btn-sm" onclick="verificarLimiteTexto()">Cadastrar</button>
+                            <button type="button" class="btn btn-primary btn-sm" disabled>Cadastrar</button>
                         @else
                             <button type="button" class="btn btn-primary btn-sm" data-bs-toggle="modal" data-bs-target="#modalCadTextoInicial">Cadastrar</button>
                         @endif
@@ -38,7 +38,12 @@
                                         <a href="#" class="action-icon" data-id="{{ $texts_start->id }}" onclick="openEditTextoInicial(event)">
                                             <i class="mdi mdi-clipboard-edit-outline" title="Editar"></i>
                                         </a>
+                                        {{-- @if ($texts_starts->total() <= 1)
+                                            <a href="{{ route('textoinicial.destroy', $texts_start->id) }}" class="action-icon mdi mdi-delete disabled"  data-confirm-delete="true"></a>
+                                        @endif --}}
+                                        {{-- @else
                                         <a href="{{ route('textoinicial.destroy', $texts_start->id) }}" class="action-icon mdi mdi-delete" data-confirm-delete="true"></a>
+                                        @endif --}}
                                     </td>
                                 </tr>
                             @endforeach

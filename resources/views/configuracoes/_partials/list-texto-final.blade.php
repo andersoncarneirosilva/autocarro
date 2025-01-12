@@ -14,7 +14,7 @@
                     <h4 class="header-title">Texto Final</h4>
                     <div class="dropdown">
                         @if ($texts->total() <= 1)
-                            <button type="button" class="btn btn-primary btn-sm" onclick="verificarLimiteTexto()">Cadastrar</button>
+                            <button type="button" class="btn btn-primary btn-sm" disabled>Cadastrar</button>
                         @else
                             <button type="button" class="btn btn-primary btn-sm" data-bs-toggle="modal" data-bs-target="#modalCadastroTexto">Cadastrar</button>
                         @endif
@@ -38,7 +38,7 @@
                                         <a href="#" class="action-icon" data-id="{{ $text->id }}" onclick="openEditTextModal(event)">
                                             <i class="mdi mdi-clipboard-edit-outline" title="Editar"></i>
                                         </a>
-                                        <a href="{{ route('poderes.destroy', $text->id) }}" class="action-icon mdi mdi-delete" data-confirm-delete="true"></a>
+                                        {{-- <a href="{{ route('poderes.destroy', $text->id) }}" class="action-icon mdi mdi-delete" data-confirm-delete="true"></a> --}}
                                     </td>
                                 </tr>
                             @endforeach

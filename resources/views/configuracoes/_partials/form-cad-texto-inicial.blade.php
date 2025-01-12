@@ -11,7 +11,7 @@
                 <div class="modal-body">
                     <div class="mb-3">
                         <label for="texto_inicial" class="form-label">Texto inicial</label>
-                        <textarea id="texto_inicial" name="texto_inicio" class="form-control"></textarea>
+                        <textarea name="texto_inicio" class="form-control"  rows="5"></textarea>
                     </div>
                 </div>
                 <div class="modal-footer">

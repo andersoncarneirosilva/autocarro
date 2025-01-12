@@ -24,8 +24,8 @@
 
 
 @can('access-despachante')
-    @include('dashboard.widgets.content')
-    @include('dashboard.widgets.widgets')
+@include('dashboard.widgets.widgets')
+@include('dashboard.widgets.content')
 @endcan
 
 

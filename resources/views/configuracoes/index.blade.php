@@ -153,24 +153,41 @@ function openEditTextoInicial(event) {
     event.preventDefault();
 
     // Obtenha o ID do documento
-    //const docId = event.currentTarget.getAttribute('data-id');
-    const docId = event.target.closest('a').getAttribute('data-id');
+    const docId = event.target.closest('a')?.getAttribute('data-id');
+    //console.log("ID do documento:", docId);
+
+    if (!docId) {
+        Swal.fire({
+            title: 'Erro!',
+            text: 'ID do documento não encontrado.',
+            icon: 'error',
+            confirmButtonText: 'OK'
+        });
+        return;
+    }
+
     // Faça uma requisição AJAX para buscar os dados
-    console.log(docId);
     $.ajax({
         url: `/textoinicial/${docId}`,
         method: 'GET',
         success: function(response) {
-            console.log(response);
+            //console.log("Resposta do servidor:", response);
+
             // Preencha os campos do modal com os dados do documento
-            $('#edit_texto_inicial').val(response.texto_inicial); // Preenche o valor no textarea (usado para inicialização)
-
-            // Atualize a ação do formulário para apontar para a rota de edição
-            $('#editFormTextoInicial').attr('action', `/textoinicial/${docId}`);
-
-            // Exiba o modal
-            $('#editTextInicialModal').modal('show');
-            
+            if (response.texto_inicio) { // Atualizado para `texto_inicio`
+                $('#edit_text_inicial').val(response.texto_inicio); // Preenche o textarea
+                // Atualize a ação do formulário
+                $('#editFormTextoInicial').attr('action', `/textoinicial/${docId}`);
+                // Exiba o modal
+                $('#editTextInicialModal').modal('show');
+            } else {
+                Swal.fire({
+                    title: 'Erro!',
+                    text: 'Texto inicial não encontrado.',
+                    icon: 'error',
+                    confirmButtonText: 'OK'
+                });
+            }
         },
         error: function() {
             Swal.fire({
@@ -185,37 +202,28 @@ function openEditTextoInicial(event) {
 
 
 
+
 // Após a inicialização, use o método value para preencher o editor
 function openEditTextModal(event) {
     event.preventDefault();
 
+    // Obtém o ID do documento
     const docId = event.target.closest('a').getAttribute('data-id');
 
     $.ajax({
         url: `/poderes/${docId}`,
-        method: 'GET',  // Use GET para buscar dados
+        method: 'GET', // Use GET para buscar dados
         success: function(response) {
-            // Preenche o campo do textarea com o conteúdo da resposta
-            $('#texto_final').val(response.texto_final); // Preenche o valor no textarea (usado para inicialização)
+            console.log("Resposta recebida:", response);
 
+            // Preenche o campo do textarea com o conteúdo da resposta
+            $('#edit_text_final').val(response.texto_final); // ID corrigido aqui
+
+            // Atualiza a ação do formulário
             $('#editFormTextoFinal').attr('action', `/poderes/${docId}`);
+
             // Exibe o modal
             $('#editTextoFinalModal').modal('show');
-            // Inicializa o SimpleMDE apenas depois que o modal for exibido
-            setTimeout(function() {
-                // Inicializa o SimpleMDE
-                const simpleMDE = new SimpleMDE({
-                    element: document.getElementById('texto_final'),
-                    spellChecker: false,
-                    autosave: {
-                        enabled: true,
-                        unique_id: "simplemde1"
-                    }
-                });
-
-                // Preenche o conteúdo do SimpleMDE com o texto retornado pela requisição
-                simpleMDE.value(response.texto_final);
-            }, 3000); // Aguarda um pouco para garantir que o modal foi exibido
         },
         error: function(xhr, status, error) {
             console.log('Erro AJAX:', error);
@@ -228,6 +236,7 @@ function openEditTextModal(event) {
         }
     });
 }
+
 
 
 function openEditCidadeModal(event) {
