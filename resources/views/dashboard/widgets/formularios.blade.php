@@ -38,6 +38,14 @@
                 <form action="{{ route('gerar.atpve') }}" method="POST" enctype="multipart/form-data" id="formProc">
                     @csrf
                     <div class="row">
+                            <div class="mb-6">
+                                <label for="social-fb" class="form-label">Email: <span style="color: red;">*</span></label>
+                                <div class="input-group">
+                                    <input type="text" name="email" class="form-control" required/>
+                                </div>
+                            </div>
+                    </div>
+                    <div class="row">
                         <div class="col-md-6">
                             <div class="mb-3">
                                 <label for="social-fb" class="form-label">CEP: <span style="color: red;">*</span></label>

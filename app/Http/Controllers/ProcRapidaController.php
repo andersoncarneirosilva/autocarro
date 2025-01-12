@@ -439,7 +439,7 @@ $pdf->Text($x = 30, $y = $pdf->GetY(), "e-mail: ");
 $x += $pdf->GetStringWidth("e-mail:"); // Ajuste para "CPF/CNPJ:"
 
 // Sublinha o CPF
-$this->desenharSublinhado($pdf, 41, 148, "email_adquirente@gmail.com", 100); // Sublinha o CPF
+$this->desenharSublinhado($pdf, 41, 148, $request['email'], 100); // Sublinha o CPF
 $x += 100;
 
 $pdf->Ln(20); // Linha em branco após o CPF
@@ -479,7 +479,9 @@ $pdf->Text($x, $y, "Logradouro:Rua/Av.");
 
 // Ajusta posição para o endereço e sublinha
 $x += $pdf->GetStringWidth("Logradouro:Rua/Av.");
-$this->desenharSublinhado($pdf, $x, 186, $request['endereco'], 80);
+$endereco = iconv('UTF-8', 'ISO-8859-1//TRANSLIT', $request['endereco']);
+$this->desenharSublinhado($pdf, $x, 186, $endereco, 80);
+
 $x += 80;
 
 // Texto "N."
@@ -519,7 +521,7 @@ $y = $pdf->GetY();
 $pdf->Text($x, $y, "Valor:");
 // Ajusta posição para o endereço e sublinha
 $x += $pdf->GetStringWidth("Valor:");
-$this->desenharSublinhado($pdf, $x, 204, "R$ " . number_format($request['valor']), 40);
+$this->desenharSublinhado($pdf, $x, 204, "R$ " . number_format($request['valor'], 2, ',', '.'), 40);
 $x += 40;
 
 $pdf->Ln(10);
