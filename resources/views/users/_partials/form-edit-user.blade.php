@@ -73,9 +73,9 @@
                                 <select class="form-select" name="perfil" >
                                     @if($user->perfil == "Despachante")
                                     <option value="Despachante" selected>Despachante</option>
-                                    <option value="Logista">Logista</option>
+                                    <option value="Lojista">Lojista</option>
                                     @else
-                                    <option value="Logista">Logista</option>
+                                    <option value="Lojista">Lojista</option>
                                     <option value="Despachante">Despachante</option>
                                     @endif
                                   </select>

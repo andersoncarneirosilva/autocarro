@@ -52,14 +52,14 @@
                 </a>
             </li>
 
-            @can('access-perfil')
+            {{-- @can('access-perfil')
             <li class="side-nav-item">
                 <a href="{{ route('procrapida.index') }}" class="side-nav-link">
                     <i class="uil-file"></i>
                     <span> Doc rápido </span>
                 </a>
             </li>
-            @endcan
+            @endcan --}}
 
             <li class="side-nav-item">
                 <a href="{{ route('documentos.index') }}" class="side-nav-link">
@@ -122,14 +122,11 @@
                         <li>
                             <a href="{{ route('configuracoes.index') }}">Procuração</a>
                         </li>
-                        {{-- @can('access') 
+                        @can('access-admin') 
                         <li>
                             <a href="{{ route('users.index') }}">Usuários</a>
                         </li>
-                        @endcan --}}
-                        <li>
-                            <a href="{{ route('users.index') }}">Usuários</a>
-                        </li>
+                        @endcan
                     </ul>
                 </div>
             </li>

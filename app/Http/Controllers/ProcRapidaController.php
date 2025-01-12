@@ -40,11 +40,10 @@ class ProcRapidaController extends Controller
 
     public function store(Request $request){
         
-        $cidade = Cidade::first();
+        $cidades = Cidade::first();
         $outorgados = Outorgado::all();
         $textoFinal = TextoPoder::first();
         $textoInicial = TextoInicio::first();
-        $cidade = Cidade::first();
 
         $dataAtual = Carbon::now();
         
@@ -61,7 +60,7 @@ class ProcRapidaController extends Controller
             //dd($validated);
         } catch (\Illuminate\Validation\ValidationException $e) {
             alert()->error('Selecione o documento em pdf!');
-            return redirect()->route('procrapida.index');
+            return redirect()->route('dashboard.index');
         }
         
 
@@ -183,11 +182,11 @@ class ProcRapidaController extends Controller
         // Adicionar o texto justificado, utilizando a largura calculada
         $pdf->MultiCell($largura_disponivel2, 5, utf8_decode($text2), 0, 'J');
         // Adicionando a data por extenso no PDF
-        $pdf->Cell(0, 10, utf8_decode("$cidade, $dataPorExtenso"), 0, 1, 'R');  // 'R' para alinhamento à direita
+        $pdf->Cell(0, 10, utf8_decode("$cidades->cidade, $dataPorExtenso"), 0, 1, 'R');  // 'R' para alinhamento à direita
                                                                              
         $pdf->Ln(5);
         $pdf->Cell(0, 10, "_________________________________________________" , 0, 1, 'C');
-        $pdf->Cell(0, 5, utf8_decode("$request->nome"), 0, 1, 'C');
+        $pdf->Cell(0, 5, utf8_decode("$nome"), 0, 1, 'C');
 
         // Definir o nome do arquivo do PDF
         //$nomePDF = 'nome_extraido_' . time() . '.pdf';
@@ -264,7 +263,7 @@ public function gerarAtpve(Request $request)
             //dd($validated);
         } catch (\Illuminate\Validation\ValidationException $e) {
             alert()->error('Selecione o documento em pdf!');
-            return redirect()->route('procrapida.index');
+            return redirect()->route('dashboard.index');
         }
         
 
@@ -284,7 +283,7 @@ public function gerarAtpve(Request $request)
 
             if ($linhas[3] != "SECRETARIA NACIONAL DE TRÂNSITO - SENATRAN") {
                 alert()->error('Selecione um documento 2024.');
-                return redirect()->route('procrapida.index');
+                return redirect()->route('dashboard.index');
             }
 
             $marca = $this->model->extrairMarca($textoPagina);

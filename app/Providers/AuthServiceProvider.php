@@ -22,7 +22,7 @@ class AuthServiceProvider extends ServiceProvider
     public function boot(): void
     {
         // Definindo a política de acesso
-        Gate::define('access', function (User $user) {
+        Gate::define('access-admin', function (User $user) {
             //dd($user);
             return $user->nivel_acesso == 'Administrador';
         });
