@@ -41,7 +41,13 @@
                                     <td>{{ $doc->crv }}</td>
                                     <td><a href="{{ $doc->arquivo_doc }}" target="blank">{{ $doc->placa }}</a>
                                     <td><a href="{{ $doc->arquivo_proc }}" target="blank">PROC</a>
-                                        <td><a href="{{ $doc->arquivo_atpve }}" target="blank">ATPVe</a>
+                                    <td>
+                                        @if(!empty($doc->arquivo_atpve))
+                                            <a href="{{ $doc->arquivo_atpve }}" target="_blank">ATPVe</a>
+                                        @else
+                                            <!-- Mostre uma mensagem ou deixe em branco -->
+                                            <span>Sem ATPVe</span>
+                                        @endif
                                     </td>
                                     <td>{{ Carbon\Carbon::parse($doc->created_at)->format('d/m') }}</td>
                                     <td class="table-action">
