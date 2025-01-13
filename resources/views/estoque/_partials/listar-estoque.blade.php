@@ -71,9 +71,11 @@
                                                 Procuração
                                                 </a>
                                                 <a href="{{ route('estoque.create-atpve') }}?id={{ $doc->id }}" 
-                                                class="dropdown-item">
-                                                Gerar APTVe
-                                                </a>
+                                                    class="dropdown-item {{ !empty($doc->arquivo_atpve) ? 'disabled' : '' }}"
+                                                    {{ !empty($doc->arquivo_atpve) ? 'aria-disabled=true' : '' }}>
+                                                    Gerar APTVe
+                                                 </a>
+                                                 
                                                 <a href="{{ route('estoque.destroy', $doc->id) }}" 
                                                 data-confirm-delete="true"
                                                 class="dropdown-item">
