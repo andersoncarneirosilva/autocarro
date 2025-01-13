@@ -172,4 +172,156 @@ class Procuracao extends Model
         // Caso nenhum nome de usuário seja encontrado
         return $renavam ;
     }
+
+    public function extrairNome($textoPagina){
+        // Suposição: O nome do usuário está precedido pela palavra "Nome:" ou "Nome do usuário:"
+        
+        $linhas = explode("\n", $textoPagina);
+                //dd($linhas);
+                $nome = explode("\t", $linhas[62]);
+                //dd($colunas);
+                $outorgante = implode(', ', $nome);
+            //dd($outorgante);
+
+        // Caso nenhum nome de usuário seja encontrado
+        return $outorgante ;
+    }
+
+    public function extrairCpf($textoPagina){
+        // Suposição: O nome do usuário está precedido pela palavra "Nome:" ou "Nome do usuário:"
+        
+        $linhas = explode("\n", $textoPagina);
+                //dd($linhas);
+                $numCpf = explode("\t", $linhas[63]);
+                //dd($colunas);
+                $cpf = implode(', ', $numCpf);
+            //dd($outorgante);
+
+        // Caso nenhum nome de usuário seja encontrado
+        return $cpf ;
+    }
+
+    public function extrairCidade($textoPagina) {
+        // Divide o texto em linhas
+        $linhas = explode("\n", $textoPagina);
+    
+        // Verifica se a linha 64 existe
+        if (isset($linhas[64])) {
+            // Remove possíveis espaços em branco ou tabulações na linha
+            $linha = trim($linhas[64]);
+    
+            // Divide a linha em partes, usando espaço ou tabulação como delimitador
+            $partes = preg_split('/\s+/', $linha);
+    
+            // Verifica se a cidade e o estado estão presentes
+            if (isset($partes[0], $partes[1])) {
+                // Concatena a cidade e o estado com uma barra
+                $cidadeEstado = $partes[0] . '/' . $partes[1];
+    
+                // Debug para verificar o valor capturado
+                //dd($cidadeEstado);
+    
+                return $cidadeEstado;
+            }
+        }
+    
+        // Caso a linha 64 não exista ou esteja incompleta, retorna vazio ou gera um erro
+        //dd('Linha 64 ou dados insuficientes');
+        return '';
+    }
+
+    public function extrairCrv($textoPagina){
+        // Suposição: O nome do usuário está precedido pela palavra "Nome:" ou "Nome do usuário:"
+        
+        $linhas = explode("\n", $textoPagina);
+                //dd($linhas);
+                $linha = explode("\t", $linhas[51]);
+                //dd($colunas);
+                $crv = implode(', ', $linha);
+            //dd($crv);
+
+        // Caso nenhum nome de usuário seja encontrado
+        return $crv ;
+    }
+
+    public function extrairPlacaAnterior($textoPagina){
+        // Suposição: O nome do usuário está precedido pela palavra "Nome:" ou "Nome do usuário:"
+        
+        $linhas = explode("\n", $textoPagina);
+
+        // Divida a linha 55 em palavras usando o espaço como delimitador
+        $linha = explode(" ", $linhas[55]);
+
+        // Captura o primeiro item (antes do espaço)
+        $placaAnterior = isset($linha[0]) ? $linha[0] : '';  // Garante que não cause erro caso não exista
+        //dd($cor);
+        return $placaAnterior;
+    }
+
+    public function extrairCategoria($textoPagina){
+        // Suposição: O nome do usuário está precedido pela palavra "Nome:" ou "Nome do usuário:"
+        
+        $linhas = explode("\n", $textoPagina);
+
+        // Divida a linha 55 em palavras usando o espaço como delimitador
+        $linha = explode(" ", $linhas[57]);
+
+        // Captura o primeiro item (antes do espaço)
+        $categoria = isset($linha[0]) ? $linha[0] : '';  // Garante que não cause erro caso não exista
+        //dd($cor);
+        return $categoria;
+    }
+
+    public function extrairMotor($textoPagina) {
+        // Divide o texto em linhas
+        $linhas = explode("\n", $textoPagina);
+    
+        // Verifica se a linha 60 existe
+        if (isset($linhas[60])) {
+            // Remove espaços e tabulações no início e no fim da linha
+            $linha = trim($linhas[60]);
+    
+            // Divide a linha em palavras, considerando qualquer espaço ou tabulação como delimitador
+            $partes = preg_split('/\s+/', $linha);
+    
+            // Captura o primeiro conjunto
+            $motor = isset($partes[0]) ? $partes[0] : ''; // Garante que não cause erro caso não exista
+    
+            // Debug para verificar o valor capturado (se necessário)
+            // dd($motor);
+    
+            return $motor;
+        }
+    
+        // Caso a linha 60 não exista, retorna vazio
+        return '';
+    }
+
+    public function extrairCombustivel($textoPagina){
+        $linhas = explode("\n", $textoPagina);
+
+        // Divida a linha 55 em palavras usando o espaço como delimitador
+        $linha = explode(" ", $linhas[56]);
+//dd($linha);
+        // Captura o primeiro item (antes do espaço)
+        $combustivel = isset($linha[1]) ? $linha[1] : '';  // Garante que não cause erro caso não exista
+        //dd($cor);
+        return $combustivel;
+    }
+    
+    public function extrairInfos($textoPagina){
+        // Suposição: O nome do usuário está precedido pela palavra "Nome:" ou "Nome do usuário:"
+        
+        $linhas = explode("\n", $textoPagina);
+                //dd($linhas);
+                $linha = explode("\t", $linhas[65]);
+                //dd($colunas);
+                $infos = implode(', ', $linha);
+            //dd($outorgante);
+
+        // Caso nenhum nome de usuário seja encontrado
+        return $infos ;
+    }
+
+    
 }

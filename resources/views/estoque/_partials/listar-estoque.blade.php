@@ -6,7 +6,8 @@
                     <h4 class="header-title">Controle de Estoque</h4>
                     <div class="dropdown">
                         @if(auth()->user()->credito > 0)
-                        <a href="{{ route('estoque.create')}}" class="btn btn-primary btn-sm">Cadastrar</a>
+                        <button type="button" class="btn btn-primary btn-sm" data-bs-toggle="modal"
+                            data-bs-target="#standard-modal">Cadastrar</button>
                             @endif
                             <a href="{{ route('relatorio-veiculos') }}" target="_blank" class="btn btn-danger btn-sm">Relatório</a>
                     </div>

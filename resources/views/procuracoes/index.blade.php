@@ -58,6 +58,8 @@
                     <h4 class="header-title">Procurações cadastradas</h4>
                     <div class="dropdown">
                         @if(auth()->user()->credito > 0)
+                        <button type="button" class="btn btn-info btn-sm" data-bs-toggle="modal"
+                            data-bs-target="#standard-modal">Gerar Procuração</button>
                         <a href="{{ route('procuracoes.create')}}" class="btn btn-primary btn-sm">Cadastro manual</a>
                         @endif
                         <a href="{{ route('relatorio-procuracoes')}}" target="_blank" class="btn btn-danger btn-sm">Relatório</a>
@@ -92,12 +94,34 @@
                                     <td>{{ $doc->renavam }}</td>
                                     <td>{{ Carbon\Carbon::parse($doc->created_at)->format('d/m/Y') }}</td>
                                     <td class="table-action">
-                                                <a href="{{ $doc->arquivo_doc }}" class="action-icon" target="blank">
-                                                    <i class="mdi mdi-printer"></i>
+                                        <div class="dropdown btn-group">
+                                            <button class="btn btn-info btn-sm dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                                Ações
+                                            </button>
+                                            <div class="dropdown-menu dropdown-menu-animated dropdown-menu-end">
+                                                <a href="{{ $doc->arquivo_proc }}" 
+                                                class="dropdown-item"
+                                                target="_blank">
+                                                Procuração
                                                 </a>
-                                                
-                                        <a href="{{ route('procuracoes.destroy', $doc->id) }}"
-                                            class="action-icon mdi mdi-delete text-danger" data-confirm-delete="true"></a>
+                                                <a href="{{ $doc->arquivo_doc }}" 
+                                                class="dropdown-item"
+                                                target="_blank">
+                                                CRLV
+                                                </a>
+                                                <a href="{{ route('estoque.create-atpve') }}?id={{ $doc->id }}" 
+                                                    class="dropdown-item {{ !empty($doc->arquivo_atpve) ? 'disabled' : '' }}"
+                                                    {{ !empty($doc->arquivo_atpve) ? 'aria-disabled=true' : '' }}>
+                                                    Gerar APTVe
+                                                 </a>
+                                                 
+                                                <a href="{{ route('procuracoes.destroy', $doc->id) }}" 
+                                                data-confirm-delete="true"
+                                                class="dropdown-item">
+                                                Excluir
+                                                </a>
+                                            </div>
+                                        </div>
                                     </td>
                                 </tr>
                             @endforeach
@@ -183,9 +207,23 @@
         </div>
     </div>
 </div>
+<!-- Standard modal -->
+<div id="standard-modal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="standard-modalLabel"
+aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title" id="standard-modalLabel">Nova procuração</h4>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-hidden="true"></button>
+            </div>
+            <div class="modal-body">
+                @include('procuracoes.create')
+            </div>
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
 
-
-<script>
+{{-- <script>
     
   $(document).ready(function() {
     $('#select-timezone').select2({
@@ -211,8 +249,8 @@
 });
 
 
-</script>
-<script>
+</script> --}}
+{{-- <script>
 
 
 
@@ -265,6 +303,6 @@
 
 
 
-</script>
+</script> --}}
 
     @endsection

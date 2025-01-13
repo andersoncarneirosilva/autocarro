@@ -1,38 +1,37 @@
-@extends('layouts.app')
-
-@section('title', 'Veículos')
-
-@section('content')
-
-
-
-<div class="row">
-    <div class="col-12">
-        <div class="page-title-box">
-            <div class="page-title-right">
-                <ol class="breadcrumb m-0">
-                    <li class="breadcrumb-item"><a href="{{ route('dashboard.index') }}">Dashboard</a></li>
-                    <li class="breadcrumb-item"><a href="{{ route('clientes.index') }}">Veículos</a></li>
-                    <li class="breadcrumb-item active">Novo Veículo</li>
-                </ol>
-            </div>
-            <h3 class="page-title">Cadastrar Veículo</h3>
-        </div>
-    </div>
-</div>
-@if ($errors->any())
-    <div class="alert alert-danger bg-transparent text-danger" role="alert">
-        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-        <strong>Atenção - </strong>Todos os campos são obrigatórios.
-    </div>
-@endif
-
-{{-- Form para o cadastrar os clientes do sistema --}}
-<form action="{{ route('estoque.store') }}" id="form-cadastro" method="POST" enctype="multipart/form-data">
+<form action="{{ route('estoque.store') }}" method="POST" enctype="multipart/form-data" id="formDoc">
     @csrf
     @include('estoque._partials.form-cad-veiculo')
 </form>
 
+<script>
+    // Obtenha o formulário
+    const form = document.getElementById('formDoc');
 
+    // Obtenha os inputs do arquivo e do endereço
+    const arquivoInput = document.getElementById('arquivo_doc');
+    
+    // Adicionando um evento de submit para o formulário
+    form.addEventListener('submit', function(event) {
+        // Impede o comportamento padrão do formulário
+        event.preventDefault();
+        
+        // Obtém o arquivo
+        const arquivo = arquivoInput.files[0]; 
 
-@endsection
+        // Verifica se o arquivo foi selecionado
+        if (!arquivo) {
+            Swal.fire({
+                title: 'Erro!',
+                text: 'Por favor, selecione um arquivo em pdf.',
+                icon: 'error',
+                confirmButtonText: 'OK'
+            });
+            return;  // Impede o envio do formulário
+        }
+
+        
+
+        // Se o arquivo e o endereço estiverem presentes, envie o formulário
+        form.submit();
+    });
+</script>

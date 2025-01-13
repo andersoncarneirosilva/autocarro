@@ -7,6 +7,7 @@ use App\Models\Procuracao;
 use App\Models\Outorgado;
 use App\Models\Cidade;
 use App\Models\TextoPoder;
+use App\Models\TextoInicio;
 use App\Models\Cliente;
 use Smalot\PdfParser\Parser;
 use FPDF;
@@ -50,11 +51,88 @@ class ProcuracaoController extends Controller
         $outorgados = Outorgado::all();
         //dd($outorgados);
         $config = TextoPoder::first();
-        $cidade = Cidade::first();
+        $textInicio = TextoInicio::first();
+        //dd($textInicio);
+        $cidades = Cidade::first();
         
         $dataAtual = Carbon::now();
         
         $dataPorExtenso = $dataAtual->translatedFormat('d \d\e F \d\e Y');
+
+        $cidade = Cidade::first();
+
+        try {
+            $validated = $request->validate([
+                'arquivo_doc' => 'required|mimes:pdf|max:10240',
+            ], [
+                'arquivo_doc.mimes' => 'O arquivo deve ser um PDF.',
+                'arquivo_doc.required' => 'O arquivo é obrigatório.',
+                'arquivo_doc.max' => 'O arquivo não pode ultrapassar 10MB.',
+            ]);
+            //dd($validated);
+        } catch (\Illuminate\Validation\ValidationException $e) {
+            alert()->error('Selecione o documento em pdf!');
+            return redirect()->route('documentos.index');
+        }
+        
+
+        $arquivo = $request->file('arquivo_doc');
+        
+        $nomeOriginal = $arquivo->getClientOriginalName();
+
+        
+        
+        $parser = new Parser();
+
+        $pdf = $parser->parseFile($arquivo);
+        
+        
+        foreach ($pdf->getPages() as $numeroPagina => $pagina) {
+            $textoPagina = $pagina->getText();
+            
+            $linhas = explode("\n", $textoPagina);
+
+            if ($linhas[3] != "SECRETARIA NACIONAL DE TRÂNSITO - SENATRAN") {
+                alert()->error('Selecione um documento 2024.');
+                return redirect()->route('documentos.index');
+            }
+
+            $marca = $this->model->extrairMarca($textoPagina);
+            $placa = $this->model->extrairPlaca($textoPagina);
+            $chassi = $this->model->extrairChassi($textoPagina);
+            $cor = $this->model->extrairCor($textoPagina);
+            $anoModelo = $this->model->extrairAnoModelo($textoPagina);
+            //dd($anoModelo);
+            $renavam = $this->model->extrairRevanam($textoPagina);
+            $nome = $this->model->extrairNome($textoPagina);
+            $cpf = $this->model->extrairCpf($textoPagina);
+            $cidade = $this->model->extrairCidade($textoPagina);
+            $crv = $this->model->extrairCrv($textoPagina);
+            $placaAnterior = $this->model->extrairPlacaAnterior($textoPagina);
+            $categoria = $this->model->extrairCategoria($textoPagina);
+            $motor = $this->model->extrairMotor($textoPagina);
+            $combustivel = $this->model->extrairCombustivel($textoPagina);
+            $infos = $this->model->extrairInfos($textoPagina);
+            //dd($placaAnterior);
+        }
+
+            // Garante que a pasta "procuracoes" existe
+            $pastaDestino = storage_path('app/public/documento');
+            $urlDoc = asset('storage/documento/' . $nomeOriginal); 
+            //dd($urlDoc);
+            if (!file_exists($pastaDestino)) {
+                mkdir($pastaDestino, 0777, true); // Cria a pasta
+            }
+
+            // Salva o arquivo na pasta
+            $caminhoDoc = $pastaDestino . '/' . $nomeOriginal;
+            $arquivo->move($pastaDestino, $nomeOriginal);
+
+            // Verifica se o arquivo foi salvo
+            if (!file_exists($caminhoDoc)) {
+                return response()->json(['error' => 'Erro ao salvar o arquivo.'], 500);
+            }
+
 
         // Gerar o PDF com FPDF
         $pdf = new FPDF();
@@ -73,7 +151,7 @@ class ProcuracaoController extends Controller
 
         $enderecoFormatado = $this->forcarAcentosMaiusculos($request->endereco);
 
-        $nomeFormatado = $this->forcarAcentosMaiusculos($request->nome);
+        $nomeFormatado = $this->forcarAcentosMaiusculos($nome);
 
         //dd($nomeFormatado);
 
@@ -81,7 +159,7 @@ class ProcuracaoController extends Controller
         $pdf->Ln(5);
         $pdf->Cell(10, 0, "CPF: $request->cpf", 0, 0, 'L');
         $pdf->Ln(5);
-        $pdf->Cell(0, 0, utf8_decode("ENDEREÇO: " . strtoupper($enderecoFormatado)) . ", " . $request->numero . ", " . strtoupper($request->bairro) . ", " . strtoupper($request->cidade) . "/" . strtoupper($request->estado), 0, 0, 'L');
+        $pdf->Cell(0, 0, utf8_decode("ENDEREÇO: " . strtoupper($enderecoFormatado)), 0, 0, 'L');
 
         $pdf->Ln(5);
 
@@ -113,7 +191,7 @@ class ProcuracaoController extends Controller
         $margem_direita = 10;  // Margem direita
 
         // Texto a ser inserido no PDF
-        $text = "FINS E PODERES: O OUTORGANTE confere ao OUTORGADO amplos e ilimitados poderes para o fim especial de vender a quem quiser, receber valores de venda, transferir para si próprio ou terceiros, em causa própria, locar ou de qualquer forma alienar ou onerar o veículo de sua propriedade com as seguintes características:";
+        $text = $textInicio->texto_inicio;
 
         // Remover quebras de linha manuais, caso existam
         $text = str_replace("\n", " ", $text);
@@ -126,14 +204,14 @@ class ProcuracaoController extends Controller
 
         $pdf->Ln(8);
         $pdf->SetFont('Arial', 'B', 12);
-        $pdf->Cell(120, 2, "MARCA: " . strtoupper($request->marca), 0, 0, 'L');
-        $pdf->Cell(0, 2, "PLACA: " . strtoupper($request->placa), 0, 1, 'L');
+        $pdf->Cell(120, 2, "MARCA: " . strtoupper($marca), 0, 0, 'L');
+        $pdf->Cell(0, 2, "PLACA: " . strtoupper($placa), 0, 1, 'L');
         $pdf->Ln(5);
-        $pdf->Cell(120, 2, "CHASSI: " . strtoupper($request->chassi), 0, 0, 'L');
-        $pdf->Cell(0, 2, "COR: " . strtoupper($request->cor), 0, 1, 'L');
+        $pdf->Cell(120, 2, "CHASSI: " . strtoupper($chassi), 0, 0, 'L');
+        $pdf->Cell(0, 2, "COR: " . strtoupper($cor), 0, 1, 'L');
         $pdf->Ln(5);
-        $pdf->Cell(120, 2, "ANO/MODELO: " . strtoupper($request->ano_modelo), 0, 0, 'L');
-        $pdf->Cell(0, 2, "RENAVAM: " . strtoupper($request->renavam), 0, 1, 'L');
+        $pdf->Cell(120, 2, "ANO/MODELO: " . strtoupper($anoModelo), 0, 0, 'L');
+        $pdf->Cell(0, 2, "RENAVAM: " . strtoupper($renavam), 0, 1, 'L');
 
 
         $pdf->Ln(8);
@@ -150,42 +228,42 @@ class ProcuracaoController extends Controller
         // Adicionar o texto justificado, utilizando a largura calculada
         $pdf->MultiCell($largura_disponivel2, 5, utf8_decode($text2), 0, 'J');
         // Adicionando a data por extenso no PDF
-        $pdf->Cell(0, 10, utf8_decode("$cidade->cidade, $dataPorExtenso"), 0, 1, 'R');  // 'R' para alinhamento à direita
+        $pdf->Cell(0, 10, utf8_decode("$cidades->cidade, $dataPorExtenso"), 0, 1, 'R');  // 'R' para alinhamento à direita
 
 
 
                                                                                         
         $pdf->Ln(5);
         $pdf->Cell(0, 10, "_________________________________________________" , 0, 1, 'C');
-        $pdf->Cell(0, 5, utf8_decode("$request->nome"), 0, 1, 'C');
+        $pdf->SetFont('Arial', 'B', 12);
+        $pdf->Cell(0, 5, utf8_decode("$nome"), 0, 1, 'C');
 
         // Definir o nome do arquivo do PDF
         //$nomePDF = 'nome_extraido_' . time() . '.pdf';
 
-        // Caminho para salvar o PDF na pasta 'procuracoes' dentro de public
-        $caminhoPDF = storage_path('app/public/procuracoes/' . strtoupper($request->placa) . '.pdf'); 
-        $urlPDF = asset('storage/procuracoes/' . strtoupper($request->placa) . '.pdf'); 
+        // Caminho para salvar o PDF na pasta 'procuracoes' dentro de 'documentos'
+        $caminhoProc = storage_path('app/public/documentos/procuracoes/' . 'proc_' . strtoupper($placa) . '.pdf'); 
+        $urlProc = asset('storage/documentos/procuracoes/' . 'proc_' . strtoupper($placa) . '.pdf'); 
         // Verificar se a pasta 'procuracoes' existe, se não, cria-la
-        if (!file_exists(storage_path('app/public/procuracoes'))) {
-            mkdir(storage_path('app/public/procuracoes'), 0777, true); // Cria a pasta se ela não existir
+        if (!file_exists(storage_path('app/public/documentos/procuracoes'))) {
+            mkdir(storage_path('app/public/documentos/procuracoes'), 0777, true); // Cria a pasta se ela não existir
         }
         $data = [
             'nome' => strtoupper($nomeFormatado),
             'endereco' => strtoupper($enderecoFormatado),  // Endereço em maiúsculas
-            // Caminho do arquivo salvo
-            'cpf' => $request->cpf,
-            'marca' => strtoupper($request->marca),
-            'placa' => strtoupper($request->placa),
-            'chassi' => strtoupper($request->chassi),
-            'cor' => strtoupper($request->cor),
-            'ano' => $request->ano_modelo,
-            'renavam' => $request->renavam,
-            'arquivo_doc' => $urlPDF,
-            'arquivo_proc' => $caminhoPDF,
+            'cpf' => $cpf,
+            'marca' => strtoupper($marca),
+            'placa' => strtoupper($placa),
+            'chassi' => strtoupper($chassi),
+            'cor' => strtoupper($cor),
+            'ano' => $anoModelo,
+            'renavam' => $renavam,
+            'arquivo_doc' => $urlDoc,
+            'arquivo_proc' => $urlProc,
         ];
-
+        //dd($urlProc);
         // Salvar o PDF
-        $pdf->Output('F', $caminhoPDF); 
+        $pdf->Output('F', $caminhoProc); 
 
         //$extension = $request->arquivo->getClientOriginalExtension();
         //$data['arquivo'] = $request->arquivo->storeAs("usuarios/$request->colaborador/Adiantamento/$request->mes/arquivo-$dataAtual" . ".{$extension}");
