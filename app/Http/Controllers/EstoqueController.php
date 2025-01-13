@@ -96,8 +96,8 @@ class EstoqueController extends Controller
         $textoInicial = TextoInicio::first();
         $cidade = Cidade::first();
 
-        $estoque = Estoque::first();
-
+        $estoque = Estoque::find($id);
+        //dd($estoque);
         $dataAtual = Carbon::now();
         
         $dataDia = $dataAtual->translatedFormat('d');
@@ -378,7 +378,7 @@ $pdf->Ln(20); // Linha em branco após o texto
     $pdf->Output('F', $filePath);
 
     // Retornar o link do PDF para download/visualização
-    $fileUrl = asset('storage/atpves/' . basename($filePath));
+    $fileUrl = asset('storage/veiculos/atpves/' . basename($filePath));
 
     $data = [
         'arquivo_atpve' => $fileUrl,
