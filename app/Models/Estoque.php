@@ -34,6 +34,8 @@ class Estoque extends Model
         'combustivel',
         'infos',
         'arquivo_doc',
+        'arquivo_proc',
+        'arquivo_atpve',
 
     ];
 
@@ -42,7 +44,7 @@ class Estoque extends Model
         $docs = $this->where(function ($query) use ($search) {
             if($search){
                 $query->where('placa', 'LIKE', "%{$search}%");
-                $query->orWhere('nome', 'LIKE', "%{$search}%");
+                $query->orWhere('renavam', 'LIKE', "%{$search}%");
             }
         })->paginate(10);
         return $docs;

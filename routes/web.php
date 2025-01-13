@@ -170,9 +170,14 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/procrapida', [ProcRapidaController::class, 'index'])->name('procrapida.index');
     Route::post('/procrapida', [ProcRapidaController::class, 'store'])->name('procrapida.store');
     
+    Route::get('/estoque/create-atpve', [EstoqueController::class, 'createAtpve'])->name('estoque.create-atpve');
+    
     Route::get('/estoque/{id}', [EstoqueController::class, 'show'])->name('estoque.show');
     Route::put('/estoque/{id}', [EstoqueController::class, 'update'])->name('estoque.update');
     Route::delete('/estoque/{id}', [EstoqueController::class, 'destroy'])->name('estoque.destroy');
+    Route::get('/estoque/create', [EstoqueController::class, 'create'])->name('estoque.create');
+    Route::post('/estoque/store-atpve/{id}', [EstoqueController::class, 'storeAtpve'])->name('estoque.store_atpve');
+
     Route::post('/estoque', [EstoqueController::class, 'store'])->name('estoque.store');
     Route::get('/estoque', [EstoqueController::class, 'index'])->name('estoque.index');
 });

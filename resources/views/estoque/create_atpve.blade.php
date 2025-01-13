@@ -28,9 +28,9 @@
 @endif
 
 {{-- Form para o cadastrar os clientes do sistema --}}
-<form action="{{ route('estoque.store') }}" id="form-cadastro" method="POST" enctype="multipart/form-data">
+<form action="{{ route('estoque.store_atpve', ['id' => request()->query('id')]) }}" id="form-cadastro" method="POST" enctype="multipart/form-data">
     @csrf
-    @include('estoque._partials.form-cad-veiculo')
+    @include('estoque._partials.form-cad-atpve')
 </form>
 
 

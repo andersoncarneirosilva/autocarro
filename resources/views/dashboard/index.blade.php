@@ -19,8 +19,8 @@
 <br>
 
 @can('access-lojista')
-    @include('dashboard.widgets.formularios')
 @endcan
+@include('dashboard.widgets.formularios')
 
 
 @can('access-despachante')

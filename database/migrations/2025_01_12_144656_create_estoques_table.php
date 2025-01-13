@@ -28,6 +28,9 @@ return new class extends Migration
             $table->string('combustivel');
             $table->string('infos');
             $table->string('arquivo_doc');
+            $table->string('arquivo_proc')->nullable();
+            $table->string('arquivo_proc_assinado')->nullable();
+            $table->string('arquivo_atpve')->nullable();
             $table->timestamps();
         });
     }
