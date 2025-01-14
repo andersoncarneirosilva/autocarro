@@ -157,7 +157,7 @@ class ProcuracaoController extends Controller
 
         $pdf->Cell(0, 0, "OUTORGANTE: ". strtoupper(iconv("UTF-8", "ISO-8859-1", $nomeFormatado)), 0, 0, 'L');
         $pdf->Ln(5);
-        $pdf->Cell(10, 0, "CPF: $request->cpf", 0, 0, 'L');
+        $pdf->Cell(10, 0, "CPF: $cpf", 0, 0, 'L');
         $pdf->Ln(5);
         $pdf->Cell(0, 0, utf8_decode("ENDEREÇO: " . strtoupper($enderecoFormatado)), 0, 0, 'L');
 
