@@ -44,7 +44,7 @@
                     <span> Dashboard </span>
                 </a>
             </li>
-            @can('access-admin')
+            
             <li class="side-nav-item">
                 <a href="{{ route('procuracoes.index') }}" class="side-nav-link">
                     <i class="uil-file"></i>
@@ -52,29 +52,21 @@
                 </a>
             </li>
             
-            {{-- @can('access-perfil')
-            <li class="side-nav-item">
-                <a href="{{ route('procrapida.index') }}" class="side-nav-link">
-                    <i class="uil-file"></i>
-                    <span> Doc rápido </span>
-                </a>
-            </li>
-            @endcan --}}
-
+            @can('access-admin')
             <li class="side-nav-item">
                 <a href="{{ route('documentos.index') }}" class="side-nav-link">
                     <i class="uil-car"></i>
                     <span> Veículos </span>
                 </a>
             </li>
-            @endcan
+            
             <li class="side-nav-item">
                 <a href="{{ route('estoque.index') }}" class="side-nav-link">
                     <i class="uil-car"></i>
                     <span> Estoque </span>
                 </a>
             </li>
-            @can('access-admin')
+            
             <li class="side-nav-item">
                 <a href="{{ route('ordensdeservicos.index') }}" class="side-nav-link">
                     <i class="uil-clipboard-notes"></i>
