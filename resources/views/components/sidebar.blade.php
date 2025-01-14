@@ -44,14 +44,14 @@
                     <span> Dashboard </span>
                 </a>
             </li>
-
+            @can('access-admin')
             <li class="side-nav-item">
                 <a href="{{ route('procuracoes.index') }}" class="side-nav-link">
                     <i class="uil-file"></i>
                     <span> Procurações </span>
                 </a>
             </li>
-
+            
             {{-- @can('access-perfil')
             <li class="side-nav-item">
                 <a href="{{ route('procrapida.index') }}" class="side-nav-link">
@@ -67,14 +67,14 @@
                     <span> Veículos </span>
                 </a>
             </li>
-
+            @endcan
             <li class="side-nav-item">
                 <a href="{{ route('estoque.index') }}" class="side-nav-link">
                     <i class="uil-car"></i>
                     <span> Estoque </span>
                 </a>
             </li>
-
+            @can('access-admin')
             <li class="side-nav-item">
                 <a href="{{ route('ordensdeservicos.index') }}" class="side-nav-link">
                     <i class="uil-clipboard-notes"></i>
@@ -88,21 +88,21 @@
                     <span> Clientes </span>
                 </a>
             </li>
-
+            
             <li class="side-nav-item">
                 <a href="{{ route('calendar.index') }}" class="side-nav-link">
                     <i class="uil-calender"></i>
                     <span> Calendário </span>
                 </a>
             </li>
-
+            @endcan
             <li class="side-nav-item">
                 <a href="{{ route('relatorios.index') }}" class="side-nav-link">
                     <i class="uil-file-info-alt"></i>
                     <span> Relatórios </span>
                 </a>
             </li>
-
+            @can('access-admin')
             <li class="side-nav-item">
                 <a data-bs-toggle="collapse" href="#sideCad" aria-expanded="false" aria-controls="sidebarLayouts" class="side-nav-link">
                     <i class="uil-folder-medical"></i>
@@ -117,7 +117,7 @@
                     </ul>
                 </div>
             </li>
-
+            @endcan
             <li class="side-nav-item">
                 <a data-bs-toggle="collapse" href="#sidebarLayoutss" aria-expanded="false" aria-controls="sidebarLayouts" class="side-nav-link">
                     <i class="uil-cog"></i>
