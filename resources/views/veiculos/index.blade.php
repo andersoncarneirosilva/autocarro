@@ -10,10 +10,10 @@
             <div class="page-title-right">
                 <ol class="breadcrumb m-0">
                     <li class="breadcrumb-item"><a href="{{ route('dashboard.index') }}">Dashboard</a></li>
-                    <li class="breadcrumb-item active">Procurações</li>
+                    <li class="breadcrumb-item active">Veículos</li>
                 </ol>
             </div>
-            <h3 class="page-title">Procurações</h3>
+            <h3 class="page-title">Veículos</h3>
         </div>
     </div>
 </div>
@@ -55,14 +55,14 @@
             @endif --}}
             <div class="col-sm-12">
                 <div class="card-header d-flex justify-content-between align-items-center">
-                    <h4 class="header-title">Procurações cadastradas</h4>
+                    <h4 class="header-title">Veículos cadastrados</h4>
                     <div class="dropdown">
                         @if(auth()->user()->credito > 0)
                         <button type="button" class="btn btn-info btn-sm" data-bs-toggle="modal"
-                            data-bs-target="#standard-modal">Gerar Procuração</button>
-                        <a href="{{ route('procuracoes.create')}}" class="btn btn-primary btn-sm">Cadastro manual</a>
+                            data-bs-target="#standard-modal">Cadastro automático</button>
+                        <a href="{{ route('veiculos.create')}}" class="btn btn-primary btn-sm">Cadastro manual</a>
+                        {{-- <a href="{{ route('relatorio-procuracoes')}}" target="_blank" class="btn btn-danger btn-sm">Veíclo próprio</a> --}}
                         @endif
-                        <a href="{{ route('relatorio-procuracoes')}}" target="_blank" class="btn btn-danger btn-sm">Relatório</a>
                         {{-- <button class="btn btn-secondary btn-sm" id="deleteAllSelectedRecord" disabled><i
                                 class="fa-solid fa-trash"></i></button> --}}
                     </div>
@@ -76,7 +76,7 @@
                                 <th>Placa</th>
                                 <th>Veículo</th>
                                 <th>Ano/Modelo</th>
-                                <th>CRV</th>
+                                <th>DOC</th>
                                 <th>ATPVe</th>
                                 <th>Ações</th>
                             </tr>
@@ -89,7 +89,22 @@
                                     <td>{{ $doc->placa }}</td>
                                     <td>{{ $doc->marca }}</td>
                                     <td>{{ $doc->ano }}</td>
-                                    <td>{{ $doc->crv }}</td>
+                                    <td>
+                                        @if($doc->crv === "***")
+                                        <span class="badge badge-outline-danger">FÍSICO</span>
+                                        @else
+                                            <!-- Mostre uma mensagem ou deixe em branco -->
+                                            <span class="badge badge-outline-success">DIGITAL</span>
+                                        @endif
+                                    </td>
+                                    <td>
+                                        @if(!empty($doc->arquivo_atpve))
+                                            <a href="{{ $doc->arquivo_atpve }}" target="_blank">ATPVe</a>
+                                        @else
+                                            <!-- Mostre uma mensagem ou deixe em branco -->
+                                            <span>Sem ATPVe</span>
+                                        @endif
+                                    </td>
                                     <td class="table-action">
                                         <div class="dropdown btn-group">
                                             <button class="btn btn-info btn-sm dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
@@ -106,13 +121,13 @@
                                                 target="_blank">
                                                 CRLV
                                                 </a>
-                                                <a href="{{ route('estoque.create-atpve') }}?id={{ $doc->id }}" 
+                                                <a href="{{ route('veiculos.create-atpve') }}?id={{ $doc->id }}" 
                                                     class="dropdown-item {{ !empty($doc->arquivo_atpve) ? 'disabled' : '' }}"
                                                     {{ !empty($doc->arquivo_atpve) ? 'aria-disabled=true' : '' }}>
                                                     Gerar APTVe
                                                  </a>
                                                  
-                                                <a href="{{ route('procuracoes.destroy', $doc->id) }}" 
+                                                <a href="{{ route('veiculos.destroy', $doc->id) }}" 
                                                 data-confirm-delete="true"
                                                 class="dropdown-item">
                                                 Excluir
@@ -165,7 +180,7 @@
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
-                <form action="{{ route('procuracoes.store') }}" method="POST" enctype="multipart/form-data" id="formProc">
+                <form action="{{ route('veiculos.store') }}" method="POST" enctype="multipart/form-data" id="formProc">
                     @csrf
                     <div class="row">
                         <div class="col-lg-12">
@@ -214,7 +229,7 @@ aria-hidden="true">
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-hidden="true"></button>
             </div>
             <div class="modal-body">
-                @include('procuracoes.create')
+                @include('veiculos.create')
             </div>
         </div><!-- /.modal-content -->
     </div><!-- /.modal-dialog -->

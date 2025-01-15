@@ -46,13 +46,13 @@
             </li>
             
             <li class="side-nav-item">
-                <a href="{{ route('procuracoes.index') }}" class="side-nav-link">
+                <a href="{{ route('veiculos.index') }}" class="side-nav-link">
                     <i class="uil-file"></i>
-                    <span> Procurações </span>
+                    <span> Veículos </span>
                 </a>
             </li>
             
-            @can('access-admin')
+            {{-- @can('access-admin')
             <li class="side-nav-item">
                 <a href="{{ route('documentos.index') }}" class="side-nav-link">
                     <i class="uil-car"></i>
@@ -72,7 +72,7 @@
                     <i class="uil-clipboard-notes"></i>
                     <span> Ordens de Serviços </span>
                 </a>
-            </li>
+            </li> --}}
 
             <li class="side-nav-item">
                 <a href="{{ route('clientes.index') }}" class="side-nav-link">
@@ -81,20 +81,20 @@
                 </a>
             </li>
             
-            <li class="side-nav-item">
+            {{-- <li class="side-nav-item">
                 <a href="{{ route('calendar.index') }}" class="side-nav-link">
                     <i class="uil-calender"></i>
                     <span> Calendário </span>
                 </a>
             </li>
-            @endcan
+            @endcan --}}
             <li class="side-nav-item">
                 <a href="{{ route('relatorios.index') }}" class="side-nav-link">
                     <i class="uil-file-info-alt"></i>
                     <span> Relatórios </span>
                 </a>
             </li>
-            @can('access-admin')
+            {{-- @can('access-admin')
             <li class="side-nav-item">
                 <a data-bs-toggle="collapse" href="#sideCad" aria-expanded="false" aria-controls="sidebarLayouts" class="side-nav-link">
                     <i class="uil-folder-medical"></i>
@@ -109,7 +109,7 @@
                     </ul>
                 </div>
             </li>
-            @endcan
+            @endcan --}}
             <li class="side-nav-item">
                 <a data-bs-toggle="collapse" href="#sidebarLayoutss" aria-expanded="false" aria-controls="sidebarLayouts" class="side-nav-link">
                     <i class="uil-cog"></i>

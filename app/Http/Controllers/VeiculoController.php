@@ -3,7 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use App\Models\Procuracao;
+use App\Models\Veiculo;
 use App\Models\Outorgado;
 use App\Models\Cidade;
 use App\Models\TextoPoder;
@@ -17,11 +17,11 @@ use Mail;
 use TesseractOCR;
 
 
-class ProcuracaoController extends Controller
+class VeiculoController extends Controller
 {
     protected $model;
 
-    public function __construct(Procuracao $procs)
+    public function __construct(Veiculo $procs)
     {
         $this->model = $procs;
     }
@@ -38,11 +38,11 @@ class ProcuracaoController extends Controller
         $procs = $this->model->getSearch(search: $request->search ?? '');
         
         
-        return view('procuracoes.index', compact(['procs', 'clientes']));
+        return view('veiculos.index', compact(['procs', 'clientes']));
     }
 
      public function create(){
-        return view('procuracoes.create');
+        return view('veiculos.create');
     }
     
 
@@ -94,7 +94,7 @@ class ProcuracaoController extends Controller
 
             if ($linhas[3] != "SECRETARIA NACIONAL DE TRÂNSITO - SENATRAN") {
                 alert()->error('Selecione um documento 2024.');
-                return redirect()->route('documentos.index');
+                return redirect()->route('veiculos.index');
             }
 
             $marca = $this->model->extrairMarca($textoPagina);
@@ -107,6 +107,7 @@ class ProcuracaoController extends Controller
             $nome = $this->model->extrairNome($textoPagina);
             $cpf = $this->model->extrairCpf($textoPagina);
             $cidade = $this->model->extrairCidade($textoPagina);
+            //dd($cidade);
             $crv = $this->model->extrairCrv($textoPagina);
             $placaAnterior = $this->model->extrairPlacaAnterior($textoPagina);
             $categoria = $this->model->extrairCategoria($textoPagina);
@@ -117,8 +118,8 @@ class ProcuracaoController extends Controller
         }
 
             // Garante que a pasta "procuracoes" existe
-            $pastaDestino = storage_path('app/public/documentos/crlv');
-            $urlDoc = asset('storage/documentos/crlv' . $nomeOriginal); 
+            $pastaDestino = storage_path('app/public/documentos/crlv/');
+            $urlDoc = asset('storage/documentos/crlv/' . $nomeOriginal); 
             //dd($urlDoc);
             if (!file_exists($pastaDestino)) {
                 mkdir($pastaDestino, 0777, true); // Cria a pasta
@@ -252,16 +253,24 @@ class ProcuracaoController extends Controller
             'nome' => strtoupper($nomeFormatado),
             'endereco' => strtoupper($enderecoFormatado),  // Endereço em maiúsculas
             'cpf' => $cpf,
+            'cidade' => $cidade,
             'marca' => strtoupper($marca),
             'placa' => strtoupper($placa),
             'chassi' => strtoupper($chassi),
             'cor' => strtoupper($cor),
             'ano' => $anoModelo,
             'renavam' => $renavam,
+            'crv' => $crv,
+            'placaAnterior' => $placaAnterior,
+            'categoria' => $categoria,
+            'motor' => $motor,
+            'combustivel' => $combustivel,
+            'infos' => $infos,
+
             'arquivo_doc' => $urlDoc,
             'arquivo_proc' => $urlProc,
         ];
-        //dd($urlProc);
+        //dd($data);
         // Salvar o PDF
         $pdf->Output('F', $caminhoProc); 
 
@@ -271,9 +280,9 @@ class ProcuracaoController extends Controller
 
         if($this->model->create($data)){
             
-            alert()->success('Procuração cadastrada com sucesso!');
+            alert()->success('Veículo cadastrado com sucesso!');
 
-            return redirect()->route('procuracoes.index');
+            return redirect()->route('veiculos.index');
         }
     } 
 
@@ -309,7 +318,7 @@ class ProcuracaoController extends Controller
         // Tenta localizar o documento no banco de dados
         if (!$doc = $this->model->find($id)) {
             alert()->error('Erro ao excluir a procuração!');
-            return redirect()->route('procuracoes.index');
+            return redirect()->route('veiculos.index');
         }
 
         // Extrai apenas o nome do arquivo da URL completa
@@ -329,7 +338,7 @@ class ProcuracaoController extends Controller
             alert()->success('Procuração excluída com sucesso!');
         }
 
-        return redirect()->route('procuracoes.index');
+        return redirect()->route('veiculos.index');
     }
 
 }
