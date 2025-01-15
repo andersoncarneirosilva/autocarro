@@ -1,6 +1,6 @@
 @extends('layouts.app')
 
-@section('title', 'Procurações')
+@section('title', 'Veículos')
 
 @section('content')
 
@@ -121,11 +121,12 @@
                                                 target="_blank">
                                                 CRLV
                                                 </a>
-                                                <a href="{{ route('veiculos.create-atpve') }}?id={{ $doc->id }}" 
-                                                    class="dropdown-item {{ !empty($doc->arquivo_atpve) ? 'disabled' : '' }}"
-                                                    {{ !empty($doc->arquivo_atpve) ? 'aria-disabled=true' : '' }}>
-                                                    Gerar APTVe
-                                                 </a>
+                                                <a href="javascript:void(0);" 
+                                                class="dropdown-item"
+                                                onclick="openAddressModal(event, {{ $doc->id }})">
+                                                Gerar APTVe
+                                                </a>
+
                                                  
                                                 <a href="{{ route('veiculos.destroy', $doc->id) }}" 
                                                 data-confirm-delete="true"
@@ -235,86 +236,77 @@ aria-hidden="true">
     </div><!-- /.modal-dialog -->
 </div><!-- /.modal -->
 
-{{-- <script>
-    
-  $(document).ready(function() {
-    $('#select-timezone').select2({
-        placeholder: "Digite para buscar clientes",
-        allowClear: true,
-        ajax: {
-            url: '/buscar-clientes',
-            dataType: 'json',
-            delay: 250,
-            data: function(params) {
-                return {
-                    term: params.term // Termo digitado
-                };
-            },
-            processResults: function(data) {
-                return {
-                    results: data // [{id: '1', text: 'Cliente 1'}, {id: '2', text: 'Cliente 2'}]
-                };
-            },
-            cache: true
-        }
+<div class="modal fade" id="addressModal" tabindex="-1" role="dialog" aria-labelledby="addressModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="addressModalLabel">Gerar procuração</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-hidden="true"></button>
+            </div>
+            <div class="modal-body">
+                <form id="addressForm" method="POST">
+                    @csrf <!-- Necessário para o Laravel validar a requisição -->
+                    <div class="form-group">
+                        <label>Selecione o cliente: <span style="color: red;">*</span></label>
+                        <select class="select2 form-control select2-multiple" name="cliente[]" id="inputAddress" data-toggle="select2" multiple="multiple">
+                            <option value="">Selecione um cliente</option>
+                            @foreach ($clientes as $cliente)
+                                <option value="{{ $cliente->id }}">{{ $cliente->nome }}</option>
+                            @endforeach
+                        </select>
+                    </div>
+                    <br>
+                    <!-- Campo adicional para valor -->
+                    <div class="form-group">
+                        <label for="valor">Valor: <span style="color: red;">*</span></label>
+                        <input type="text" class="form-control" id="valor" name="valor" placeholder="Insira o valor" required>
+                    </div>
+                    <input type="hidden" id="docId" name="docId">
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-light" data-bs-dismiss="modal">Fechar</button>
+                <button type="button" class="btn btn-primary" onclick="submitAddress()">Gerar Procuração</button>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+    $(document).ready(function(){
+        // Máscara para o campo de valor: formato R$ 1.000,00
+        $('#valor').mask('000.000.000.000.000,00', {reverse: true});
     });
-});
-
-
-</script> --}}
-{{-- <script>
-
-
-
-
-    // Obtenha o formulário
-    const form = document.getElementById('formProc');
-
-    // Obtenha os inputs do arquivo e do endereço
-    const arquivoInput = document.getElementById('arquivo_doc');
-    const cliente = document.getElementById('idCliente');
+</script>
+<script>
+    function openAddressModal(event, docId) {
+        // Armazena o ID do documento globalmente
+        window.selectedDocId = docId;
     
-    // Adicionando um evento de submit para o formulário
-    form.addEventListener('submit', function(event) {
-        // Impede o comportamento padrão do formulário
-        event.preventDefault();
-
-        // Verifica se o endereço foi preenchido
-         const endereco = cliente.value.trim();
-         if (!endereco) {
-             Swal.fire({
-                 title: 'Erro!',
-                 text: 'Por favor, selecione o cliente.',
-                 icon: 'error',
-                 confirmButtonText: 'OK'
-             });
-             return;  // Impede o envio do formulário
-         }
-        
-        // Obtém o arquivo
-        const arquivo = arquivoInput.files[0]; 
-
-        // Verifica se o arquivo foi selecionado
-        if (!arquivo) {
-            Swal.fire({
-                title: 'Erro!',
-                text: 'Por favor, selecione um arquivo.',
-                icon: 'error',
-                confirmButtonText: 'OK'
-            });
-            return;  // Impede o envio do formulário
+        // Atualiza o campo oculto no formulário com o ID do documento
+        document.getElementById('docId').value = docId;
+    
+        // Exibe o modal
+        $('#addressModal').modal('show');
+    }
+    
+    function submitAddress() {
+        const selectedClient = $('#inputAddress').val(); // Retorna um array para múltiplos valores
+    
+        if (!selectedClient || selectedClient.length === 0) {
+            Swal.fire('Erro', 'Você precisa selecionar um cliente antes de continuar.', 'error');
+            return;
         }
-
-        
-
-        // Se o arquivo e o endereço estiverem presentes, envie o formulário
+    
+        const docId = window.selectedDocId;
+    
+        // Atualiza a ação do formulário para incluir o ID do documento na rota
+        const form = document.getElementById('addressForm');
+        form.action = `{{ url('veiculos/store-atpve') }}/${docId}`;
+    
+        // Envia o formulário
         form.submit();
-    });
-
+    }
+    </script>
     
 
-
-
-</script> --}}
-
-    @endsection
+@endsection
