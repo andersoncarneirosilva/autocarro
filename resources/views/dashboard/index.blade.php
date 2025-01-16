@@ -19,7 +19,9 @@
 <br>
 
 @can('access-lojista')
-@include('dashboard.widgets.formularios')
+@include('dashboard.widgets.widgets')
+@include('dashboard.widgets.content')
+{{-- @include('dashboard.widgets.formularios') --}}
 @endcan
 
 
