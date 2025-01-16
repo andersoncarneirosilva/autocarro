@@ -70,7 +70,7 @@
                         @if(auth()->user()->credito > 0)
                         <button type="button" class="btn btn-info btn-sm" data-bs-toggle="modal"
                             data-bs-target="#standard-modal">Cadastro automático</button>
-                        <a href="{{ route('veiculos.create')}}" class="btn btn-primary btn-sm">Cadastro manual</a>
+                            <a href="{{ route('veiculos.create-proc-manual')}}" class="btn btn-primary btn-sm">Cadastro manual</a>
                         {{-- <a href="{{ route('relatorio-procuracoes')}}" target="_blank" class="btn btn-danger btn-sm">Veíclo próprio</a> --}}
                         @endif
                         {{-- <button class="btn btn-secondary btn-sm" id="deleteAllSelectedRecord" disabled><i

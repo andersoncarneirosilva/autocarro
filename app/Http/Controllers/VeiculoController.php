@@ -44,6 +44,9 @@ class VeiculoController extends Controller
      public function create(){
         return view('veiculos.create');
     }
+    public function createProcManual(){
+        return view('veiculos.create-proc-manual');
+    }
     
 
     public function store(Request $request){
