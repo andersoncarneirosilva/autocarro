@@ -345,7 +345,7 @@ class VeiculoController extends Controller
     }
 
     public function storeAtpve(Request $request, $id){
-        //dd($request);
+        dd($request);
         $clienteIds = $request->input('cliente'); // Exemplo: [1, 2, 3]
         $clientes = Cliente::whereIn('id', $clienteIds)->get();
         foreach ($clientes as $cliente) {
