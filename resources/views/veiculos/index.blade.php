@@ -132,10 +132,10 @@
                                                 CRLV
                                                 </a>
                                                 <a href="javascript:void(0);"
-   class="dropdown-item {{ $doc->crv === '***' ? 'disabled' : '' }}"
-   onclick="{{ $doc->crv === '***' ? 'return false;' : "openAddressModal(event, $doc->id)" }}">
-   Gerar ATPVe
-</a>
+                                                class="dropdown-item {{ $doc->crv === '***' ? 'disabled' : '' }}"
+                                                onclick="{{ $doc->crv === '***' ? 'return false;' : "openAddressModal(event, $doc->id)" }}">
+                                                Gerar ATPVe
+                                                </a>
 
 
                                                  
@@ -267,7 +267,7 @@ aria-hidden="true">
     
         // Atualiza a ação do formulário para incluir o ID do documento na rota
         const form = document.getElementById('addressForm');
-        form.action = `{{ url('veiculos/store-atpve') }}/${docId}`;
+        form.action = `{{ secure_url('veiculos/store-atpve') }}/${docId}`;
     
         // Envia o formulário
         form.submit();
