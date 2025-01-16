@@ -131,11 +131,12 @@
                                                 target="_blank">
                                                 CRLV
                                                 </a>
-                                                <a href="javascript:void(0);" 
-                                                class="dropdown-item"
-                                                onclick="openAddressModal(event, {{ $doc->id }})">
-                                                Gerar APTVe
-                                                </a>
+                                                <a href="javascript:void(0);"
+   class="dropdown-item {{ $doc->crv === '***' ? 'disabled' : '' }}"
+   onclick="{{ $doc->crv === '***' ? 'return false;' : "openAddressModal(event, $doc->id)" }}">
+   Gerar ATPVe
+</a>
+
 
                                                  
                                                 <a href="{{ route('veiculos.destroy', $doc->id) }}" 
