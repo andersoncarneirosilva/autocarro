@@ -20,7 +20,9 @@
         <script src="{{ url('assets/js/hyper-config.js') }}"></script>
         <link href="https://cdn.jsdelivr.net/npm/fullcalendar@5.11.0/main.min.css" rel="stylesheet">
 
-        
+        <link href="https://cdn.jsdelivr.net/npm/choices.js/public/assets/styles/choices.min.css" rel="stylesheet" />
+<script src="https://cdn.jsdelivr.net/npm/choices.js/public/assets/scripts/choices.min.js"></script>
+
         <!-- App css -->
         <link href="{{ url('assets/css/app-saas.css') }}" rel="stylesheet" type="text/css" id="app-style" />
         <script src="https://cdn.jsdelivr.net/npm/apexcharts@3.41.0"></script>

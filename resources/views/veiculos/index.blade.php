@@ -3,6 +3,16 @@
 @section('title', 'Veículos')
 
 @section('content')
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        const selectElement = document.getElementById('idCliente');
+        const choices = new Choices(selectElement, {
+            searchEnabled: true, // Ativa a busca
+            itemSelectText: '', // Remove o texto de seleção padrão
+            removeItemButton: true, // Permite remover itens da seleção
+        });
+    });
+</script>
 
 <div class="row">
     <div class="col-12">
@@ -173,54 +183,7 @@
                                                 
 
 </div>
-<div class="modal fade" id="modalID" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-    <div class="modal-dialog" role="document">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="exampleModalLabel">Cadastrar procuração</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-            </div>
-            <div class="modal-body">
-                <form action="{{ route('veiculos.store') }}" method="POST" enctype="multipart/form-data" id="formProc">
-                    @csrf
-                    <div class="row">
-                        <div class="col-lg-12">
-                            <div class="mb-3">
-                                <label>Cliente: <span style="color: red;">*</span></label>
-                                {{-- <input class="form-control" type="text" name="endereco" id="idEndereco"> --}}
-                                {{-- <select id="select-timezone" class="form-control select2" data-toggle="select2"> --}}
-                                    {{-- <select id="select-timezone" class="form-control select2" data-toggle="select2" style="width: 100%;"> --}}
-                                        <select class="select2 form-control select2-multiple" name="cliente[]" id="idCliente" data-toggle="select2" multiple="multiple" >
-                                        <option value="">Selecione um cliente</option>
-                                        @foreach ($clientes as $cliente)
-                                            <option value="{{ $cliente->endereco }}">{{ $cliente->nome }}</option>
-                                        @endforeach
-                                    </select>
-                                    
-                            </div>
-                        </div>
-                        <div class="col-lg-12">
-                            <div class="mb-3">
-                                <label for="inputAddress">Documento: <span style="color: red;">*</span></label>
-                                <div class="col-lg">
-                                    <input class="form-control" type="file" name="arquivo_doc" id="arquivo_doc">
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <br>
-                    <div class="row">
-                        <div class="modal-footer">
-                            <button type="button" class="btn btn-light" data-bs-dismiss="modal">Fechar</button>
-                            <button type="submit" class="btn btn-primary">Cadastrar</button>
-                        </div>
-                    </div>
-                </form>
-            </div>
-        </div>
-    </div>
-</div>
-<!-- Standard modal -->
+
 <div id="standard-modal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="standard-modalLabel"
 aria-hidden="true">
     <div class="modal-dialog modal-lg">
@@ -240,7 +203,7 @@ aria-hidden="true">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="addressModalLabel">Gerar procuração</h5>
+                <h5 class="modal-title" id="addressModalLabel">Gerar solicitação ATPVe</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-hidden="true"></button>
             </div>
             <div class="modal-body">
@@ -248,12 +211,13 @@ aria-hidden="true">
                     @csrf <!-- Necessário para o Laravel validar a requisição -->
                     <div class="form-group">
                         <label>Selecione o cliente: <span style="color: red;">*</span></label>
-                        <select class="select2 form-control select2-multiple" name="cliente[]" id="inputAddress" data-toggle="select2" multiple="multiple">
-                            <option value="">Selecione um cliente</option>
+                        <select id="idCliente" name="cliente[]" placeholder="Selecione o cliente">
+                            <option value="">Selecione o cliente</option>
                             @foreach ($clientes as $cliente)
                                 <option value="{{ $cliente->id }}">{{ $cliente->nome }}</option>
                             @endforeach
                         </select>
+                        
                     </div>
                     <br>
                     <!-- Campo adicional para valor -->
@@ -266,11 +230,12 @@ aria-hidden="true">
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-light" data-bs-dismiss="modal">Fechar</button>
-                <button type="button" class="btn btn-primary" onclick="submitAddress()">Gerar Procuração</button>
+                <button type="button" class="btn btn-primary" onclick="submitAddress()">Gerar</button>
             </div>
         </div>
     </div>
 </div>
+
 <script>
     $(document).ready(function(){
         // Máscara para o campo de valor: formato R$ 1.000,00
@@ -290,7 +255,7 @@ aria-hidden="true">
     }
     
     function submitAddress() {
-        const selectedClient = $('#inputAddress').val(); // Retorna um array para múltiplos valores
+        const selectedClient = $('#idCliente').val(); // Corrigido para o id correto do select
     
         if (!selectedClient || selectedClient.length === 0) {
             Swal.fire('Erro', 'Você precisa selecionar um cliente antes de continuar.', 'error');
@@ -306,7 +271,8 @@ aria-hidden="true">
         // Envia o formulário
         form.submit();
     }
-    </script>
+</script>
+
     
 
 @endsection

@@ -650,7 +650,7 @@ $pdf->Ln(20); // Linha em branco após o texto
     $record = $this->model->findOrFail($id);
     $record->update($data);
 
-    alert()->success('ATPVe atualizada com sucesso!');
+    alert()->success('ATPVe gerada com sucesso!');
 
     return redirect()->route('veiculos.index');
 }

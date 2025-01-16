@@ -61,56 +61,65 @@
 
 
                     <h5 class="mb-3 text-uppercase bg-light p-2"><i class="mdi mdi-earth me-1"></i> Endereço</h5>
-                    <div class="row">
-                        <div class="col-md">
-                            <div class="mb-2">
-                                <label for="social-fb" class="form-label">CEP: <span style="color: red;">*</span></label>
-                                <div class="input-group">
-                                    <input type="text" class="form-control" name="cep" id="cep" onblur="pesquisacep(this.value);" required>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-md-2">
-                            <div class="mb-2">
-                                <label for="social-fb" class="form-label">Logradouro: <span style="color: red;">*</span></label>
-                                <div class="input-group">
-                                    <input type="text" name="endereco" id="rua" class="form-control" required/>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-md-2">
-                            <div class="mb-2">
-                                <label for="social-insta" class="form-label">Número: <span style="color: red;">*</span></label>
-                                <div class="input-group">
-                                    <input type="text" name="numero" id="numero" class="form-control" required/>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-md-2">
-                            <div class="mb-3">
-                                <label for="social-insta" class="form-label">Bairro: <span style="color: red;">*</span></label>
-                                <div class="input-group">
-                                    <input type="text" name="bairro" id="bairro" class="form-control" required/>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-md-2">
-                            <div class="mb-3">
-                                <label for="social-insta" class="form-label">Cidade: <span style="color: red;">*</span></label>
-                                <div class="input-group">
-                                    <input type="text" name="cidade" id="cidade" class="form-control" required/>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-md-2">
-                            <div class="mb-3">
-                                <label for="social-insta" class="form-label">Estado: <span style="color: red;">*</span></label>
-                                <div class="input-group">
-                                    <input type="text" name="estado" id="uf" class="form-control" required/>
-                                </div>
-                            </div>
-                        </div>
-                    </div> <!-- end row -->
+<div class="row">
+    <div class="col-md-2">
+        <div class="mb-2">
+            <label for="cep" class="form-label">CEP: <span style="color: red;">*</span></label>
+            <div class="input-group">
+                <input type="text" class="form-control" name="cep" id="cep" onblur="pesquisacep(this.value);" required>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-2">
+        <div class="mb-2">
+            <label for="rua" class="form-label">Logradouro: <span style="color: red;">*</span></label>
+            <div class="input-group">
+                <input type="text" name="endereco" id="rua" class="form-control" required/>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-1">
+        <div class="mb-2">
+            <label for="numero" class="form-label">Número: <span style="color: red;">*</span></label>
+            <div class="input-group">
+                <input type="text" name="numero" id="numero" class="form-control" required/>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-2">
+        <div class="mb-3">
+            <label for="bairro" class="form-label">Bairro: <span style="color: red;">*</span></label>
+            <div class="input-group">
+                <input type="text" name="bairro" id="bairro" class="form-control" required/>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-2">
+        <div class="mb-3">
+            <label for="cidade" class="form-label">Cidade: <span style="color: red;">*</span></label>
+            <div class="input-group">
+                <input type="text" name="cidade" id="cidade" class="form-control" required/>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-1">
+        <div class="mb-3">
+            <label for="uf" class="form-label">Estado: <span style="color: red;">*</span></label>
+            <div class="input-group">
+                <input type="text" name="estado" id="uf" class="form-control" required/>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-2">
+        <div class="mb-3">
+            <label for="complemento" class="form-label">Complemento:</label>
+            <div class="input-group">
+                <input type="text" name="complemento" id="complemento" class="form-control"/>
+            </div>
+        </div>
+    </div>
+</div> <!-- end row -->
+
 
                     <br>                    
                     
