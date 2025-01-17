@@ -103,7 +103,7 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="col-md-3">
+                        <div class="col-md-4">
                             <div class="mb-3">
                                 <label for="social-insta" class="form-label">Ano/Modelo: <span style="color: red;">*</span></label>
                                 <div class="input-group">
