@@ -182,14 +182,14 @@ class VeiculoController extends Controller
         $data = [
             'nome' => strtoupper($nomeFormatado),
             'endereco' => strtoupper($enderecoFormatado),  // Endereço em maiúsculas
-            'cpf' => $request['nome'],
+            'cpf' => $request['cpf'],
             'cidade' => strtoupper($request['cidade']),
             'marca' => strtoupper($request['marca']),
             'placa' => strtoupper($request['placa']),
             'chassi' => strtoupper($request['chassi']),
             'cor' => strtoupper($request['cor']),
             'ano' => $request['ano_modelo'],
-            'crv' => "Não consta",
+            'crv' => $request['tipo_doc'],
             'placaAnterior' => "Não consta",
             'categoria' => "Não consta",
             'motor' => "Não consta",

@@ -122,10 +122,10 @@
                         <div class="col-md-4">
                             <div class="mb-3">
                                 <label for="social-insta" class="form-label">Tipo de Doc: <span style="color: red;">*</span></label>
-                                <select class="form-select mb-3">
+                                <select class="form-select mb-3" name="tipo_doc">
                                     <option selected>Selecione o tipo</option>
                                     <option value="Digital">Digital</option>
-                                    <option value="Físico">Físico</option>
+                                    <option value="***">Físico</option>
                                 </select> 
                             </div>
                         </div>
