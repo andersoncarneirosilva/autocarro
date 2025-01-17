@@ -121,16 +121,17 @@
                                                 Ações
                                             </button>
                                             <div class="dropdown-menu dropdown-menu-animated dropdown-menu-end">
+                                                <a href="{{ $doc->arquivo_doc }}" 
+                                                    class="dropdown-item"
+                                                    target="_blank">
+                                                    Baixar CRLV
+                                                    </a>
                                                 <a href="{{ $doc->arquivo_proc }}" 
                                                 class="dropdown-item"
                                                 target="_blank">
-                                                Procuração
+                                                Baixar Procuração
                                                 </a>
-                                                <a href="{{ $doc->arquivo_doc }}" 
-                                                class="dropdown-item"
-                                                target="_blank">
-                                                CRLV
-                                                </a>
+                                                
                                                 <a href="javascript:void(0);"
                                                 class="dropdown-item {{ $doc->crv === '***' ? 'disabled' : '' }}"
                                                 onclick="{{ $doc->crv === '***' ? 'return false;' : "openAddressModal(event, $doc->id)" }}">

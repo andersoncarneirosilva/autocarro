@@ -152,17 +152,17 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/ordensdeservicos/buscar', [OrdemController::class, 'buscarClientes'])->name('ordensdeservicos.buscar');
     Route::get('/ordensdeservicos', [OrdemController::class, 'index'])->name('ordensdeservicos.index');
     
-    Route::get('/ordem-servico/{id}/rel-ordem', [OrdemController::class, 'gerarPDFOrdemServico'])->name('rel-ordem');
-    Route::delete('/ordensdeservicos/{id}', [OrdemController::class, 'destroy'])->name('ordensdeservicos.destroy');
-    Route::get('/ordensdeservicos/{id}/marcar-pago', [OrdemController::class, 'marcarpago'])->name('ordensdeservicos.marcarpago');
-    Route::put('/ordensdeservicos/{id}', [OrdemController::class, 'update'])->name('ordensdeservicos.update');
-    Route::get('/ordensdeservicos/{id}/edit', [OrdemController::class, 'edit'])->name('ordensdeservicos.edit');
-    Route::get('/ordensdeservicos', [OrdemController::class, 'index'])->name('ordensdeservicos.index');
-    Route::get('/ordensdeservicos/create', [OrdemController::class, 'create'])->name('ordensdeservicos.create');
-    Route::post('/ordensdeservicos', [OrdemController::class, 'store'])->name('ordensdeservicos.store');
-    Route::get('/ordensdeservicos/{id}', [OrdemController::class, 'show'])->name('ordensdeservicos.show');
+    // Route::get('/ordem-servico/{id}/rel-ordem', [OrdemController::class, 'gerarPDFOrdemServico'])->name('rel-ordem');
+    // Route::delete('/ordensdeservicos/{id}', [OrdemController::class, 'destroy'])->name('ordensdeservicos.destroy');
+    // Route::get('/ordensdeservicos/{id}/marcar-pago', [OrdemController::class, 'marcarpago'])->name('ordensdeservicos.marcarpago');
+    // Route::put('/ordensdeservicos/{id}', [OrdemController::class, 'update'])->name('ordensdeservicos.update');
+    // Route::get('/ordensdeservicos/{id}/edit', [OrdemController::class, 'edit'])->name('ordensdeservicos.edit');
+    // Route::get('/ordensdeservicos', [OrdemController::class, 'index'])->name('ordensdeservicos.index');
+    // Route::get('/ordensdeservicos/create', [OrdemController::class, 'create'])->name('ordensdeservicos.create');
+    // Route::post('/ordensdeservicos', [OrdemController::class, 'store'])->name('ordensdeservicos.store');
+    // Route::get('/ordensdeservicos/{id}', [OrdemController::class, 'show'])->name('ordensdeservicos.show');
 
-    Route::resource('ordensdeservicos', OrdemController::class);
+    // Route::resource('ordensdeservicos', OrdemController::class);
 
 
     //DOC RAPIDO
@@ -184,9 +184,13 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/veiculos/{id}/edit', [VeiculoController::class, 'edit'])->name('veiculos.edit');
     Route::get('/veiculos', [VeiculoController::class, 'index'])->name('veiculos.index');
     Route::get('/veiculos/create-proc-manual', [VeiculoController::class, 'createProcManual'])->name('veiculos.create-proc-manual');
+    
     Route::get('/veiculos/create', [VeiculoController::class, 'create'])->name('veiculos.create');
+    Route::post('/veiculos/store-proc-manual', [VeiculoController::class, 'storeProcManual'])->name('veiculos.store-proc-manual');
     Route::post('/veiculos', [VeiculoController::class, 'store'])->name('veiculos.store');
     Route::get('/veiculos/{id}', [VeiculoController::class, 'show'])->name('veiculos.show');
+
+
 });
 
 

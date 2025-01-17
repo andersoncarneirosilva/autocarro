@@ -169,8 +169,7 @@
                         <div class="col-lg-6">
                         </div>
                         <div class="col-lg-6 text-end">
-                            <a href="{{ route('procuracoes.index')}}" class="btn btn-secondary btn-sm">Cancelar</a>
-                            <button type="button" onclick="form.reset();" class="btn btn-warning btn-sm">Limpar</button>
+                            <a href="{{ route('veiculos.index')}}" class="btn btn-secondary btn-sm">Cancelar</a>
                             <button type="submit" class="btn btn-success btn-sm">Cadastrar</button>
                         </div>
                     </div>
