@@ -82,7 +82,6 @@
                     <table class="table table-hover table-centered mb-0">
                         <thead class="table-dark">
                             <tr>
-                                <th>#</th>
                                 <th>Placa</th>
                                 <th>Veículo</th>
                                 <th>Ano/Modelo</th>
@@ -95,7 +94,6 @@
                         <tbody>
                             @foreach ($procs as $doc)
                                 <tr>
-                                    <td>{{ $doc->id }}</td>
                                     <td>{{ $doc->placa }}</td>
                                     <td>{{ $doc->marca }}</td>
                                     <td>{{ $doc->ano }}</td>
