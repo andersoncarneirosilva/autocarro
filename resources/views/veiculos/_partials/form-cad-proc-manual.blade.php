@@ -48,74 +48,30 @@
             <div class="card-body">
                     <h5 class="mb-4 text-uppercase bg-light p-2"><i class="mdi mdi-account-circle me-1"></i> Informações pessoais</h5>
                     <div class="row">
-                        <div class="col-md-6">
+                        <div class="col-md-4">
                             <div class="mb-3">
                                 <label class="form-label">Nome: <span style="color: red;">*</span></label>
                                 <input type="text" class="form-control" name="nome" id="nome_cliente" required>
                             </div>
                         </div>
-                        <div class="col-md-6">
+                        <div class="col-md-4">
                             <div class="mb-3">
                                 <label class="form-label">CPF: <span style="color: red;">*</span></label>
                                 <input type="text" class="form-control" name="cpf" id="cpf" maxlength="14" required>
                             </div>
                         </div>
-                    </div> <!-- end row -->
-
-                    <h5 class="mb-3 text-uppercase bg-light p-2"><i class="mdi mdi-earth me-1"></i> Endereço</h5>
-                    <div class="row">
-                        <div class="col-md">
-                            <div class="mb-2">
-                                <label for="social-fb" class="form-label">CEP: <span style="color: red;">*</span></label>
-                                <div class="input-group">
-                                    <input type="text" class="form-control" name="cep" id="cep" onblur="pesquisacep(this.value);" required>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-md-2">
-                            <div class="mb-2">
-                                <label for="social-fb" class="form-label">Logradouro: <span style="color: red;">*</span></label>
-                                <div class="input-group">
-                                    <input type="text" name="endereco" id="rua" class="form-control" required/>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-md-2">
-                            <div class="mb-2">
-                                <label for="social-insta" class="form-label">Número: <span style="color: red;">*</span></label>
-                                <div class="input-group">
-                                    <input type="text" name="numero" id="numero" class="form-control" required/>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-md-2">
+                        <div class="col-md-4">
                             <div class="mb-3">
-                                <label for="social-insta" class="form-label">Bairro: <span style="color: red;">*</span></label>
-                                <div class="input-group">
-                                    <input type="text" name="bairro" id="bairro" class="form-control" required/>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-md-2">
-                            <div class="mb-3">
-                                <label for="social-insta" class="form-label">Cidade: <span style="color: red;">*</span></label>
-                                <div class="input-group">
-                                    <input type="text" name="cidade" id="cidade" class="form-control" required/>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-md-2">
-                            <div class="mb-3">
-                                <label for="social-insta" class="form-label">Estado: <span style="color: red;">*</span></label>
-                                <div class="input-group">
-                                    <input type="text" name="estado" id="uf" class="form-control" required/>
-                                </div>
+                                <label class="form-label">Endereço: <span style="color: red;">*</span></label>
+                                <input type="text" class="form-control" name="endereco" required>
                             </div>
                         </div>
                     </div> <!-- end row -->
+
+                    
                     <h5 class="mb-3 text-uppercase bg-light p-2"><i class="mdi mdi-earth me-1"></i> Informações do veículo</h5>
                     <div class="row">
-                        <div class="col-md-6">
+                        <div class="col-md-3">
                             <div class="mb-3">
                                 <label for="social-insta" class="form-label">Marca: <span style="color: red;">*</span></label>
                                 <div class="input-group">
@@ -123,7 +79,7 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="col-md-6">
+                        <div class="col-md-3">
                             <div class="mb-3">
                                 <label for="social-insta" class="form-label">Placa: <span style="color: red;">*</span></label>
                                 <div class="input-group">
@@ -131,7 +87,7 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="col-md-6">
+                        <div class="col-md-3">
                             <div class="mb-3">
                                 <label for="social-insta" class="form-label">Chassi: <span style="color: red;">*</span></label>
                                 <div class="input-group">
@@ -139,7 +95,7 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="col-md-6">
+                        <div class="col-md-3">
                             <div class="mb-3">
                                 <label for="social-insta" class="form-label">Cor: <span style="color: red;">*</span></label>
                                 <div class="input-group">
@@ -147,7 +103,7 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="col-md-6">
+                        <div class="col-md-3">
                             <div class="mb-3">
                                 <label for="social-insta" class="form-label">Ano/Modelo: <span style="color: red;">*</span></label>
                                 <div class="input-group">
@@ -155,7 +111,7 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="col-md-6">
+                        <div class="col-md-4">
                             <div class="mb-3">
                                 <label for="social-insta" class="form-label">Renavam: <span style="color: red;">*</span></label>
                                 <div class="input-group">
@@ -163,6 +119,19 @@
                                 </div>
                             </div>
                         </div>
+                        <div class="col-md-4">
+                            <div class="mb-3">
+                                <label for="social-insta" class="form-label">Tipo de Doc: <span style="color: red;">*</span></label>
+                                <select class="form-select mb-3">
+                                    <option selected>Selecione o tipo</option>
+                                    <option value="Digital">Digital</option>
+                                    <option value="Físico">Físico</option>
+                                </select> 
+                            </div>
+                        </div>
+
+                                                                                   
+ 
                     </div>       
                     
                     <div class="row">
