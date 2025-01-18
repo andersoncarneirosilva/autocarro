@@ -926,84 +926,64 @@ public function edit($id){
 
 public function update(Request $request, $id)
 {
-    //dd($request);
     // Recuperar o registro do veículo pelo ID
     $veiculo = Veiculo::findOrFail($id);
 
-    if ($request->hasFile('arquivo_proc_assinado')) {
-        // Verificar e criar o diretório se ele não existir
-        $directoryPath = storage_path('app/public/documentos/procuracoes_assinadas');
-        if (!file_exists($directoryPath)) {
-            mkdir($directoryPath, 0777, true);
-        }
-    
-        // Definir o nome e o caminho completo do arquivo
-        $fileName = $veiculo->placa . '_assinado.pdf';
-        $filePath = $directoryPath . '/' . $fileName;
-    
-        // Salvar o arquivo no caminho especificado
-        $request->file('arquivo_proc_assinado')->move($directoryPath, $fileName);
-    
-        // Construir o URL completo do arquivo salvo
-        $fileUrl = asset('storage/documentos/procuracoes_assinadas/' . $fileName);
-    
-        // Salvar o URL completo no banco de dados
-        $veiculo->arquivo_proc_assinado = $fileUrl;
-    
-        // Obter o tamanho do arquivo em bytes
-        $fileSizeInBytes = filesize($filePath);
-        //dd($fileSizeInBytes);
-        // Converter o tamanho de bytes para megabytes (MB)
-        $fileSizeInMB = $fileSizeInBytes / 1024; // Resultado em MB
-        // Salvar o tamanho do arquivo na coluna size_pdf
-        $veiculo->size_proc_pdf = round($fileSizeInMB, 2); // Armazenando com 2 casas decimais
-        //dd($veiculo->size_pdf);
-    
-        // Salvar no banco de dados
-        $veiculo->save();
+    // Atualizar o campo 'crv' (caso necessário)
+    if ($request->has('crv')) {
+        $veiculo->crv = $request->input('crv');
     }
-    
-    
-    
-    if ($request->hasFile('arquivo_atpve_assinado')) {
-        // Verificar e criar o diretório se ele não existir
-        $directoryPath = storage_path('app/public/documentos/atpves_assinadas');
-        if (!file_exists($directoryPath)) {
-            mkdir($directoryPath, 0777, true);
-        }
-    
-        // Definir o nome e o caminho completo do arquivo
-        $fileName = $veiculo->placa . '_assinado.pdf';
-        $filePath = $directoryPath . '/' . $fileName;
-    
-        // Salvar o arquivo no caminho especificado
-        $request->file('arquivo_atpve_assinado')->move($directoryPath, $fileName);
-    
-        // Construir o URL completo do arquivo salvo
-        $fileUrl = asset('storage/documentos/atpves_assinadas/' . $fileName);
-    
-        // Salvar o URL completo no banco de dados
-        $veiculo->arquivo_atpve_assinado = $fileUrl;
-    
-        // Obter o tamanho do arquivo em bytes
-        $fileSizeInBytes = filesize($filePath);
-        //dd($fileSizeInBytes);
-        // Converter o tamanho de bytes para megabytes (MB)
-        $fileSizeInMB = $fileSizeInBytes / 1024; // Resultado em MB
-        // Salvar o tamanho do arquivo na coluna size_pdf
-        $veiculo->size_atpve_pdf = round($fileSizeInMB, 2); // Armazenando com 2 casas decimais
-        //dd($veiculo->size_pdf);
-    
-        // Salvar no banco de dados
-        $veiculo->save();
-    }
-    
- 
+
+    // Processar os uploads de arquivos
+    $this->processFileUpload($request, $veiculo, 'arquivo_proc_assinado', 'documentos/procuracoes_assinadas', 'arquivo_proc_assinado', 'size_proc_pdf');
+    $this->processFileUpload($request, $veiculo, 'arquivo_atpve_assinado', 'documentos/atpves_assinadas', 'arquivo_atpve_assinado', 'size_atpve_pdf');
+
+    // Salvar as alterações no banco de dados
+    $veiculo->save();
 
     // Redirecionar com mensagem de sucesso
     alert()->success('Documento enviado com sucesso!');
-
     return redirect()->route('veiculos.index');
 }
+
+/**
+ * Processa o upload de um arquivo e salva os detalhes no modelo.
+ *
+ * @param \Illuminate\Http\Request $request
+ * @param \App\Models\Veiculo $veiculo
+ * @param string $fileKey Chave do arquivo no request
+ * @param string $directoryPath Caminho relativo para salvar o arquivo
+ * @param string $dbField Campo do modelo para salvar o URL do arquivo
+ * @param string $sizeField Campo do modelo para salvar o tamanho do arquivo
+ */
+private function processFileUpload($request, $veiculo, $fileKey, $directoryPath, $dbField, $sizeField)
+{
+    if ($request->hasFile($fileKey)) {
+        // Verificar e criar o diretório se necessário
+        $storagePath = storage_path("app/public/{$directoryPath}");
+        if (!file_exists($storagePath)) {
+            mkdir($storagePath, 0777, true);
+        }
+
+        // Definir o nome e o caminho completo do arquivo
+        $fileName = $veiculo->placa . '_assinado.pdf';
+        $filePath = "{$storagePath}/{$fileName}";
+
+        // Salvar o arquivo no caminho especificado
+        $request->file($fileKey)->move($storagePath, $fileName);
+
+        // Construir o URL público do arquivo salvo
+        $fileUrl = asset("storage/{$directoryPath}/{$fileName}");
+
+        // Salvar o URL completo no banco de dados
+        $veiculo->{$dbField} = $fileUrl;
+
+        // Obter o tamanho do arquivo em MB
+        $fileSizeInBytes = filesize($filePath);
+        $fileSizeInMB = $fileSizeInBytes / (1024 * 1024); // Convertendo para MB
+        $veiculo->{$sizeField} = round($fileSizeInMB, 2); // Armazenando com 2 casas decimais
+    }
+}
+
 
 }

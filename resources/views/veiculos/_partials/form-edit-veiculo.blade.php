@@ -122,6 +122,12 @@
                             </div>
                         </div> <!-- end col -->
                     </div> <!-- end row -->
+                    <div class="row">
+                        <div class="col-md-6">
+                            <label for="firstname" class="form-label">CRV:</label>
+                            <input class="form-control" type="text" name="crv" value="{{ $veiculo->crv ?? old('crv') }}">
+                        </div>
+                    </div>
 
                     <div class="text-end">
                         <button type="submit" class="btn btn-success mt-2">Salvar</button>
