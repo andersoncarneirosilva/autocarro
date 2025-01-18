@@ -943,7 +943,7 @@ public function update(Request $request, $id)
 
     // Redirecionar com mensagem de sucesso
     alert()->success('Documento enviado com sucesso!');
-    return redirect()->route('veiculos.index');
+    return redirect()->route('veiculos.edit', $id);
 }
 
 /**

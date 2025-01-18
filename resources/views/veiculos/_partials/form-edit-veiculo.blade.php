@@ -1,3 +1,49 @@
+<div class="row">
+    <div class="col-sm-12">
+        <!-- Profile -->
+        <div class="card bg-primary">
+            <div class="card-body profile-user-box">
+                <div class="row">
+                    <div class="col-sm-8">
+                        <div class="row align-items-center">
+                            <div class="col-auto">
+                                <div class="avatar-lg">
+                                    <img src="{{ url('assets/images/img_car.png') }}" alt="" class="rounded-circle img-thumbnail">
+                                </div>
+                            </div>
+                            <div class="col">
+                                <div>
+                                    <h4 class="mt-1 mb-1 text-white">Marca</h4>
+                                    <p class="font-13 text-white-50">{{ $veiculo->marca }}</p>
+
+                                    <ul class="mb-0 list-inline text-light">
+                                        <li class="list-inline-item me-3">
+                                            <h5 class="mb-1 text-white">Cor</h5>
+                                            <p class="mb-0 font-13 text-white-50">{{ $veiculo->cor }}</p>
+                                        </li>
+                                        <li class="list-inline-item">
+                                            <h5 class="mb-1 text-white">Ano</h5>
+                                            <p class="mb-0 font-13 text-white-50">{{ $veiculo->ano }}</p>
+                                        </li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    </div> <!-- end col-->
+
+                    <div class="col-sm-4">
+                        <div class="text-center mt-sm-0 mt-3 text-sm-end">
+                            {{-- <button type="button" class="btn btn-light">
+                                <i class="mdi mdi-account-edit me-1"></i> Edit Profile
+                            </button> --}}
+                        </div>
+                    </div> <!-- end col-->
+                </div> <!-- end row -->
+
+            </div> <!-- end card-body/ profile-user-box-->
+        </div><!--end profile/ card -->
+    </div> <!-- end col-->
+</div>
 
 <div class="row">
     <div class="col-xl-4 col-lg-5">
@@ -12,8 +58,8 @@
                 {{-- <h4 class="mb-0 mt-2">{{ $veiculo->marca }}</h4> --}}
 
                 <div class="text-start mt-3">
-                    {{-- <p class="text-muted mb-2 font-13"><strong>Marca:</strong><span class="ms-2">{{ $veiculo->marca }}</span></p> --}}
-
+                    <p class="text-muted mb-2 font-13"><strong>Informações do veículo</strong></p>
+                    <hr>
                     <p class="text-muted mb-2 font-13"><strong>Placa:</strong><span class="ms-2">{{ $veiculo->placa }}</span></p>
 
                     <p class="text-muted mb-2 font-13"><strong>Cor:</strong><span class="ms-2 ">{{ $veiculo->cor }}</span></p>
