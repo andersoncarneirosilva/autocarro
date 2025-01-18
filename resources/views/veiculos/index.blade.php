@@ -86,8 +86,8 @@
                                 <th>Veículo</th>
                                 <th>Ano/Modelo</th>
                                 <th>DOC</th>
-                                <th>ATPVe</th>
                                 <th>Proc. Assinada</th>
+                                <th>ATPVe Assinada</th>
                                 <th>Ações</th>
                             </tr>
                         </thead>
@@ -107,14 +107,22 @@
                                         @endif
                                     </td>
                                     <td>
-                                        @if(!empty($doc->arquivo_atpve))
-                                            <a href="{{ $doc->arquivo_atpve }}" target="_blank">ATPVe</a>
+                                        @if(!empty($doc->arquivo_proc_assinado))
+                                            <a href="{{ $doc->arquivo_proc_assinado }}" target="_blank">PROC</a>
                                         @else
                                             <!-- Mostre uma mensagem ou deixe em branco -->
-                                            <span>Sem ATPVe</span>
+                                            <span>Não consta</span>
                                         @endif
                                     </td>
-                                    <td>Teste</td>
+                                    <td>
+                                        @if(!empty($doc->arquivo_atpve_assinado))
+                                            <a href="{{ $doc->arquivo_atpve_assinado }}" target="_blank">ATPVe</a>
+                                        @else
+                                            <!-- Mostre uma mensagem ou deixe em branco -->
+                                            <span>Não consta</span>
+                                        @endif
+                                    </td>
+                                    
                                     <td class="table-action">
                                         <div class="dropdown btn-group">
                                             <button class="btn btn-info btn-sm dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
@@ -276,7 +284,7 @@ aria-hidden="true">
     
         // Atualiza a ação do formulário para incluir o ID do documento na rota
         const form = document.getElementById('addressForm');
-        form.action = `{{ secure_url('veiculos/store-atpve') }}/${docId}`; //secure_url
+        form.action = `{{ url('veiculos/store-atpve') }}/${docId}`; //secure_url
     
         // Envia o formulário
         form.submit();
