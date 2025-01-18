@@ -47,7 +47,7 @@
                 @elseif($cidades->total() == 0)
                 <div class="col-sm-12">
                     <div class="card-header d-flex justify-content-between align-items-center">
-                        <h4 class="header-title">Data da procuração</h4>
+                        <h4 class="header-title">Cidade da procuração</h4>
                         <div class="dropdown">
                             <button type="button" class="btn btn-primary btn-sm" data-bs-toggle="modal"
                                     data-bs-target="#modalCadastroCidade">Cadastrar</button>

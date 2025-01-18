@@ -257,7 +257,7 @@ class VeiculoController extends Controller
         //dd($outorgados);
         $config = TextoPoder::first();
         $textInicio = TextoInicio::first();
-        //dd($textInicio);
+
         $cidades = Cidade::first();
         
         $dataAtual = Carbon::now();
@@ -265,6 +265,43 @@ class VeiculoController extends Controller
         $dataPorExtenso = $dataAtual->translatedFormat('d \d\e F \d\e Y');
 
         $cidade = Cidade::first();
+
+
+        if ($outorgados->isEmpty()) {
+            alert()->error('Erro!', 'Por favor, cadastre ao menos um Outorgado antes de prosseguir.')
+                ->persistent(true)
+                ->autoClose(5000) // Fecha automaticamente após 5 segundos
+                ->timerProgressBar();
+    
+            return redirect()->route('veiculos.index');
+        }
+
+        if (!$textInicio || !isset($textInicio->texto_inicio)) {
+            alert()->error('Erro!', 'Por favor, configure o texto inicial procuração antes de prosseguir.')
+                ->persistent(true)
+                ->autoClose(5000) // Fecha automaticamente após 5 segundos
+                ->timerProgressBar();
+        
+            return redirect()->route('veiculos.index');
+        }
+
+        if (!$config || !isset($config->texto_final)) {
+            alert()->error('Erro!', 'Por favor, configure o texto final da procuração antes de prosseguir.')
+                ->persistent(true)
+                ->autoClose(5000) // Fecha automaticamente após 5 segundos
+                ->timerProgressBar();
+        
+            return redirect()->route('veiculos.index');
+        }
+
+        if (!$cidade || !isset($cidade->cidade)) {
+            alert()->error('Erro!', 'Por favor, configure a cidade da procuração antes de prosseguir.')
+                ->persistent(true)
+                ->autoClose(5000) // Fecha automaticamente após 5 segundos
+                ->timerProgressBar();
+        
+            return redirect()->route('veiculos.index');
+        }
 
         try {
             $validated = $request->validate([
@@ -901,7 +938,7 @@ public function update(Request $request, $id)
         }
     
         // Definir o nome e o caminho completo do arquivo
-        $fileName = $veiculo->placa . '.pdf';
+        $fileName = $veiculo->placa . '_assinado.pdf';
         $filePath = $directoryPath . '/' . $fileName;
     
         // Salvar o arquivo no caminho especificado
@@ -936,7 +973,7 @@ public function update(Request $request, $id)
         }
     
         // Definir o nome e o caminho completo do arquivo
-        $fileName = $veiculo->placa . '.pdf';
+        $fileName = $veiculo->placa . '_assinado.pdf';
         $filePath = $directoryPath . '/' . $fileName;
     
         // Salvar o arquivo no caminho especificado
