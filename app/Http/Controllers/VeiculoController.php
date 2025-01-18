@@ -831,4 +831,84 @@ function desenharSublinhado($pdf, $x, $y, $texto, $largura) {
     $pdf->Line($x, $y + 2, $x + $largura, $y + 2); // Linha sublinhada
 }
 
+public function show($id){
+    if(!$user = $this->model->find($id)){
+        return redirect()->route('users.index');
+    }
+
+    $title = 'Excluir!';
+    $text = "Deseja excluir esse usuário?";
+    confirmDelete($title, $text);
+    
+    return view('veiculos.show', compact('user'));
+}
+
+public function edit($id){
+        
+    if(!$veiculo = $this->model->find($id)){
+        return redirect()->route('users.index');
+    }
+
+    return view('veiculos.edit', compact('veiculo'));
+}
+
+public function update(Request $request, $id)
+{
+    //dd($request);
+    // Recuperar o registro do veículo pelo ID
+    $veiculo = Veiculo::findOrFail($id);
+
+    if ($request->hasFile('arquivo_proc_assinado')) {
+        // Verificar e criar o diretório se ele não existir
+        $directoryPath = storage_path('app/public/documentos/procuracoes_assinadas');
+        if (!file_exists($directoryPath)) {
+            mkdir($directoryPath, 0777, true);
+        }
+    
+        // Definir o nome e o caminho completo do arquivo
+        $fileName = $veiculo->placa . '.pdf';
+        $filePath = $directoryPath . '/' . $fileName;
+    
+        // Salvar o arquivo no caminho especificado
+        $request->file('arquivo_proc_assinado')->move($directoryPath, $fileName);
+    
+        // Construir o URL completo do arquivo salvo
+        $fileUrl = asset('storage/documentos/procuracoes_assinadas/' . $fileName);
+    
+        // Salvar o URL completo no banco de dados
+        $veiculo->arquivo_proc_assinado = $fileUrl;
+    }
+
+
+    if ($request->hasFile('arquivo_atpve_assinado')) {
+        // Verificar e criar o diretório se ele não existir
+        $directoryPath = storage_path('app/public/documentos/atpves_assinadas');
+        if (!file_exists($directoryPath)) {
+            mkdir($directoryPath, 0777, true);
+        }
+    
+        // Definir o nome e o caminho completo do arquivo
+        $fileName = $veiculo->placa . '.pdf';
+        $filePath = $directoryPath . '/' . $fileName;
+    
+        // Salvar o arquivo no caminho especificado
+        $request->file('arquivo_atpve_assinado')->move($directoryPath, $fileName);
+    
+        // Construir o URL completo do arquivo salvo
+        $fileUrl = asset('storage/documentos/atpves_assinadas/' . $fileName);
+    
+        // Salvar o URL completo no banco de dados
+        $veiculo->arquivo_atpve_assinado = $fileUrl;
+    }
+    
+
+    // Salvar as alterações
+    $veiculo->save();
+
+    // Redirecionar com mensagem de sucesso
+    alert()->success('Documento enviado com sucesso!');
+
+    return redirect()->route('veiculos.index');
+}
+
 }

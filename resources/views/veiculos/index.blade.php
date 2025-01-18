@@ -87,6 +87,7 @@
                                 <th>Ano/Modelo</th>
                                 <th>DOC</th>
                                 <th>ATPVe</th>
+                                <th>Proc. Assinada</th>
                                 <th>Ações</th>
                             </tr>
                         </thead>
@@ -113,36 +114,37 @@
                                             <span>Sem ATPVe</span>
                                         @endif
                                     </td>
+                                    <td>Teste</td>
                                     <td class="table-action">
                                         <div class="dropdown btn-group">
                                             <button class="btn btn-info btn-sm dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                                 Ações
                                             </button>
                                             <div class="dropdown-menu dropdown-menu-animated dropdown-menu-end">
+
+                                                <a href="{{ route('veiculos.edit', $doc->id) }}" class="dropdown-item">Editar</a>
+
                                                 <a href="{{ $doc->arquivo_doc }}" 
                                                     class="dropdown-item"
                                                     target="_blank">
                                                     Baixar CRLV
-                                                    </a>
+                                                </a>
                                                 <a href="{{ $doc->arquivo_proc }}" 
-                                                class="dropdown-item"
-                                                target="_blank">
-                                                Baixar Procuração
+                                                    class="dropdown-item"
+                                                    target="_blank">
+                                                    Baixar Procuração
                                                 </a>
-                                                
                                                 <a href="javascript:void(0);"
-                                                class="dropdown-item {{ $doc->crv === '***' ? 'disabled' : '' }}"
-                                                onclick="{{ $doc->crv === '***' ? 'return false;' : "openAddressModal(event, $doc->id)" }}">
-                                                Gerar ATPVe
+                                                    class="dropdown-item {{ $doc->crv === '***' ? 'disabled' : '' }}"
+                                                    onclick="{{ $doc->crv === '***' ? 'return false;' : "openAddressModal(event, $doc->id)" }}">
+                                                    Gerar ATPVe
                                                 </a>
-
-
-                                                 
                                                 <a href="{{ route('veiculos.destroy', $doc->id) }}" 
-                                                data-confirm-delete="true"
-                                                class="dropdown-item">
-                                                Excluir
+                                                    data-confirm-delete="true"
+                                                    class="dropdown-item">
+                                                    Excluir
                                                 </a>
+
                                             </div>
                                         </div>
                                     </td>
@@ -266,7 +268,7 @@ aria-hidden="true">
     
         // Atualiza a ação do formulário para incluir o ID do documento na rota
         const form = document.getElementById('addressForm');
-        form.action = `{{ secure_url('veiculos/store-atpve') }}/${docId}`;
+        form.action = `{{ secure_url('veiculos/store-atpve') }}/${docId}`; //secure_url
     
         // Envia o formulário
         form.submit();
