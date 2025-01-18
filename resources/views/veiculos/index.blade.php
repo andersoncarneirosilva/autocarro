@@ -39,11 +39,23 @@
                     <h4 class="header-title">Veículos cadastrados</h4>
                     <div class="dropdown">
                         @if(auth()->user()->credito > 0)
-                        <button type="button" class="btn btn-info btn-sm" data-bs-toggle="modal"
-                            data-bs-target="#standard-modal">Cadastro automático</button>
-                            <a href="{{ route('veiculos.create-proc-manual')}}" class="btn btn-primary btn-sm">Cadastro manual</a>
-                            
-                        {{-- <a href="{{ route('relatorio-procuracoes')}}" target="_blank" class="btn btn-danger btn-sm">Veíclo próprio</a> --}}
+                        <div class="dropdown btn-group">
+                            <button class="btn btn-primary btn-sm dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                Cadastrar
+                            </button>
+                            <div class="dropdown-menu dropdown-menu-animated dropdown-menu-end">
+
+                                <a href="#" data-bs-toggle="modal" data-bs-target="#standard-modal" class="dropdown-item">
+                                    Cadastro automático
+                                </a>
+
+                            <a href="{{ route('veiculos.create-proc-manual')}}" class="dropdown-item">Cadastro manual</a>
+
+
+
+                            </div>
+                        </div>
+
                         @endif
                     </div>
                 </div>

@@ -6,6 +6,7 @@ use App\Models\DashModel;
 use App\Models\Procuracao;
 use Illuminate\Http\Request;
 use App\Models\Documento;
+use App\Models\Veiculo;
 use Illuminate\Support\Facades\Auth;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\DB;
@@ -23,7 +24,7 @@ class DashController extends Controller
         //dd(auth()->user());
 
         $search = $request->search;
-        $emprestimos = Procuracao::orderBy('created_at', 'desc')->take(4)->get();
+        $emprestimos = Veiculo::orderBy('created_at', 'desc')->take(4)->get();
         //$users = $this->model->getUsersDash();
         $countDocs = $this->model->getCountDocs();
         $countProcs = $this->model->getCountProcs();

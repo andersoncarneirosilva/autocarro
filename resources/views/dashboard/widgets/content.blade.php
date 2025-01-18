@@ -89,7 +89,7 @@
     <div class="col-lg-7">
         <div class="card">
             <div class="card-header d-flex justify-content-between align-items-center">
-                <h4 class="header-title">Últimas procurações</h4>
+                <h4 class="header-title">Últimos veículos</h4>
             </div>
             @if ($emprestimos)
             <div class="card-body pt-2">

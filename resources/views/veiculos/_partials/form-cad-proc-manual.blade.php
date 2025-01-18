@@ -28,7 +28,7 @@
         });
     });
 </script>
-<script>
+{{-- <script>
     document.addEventListener('DOMContentLoaded', function () {
         document.getElementById('cep').addEventListener('input', function (e) {
             let value = e.target.value.replace(/\D/g, ''); // Remove caracteres não numéricos
@@ -41,7 +41,7 @@
             e.target.value = value;
         });
     });
-</script>
+</script> --}}
 <div class="row">
     <div class="col">
         <div class="card">
