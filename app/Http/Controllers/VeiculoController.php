@@ -877,9 +877,22 @@ public function update(Request $request, $id)
     
         // Salvar o URL completo no banco de dados
         $veiculo->arquivo_proc_assinado = $fileUrl;
+    
+        // Obter o tamanho do arquivo em bytes
+        $fileSizeInBytes = filesize($filePath);
+        //dd($fileSizeInBytes);
+        // Converter o tamanho de bytes para megabytes (MB)
+        $fileSizeInMB = $fileSizeInBytes / 1024; // Resultado em MB
+        // Salvar o tamanho do arquivo na coluna size_pdf
+        $veiculo->size_proc_pdf = round($fileSizeInMB, 2); // Armazenando com 2 casas decimais
+        //dd($veiculo->size_pdf);
+    
+        // Salvar no banco de dados
+        $veiculo->save();
     }
-
-
+    
+    
+    
     if ($request->hasFile('arquivo_atpve_assinado')) {
         // Verificar e criar o diretório se ele não existir
         $directoryPath = storage_path('app/public/documentos/atpves_assinadas');
@@ -899,11 +912,21 @@ public function update(Request $request, $id)
     
         // Salvar o URL completo no banco de dados
         $veiculo->arquivo_atpve_assinado = $fileUrl;
+    
+        // Obter o tamanho do arquivo em bytes
+        $fileSizeInBytes = filesize($filePath);
+        //dd($fileSizeInBytes);
+        // Converter o tamanho de bytes para megabytes (MB)
+        $fileSizeInMB = $fileSizeInBytes / 1024; // Resultado em MB
+        // Salvar o tamanho do arquivo na coluna size_pdf
+        $veiculo->size_atpve_pdf = round($fileSizeInMB, 2); // Armazenando com 2 casas decimais
+        //dd($veiculo->size_pdf);
+    
+        // Salvar no banco de dados
+        $veiculo->save();
     }
     
-
-    // Salvar as alterações
-    $veiculo->save();
+ 
 
     // Redirecionar com mensagem de sucesso
     alert()->success('Documento enviado com sucesso!');

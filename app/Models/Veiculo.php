@@ -39,6 +39,8 @@ class Veiculo extends Model
         'arquivo_proc_assinado',
         'arquivo_atpve',
         'arquivo_atpve_assinado',
+        'size_proc_pdf',
+        'size_atpve_pdf',
 
     ];
 

@@ -37,6 +37,9 @@ return new class extends Migration
             $table->string('arquivo_atpve')->nullable();
             $table->string('arquivo_atpve_assinado')->nullable();
 
+            $table->string('size_proc_pdf')->nullable();
+            $table->string('size_atpve_pdf')->nullable();
+
             $table->timestamps();
         });
     }

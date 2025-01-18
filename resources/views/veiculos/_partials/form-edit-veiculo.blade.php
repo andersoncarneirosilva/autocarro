@@ -9,7 +9,7 @@
                     <img src="{{ url('assets/img/icon_user.png') }}" class="rounded-circle avatar-lg img-thumbnail" alt="user-image">
                 @endif--}}
 
-                <h4 class="mb-0 mt-2">{{ $veiculo->marca }}</h4>
+                {{-- <h4 class="mb-0 mt-2">{{ $veiculo->marca }}</h4> --}}
 
                 <div class="text-start mt-3">
                     {{-- <p class="text-muted mb-2 font-13"><strong>Marca:</strong><span class="ms-2">{{ $veiculo->marca }}</span></p> --}}
@@ -76,7 +76,7 @@
                                             </div>
                                             <div class="col ps-0">
                                                 <a href="{{ $veiculo->arquivo_proc_assinado }}" target="_blank" class="text-muted fw-bold">{{ $veiculo->placa }}.pdf</a>
-                                                <p class="mb-0">2.3 MB</p>
+                                                <p class="mb-0">{{ $veiculo->size_proc_pdf }} MB</p>
                                             </div>
                                             <div class="col-auto">
                                                 <a href="{{ $veiculo->arquivo_proc_assinado }}" target="_blank" class="btn btn-link btn-lg text-muted">
@@ -100,13 +100,13 @@
                                             <div class="col-auto">
                                                 <div class="avatar-sm">
                                                     <span class="avatar-title bg-primary-lighten text-primary rounded">
-                                                        .ZIP
+                                                        .PDF
                                                     </span>
                                                 </div>
                                             </div>
                                             <div class="col ps-0">
                                                 <a href="{{ $veiculo->arquivo_atpve_assinado }}" target="_blank" class="text-muted fw-bold">atpve_{{ $veiculo->placa }}.pdf</a>
-                                                <p class="mb-0">2.3 MB</p>
+                                                <p class="mb-0">{{ $veiculo->size_atpve_pdf }} MB</p>
                                             </div>
                                             <div class="col-auto">
                                                 <a href="{{ $veiculo->arquivo_atpve_assinado }}" target="_blank" class="btn btn-link btn-lg text-muted">
