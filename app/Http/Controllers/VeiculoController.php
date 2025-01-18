@@ -359,17 +359,21 @@ class VeiculoController extends Controller
             //dd($placaAnterior);
         }
 
-            // Garante que a pasta "procuracoes" existe
+            // Garante que a pasta "crlv" existe
             $pastaDestino = storage_path('app/public/documentos/crlv/');
-            $urlDoc = asset('storage/documentos/crlv/' . $nomeOriginal); 
-            //dd($urlDoc);
+            $urlDoc = asset('storage/documentos/crlv/' . $placa . '.pdf'); // Adiciona a extensão .pdf
+            // dd($urlDoc);
+
             if (!file_exists($pastaDestino)) {
-                mkdir($pastaDestino, 0777, true); // Cria a pasta
+                mkdir($pastaDestino, 0777, true); // Cria a pasta com permissões recursivas
             }
 
-            // Salva o arquivo na pasta
-            $caminhoDoc = $pastaDestino . '/' . $nomeOriginal;
-            $arquivo->move($pastaDestino, $nomeOriginal);
+            // Define o caminho completo do arquivo com a extensão .pdf
+            $caminhoDoc = $pastaDestino . $placa . '.pdf';
+
+            // Move o arquivo para a pasta com o nome correto
+            $arquivo->move($pastaDestino, $placa . '.pdf');
+
 
             // Verifica se o arquivo foi salvo
             if (!file_exists($caminhoDoc)) {
@@ -566,13 +570,37 @@ class VeiculoController extends Controller
         // Extrai apenas o nome do arquivo da URL completa
         $nomeArquivo = basename($doc->arquivo_doc); // Retorna "DOC-2024-MARILENE.pdf"
         //dd($nomeArquivo); // Verifique se o nome está correto
+        $veiculo = \App\Models\Veiculo::where('id', $id)->first();
+
+        $veiculo->arquivo_proc = basename($veiculo->arquivo_doc);
+
+        //dd($veiculo->arquivo_proc);
+        if (!$veiculo) {
+            alert()->error('Veículo não encontrado para o arquivo: ' . $nomeArquivoBase);
+            return redirect()->route('veiculos.index');
+        }
 
         // Monta o caminho completo para o arquivo no servidor
-        $arquivo = storage_path('app/public/procuracoes/' . $nomeArquivo);
+        $arquivoCrlv = storage_path('app/public/documentos/crlv/' . $nomeArquivo);
+        $arquivoProc = storage_path('app/public/documentos/procuracoes/' . $nomeArquivo);
 
+        $arquivoAtpve = storage_path('app/public/documentos/atpves/' . 'atpve_' . $nomeArquivo);
+        $arquivoAtpveAssinada = storage_path('app/public/documentos/atpves_assinadas/' . $veiculo->placa . '_assinado.pdf');
+        //dd($arquivoAtpveAssinada);
+        $arquivoProcAssinada = storage_path('app/public/documentos/procuracoes_assinadas/' . $veiculo->placa . '_assinado.pdf');
+        //dd($arquivoProcAssinada);
         // Verifica se o arquivo existe e o exclui
-        if (file_exists($arquivo)) {
-            unlink($arquivo);
+        if (file_exists($arquivoCrlv)) {
+            unlink($arquivoCrlv);
+        }
+        if (file_exists($arquivoProc)) {
+            unlink($arquivoProc);
+        }
+        if (file_exists($arquivoAtpveAssinada)) {
+            unlink($arquivoAtpveAssinada);
+        }
+        if (file_exists($arquivoProcAssinada)) {
+            unlink($arquivoProcAssinada);
         }
 
         // Exclui o registro do banco de dados
