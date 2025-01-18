@@ -49,6 +49,16 @@
                         </div>
                     </form>
                 </div>
+            @elseif(request()->routeIs('veiculos.index'))
+                <div class="app-search dropdown d-none d-lg-block">
+                    <form action="{{ route('veiculos.index') }}" method="GET">
+                        <div class="input-group">
+                            <input type="text" name="search" placeholder="Informe a placa" class="form-control">
+                            <span class="mdi mdi-magnify search-icon"></span>
+                            <button type="submit" class="btn btn-primary">Buscar</button>
+                        </div>
+                    </form>
+                </div>
             @elseif(request()->routeIs('users.index'))
                 <div class="app-search dropdown d-none d-lg-block">
                     <form action="{{ route('users.index') }}" method="GET">
@@ -112,10 +122,14 @@ observer.observe(document.body, { childList: true, subtree: true });
                     <i class="ri-search-line font-22"></i>
                 </a>
                 <div class="dropdown-menu dropdown-menu-animated dropdown-lg p-0" style="">
-                    <form class="p-3">
-                        <input type="search" class="form-control" placeholder="Search ..." aria-label="Recipient's username">
+                    <form action="{{ route('veiculos.index') }}" method="GET" class="p-3">
+                        <div class="input-group">
+                            <input type="text" name="search" placeholder="Pesquisar veículos..." class="form-control">
+                            <button type="submit" class="btn btn-primary"><i class="ri-search-line font-22"></i></button>
+                        </div>
                     </form>
                 </div>
+               
             </li>
             <li class="dropdown notification-list">
                 <a class="nav-link dropdown-toggle arrow-none" data-bs-toggle="dropdown" href="#" role="button" aria-haspopup="false" aria-expanded="false">

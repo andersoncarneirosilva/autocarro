@@ -26,7 +26,7 @@
                     <h4 class="header-title">Clientes cadastrados</h4>
                     <div class="dropdown">
                         <a href="{{ route('clientes.create')}}" class="btn btn-primary btn-sm">Cadastrar</a>
-                        <a href="{{ route('relatorio-clientes')}}" target="_blank" class="btn btn-danger btn-sm">Relatório</a>
+                        {{-- <a href="{{ route('relatorio-clientes')}}" target="_blank" class="btn btn-danger btn-sm">Relatório</a> --}}
                         {{-- <button class="btn btn-secondary btn-sm" id="deleteAllSelectedRecord" disabled><i
                                 class="fa-solid fa-trash"></i></button> --}}
                     </div>

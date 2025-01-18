@@ -10,6 +10,8 @@
             searchEnabled: true, // Ativa a busca
             itemSelectText: '', // Remove o texto de seleção padrão
             removeItemButton: true, // Permite remover itens da seleção
+            noResultsText: 'Nenhuma opção encontrada', // Texto ao não encontrar resultados na busca
+            noChoicesText: 'Nenhum cliente cadastrado', // Texto quando não há opções
         });
     });
 </script>
@@ -28,41 +30,10 @@
     </div>
 </div>
 <br>
-{{-- <div class="card">
-    <div class="card-body">
-        <div class="row">
-            <div class="col-md-6">
-                <form action="{{ route('clientes.index') }}" method="GET">
-                    <div class="filter-select-container">
-                        <select class="select2 form-control select2" name="cliente[]" id="idCliente" data-toggle="select2">
-                            <option value="" selected>Cliente</option>
-                            @foreach ($clientes as $cliente)
-                            <option value="{{ $cliente->nome }}">{{ $cliente->nome }}</option>
-                            @endforeach
-                        </select>
-                        
-                            <input type="text" class="form-control" id="" data-toggle="date-picker" data-single-date-picker="true" placeholder="Date and Time">
-                         
-                    </div>
-            </div>
 
-            <div class="col-md-6 text-end">
-                <button type="submit" class="filter-btn btn-light">Filtrar</button>
-            </div>
-            </form>
-        </div>
-    </div>
-</div> --}}
 <div class="card">
     <div class="card-body">
         <div class="row">
-            {{-- @if ($errors->any())
-                <ul class="errors">
-                    @foreach ($errors->all() as $error)
-                        <div class="alert alert-danger" role="alert">{{ $error }}</div>
-                    @endforeach
-                </ul>
-            @endif --}}
             <div class="col-sm-12">
                 <div class="card-header d-flex justify-content-between align-items-center">
                     <h4 class="header-title">Veículos cadastrados</h4>
@@ -71,10 +42,9 @@
                         <button type="button" class="btn btn-info btn-sm" data-bs-toggle="modal"
                             data-bs-target="#standard-modal">Cadastro automático</button>
                             <a href="{{ route('veiculos.create-proc-manual')}}" class="btn btn-primary btn-sm">Cadastro manual</a>
+                            
                         {{-- <a href="{{ route('relatorio-procuracoes')}}" target="_blank" class="btn btn-danger btn-sm">Veíclo próprio</a> --}}
                         @endif
-                        {{-- <button class="btn btn-secondary btn-sm" id="deleteAllSelectedRecord" disabled><i
-                                class="fa-solid fa-trash"></i></button> --}}
                     </div>
                 </div>
                 @if ($procs->total() != 0)
@@ -174,30 +144,6 @@
             'search' => request()->get('search', '')
         ])->links('components.pagination') }}
     </div>
-    <!-- Single Select -->
-
-    {{-- <form action="{{ url('upload-image') }}" method="POST" enctype="multipart/form-data">
-        @csrf
-        <label for="image">Escolha uma imagem (JPG, PNG):</label>
-        <input type="file" name="image" id="image" required>
-        <button type="submit">Enviar</button>
-    </form> --}}
-       
-    {{-- <div class="mt-5">
-        <h4><span class="badge rounded-pill p-1 px-2 badge-secondary-lighten">FREE</span></h4>
-        <h6 class="text-uppercase mt-3">Storage</h6>
-        <div class="progress my-2 progress-sm">
-            <div class="progress-bar progress-lg bg-success" role="progressbar" style="width: {{ $percentUsed }}%" aria-valuenow="{{ $percentUsed }}" aria-valuemin="0" aria-valuemax="100"></div>
-        </div>
-        <p class="text-muted font-12 mb-0">{{ $usedGB }} GB ({{ number_format($percentUsed, 2) }}%) of {{ $totalGB }} GB used</p>
-    </div> --}}
-    
-
-    
-   
-    
-
-
                                                 
 
 </div>
