@@ -72,8 +72,9 @@
             <div class="app-search dropdown d-none d-lg-block">
                 <form action="{{ route('clientes.index') }}" method="GET">
                     <div class="input-group">
-                        <input type="text" name="search" placeholder="Pesquisar clientes" class="form-control">
-                        <button type="submit" class="btn btn-primary">Pesquisar</button>
+                        <input type="text" name="search" placeholder="Buscar clientes" class="form-control">
+                        <span class="mdi mdi-magnify search-icon"></span>
+                        <button type="submit" class="btn btn-primary">Buscar</button>
                     </div>
                 </form>
             </div>
@@ -122,12 +123,21 @@ observer.observe(document.body, { childList: true, subtree: true });
                     <i class="ri-search-line font-22"></i>
                 </a>
                 <div class="dropdown-menu dropdown-menu-animated dropdown-lg p-0" style="">
+                    @if(request()->routeIs('veiculos.index'))
                     <form action="{{ route('veiculos.index') }}" method="GET" class="p-3">
                         <div class="input-group">
-                            <input type="text" name="search" placeholder="Pesquisar veículos..." class="form-control">
+                            <input type="text" name="search" placeholder="Informe a placa" class="form-control">
                             <button type="submit" class="btn btn-primary"><i class="ri-search-line font-22"></i></button>
                         </div>
                     </form>
+                    @elseif(request()->routeIs('clientes.index'))
+                    <form action="{{ route('clientes.index') }}" method="GET" class="p-3">
+                        <div class="input-group">
+                            <input type="text" name="search" placeholder="Pesquisar clientes..." class="form-control">
+                            <button type="submit" class="btn btn-primary"><i class="ri-search-line font-22"></i></button>
+                        </div>
+                    </form>
+                    @endif
                 </div>
                
             </li>

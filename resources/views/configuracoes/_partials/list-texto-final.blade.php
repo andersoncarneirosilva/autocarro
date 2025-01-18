@@ -13,10 +13,9 @@
                 <div class="card-header d-flex justify-content-between align-items-center">
                     <h4 class="header-title">Texto Final</h4>
                     <div class="dropdown">
-                        @if ($texts->total() <= 1)
-                            <button type="button" class="btn btn-primary btn-sm" disabled>Cadastrar</button>
-                        @else
-                            <button type="button" class="btn btn-primary btn-sm" data-bs-toggle="modal" data-bs-target="#modalCadastroTexto">Cadastrar</button>
+                        @if ($texts->total() < 1)
+                        <button type="button" class="btn btn-primary btn-sm" data-bs-toggle="modal" data-bs-target="#modalCadastroTexto">Cadastrar</button>
+
                         @endif
                     </div>
                 </div>

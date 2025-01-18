@@ -6,14 +6,9 @@
                 <div class="card-header d-flex justify-content-between align-items-center">
                     <h4 class="header-title">Outorgado</h4>
                     <div class="dropdown">
-                        @if ($outs->total() >= 3)
-                        <button type="button" class="btn btn-primary btn-sm" disabled>Cadastrar</button>
-
-                        @else
+                        @if ($outs->total() < 3)
                         <button type="button" class="btn btn-primary btn-sm" data-bs-toggle="modal"
-                            data-bs-target="#modalCadastroOut">Cadastrar</button>
-                        {{-- <button class="btn btn-secondary btn-sm" id="deleteAllSelectedRecord" disabled><i
-                                class="fa-solid fa-trash"></i></button> --}}
+                            data-bs-target="#modalCadastroOut">Cadastrar</button> 
                         @endif
                     </div>
                 </div>

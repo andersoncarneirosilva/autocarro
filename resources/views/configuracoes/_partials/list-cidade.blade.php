@@ -6,10 +6,7 @@
                 <div class="card-header d-flex justify-content-between align-items-center">
                     <h4 class="header-title">Cidade da procuração</h4>
                     <div class="dropdown">
-                        @if ($cidades->total() <= 1)
-                        <button type="button" class="btn btn-primary btn-sm" disabled>Cadastrar</button>
-
-                        @else
+                        @if ($cidades->total() < 1)
                         <button type="button" class="btn btn-primary btn-sm" data-bs-toggle="modal"
                             data-bs-target="#modalCadastroCidade">Cadastrar</button>
                         @endif
