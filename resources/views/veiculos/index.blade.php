@@ -175,6 +175,14 @@
         <button type="submit">Enviar</button>
     </form> --}}
        
+    {{-- <div class="mt-5">
+        <h4><span class="badge rounded-pill p-1 px-2 badge-secondary-lighten">FREE</span></h4>
+        <h6 class="text-uppercase mt-3">Storage</h6>
+        <div class="progress my-2 progress-sm">
+            <div class="progress-bar progress-lg bg-success" role="progressbar" style="width: {{ $percentUsed }}%" aria-valuenow="{{ $percentUsed }}" aria-valuemin="0" aria-valuemax="100"></div>
+        </div>
+        <p class="text-muted font-12 mb-0">{{ $usedGB }} GB ({{ number_format($percentUsed, 2) }}%) of {{ $totalGB }} GB used</p>
+    </div> --}}
     
 
     

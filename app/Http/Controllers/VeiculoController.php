@@ -41,6 +41,41 @@ class VeiculoController extends Controller
         return view('veiculos.index', compact(['procs', 'clientes']));
     }
 
+//     public function index(Request $request)
+// {
+//     // Título e texto para confirmação de exclusão
+//     $title = 'Excluir!';
+//     $text = "Deseja excluir essa procuração?";
+//     confirmDelete($title, $text);
+
+//     // Obter todos os clientes
+//     $clientes = Cliente::all();
+
+//     // Obter procurações com base na pesquisa
+//     $procs = $this->model->getSearch(search: $request->search ?? '');
+
+//     // Caminho para a pasta de documentos
+//     $path = storage_path('app/public/documentos');
+
+//     // Obter o espaço total do sistema de arquivos
+//     $totalSpace = disk_total_space($path);
+
+//     // Obter o espaço livre no sistema de arquivos
+//     $usedSpace = disk_free_space($path);
+
+//     // Calcular o percentual de espaço utilizado
+//     $percentUsed = (($totalSpace - $usedSpace) / $totalSpace) * 100;
+
+//     // Calcular o valor usado em GB
+//     $usedGB = number_format(($totalSpace - $usedSpace) / (1024 * 1024 * 1024), 2);
+
+//     // Calcular o valor total em GB
+//     $totalGB = number_format($totalSpace / (1024 * 1024 * 1024), 2);
+
+//     // Passar as informações para a view
+//     return view('veiculos.index', compact(['procs', 'clientes', 'usedGB', 'percentUsed', 'totalGB']));
+// }
+
      public function create(){
         return view('veiculos.create');
     }
