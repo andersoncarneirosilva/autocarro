@@ -24,11 +24,10 @@
               <h5 class="text-success float-start mt-0">Novidades no App!</h5>
               <div class="ribbon-content">
                   <ul>
-                    <li>Correção na validação no cadastro de outorgados.</li>
                     <li>Agora cada usuário tem um espaço limitado para armazenamento de arquivos.</li>
                     <li>Correção no campo de busca para smartphone.</li>
                     <li>Campo CRV não será exibido para editar caso o documento seja digital.</li>
-                    <li>Página para cadastro de outorgados</li>
+                    <li>Página modelo de procuração reformulada</li>
                   </ul>
               </div>
           </div> <!-- end card-body -->

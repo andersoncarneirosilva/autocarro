@@ -32,7 +32,7 @@ class OutorgadoController extends Controller
         $doc->update($request->all());
     
         alert()->success('Procuração editada com sucesso!');
-        return redirect()->route('outorgados.index');
+        return redirect()->route('configuracoes.index');
     }
 
     public function show($id){
@@ -62,12 +62,12 @@ class OutorgadoController extends Controller
             // Se encontrar um registro, verifica se o nome ou CPF já estão cadastrados
             if ($outorgados->nome_outorgado == $request->nome_outorgado) {
                 alert()->error('Outorgado já cadastrado!');
-                return redirect()->route('outorgados.index');
+                return redirect()->route('configuracoes.index');
             }
             
             if ($outorgados->cpf_outorgado == $request->cpf_outorgado) {
                 alert()->error('Outorgado já cadastrado!');
-                return redirect()->route('outorgados.index');
+                return redirect()->route('configuracoes.index');
             }
         }
          //dd($data);
@@ -75,7 +75,7 @@ class OutorgadoController extends Controller
              alert()->success('Outorgado cadastrado com sucesso!');
          }   
 
-         return redirect()->route('outorgados.index');
+         return redirect()->route('configuracoes.index');
      }
      
 
@@ -88,7 +88,7 @@ class OutorgadoController extends Controller
             alert()->success('Outorgado excluído com sucesso!');
         }
 
-        return redirect()->route('outorgados.index');
+        return redirect()->route('configuracoes.index');
     }
 
 }

@@ -1,7 +1,7 @@
-<div class="col-sm-6">
+<div class="col-sm-12">
     <div class="card">
         <div class="card-body">
-            <h4 class="header-title">Pré-visualização</h4>
+            {{-- <h4 class="header-title">Pré-visualização</h4> --}}
             <div id="preview" class="border p-3" style="font-size: 12px;">
                 <strong>OUTORGANTE: </strong>__________________________<br>
                 <strong>CPF: </strong>____________________________________<br>
