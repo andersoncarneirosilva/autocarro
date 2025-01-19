@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
+
+use Illuminate\Support\Facades\File;
 use App\Models\Veiculo;
 use App\Models\Outorgado;
 use App\Models\Cidade;
@@ -88,6 +90,9 @@ class VeiculoController extends Controller
     
     public function storeProcManual(Request $request){
         //dd($request);
+        $userId = Auth::id(); // Obtém o ID do usuário autenticado
+        // Localiza o usuário logado
+        $user = User::find($userId);
         $outorgados = Outorgado::all();
         //dd($outorgados);
         $config = TextoPoder::first();
@@ -121,34 +126,7 @@ class VeiculoController extends Controller
         $nomeFormatado = $this->forcarAcentosMaiusculos($request['nome']);
 
         //dd($nomeFormatado);
-        // Define o limite de espaço por usuário (em MB)
-        $limiteMb = 1; // Limite de 100 MB
-        $limiteBytes = $limiteMb * 1024 * 1024; // Converte para bytes
-
-        // Caminho para a pasta do usuário
-        $pastaUsuario = "documentos/usuario_{$userId}/";
-
-        // Garante que a pasta do usuário exista
-        if (!Storage::disk('public')->exists($pastaUsuario)) {
-            Storage::disk('public')->makeDirectory($pastaUsuario, 0777, true);
-        }
-
-        // Calcula o espaço total usado na pasta
-        $espacoUsado = 0;
-        foreach (Storage::disk('public')->allFiles($pastaUsuario) as $file) {
-            $espacoUsado += Storage::disk('public')->size($file);
-        }
-
-        // Tamanho do novo arquivo
-        $tamanhoNovoArquivo = $arquivo->getSize(); // Em bytes
-
-        // Verifica se há espaço suficiente
-        if (($espacoUsado + $tamanhoNovoArquivo) > $limiteBytes) {
-            alert()->error('Espaço insuficiente. Você atingiu o limite de armazenamento!');
-
-            return redirect()->route('veiculos.index');
-            return back()->withErrors(['message' => 'Espaço insuficiente. Você atingiu o limite de armazenamento.']);
-        }
+        
 
         $pdf->Cell(0, 0, "OUTORGANTE: ". strtoupper(iconv("UTF-8", "ISO-8859-1", $nomeFormatado)), 0, 0, 'L');
         $pdf->Ln(5);
@@ -235,50 +213,78 @@ class VeiculoController extends Controller
         $pdf->Cell(0, 5, utf8_decode($request['nome']), 0, 1, 'C');
 
 
-        // Definir o nome do arquivo do PDF
-        //$nomePDF = 'nome_extraido_' . time() . '.pdf';
+        // Define o limite de espaço por usuário (em MB)
+$limiteMb = 1; // Limite de 1 MB
+$limiteBytes = $limiteMb * 1024 * 1024; // Converte para bytes
 
-        // Caminho para salvar o PDF na pasta 'procuracoes' dentro de 'documentos'
-        $caminhoProc = storage_path('app/public/documentos/procuracoes/' . strtoupper($request['placa']) . '.pdf'); 
-        $urlProc = asset('storage/documentos/procuracoes/' . strtoupper($request['placa']) . '.pdf'); 
-        // Verificar se a pasta 'procuracoes' existe, se não, cria-la
-        if (!file_exists(storage_path('app/public/documentos/procuracoes'))) {
-            mkdir(storage_path('app/public/documentos/procuracoes'), 0777, true); // Cria a pasta se ela não existir
-        }
-        $data = [
-            'nome' => strtoupper($nomeFormatado),
-            'endereco' => strtoupper($enderecoFormatado),  // Endereço em maiúsculas
-            'cpf' => $request['cpf'],
-            'cidade' => strtoupper($request['cidade']),
-            'marca' => strtoupper($request['marca']),
-            'placa' => strtoupper($request['placa']),
-            'chassi' => strtoupper($request['chassi']),
-            'cor' => strtoupper($request['cor']),
-            'ano' => $request['ano_modelo'],
-            'crv' => $request['tipo_doc'],
-            'placaAnterior' => "Não consta",
-            'categoria' => "Não consta",
-            'motor' => "Não consta",
-            'combustivel' => "Não consta",
-            'infos' => "Não consta",
-            'arquivo_doc' => "Não consta",
-            'renavam' => $request['renavam'],
-            'arquivo_proc' => $urlProc,
-        ];
-        //dd($urlProc);
-        // Salvar o PDF
-        $pdf->Output('F', $caminhoProc); 
+// Caminho para a pasta de documentos do usuário
+$pastaUsuario = "documentos/usuario_{$userId}/";
 
-        //$extension = $request->arquivo->getClientOriginalExtension();
-        //$data['arquivo'] = $request->arquivo->storeAs("usuarios/$request->colaborador/Adiantamento/$request->mes/arquivo-$dataAtual" . ".{$extension}");
-        //Mail::to( config('mail.from.address'))->send(new SendEmail($data, $caminhoPDF));
+// Garante que a pasta do usuário exista
+if (!Storage::disk('public')->exists($pastaUsuario)) {
+    Storage::disk('public')->makeDirectory($pastaUsuario, 0777, true);
+}
 
-        if($this->model->create($data)){
-            
-            alert()->success('Procuração cadastrada com sucesso!');
+// Calcula o espaço total usado na pasta do usuário
+$espacoUsado = 0;
+foreach (Storage::disk('public')->allFiles('app/public/' . $pastaUsuario) as $file) {
+    $espacoUsado += Storage::disk('public')->size($file);
+}
 
-            return redirect()->route('veiculos.index');
-        }
+// Caminho para a pasta de procuracoes
+$pastaProc = storage_path('app/public/' . $pastaUsuario . 'procuracoes_manual/');
+if (!File::exists($pastaProc)) {
+    File::makeDirectory($pastaProc, 0777, true); // Cria a pasta se não existir
+}
+
+$caminhoProc = $pastaProc . strtoupper($request['placa']) . '.pdf';
+$urlProc = asset('procuracoes_manual/' . strtoupper($request['placa']) . '.pdf');
+
+// Salvar o PDF
+$pdf->Output('F', $caminhoProc);
+
+// Agora que o arquivo foi gerado, podemos calcular o tamanho
+$tamanhoNovoArquivo = filesize($caminhoProc); // Calcula o tamanho do arquivo gerado em bytes
+
+// Verifica se há espaço suficiente
+if (($espacoUsado + $tamanhoNovoArquivo) > $limiteBytes) {
+    // Apaga o arquivo gerado se não houver espaço suficiente
+    unlink($caminhoProc);
+    
+    alert()->error('Espaço insuficiente. Você atingiu o limite de armazenamento!');
+    return redirect()->route('veiculos.index');
+}
+
+// Dados a serem salvos
+$data = [
+    'nome' => strtoupper($nomeFormatado),
+    'endereco' => strtoupper($enderecoFormatado),  // Endereço em maiúsculas
+    'cpf' => $request['cpf'],
+    'cidade' => strtoupper($request['cidade']),
+    'marca' => strtoupper($request['marca']),
+    'placa' => strtoupper($request['placa']),
+    'chassi' => strtoupper($request['chassi']),
+    'cor' => strtoupper($request['cor']),
+    'ano' => $request['ano_modelo'],
+    'crv' => $request['tipo_doc'],
+    'placaAnterior' => "Não consta",
+    'categoria' => "Não consta",
+    'motor' => "Não consta",
+    'combustivel' => "Não consta",
+    'infos' => "Não consta",
+    'arquivo_doc' => "Não consta",
+    'renavam' => $request['renavam'],
+    'arquivo_proc' => $urlProc,
+];
+
+// Criar o registro no banco
+if ($this->model->create($data)) {
+    alert()->success('Procuração cadastrada com sucesso!');
+    return redirect()->route('veiculos.index');
+} else {
+    alert()->error('Erro ao cadastrar a procuração.');
+    return back()->withErrors(['message' => 'Erro ao cadastrar a procuração.']);
+}
     }
 
 

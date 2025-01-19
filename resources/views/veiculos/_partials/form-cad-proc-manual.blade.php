@@ -10,7 +10,7 @@
                     <li class="breadcrumb-item active">Novo veículo</li>
                 </ol>
             </div>
-            {{-- <h3 class="page-title">{{ $user->name }}</h3> --}}
+            <h3 class="page-title">Novo veículo</h3>
         </div>
     </div>
 </div>
