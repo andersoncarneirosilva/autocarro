@@ -14,6 +14,7 @@
                 <li>Agora cada usuário tem um espaço limitado para armazenamento de arquivos.</li>
                 <li>Correção no campo de busca para smartphone.</li>
                 <li>Campo CRV não será exibido para editar caso o documento seja digital.</li>
+                <li>Página para cadastro de outorgados</li>
             </ul>
         </div>
     </div> <!-- end card-body -->
