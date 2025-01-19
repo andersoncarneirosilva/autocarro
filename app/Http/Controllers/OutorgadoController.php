@@ -20,9 +20,9 @@ class OutorgadoController extends Controller
         $text = "Deseja tests excluir esse outorgado?";
         confirmDelete($title, $text);
 
-        $procs = Outorgado::paginate(10);
+        $outs = Outorgado::paginate(10);
         //dd($docs);
-        return view('configuracoes.index', compact('procs'));
+        return view('outorgados.index', compact('outs'));
     }
 
     public function update(Request $request, $id){

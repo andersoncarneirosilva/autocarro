@@ -1,17 +1,23 @@
 <div class="row">
     <div class="col-lg-5">
-        <div class="card ribbon-box">
-            <div class="card-body">
-                <div class="ribbon ribbon-success float-end"><i class="mdi mdi-access-point me-1"></i> 19.01.2025</div>
-                <h5 class="text-success float-start mt-0">Atualizações </h5>
-                <div class="ribbon-content">
-                    <li>Correção na validação no cadastro de outorgados.</li>
-                    <li>Cada usuário tem um espaço limitado para armazenamento de arquivos.</li>
-                    <li>Correção no campo busca para smartphone.</li>
-                </div>
-            </div> <!-- end card-body -->
-        </div> <!-- end card-->
+        
 
+
+<!-- Para Desktop -->
+<div class="card ribbon-box d-none d-md-block">
+    <div class="card-body">
+        <div class="ribbon ribbon-success float-end"><i class="mdi mdi-access-point me-1"></i> 19.01.2025</div>
+        <h5 class="text-success float-start mt-0">Atualizações importantes:</h5>
+        <div class="ribbon-content">
+            <ul>
+                <li>Correção na validação no cadastro de outorgados.</li>
+                <li>Agora cada usuário tem um espaço limitado para armazenamento de arquivos.</li>
+                <li>Correção no campo de busca para smartphone.</li>
+                <li>Campo CRV não será exibido para editar caso o documento seja digital.</li>
+            </ul>
+        </div>
+    </div> <!-- end card-body -->
+</div> <!-- end card-->
         {{-- <div class="card">
             <div class="card-header d-flex justify-content-between align-items-center">
                 <h4 class="header-title">Visão geral</h4>

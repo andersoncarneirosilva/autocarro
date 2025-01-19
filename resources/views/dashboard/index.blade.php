@@ -17,7 +17,19 @@
     </div>
 </div>
 <br>
-
+        <!-- Para Mobile -->
+        <div class="card ribbon-box d-block d-md-none">
+          <div class="card-body">
+              <div class="ribbon ribbon-success float-end"><i class="mdi mdi-access-point me-1"></i> 19.01.2025</div>
+              <h5 class="text-success float-start mt-0">Novidades no App!</h5>
+              <div class="ribbon-content">
+                  <ul>
+                      <li>Correção na validação no cadastro de outorgados.</li>
+                      <li>Espaço limitado para armazenamento de arquivos.</li>
+                  </ul>
+              </div>
+          </div> <!-- end card-body -->
+      </div> <!-- end card-->
 @can('access-lojista')
 @include('dashboard.widgets.widgets')
 @include('dashboard.widgets.content')

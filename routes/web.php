@@ -86,6 +86,7 @@ Route::middleware(['auth'])->group(function () {
     Route::put('/outorgados/{id}', [OutorgadoController::class, 'update'])->name('outorgados.update');
     Route::delete('/outorgados/{id}', [OutorgadoController::class, 'destroy'])->name('outorgados.destroy');
     Route::post('/outorgados', [OutorgadoController::class, 'store'])->name('outorgados.store');
+    Route::get('/outorgados', [OutorgadoController::class, 'index'])->name('outorgados.index');
 
     Route::get('/poderes/{id}', [TextoPoderesController::class, 'show'])->name('poderes.show');
     Route::delete('/poderes/{id}', [TextoPoderesController::class, 'destroy'])->name('poderes.destroy');

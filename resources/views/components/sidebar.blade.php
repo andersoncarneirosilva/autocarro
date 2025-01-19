@@ -119,6 +119,9 @@
                 <div class="collapse" id="sidebarLayoutss">
                     <ul class="side-nav-second-level">
                         <li>
+                            <a href="{{ route('outorgados.index') }}">Outorgados</a>
+                        </li>
+                        <li>
                             <a href="{{ route('configuracoes.index') }}">Procuração</a>
                         </li>
                         @can('access-admin') 

@@ -118,29 +118,37 @@ observer.observe(document.body, { childList: true, subtree: true });
         </script>
         
         <ul class="topbar-menu d-flex align-items-center gap-3">
+            @if(request()->routeIs('veiculos.index'))
             <li class="dropdown d-lg-none">
                 <a class="nav-link dropdown-toggle arrow-none" data-bs-toggle="dropdown" href="#" role="button" aria-haspopup="false" aria-expanded="false">
                     <i class="ri-search-line font-22"></i>
                 </a>
+                
                 <div class="dropdown-menu dropdown-menu-animated dropdown-lg p-0" style="">
-                    @if(request()->routeIs('veiculos.index'))
                     <form action="{{ route('veiculos.index') }}" method="GET" class="p-3">
                         <div class="input-group">
-                            <input type="text" name="search" placeholder="Informe a placa" class="form-control">
+                            <input type="text" name="search" placeholder="Informe a placa" class="form-control" required>
                             <button type="submit" class="btn btn-primary"><i class="ri-search-line font-22"></i></button>
                         </div>
                     </form>
-                    @elseif(request()->routeIs('clientes.index'))
+                </div>
+            </li>
+            @elseif(request()->routeIs('clientes.index'))
+            <li class="dropdown d-lg-none">
+                <a class="nav-link dropdown-toggle arrow-none" data-bs-toggle="dropdown" href="#" role="button" aria-haspopup="false" aria-expanded="false">
+                    <i class="ri-search-line font-22"></i>
+                </a>
+                
+                <div class="dropdown-menu dropdown-menu-animated dropdown-lg p-0" style="">
                     <form action="{{ route('clientes.index') }}" method="GET" class="p-3">
                         <div class="input-group">
-                            <input type="text" name="search" placeholder="Pesquisar clientes..." class="form-control">
+                            <input type="text" name="search" placeholder="Informe o cliente" class="form-control" required>
                             <button type="submit" class="btn btn-primary"><i class="ri-search-line font-22"></i></button>
                         </div>
                     </form>
-                    @endif
                 </div>
-               
             </li>
+            @endif
             <li class="dropdown notification-list">
                 <a class="nav-link dropdown-toggle arrow-none" data-bs-toggle="dropdown" href="#" role="button" aria-haspopup="false" aria-expanded="false">
                     <i class="ri-notification-3-line font-22"></i>
