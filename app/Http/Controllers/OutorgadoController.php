@@ -4,7 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Outorgado;
-
+use Illuminate\Support\Facades\Validator;
 class OutorgadoController extends Controller
 {
     protected $model;
@@ -54,6 +54,19 @@ class OutorgadoController extends Controller
         
         // Buscando o primeiro registro (se houver)
         $outorgados = Outorgado::first();
+
+        $validator = Validator::make($request->all(), [
+            'nome_outorgado' => 'required|string|max:255',
+            'cpf_outorgado' => 'required|cpf|unique:outorgados,cpf_outorgado',
+            'end_outorgado' => 'required|string|max:255',
+        ]);
+    
+        // Caso a validação falhe, retorne os erros
+        if ($validator->fails()) {
+            alert()->error('Todos os campos são obrigatórios!');
+
+            return redirect()->route('configuracoes.index');
+        }
 
         // Verifica se já existe um registro de outorgado no banco de dados
         if ($outorgados) {

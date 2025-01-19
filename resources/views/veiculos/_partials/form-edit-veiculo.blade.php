@@ -81,35 +81,12 @@
                     <p class="text-muted mb-2 font-13"><strong>Combustível:</strong><span class="ms-2">{{ $veiculo->combustivel }}</span></p>
 
                     <p class="text-muted mb-2 font-13"><strong>Observações:</strong><span class="ms-2">{{ $veiculo->infos }}</span></p>
-                </div>
-            </div> 
-        </div> 
-    </div>
-    <div class="col-xl-8 col-lg-7">
-        <div class="card">
-            <div class="card-body">
-                <form>
-                    <h5 class="mb-4 text-uppercase"><i class="mdi mdi-account-circle me-1"></i> Documentos assinados</h5>
-                    <div class="row">
-                        <div class="col-md-6">
-                            <div class="mb-3">
-                                <label for="firstname" class="form-label">Procuração assinada</label>
-                                <input class="form-control" type="file" name="arquivo_proc_assinado">
-                            </div>
-                        </div>
-                        <div class="col-md-6">
-                            <div class="mb-3">
-                                <label for="firstname" class="form-label">ATPVe assinada</label>
-                                <input class="form-control" type="file" name="arquivo_atpve_assinado">
-                            </div>
-                        </div> <!-- end col -->
-                    </div> <!-- end row -->
 
-                    <div class="row">
-                        <div class="col-md-6">
-                            <div class="mb-3">
+                    <hr>
 
-                                @if (!empty($veiculo->arquivo_proc_assinado))
+                    <p class="text-muted mb-2 font-13"><strong>Procuração Assinada</strong></p>
+
+                    @if (!empty($veiculo->arquivo_proc_assinado))
                                 <div class="card mb-1 shadow-none border">
                                     <div class="p-2">
                                         <div class="row align-items-center">
@@ -132,14 +109,10 @@
                                         </div>
                                     </div>
                                 </div>
-                                @endif
-
-                            </div>
-                        </div>
-                        <div class="col-md-6">
-                            <div class="mb-3">
-                               
-                                @if (!empty($veiculo->arquivo_atpve_assinado))
+                    @endif
+                    <hr>
+                    <p class="text-muted mb-2 font-13"><strong>ATPVe Assinada</strong></p>
+                    @if (!empty($veiculo->arquivo_atpve_assinado))
                                 <div class="card mb-1 shadow-none border">
                                     <div class="p-2">
                                         <div class="row align-items-center">
@@ -163,17 +136,42 @@
                                     </div>
                                 </div>
                                 @endif
-
-
+                </div>
+            </div> 
+        </div> 
+    </div>
+    <div class="col-xl-8 col-lg-7">
+        <div class="card">
+            <div class="card-body">
+                <form>
+                    <h5 class="mb-4 text-uppercase"><i class="mdi mdi-account-circle me-1"></i> Documentos assinados</h5>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="mb-3">
+                                <label for="firstname" class="form-label">Procuração assinada</label>
+                                <input class="form-control" type="file" name="arquivo_proc_assinado">
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="mb-3">
+                                <label for="firstname" class="form-label">ATPVe assinada</label>
+                                <input class="form-control" type="file" name="arquivo_atpve_assinado">
                             </div>
                         </div> <!-- end col -->
                     </div> <!-- end row -->
+                    @if ($veiculo->crv === "***")
                     <div class="row">
                         <div class="col-md-6">
-                            <label for="firstname" class="form-label">CRV:</label>
-                            <input class="form-control" type="text" name="crv" value="{{ $veiculo->crv ?? old('crv') }}">
+                            <div class="mb-3">
+                                <label for="firstname" class="form-label">CRV:</label>
+                                <input class="form-control" type="text" name="crv" value="{{ $veiculo->crv ?? old('crv') }}">
+                            </div>
                         </div>
                     </div>
+                    @endif
+
+                    
+                    
 
                     <div class="text-end">
                         <a href="{{ route('veiculos.index')}}" class="btn btn-secondary btn-sm">Cancelar</a>

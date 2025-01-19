@@ -14,7 +14,7 @@
                     </div>
                     <div class="mb-3">
                         <label for="cpf_outorgado" class="form-label">CPF</label>
-                        <input type="text" class="form-control" id="cpf_outorgado" name="cpf_outorgado">
+                        <input type="text" class="form-control" id="cpf_outorgado" name="cpf_outorgado" required>
                     </div>
                     <div class="mb-3">
                         <label for="end_outorgado" class="form-label">Endereço</label>
