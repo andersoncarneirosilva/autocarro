@@ -9,6 +9,8 @@ use App\Models\Cidade;
 use App\Models\TextoPoder;
 use App\Models\TextoInicio;
 use App\Models\Cliente;
+use Illuminate\Support\Facades\Auth;
+use App\Models\User;
 use Smalot\PdfParser\Parser;
 use FPDF;
 use Carbon\Carbon;
@@ -253,6 +255,12 @@ class VeiculoController extends Controller
 
     public function store(Request $request){
 
+        $userId = Auth::id(); // Obtém o ID do usuário autenticado
+        // Localiza o usuário logado
+        $user = User::find($userId);
+
+        //dd($user->name);
+
         $outorgados = Outorgado::all();
         //dd($outorgados);
         $config = TextoPoder::first();
@@ -360,8 +368,8 @@ class VeiculoController extends Controller
         }
 
             // Garante que a pasta "crlv" existe
-            $pastaDestino = storage_path('app/public/documentos/crlv/');
-            $urlDoc = asset('storage/documentos/crlv/' . $placa . '.pdf'); // Adiciona a extensão .pdf
+            $pastaDestino = storage_path('app/public/' . $user->name . '/documentos/crlv/');
+            $urlDoc = asset('storage/' . $user->name . '/documentos/crlv/' . $placa . '.pdf'); // Adiciona a extensão .pdf
             // dd($urlDoc);
 
             if (!file_exists($pastaDestino)) {
@@ -489,11 +497,11 @@ class VeiculoController extends Controller
         //$nomePDF = 'nome_extraido_' . time() . '.pdf';
 
         // Caminho para salvar o PDF na pasta 'procuracoes' dentro de 'documentos'
-        $caminhoProc = storage_path('app/public/documentos/procuracoes/' . strtoupper($placa) . '.pdf'); 
-        $urlProc = asset('storage/documentos/procuracoes/' . strtoupper($placa) . '.pdf'); 
+        $caminhoProc = storage_path('app/public/' . $user->name . '/documentos/procuracoes/' . strtoupper($placa) . '.pdf'); 
+        $urlProc = asset('storage/' . $user->name . '/documentos/procuracoes/' . strtoupper($placa) . '.pdf'); 
         // Verificar se a pasta 'procuracoes' existe, se não, cria-la
-        if (!file_exists(storage_path('app/public/documentos/procuracoes'))) {
-            mkdir(storage_path('app/public/documentos/procuracoes'), 0777, true); // Cria a pasta se ela não existir
+        if (!file_exists(storage_path('app/public/' . $user->name . '/documentos/procuracoes'))) {
+            mkdir(storage_path('app/public/' . $user->name . '/documentos/procuracoes'), 0777, true); // Cria a pasta se ela não existir
         }
         $data = [
             'nome' => strtoupper($nomeFormatado),
@@ -525,7 +533,7 @@ class VeiculoController extends Controller
         //Mail::to( config('mail.from.address'))->send(new SendEmail($data, $caminhoPDF));
 
         if($this->model->create($data)){
-            
+            $user->decrement('credito');
             alert()->success('Veículo cadastrado com sucesso!');
 
             return redirect()->route('veiculos.index');
@@ -561,6 +569,9 @@ class VeiculoController extends Controller
 
 
     public function destroy($id){
+        $userId = Auth::id(); // Obtém o ID do usuário autenticado
+        // Localiza o usuário logado
+        $user = User::find($userId);
         // Tenta localizar o documento no banco de dados
         if (!$doc = $this->model->find($id)) {
             alert()->error('Erro ao excluir a procuração!');
@@ -581,13 +592,13 @@ class VeiculoController extends Controller
         }
 
         // Monta o caminho completo para o arquivo no servidor
-        $arquivoCrlv = storage_path('app/public/documentos/crlv/' . $nomeArquivo);
-        $arquivoProc = storage_path('app/public/documentos/procuracoes/' . $nomeArquivo);
+        $arquivoCrlv = storage_path('app/public/' . $user->name . '/documentos/crlv/' . $nomeArquivo);
+        $arquivoProc = storage_path('app/public/' . $user->name . '/documentos/procuracoes/' . $nomeArquivo);
 
-        $arquivoAtpve = storage_path('app/public/documentos/atpves/' . 'atpve_' . $nomeArquivo);
-        $arquivoAtpveAssinada = storage_path('app/public/documentos/atpves_assinadas/' . $veiculo->placa . '_assinado.pdf');
+        $arquivoAtpve = storage_path('app/public/' . $user->name . '/documentos/atpves/' . 'atpve_' . $nomeArquivo);
+        $arquivoAtpveAssinada = storage_path('app/public/' . $user->name . '/documentos/atpves_assinadas/' . $veiculo->placa . '_assinado.pdf');
         //dd($arquivoAtpveAssinada);
-        $arquivoProcAssinada = storage_path('app/public/documentos/procuracoes_assinadas/' . $veiculo->placa . '_assinado.pdf');
+        $arquivoProcAssinada = storage_path('app/public/' . $user->name . '/documentos/procuracoes_assinadas/' . $veiculo->placa . '_assinado.pdf');
         //dd($arquivoProcAssinada);
         // Verifica se o arquivo existe e o exclui
         if (file_exists($arquivoCrlv)) {
@@ -595,6 +606,9 @@ class VeiculoController extends Controller
         }
         if (file_exists($arquivoProc)) {
             unlink($arquivoProc);
+        }
+        if (file_exists($arquivoAtpve)) {
+            unlink($arquivoAtpve);
         }
         if (file_exists($arquivoAtpveAssinada)) {
             unlink($arquivoAtpveAssinada);
@@ -612,6 +626,10 @@ class VeiculoController extends Controller
     }
 
     public function storeAtpve(Request $request, $id){
+
+        $userId = Auth::id(); // Obtém o ID do usuário autenticado
+        // Localiza o usuário logado
+        $user = User::find($userId);
         //dd($request);
         $clienteIds = $request->input('cliente'); // Exemplo: [1, 2, 3]
         $clientes = Cliente::whereIn('id', $clienteIds)->get();
@@ -902,14 +920,14 @@ $pdf->Ln(20); // Linha em branco após o texto
     $pdf->Cell(0, 8, "Assinatura do vendedor/representante legal", 0, 1, 'C');
 
     // Salvar o PDF no servidor
-    $filePath = storage_path('app/public/documentos/atpves/') . 'atpve_' . $estoque->placa . '.pdf';
-    if (!file_exists(storage_path('app/public/documentos/atpves'))) {
-        mkdir(storage_path('app/public/documentos/atpves'), 0777, true);
+    $filePath = storage_path('app/public/' . $user->name . '/documentos/atpves/') . 'atpve_' . $estoque->placa . '.pdf';
+    if (!file_exists(storage_path('app/public/' . $user->name . '/documentos/atpves'))) {
+        mkdir(storage_path('app/public/' . $user->name . '/documentos/atpves'), 0777, true);
     }
     $pdf->Output('F', $filePath);
 
     // Retornar o link do PDF para download/visualização
-    $fileUrl = asset('storage/documentos/atpves/' . basename($filePath));
+    $fileUrl = asset('storage/' . $user->name . '/documentos/atpves/' . basename($filePath));
 
     $data = [
         'arquivo_atpve' => $fileUrl,
@@ -954,6 +972,9 @@ public function edit($id){
 
 public function update(Request $request, $id)
 {
+    $userId = Auth::id(); // Obtém o ID do usuário autenticado
+        // Localiza o usuário logado
+        $user = User::find($userId);
     // Recuperar o registro do veículo pelo ID
     $veiculo = Veiculo::findOrFail($id);
 
@@ -963,8 +984,8 @@ public function update(Request $request, $id)
     }
 
     // Processar os uploads de arquivos
-    $this->processFileUpload($request, $veiculo, 'arquivo_proc_assinado', 'documentos/procuracoes_assinadas', 'arquivo_proc_assinado', 'size_proc_pdf');
-    $this->processFileUpload($request, $veiculo, 'arquivo_atpve_assinado', 'documentos/atpves_assinadas', 'arquivo_atpve_assinado', 'size_atpve_pdf');
+    $this->processFileUpload($request, $veiculo, 'arquivo_proc_assinado', $user->name . '/documentos/procuracoes_assinadas', 'arquivo_proc_assinado', 'size_proc_pdf');
+    $this->processFileUpload($request, $veiculo, 'arquivo_atpve_assinado', $user->name . '/documentos/atpves_assinadas', 'arquivo_atpve_assinado', 'size_atpve_pdf');
 
     // Salvar as alterações no banco de dados
     $veiculo->save();

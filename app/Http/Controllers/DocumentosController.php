@@ -376,7 +376,7 @@ class DocumentosController extends Controller
         if(Procuracao::create($data)){
             // Obter o ID do usuário logado
             
-            $user->decrement('credito');
+            
             alert()->success('Procuração gerada com sucesso!');
 
             return redirect()->route('procuracoes.index');
