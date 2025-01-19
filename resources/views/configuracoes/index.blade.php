@@ -19,7 +19,7 @@
     </div>
 </div>
 
-<div class="col-6">
+<div class="col-sm-6">
 <div class="card">
     <div class="card-body">
         <div class="row">

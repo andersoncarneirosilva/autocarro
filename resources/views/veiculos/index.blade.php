@@ -129,6 +129,13 @@
                                                     onclick="{{ $doc->crv === '***' ? 'return false;' : "openAddressModal(event, $doc->id)" }}">
                                                     Gerar ATPVe
                                                 </a>
+
+                                                <a href="{{ $doc->arquivo_atpve }}" 
+                                                    class="dropdown-item"
+                                                    target="_blank">
+                                                    Baixar ATPVe
+                                                </a>
+
                                                 <a href="{{ route('veiculos.destroy', $doc->id) }}" 
                                                     data-confirm-delete="true"
                                                     class="dropdown-item">

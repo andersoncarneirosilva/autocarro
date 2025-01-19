@@ -40,10 +40,12 @@ class VeiculoController extends Controller
 
         $clientes = Cliente::all();
 
+        $outorgados = Outorgado::all();
+
         $procs = $this->model->getSearch(search: $request->search ?? '');
         
         
-        return view('veiculos.index', compact(['procs', 'clientes']));
+        return view('veiculos.index', compact(['procs', 'clientes', 'outorgados']));
     }
 
 //     public function index(Request $request)
@@ -290,14 +292,28 @@ if ($this->model->create($data)) {
 
     public function store(Request $request){
 
+        //dd($request);
+
         $userId = Auth::id(); // Obtém o ID do usuário autenticado
         // Localiza o usuário logado
         $user = User::find($userId);
-
+        $outorgadosAll = Outorgado::all();
         //dd($user->name);
 
-        $outorgados = Outorgado::all();
-        //dd($outorgados);
+        $request->validate([
+            'outorgados' => 'required|array', // Certifique-se de que é um array
+            'outorgados.*' => 'exists:outorgados,id', // Verifica se os IDs existem na tabela 'outorgados'
+        ]);
+    
+        // Obtém os IDs selecionados
+        $idsOutorgados = $request->input('outorgados');
+    
+        // Busca os registros correspondentes no banco de dados
+        $outorgadosSelecionados = Outorgado::whereIn('id', $idsOutorgados)->get();
+
+        
+        //dd($outorgado->nome_outorgado);
+        //dd($outorgadosSelecionados->nome_outorgado);
         $config = TextoPoder::first();
         $textInicio = TextoInicio::first();
 
@@ -310,7 +326,7 @@ if ($this->model->create($data)) {
         $cidade = Cidade::first();
 
 
-        if ($outorgados->isEmpty()) {
+        if ($outorgadosAll->isEmpty()) {
             alert()->error('Erro!', 'Por favor, cadastre ao menos um Outorgado antes de prosseguir.')
                 ->persistent(true)
                 ->autoClose(5000) // Fecha automaticamente após 5 segundos
@@ -434,7 +450,7 @@ if ($this->model->create($data)) {
             // Garante que a pasta "crlv" existe
             $pastaDestino = storage_path('app/public/' . $pastaUsuario . 'crlv/');
             //dd($pastaDestino);
-            $urlDoc = asset('app/public/' . $pastaUsuario .  'crlv/' . $placa . '.pdf'); // Adiciona a extensão .pdf
+            $urlDoc = asset('storage/' . $pastaUsuario .  'crlv/' . $placa . '.pdf'); // Adiciona a extensão .pdf
             // dd($urlDoc);
 
             if (!file_exists($pastaDestino)) {
@@ -489,7 +505,7 @@ if ($this->model->create($data)) {
 
         $pdf->Ln(8);
 
-        foreach ($outorgados as $outorgado) {
+        foreach ($outorgadosSelecionados as $outorgado) {
             // Adicionar informações ao PDF
             $pdf->Cell(0, 0, utf8_decode("OUTORGADO: {$outorgado->nome_outorgado}"), 0, 0, 'L');
             $pdf->Ln(5);
@@ -563,7 +579,7 @@ if ($this->model->create($data)) {
 
         // Caminho para salvar o PDF na pasta 'procuracoes' dentro de 'documentos'
         $caminhoProc = storage_path('app/public/' . $pastaUsuario . 'procuracoes/' . strtoupper($placa) . '.pdf'); 
-        $urlProc = asset('app/public/' . $pastaUsuario . 'procuracoes/' . strtoupper($placa) . '.pdf'); 
+        $urlProc = asset('storage/' . $pastaUsuario . 'procuracoes/' . strtoupper($placa) . '.pdf'); 
         // Verificar se a pasta 'procuracoes' existe, se não, cria-la
         if (!file_exists(storage_path('app/public/' . $pastaUsuario . '/procuracoes'))) {
             mkdir(storage_path('app/public/' . $pastaUsuario . '/procuracoes'), 0777, true); // Cria a pasta se ela não existir
@@ -980,7 +996,7 @@ $pdf->Ln(20); // Linha em branco após o texto
 $limiteMb = 1; // Limite de 1 MB
 $limiteBytes = $limiteMb * 1024 * 1024; // Converte para bytes
 
-// Caminho para a pasta do usuário
+// Define o ID do usuário
 $pastaUsuario = "documentos/usuario_{$userId}/";
 
 // Garante que a pasta do usuário exista
@@ -995,17 +1011,20 @@ foreach (Storage::disk('public')->allFiles($pastaUsuario) as $file) {
 }
 
 // Caminho para salvar o PDF gerado
-$pastaAtpves = 'app/public/' .$pastaUsuario . 'atpves/';
-$filePath = storage_path($pastaAtpves) . 'atpve_' . $estoque->placa . '.pdf';
-
-// Garante que a subpasta exista
-if (!file_exists(storage_path($pastaAtpves))) {
-    mkdir(storage_path($pastaAtpves), 0777, true);
+$pastaAtpves = $pastaUsuario . 'atpves/';
+if (!Storage::disk('public')->exists($pastaAtpves)) {
+    Storage::disk('public')->makeDirectory($pastaAtpves, 0777, true);
 }
 
-// Gera o arquivo PDF temporariamente para obter o tamanho
-$pdf->Output('F', $filePath);
-$tamanhoNovoArquivo = filesize($filePath); // Em bytes
+$fileName = 'atpve_' . $estoque->placa . '.pdf';
+$filePath = $pastaAtpves . $fileName;
+
+// Gera o arquivo PDF
+$pdfContent = $pdf->Output('S'); // Salva o conteúdo do PDF em formato string
+Storage::disk('public')->put($filePath, $pdfContent);
+
+// Calcula o tamanho do novo arquivo
+$tamanhoNovoArquivo = Storage::disk('public')->size($filePath); // Em bytes
 
 // Verifica se há espaço suficiente
 if (($espacoUsado + $tamanhoNovoArquivo) > $limiteBytes) {
@@ -1017,7 +1036,7 @@ if (($espacoUsado + $tamanhoNovoArquivo) > $limiteBytes) {
 }
 
 // Retornar o link do PDF para download/visualização
-$fileUrl = asset($pastaAtpves . 'atpve_' . $estoque->placa . '.pdf');
+$fileUrl = asset('storage/' . $pastaAtpves . 'atpve_' . $estoque->placa . '.pdf');
 
 $data = [
     'arquivo_atpve' => $fileUrl,
