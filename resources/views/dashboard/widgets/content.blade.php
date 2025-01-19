@@ -1,20 +1,17 @@
 <div class="row">
     <div class="col-lg-5">
-        <div class="card mb-md-0 mb-3">
+        <div class="card ribbon-box">
             <div class="card-body">
-                <div class="card-widgets">
-                    {{-- <a href="javascript:;" data-bs-toggle="reload"><i class="mdi mdi-refresh"></i></a>
-                    <a data-bs-toggle="collapse" href="#cardCollpase1" role="button" aria-expanded="false" aria-controls="cardCollpase1"><i class="mdi mdi-minus"></i></a>
-                    <a href="#" data-bs-toggle="remove"><i class="mdi mdi-close"></i></a> --}}
-                </div>
-                <h5 class="card-title mb-0">Atualizações 19.01.2025</h5>                
-                <div id="cardCollpase1" class="collapse pt-3 show">
+                <div class="ribbon ribbon-success float-end"><i class="mdi mdi-access-point me-1"></i> 19.01.2025</div>
+                <h5 class="text-success float-start mt-0">Atualizações </h5>
+                <div class="ribbon-content">
                     <li>Correção na validação no cadastro de outorgados.</li>
                     <li>Cada usuário tem um espaço limitado para armazenamento de arquivos.</li>
                     <li>Correção no campo busca para smartphone.</li>
                 </div>
-            </div>
+            </div> <!-- end card-body -->
         </div> <!-- end card-->
+
         {{-- <div class="card">
             <div class="card-header d-flex justify-content-between align-items-center">
                 <h4 class="header-title">Visão geral</h4>
