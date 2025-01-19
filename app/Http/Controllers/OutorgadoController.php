@@ -32,7 +32,7 @@ class OutorgadoController extends Controller
         $doc->update($request->all());
     
         alert()->success('Procuração editada com sucesso!');
-        return redirect()->route('configuracoes.index');
+        return redirect()->route('outorgados.index');
     }
 
     public function show($id){
@@ -55,30 +55,19 @@ class OutorgadoController extends Controller
         // Buscando o primeiro registro (se houver)
         $outorgados = Outorgado::first();
 
-        $validator = Validator::make($request->all(), [
-            'nome_outorgado' => 'required|string|max:255',
-            'cpf_outorgado' => 'required|cpf|unique:outorgados,cpf_outorgado',
-            'end_outorgado' => 'required|string|max:255',
-        ]);
-    
-        // Caso a validação falhe, retorne os erros
-        if ($validator->fails()) {
-            alert()->error('Todos os campos são obrigatórios!');
-
-            return redirect()->route('configuracoes.index');
-        }
+        
 
         // Verifica se já existe um registro de outorgado no banco de dados
         if ($outorgados) {
             // Se encontrar um registro, verifica se o nome ou CPF já estão cadastrados
             if ($outorgados->nome_outorgado == $request->nome_outorgado) {
                 alert()->error('Outorgado já cadastrado!');
-                return redirect()->route('configuracoes.index');
+                return redirect()->route('outorgados.index');
             }
             
             if ($outorgados->cpf_outorgado == $request->cpf_outorgado) {
                 alert()->error('Outorgado já cadastrado!');
-                return redirect()->route('configuracoes.index');
+                return redirect()->route('outorgados.index');
             }
         }
          //dd($data);
@@ -86,7 +75,7 @@ class OutorgadoController extends Controller
              alert()->success('Outorgado cadastrado com sucesso!');
          }   
 
-         return redirect()->route('configuracoes.index');
+         return redirect()->route('outorgados.index');
      }
      
 
@@ -99,7 +88,7 @@ class OutorgadoController extends Controller
             alert()->success('Outorgado excluído com sucesso!');
         }
 
-        return redirect()->route('configuracoes.index');
+        return redirect()->route('outorgados.index');
     }
 
 }

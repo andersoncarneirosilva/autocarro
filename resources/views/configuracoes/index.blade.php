@@ -22,7 +22,7 @@
 <div class="row">
     <div class="col-sm-6">
         
-        @include('configuracoes._partials.list-outorgado')
+        {{-- @include('configuracoes._partials.list-outorgado') --}}
         
         @include('configuracoes._partials.list-texto-inicial')
 
@@ -50,7 +50,7 @@
 @include('configuracoes._partials.form-edit-texto-inicial')
 
 <!-- Modal Cadastro outorgado-->
-@include('configuracoes._partials.form-cad-outorgado')
+{{-- @include('configuracoes._partials.form-cad-outorgado') --}}
 
 <!-- Modal Editar outorgado-->
 @include('configuracoes._partials.form-edit-outorgado')

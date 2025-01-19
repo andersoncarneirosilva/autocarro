@@ -50,7 +50,13 @@
                                     <td>{{ $out->cpf_outorgado }}</td>
                                     <td>{{ $out->end_outorgado }}</td>
                                     <td class="table-action">
-                                        
+
+                                        <a href="#" class="action-icon" data-id="{{ $out->id }}" onclick="openEditModalOutorgado(event)">
+                                            <i class="mdi mdi-clipboard-edit-outline" title="Editar"></i>
+                                        </a>
+                                        <a href="{{ route('outorgados.destroy', $out->id) }}"
+                                            class="action-icon mdi mdi-delete" data-confirm-delete="true"></a>
+
                                     </td>
                                 </tr>
                             @endforeach
@@ -119,4 +125,73 @@
         </div>
     </div>
 </div>
+
+<div class="modal fade" id="editInfoModal" tabindex="-1" aria-labelledby="editInfoModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="editInfoModalLabel">Editar Informações</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <form id="editForm" method="POST">
+                @csrf
+                @method('PUT') <!-- Usado para edições -->
+                <div class="modal-body">
+                    <div class="mb-3">
+                        <label for="nome_outorgado" class="form-label">Nome</label>
+                        <input type="text" class="form-control" id="edit_nome_outorgado" name="nome_outorgado" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="cpf_outorgado" class="form-label">CPF</label>
+                        <input type="text" class="form-control" id="edit_cpf_outorgado" name="cpf_outorgado" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="end_outorgado" class="form-label">Endereço</label>
+                        <input type="text" class="form-control" id="edit_end_outorgado" name="end_outorgado" required>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fechar</button>
+                    <button type="submit" class="btn btn-primary">Salvar Alterações</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+<script>
+    function openEditModalOutorgado(event) {
+    event.preventDefault();
+
+    // Obtenha o ID do documento
+    //const docId = event.currentTarget.getAttribute('data-id');
+    const docId = event.target.closest('a').getAttribute('data-id');
+    // Faça uma requisição AJAX para buscar os dados
+    console.log(docId);
+    $.ajax({
+        url: `/outorgados/${docId}`,
+        method: 'GET',
+        success: function(response) {
+            console.log(response);
+            // Preencha os campos do modal com os dados do documento
+            $('#edit_nome_outorgado').val(response.nome_outorgado);
+            $('#edit_cpf_outorgado').val(response.cpf_outorgado);
+            $('#edit_end_outorgado').val(response.end_outorgado);
+
+            // Atualize a ação do formulário para apontar para a rota de edição
+            $('#editForm').attr('action', `/outorgados/${docId}`);
+
+            // Exiba o modal
+            $('#editInfoModal').modal('show');
+        },
+        error: function() {
+            Swal.fire({
+                title: 'Erro!',
+                text: 'Não foi possível carregar os dados.',
+                icon: 'error',
+                confirmButtonText: 'OK'
+            });
+        }
+    });
+}
+</script>
     @endsection
