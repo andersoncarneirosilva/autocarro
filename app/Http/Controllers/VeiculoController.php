@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
 use App\Models\Veiculo;
 use App\Models\Outorgado;
 use App\Models\Cidade;
@@ -120,6 +121,34 @@ class VeiculoController extends Controller
         $nomeFormatado = $this->forcarAcentosMaiusculos($request['nome']);
 
         //dd($nomeFormatado);
+        // Define o limite de espaço por usuário (em MB)
+        $limiteMb = 1; // Limite de 100 MB
+        $limiteBytes = $limiteMb * 1024 * 1024; // Converte para bytes
+
+        // Caminho para a pasta do usuário
+        $pastaUsuario = "documentos/usuario_{$userId}/";
+
+        // Garante que a pasta do usuário exista
+        if (!Storage::disk('public')->exists($pastaUsuario)) {
+            Storage::disk('public')->makeDirectory($pastaUsuario, 0777, true);
+        }
+
+        // Calcula o espaço total usado na pasta
+        $espacoUsado = 0;
+        foreach (Storage::disk('public')->allFiles($pastaUsuario) as $file) {
+            $espacoUsado += Storage::disk('public')->size($file);
+        }
+
+        // Tamanho do novo arquivo
+        $tamanhoNovoArquivo = $arquivo->getSize(); // Em bytes
+
+        // Verifica se há espaço suficiente
+        if (($espacoUsado + $tamanhoNovoArquivo) > $limiteBytes) {
+            alert()->error('Espaço insuficiente. Você atingiu o limite de armazenamento!');
+
+            return redirect()->route('veiculos.index');
+            return back()->withErrors(['message' => 'Espaço insuficiente. Você atingiu o limite de armazenamento.']);
+        }
 
         $pdf->Cell(0, 0, "OUTORGANTE: ". strtoupper(iconv("UTF-8", "ISO-8859-1", $nomeFormatado)), 0, 0, 'L');
         $pdf->Ln(5);
@@ -327,6 +356,35 @@ class VeiculoController extends Controller
         
 
         $arquivo = $request->file('arquivo_doc');
+
+        // Define o limite de espaço por usuário (em MB)
+        $limiteMb = 1; // Limite de 100 MB
+        $limiteBytes = $limiteMb * 1024 * 1024; // Converte para bytes
+
+        // Caminho para a pasta do usuário
+        $pastaUsuario = "documentos/usuario_{$userId}/";
+
+        // Garante que a pasta do usuário exista
+        if (!Storage::disk('public')->exists($pastaUsuario)) {
+            Storage::disk('public')->makeDirectory($pastaUsuario, 0777, true);
+        }
+
+        // Calcula o espaço total usado na pasta
+        $espacoUsado = 0;
+        foreach (Storage::disk('public')->allFiles($pastaUsuario) as $file) {
+            $espacoUsado += Storage::disk('public')->size($file);
+        }
+
+        // Tamanho do novo arquivo
+        $tamanhoNovoArquivo = $arquivo->getSize(); // Em bytes
+
+        // Verifica se há espaço suficiente
+        if (($espacoUsado + $tamanhoNovoArquivo) > $limiteBytes) {
+            alert()->error('Espaço insuficiente. Você atingiu o limite de armazenamento!');
+
+            return redirect()->route('veiculos.index');
+            return back()->withErrors(['message' => 'Espaço insuficiente. Você atingiu o limite de armazenamento.']);
+        }
         
         $nomeOriginal = $arquivo->getClientOriginalName();
 
@@ -368,8 +426,9 @@ class VeiculoController extends Controller
         }
 
             // Garante que a pasta "crlv" existe
-            $pastaDestino = storage_path('app/public/' . $user->name . '/documentos/crlv/');
-            $urlDoc = asset('storage/' . $user->name . '/documentos/crlv/' . $placa . '.pdf'); // Adiciona a extensão .pdf
+            $pastaDestino = storage_path('app/public/' . $pastaUsuario . 'crlv/');
+            //dd($pastaDestino);
+            $urlDoc = asset('app/public/' . $pastaUsuario .  'crlv/' . $placa . '.pdf'); // Adiciona a extensão .pdf
             // dd($urlDoc);
 
             if (!file_exists($pastaDestino)) {
@@ -497,11 +556,11 @@ class VeiculoController extends Controller
         //$nomePDF = 'nome_extraido_' . time() . '.pdf';
 
         // Caminho para salvar o PDF na pasta 'procuracoes' dentro de 'documentos'
-        $caminhoProc = storage_path('app/public/' . $user->name . '/documentos/procuracoes/' . strtoupper($placa) . '.pdf'); 
-        $urlProc = asset('storage/' . $user->name . '/documentos/procuracoes/' . strtoupper($placa) . '.pdf'); 
+        $caminhoProc = storage_path('app/public/' . $pastaUsuario . 'procuracoes/' . strtoupper($placa) . '.pdf'); 
+        $urlProc = asset('app/public/' . $pastaUsuario . 'procuracoes/' . strtoupper($placa) . '.pdf'); 
         // Verificar se a pasta 'procuracoes' existe, se não, cria-la
-        if (!file_exists(storage_path('app/public/' . $user->name . '/documentos/procuracoes'))) {
-            mkdir(storage_path('app/public/' . $user->name . '/documentos/procuracoes'), 0777, true); // Cria a pasta se ela não existir
+        if (!file_exists(storage_path('app/public/' . $pastaUsuario . '/procuracoes'))) {
+            mkdir(storage_path('app/public/' . $pastaUsuario . '/procuracoes'), 0777, true); // Cria a pasta se ela não existir
         }
         $data = [
             'nome' => strtoupper($nomeFormatado),
@@ -568,65 +627,56 @@ class VeiculoController extends Controller
     }
 
 
-    public function destroy($id){
-        $userId = Auth::id(); // Obtém o ID do usuário autenticado
-        // Localiza o usuário logado
-        $user = User::find($userId);
-        // Tenta localizar o documento no banco de dados
-        if (!$doc = $this->model->find($id)) {
-            alert()->error('Erro ao excluir a procuração!');
-            return redirect()->route('veiculos.index');
-        }
+    public function destroy($id)
+{
+    $userId = Auth::id(); // Obtém o ID do usuário autenticado
+    $user = User::find($userId); // Localiza o usuário logado
 
-        // Extrai apenas o nome do arquivo da URL completa
-        $nomeArquivo = basename($doc->arquivo_doc); // Retorna "DOC-2024-MARILENE.pdf"
-        //dd($nomeArquivo); // Verifique se o nome está correto
-        $veiculo = \App\Models\Veiculo::where('id', $id)->first();
-
-        $veiculo->arquivo_proc = basename($veiculo->arquivo_doc);
-
-        //dd($veiculo->arquivo_proc);
-        if (!$veiculo) {
-            alert()->error('Veículo não encontrado para o arquivo: ' . $nomeArquivoBase);
-            return redirect()->route('veiculos.index');
-        }
-
-        // Monta o caminho completo para o arquivo no servidor
-        $arquivoCrlv = storage_path('app/public/' . $user->name . '/documentos/crlv/' . $nomeArquivo);
-        $arquivoProc = storage_path('app/public/' . $user->name . '/documentos/procuracoes/' . $nomeArquivo);
-
-        $arquivoAtpve = storage_path('app/public/' . $user->name . '/documentos/atpves/' . 'atpve_' . $nomeArquivo);
-        $arquivoAtpveAssinada = storage_path('app/public/' . $user->name . '/documentos/atpves_assinadas/' . $veiculo->placa . '_assinado.pdf');
-        //dd($arquivoAtpveAssinada);
-        $arquivoProcAssinada = storage_path('app/public/' . $user->name . '/documentos/procuracoes_assinadas/' . $veiculo->placa . '_assinado.pdf');
-        //dd($arquivoProcAssinada);
-        // Verifica se o arquivo existe e o exclui
-        if (file_exists($arquivoCrlv)) {
-            unlink($arquivoCrlv);
-        }
-        if (file_exists($arquivoProc)) {
-            unlink($arquivoProc);
-        }
-        if (file_exists($arquivoAtpve)) {
-            unlink($arquivoAtpve);
-        }
-        if (file_exists($arquivoAtpveAssinada)) {
-            unlink($arquivoAtpveAssinada);
-        }
-        if (file_exists($arquivoProcAssinada)) {
-            unlink($arquivoProcAssinada);
-        }
-
-        // Exclui o registro do banco de dados
-        if ($doc->delete()) {
-            alert()->success('Procuração excluída com sucesso!');
-        }
-
+    // Tenta localizar o documento no banco de dados
+    if (!$doc = $this->model->find($id)) {
+        alert()->error('Erro ao excluir a procuração!');
         return redirect()->route('veiculos.index');
     }
 
-    public function storeAtpve(Request $request, $id){
+    // Recupera o veículo associado ao documento
+    $veiculo = \App\Models\Veiculo::where('id', $id)->first();
+    if (!$veiculo) {
+        alert()->error('Veículo não encontrado para o documento!');
+        return redirect()->route('veiculos.index');
+    }
 
+    // Caminho base para os arquivos do usuário
+    $pastaUsuario = "documentos/usuario_{$userId}/";
+
+    // Nomes e caminhos dos arquivos a serem excluídos
+    $arquivosParaExcluir = [
+        $pastaUsuario . 'crlv/' . basename($doc->arquivo_doc), // CRLV
+        $pastaUsuario . 'procuracoes/' . basename($doc->arquivo_doc), // Procuração
+        $pastaUsuario . 'atpves/' . 'atpve_' . basename($doc->arquivo_doc), // ATPVE
+        $pastaUsuario . 'atpves_assinadas/' . $veiculo->placa . '_assinado.pdf', // ATPVE Assinada
+        $pastaUsuario . 'procuracoes_assinadas/' . $veiculo->placa . '_assinado.pdf', // Procuração Assinada
+    ];
+
+    // Verifica e exclui os arquivos
+    foreach ($arquivosParaExcluir as $arquivo) {
+        if (Storage::disk('public')->exists($arquivo)) {
+            Storage::disk('public')->delete($arquivo);
+        }
+    }
+
+    // Exclui o registro do banco de dados
+    if ($doc->delete()) {
+        alert()->success('Procuração excluída com sucesso!');
+    } else {
+        alert()->error('Erro ao excluir a procuração!');
+    }
+
+    return redirect()->route('veiculos.index');
+}
+
+
+    public function storeAtpve(Request $request, $id){
+//dd($request);
         $userId = Auth::id(); // Obtém o ID do usuário autenticado
         // Localiza o usuário logado
         $user = User::find($userId);
@@ -653,7 +703,7 @@ class VeiculoController extends Controller
         $dataMes = $dataAtual->translatedFormat('m');
         $dataAno = $dataAtual->translatedFormat('Y');
 
-
+        
     // Criar o PDF com FPDF
     $pdf = new FPDF();
         $pdf->SetMargins(30, 30, 30);
@@ -919,19 +969,54 @@ $pdf->Ln(20); // Linha em branco após o texto
     $pdf->Cell(0, 8, "__________________________________________", 0, 1, 'C');
     $pdf->Cell(0, 8, "Assinatura do vendedor/representante legal", 0, 1, 'C');
 
-    // Salvar o PDF no servidor
-    $filePath = storage_path('app/public/' . $user->name . '/documentos/atpves/') . 'atpve_' . $estoque->placa . '.pdf';
-    if (!file_exists(storage_path('app/public/' . $user->name . '/documentos/atpves'))) {
-        mkdir(storage_path('app/public/' . $user->name . '/documentos/atpves'), 0777, true);
-    }
-    $pdf->Output('F', $filePath);
 
-    // Retornar o link do PDF para download/visualização
-    $fileUrl = asset('storage/' . $user->name . '/documentos/atpves/' . basename($filePath));
+    // Define o limite de espaço por usuário (em MB)
+$limiteMb = 1; // Limite de 1 MB
+$limiteBytes = $limiteMb * 1024 * 1024; // Converte para bytes
 
-    $data = [
-        'arquivo_atpve' => $fileUrl,
-    ];
+// Caminho para a pasta do usuário
+$pastaUsuario = "documentos/usuario_{$userId}/";
+
+// Garante que a pasta do usuário exista
+if (!Storage::disk('public')->exists($pastaUsuario)) {
+    Storage::disk('public')->makeDirectory($pastaUsuario, 0777, true);
+}
+
+// Calcula o espaço total usado na pasta
+$espacoUsado = 0;
+foreach (Storage::disk('public')->allFiles($pastaUsuario) as $file) {
+    $espacoUsado += Storage::disk('public')->size($file);
+}
+
+// Caminho para salvar o PDF gerado
+$pastaAtpves = 'app/public/' .$pastaUsuario . 'atpves/';
+$filePath = storage_path($pastaAtpves) . 'atpve_' . $estoque->placa . '.pdf';
+
+// Garante que a subpasta exista
+if (!file_exists(storage_path($pastaAtpves))) {
+    mkdir(storage_path($pastaAtpves), 0777, true);
+}
+
+// Gera o arquivo PDF temporariamente para obter o tamanho
+$pdf->Output('F', $filePath);
+$tamanhoNovoArquivo = filesize($filePath); // Em bytes
+
+// Verifica se há espaço suficiente
+if (($espacoUsado + $tamanhoNovoArquivo) > $limiteBytes) {
+    // Remove o arquivo PDF temporário caso o limite seja excedido
+    unlink($filePath);
+
+    alert()->error('Espaço insuficiente. Você atingiu o limite de armazenamento!');
+    return redirect()->route('veiculos.index')->withErrors(['message' => 'Espaço insuficiente. Você atingiu o limite de armazenamento.']);
+}
+
+// Retornar o link do PDF para download/visualização
+$fileUrl = asset($pastaAtpves . 'atpve_' . $estoque->placa . '.pdf');
+
+$data = [
+    'arquivo_atpve' => $fileUrl,
+];
+
 
     //dd($data);
     // Busca o registro pelo ID e atualiza
@@ -973,8 +1058,7 @@ public function edit($id){
 public function update(Request $request, $id)
 {
     $userId = Auth::id(); // Obtém o ID do usuário autenticado
-        // Localiza o usuário logado
-        $user = User::find($userId);
+    
     // Recuperar o registro do veículo pelo ID
     $veiculo = Veiculo::findOrFail($id);
 
@@ -983,9 +1067,12 @@ public function update(Request $request, $id)
         $veiculo->crv = $request->input('crv');
     }
 
+    // Caminho base para o usuário
+    $pastaUsuario = "documentos/usuario_{$userId}/";
+
     // Processar os uploads de arquivos
-    $this->processFileUpload($request, $veiculo, 'arquivo_proc_assinado', $user->name . '/documentos/procuracoes_assinadas', 'arquivo_proc_assinado', 'size_proc_pdf');
-    $this->processFileUpload($request, $veiculo, 'arquivo_atpve_assinado', $user->name . '/documentos/atpves_assinadas', 'arquivo_atpve_assinado', 'size_atpve_pdf');
+    $this->processFileUpload($request, $veiculo, 'arquivo_proc_assinado', $pastaUsuario . 'procuracoes_assinadas', 'arquivo_proc_assinado', 'size_proc_pdf', 10); // Limite de 10 MB
+    $this->processFileUpload($request, $veiculo, 'arquivo_atpve_assinado', $pastaUsuario . 'atpves_assinadas', 'arquivo_atpve_assinado', 'size_atpve_pdf', 10); // Limite de 10 MB
 
     // Salvar as alterações no banco de dados
     $veiculo->save();
@@ -995,43 +1082,73 @@ public function update(Request $request, $id)
     return redirect()->route('veiculos.edit', $id);
 }
 
-/**
- * Processa o upload de um arquivo e salva os detalhes no modelo.
- *
- * @param \Illuminate\Http\Request $request
- * @param \App\Models\Veiculo $veiculo
- * @param string $fileKey Chave do arquivo no request
- * @param string $directoryPath Caminho relativo para salvar o arquivo
- * @param string $dbField Campo do modelo para salvar o URL do arquivo
- * @param string $sizeField Campo do modelo para salvar o tamanho do arquivo
- */
-private function processFileUpload($request, $veiculo, $fileKey, $directoryPath, $dbField, $sizeField)
+private function processFileUpload($request, $veiculo, $fileKey, $storagePath, $fieldName, $sizeFieldName, $limiteMb)
 {
+    $limiteBytes = $limiteMb * 1024 * 1024; // Converte o limite para bytes
+
+    // Garante que a pasta do usuário exista no disco 'public'
+    if (!Storage::disk('public')->exists($storagePath)) {
+        Storage::disk('public')->makeDirectory($storagePath);
+    }
+
+    // Calcula o espaço total usado na pasta
+    $espacoUsado = 0;
+    foreach (Storage::disk('public')->allFiles($storagePath) as $file) {
+        $espacoUsado += Storage::disk('public')->size($file);
+    }
+
+    // Processa o upload se o arquivo estiver presente
     if ($request->hasFile($fileKey)) {
-        // Verificar e criar o diretório se necessário
-        $storagePath = storage_path("app/public/{$directoryPath}");
-        if (!file_exists($storagePath)) {
-            mkdir($storagePath, 0777, true);
+        $arquivo = $request->file($fileKey);
+
+        // Tamanho do novo arquivo
+        $tamanhoNovoArquivo = $arquivo->getSize();
+
+        // Verifica se há espaço suficiente
+        if (($espacoUsado + $tamanhoNovoArquivo) > $limiteBytes) {
+            alert()->error("Espaço insuficiente para upload de {$fileKey}. Você atingiu o limite de armazenamento!");
+
+            // Interrompe o fluxo e redireciona
+            return redirect()->route('veiculos.edit', $veiculo->id)->withErrors(['message' => 'Espaço insuficiente.']);
         }
 
-        // Definir o nome e o caminho completo do arquivo
+        // Salva o arquivo no disco 'public' e retorna o caminho correto
         $fileName = $veiculo->placa . '_assinado.pdf';
-        $filePath = "{$storagePath}/{$fileName}";
+        $filePath = $arquivo->storeAs($storagePath, $fileName, ['disk' => 'public']);
 
-        // Salvar o arquivo no caminho especificado
-        $request->file($fileKey)->move($storagePath, $fileName);
-
-        // Construir o URL público do arquivo salvo
-        $fileUrl = asset("storage/{$directoryPath}/{$fileName}");
-
-        // Salvar o URL completo no banco de dados
-        $veiculo->{$dbField} = $fileUrl;
-
-        // Obter o tamanho do arquivo em MB
-        $fileSizeInBytes = filesize($filePath);
-        $fileSizeInMB = $fileSizeInBytes / (1024 * 1024); // Convertendo para MB
-        $veiculo->{$sizeField} = round($fileSizeInMB, 2); // Armazenando com 2 casas decimais
+        // Atualiza os campos no modelo
+        $veiculo->$fieldName = Storage::disk('public')->url($filePath); // URL pública do arquivo
+        $veiculo->$sizeFieldName = $tamanhoNovoArquivo; // Salva o tamanho do arquivo no banco
     }
+}
+
+
+function verificarEspaco($userId, $arquivo)
+{
+    // Define o limite de espaço em MB
+    $limiteMb = 100; // Limite de 100 MB
+    $limiteBytes = $limiteMb * 1024 * 1024; // Convertido para bytes
+
+    // Caminho para a pasta do usuário
+    $pastaUsuario = "documentos/usuario_{$userId}/";
+
+    // Calcula o espaço total usado na pasta
+    $espacoUsado = 0;
+    if (Storage::exists($pastaUsuario)) {
+        foreach (Storage::allFiles($pastaUsuario) as $file) {
+            $espacoUsado += Storage::size($file);
+        }
+    }
+
+    // Tamanho do novo arquivo
+    $tamanhoNovoArquivo = $arquivo->getSize(); // Tamanho em bytes
+
+    // Verifica se ultrapassa o limite
+    if (($espacoUsado + $tamanhoNovoArquivo) > $limiteBytes) {
+        return false; // Espaço excedido
+    }
+
+    return true; // Espaço disponível
 }
 
 
