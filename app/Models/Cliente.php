@@ -27,19 +27,20 @@ class Cliente extends Model
         'bairro',
         'cidade',
         'estado',
+        'user_id',
     ];
 
-    public function getClientes(string|null $search = null){
+    public function getClientes(?string $search = null, $userId)
+{
+    return $this->where('user_id', $userId) // Filtro pelo usuário logado
+        ->when($search, function ($query) use ($search) {
+            // Se houver pesquisa, filtra por nome ou CPF
+            $query->where('nome', 'LIKE', "%{$search}%")
+                  ->orWhere('cpf', 'LIKE', "%{$search}%");
+        })
+        ->paginate(10); // Retorna os resultados paginados
+}
 
-        $users = $this->where(function ($query) use ($search) {
-            if($search){
-                $query->where('nome', 'LIKE', "%{$search}%");
-                $query->orWhere('cpf', 'LIKE', "%{$search}%");
-            }
-        })->paginate(10);
-        //dd($users);
-        return $users;
-    }
 
     public function ordens()
     {

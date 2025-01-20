@@ -38,12 +38,13 @@ class VeiculoController extends Controller
     $title = 'Excluir!';
     $text = "Deseja excluir essa procuração?";
     confirmDelete($title, $text);
-    $userId = Auth::id();
+    
     // Obtendo os clientes e outorgados
     $clientes = Cliente::all();
     $outorgados = Outorgado::all();
 
     // Filtrando os veículos do usuário logado
+    $userId = Auth::id();
     $veiculos = Veiculo::where('user_id', $userId)->paginate(10);
     //dd($veiculos);
     // Pesquisa de documentos

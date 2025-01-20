@@ -28,6 +28,7 @@
                     <li>Campo CRV não será exibido para editar caso o documento seja digital.</li>
                     <li>Página modelo de procuração reformulada.</li>
                     <li>Cada usuário tem acesso apenas ao seu próprio cadastro.</li>
+
                   </ul>
               </div>
           </div> <!-- end card-body -->

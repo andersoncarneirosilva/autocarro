@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\Models\Cliente;
 use App\Models\Documento;
 use Smalot\PdfParser\Parser;
+use Illuminate\Support\Facades\Auth;
 use Carbon\Carbon;
 use FPDF;
 
@@ -24,8 +25,11 @@ class ClientesController extends Controller
         $text = "Deseja excluir esse cliente?";
         confirmDelete($title, $text);
 
-        //$clientes = Cliente::paginate(10);
-        $clientes = $this->model->getClientes(search: $request->search ?? '');
+        // Obtendo o ID do usuário logado
+    $userId = Auth::id();
+
+    // Filtrando os clientes do usuário logado e realizando a pesquisa
+    $clientes = $this->model->getClientes($request->search, $userId);
         //dd($docs);
         return view('clientes.index', compact('clientes'));
     }
@@ -38,37 +42,43 @@ class ClientesController extends Controller
          return view('clientes.create');
      }
 
-     public function store(Request $request){
-        $data = $request->all();
+     public function store(Request $request)
+{
+    $userId = Auth::id(); // Obtendo o ID do usuário logado
+    $data = $request->all(); // Obtendo todos os dados da requisição
 
-        try {
-            $validatedData = $request->validate([
-                'nome' => 'required|string|max:255',
-                'cpf' => 'required|string|max:255',
-                'fone' => 'required|string|max:255',
-                'email' => 'required|email|max:255',
-                'cep' => 'required|string|max:255',
-                'endereco' => 'required|string|max:255',
-                'numero' => 'required|string|max:255',
-                'bairro' => 'required|string|max:255',
-                'cidade' => 'required|string|max:255',
-                'estado' => 'required|string|max:255',
-            ]);
-            //dd($validated);
-        } catch (\Illuminate\Validation\ValidationException $e) {
-            alert()->error('Todos os campos são obrigatórios!');
-            return redirect()->route('clientes.create');
-        }
-
-        // Criação do cliente no banco de dados
-        $cliente = $this->model->create($validatedData);
-
-        if ($cliente) {
-            alert()->success('Cliente cadastrado com sucesso!');
-        }
-
-        return redirect()->route('clientes.index');
+    try {
+        // Validação dos dados do cliente
+        $validatedData = $request->validate([
+            'nome' => 'required|string|max:255',
+            'cpf' => 'required|string|max:255',
+            'fone' => 'required|string|max:255',
+            'email' => 'required|email|max:255',
+            'cep' => 'required|string|max:255',
+            'endereco' => 'required|string|max:255',
+            'numero' => 'required|string|max:255',
+            'bairro' => 'required|string|max:255',
+            'cidade' => 'required|string|max:255',
+            'estado' => 'required|string|max:255',
+        ]);
+    } catch (\Illuminate\Validation\ValidationException $e) {
+        alert()->error('Todos os campos são obrigatórios!');
+        return redirect()->route('clientes.create');
     }
+
+    // Adicionando o user_id ao array de dados
+    $validatedData['user_id'] = $userId;
+
+    // Criação do cliente no banco de dados
+    $cliente = $this->model->create($validatedData);
+
+    if ($cliente) {
+        alert()->success('Cliente cadastrado com sucesso!');
+    }
+
+    return redirect()->route('clientes.index');
+}
+
 
      public function buscarClientes(Request $request)
      {
