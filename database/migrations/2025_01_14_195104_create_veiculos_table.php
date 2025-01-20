@@ -40,6 +40,8 @@ return new class extends Migration
             $table->string('size_proc_pdf')->nullable();
             $table->string('size_atpve_pdf')->nullable();
 
+            $table->foreignId('user_id')->constrained()->onDelete('cascade'); // Chave estrangeira para o usuário
+
             $table->timestamps();
         });
     }

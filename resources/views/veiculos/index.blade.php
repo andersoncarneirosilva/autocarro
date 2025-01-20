@@ -65,7 +65,7 @@
                         @endif
                     </div>
                 </div>
-                @if ($procs->total() != 0)
+                @if ($veiculos->total() != 0)
                 <div class="table-responsive-sm">
                     <table class="table table-hover table-centered mb-0">
                         <thead class="table-dark">
@@ -81,7 +81,7 @@
                         </thead>
 
                         <tbody>
-                            @foreach ($procs as $doc)
+                            @foreach ($veiculos as $doc)
                                 <tr>
                                     <td>{{ $doc->placa }}</td>
                                     <td>{{ $doc->marca }}</td>
@@ -167,7 +167,7 @@
                         </tbody>
                     </table>
                 </div>
-                    @elseif($procs->total() == 0)
+                    @elseif($veiculos->total() == 0)
                         <div class="alert alert-danger bg-transparent text-danger" role="alert">
                             NENHUM RESULTADO ENCONTRADO!
                         </div>

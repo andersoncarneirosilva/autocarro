@@ -34,16 +34,23 @@ class VeiculoController extends Controller
 
     public function index(Request $request)
 {
+    // Título e texto para confirmação de exclusão (mantido como está)
     $title = 'Excluir!';
     $text = "Deseja excluir essa procuração?";
     confirmDelete($title, $text);
-
+    $userId = Auth::id();
+    // Obtendo os clientes e outorgados
     $clientes = Cliente::all();
     $outorgados = Outorgado::all();
+
+    // Filtrando os veículos do usuário logado
+    $veiculos = Veiculo::where('user_id', $userId)->paginate(10);
+    //dd($veiculos);
+    // Pesquisa de documentos
     $procs = $this->model->getSearch(search: $request->search ?? '');
 
-    // Caminho para a pasta de documentos
-    $path = storage_path('app/public/documentos/usuario_1');
+    // Caminho para a pasta de documentos (verifique se o caminho está correto para o usuário logado)
+    $path = storage_path('app/public/documentos/usuario_' . auth()->id());
 
     // Função para calcular o tamanho total da pasta
     function getFolderSize($folder)
@@ -62,8 +69,9 @@ class VeiculoController extends Controller
     $percentUsed = ($usedSpaceInMB / $limitInMB) * 100; // Percentual usado
 
     // Passar as informações para a view
-    return view('veiculos.index', compact(['procs', 'clientes', 'usedSpaceInMB', 'percentUsed', 'outorgados', 'limitInMB']));
+    return view('veiculos.index', compact(['procs', 'clientes', 'usedSpaceInMB', 'percentUsed', 'outorgados', 'limitInMB', 'veiculos']));
 }
+
 
 
 //     public function index(Request $request)
@@ -622,6 +630,8 @@ if ($this->model->create($data)) {
 
             'arquivo_doc' => $urlDoc,
             'arquivo_proc' => $urlProc,
+
+            'user_id' => $userId,
         ];
         //dd($data);
         // Salvar o PDF

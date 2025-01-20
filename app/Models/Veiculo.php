@@ -41,8 +41,15 @@ class Veiculo extends Model
         'arquivo_atpve_assinado',
         'size_proc_pdf',
         'size_atpve_pdf',
+        'user_id',
 
     ];
+
+    // Relacionamento com o usuário
+    public function user()
+    {
+        return $this->belongsTo(User::class);
+    }
 
     public function getSearch(string|null $search = null){
 

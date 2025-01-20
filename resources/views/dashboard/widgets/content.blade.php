@@ -1,3 +1,4 @@
+
 <div class="row">
     <div class="col-lg-5">
         
@@ -10,11 +11,10 @@
         <h5 class="text-success float-start mt-0">Atualizações importantes:</h5>
         <div class="ribbon-content">
             <ul>
-                <li>Agora cada usuário tem um espaço limitado para armazenamento de arquivos.</li>
                 <li>Correção no campo de busca para smartphone.</li>
-                <li>Campo CRV não será exibido para editar caso o documento seja digital.</li>
-                <li>Página para cadastro de outorgados</li>
-                <li>Página modelo de procuração reformulada</li>
+                    <li>Campo CRV não será exibido para editar caso o documento seja digital.</li>
+                    <li>Página modelo de procuração reformulada.</li>
+                    <li>Cada usuário tem acesso apenas ao seu próprio cadastro.</li>
             </ul>
         </div>
     </div> <!-- end card-body -->
