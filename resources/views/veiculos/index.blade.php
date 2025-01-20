@@ -40,9 +40,15 @@
                     <div class="dropdown">
                         @if(auth()->user()->credito > 0)
                         <div class="dropdown btn-group">
-                            <button class="btn btn-primary btn-sm dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                Cadastrar
-                            </button>
+                            <button class="btn btn-primary btn-sm dropdown-toggle" 
+        type="button" 
+        data-bs-toggle="dropdown" 
+        aria-haspopup="true" 
+        aria-expanded="false" 
+        @if($percentUsed > 100) disabled @endif>
+    Cadastrar
+</button>
+
                             <div class="dropdown-menu dropdown-menu-animated dropdown-menu-end">
 
                                 <a href="#" data-bs-toggle="modal" data-bs-target="#standard-modal" class="dropdown-item">
@@ -124,17 +130,28 @@
                                                     target="_blank">
                                                     Baixar Procuração
                                                 </a>
+                                                @if(!empty($doc->arquivo_atpve))
+                                                    <a href="{{ $doc->arquivo_atpve }}" 
+                                                    class="dropdown-item" 
+                                                    target="_blank">
+                                                    Baixar ATPVe
+                                                    </a>
+                                                @else
+                                                    <a href="#" 
+                                                    class="dropdown-item disabled" 
+                                                    tabindex="-1" 
+                                                    aria-disabled="true">
+                                                    Baixar ATPVe
+                                                    </a>
+                                                @endif
+
+
                                                 <a href="javascript:void(0);"
                                                     class="dropdown-item {{ $doc->crv === '***' ? 'disabled' : '' }}"
                                                     onclick="{{ $doc->crv === '***' ? 'return false;' : "openAddressModal(event, $doc->id)" }}">
                                                     Gerar ATPVe
                                                 </a>
 
-                                                <a href="{{ $doc->arquivo_atpve }}" 
-                                                    class="dropdown-item"
-                                                    target="_blank">
-                                                    Baixar ATPVe
-                                                </a>
 
                                                 <a href="{{ route('veiculos.destroy', $doc->id) }}" 
                                                     data-confirm-delete="true"
@@ -163,7 +180,21 @@
             'search' => request()->get('search', '')
         ])->links('components.pagination') }}
     </div>
-                                                
+    <div class="mt-5">
+        <h4><span class="badge rounded-pill p-1 px-2 badge-secondary-lighten">FREE</span></h4>
+        <h6 class="text-uppercase mt-3">Storage</h6>
+        <div class="progress mb-3">
+            <div class="progress-bar" 
+                 role="progressbar" 
+                 style="width: {{ $percentUsed }}%" 
+                 aria-valuenow="{{ $percentUsed }}" 
+                 aria-valuemin="0" 
+                 aria-valuemax="100">{{ number_format($percentUsed, 2) }}%</div>
+        </div>
+        <p class="text-muted font-12 mb-0">
+            {{ number_format($usedSpaceInMB, 2) }} MB ({{ number_format($percentUsed, 2) }}%) of {{ $limitInMB }} MB used
+        </p>
+    </div>                                            
 
 </div>
 
