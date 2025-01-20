@@ -176,7 +176,7 @@
         </div>
     </div>
     <div class="row">
-        {{ $procs->appends([
+        {{ $veiculos->appends([
             'search' => request()->get('search', '')
         ])->links('components.pagination') }}
     </div>

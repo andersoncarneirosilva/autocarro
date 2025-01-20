@@ -42,7 +42,6 @@
                                 <th>Whatsapp</th>
                                 <th>Endereço</th>
                                 <th>Cidade</th>
-                                <th>Cadastrado em</th>
                                 <th>Ações</th>
                             </tr>
                         </thead>
@@ -65,14 +64,13 @@
                                     </a></td>
                                     <td>{{ $cli->endereco }}, {{ $cli->numero }}</td>
                                     <td>{{ $cli->cidade }}/{{ $cli->estado }}</td>
-                                    <td>{{ Carbon\Carbon::parse($cli->created_at)->format('d/m/Y') }}</td>
                                     <td class="table-action">
 
                                         <a href="{{ route('clientes.edit', $cli->id) }}" class="action-icon" data-id="{{ $cli->id }}" onclick="openEditTextModal(event)">
                                             <i class="mdi mdi-clipboard-edit-outline" title="Editar"></i>
 
                                         <a href="{{ route('clientes.destroy', $cli->id) }}"
-                                            class="action-icon mdi mdi-delete text-danger" data-confirm-delete="true" title="Excluir"></a>
+                                            class="action-icon mdi mdi-delete" data-confirm-delete="true" title="Excluir"></a>
                                             
                                     </td>
                                 </tr>

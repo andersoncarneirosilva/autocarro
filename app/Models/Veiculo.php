@@ -51,16 +51,16 @@ class Veiculo extends Model
         return $this->belongsTo(User::class);
     }
 
-    public function getSearch(string|null $search = null){
-
-        $procs = $this->where(function ($query) use ($search) {
-            if($search){
-                $query->where('placa', 'LIKE', "%{$search}%");
-                $query->orWhere('renavam', 'LIKE', "%{$search}%");
-            }
-        })->paginate(10);
-        return $procs;
-    }
+    public function getSearch(?string $search = null, $userId)
+        {
+            return $this->where('user_id', $userId) // Filtro pelo usuário logado
+                ->when($search, function ($query) use ($search) {
+                    // Se houver pesquisa, filtra por nome ou CPF
+                    $query->where('placa', 'LIKE', "%{$search}%")
+                          ->orWhere('renavam', 'LIKE', "%{$search}%");
+                })
+                ->paginate(10); // Retorna os resultados paginados
+        }
 
     public function getDocs(string|null $search = null){
 

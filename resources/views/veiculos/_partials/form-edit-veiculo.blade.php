@@ -174,7 +174,7 @@
                     
 
                     <div class="text-end">
-                        <a href="{{ route('veiculos.index')}}" class="btn btn-secondary btn-sm">Cancelar</a>
+                        <a href="{{ route('veiculos.index')}}" class="btn btn-secondary btn-sm">Voltar</a>
                         <button type="submit" class="btn btn-success btn-sm">Salvar</button>
                     </div>
                 </form>

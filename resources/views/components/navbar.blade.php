@@ -90,7 +90,9 @@
             @endif
 
         </div>
-        <script>
+
+        {{-- Notificações --- HABILITAR notificaçoes.js --}}
+        {{-- <script>
             document.addEventListener("DOMContentLoaded", function () {
                 // Seleciona o elemento de dropdown
                 const dropdownToggle = document.querySelector('.notification-list .dropdown-toggle');
@@ -115,7 +117,7 @@
 // Observar mudanças no body
 observer.observe(document.body, { childList: true, subtree: true });
 
-        </script>
+        </script> --}}
         
         <ul class="topbar-menu d-flex align-items-center gap-3">
             @if(request()->routeIs('veiculos.index'))
@@ -149,7 +151,10 @@ observer.observe(document.body, { childList: true, subtree: true });
                 </div>
             </li>
             @endif
-            <li class="dropdown notification-list">
+
+            {{-- Notificações --- HABILITAR notificaçoes.js --}}
+            {{-- Notificações --- HABILITAR script logo acima nessa pagina --}}
+            {{-- <li class="dropdown notification-list">
                 <a class="nav-link dropdown-toggle arrow-none" data-bs-toggle="dropdown" href="#" role="button" aria-haspopup="false" aria-expanded="false">
                     <i class="ri-notification-3-line font-22"></i>
                     <span class="noti-icon-badge"></span>
@@ -162,7 +167,7 @@ observer.observe(document.body, { childList: true, subtree: true });
                             </div>
                             <div class="col-auto">
                                 <a href="javascript: void(0);" class="text-dark text-decoration-underline">
-                                    {{-- <small>Limpar</small> --}}
+                                    <small>Limpar</small>
                                 </a>
                             </div>
                         </div>
@@ -174,7 +179,7 @@ observer.observe(document.body, { childList: true, subtree: true });
                         </a>
                     </div>
                 </div>
-            </li>
+            </li> --}}
             <li class="d-none d-sm-inline-block">
                 <div class="nav-link" id="light-dark-mode" data-bs-toggle="tooltip" data-bs-placement="left"
                     title="Tema escuro">

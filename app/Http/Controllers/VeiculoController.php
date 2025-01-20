@@ -45,10 +45,11 @@ class VeiculoController extends Controller
 
     // Filtrando os veículos do usuário logado
     $userId = Auth::id();
-    $veiculos = Veiculo::where('user_id', $userId)->paginate(10);
+    $veiculos = $this->model->getSearch($request->search, $userId);
+    //$veiculos = Veiculo::where('user_id', $userId)->paginate(10);
     //dd($veiculos);
     // Pesquisa de documentos
-    $procs = $this->model->getSearch(search: $request->search ?? '');
+    //$veiculos = $this->model->getSearch(search: $request->search ?? '');
 
     // Caminho para a pasta de documentos (verifique se o caminho está correto para o usuário logado)
     $path = storage_path('app/public/documentos/usuario_' . auth()->id());
@@ -70,7 +71,7 @@ class VeiculoController extends Controller
     $percentUsed = ($usedSpaceInMB / $limitInMB) * 100; // Percentual usado
 
     // Passar as informações para a view
-    return view('veiculos.index', compact(['procs', 'clientes', 'usedSpaceInMB', 'percentUsed', 'outorgados', 'limitInMB', 'veiculos']));
+    return view('veiculos.index', compact(['clientes', 'usedSpaceInMB', 'percentUsed', 'outorgados', 'limitInMB', 'veiculos']));
 }
 
 
