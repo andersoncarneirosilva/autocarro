@@ -1,3 +1,4 @@
+
 <div class="row">
     <div class="col-xl-5 col-lg-6">
         <div class="row">
@@ -88,48 +89,46 @@
     <div class="col-xl-7 col-lg-6">
         <div class="card card-h-100">
             <div class="d-flex card-header justify-content-between align-items-center">
-                <h4 class="header-title">Ordens lançadas</h4>
+                <h4 class="header-title">Veículos cadastrados</h4>
                 
             </div>
             <div class="card-body pt-0">
                 <script>
                     document.addEventListener('DOMContentLoaded', function () {
-                        var countDocs = @json($countDocs);
-                        var countProcs = @json($countProcs);
-                        var countCnh = @json($countCnh);
-
+                        var countDocs = @json($countDocs); // Agora isso será um array com contagens por mês
+                
                         var options = {
-                        chart: {
-                            type: 'bar',
-                            height: 230,
-                        },
-                        plotOptions: {
-                            bar: {
-                                barHeight: '70%', // Proporção da altura do gráfico
-                                columnWidth: '30%', // Define a largura das barras como porcentagem
-                            }
+                            chart: {
+                                type: 'bar',
+                                height: 230,
                             },
-                        series: [
-                            {
-                            name: 'Ordens',
-                            data: [countDocs, 15, 25,19, 35, 20, 30,10,15,34,23, 40]
-                            }
-                        ],
-                        xaxis: {
-                            categories: ['Janeiro', 'Fevereiro', 'Março', 'Abril', 'Maio', 'Junho', 'Julho', 'Agosto','Setembro', 'Outubro', 'Novembro', 'Dezembro']
-                        },
-                        title: {
-                            text: 'Lancamento anual',
-                            align: 'center'
-                        },
-                        
-                        colors: ['#008FFB']
+                            plotOptions: {
+                                bar: {
+                                    barHeight: '70%', // Proporção da altura do gráfico
+                                    columnWidth: '30%', // Define a largura das barras como porcentagem
+                                }
+                            },
+                            series: [
+                                {
+                                    name: 'Veículos',
+                                    data: countDocs // Usando o array com as contagens mensais
+                                }
+                            ],
+                            xaxis: {
+                                categories: ['Janeiro', 'Fevereiro', 'Março', 'Abril', 'Maio', 'Junho', 'Julho', 'Agosto', 'Setembro', 'Outubro', 'Novembro', 'Dezembro']
+                            },
+                            title: {
+                                text: 'Lançamento anual de veículos',
+                                align: 'center'
+                            },
+                            colors: ['#008FFB']
                         };
                 
                         var chart = new ApexCharts(document.querySelector("#chart"), options);
                         chart.render();
                     });
-                    </script>
+                </script>
+                
                     <div id="chart" class="apex-charts" style="width: 100%; height: 200px; margin: auto;"></div>
                 
 

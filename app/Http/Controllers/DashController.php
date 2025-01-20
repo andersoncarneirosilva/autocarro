@@ -64,8 +64,26 @@ class DashController extends Controller
         \Carbon\Carbon::setLocale('pt_BR'); // Define o idioma do Carbon
         $today = Carbon::now()->translatedFormat('d \d\e F \d\e Y'); // Exemplo: "02 de janeiro de 2025"
         
-        //return view('sua-view', compact('today'));
+        // Caminho para a pasta de documentos
+        $path = storage_path('app/public/documentos/usuario_1');
 
+        // Função para calcular o tamanho total da pasta
+        function getFolderSize($folder)
+        {
+            $size = 0;
+            foreach (glob(rtrim($folder, '/') . '/*', GLOB_NOSORT) as $file) {
+                $size += is_file($file) ? filesize($file) : getFolderSize($file);
+            }
+            return $size;
+        }
+
+        // Calcular o tamanho usado na pasta
+        $usedSpaceInBytes = getFolderSize($path);
+        $usedSpaceInMB = $usedSpaceInBytes / (1024 * 1024); // Converter para MB
+        $limitInMB = 1; // Limite de 1 MB
+        $percentUsed = ($usedSpaceInMB / $limitInMB) * 100; // Percentual usado
+
+        // Passar as informações para a view
         return view('dashboard.index', compact(['countDocs', 
                                                 'countProcs', 
                                                 'countOrder', 
@@ -74,6 +92,9 @@ class DashController extends Controller
                                                 'today', 
                                                 'totalOrdensAtual',
                                                 'totalOrdensAnterior',
-                                                'porcentagem']));
+                                                'porcentagem',
+                                                'usedSpaceInMB', 
+                                                'percentUsed', 
+                                                'limitInMB']));
     }
 }

@@ -20,9 +20,17 @@ class DashModel extends Model
     } */
 
     public function getCountDocs(){
-        $countAd = DB::table('documentos')->count();
-        return $countAd;
+        $counts = [];
+        for ($month = 1; $month <= 12; $month++) {
+            $countMonth = DB::table('veiculos')
+                            ->whereMonth('created_at', $month)
+                            ->count();
+            $counts[] = $countMonth;
+        }
+        return $counts;
     }
+    
+
     public function getCountProcs(){
         $countAd = DB::table('procuracaos')->count();
         return $countAd;
