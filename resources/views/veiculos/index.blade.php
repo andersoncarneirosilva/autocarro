@@ -181,8 +181,8 @@
         ])->links('components.pagination') }}
     </div>
     <div class="mt-5">
-        <h4><span class="badge rounded-pill p-1 px-2 badge-secondary-lighten">FREE</span></h4>
-        <h6 class="text-uppercase mt-3">Storage</h6>
+        <h4><span class="badge rounded-pill p-1 px-2 badge-secondary-lighten">PLANO FREE</span></h4>
+        <h6 class="text-uppercase mt-3">Espaço</h6>
         <div class="progress mb-3">
             <div class="progress-bar" 
                  role="progressbar" 
