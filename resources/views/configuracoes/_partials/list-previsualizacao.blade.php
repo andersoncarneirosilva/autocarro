@@ -13,9 +13,13 @@
                 <strong>ENDEREÇO: {{ $out->end_outorgado }}</strong><br>
                 ______________________________________________________________________________________<br><br>
                 @endforeach
+
                 @foreach ($texts_starts as $texts_start)
-                {{ $texts_start->texto_inicio}}<br>
+                    <div class="row" style="text-align: justify;">
+                        {{ $texts_start->texto_inicio}}<br>
+                    </div>
                 @endforeach
+
                 <br>
                 <div class="row">
                     <div class="col-sm-6">
@@ -42,9 +46,13 @@
                     </div>
                 </div>
                 <br>
-                @foreach ($texts as $text)
-                {!! $text->html !!}
-                @endforeach
+
+                <div class="row" style="text-align: justify;">
+                    @foreach ($texts as $text)
+                    {!! $text->html !!}
+                    @endforeach
+                </div>
+                
                 <br>
                 <div class="row">
                     <div class="col text-end">

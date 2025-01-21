@@ -882,7 +882,7 @@ $pdf->Ln(10);
 $pdf->Text($x = 30, $y = $pdf->GetY(), "Nome:");
 $x += $pdf->GetStringWidth("Nome:");
 
-$this->desenharSublinhado($pdf, 41, 139, $cliente->nome, 100); 
+$this->desenharSublinhado($pdf, 41, 139, iconv('UTF-8', 'ISO-8859-1', $cliente->nome), 100); 
 $x += 100;
 
 $pdf->Ln(10);

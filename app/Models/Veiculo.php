@@ -205,32 +205,59 @@ class Veiculo extends Model
         return $renavam ;
     }
 
+    // public function extrairCidade($textoPagina) {
+    //     // Divide o texto em linhas
+    //     $linhas = explode("\n", $textoPagina);
+    
+    //     // Verifica se a linha 64 existe
+    //     if (isset($linhas[64])) {
+    //         // Remove possíveis espaços em branco ou tabulações na linha
+    //         $linha = trim($linhas[64]);
+    
+    //         // Divide a linha em partes, usando espaço ou tabulação como delimitador
+    //         $partes = preg_split('/\s+/', $linha);
+    
+    //         // Verifica se a cidade e o estado estão presentes
+    //         if (isset($partes[0], $partes[1])) {
+    //             // Concatena a cidade e o estado com uma barra
+    //             $cidadeEstado = $partes[0] . '/' . $partes[1];
+    
+    //             // Debug para verificar o valor capturado
+    //             //dd($cidadeEstado);
+    
+    //             return $cidadeEstado;
+    //         }
+    //     }
+    
+    //     // Caso a linha 64 não exista ou esteja incompleta, retorna vazio ou gera um erro
+    //     //dd('Linha 64 ou dados insuficientes');
+    //     return '';
+    // }
+
     public function extrairCidade($textoPagina) {
-        // Divide o texto em linhas
         $linhas = explode("\n", $textoPagina);
+        //dd($linhas);
     
-        // Verifica se a linha 64 existe
         if (isset($linhas[64])) {
-            // Remove possíveis espaços em branco ou tabulações na linha
             $linha = trim($linhas[64]);
+            //dd($linha);
     
-            // Divide a linha em partes, usando espaço ou tabulação como delimitador
-            $partes = preg_split('/\s+/', $linha);
+            // Remove qualquer conteúdo após o estado (RS, SP, etc.), incluindo tabulação e data
+            $linhaSemData = preg_replace('/\s[A-Z]{2}\s*\t.*$/', '', $linha);
+            //dd($linhaSemData);
     
-            // Verifica se a cidade e o estado estão presentes
-            if (isset($partes[0], $partes[1])) {
-                // Concatena a cidade e o estado com uma barra
-                $cidadeEstado = $partes[0] . '/' . $partes[1];
+            // Regex para extrair cidade e estado
+            if (preg_match('/^(.+)\s([A-Z]{2})$/', $linhaSemData, $matches)) {
+                $cidade = trim($matches[1]); // Captura a cidade completa
+                $estado = $matches[2];      // Captura o estado (2 letras)
     
-                // Debug para verificar o valor capturado
-                //dd($cidadeEstado);
-    
-                return $cidadeEstado;
+                return $cidade . '/' . $estado;
+            } else {
+                // Adiciona /RS caso o estado não seja identificado
+                return $linhaSemData . '/RS';
             }
         }
     
-        // Caso a linha 64 não exista ou esteja incompleta, retorna vazio ou gera um erro
-        //dd('Linha 64 ou dados insuficientes');
         return '';
     }
 

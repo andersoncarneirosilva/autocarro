@@ -9,11 +9,14 @@ use App\Models\Cliente;
 use App\Models\Documento;
 use App\Models\Procuracao;
 use App\Models\Ordem;
+use Illuminate\Support\Facades\Auth;
 
 class RelatoriosController extends Controller
 {
 
     public function index(Request $request){
+
+        $userId = Auth::id();
 
         $title = 'Excluir!';
         $text = "Deseja excluir esse veículo?";
@@ -25,48 +28,64 @@ class RelatoriosController extends Controller
     
 
     public function gerarRelatoriosSelect(Request $request)
-    {
-        // Validação dos campos
-        $validated = $request->validate([
-            'tipo-relatorio' => 'required|string',
-            'data-inicial' => 'required|date',
-            'data-final' => 'required|date|after_or_equal:data-inicial',
-        ]);
+{
+    $userId = Auth::id();
+    
+    // Validação dos campos
+    $validated = $request->validate([
+        'tipo-relatorio' => 'required|string',
+        'data-inicial' => 'required|date',
+        'data-final' => 'required|date|after_or_equal:data-inicial',
+    ]);
 
-        $tipo = $validated['tipo-relatorio'];
-        $dataInicial = $validated['data-inicial'];
-        $dataFinal = $validated['data-final'];
+    $tipo = $validated['tipo-relatorio'];
+    $dataInicial = $validated['data-inicial'];
+    $dataFinal = $validated['data-final'];
 
-        // Lógica para gerar o relatório com base no tipo e intervalo de datas
-        switch ($tipo) {
-            case 'Clientes':
-                $dados = Cliente::whereBetween('created_at', [
-                    $dataInicial . ' 00:00:00',
-                    $dataFinal . ' 23:59:59'
-                ])->get();
-                //dd($dados);
-                return view('relatorios.resultado-clientes', compact('dados', 'tipo', 'dataInicial', 'dataFinal'));
-                break;
-            case 'Procurações':
-                $dados = Procuracao::whereBetween('created_at', [
-                    $dataInicial . ' 00:00:00',
-                    $dataFinal . ' 23:59:59'
-                ])->get();
-                return view('relatorios.resultado-procs', compact('dados', 'tipo', 'dataInicial', 'dataFinal'));
-                break;
-            case 'Veículos':
-                $dados = Documento::whereBetween('created_at', [
-                    $dataInicial . ' 00:00:00',
-                    $dataFinal . ' 23:59:59'
-                ])->get();
-                return view('relatorios.resultado-veiculos', compact('dados', 'tipo', 'dataInicial', 'dataFinal'));
-                break;
-            default:
-                return back()->withErrors(['tipo-relatorio' => 'Tipo de relatório inválido.']);
-        }      
-    }
+    // Lógica para gerar o relatório com base no tipo e intervalo de datas
+    switch ($tipo) {
+        case 'Clientes':
+            // Filtra os clientes do usuário logado
+            $dados = Cliente::where('user_id', $userId)
+                            ->whereBetween('created_at', [
+                                $dataInicial . ' 00:00:00',
+                                $dataFinal . ' 23:59:59'
+                            ])
+                            ->get();
+            return view('relatorios.resultado-clientes', compact('dados', 'tipo', 'dataInicial', 'dataFinal'));
+            break;
+
+        case 'Procurações':
+            // Adiciona a restrição para o usuário logado, se necessário
+            $dados = Procuracao::where('user_id', $userId)
+                               ->whereBetween('created_at', [
+                                   $dataInicial . ' 00:00:00',
+                                   $dataFinal . ' 23:59:59'
+                               ])
+                               ->get();
+            return view('relatorios.resultado-procs', compact('dados', 'tipo', 'dataInicial', 'dataFinal'));
+            break;
+
+        case 'Veículos':
+            // Adiciona a restrição para o usuário logado, se necessário
+            $dados = Documento::where('user_id', $userId)
+                              ->whereBetween('created_at', [
+                                  $dataInicial . ' 00:00:00',
+                                  $dataFinal . ' 23:59:59'
+                              ])
+                              ->get();
+            return view('relatorios.resultado-veiculos', compact('dados', 'tipo', 'dataInicial', 'dataFinal'));
+            break;
+
+        default:
+            return back()->withErrors(['tipo-relatorio' => 'Tipo de relatório inválido.']);
+    }      
+}
+
 
     public function gerarPdfClientes(Request $request){
+
+        $userId = Auth::id();
 
         $data = $request->all();
         //dd($data);

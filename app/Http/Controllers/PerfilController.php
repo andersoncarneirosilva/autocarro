@@ -17,8 +17,28 @@ class PerfilController extends Controller
 
     public function index(){
 
+        $path = storage_path('app/public/documentos/usuario_' . auth()->id());
+
+    // Função para calcular o tamanho total da pasta
+    function getFolderSize($folder)
+    {
+        $size = 0;
+        foreach (glob(rtrim($folder, '/') . '/*', GLOB_NOSORT) as $file) {
+            $size += is_file($file) ? filesize($file) : getFolderSize($file);
+        }
+        return $size;
+    }
+
+    // Calcular o tamanho usado na pasta
+    $usedSpaceInBytes = getFolderSize($path);
+    $usedSpaceInMB = $usedSpaceInBytes / (1024 * 1024); // Converter para MB
+    $limitInMB = 1; // Limite de 1 MB
+    $percentUsed = ($usedSpaceInMB / $limitInMB) * 100; // Percentual usado
+
+    // Passar as informações para a view
+    return view('perfil.index', compact(['usedSpaceInMB', 'percentUsed', 'limitInMB']));
         
-        return view('perfil.index');
+
     }
 
     public function edit($id){

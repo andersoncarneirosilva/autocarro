@@ -27,7 +27,7 @@
                 <img src="{{ url("assets/img/icon_user.png") }}" alt="" class="rounded-circle avatar-lg img-thumbnail">
                 @endif
                 <h4 class="mb-0 mt-2">{{ auth()->user()->name }}</h4>
-                <p class="text-muted font-14">{{ auth()->user()->cargo }}</p>
+                <p class="text-muted font-14">{{ auth()->user()->perfil }}</p>
               
                 <div class="text-start mt-3">
                     <p class="text-muted mb-2 font-13"><strong>Nome: :</strong> <span class="ms-2">{{ auth()->user()->name }}</span></p>
@@ -36,42 +36,25 @@
 
                     <p class="text-muted mb-2 font-13"><strong>Email:</strong> <span class="ms-2 ">{{ auth()->user()->email }}</span></p>
 
-                    <p class="text-muted mb-1 font-13"><strong>Endereço:</strong> <span class="ms-2">{{ auth()->user()->logradouro }} - {{ auth()->user()->bairro }}/{{ auth()->user()->cidade }}</span></p>
+                    <p class="text-muted mb-1 font-13"><strong>Perfil:</strong> <span class="ms-2">{{ auth()->user()->perfil }}</span></p>
                     
                 </div>
-                <ul class="social-list list-inline mt-3 mb-0">
-                    @if(auth()->user()->facebook == "#")
+                <div class="text-start mt-3">
+                    <h4><span class="badge rounded-pill p-1 px-2 badge-success-lighten">PLANO FREE</span></h4>
+                    <h6 class="text-uppercase mt-3">Espaço em disco</h6>
+                    <p class="text-muted font-12 mb-0">
+                        {{ number_format($usedSpaceInMB, 2) }} MB ({{ number_format($percentUsed, 2) }}%) of {{ $limitInMB }} MB usados
+                    </p>
+                    <div class="progress mb-3">
+                        <div class="progress-bar" 
+                            role="progressbar" 
+                            style="width: {{ $percentUsed }}%" 
+                            aria-valuenow="{{ $percentUsed }}" 
+                            aria-valuemin="0" 
+                            aria-valuemax="100">{{ number_format($percentUsed, 2) }}%</div>
+                    </div>
                     
-                    @else
-                    <li class="list-inline-item">
-                        <a href="{{ auth()->user()->facebook }}" target="_blank" class="social-list-item border-primary text-primary"><i class="mdi mdi-facebook"></i></a>
-                    </li>
-                    @endif
-                    @if(auth()->user()->instagram == "#")
-                    
-                    @else
-                    <li class="list-inline-item">
-                        <a href="{{ auth()->user()->instagram }}" target="_blank"  class="social-list-item border-danger text-danger"><i class="mdi mdi-instagram"></i></a>
-                    </li>
-                    @endif
-                    @if(auth()->user()->skype == "#")
-                    
-                    @else
-                    <li class="list-inline-item">
-                        <a href="{{ auth()->user()->skype }}" target="_blank"  class="social-list-item border-info text-info"><i class="mdi mdi-skype"></i></a>
-                    </li>
-                    @endif
-                    @if(auth()->user()->linkedin == "#")
-                    
-                    @else
-                    <li class="list-inline-item">
-                        <a href="{{ auth()->user()->linkedin }}" target="_blank"  class="social-list-item border-secondary text-secondary"><i class="mdi mdi-linkedin"></i></a>
-                    </li>
-                    @endif
-                    <li class="list-inline-item">
-                        <a href="mailto:{{ auth()->user()->email }}" target="_blank"  class="social-list-item border-success text-success"><i class="mdi mdi-mail"></i></a>
-                    </li>
-                </ul>
+                </div>
             </div> <!-- end card-body -->
         </div> <!-- end card -->
 

@@ -67,6 +67,16 @@
                                     </a>
                                 @endforeach
 
+                                @if ($cidades->total() < 1)
+                                <a href="#" data-bs-toggle="modal" data-bs-target="#modalCadastroCidade" class="dropdown-item">
+                                    Cidade
+                                </a>
+                                @endif
+                                @foreach ($cidades as $cidade)
+                                <a href="#" class="dropdown-item" data-id="{{ $cidade->id }}" onclick="openEditCidadeModal(event)">
+                                    Editar cidade
+                                </a>
+                                @endforeach
 
                             </div>
                         </div>
