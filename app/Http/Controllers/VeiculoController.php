@@ -974,7 +974,8 @@ if (($espacoUsado + $tamanhoNovoArquivo) > $limiteBytes) {
 }
 
 // Retornar o link do PDF para download/visualização
-$fileUrl = asset('storage/' . $pastaAtpves . 'atpve_' . $estoque->placa . '.pdf');
+$fileUrl = asset('storage/' . $pastaAtpves . 'atpve_' . $estoque->placa . '_' . rand(1000, 9999) . '.pdf');
+
 
 $data = [
     'arquivo_atpve' => $fileUrl,
