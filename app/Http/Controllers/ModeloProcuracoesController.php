@@ -5,11 +5,9 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\ModeloProcuracoes;
 use Illuminate\Support\Facades\Auth;
-use App\Models\Cidade;
-use App\Models\TextoPoder;
-use App\Models\TextoInicio;
 use App\Models\Outorgado;
 use Illuminate\Support\Facades\Log;
+
 class ModeloProcuracoesController extends Controller
 {
     //

@@ -4,20 +4,19 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
-
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\File;
+use Smalot\PdfParser\Parser;
+
 use App\Models\Veiculo;
 use App\Models\Outorgado;
-use App\Models\Cidade;
-use App\Models\TextoPoder;
-use App\Models\TextoInicio;
 use App\Models\Cliente;
-use Illuminate\Support\Facades\Auth;
 use App\Models\User;
-use Smalot\PdfParser\Parser;
-use FPDF;
+use App\Models\ModeloProcuracoes;
+
 use Carbon\Carbon;
 use App\Mail\SendEmail;
+use FPDF;
 use Mail;
 use TesseractOCR;
 
@@ -32,109 +31,53 @@ class VeiculoController extends Controller
     }
 
 
-    public function index(Request $request)
-{
-    // Título e texto para confirmação de exclusão (mantido como está)
-    $title = 'Excluir!';
-    $text = "Deseja excluir essa procuração?";
-    confirmDelete($title, $text);
-    
-    // Obtendo os clientes e outorgados
-    $clientes = Cliente::all();
-    $outorgados = Outorgado::all();
+    public function index(Request $request){
+        $title = 'Excluir!';
+        $text = "Deseja excluir essa procuração?";
+        confirmDelete($title, $text);
+        
+        $clientes = Cliente::all();
+        $outorgados = Outorgado::all();
 
-    // Filtrando os veículos do usuário logado
-    $userId = Auth::id();
-    $veiculos = $this->model->getSearch($request->search, $userId);
-    //$veiculos = Veiculo::where('user_id', $userId)->paginate(10);
-    //dd($veiculos);
-    // Pesquisa de documentos
-    //$veiculos = $this->model->getSearch(search: $request->search ?? '');
+        $userId = Auth::id();
+        $veiculos = $this->model->getSearch($request->search, $userId);
+        $path = storage_path('app/public/documentos/usuario_' . auth()->id());
 
-    // Caminho para a pasta de documentos (verifique se o caminho está correto para o usuário logado)
-    $path = storage_path('app/public/documentos/usuario_' . auth()->id());
-
-    // Função para calcular o tamanho total da pasta
-    function getFolderSize($folder)
-    {
-        $size = 0;
-        foreach (glob(rtrim($folder, '/') . '/*', GLOB_NOSORT) as $file) {
-            $size += is_file($file) ? filesize($file) : getFolderSize($file);
+        // Função para calcular o tamanho total da pasta
+        function getFolderSize($folder)
+        {
+            $size = 0;
+            foreach (glob(rtrim($folder, '/') . '/*', GLOB_NOSORT) as $file) {
+                $size += is_file($file) ? filesize($file) : getFolderSize($file);
+            }
+            return $size;
         }
-        return $size;
+
+        // Calcular o tamanho usado na pasta
+        $usedSpaceInBytes = getFolderSize($path);
+        $usedSpaceInMB = $usedSpaceInBytes / (1024 * 1024); // Converter para MB
+        $limitInMB = 1; // Limite de 1 MB
+        $percentUsed = ($usedSpaceInMB / $limitInMB) * 100; // Percentual usado
+
+        return view('veiculos.index', compact(['clientes', 'usedSpaceInMB', 'percentUsed', 'outorgados', 'limitInMB', 'veiculos']));
     }
 
-    // Calcular o tamanho usado na pasta
-    $usedSpaceInBytes = getFolderSize($path);
-    $usedSpaceInMB = $usedSpaceInBytes / (1024 * 1024); // Converter para MB
-    $limitInMB = 1; // Limite de 1 MB
-    $percentUsed = ($usedSpaceInMB / $limitInMB) * 100; // Percentual usado
-
-    // Passar as informações para a view
-    return view('veiculos.index', compact(['clientes', 'usedSpaceInMB', 'percentUsed', 'outorgados', 'limitInMB', 'veiculos']));
-}
-
-
-
-//     public function index(Request $request)
-// {
-//     // Título e texto para confirmação de exclusão
-//     $title = 'Excluir!';
-//     $text = "Deseja excluir essa procuração?";
-//     confirmDelete($title, $text);
-
-//     // Obter todos os clientes
-//     $clientes = Cliente::all();
-
-//     // Obter procurações com base na pesquisa
-//     $procs = $this->model->getSearch(search: $request->search ?? '');
-
-//     // Caminho para a pasta de documentos
-//     $path = storage_path('app/public/documentos');
-
-//     // Obter o espaço total do sistema de arquivos
-//     $totalSpace = disk_total_space($path);
-
-//     // Obter o espaço livre no sistema de arquivos
-//     $usedSpace = disk_free_space($path);
-
-//     // Calcular o percentual de espaço utilizado
-//     $percentUsed = (($totalSpace - $usedSpace) / $totalSpace) * 100;
-
-//     // Calcular o valor usado em GB
-//     $usedGB = number_format(($totalSpace - $usedSpace) / (1024 * 1024 * 1024), 2);
-
-//     // Calcular o valor total em GB
-//     $totalGB = number_format($totalSpace / (1024 * 1024 * 1024), 2);
-
-//     // Passar as informações para a view
-//     return view('veiculos.index', compact(['procs', 'clientes', 'usedGB', 'percentUsed', 'totalGB']));
-// }
-
-     public function create(){
+    public function create(){
         return view('veiculos.create');
     }
+
     public function createProcManual(){
         return view('veiculos.create-proc-manual');
     }
     
     public function storeProcManual(Request $request){
-        //dd($request);
-        $userId = Auth::id(); // Obtém o ID do usuário autenticado
-        // Localiza o usuário logado
+
+        $userId = Auth::id();
         $user = User::find($userId);
-        $outorgados = Outorgado::all();
-        //dd($outorgados);
-        $config = TextoPoder::first();
-        $textInicio = TextoInicio::first();
-        //dd($textInicio);
-        $cidades = Cidade::first();
-        
+        $configProc = ModeloProcuracoes::first();
         $dataAtual = Carbon::now();
         
         $dataPorExtenso = $dataAtual->translatedFormat('d \d\e F \d\e Y');
-
-        $cidade = Cidade::first();
        
         // Gerar o PDF com FPDF
         $pdf = new FPDF();
@@ -173,6 +116,13 @@ class VeiculoController extends Controller
 
         $pdf->Ln(8);
 
+        // Decodificar o array JSON de outorgados
+        $outorgadosSelecionados = json_decode($configProc->outorgados, true);
+
+        // Buscar dados dos outorgados na tabela
+        $outorgados = Outorgado::whereIn('id', $outorgadosSelecionados)->get();
+
+        // Gerar o PDF com os dados dos outorgados
         foreach ($outorgados as $outorgado) {
             // Adicionar informações ao PDF
             $pdf->Cell(0, 0, utf8_decode("OUTORGADO: {$outorgado->nome_outorgado}"), 0, 0, 'L');
@@ -195,7 +145,7 @@ class VeiculoController extends Controller
         $margem_direita = 10;  // Margem direita
 
         // Texto a ser inserido no PDF
-        $text = $textInicio->texto_inicio;
+        $text = $configProc->texto_inicial;
 
         // Remover quebras de linha manuais, caso existam
         $text = str_replace("\n", " ", $text);
@@ -221,7 +171,7 @@ class VeiculoController extends Controller
         $pdf->Ln(8);
         $pdf->SetFont('Arial', '', 11);
 
-        $text2 = "$config->texto_final";
+        $text2 = "$configProc->texto_final";
 
         // Remover quebras de linha manuais, caso existam
         $text2 = str_replace("\n", " ", $text2);
@@ -232,7 +182,7 @@ class VeiculoController extends Controller
         // Adicionar o texto justificado, utilizando a largura calculada
         $pdf->MultiCell($largura_disponivel2, 5, utf8_decode($text2), 0, 'J');
         // Adicionando a data por extenso no PDF
-        $pdf->Cell(0, 10, utf8_decode("$cidades->cidade, $dataPorExtenso"), 0, 1, 'R');  // 'R' para alinhamento à direita
+        $pdf->Cell(0, 10, utf8_decode("$configProc->cidade, $dataPorExtenso"), 0, 1, 'R');  // 'R' para alinhamento à direita
 
 
 
@@ -268,7 +218,7 @@ if (!File::exists($pastaProc)) {
 }
 
 $caminhoProc = $pastaProc . strtoupper($request['placa']) . '.pdf';
-$urlProc = asset('procuracoes_manual/' . strtoupper($request['placa']) . '.pdf');
+$urlProc = asset('storage/documentos/usuario_1/procuracoes_manual/' . strtoupper($request['placa']) . '.pdf');
 
 // Salvar o PDF
 $pdf->Output('F', $caminhoProc);
@@ -305,6 +255,7 @@ $data = [
     'arquivo_doc' => "Não consta",
     'renavam' => $request['renavam'],
     'arquivo_proc' => $urlProc,
+    'user_id' => $userId,
 ];
 
 // Criar o registro no banco
@@ -325,68 +276,21 @@ if ($this->model->create($data)) {
         $userId = Auth::id(); // Obtém o ID do usuário autenticado
         // Localiza o usuário logado
         $user = User::find($userId);
-        $outorgadosAll = Outorgado::all();
-        //dd($user->name);
 
-        $request->validate([
-            'outorgados' => 'required|array', // Certifique-se de que é um array
-            'outorgados.*' => 'exists:outorgados,id', // Verifica se os IDs existem na tabela 'outorgados'
-        ]);
-    
-        // Obtém os IDs selecionados
-        $idsOutorgados = $request->input('outorgados');
-    
-        // Busca os registros correspondentes no banco de dados
-        $outorgadosSelecionados = Outorgado::whereIn('id', $idsOutorgados)->get();
+        $configProc = ModeloProcuracoes::first();
 
-        
-        //dd($outorgado->nome_outorgado);
-        //dd($outorgadosSelecionados->nome_outorgado);
-        $config = TextoPoder::first();
-        $textInicio = TextoInicio::first();
+        //dd($configProc->outorgados);
 
-        $cidades = Cidade::first();
-        
         $dataAtual = Carbon::now();
         
         $dataPorExtenso = $dataAtual->translatedFormat('d \d\e F \d\e Y');
 
-        $cidade = Cidade::first();
-
-
-        if ($outorgadosAll->isEmpty()) {
+        if (empty($configProc->outorgados)) {
             alert()->error('Erro!', 'Por favor, cadastre ao menos um Outorgado antes de prosseguir.')
                 ->persistent(true)
                 ->autoClose(5000) // Fecha automaticamente após 5 segundos
                 ->timerProgressBar();
     
-            return redirect()->route('veiculos.index');
-        }
-
-        if (!$textInicio || !isset($textInicio->texto_inicio)) {
-            alert()->error('Erro!', 'Por favor, configure o texto inicial procuração antes de prosseguir.')
-                ->persistent(true)
-                ->autoClose(5000) // Fecha automaticamente após 5 segundos
-                ->timerProgressBar();
-        
-            return redirect()->route('veiculos.index');
-        }
-
-        if (!$config || !isset($config->texto_final)) {
-            alert()->error('Erro!', 'Por favor, configure o texto final da procuração antes de prosseguir.')
-                ->persistent(true)
-                ->autoClose(5000) // Fecha automaticamente após 5 segundos
-                ->timerProgressBar();
-        
-            return redirect()->route('veiculos.index');
-        }
-
-        if (!$cidade || !isset($cidade->cidade)) {
-            alert()->error('Erro!', 'Por favor, configure a cidade da procuração antes de prosseguir.')
-                ->persistent(true)
-                ->autoClose(5000) // Fecha automaticamente após 5 segundos
-                ->timerProgressBar();
-        
             return redirect()->route('veiculos.index');
         }
 
@@ -533,7 +437,16 @@ if ($this->model->create($data)) {
 
         $pdf->Ln(8);
 
-        foreach ($outorgadosSelecionados as $outorgado) {
+        //$outorgadosSelecionados = ModeloProcuracoes::where('')
+
+        // Decodificar o array JSON de outorgados
+        $outorgadosSelecionados = json_decode($configProc->outorgados, true);
+
+        // Buscar dados dos outorgados na tabela
+        $outorgados = Outorgado::whereIn('id', $outorgadosSelecionados)->get();
+
+        // Gerar o PDF com os dados dos outorgados
+        foreach ($outorgados as $outorgado) {
             // Adicionar informações ao PDF
             $pdf->Cell(0, 0, utf8_decode("OUTORGADO: {$outorgado->nome_outorgado}"), 0, 0, 'L');
             $pdf->Ln(5);
@@ -555,7 +468,7 @@ if ($this->model->create($data)) {
         $margem_direita = 10;  // Margem direita
 
         // Texto a ser inserido no PDF
-        $text = $textInicio->texto_inicio;
+        $text = $configProc->texto_inicial;
 
         // Remover quebras de linha manuais, caso existam
         $text = str_replace("\n", " ", $text);
@@ -581,7 +494,7 @@ if ($this->model->create($data)) {
         $pdf->Ln(8);
         $pdf->SetFont('Arial', '', 11);
 
-        $text2 = "$config->texto_final";
+        $text2 = "$configProc->texto_final";
 
         // Remover quebras de linha manuais, caso existam
         $text2 = str_replace("\n", " ", $text2);
@@ -592,18 +505,13 @@ if ($this->model->create($data)) {
         // Adicionar o texto justificado, utilizando a largura calculada
         $pdf->MultiCell($largura_disponivel2, 5, utf8_decode($text2), 0, 'J');
         // Adicionando a data por extenso no PDF
-        $pdf->Cell(0, 10, utf8_decode("$cidades->cidade, $dataPorExtenso"), 0, 1, 'R');  // 'R' para alinhamento à direita
-
-
+        $pdf->Cell(0, 10, utf8_decode("$configProc->cidade, $dataPorExtenso"), 0, 1, 'R');  // 'R' para alinhamento à direita
 
                                                                                         
         $pdf->Ln(5);
         $pdf->Cell(0, 10, "_________________________________________________" , 0, 1, 'C');
         $pdf->SetFont('Arial', 'B', 12);
         $pdf->Cell(0, 5, utf8_decode("$nome"), 0, 1, 'C');
-
-        // Definir o nome do arquivo do PDF
-        //$nomePDF = 'nome_extraido_' . time() . '.pdf';
 
         // Caminho para salvar o PDF na pasta 'procuracoes' dentro de 'documentos'
         $caminhoProc = storage_path('app/public/' . $pastaUsuario . 'procuracoes/' . strtoupper($placa) . '.pdf'); 
@@ -635,12 +543,10 @@ if ($this->model->create($data)) {
 
             'user_id' => $userId,
         ];
-        //dd($data);
+
         // Salvar o PDF
         $pdf->Output('F', $caminhoProc); 
 
-        //$extension = $request->arquivo->getClientOriginalExtension();
-        //$data['arquivo'] = $request->arquivo->storeAs("usuarios/$request->colaborador/Adiantamento/$request->mes/arquivo-$dataAtual" . ".{$extension}");
         //Mail::to( config('mail.from.address'))->send(new SendEmail($data, $caminhoPDF));
 
         if($this->model->create($data)){

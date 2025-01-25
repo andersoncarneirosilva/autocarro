@@ -1,5 +1,5 @@
 <div class="row">
-    <div class="col-lg-12">
+    {{-- <div class="col-lg-12">
         <div class="mb-3">
             <label>Selecione o Outorgado: <span style="color: red;">*</span></label>
             <select class="select2 form-control select2-multiple" data-toggle="select2" multiple="multiple" name="outorgados[]" data-placeholder="Escolha um ou mais ...">
@@ -11,7 +11,7 @@
             
                                                             
         </div>
-    </div>
+    </div> --}}
     <div class="col-lg-12">
         <div class="mb-3">
             <label>Endereço: <span style="color: red;">*</span></label>
