@@ -25,6 +25,7 @@ class DashController extends Controller
 
         $search = $request->search;
         $emprestimos = Veiculo::orderBy('created_at', 'desc')->take(4)->get();
+        //dd($emprestimos);
         //$users = $this->model->getUsersDash();
         $countDocs = $this->model->getCountDocs();
         $countProcs = $this->model->getCountProcs();

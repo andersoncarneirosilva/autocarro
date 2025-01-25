@@ -36,7 +36,6 @@
                     <table class="table table-hover table-centered mb-0">
                         <thead class="table-dark">
                             <tr>
-                                <th>#</th>
                                 <th>Nome</th>
                                 <th>CPF</th>
                                 <th>Whatsapp</th>
@@ -56,7 +55,6 @@
                         $link_whatsapp = "https://wa.me/" . preg_replace('/\D/', '', $fone); 
                         ?>
                                 <tr>
-                                    <td>{{ $cli->id }}</td>
                                     <td>{{ $cli->nome }}</td>
                                     <td>{{ $cli->cpf }}</td>
                                     <td><a href="<?= $link_whatsapp ?>" target="_blank" style="color: #0b8638;">

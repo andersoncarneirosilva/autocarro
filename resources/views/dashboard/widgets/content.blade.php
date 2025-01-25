@@ -105,50 +105,6 @@
     </div>
     <!-- end col-->
 
-    <div class="col-lg-7">
-        <div class="card">
-            <div class="card-header d-flex justify-content-between align-items-center">
-                <h4 class="header-title">Últimos veículos</h4>
-            </div>
-            @if ($emprestimos)
-            <div class="card-body pt-2">
-                <div class="table-responsive">
-                    <table class="table table-centered table-nowrap table-hover mb-0">
-                        <tbody>
-                            @foreach ($emprestimos as $emp)
-                            <tr>
-                                <td>
-                                    <h5 class="font-14 my-1"><a href="#" class="text-body">{{ $emp->nome }}</a></h5>
-                                    <span class="text-muted font-13">{{ $emp->marca }}</span>
-                                </td>
-                                <td>
-                                    <span class="text-muted font-13">Placa</span> <br>
-                                    <span class="font-14 mt-1 fw-normal">{{ $emp->placa }}</span>
-                                </td>
-                                <td>
-                                    <span class="text-muted font-13">Cor</span>
-                                    <h5 class="font-14 mt-1 fw-normal">{{ $emp->cor }}</h5>
-                                </td>
-                                <td>
-                                    <span class="text-muted font-13">Ano/Modelo</span>
-                                    <h5 class="font-14 mt-1 fw-normal">{{ $emp->ano }}</h5>
-                                </td>
-                                
-                            </tr>
-                            @endforeach
-                        </tbody>
-                    </table>
-                </div> <!-- end table-responsive-->
 
-            </div> <!-- end card body-->
-            
-            @else
-                <div class="alert alert-warning" role="alert">
-                    NENHUM RESULTADO ENCONTRADO!
-                </div>
-            @endif
-        </div> <!-- end card -->
-        <!-- end card -->
-    </div>
     <!-- end col-->
 </div><!-- end row-->

@@ -34,7 +34,6 @@
                     <table class="table table-hover table-centered mb-0">
                         <thead class="table-dark">
                             <tr>
-                                <th>#</th>
                                 <th>Nome</th>
                                 <th>CPF</th>
                                 <th>CPF</th>
@@ -45,7 +44,6 @@
                         <tbody>
                             @foreach ($outs as $out)
                                 <tr>
-                                    <td>{{ $out->id }}</td>
                                     <td>{{ $out->nome_outorgado }}</td>
                                     <td>{{ $out->cpf_outorgado }}</td>
                                     <td>{{ $out->end_outorgado }}</td>
@@ -87,7 +85,7 @@
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
-                <form action="{{ route('outorgados.store') }}" method="POST" enctype="multipart/form-data">
+                <form action="{{ route('outorgados.store') }}" method="POST" id="form-cad" enctype="multipart/form-data">
                     @csrf
                     <div class="mb-3">
                         <label for="nome_outorgado" class="form-label">Nome</label>
@@ -133,7 +131,7 @@
                 <h5 class="modal-title" id="editInfoModalLabel">Editar Informações</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
-            <form id="editForm" method="POST">
+            <form id="edit-form-cad" method="POST">
                 @csrf
                 @method('PUT') <!-- Usado para edições -->
                 <div class="modal-body">
@@ -171,7 +169,7 @@
         url: `/outorgados/${docId}`,
         method: 'GET',
         success: function(response) {
-            console.log(response);
+            //console.log(response);
             // Preencha os campos do modal com os dados do documento
             $('#edit_nome_outorgado').val(response.nome_outorgado);
             $('#edit_cpf_outorgado').val(response.cpf_outorgado);
@@ -194,4 +192,148 @@
     });
 }
 </script>
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        document.getElementById('cpf_outorgado').addEventListener('input', function (e) {
+            let value = e.target.value.replace(/\D/g, ''); // Remove caracteres não numéricos
+            if (value.length > 11) value = value.slice(0, 11); // Limita ao tamanho máximo do CPF
+            value = value.replace(/(\d{3})(\d)/, '$1.$2'); // Adiciona o primeiro ponto
+            value = value.replace(/(\d{3})(\d)/, '$1.$2'); // Adiciona o segundo ponto
+            value = value.replace(/(\d{3})(\d{1,2})$/, '$1-$2'); // Adiciona o hífen
+            e.target.value = value;
+        });
+    });
+</script>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        document.getElementById('edit_cpf_outorgado').addEventListener('input', function (e) {
+            let value = e.target.value.replace(/\D/g, ''); // Remove caracteres não numéricos
+            if (value.length > 11) value = value.slice(0, 11); // Limita ao tamanho máximo do CPF
+            value = value.replace(/(\d{3})(\d)/, '$1.$2'); // Adiciona o primeiro ponto
+            value = value.replace(/(\d{3})(\d)/, '$1.$2'); // Adiciona o segundo ponto
+            value = value.replace(/(\d{3})(\d{1,2})$/, '$1-$2'); // Adiciona o hífen
+            e.target.value = value;
+        });
+    });
+</script>
+
+<script>
+    // Função para validar CPF
+    function validarCPF(cpf) {
+        // Remove caracteres não numéricos
+        cpf = cpf.replace(/[^\d]+/g, '');
+
+        // Verifica se o CPF tem 11 dígitos ou é uma sequência repetida
+        if (cpf.length !== 11 || /^(\d)\1+$/.test(cpf)) {
+            return false;
+        }
+
+        // Função para calcular os dígitos verificadores
+        function calcularDigito(base) {
+            let soma = 0;
+            for (let i = 0; i < base.length; i++) {
+                soma += base[i] * (base.length + 1 - i);
+            }
+            const resto = soma % 11;
+            return resto < 2 ? 0 : 11 - resto;
+        }
+
+        // Calcula o primeiro dígito verificador
+        const primeiroDigito = calcularDigito(cpf.slice(0, 9));
+
+        // Verifica o primeiro dígito
+        if (primeiroDigito !== parseInt(cpf[9], 10)) {
+            return false;
+        }
+
+        // Calcula o segundo dígito verificador
+        const segundoDigito = calcularDigito(cpf.slice(0, 10));
+
+        // Verifica o segundo dígito
+        return segundoDigito === parseInt(cpf[10], 10);
+    }
+
+    // Adiciona evento no envio do formulário
+    document.getElementById('form-cad').addEventListener('submit', function (e) {
+        e.preventDefault(); // Impede o envio do formulário para verificar antes
+        const cpfInput = document.getElementById('cpf_outorgado');
+
+        if (validarCPF(cpfInput.value)) {
+            // CPF válido, aqui você pode prosseguir com o envio do formulário
+            //alert('CPF válido!');
+             e.target.submit(); // Envia o formulário caso o CPF seja válido
+        } else {
+            // Exibe o SweetAlert com erro por 5 segundos
+            Swal.fire({
+                icon: 'error',
+                title: 'CPF Inválido!',
+                text: 'O CPF informado não é válido.',
+                timer: 5000, // Exibe por 5 segundos
+                showConfirmButton: true, // Remove o botão de confirmação
+                timerProgressBar: true,
+            });
+        }
+    });
+</script>
+
+<script>
+    // Função para validar CPF
+    function validarCPF(cpf) {
+        // Remove caracteres não numéricos
+        cpf = cpf.replace(/[^\d]+/g, '');
+
+        // Verifica se o CPF tem 11 dígitos ou é uma sequência repetida
+        if (cpf.length !== 11 || /^(\d)\1+$/.test(cpf)) {
+            return false;
+        }
+
+        // Função para calcular os dígitos verificadores
+        function calcularDigito(base) {
+            let soma = 0;
+            for (let i = 0; i < base.length; i++) {
+                soma += base[i] * (base.length + 1 - i);
+            }
+            const resto = soma % 11;
+            return resto < 2 ? 0 : 11 - resto;
+        }
+
+        // Calcula o primeiro dígito verificador
+        const primeiroDigito = calcularDigito(cpf.slice(0, 9));
+
+        // Verifica o primeiro dígito
+        if (primeiroDigito !== parseInt(cpf[9], 10)) {
+            return false;
+        }
+
+        // Calcula o segundo dígito verificador
+        const segundoDigito = calcularDigito(cpf.slice(0, 10));
+
+        // Verifica o segundo dígito
+        return segundoDigito === parseInt(cpf[10], 10);
+    }
+
+    // Adiciona evento no envio do formulário
+    document.getElementById('edit-form-cad').addEventListener('submit', function (e) {
+        e.preventDefault(); // Impede o envio do formulário para verificar antes
+        const cpfInput = document.getElementById('edit_cpf_outorgado');
+
+        if (validarCPF(cpfInput.value)) {
+            // CPF válido, aqui você pode prosseguir com o envio do formulário
+            //alert('CPF válido!');
+             e.target.submit(); // Envia o formulário caso o CPF seja válido
+        } else {
+            // Exibe o SweetAlert com erro por 5 segundos
+            Swal.fire({
+                icon: 'error',
+                title: 'CPF Inválido!',
+                text: 'O CPF informado não é válido.',
+                timer: 5000, // Exibe por 5 segundos
+                showConfirmButton: true, // Remove o botão de confirmação
+                timerProgressBar: true,
+            });
+        }
+    });
+</script>
+
     @endsection
