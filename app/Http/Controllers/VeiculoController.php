@@ -954,7 +954,7 @@ if (!Storage::disk('public')->exists($pastaAtpves)) {
     Storage::disk('public')->makeDirectory($pastaAtpves, 0777, true);
 }
 
-$fileName = 'atpve_' . $estoque->placa . '.pdf';
+$fileName = 'atpve_' . $estoque->placa . '_' . rand(1000, 9999) . '.pdf';
 $filePath = $pastaAtpves . $fileName;
 
 // Gera o arquivo PDF
