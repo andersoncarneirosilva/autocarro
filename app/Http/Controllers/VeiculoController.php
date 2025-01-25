@@ -962,7 +962,7 @@ if (Storage::disk('public')->exists($filePath)) {
     // Remove o arquivo existente
     Storage::disk('public')->delete($filePath);
 }
-//dd($filePath);
+dd($filePath);
 
 // Gera o arquivo PDF
 $pdfContent = $pdf->Output('S'); // Salva o conteúdo do PDF em formato string
