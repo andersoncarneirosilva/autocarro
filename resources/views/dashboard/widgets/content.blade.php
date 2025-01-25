@@ -35,7 +35,7 @@
                 
                 <script>
                     // Dados recebidos da controller
-                    const data = [{{ $countProcs }}, {{ $countDocs }}, {{ $countOrder }}];
+                    const data = {!! json_encode([$countProcs, $countDocs, $countOrder]) !!};
                     const labels = ["Procurações", "Documentos", "Ordens"];
                 
                     // Inicializar o gráfico
@@ -74,12 +74,14 @@
                     });
                 </script>
                 
+                
 
                 <div class="row text-center mt-3">
                     <div class="col-sm-4">
                         <i class="mdi mdi-file-account widget-icon rounded-circle bg-warning-lighten text-warning"></i>
                         <h3 class="fw-normal mt-3">
-                            <span>{{ $countDocs }}</span>
+                            <span>{{ is_array($countDocs) ? json_encode($countDocs) : $countDocs }}</span>
+
                         </h3>
                         <p class="text-muted mb-0 mb-2"><i class="mdi mdi-checkbox-blank-circle text-warning"></i> Documentos</p>
                     </div>
@@ -100,9 +102,9 @@
                 </div>
             </div>
             <!-- end card body-->
-        </div> --}}
+        </div>
         <!-- end card -->
-    </div>
+    </div> --}}
     <!-- end col-->
 
 

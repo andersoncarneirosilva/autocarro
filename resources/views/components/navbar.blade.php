@@ -214,7 +214,7 @@ observer.observe(document.body, { childList: true, subtree: true });
                 <div class="dropdown-menu dropdown-menu-end dropdown-menu-animated profile-dropdown">
                     <!-- item-->
                     <div class=" dropdown-header noti-title">
-                        {{-- <h6 class="text-overflow m-0">Bem-vindo, {{ Auth::user()->name }}!</h6> --}}
+                        <h6 class="text-overflow m-0">Menu</h6>
                     </div>
 
                     <!-- item-->
@@ -224,10 +224,10 @@ observer.observe(document.body, { childList: true, subtree: true });
                     </a>
 
                     <!-- item-->
-                    <a href="javascript:void(0);" class="dropdown-item">
+                    {{-- <a href="javascript:void(0);" class="dropdown-item">
                         <i class="mdi mdi-account-edit me-1"></i>
                         <span>Configurações</span>
-                    </a>
+                    </a> --}}
 
                     <!-- item-->
 

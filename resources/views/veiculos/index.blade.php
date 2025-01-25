@@ -38,31 +38,44 @@
                 <div class="card-header d-flex justify-content-between align-items-center">
                     <h4 class="header-title">Veículos cadastrados</h4>
                     <div class="dropdown">
-                        @if(auth()->user()->credito > 0)
+                        
+                        @if(auth()->user()->plano == "Mensal")
                         <div class="dropdown btn-group">
                             <button class="btn btn-primary btn-sm dropdown-toggle" 
-        type="button" 
-        data-bs-toggle="dropdown" 
-        aria-haspopup="true" 
-        aria-expanded="false" 
-        @if($percentUsed > 100) disabled @endif>
-    Cadastrar
-</button>
-
+                                    type="button" 
+                                    data-bs-toggle="dropdown" 
+                                    aria-haspopup="true" 
+                                    aria-expanded="false" 
+                                    @if($percentUsed > 100) disabled @endif>
+                                Cadastrar
+                            </button>
                             <div class="dropdown-menu dropdown-menu-animated dropdown-menu-end">
-
                                 <a href="#" data-bs-toggle="modal" data-bs-target="#standard-modal" class="dropdown-item">
                                     Cadastro automático
                                 </a>
-
                             <a href="{{ route('veiculos.create-proc-manual')}}" class="dropdown-item">Cadastro manual</a>
-
-
-
                             </div>
                         </div>
 
+                        @elseif(auth()->user()->credito < 0)
+                        <div class="dropdown btn-group">
+                            <button class="btn btn-primary btn-sm dropdown-toggle" 
+                                    type="button" 
+                                    data-bs-toggle="dropdown" 
+                                    aria-haspopup="true" 
+                                    aria-expanded="false" 
+                                    @if($percentUsed > 100) disabled @endif>
+                                Cadastrar
+                            </button>
+                            <div class="dropdown-menu dropdown-menu-animated dropdown-menu-end">
+                                <a href="#" data-bs-toggle="modal" data-bs-target="#standard-modal" class="dropdown-item">
+                                    Cadastro automático
+                                </a>
+                            <a href="{{ route('veiculos.create-proc-manual')}}" class="dropdown-item">Cadastro manual</a>
+                            </div>
+                        </div>
                         @endif
+
                     </div>
                 </div>
                 @if ($veiculos->total() != 0)
