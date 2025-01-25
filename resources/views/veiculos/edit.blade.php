@@ -10,10 +10,10 @@
                 <ol class="breadcrumb m-0">
                     <li class="breadcrumb-item"><a href="{{ route('dashboard.index') }}">Dashboard</a></li>
                     <li class="breadcrumb-item"><a href="{{ route('veiculos.index') }}">Veículos</a></li>
-                    <li class="breadcrumb-item active">{{ $veiculo->marca }}</li>
+                    <li class="breadcrumb-item active">Detalhes</li>
                 </ol>
             </div>
-            <h3 class="page-title">Veículo: {{ $veiculo->marca }}</h3>
+            <h3 class="page-title">Detalhes do veículo</h3>
         </div>
     </div>
 </div>

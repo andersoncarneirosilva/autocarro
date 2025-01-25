@@ -24,6 +24,7 @@ class ClienteSeeder extends Seeder
             'bairro' => 'Olaria',
             'cidade' => 'Canoas',
             'estado' => 'RS',
+            'user_id' => '1',
         ]);
     }
 }

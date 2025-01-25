@@ -18,15 +18,23 @@ class ModeloProcuracoesController extends Controller
         $this->model = $procs;
     }
 
-    public function index(Request $request){
 
-        $title = 'Excluir!';
-        $text = "Deseja excluir essa categoria?";
-        confirmDelete($title, $text);
-        $modeloProc = $this->model::first();
-        //dd($docs);
-        return view('configuracoes.index', compact('modeloProc'));
-    }
+public function index(Request $request)
+{
+    $title = 'Excluir!';
+    $text = "Deseja excluir essa categoria?";
+    confirmDelete($title, $text);
+
+    // Obter o ID do usuário logado
+    $userId = Auth::id();
+//dd($userId);
+    // Buscar o modelo de procuração relacionado ao usuário logado
+    $modeloProc = $this->model::where('user_id', $userId)->first();
+
+    // Retornar para a view
+    return view('configuracoes.index', compact('modeloProc'));
+}
+
 
     public function store(Request $request)
 {

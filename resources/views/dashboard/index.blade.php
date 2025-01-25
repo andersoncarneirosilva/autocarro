@@ -24,10 +24,10 @@
               <h5 class="text-success float-start mt-0">Novidades no App!</h5>
               <div class="ribbon-content">
                   <ul>
-                    <li>Correção no campo de busca para smartphone.</li>
-                    <li>Campo CRV não será exibido para editar caso o documento seja digital.</li>
-                    <li>Página modelo de procuração reformulada.</li>
+                    <li>Agora é possível selecionar os outorgados para a procuração.</li>
+                    <li>Cada veículo tem a sua imagem individual(moto, carro, caminhonete).</li>
                     <li>Cada usuário tem acesso apenas ao seu próprio cadastro.</li>
+                    <li>Página modelo de procuração reformulada.</li>
 
                   </ul>
               </div>

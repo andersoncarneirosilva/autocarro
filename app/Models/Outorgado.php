@@ -20,13 +20,20 @@ class Outorgado extends Model
         'nome_outorgado',
         'cpf_outorgado',
         'end_outorgado',
+        'user_id',
     ];
 
 
-    public static function getOutorgados()
-    {
-        return DB::table('outorgados')->get();
-    }
+    public function getSearch(?string $search = null, $userId)
+        {
+            return $this->where('user_id', $userId) // Filtro pelo usuário logado
+                ->when($search, function ($query) use ($search) {
+                    // Se houver pesquisa, filtra por renavam ou placa
+                    $query->where('nome', 'LIKE', "%{$search}%")
+                          ->orWhere('cpf', 'LIKE', "%{$search}%");
+                })
+                ->paginate(10); // Retorna os resultados paginados
+        }
 
     
 

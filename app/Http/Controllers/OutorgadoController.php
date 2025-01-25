@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\Outorgado;
 use App\Models\ModeloProcuracoes;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
 class OutorgadoController extends Controller
 {
@@ -21,7 +22,8 @@ class OutorgadoController extends Controller
         $text = "Deseja tests excluir esse outorgado?";
         confirmDelete($title, $text);
 
-        $outs = Outorgado::paginate(10);
+        $userId = Auth::id();
+        $outs = $this->model->getSearch($request->search, $userId);
         //dd($docs);
         return view('outorgados.index', compact('outs'));
     }
@@ -52,11 +54,13 @@ class OutorgadoController extends Controller
 
     public function store(Request $request)
 {
+    $userId = Auth::id();
     // Dados recebidos da requisição
     $data = [
         'nome_outorgado' => $request->nome_outorgado,
         'cpf_outorgado' => $request->cpf_outorgado,
         'end_outorgado' => $request->end_outorgado,
+        'user_id' => $userId,
     ];
 
     // Salva o novo outorgado na tabela 'outorgados'

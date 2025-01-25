@@ -36,10 +36,10 @@ class VeiculoController extends Controller
         $text = "Deseja excluir essa procuração?";
         confirmDelete($title, $text);
         
-        $clientes = Cliente::all();
         $outorgados = Outorgado::all();
-
+        
         $userId = Auth::id();
+        $clientes = Cliente::where('user_id', $userId)->get();
         $veiculos = $this->model->getSearch($request->search, $userId);
         $path = storage_path('app/public/documentos/usuario_' . auth()->id());
 
@@ -74,7 +74,7 @@ class VeiculoController extends Controller
 
         $userId = Auth::id();
         $user = User::find($userId);
-        $configProc = ModeloProcuracoes::first();
+        $configProc = ModeloProcuracoes::where('user_id', $userId)->first();
         $dataAtual = Carbon::now();
         
         $dataPorExtenso = $dataAtual->translatedFormat('d \d\e F \d\e Y');
@@ -218,7 +218,7 @@ if (!File::exists($pastaProc)) {
 }
 
 $caminhoProc = $pastaProc . strtoupper($request['placa']) . '.pdf';
-$urlProc = asset('storage/documentos/usuario_1/procuracoes_manual/' . strtoupper($request['placa']) . '.pdf');
+$urlProc = asset('storage/' . $pastaUsuario . 'procuracoes_manual/' . strtoupper($request['placa']) . '.pdf');
 
 // Salvar o PDF
 $pdf->Output('F', $caminhoProc);
@@ -252,6 +252,7 @@ $data = [
     'motor' => "Não consta",
     'combustivel' => "Não consta",
     'infos' => "Não consta",
+    'tipo' => $request['tipo'],
     'arquivo_doc' => "Não consta",
     'renavam' => $request['renavam'],
     'arquivo_proc' => $urlProc,
@@ -277,7 +278,7 @@ if ($this->model->create($data)) {
         // Localiza o usuário logado
         $user = User::find($userId);
 
-        $configProc = ModeloProcuracoes::first();
+        $configProc = ModeloProcuracoes::where('user_id', $userId)->first();
 
         //dd($configProc->outorgados);
 

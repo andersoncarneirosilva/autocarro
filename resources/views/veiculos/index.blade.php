@@ -121,7 +121,7 @@
                                                 <a href="{{ route('veiculos.edit', $doc->id) }}" class="dropdown-item">Editar</a>
 
                                                 <a href="{{ $doc->arquivo_doc }}" 
-                                                    class="dropdown-item"
+                                                    class="dropdown-item {{ $doc->arquivo_doc === 'Não consta' ? 'disabled' : '' }}"
                                                     target="_blank">
                                                     Baixar CRLV
                                                 </a>

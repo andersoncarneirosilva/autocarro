@@ -103,7 +103,7 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="col-md-4">
+                        <div class="col-md-3">
                             <div class="mb-3">
                                 <label for="social-insta" class="form-label">Ano/Modelo: <span style="color: red;">*</span></label>
                                 <div class="input-group">
@@ -111,7 +111,7 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="col-md-4">
+                        <div class="col-md-3">
                             <div class="mb-3">
                                 <label for="social-insta" class="form-label">Renavam: <span style="color: red;">*</span></label>
                                 <div class="input-group">
@@ -119,13 +119,24 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="col-md-4">
+                        <div class="col-md-3">
                             <div class="mb-3">
                                 <label for="social-insta" class="form-label">Tipo de Doc: <span style="color: red;">*</span></label>
                                 <select class="form-select mb-3" name="tipo_doc" required>
                                     <option selected value="">Selecione o tipo</option>
                                     <option value="Digital">Digital</option>
                                     <option value="***">Físico</option>
+                                </select> 
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="mb-3">
+                                <label for="social-insta" class="form-label">Tipo de veículo: <span style="color: red;">*</span></label>
+                                <select class="form-select mb-3" name="tipo" required>
+                                    <option selected value="">Selecione o tipo</option>
+                                    <option value="Carro">Carro</option>
+                                    <option value="Moto">Moto</option>
+                                    <option value="Caminhonete">Caminhonete</option>
                                 </select> 
                             </div>
                         </div>
@@ -138,7 +149,7 @@
                         <div class="col-lg-6">
                         </div>
                         <div class="col-lg-6 text-end">
-                            <a href="{{ route('veiculos.index')}}" class="btn btn-secondary btn-sm">Cancelar</a>
+                            <a href="{{ route('veiculos.index')}}" class="btn btn-secondary btn-sm">Voltar</a>
                             <button type="submit" class="btn btn-success btn-sm">Cadastrar</button>
                         </div>
                     </div>

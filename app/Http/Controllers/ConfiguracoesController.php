@@ -26,17 +26,17 @@ class ConfiguracoesController extends Controller
 
     $userId = Auth::id();
     $user = User::find($userId);
-
+    //dd($user);
     // Paginar os registros de Outorgado
-    $outorgados = Outorgado::paginate(2);
+    $outorgados = Outorgado::where('user_id', $userId)->get();
+    
+    // Filtrar os registros de ModeloProcuracoes pelo user_id do usuário logado
+    $modeloProc = ModeloProcuracoes::where('user_id', $userId)->get()->map(function ($modelo) {
+        // Decodificar o campo "outorgados" (JSON)
+        $outorgadosIds = json_decode($modelo->outorgados, true);
 
-    // Obter registros de ModeloProcuracoes e buscar os "outorgados" relacionados
-    $modeloProc = ModeloProcuracoes::all()->map(function ($modelo) {
-        // Decodificar o campo "outorgados"
-    $outorgadosIds = json_decode($modelo->outorgados, true);
-    //dd($outorgadosIds);
-    // Buscar os registros correspondentes na tabela "outorgados"
-    $modelo->outorgadosDetalhes = Outorgado::whereIn('id', $outorgadosIds)->get();
+        // Buscar os registros de "outorgados" relacionados
+        $modelo->outorgadosDetalhes = Outorgado::whereIn('id', $outorgadosIds)->get();
 
         return $modelo;
     });
