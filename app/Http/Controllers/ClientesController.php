@@ -9,7 +9,7 @@ use Smalot\PdfParser\Parser;
 use Illuminate\Support\Facades\Auth;
 use Carbon\Carbon;
 use FPDF;
-
+use App\Rules\ValidCPF;
 class ClientesController extends Controller
 {
     protected $model;

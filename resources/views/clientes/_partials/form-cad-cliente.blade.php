@@ -138,3 +138,61 @@
     
 </div>
 
+<script>
+    // Função para validar CPF
+    function validarCPF(cpf) {
+        // Remove caracteres não numéricos
+        cpf = cpf.replace(/[^\d]+/g, '');
+
+        // Verifica se o CPF tem 11 dígitos ou é uma sequência repetida
+        if (cpf.length !== 11 || /^(\d)\1+$/.test(cpf)) {
+            return false;
+        }
+
+        // Função para calcular os dígitos verificadores
+        function calcularDigito(base) {
+            let soma = 0;
+            for (let i = 0; i < base.length; i++) {
+                soma += base[i] * (base.length + 1 - i);
+            }
+            const resto = soma % 11;
+            return resto < 2 ? 0 : 11 - resto;
+        }
+
+        // Calcula o primeiro dígito verificador
+        const primeiroDigito = calcularDigito(cpf.slice(0, 9));
+
+        // Verifica o primeiro dígito
+        if (primeiroDigito !== parseInt(cpf[9], 10)) {
+            return false;
+        }
+
+        // Calcula o segundo dígito verificador
+        const segundoDigito = calcularDigito(cpf.slice(0, 10));
+
+        // Verifica o segundo dígito
+        return segundoDigito === parseInt(cpf[10], 10);
+    }
+
+    // Adiciona evento no envio do formulário
+    document.getElementById('form-cadastro').addEventListener('submit', function (e) {
+        e.preventDefault(); // Impede o envio do formulário para verificar antes
+        const cpfInput = document.getElementById('cpf');
+
+        if (validarCPF(cpfInput.value)) {
+            // CPF válido, aqui você pode prosseguir com o envio do formulário
+            //alert('CPF válido!');
+             e.target.submit(); // Envia o formulário caso o CPF seja válido
+        } else {
+            // Exibe o SweetAlert com erro por 5 segundos
+            Swal.fire({
+                icon: 'error',
+                title: 'CPF Inválido!',
+                text: 'O CPF informado não é válido.',
+                timer: 5000, // Exibe por 5 segundos
+                showConfirmButton: true, // Remove o botão de confirmação
+                timerProgressBar: true,
+            });
+        }
+    });
+</script>

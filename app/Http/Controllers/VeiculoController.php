@@ -217,8 +217,10 @@ if (!File::exists($pastaProc)) {
     File::makeDirectory($pastaProc, 0777, true); // Cria a pasta se não existir
 }
 
-$caminhoProc = $pastaProc . strtoupper($request['placa']) . '.pdf';
-$urlProc = asset('storage/' . $pastaUsuario . 'procuracoes_manual/' . strtoupper($request['placa']) . '.pdf');
+$numeroRandom = rand(1000, 9999);
+
+$caminhoProc = $pastaProc . strtoupper($request['placa']) . '_' . $numeroRandom . '.pdf';
+$urlProc = asset('storage/' . $pastaUsuario . 'procuracoes_manual/' . strtoupper($request['placa']) . '_' . $numeroRandom . '.pdf');
 
 // Salvar o PDF
 $pdf->Output('F', $caminhoProc);
@@ -384,7 +386,9 @@ if ($this->model->create($data)) {
             // Garante que a pasta "crlv" existe
             $pastaDestino = storage_path('app/public/' . $pastaUsuario . 'crlv/');
             //dd($pastaDestino);
-            $urlDoc = asset('storage/' . $pastaUsuario .  'crlv/' . $placa . '.pdf'); // Adiciona a extensão .pdf
+            $numeroRandom = rand(1000, 9999);
+
+            $urlDoc = asset('storage/' . $pastaUsuario .  'crlv/' . $placa . '_' . $numeroRandom . '.pdf'); // Adiciona a extensão .pdf
             // dd($urlDoc);
 
             if (!file_exists($pastaDestino)) {
@@ -392,10 +396,10 @@ if ($this->model->create($data)) {
             }
 
             // Define o caminho completo do arquivo com a extensão .pdf
-            $caminhoDoc = $pastaDestino . $placa . '.pdf';
+            $caminhoDoc = $pastaDestino . $placa . '_' . $numeroRandom . '.pdf';
 
             // Move o arquivo para a pasta com o nome correto
-            $arquivo->move($pastaDestino, $placa . '.pdf');
+            $arquivo->move($pastaDestino, $placa . '_' . $numeroRandom . '.pdf');
 
 
             // Verifica se o arquivo foi salvo
@@ -516,8 +520,9 @@ if ($this->model->create($data)) {
         $pdf->Cell(0, 5, utf8_decode("$nome"), 0, 1, 'C');
 
         // Caminho para salvar o PDF na pasta 'procuracoes' dentro de 'documentos'
-        $caminhoProc = storage_path('app/public/' . $pastaUsuario . 'procuracoes/' . strtoupper($placa) . '.pdf'); 
-        $urlProc = asset('storage/' . $pastaUsuario . 'procuracoes/' . strtoupper($placa) . '.pdf'); 
+        $numeroRandom = rand(1000, 9999);
+        $caminhoProc = storage_path('app/public/' . $pastaUsuario . 'procuracoes/' . strtoupper($placa) . '_' . $numeroRandom . '.pdf'); 
+        $urlProc = asset('storage/' . $pastaUsuario . 'procuracoes/' . strtoupper($placa) . '_' . $numeroRandom . '.pdf'); 
         // Verificar se a pasta 'procuracoes' existe, se não, cria-la
         if (!file_exists(storage_path('app/public/' . $pastaUsuario . '/procuracoes'))) {
             mkdir(storage_path('app/public/' . $pastaUsuario . '/procuracoes'), 0777, true); // Cria a pasta se ela não existir
@@ -610,11 +615,11 @@ if ($this->model->create($data)) {
 
     // Nomes e caminhos dos arquivos a serem excluídos
     $arquivosParaExcluir = [
-        $pastaUsuario . 'crlv/' . basename($doc->arquivo_doc), // CRLV
-        $pastaUsuario . 'procuracoes/' . basename($doc->arquivo_doc), // Procuração
-        $pastaUsuario . 'atpves/' . 'atpve_' . basename($doc->arquivo_doc), // ATPVE
-        $pastaUsuario . 'atpves_assinadas/' . $veiculo->placa . '_assinado.pdf', // ATPVE Assinada
-        $pastaUsuario . 'procuracoes_assinadas/' . $veiculo->placa . '_assinado.pdf', // Procuração Assinada
+        $pastaUsuario . 'crlv/' . basename($doc->arquivo_doc),
+        $pastaUsuario . 'procuracoes/' . basename($doc->arquivo_proc),
+        $pastaUsuario . 'atpves/' . basename($doc->arquivo_atpve),
+        $pastaUsuario . 'atpves_assinadas/' . basename($doc->arquivo_atpve_assinado),
+        $pastaUsuario . 'procuracoes_assinadas/' . basename($doc->arquivo_proc_assinado),
     ];
 
     // Verifica e exclui os arquivos
@@ -645,7 +650,7 @@ if ($this->model->create($data)) {
         $clienteId = $request->input('cliente');
         //dd($clienteIds);
         $cliente = Cliente::whereIn('id', $clienteId)->first();
-        //dd($cliente->nome);
+        //dd($clientes->nome);
         // foreach ($clientes as $cliente) {
         // }
         
@@ -953,16 +958,9 @@ $pastaAtpves = $pastaUsuario . 'atpves/';
 if (!Storage::disk('public')->exists($pastaAtpves)) {
     Storage::disk('public')->makeDirectory($pastaAtpves, 0777, true);
 }
-
-$fileName = 'atpve_' . $estoque->placa . '.pdf';
+$numeroRandom = rand(1000, 9999);
+$fileName = 'atpve_' . $estoque->placa . '_' . $numeroRandom . '.pdf';
 $filePath = $pastaAtpves . $fileName;
-
-// Verifica se o arquivo já existe
-if (Storage::disk('public')->exists($filePath)) {
-    // Remove o arquivo existente
-    Storage::disk('public')->delete($filePath);
-}
-//dd($filePath);
 
 // Gera o arquivo PDF
 $pdfContent = $pdf->Output('S'); // Salva o conteúdo do PDF em formato string
@@ -970,7 +968,6 @@ Storage::disk('public')->put($filePath, $pdfContent);
 
 // Calcula o tamanho do novo arquivo
 $tamanhoNovoArquivo = Storage::disk('public')->size($filePath); // Em bytes
-
 
 // Verifica se há espaço suficiente
 if (($espacoUsado + $tamanhoNovoArquivo) > $limiteBytes) {
@@ -982,8 +979,8 @@ if (($espacoUsado + $tamanhoNovoArquivo) > $limiteBytes) {
 }
 
 // Retornar o link do PDF para download/visualização
-$fileUrl = asset('storage/' . $pastaAtpves . 'atpve_' . $estoque->placa . '.pdf');
-//dd($fileUrl);
+$fileUrl = asset('storage/' . $pastaAtpves . 'atpve_' . $estoque->placa . '_' . $numeroRandom . '.pdf');
+
 $data = [
     'arquivo_atpve' => $fileUrl,
 ];
@@ -1029,7 +1026,7 @@ public function edit($id){
 public function update(Request $request, $id)
 {
     $userId = Auth::id(); // Obtém o ID do usuário autenticado
-    
+    $numeroRandom = rand(1000, 9999);
     // Recuperar o registro do veículo pelo ID
     $veiculo = Veiculo::findOrFail($id);
 
@@ -1082,9 +1079,9 @@ private function processFileUpload($request, $veiculo, $fileKey, $storagePath, $
             // Interrompe o fluxo e redireciona
             return redirect()->route('veiculos.edit', $veiculo->id)->withErrors(['message' => 'Espaço insuficiente.']);
         }
-
+        $numeroRandom = rand(1000, 9999);
         // Salva o arquivo no disco 'public' e retorna o caminho correto
-        $fileName = $veiculo->placa . '_assinado.pdf';
+        $fileName = $veiculo->placa . '_' . $numeroRandom . '_assinado.pdf';
         $filePath = $arquivo->storeAs($storagePath, $fileName, ['disk' => 'public']);
 
         // Atualiza os campos no modelo
