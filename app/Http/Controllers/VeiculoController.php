@@ -954,9 +954,14 @@ if (!Storage::disk('public')->exists($pastaAtpves)) {
     Storage::disk('public')->makeDirectory($pastaAtpves, 0777, true);
 }
 
-$randon = rand(1000, 9999);
-$fileName = 'atpve_' . $estoque->placa . $randon . '.pdf';
+$fileName = 'atpve_' . $estoque->placa . '.pdf';
 $filePath = $pastaAtpves . $fileName;
+
+// Verifica se o arquivo já existe
+if (Storage::disk('public')->exists($filePath)) {
+    // Remove o arquivo existente
+    Storage::disk('public')->delete($filePath);
+}
 
 // Gera o arquivo PDF
 $pdfContent = $pdf->Output('S'); // Salva o conteúdo do PDF em formato string
@@ -964,6 +969,7 @@ Storage::disk('public')->put($filePath, $pdfContent);
 
 // Calcula o tamanho do novo arquivo
 $tamanhoNovoArquivo = Storage::disk('public')->size($filePath); // Em bytes
+
 
 // Verifica se há espaço suficiente
 if (($espacoUsado + $tamanhoNovoArquivo) > $limiteBytes) {
@@ -975,8 +981,7 @@ if (($espacoUsado + $tamanhoNovoArquivo) > $limiteBytes) {
 }
 
 // Retornar o link do PDF para download/visualização
-$fileUrl = asset('storage/' . $pastaAtpves . 'atpve_' . $estoque->placa . $randon . '.pdf');
-
+$fileUrl = asset('storage/' . $pastaAtpves . 'atpve_' . $estoque->placa . '.pdf');
 
 $data = [
     'arquivo_atpve' => $fileUrl,
