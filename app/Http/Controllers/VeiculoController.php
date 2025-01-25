@@ -642,12 +642,14 @@ if ($this->model->create($data)) {
         $user = User::find($userId);
         $configProc = ModeloProcuracoes::first();
         
-        $clienteIds = $request->input('cliente');
-        $clientes = Cliente::whereIn('id', $clienteIds)->get();
-        foreach ($clientes as $cliente) {
-        }
+        $clienteId = $request->input('cliente');
+        //dd($clienteIds);
+        $cliente = Cliente::whereIn('id', $clienteId)->first();
+        //dd($clientes->nome);
+        // foreach ($clientes as $cliente) {
+        // }
         
-        if ($clientes->isEmpty()) {
+        if (empty($cliente)) {
             return redirect()->back()->with('error', 'Nenhum cliente válido foi encontrado.');
         }
 
