@@ -52,43 +52,24 @@ class OutorgadoController extends Controller
 
     public function store(Request $request)
 {
-    // Validação dos dados
-    $validated = $request->validate([
-        'nome_outorgado' => 'required|string|max:255',
-        'cpf_outorgado' => 'required|cpf|unique:outorgados', // Exemplo de validação de CPF
-        'end_outorgado' => 'required|string|max:255',
-    ]);
-
-    // Dados que você já validou
-    $data = $validated;
+    // Dados recebidos da requisição
+    $data = [
+        'nome_outorgado' => $request->nome_outorgado,
+        'cpf_outorgado' => $request->cpf_outorgado,
+        'end_outorgado' => $request->end_outorgado,
+    ];
 
     // Salva o novo outorgado na tabela 'outorgados'
     $outorgado = $this->model->create($data);
 
-    // Verifique se a criação do outorgado foi bem-sucedida
-    if ($outorgado) {
-        // Agora, salve os dados na tabela 'ModeloProcuracoes'
-        
-        $modeloProcuracaoData = [
-            'outorgados' => json_encode([$outorgado->id]), // Adicionando o ID do outorgado como um array em JSON
-            'texto_inicial' => 'Texto inicial para o modelo', // Aqui você pode ajustar conforme necessário
-            'texto_final' => null, // Caso necessário, preencha com dados adicionais
-            'cidade' => null, // Caso necessário, preencha com dados adicionais
-            'user_id' => auth()->id(), // Defina o user_id se necessário
-        ];
-
-        // Salve na tabela ModeloProcuracoes
-        ModeloProcuracoes::create($modeloProcuracaoData);
-
         // Alerta de sucesso
-        alert()->success('Outorgado cadastrado com sucesso e dados salvos em ModeloProcuracoes!');
-    } else {
-        alert()->error('Erro ao cadastrar o Outorgado!');
-    }
+    alert()->success('Outorgado cadastrado com sucesso!');
+
 
     // Redireciona para a página de listagem
     return redirect()->route('outorgados.index');
 }
+
 
      
 
@@ -101,7 +82,7 @@ class OutorgadoController extends Controller
             alert()->success('Outorgado excluído com sucesso!');
         }
 
-        return redirect()->route('configuracoes.index');
+        return redirect()->route('outorgados.index');
     }
 
 }
