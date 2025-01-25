@@ -962,6 +962,7 @@ if (Storage::disk('public')->exists($filePath)) {
     // Remove o arquivo existente
     Storage::disk('public')->delete($filePath);
 }
+dd($filePath);
 
 // Gera o arquivo PDF
 $pdfContent = $pdf->Output('S'); // Salva o conteúdo do PDF em formato string
@@ -982,7 +983,7 @@ if (($espacoUsado + $tamanhoNovoArquivo) > $limiteBytes) {
 
 // Retornar o link do PDF para download/visualização
 $fileUrl = asset('storage/' . $pastaAtpves . 'atpve_' . $estoque->placa . '.pdf');
-
+//dd($fileUrl);
 $data = [
     'arquivo_atpve' => $fileUrl,
 ];
