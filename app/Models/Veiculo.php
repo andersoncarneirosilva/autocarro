@@ -34,6 +34,7 @@ class Veiculo extends Model
         'motor',
         'combustivel',
         'infos',
+        'tipo',
         'arquivo_doc',
         'arquivo_proc',
         'arquivo_proc_assinado',
@@ -352,6 +353,20 @@ class Veiculo extends Model
 
         // Caso nenhum nome de usuário seja encontrado
         return $infos ;
+    }
+
+    public function extrairEspecie($textoPagina){
+        // Suposição: O nome do usuário está precedido pela palavra "Nome:" ou "Nome do usuário:"
+        
+        $linhas = explode("\n", $textoPagina);
+                //dd($linhas);
+                $linha = explode("\t", $linhas[54]);
+                //dd($colunas);
+                $tipos = implode(', ', $linha);
+            //dd($outorgante);
+
+        // Caso nenhum nome de usuário seja encontrado
+        return $tipos ;
     }
     
 }

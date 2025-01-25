@@ -8,7 +8,13 @@
                         <div class="row align-items-center">
                             <div class="col-auto">
                                 <div class="avatar-lg">
-                                    <img src="{{ url('assets/images/img_car.png') }}" alt="" class="rounded-circle img-thumbnail">
+                                    @if($veiculo->tipo == "CARGA CAMINHONETE")
+                                        <img src="{{ url('assets/images/pickup.png') }}" alt="" class="rounded-circle img-thumbnail">
+                                    @elseif($veiculo->tipo == "PASSAGEIRO MOTOCICLETA")
+                                        <img src="{{ url('assets/images/moto.png') }}" alt="" class="rounded-circle img-thumbnail">
+                                    @elseif($veiculo->tipo == "PASSAGEIRO AUTOMOVEL")
+                                        <img src="{{ url('assets/images/car.png') }}" alt="" class="rounded-circle img-thumbnail">
+                                    @endif
                                 </div>
                             </div>
                             <div class="col">

@@ -29,6 +29,8 @@ return new class extends Migration
             $table->string('motor');
             $table->string('combustivel');
             $table->string('infos');
+            $table->string('tipo');
+
             $table->string('arquivo_doc');
 
             $table->string('endereco');

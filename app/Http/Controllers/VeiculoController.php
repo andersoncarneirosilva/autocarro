@@ -376,7 +376,8 @@ if ($this->model->create($data)) {
             $motor = $this->model->extrairMotor($textoPagina);
             $combustivel = $this->model->extrairCombustivel($textoPagina);
             $infos = $this->model->extrairInfos($textoPagina);
-            //dd($placaAnterior);
+            $tipo = $this->model->extrairEspecie($textoPagina);
+            //dd($tipo);
         }
 
             // Garante que a pasta "crlv" existe
@@ -537,7 +538,7 @@ if ($this->model->create($data)) {
             'motor' => $motor,
             'combustivel' => $combustivel,
             'infos' => $infos,
-
+            'tipo' => $tipo,
             'arquivo_doc' => $urlDoc,
             'arquivo_proc' => $urlProc,
 
@@ -634,24 +635,22 @@ if ($this->model->create($data)) {
 
 
     public function storeAtpve(Request $request, $id){
-//dd($request);
-        $userId = Auth::id(); // Obtém o ID do usuário autenticado
-        // Localiza o usuário logado
+
+        $userId = Auth::id();
+        
         $user = User::find($userId);
-        //dd($request);
-        $clienteIds = $request->input('cliente'); // Exemplo: [1, 2, 3]
+        $configProc = ModeloProcuracoes::first();
+        
+        $clienteIds = $request->input('cliente');
         $clientes = Cliente::whereIn('id', $clienteIds)->get();
         foreach ($clientes as $cliente) {
         }
-        // Verifica se os clientes foram encontrados
-    if ($clientes->isEmpty()) {
-        return redirect()->back()->with('error', 'Nenhum cliente válido foi encontrado.');
-    }
-        $cidade = Cidade::first();
+        
+        if ($clientes->isEmpty()) {
+            return redirect()->back()->with('error', 'Nenhum cliente válido foi encontrado.');
+        }
+
         $outorgados = Outorgado::first();
-        $textoFinal = TextoPoder::first();
-        $textoInicial = TextoInicio::first();
-        $cidade = Cidade::first();
 
         $estoque = Veiculo::find($id);
         //dd($estoque);
@@ -662,8 +661,8 @@ if ($this->model->create($data)) {
         $dataAno = $dataAtual->translatedFormat('Y');
 
         
-    // Criar o PDF com FPDF
-    $pdf = new FPDF();
+        // Criar o PDF com FPDF
+        $pdf = new FPDF();
         $pdf->SetMargins(30, 30, 30);
         $pdf->AddPage();
         $pdf->SetFont('Arial', 'B', 10);
