@@ -645,7 +645,7 @@ if ($this->model->create($data)) {
         $clienteId = $request->input('cliente');
         //dd($clienteIds);
         $cliente = Cliente::whereIn('id', $clienteId)->first();
-        dd($clientes->nome);
+        dd($cliente->nome);
         // foreach ($clientes as $cliente) {
         // }
         
