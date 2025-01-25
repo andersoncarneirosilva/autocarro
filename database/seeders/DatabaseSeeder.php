@@ -19,7 +19,6 @@ class DatabaseSeeder extends Seeder
             UserSeeder::class, // Substitua pelo nome real do seeder
             DocSeeder::class, // Adicione outros seeders conforme necessário
             ProcuracaoSeeder::class,
-            ConfigProcSeeder::class,
             ServicoSeeder::class,
             ClienteSeeder::class,
             ProcRapidaSeeder::class,

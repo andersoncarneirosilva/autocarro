@@ -38,7 +38,7 @@ class CidadeController extends Controller
             ]);
             //dd($validated);
         } catch (\Illuminate\Validation\ValidationException $e) {
-            alert()->error('Campo cidade é obrigatórios!');
+            alert()->error('Campo cidade é obrigatório!');
             return redirect()->route('configuracoes.index');
         }
 

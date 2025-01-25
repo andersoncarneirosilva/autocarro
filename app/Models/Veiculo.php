@@ -55,7 +55,7 @@ class Veiculo extends Model
         {
             return $this->where('user_id', $userId) // Filtro pelo usuário logado
                 ->when($search, function ($query) use ($search) {
-                    // Se houver pesquisa, filtra por nome ou CPF
+                    // Se houver pesquisa, filtra por renavam ou placa
                     $query->where('placa', 'LIKE', "%{$search}%")
                           ->orWhere('renavam', 'LIKE', "%{$search}%");
                 })

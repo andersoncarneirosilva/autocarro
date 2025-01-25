@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\TextoInicio;
 use Parsedown;
+use App\Models\ModeloProcuracoes;
 class TextoInicioController extends Controller
 {
     protected $model;
@@ -28,9 +29,17 @@ class TextoInicioController extends Controller
     public function store(Request $request){
         $data = $request->all();
         //dd($data);
-        if($this->model->create($data)){
+        if ($this->model->create($data)) {
+            // Atualiza ou cria na tabela ModeloProcuracoes
+            ModeloProcuracoes::updateOrCreate(
+                ['id' => 1], // Substitua por critérios reais, se necessário
+                [
+                    'texto_inicial' => $data['texto_inicio'], // Salva o texto_inicio
+                ]
+            );
+    
             alert()->success('Texto cadastrado com sucesso!');
-        }   
+        }  
 
         return redirect()->route('configuracoes.index');
     }
@@ -47,6 +56,8 @@ class TextoInicioController extends Controller
 
     public function show($id)
 {
+
+    //dd($id);
     // Tente encontrar o documento pelo ID
     $configuracao = TextoInicio::find($id);
 

@@ -24,6 +24,7 @@ use App\Http\Controllers\TextoInicioController;
 use App\Http\Controllers\OrdemController;
 use App\Http\Controllers\ProcRapidaController;
 use App\Http\Controllers\EstoqueController;
+use App\Http\Controllers\ModeloProcuracoesController;
 
 use Illuminate\Support\Facades\Route;
 use App\Events\EventReminderBroadcast;
@@ -74,6 +75,7 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/procuracoes', [ProcuracaoController::class, 'index'])->name('procuracoes.index');
     Route::post('/procuracoes', [ProcuracaoController::class, 'store'])->name('procuracoes.store');
 
+    Route::post('/outorgados/store-or-update', [ConfiguracoesController::class, 'storeOrUpdate'])->name('outorgados.storeOrUpdate');
     Route::get('/configuracoes/{id}', [ConfiguracoesController::class, 'show'])->name('configuracoes.show');
     Route::delete('/configuracoes/{id}', [ConfiguracoesController::class, 'destroy'])->name('configuracoes.destroy');
     Route::put('/configuracoes/{id}', [ConfiguracoesController::class, 'update'])->name('configuracoes.update');
@@ -193,6 +195,14 @@ Route::middleware(['auth'])->group(function () {
     Route::post('/veiculos', [VeiculoController::class, 'store'])->name('veiculos.store');
     Route::get('/veiculos/{id}', [VeiculoController::class, 'show'])->name('veiculos.show');
 
+    Route::get('/modeloprocs/{id}', [ModeloProcuracoesController::class, 'show'])->name('modeloprocs.show');
+    Route::put('/modeloprocs/{id}', [ModeloProcuracoesController::class, 'update'])->name('modeloprocs.update');
+    Route::post('/modeloprocs', [ModeloProcuracoesController::class, 'store'])->name('modeloprocs.store');
+
+    Route::get('/modeloprocuracoes/create', [ModeloProcuracoesController::class, 'create'])->name('modeloprocuracoes.create');
+Route::post('/modeloprocuracoes/store', [ModeloProcuracoesController::class, 'store'])->name('modeloprocuracoes.store');
+Route::get('/modeloprocuracoes/select/{id}', [ModeloProcuracoesController::class, 'select'])->name('modeloprocuracoes.select');
+Route::post('/modeloprocuracoes/confirm/{id}', [ModeloProcuracoesController::class, 'confirm'])->name('modeloprocuracoes.confirm');
 
 });
 

@@ -7,16 +7,17 @@
                 <strong>CPF: </strong>____________________________________<br>
                 <strong>ENDEREÇO: </strong>_____________________________<br>
                 ______________________________________________________________________________________<br><br>
-                @foreach ($outs as $out)
+                @foreach ($modeloProc as $modelo)
+                @foreach ($modelo->outorgadosDetalhes as $out)
                 <strong>OUTORGADO: {{ $out->nome_outorgado }}</strong><br>
                 <strong>CPF: {{ $out->cpf_outorgado }}</strong><br>
                 <strong>ENDEREÇO: {{ $out->end_outorgado }}</strong><br>
                 ______________________________________________________________________________________<br><br>
                 @endforeach
-
-                @foreach ($texts_starts as $texts_start)
+                @endforeach
+                @foreach ($modeloProc as $texts_start)
                     <div class="row" style="text-align: justify;">
-                        {{ $texts_start->texto_inicio}}<br>
+                        {{ $texts_start->texto_inicial}}<br>
                     </div>
                 @endforeach
 
@@ -48,15 +49,15 @@
                 <br>
 
                 <div class="row" style="text-align: justify;">
-                    @foreach ($texts as $text)
-                    {!! $text->html !!}
+                    @foreach ($modeloProc as $texts_start)
+                    {!! $texts_start->texto_final !!}
                     @endforeach
                 </div>
                 
                 <br>
                 <div class="row">
                     <div class="col text-end">
-                        @foreach ($cidades as $cidade)
+                        @foreach ($modeloProc as $cidade)
                         {{ $cidade->cidade }}
                         @endforeach
                         , 20 DE NOVEMBRO DE 2024

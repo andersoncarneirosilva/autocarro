@@ -10,7 +10,10 @@ use App\Models\Testemunha;
 use App\Models\Cidade;
 use App\Models\TextoPoder;
 use App\Models\TextoInicio;
+use App\Models\ModeloProcuracoes;
 use Smalot\PdfParser\Parser;
+use Illuminate\Support\Facades\Auth;
+use App\Models\User;
 use Carbon\Carbon;
 use FPDF;
 use Parsedown;
@@ -30,23 +33,82 @@ class ConfiguracoesController extends Controller
     $text = "Tem certeza que deseja excluir?";
     confirmDelete($title, $text);
 
-    $procs = ConfigProc::paginate(10);
-    $outs = Outorgado::paginate(10);
-    $teste = Testemunha::paginate(10);
-    $texts = TextoPoder::paginate(10);
-    $texts_starts = TextoInicio::paginate(10);
-    $cidades = Cidade::paginate(10);
+    $userId = Auth::id();
+    $user = User::find($userId);
 
-    $parsedown = new Parsedown();
+    // Paginar os registros de Outorgado
+    $outorgados = Outorgado::paginate(2);
 
-    // Processa o texto Markdown para HTML mantendo a paginação
-    $texts->getCollection()->transform(function ($text) use ($parsedown) {
-        $text->html = $parsedown->text($text->texto_final); // Adiciona o HTML processado ao item
-        return $text;
+    // Obter registros de ModeloProcuracoes e buscar os "outorgados" relacionados
+    $modeloProc = ModeloProcuracoes::all()->map(function ($modelo) {
+        // Decodificar o campo "outorgados"
+    $outorgadosIds = json_decode($modelo->outorgados, true);
+    //dd($outorgadosIds);
+    // Buscar os registros correspondentes na tabela "outorgados"
+    $modelo->outorgadosDetalhes = Outorgado::whereIn('id', $outorgadosIds)->get();
+
+        return $modelo;
     });
 
-    return view('configuracoes.index', compact('procs', 'outs', 'teste', 'texts', 'cidades', 'texts_starts'));
+
+    // Passa os dados necessários para a view
+    return view('configuracoes.index', compact('modeloProc', 'outorgados'));
 }
+
+
+public function storeOrUpdate(Request $request)
+{
+    // Obtém o ID do usuário logado
+    $userId = Auth::id();
+
+    // Obtém os textos necessários
+    $textoInicio = TextoInicio::first();
+    $textoPoder = TextoPoder::first();
+    $cidade = Cidade::first();
+
+    // Verifica se o campo "outorgados" foi enviado e é um array
+    if ($request->has('outorgados') && is_array($request->outorgados)) {
+        // Salva o array de outorgados como JSON
+        $outorgadosJson = json_encode($request->outorgados);
+
+        // Verifica se já existe um cadastro na tabela
+        $existeCadastro = ModeloProcuracoes::first();
+
+        if ($existeCadastro) {
+            // Atualiza o registro existente
+            $existeCadastro->update([
+                'outorgados' => $outorgadosJson,
+                'texto_inicial' => $textoInicio->texto_inicio, // Salva texto_inicial como string
+                'texto_final' => $textoPoder->texto_final,    // Salva texto_final como string
+                'user_id' => $userId,           // Salva o ID do usuário logado
+                'cidade' => $cidade->cidade,
+            ]);
+        } else {
+            // Cria um novo registro
+            ModeloProcuracoes::create([
+                'outorgados' => $outorgadosJson,
+                'texto_inicial' => $textoInicio ? $textoInicio->texto_inicio : null,
+                'texto_final' => $textoPoder ? $textoPoder->texto_final : null,
+                'user_id' => $userId,
+                'cidade' => $cidade ? $cidade->cidade : null,
+            ]);
+        }
+    } else {
+        // Retorna erro caso 'outorgados' não seja enviado ou não seja um array
+        return redirect()->back()->withErrors(['outorgados' => 'O campo outorgados é obrigatório e deve ser um array.']);
+    }
+
+    // Redireciona com mensagem de sucesso
+    alert()->success('Outorgado selecionado com sucesso!');
+
+        return redirect()->route('configuracoes.index');
+}
+
+
+
+
+
+
 
 
 
