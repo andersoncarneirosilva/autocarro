@@ -77,7 +77,7 @@ class DashController extends Controller
         $today = Carbon::now()->translatedFormat('d \d\e F \d\e Y'); // Exemplo: "02 de janeiro de 2025"
         
         // Caminho para a pasta de documentos
-        $path = storage_path('app/public/documentos/usuario_1');
+        $path = storage_path("app/public/documentos/usuario_{$userId}");
 
         // Função para calcular o tamanho total da pasta
         function getFolderSize($folder)

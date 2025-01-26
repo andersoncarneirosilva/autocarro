@@ -56,8 +56,8 @@
                             <a href="{{ route('veiculos.create-proc-manual')}}" class="dropdown-item">Cadastro manual</a>
                             </div>
                         </div>
-
-                        @elseif(auth()->user()->credito < 0)
+                        @endif
+                        @if(auth()->user()->plano == "Básico" || auth()->user()->plano == "Intermediário" || auth()->user()->credito < 0)
                         <div class="dropdown btn-group">
                             <button class="btn btn-primary btn-sm dropdown-toggle" 
                                     type="button" 

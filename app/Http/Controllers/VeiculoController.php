@@ -275,7 +275,7 @@ if ($this->model->create($data)) {
     public function store(Request $request){
 
         //dd($request);
-
+        
         $userId = Auth::id(); // Obtém o ID do usuário autenticado
         // Localiza o usuário logado
         $user = User::find($userId);
@@ -381,6 +381,20 @@ if ($this->model->create($data)) {
             $infos = $this->model->extrairInfos($textoPagina);
             $tipo = $this->model->extrairEspecie($textoPagina);
             //dd($tipo);
+        }
+
+        // Verificar se o veículo já existe com a placa fornecida
+        $veiculoExistente = Veiculo::where('placa', $placa)
+                            ->where('user_id', $userId)
+                            ->first();
+
+        if ($veiculoExistente) {
+            alert()->warning('Atenção!', 'Veículo já cadastrado.')
+                ->persistent(true)
+                ->autoClose(3000) // Fecha automaticamente após 5 segundos
+                ->timerProgressBar();
+    
+            return redirect()->route('veiculos.index');
         }
 
             // Garante que a pasta "crlv" existe
