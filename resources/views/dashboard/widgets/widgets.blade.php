@@ -12,10 +12,16 @@
         <div class="card tilebox-one">
             <div class="card-body">
                 <i class="uil uil-window-restore float-end"></i>
-                <h6 class="text-uppercase mt-0">Saldo</h6>
+                <h6 class="text-uppercase mt-0">
+                    @if(auth()->user()->plano == "Mensal")
+                    Plano
+                    @else
+                    Saldo
+                    @endif
+                </h6>
                 <h3 class="my-2" id="active-views-count">
                     @if(auth()->user()->plano == "Mensal")
-                        <span class="link">Plano Premium</span>
+                        <span class="link">Premium</span>
                     @elseif(auth()->user()->credito <= 2)
                         <span class="link-danger">R${{ auth()->user()->credito }},00</span>
                         <h4 class="m-0 fw-normal cta-box-title">

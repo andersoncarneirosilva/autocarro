@@ -93,5 +93,14 @@ Utilizar o comando para dar permissão ao user
 ```sh
 sudo chown -R "${USER:-$(id -un)}" .
 ```
+
+Utilizar o comando para limpar o cache
+```sh
+php artisan config:clear
+php artisan route:clear
+php artisan view:clear
+php artisan cache:clear
+
+```
 Acessar o projeto
 [http://localhost:8989](http://localhost:8989)

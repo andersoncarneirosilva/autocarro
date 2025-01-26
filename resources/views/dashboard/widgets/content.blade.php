@@ -5,7 +5,7 @@
 
 
 <!-- Para Desktop -->
-<div class="card ribbon-box d-none d-md-block">
+{{-- <div class="card ribbon-box d-none d-md-block">
     <div class="card-body">
         <div class="ribbon ribbon-success float-end"><i class="mdi mdi-access-point me-1"></i> 19.01.2025</div>
         <h5 class="text-success float-start mt-0">Atualizações importantes:</h5>
@@ -18,7 +18,7 @@
             </ul>
         </div>
     </div> <!-- end card-body -->
-</div> <!-- end card-->
+</div> <!-- end card--> --}}
         {{-- <div class="card">
             <div class="card-header d-flex justify-content-between align-items-center">
                 <h4 class="header-title">Visão geral</h4>

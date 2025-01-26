@@ -199,7 +199,7 @@ observer.observe(document.body, { childList: true, subtree: true });
                     role="button" aria-haspopup="false" aria-expanded="false">
                     <span class="account-user-avatar">
                         @if(auth()->user()->image)
-                        <img src="../../storage/{{ auth()->user()->image }}" alt="user-image" width="32"
+                        <img src="../../storage/{{ auth()->user()->image }}" alt="user-image" width="32" height="32"
                             class="rounded-circle">
                         @else
                         <img src="{{ url('assets/img/icon_user.png') }}" alt="user-image" width="32"

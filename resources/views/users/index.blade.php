@@ -31,7 +31,7 @@
             @endif --}}
             <div class="col-sm-12">
                 <div class="card-header d-flex justify-content-between align-items-center">
-                    <h4 class="header-title">Serviços cadastradas</h4>
+                    <h4 class="header-title">Usuários cadastradas</h4>
                     <div class="dropdown">
                         @can('access-admin') 
                     <a href="{{ route('users.create')}}" class="btn btn-primary btn-sm">Cadastrar</a>
