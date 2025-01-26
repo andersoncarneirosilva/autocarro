@@ -109,7 +109,7 @@
 
 
 <div class="row">
-    <div class="col-xl-12 col-lg-12 order-lg-2 order-xl-1">
+    <div class="col-xl-7 col-lg-12 order-lg-2 order-xl-1">
         <div class="card">
             <div class="d-flex card-header justify-content-between align-items-center">
                 <h4 class="header-title">Últimos veículos cadastrados</h4>
@@ -123,20 +123,20 @@
                             @foreach ($emprestimos as $emp)
                             <tr>
                                 <td>
-                                    <h5 class="font-14 my-1"><a href="#" class="text-body">{{ $emp->nome }}</a></h5>
-                                    <span class="text-muted font-13">{{ $emp->marca }}</span>
+                                    <span class="text-muted font-13">MARCA</span>
+                                    <h5 class="font-14 my-0"><a href="#" class="text-body">{{ $emp->marca }}</a></h5>
                                 </td>
                                 <td>
                                     <span class="text-muted font-13">Placa</span> <br>
-                                    <span class="font-14 mt-1 fw-normal">{{ $emp->placa }}</span>
+                                    <span class="font-14 mt-0 fw-normal">{{ $emp->placa }}</span>
                                 </td>
                                 <td>
                                     <span class="text-muted font-13">Cor</span>
-                                    <h5 class="font-14 mt-1 fw-normal">{{ $emp->cor }}</h5>
+                                    <h5 class="font-14 mt-0 fw-normal">{{ $emp->cor }}</h5>
                                 </td>
                                 <td>
                                     <span class="text-muted font-13">Ano/Modelo</span>
-                                    <h5 class="font-14 mt-1 fw-normal">{{ $emp->ano }}</h5>
+                                    <h5 class="font-14 mt-0 fw-normal">{{ $emp->ano }}</h5>
                                 </td>
                                 <td>
                                     @if($emp->crv === "***")
@@ -159,7 +159,43 @@
             @endif
         </div> <!-- end card-->
     </div> <!-- end col-->
+    <div class="col-xl-5">
+        <div class="card">
+            <div class="card-header d-flex justify-content-between align-items-center">
+                <h4 class="header-title">Clientes recentes</h4>
+            </div>
 
+            <div class="card-body pt-0">
+                <div class="table-responsive">
+                    <table class="table table-centered table-nowrap table-hover mb-0">
+                        <tbody>
+                            @foreach ($clientes as $cliente)
+                            <tr>
+                                <td>
+                                    <div class="d-flex align-items-start">
+                                        <div>
+                                            <h5 class="mt-0 mb-1">{{ $cliente->nome }}</h5>
+                                            <span class="font-13">{{ $cliente->email }}</span>
+                                        </div>
+                                    </div>
+                                </td>
+                                <td>
+                                    <span class="text-muted font-13">Fone/WhatsApp</span> <br>
+                                    <p class="mb-0">
+                                        <a href="https://api.whatsapp.com/send/?phone=51999047299&text&type=phone_number&app_absent=0" 
+                                            style="text-decoration: none; color: rgb(9, 146, 20);" 
+                                            target="_blank"><i class="mdi mdi-whatsapp me-1"></i>{{ $cliente->fone }}
+                                        </a></p>
+                                </td>
+                            </tr>
+                            @endforeach
+                        </tbody>
+                    </table>
+                </div> <!-- end table-responsive-->
+
+            </div> <!-- end card body-->
+        </div> <!-- end card -->
+    </div>
     
 
 </div>

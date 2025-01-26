@@ -7,8 +7,10 @@ use App\Models\Procuracao;
 use Illuminate\Http\Request;
 use App\Models\Documento;
 use App\Models\Veiculo;
+use App\Models\Cliente;
 use Illuminate\Support\Facades\Auth;
 use Carbon\Carbon;
+use App\Models\User;
 use Illuminate\Support\Facades\DB;
 
 class DashController extends Controller
@@ -24,7 +26,14 @@ class DashController extends Controller
         //dd(auth()->user());
 
         $search = $request->search;
-        $emprestimos = Veiculo::orderBy('created_at', 'desc')->take(4)->get();
+
+        $userId = Auth::id();
+        $user = User::find($userId);
+        //dd($user);
+        // Paginar os registros de Outorgado
+        $clientes = Cliente::where('user_id', $userId)->get();
+
+        $emprestimos = Veiculo::orderBy('created_at', 'desc')->take(5)->get();
         //dd($emprestimos);
         //$users = $this->model->getUsersDash();
         $countDocs = $this->model->getCountDocs();
@@ -89,6 +98,7 @@ class DashController extends Controller
                                                 'countProcs', 
                                                 'countOrder', 
                                                 'countCnh', 
+                                                'clientes',
                                                 'emprestimos', 
                                                 'today', 
                                                 'totalOrdensAtual',
