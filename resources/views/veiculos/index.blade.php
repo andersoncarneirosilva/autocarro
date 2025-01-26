@@ -146,7 +146,7 @@
                         <tbody>
                             @foreach ($veiculos as $doc)
                                 <tr>
-                                    <td>{{ $doc->id }}</td>
+                                    <td><a href="{{ route('veiculos.edit', $doc->id) }}" class="">0{{ $doc->id }}</a></td>
                                     <td>{{ $doc->placa }}</td>
                                     <td>{{ $doc->marca }}</td>
                                     <td>{{ $doc->ano }}</td>
@@ -330,7 +330,7 @@ aria-hidden="true">
     
         // Atualiza a ação do formulário para incluir o ID do documento na rota
         const form = document.getElementById('addressForm');
-        form.action = `{{ secure_url('veiculos/store-atpve') }}/${docId}`; //secure_url
+        form.action = `{{ url('veiculos/store-atpve') }}/${docId}`; //secure_url
     
         // Envia o formulário
         form.submit();
