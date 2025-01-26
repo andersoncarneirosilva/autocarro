@@ -110,7 +110,7 @@
                 <div class="tab-content">
                     <div class="tab-pane show active" id="aboutme" role="tabpanel">
                         <form>
-                            <h5 class="mb-4 text-uppercase"><i class="mdi mdi-account-circle me-1"></i> Documentos assinados</h5>
+                            <h5 class="mb-4 text-uppercase"><i class="mdi mdi-account-circle me-1"></i> Enviar documentos assinados</h5>
                             <div class="row">
                                 <div class="col-md-6">
                                     <div class="mb-3">
@@ -163,7 +163,8 @@
                                                 </div>
                                                 <div class="col ps-0">
                                                     <a href="{{ $veiculo->arquivo_proc }}" target="_blank" class="text-muted fw-bold">Procuração</a>
-                                                    <p class="mb-0 font-13">{{ $veiculo->size_proc_pdf }} MB</p>
+                                                    <p class="mb-0 font-13">{{ number_format($veiculo->size_proc_pdf / 1024, 2, ',', '.') }} KB</p>
+
                                                 </div>
                                             </div> <!-- end row -->
                                         </div> <!-- end .p-2-->
@@ -186,7 +187,7 @@
                                                 </div>
                                                 <div class="col ps-0">
                                                     <a href="{{ $veiculo->arquivo_atpve }}" target="_blank" class="text-muted fw-bold">ATPVe</a>
-                                                    <p class="mb-0 font-13">{{ $veiculo->size_atpve_pdf }} MB</p>
+                                                    <p class="mb-0 font-13">{{ number_format($veiculo->size_atpve_pdf / 1024, 2, ',', '.') }} KB</p>
                                                 </div>
                                             </div> <!-- end row -->
                                         </div> <!-- end .p-2-->
@@ -215,7 +216,7 @@
                                                 </div>
                                                 <div class="col ps-0">
                                                     <a href="{{ $veiculo->arquivo_proc_assinado }}" target="_blank" class="text-muted fw-bold">Procuração</a>
-                                                    <p class="mb-0 font-13">{{ $veiculo->size_proc_pdf }} MB</p>
+                                                    <p class="mb-0 font-13">{{ number_format($veiculo->size_proc_pdf / 1024, 2, ',', '.') }} KB</p>
                                                 </div>
                                             </div> <!-- end row -->
                                         </div> <!-- end .p-2-->
@@ -238,7 +239,7 @@
                                                 </div>
                                                 <div class="col ps-0">
                                                     <a href="{{ $veiculo->arquivo_atpve_assinado }}" target="_blank" class="text-muted fw-bold">ATPVe</a>
-                                                    <p class="mb-0 font-13">{{ $veiculo->size_atpve_pdf }} MB</p>
+                                                    <p class="mb-0 font-13">{{ number_format($veiculo->size_atpve_pdf / 1024, 2, ',', '.') }} KB</p>
                                                 </div>
                                             </div> <!-- end row -->
                                         </div> <!-- end .p-2-->
