@@ -24,10 +24,11 @@
               <h5 class="text-success float-start mt-0">Novidades no App!</h5>
               <div class="ribbon-content">
                   <ul>
-                    <li>Agora é possível selecionar os outorgados para a procuração.</li>
+                    <li>Dashboard reformulada</li>
+                    <li>Mostrador de espaço em disco.</li>
                     <li>Cada veículo tem a sua imagem individual(moto, carro, caminhonete).</li>
-                    <li>Cada usuário tem acesso apenas ao seu próprio cadastro.</li>
-                    <li>Página modelo de procuração reformulada.</li>
+                    <li>Inclusão dos planos Padrão/Pro/Premium.</li>
+                    <li>Aba para envio e download dos arquivos na página de detalhes do veículo.</li>
 
                   </ul>
               </div>
