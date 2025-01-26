@@ -25,6 +25,7 @@ use App\Http\Controllers\OrdemController;
 use App\Http\Controllers\ProcRapidaController;
 use App\Http\Controllers\EstoqueController;
 use App\Http\Controllers\ModeloProcuracoesController;
+use App\Http\Controllers\OCRController;
 
 use Illuminate\Support\Facades\Route;
 use App\Events\EventReminderBroadcast;
@@ -203,6 +204,9 @@ Route::middleware(['auth'])->group(function () {
 Route::post('/modeloprocuracoes/store', [ModeloProcuracoesController::class, 'store'])->name('modeloprocuracoes.store');
 Route::get('/modeloprocuracoes/select/{id}', [ModeloProcuracoesController::class, 'select'])->name('modeloprocuracoes.select');
 Route::post('/modeloprocuracoes/confirm/{id}', [ModeloProcuracoesController::class, 'confirm'])->name('modeloprocuracoes.confirm');
+
+Route::get('/ocr', [OCRController::class, 'index'])->name('ocr.index');
+Route::post('/upload', [OCRController::class, 'process'])->name('ocr.process');
 
 });
 
