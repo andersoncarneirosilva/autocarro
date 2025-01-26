@@ -44,13 +44,17 @@
                     {{ number_format($usedSpaceInMB, 0) }} MB ({{ number_format($percentUsed, 0) }}%) of {{ $limitInMB }} MB usados
                 </p>
                 <div class="progress mb-3">
-                    <div class="progress-bar" 
+                    <div class="progress-bar {{ $percentUsed >= 80 ? 'bg-danger' : '' }}" 
                         role="progressbar" 
                         style="width: {{ $percentUsed }}%" 
                         aria-valuenow="{{ $percentUsed }}" 
                         aria-valuemin="0" 
-                        aria-valuemax="100">{{ number_format($percentUsed, 0) }}%</div>
+                        aria-valuemax="100">
+                        {{ number_format($percentUsed, 0) }}%
+                    </div>
                 </div>
+                
+                
             </div>
         </div>
         {{-- <div class="card overflow-hidden">
