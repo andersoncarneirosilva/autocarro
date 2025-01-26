@@ -333,10 +333,10 @@ if ($this->model->create($data)) {
         }
 
         // Tamanho do novo arquivo
-        $tamanhoNovoArquivo = $arquivo->getSize(); // Em bytes
-
+        $size_doc = $arquivo->getSize(); // Em bytes
+        //dd($tamanhoNovoArquivo);
         // Verifica se há espaço suficiente
-        if (($espacoUsado + $tamanhoNovoArquivo) > $limiteBytes) {
+        if (($espacoUsado + $size_doc) > $limiteBytes) {
             alert()->error('Espaço insuficiente. Você atingiu o limite de armazenamento!');
 
             return redirect()->route('veiculos.index');
@@ -535,38 +535,45 @@ if ($this->model->create($data)) {
 
         // Caminho para salvar o PDF na pasta 'procuracoes' dentro de 'documentos'
         $numeroRandom = rand(1000, 9999);
-        $caminhoProc = storage_path('app/public/' . $pastaUsuario . 'procuracoes/' . strtoupper($placa) . '_' . $numeroRandom . '.pdf'); 
-        $urlProc = asset('storage/' . $pastaUsuario . 'procuracoes/' . strtoupper($placa) . '_' . $numeroRandom . '.pdf'); 
-        // Verificar se a pasta 'procuracoes' existe, se não, cria-la
-        if (!file_exists(storage_path('app/public/' . $pastaUsuario . '/procuracoes'))) {
-            mkdir(storage_path('app/public/' . $pastaUsuario . '/procuracoes'), 0777, true); // Cria a pasta se ela não existir
-        }
-        $data = [
-            'nome' => strtoupper($nomeFormatado),
-            'endereco' => strtoupper($enderecoFormatado),  // Endereço em maiúsculas
-            'cpf' => $cpf,
-            'cidade' => $cidade,
-            'marca' => strtoupper($marca),
-            'placa' => strtoupper($placa),
-            'chassi' => strtoupper($chassi),
-            'cor' => strtoupper($cor),
-            'ano' => $anoModelo,
-            'renavam' => $renavam,
-            'crv' => $crv,
-            'placaAnterior' => $placaAnterior,
-            'categoria' => $categoria,
-            'motor' => $motor,
-            'combustivel' => $combustivel,
-            'infos' => $infos,
-            'tipo' => $tipo,
-            'arquivo_doc' => $urlDoc,
-            'arquivo_proc' => $urlProc,
+$caminhoProc = storage_path('app/public/' . $pastaUsuario . 'procuracoes/' . strtoupper($placa) . '_' . $numeroRandom . '.pdf'); 
+$urlProc = asset('storage/' . $pastaUsuario . 'procuracoes/' . strtoupper($placa) . '_' . $numeroRandom . '.pdf'); 
 
-            'user_id' => $userId,
-        ];
+// Verificar se a pasta 'procuracoes' existe, se não, cria-la
+if (!file_exists(storage_path('app/public/' . $pastaUsuario . '/procuracoes'))) {
+    mkdir(storage_path('app/public/' . $pastaUsuario . '/procuracoes'), 0777, true); // Cria a pasta se ela não existir
+}
 
-        // Salvar o PDF
-        $pdf->Output('F', $caminhoProc); 
+// Salvar o PDF
+$pdf->Output('F', $caminhoProc);
+
+// Obter o tamanho do arquivo PDF em bytes
+$sizeProc = filesize($caminhoProc);
+
+$data = [
+    'nome' => strtoupper($nomeFormatado),
+    'endereco' => strtoupper($enderecoFormatado),  // Endereço em maiúsculas
+    'cpf' => $cpf,
+    'cidade' => $cidade,
+    'marca' => strtoupper($marca),
+    'placa' => strtoupper($placa),
+    'chassi' => strtoupper($chassi),
+    'cor' => strtoupper($cor),
+    'ano' => $anoModelo,
+    'renavam' => $renavam,
+    'crv' => $crv,
+    'placaAnterior' => $placaAnterior,
+    'categoria' => $categoria,
+    'motor' => $motor,
+    'combustivel' => $combustivel,
+    'infos' => $infos,
+    'tipo' => $tipo,
+    'arquivo_doc' => $urlDoc,
+    'size_doc' => $size_doc,
+    'arquivo_proc' => $urlProc,
+    'size_proc' => $sizeProc, // Adicionando o tamanho do arquivo PDF gerado
+    'user_id' => $userId,
+];
+
 
         //Mail::to( config('mail.from.address'))->send(new SendEmail($data, $caminhoProc));
 

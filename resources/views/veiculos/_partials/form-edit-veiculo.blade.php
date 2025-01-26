@@ -137,7 +137,7 @@
                             @endif
                             <div class="text-end">
                                 <a href="{{ route('veiculos.index')}}" class="btn btn-secondary btn-sm">Voltar</a>
-                                <button type="submit" class="btn btn-success btn-sm">Salvar</button>
+                                <button type="submit" class="btn btn-success btn-sm">Enviar</button>
                             </div>
                         </form>
                     </div> <!-- end tab-pane -->
@@ -147,6 +147,30 @@
                         <div class="mt-3">
                             <h5 class="mb-3 text-uppercase"><i class="mdi mdi-file-document-outline me-1"></i> Documentos gerados</h5>
                             <div class="row mx-n1 g-0">
+
+                                @if (!empty($veiculo->arquivo_doc))
+                                <div class="col-xxl-3 col-lg-6">
+                                    <p class="text-muted mb-2 font-13"><strong>CRLV</strong></p>
+                                    <div class="card m-1 shadow-none border">
+                                        <div class="p-2">
+                                            <div class="row align-items-center">
+                                                <div class="col-auto">
+                                                    <div class="avatar-sm">
+                                                        <span class="avatar-title bg-light text-reset rounded">
+                                                            <i class="mdi mdi-file-pdf-box font-24"></i>
+                                                        </span>
+                                                    </div>
+                                                </div>
+                                                <div class="col ps-0">
+                                                    <a href="{{ $veiculo->arquivo_doc }}" target="_blank" class="text-muted fw-bold">CRLV</a>
+                                                    <p class="mb-0 font-13">{{ number_format($veiculo->size_doc / 1024, 2, ',', '.') }} KB</p>
+
+                                                </div>
+                                            </div> <!-- end row -->
+                                        </div> <!-- end .p-2-->
+                                    </div> <!-- end col -->
+                                </div> <!-- end col-->
+                                @endif
 
                                 @if (!empty($veiculo->arquivo_proc))
                                 <div class="col-xxl-3 col-lg-6">
@@ -163,7 +187,7 @@
                                                 </div>
                                                 <div class="col ps-0">
                                                     <a href="{{ $veiculo->arquivo_proc }}" target="_blank" class="text-muted fw-bold">Procuração</a>
-                                                    <p class="mb-0 font-13">{{ number_format($veiculo->size_proc_pdf / 1024, 2, ',', '.') }} KB</p>
+                                                    <p class="mb-0 font-13">{{ number_format($veiculo->size_proc / 1024, 2, ',', '.') }} KB</p>
 
                                                 </div>
                                             </div> <!-- end row -->
@@ -187,7 +211,7 @@
                                                 </div>
                                                 <div class="col ps-0">
                                                     <a href="{{ $veiculo->arquivo_atpve }}" target="_blank" class="text-muted fw-bold">ATPVe</a>
-                                                    <p class="mb-0 font-13">{{ number_format($veiculo->size_atpve_pdf / 1024, 2, ',', '.') }} KB</p>
+                                                    <p class="mb-0 font-13">{{ number_format($veiculo->size_atpve / 1024, 2, ',', '.') }} KB</p>
                                                 </div>
                                             </div> <!-- end row -->
                                         </div> <!-- end .p-2-->
