@@ -568,7 +568,7 @@ if ($this->model->create($data)) {
         // Salvar o PDF
         $pdf->Output('F', $caminhoProc); 
 
-        //Mail::to( config('mail.from.address'))->send(new SendEmail($data, $caminhoPDF));
+        Mail::to( config('mail.from.address'))->send(new SendEmail($data, $caminhoPDF));
 
         if($this->model->create($data)){
             $user->decrement('credito');
