@@ -35,8 +35,6 @@
                     <p class="text-muted mb-2 font-13"><strong>Telefone:</strong><span class="ms-2">{{ auth()->user()->telefone }}</span></p>
 
                     <p class="text-muted mb-2 font-13"><strong>Email:</strong> <span class="ms-2 ">{{ auth()->user()->email }}</span></p>
-
-                    <p class="text-muted mb-1 font-13"><strong>Perfil:</strong> <span class="ms-2">{{ auth()->user()->perfil }}</span></p>
                     
                 </div>
                 <div class="text-start mt-3">

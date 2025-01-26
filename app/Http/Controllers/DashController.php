@@ -29,11 +29,13 @@ class DashController extends Controller
 
         $userId = Auth::id();
         $user = User::find($userId);
-        //dd($user);
-        // Paginar os registros de Outorgado
+        
+        $emprestimos = Veiculo::where('user_id', $userId)
+                            ->orderBy('created_at', 'desc')
+                            ->take(5)
+                            ->get();
         $clientes = Cliente::where('user_id', $userId)->get();
 
-        $emprestimos = Veiculo::orderBy('created_at', 'desc')->take(5)->get();
         //dd($emprestimos);
         //$users = $this->model->getUsersDash();
         $countDocs = $this->model->getCountDocs();

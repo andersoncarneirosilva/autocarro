@@ -85,13 +85,12 @@
                             <div class="mb-3">
                                 <label for="useremail" class="form-label">Plano:</label>
                                 <select class="form-select" name="plano" >
-                                    @if($user->plano == "Mensal")
-                                    <option value="Mensal" selected>Mensal</option>
-                                    <option value="Credito">Crédito</option>
-                                    @else
-                                    <option value="Credito">Crédito</option>
-                                    <option value="Mensal">Mensal</option>
-                                    @endif
+                                    <option value="">Selecione o plano</option>
+<option value="Básico" @selected($user->plano == 'Básico')>Básico</option>
+<option value="Intermediário" @selected($user->plano == 'Intermediário')>Intermediário</option>
+<option value="Premium" @selected($user->plano == 'Premium')>Premium</option>
+
+                                    
                                   </select>
                             </div>
                         </div>

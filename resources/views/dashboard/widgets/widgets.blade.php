@@ -13,14 +13,14 @@
             <div class="card-body">
                 <i class="uil uil-window-restore float-end"></i>
                 <h6 class="text-uppercase mt-0">
-                    @if(auth()->user()->plano == "Mensal")
-                    Plano
+                    @if(auth()->user()->plano == "Premium")
+                        Plano
                     @else
-                    Saldo
+                        Crédito
                     @endif
                 </h6>
-                <h3 class="my-2" id="active-views-count">
-                    @if(auth()->user()->plano == "Mensal")
+                <h3 class="my-1" id="active-views-count">
+                    @if(auth()->user()->plano == "Premium")
                         <span class="link">Premium</span>
                     @elseif(auth()->user()->credito <= 2)
                         <span class="link-danger">R${{ auth()->user()->credito }},00</span>
@@ -36,7 +36,24 @@
         </div>
         <!--end card-->
 
-        <div class="card overflow-hidden">
+        <div class="card tilebox-one">
+            <div class="card-body">
+                <i class="mdi mdi-harddisk float-end"></i>
+                <h6 class="text-uppercase mt-0">Espaço em disco</h6>
+                <p class="text-muted font-12 mb-0">
+                    {{ number_format($usedSpaceInMB, 0) }} MB ({{ number_format($percentUsed, 0) }}%) of {{ $limitInMB }} MB usados
+                </p>
+                <div class="progress mb-3">
+                    <div class="progress-bar" 
+                        role="progressbar" 
+                        style="width: {{ $percentUsed }}%" 
+                        aria-valuenow="{{ $percentUsed }}" 
+                        aria-valuemin="0" 
+                        aria-valuemax="100">{{ number_format($percentUsed, 0) }}%</div>
+                </div>
+            </div>
+        </div>
+        {{-- <div class="card overflow-hidden">
             <div class="card-body">
                 <div class="d-flex align-items-center">
                     <div>
@@ -45,11 +62,11 @@
                             <i class="uil uil-whatsapp"></i> Chame no whats
                         </a></h4>
                     </div>
-                    <img class="ms-3" src="assets/images/svg/email-campaign.svg" width="92" alt="Generic placeholder image">
+                    <img class="ms-3 float-end" src="assets/images/svg/email-campaign.svg" width="92" alt="Generic placeholder image">
                 </div>
             </div>
             <!-- end card-body -->
-        </div>
+        </div> --}}
     </div> <!-- end col -->
 
     <div class="col-xl-9 col-lg-8">

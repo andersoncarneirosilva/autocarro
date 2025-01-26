@@ -39,7 +39,7 @@
                     <h4 class="header-title">Veículos cadastrados</h4>
                     <div class="dropdown">
                         
-                        @if(auth()->user()->plano == "Mensal")
+                        @if(auth()->user()->plano == "Premium")
                         <div class="dropdown btn-group">
                             <button class="btn btn-primary btn-sm dropdown-toggle" 
                                     type="button" 
@@ -83,6 +83,7 @@
                     <table class="table table-hover table-centered mb-0">
                         <thead class="table-dark">
                             <tr>
+                                <th>#</th>
                                 <th>Placa</th>
                                 <th>Veículo</th>
                                 <th>Ano/Modelo</th>
@@ -96,6 +97,7 @@
                         <tbody>
                             @foreach ($veiculos as $doc)
                                 <tr>
+                                    <td>{{ $doc->id }}</td>
                                     <td>{{ $doc->placa }}</td>
                                     <td>{{ $doc->marca }}</td>
                                     <td>{{ $doc->ano }}</td>

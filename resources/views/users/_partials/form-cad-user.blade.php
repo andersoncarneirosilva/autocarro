@@ -51,8 +51,9 @@
                                 <label for="useremail" class="form-label">Plano</label>
                                 <select class="form-select" name="plano">
                                     <option value="">Selecione o plano</option>
-                                    <option value="Mensal">Mensal</option>
-                                    <option value="Crédito">Crédito</option>
+                                    <option value="Básico">Básico</option>
+                                    <option value="Intermediário">Intermediário</option>
+                                    <option value="Premium">Premium</option>
                                   </select>
                             </div>
                         </div>
@@ -104,8 +105,7 @@
                         <div class="col-lg-6">
                         </div>
                         <div class="col-lg-6 text-end">
-                            <button type="button" class="btn btn-secondary btn-sm" data-bs-dismiss="modal">Cancelar</button>
-                        <button type="button" onclick="form.reset();" class="btn btn-warning btn-sm">Limpar</button>
+                            <a href="{{ route('users.index')}}" class="btn btn-secondary btn-sm">Voltar</a>
                         <button type="submit" class="btn btn-success btn-sm">Cadastrar</button>
                         </div>
                     </div>
