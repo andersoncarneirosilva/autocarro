@@ -279,7 +279,7 @@ aria-hidden="true">
     
         // Atualiza a ação do formulário para incluir o ID do documento na rota
         const form = document.getElementById('addressForm');
-        form.action = `{{ url('veiculos/store-atpve') }}/${docId}`; //secure_url
+        form.action = `{{ secure_url('veiculos/store-atpve') }}/${docId}`; //secure_url
     
         // Envia o formulário
         form.submit();
