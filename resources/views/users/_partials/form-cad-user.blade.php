@@ -51,8 +51,8 @@
                                 <label for="useremail" class="form-label">Plano</label>
                                 <select class="form-select" name="plano">
                                     <option value="">Selecione o plano</option>
-                                    <option value="Básico">Básico</option>
-                                    <option value="Intermediário">Intermediário</option>
+                                    <option value="Padrão">Padrão</option>
+                                    <option value="Pro">Pro</option>
                                     <option value="Premium">Premium</option>
                                   </select>
                             </div>

@@ -86,11 +86,9 @@
                                 <label for="useremail" class="form-label">Plano:</label>
                                 <select class="form-select" name="plano" >
                                     <option value="">Selecione o plano</option>
-<option value="Básico" @selected($user->plano == 'Básico')>Básico</option>
-<option value="Intermediário" @selected($user->plano == 'Intermediário')>Intermediário</option>
-<option value="Premium" @selected($user->plano == 'Premium')>Premium</option>
-
-                                    
+                                    <option value="Padrão" @selected($user->plano == 'Padrão')>Básico</option>
+                                    <option value="Pro" @selected($user->plano == 'Pro')>Intermediário</option>
+                                    <option value="Premium" @selected($user->plano == 'Premium')>Premium</option>
                                   </select>
                             </div>
                         </div>

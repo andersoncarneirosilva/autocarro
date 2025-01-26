@@ -25,11 +25,36 @@
                     <li class="breadcrumb-item active">Veículos</li>
                 </ol>
             </div>
-            <h3 class="page-title">Veículos</h3>
+            <h3 class="page-title">Veículos 
+                {{-- <button type="button" 
+                    class="btn btn-warning btn-sm opacity-75 text-dark" 
+                    data-bs-toggle="modal" 
+                    data-bs-target="#dicas">
+                    <i class="mdi mdi-lightbulb-on-outline"></i>
+                </button> --}}
+            </h3>
         </div>
     </div>
 </div>
 
+{{-- <div id="dicas" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="standard-modalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title" id="standard-modalLabel">Dica</h4>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-hidden="true"></button>
+            </div>
+            <div class="modal-body">
+                <h5>Gerando uma procuração</h5>
+                <li>Clique no botão cadastrar e selecione o cadastro automático.</li>
+                <li>Insira o endereço do outorgado e o documento em pdf.</li>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-light" data-bs-dismiss="modal">Fechar</button>
+            </div>
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal-dialog -->
+</div><!-- /.modal --> --}}
 <div class="card">
     <div class="card-body">
         <div class="row">
@@ -39,7 +64,7 @@
                     <div class="dropdown">
                         @php
                             $isPremium = auth()->user()->plano == "Premium";
-                            $isBasicOrIntermediate = in_array(auth()->user()->plano, ["Básico", "Intermediário"]);
+                            $isBasicOrIntermediate = in_array(auth()->user()->plano, ["Padrão", "Pro"]);
                             $isButtonDisabled = ($isPremium && $percentUsed > 100) || 
                                                 ($isBasicOrIntermediate && (auth()->user()->credito < 1 || $percentUsed > 100));
                         @endphp
