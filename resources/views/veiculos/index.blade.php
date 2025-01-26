@@ -29,7 +29,6 @@
         </div>
     </div>
 </div>
-<br>
 
 <div class="card">
     <div class="card-body">
@@ -38,8 +37,33 @@
                 <div class="card-header d-flex justify-content-between align-items-center">
                     <h4 class="header-title">Veículos cadastrados</h4>
                     <div class="dropdown">
-                        
-                        @if(auth()->user()->plano == "Premium")
+                        @php
+                            $isPremium = auth()->user()->plano == "Premium";
+                            $isBasicOrIntermediate = in_array(auth()->user()->plano, ["Básico", "Intermediário"]);
+                            $isButtonDisabled = ($isPremium && $percentUsed > 100) || 
+                                                ($isBasicOrIntermediate && (auth()->user()->credito < 1 || $percentUsed > 100));
+                        @endphp
+
+                        <div class="dropdown btn-group">
+                            <button class="btn btn-primary btn-sm dropdown-toggle" 
+                                    type="button" 
+                                    data-bs-toggle="dropdown" 
+                                    aria-haspopup="true" 
+                                    aria-expanded="false" 
+                                    @if($isButtonDisabled) disabled @endif>
+                                Cadastrar
+                            </button>
+                            <div class="dropdown-menu dropdown-menu-animated dropdown-menu-end">
+                                <a href="#" data-bs-toggle="modal" data-bs-target="#standard-modal" class="dropdown-item">
+                                    Cadastro automático
+                                </a>
+                                <a href="{{ route('veiculos.create-proc-manual') }}" class="dropdown-item">
+                                    Cadastro manual
+                                </a>
+                            </div>
+                        </div>
+
+                        {{-- @if(auth()->user()->plano == "Premium")
                         <div class="dropdown btn-group">
                             <button class="btn btn-primary btn-sm dropdown-toggle" 
                                     type="button" 
@@ -74,7 +98,7 @@
                             <a href="{{ route('veiculos.create-proc-manual')}}" class="dropdown-item">Cadastro manual</a>
                             </div>
                         </div>
-                        @endif
+                        @endif --}}
 
                     </div>
                 </div>

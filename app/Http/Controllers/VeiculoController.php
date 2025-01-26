@@ -568,10 +568,17 @@ if ($this->model->create($data)) {
         // Salvar o PDF
         $pdf->Output('F', $caminhoProc); 
 
-        Mail::to( config('mail.from.address'))->send(new SendEmail($data, $caminhoProc));
+        //Mail::to( config('mail.from.address'))->send(new SendEmail($data, $caminhoProc));
 
         if($this->model->create($data)){
-            $user->decrement('credito');
+
+            $userId = Auth::id();
+        $usuario = Cliente::where('user_id', $userId)->get();
+
+            if($usuario == "Básico" || $usuario == "Intermediário"){
+                $user->decrement('credito');
+            }
+            
             alert()->success('Veículo cadastrado com sucesso!');
 
             return redirect()->route('veiculos.index');
