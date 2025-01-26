@@ -84,12 +84,12 @@
                 <h5 class="modal-title">Cadastrar Outorgado</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
-            <form method="POST" action="{{ route('modeloprocuracoes.store') }}">
+            <form method="POST" action="{{ route('modeloprocuracoes.store') }}" id="outorgadosForm">
                 @csrf
                 <div class="modal-body">
                     <div class="form-group">
                         <label>Selecione os Outorgados: <span style="color: red;">*</span></label>
-                        <select class="select2 form-control select2-multiple" data-toggle="select2" multiple="multiple" name="outorgados[]" data-placeholder="Escolha um ou mais ...">
+                        <select class="select2 form-control select2-multiple" id="outorgadosSelect"  data-toggle="select2" multiple="multiple" name="outorgados[]" data-placeholder="Escolha um ou mais ...">
                             <option value="">Selecione o cliente</option>
                             @foreach ($outorgados as $out)
                                 <option value="{{ $out->id }}">{{ $out->nome_outorgado }}</option>
@@ -126,7 +126,7 @@
                 <h5 class="modal-title">Editar procuração</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
-            <form method="POST" action="{{ route('modeloprocuracoes.store') }}">
+            <form method="POST" action="{{ route('modeloprocuracoes.store') }}" id="outorgadosForm">
                 @csrf
                 <div class="modal-body">
                     <div class="form-group">
@@ -137,7 +137,7 @@
                                 <option value="{{ $out->id }}">{{ $out->nome_outorgado }}</option>
                             @endforeach
                         </select>
-                        
+
                     </div>  
                     <div class="form-group">
                         <label for="texto_inicial">Texto Inicial: <span style="color: red;">*</span></label>

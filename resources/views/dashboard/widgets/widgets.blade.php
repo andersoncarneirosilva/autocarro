@@ -15,7 +15,7 @@
                 <h6 class="text-uppercase mt-0">Saldo</h6>
                 <h3 class="my-2" id="active-views-count">
                     @if(auth()->user()->plano == "Mensal")
-                        <span class="link">Ilimitado</span>
+                        <span class="link">Plano Premium</span>
                     @elseif(auth()->user()->credito <= 2)
                         <span class="link-danger">R${{ auth()->user()->credito }},00</span>
                         <h4 class="m-0 fw-normal cta-box-title">

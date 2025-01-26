@@ -53,15 +53,17 @@ class Veiculo extends Model
     }
 
     public function getSearch(?string $search = null, $userId)
-        {
-            return $this->where('user_id', $userId) // Filtro pelo usuário logado
-                ->when($search, function ($query) use ($search) {
-                    // Se houver pesquisa, filtra por renavam ou placa
-                    $query->where('placa', 'LIKE', "%{$search}%")
-                          ->orWhere('renavam', 'LIKE', "%{$search}%");
-                })
-                ->paginate(10); // Retorna os resultados paginados
-        }
+{
+    return $this->where('user_id', $userId) // Filtro pelo usuário logado
+        ->when($search, function ($query) use ($search) {
+            // Se houver pesquisa, filtra por renavam ou placa
+            $query->where('placa', 'LIKE', "%{$search}%")
+                  ->orWhere('renavam', 'LIKE', "%{$search}%");
+        })
+        ->orderBy('created_at', 'desc') // Ordena pelo mais recente
+        ->paginate(10); // Retorna os resultados paginados
+}
+
 
     public function getDocs(string|null $search = null){
 

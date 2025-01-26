@@ -67,16 +67,10 @@
                             ferramentas práticas, você pode criar, gerenciar e organizar procurações de maneira ágil e segura. 
                             Tudo que você precisa para centralizar e otimizar seus processos está aqui!
                         </p>
-                        @if(session('success'))
-                        <div class="alert alert-success">
-                            {{ session('success') }}
-                        </div>
-                        @elseif(session('error'))
-                        <div class="alert alert-danger">
-                            {{ session('error') }}
-                        </div>
-                    @endif
-                        <a href="#" target="_blank" class="btn btn-lg font-16 btn-success">Teste grátis <i class="mdi mdi-arrow-right ms-1"></i></a>
+                        
+                        <a href="https://api.whatsapp.com/send/?phone=51999047299&text&type=phone_number&app_absent=0" 
+                        target="_blank" 
+                        class="btn btn-lg font-16 btn-success">Solicite um Teste grátis <i class="mdht ms-1"></i></a>
                         {{-- <a href="" target="_blank" class="btn btn-lg font-16 btn-info">Check Demos</a> --}}
                     </div>
                 </div>
@@ -156,7 +150,7 @@
                         </div>
                         <h4 class="mt-3">Cadastros</h4>
                         <p class="text-muted mt-2 mb-0">Cadastros simples de clientes e veículos, facilitando o gerencimento
-                            de procurações e documentos.
+                            de procurações.
                         </p>
                     </div>
                 </div>
@@ -331,13 +325,13 @@
                     <div class="col-md-4">
                         <div class="card card-pricing">
                             <div class="card-body text-center">
-                                <p class="card-pricing-plan-name fw-bold text-uppercase">Licença Padrão</p>
+                                <p class="card-pricing-plan-name fw-bold text-uppercase">Básico</p>
                                 <i class="card-pricing-icon ri-user-line text-primary"></i>
-                                <h2 class="card-pricing-price">R$25 <span>/ mês</span></h2>
+                                <h2 class="card-pricing-price">R$150 <span>/ mês</span></h2>
                                 <ul class="card-pricing-features">
-                                    <li>10 documentos</li>
-                                    <li>1 usuário</li>
+                                    <li>100 documentos</li>
                                     <li>512 MB de armazenamento</li>
+                                    <li>1 usuário</li>
                                     <li>Suporte 24/7</li>
                                 </ul>
                                 <button class="btn btn-primary mt-4 mb-2 rounded-pill">Escolher plano</button>
@@ -348,13 +342,13 @@
                     <div class="col-md-4">
                         <div class="card card-pricing">
                             <div class="card-body text-center">
-                                <p class="card-pricing-plan-name fw-bold text-uppercase">Licença Profissional</p>
+                                <p class="card-pricing-plan-name fw-bold text-uppercase">Intermediário</p>
                                 <i class="card-pricing-icon ri-briefcase-line text-success"></i>
-                                <h2 class="card-pricing-price">R$50 <span>/ mês</span></h2>
+                                <h2 class="card-pricing-price">R$250 <span>/ mês</span></h2>
                                 <ul class="card-pricing-features">
-                                    <li>50 documentos</li>
-                                    <li>2 usuários</li>
+                                    <li>200 documentos</li>
                                     <li>2 GB de armazenamento</li>
+                                    <li>1 usuário</li>
                                     <li>Suporte dedicado</li>
                                 </ul>
                                 <button class="btn btn-success mt-4 mb-2 rounded-pill">Escolher plano</button>
@@ -365,14 +359,14 @@
                     <div class="col-md-4">
                         <div class="card card-pricing">
                             <div class="card-body text-center">
-                                <p class="card-pricing-plan-name fw-bold text-uppercase">Licença Avançada</p>
+                                <p class="card-pricing-plan-name fw-bold text-uppercase">Avançado</p>
                                 <i class="card-pricing-icon ri-shield-star-line text-danger"></i>
-                                <h2 class="card-pricing-price">R$100 <span>/ mês</span></h2>
+                                <h2 class="card-pricing-price">R$400 <span>/ mês</span></h2>
                                 <ul class="card-pricing-features">
                                     <li>Documentos ilimitados</li>
-                                    <li>Usuários ilimitados</li>
-                                    <li>10 GB de armazenamento</li>
-                                    <li>Gerente de conta dedicado</li>
+                                    <li>5 GB de armazenamento</li>
+                                    <li>1 usuário</li>
+                                    <li>Suporte dedicado</li>
                                 </ul>
                                 <button class="btn btn-danger mt-4 mb-2 rounded-pill">Escolher plano</button>
                             </div>
@@ -402,7 +396,14 @@
                             <br>Para mais informações entre em contato conosco.
                         </p>
 
-                        <button type="button" class="btn btn-success btn-sm mt-2"><i class="mdi mdi-whatsapp me-1"></i> (51)99486.7806</button>
+                        <button type="button" class="btn btn-success btn-sm mt-2">
+                            <i class="mdi mdi-whatsapp me-1"></i>
+                            <a href="https://api.whatsapp.com/send/?phone=51999047299&text&type=phone_number&app_absent=0" 
+                                style="text-decoration: none; color: white;" 
+                                target="_blank">(51)99904.7299
+                            </a>
+                        </button>
+                        
                         <button type="button" class="btn btn-info btn-sm mt-2 ms-1"><i class="mdi mdi-email me-1"></i> Enviar email</button>
                     </div>
                 </div>
@@ -424,8 +425,7 @@
                     <div>
                         <div class="faq-question-q-box">Q.</div>
                         <h4 class="faq-question text-body">Como obtenho ajuda para o sistema?</h4>
-                        <p class="faq-answer mb-4 pb-1 text-muted">Nosso suporte funciona 24/7 por email ou whatsapp. 
-                            <br>Não deixe de entrar em contato.</p>
+                        <p class="faq-answer mb-4 pb-1 text-muted">Pode entrar em contato diretamente com nossa equipe através do WhatsApp para obter uma resposta rápida.</p>
                     </div>
 
                 </div>
@@ -436,7 +436,7 @@
                     <div>
                         <div class="faq-question-q-box">Q.</div>
                         <h4 class="faq-question text-body">Como faço para testar o ProcOnline?</h4>
-                        <p class="faq-answer mb-4 pb-1 text-muted"><a href="">Clique aqui</a> e faça um simples cadastro para acessar o sistema.</p>
+                        <p class="faq-answer mb-4 pb-1 text-muted">Para testar, basta entrar em contato  <a href="https://api.whatsapp.com/send/?phone=51999047299&text&type=phone_number&app_absent=0" target="_blank"">clicando aqui</a> e solicitar um teste gratuíto via WhatsApp.</p>
                     </div>
 
                     <!-- Question/Answer -->
@@ -459,7 +459,7 @@
 
 
     <!-- START CONTACT -->
-    <section class="py-5 bg-light-lighten border-top border-bottom border-light">
+    {{-- <section class="py-5 bg-light-lighten border-top border-bottom border-light">
         <div class="container">
             <div class="row">
                 <div class="col-lg-12">
@@ -514,7 +514,7 @@
                 </div>
             </div>
         </div>
-    </section>
+    </section> --}}
     <!-- END CONTACT -->
 
     <!-- START FOOTER -->
@@ -582,7 +582,7 @@
                 <div class="col-lg-12">
                     <div class="mt-5">
                         <p class="text-light text-opacity-50 mt-4 text-center mb-0">©
-                            <script>document.write(new Date().getFullYear())</script> ProcOnline. www.proconline.com.br
+                            <script>document.write(new Date().getFullYear())</script> ProcOnline - proconline.com.br
                         </p>
                     </div>
                 </div>
