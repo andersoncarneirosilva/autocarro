@@ -8,11 +8,11 @@
                         <div class="row align-items-center">
                             <div class="col-auto">
                                 <div class="avatar-lg">
-                                    @if($veiculo->tipo == "CARGA CAMINHONETE")
+                                    @if($veiculo->tipo == "CAMINHONETE")
                                         <img src="{{ url('assets/images/pickup.png') }}" alt="" class="rounded-circle img-thumbnail">
-                                    @elseif($veiculo->tipo == "PASSAGEIRO MOTOCICLETA" || $veiculo->tipo == "PASSAGEIRO MOTONETA")
+                                    @elseif($veiculo->tipo == "MOTOCICLETA" || $veiculo->tipo == "MOTONETA")
                                         <img src="{{ url('assets/images/moto.png') }}" alt="" class="rounded-circle img-thumbnail">
-                                    @elseif($veiculo->tipo == "PASSAGEIRO AUTOMOVEL")
+                                    @elseif($veiculo->tipo == "AUTOMOVEL")
                                         <img src="{{ url('assets/images/car.png') }}" alt="" class="rounded-circle img-thumbnail">
                                     @endif
                                 </div>

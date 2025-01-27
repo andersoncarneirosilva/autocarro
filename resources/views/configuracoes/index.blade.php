@@ -139,14 +139,17 @@
                         </select>
 
                     </div>  
+                    <br>
                     <div class="form-group">
                         <label for="texto_inicial">Texto Inicial: <span style="color: red;">*</span></label>
                         <textarea name="texto_inicial" id="edit_text_inicial" class="form-control"  rows="5"></textarea>
-                    </div>   
+                    </div>
+                    <br>   
                     <div class="form-group">
                         <label for="texto_inicial">Texto Final: <span style="color: red;">*</span></label>
                         <textarea name="texto_final" id="edit_text_final" class="form-control" rows="5"></textarea>
                     </div>  
+                    <br>
                     <div class="form-group">
                         <label for="nome_outorgado" class="form-label">Cidade: <span style="color: red;">*</span></label>
                         <input class="form-control" id="edit_cidade" name="cidade"/>

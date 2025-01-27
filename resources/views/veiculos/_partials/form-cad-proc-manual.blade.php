@@ -134,9 +134,9 @@
                                 <label for="social-insta" class="form-label">Tipo de veículo: <span style="color: red;">*</span></label>
                                 <select class="form-select mb-3" name="tipo" required>
                                     <option selected value="">Selecione o tipo</option>
-                                    <option value="Carro">Carro</option>
-                                    <option value="Moto">Moto</option>
-                                    <option value="Caminhonete">Caminhonete</option>
+                                    <option value="AUTOMOVEL">Carro</option>
+                                    <option value="MOTOCICLETA">Moto</option>
+                                    <option value="CAMINHOTENE">Caminhonete</option>
                                 </select> 
                             </div>
                         </div>

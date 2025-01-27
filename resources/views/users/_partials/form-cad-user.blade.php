@@ -4,16 +4,26 @@
             <div class="card-body">
                     <h5 class="mb-4 text-uppercase"><i class="mdi mdi-account-circle me-1"></i> Informações pessoais</h5>
                     <div class="row">
-                        <div class="col-md-6">
+                        <div class="col-md-4">
                             <div class="mb-3">
                                 <label class="form-label">Nome</label>
                                 <input type="text" class="form-control" name="name">
                             </div>
                         </div>
-                        <div class="col-md-6">
+                        <div class="col-md-4">
                             <div class="mb-3">
                                 <label class="form-label">E-mail</label>
                                 <input type="email" class="form-control" name="email">
+                            </div>
+                        </div> <!-- end col -->
+                        <div class="col-md-4">
+                            <div class="mb-3">
+                                <label class="form-label">Espaço em MB</label>
+                                <select class="form-select" name="size_folder">
+                                    <option value="100" selected>100Mb</option>
+                                    <option value="1000">1Gb</option>
+                                    <option value="5000">5Gb</option>
+                                  </select>
                             </div>
                         </div> <!-- end col -->
                     </div> <!-- end row -->
@@ -32,7 +42,6 @@
                                     <option value="">Selecione o nível</option>
                                     <option value="Administrador">Administrador</option>
                                     <option value="Usuario">Usuário</option>
-                                    
                                   </select>
                             </div>
                         </div>

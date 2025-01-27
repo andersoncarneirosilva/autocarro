@@ -207,7 +207,7 @@ observer.observe(document.body, { childList: true, subtree: true });
                         @endif
                     </span>
                     <span class="d-lg-flex flex-column gap-1 d-none">
-                        <h5 class="my-0">{{ auth()->user()->name }}</h5>
+                        <h5 class="my-0">{{ explode(' ', auth()->user()->name)[0] }}</h5>
                         <h6 class="my-0 fw-normal">{{ auth()->user()->perfil }}</h6>
                     </span>
                 </a>

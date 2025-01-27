@@ -4,7 +4,7 @@
             <div class="card-body">
                 <i class="mdi mdi-robot-happy-outline float-end"></i>
                 <h6 class="text-uppercase mt-0">Bem-vindo</h6>
-                <h3 class="my-2" id="">{{ auth()->user()->name }}</h3>
+                <h4 class="my-2" id="">{{ explode(' ', auth()->user()->name)[0] }}</h4>
             </div>
         </div>
         <!--end card-->
@@ -19,7 +19,7 @@
                         Crédito
                     @endif
                 </h6>
-                <h3 class="my-1" id="active-views-count">
+                <h4 class="my-1" id="active-views-count">
                     @if(auth()->user()->plano == "Premium")
                         <span class="link">Premium</span>
                     @elseif(auth()->user()->credito <= 2)
@@ -31,7 +31,7 @@
                     @else
                         <span class="link">R${{ auth()->user()->credito }},00</span>
                     @endif
-                </h3>
+                </h4>
             </div> <!-- end card-body-->
         </div>
         <!--end card-->
@@ -41,7 +41,7 @@
                 <i class="mdi mdi-harddisk float-end"></i>
                 <h6 class="text-uppercase mt-0">Espaço em disco</h6>
                 <p class="text-muted font-12 mb-0">
-                    {{ number_format($usedSpaceInMB, 0) }} MB ({{ number_format($percentUsed, 0) }}%) of {{ $limitInMB }} MB usados
+                    {{ number_format($usedSpaceInMB, 0) }} MB ({{ number_format($percentUsed, 0) }}%) de {{ $limitInMB }} MB usados
                 </p>
                 <div class="progress mb-3">
                     <div class="progress-bar {{ $percentUsed >= 80 ? 'bg-danger' : '' }}" 

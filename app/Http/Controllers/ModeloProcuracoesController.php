@@ -36,20 +36,29 @@ public function index(Request $request)
 }
 
 
-    public function store(Request $request)
+public function store(Request $request)
 {
     try {
+        // Verificar se o número de outorgados excede o limite
+        if (count($request->outorgados) > 3) {
+            alert()->error('Erro!', 'Selecione no máximo 3 outorgados.')
+                ->persistent(true)
+                ->autoClose(5000) // Fecha automaticamente após 5 segundos
+                ->timerProgressBar();
+                return redirect()->route('configuracoes.index');
+        }
+
         $request->validate([
             'texto_inicial' => 'required|string',
             'texto_final' => 'required|string',
             'cidade' => 'required|string',
-            'outorgados' => 'required|array',
+            'outorgados' => 'required|array|max:3',  // A validação do Laravel já garante que o limite não será ultrapassado
             'outorgados.*' => 'exists:outorgados,id',
         ]);
 
         // Critérios para verificar a existência do registro
         $modelo = ModeloProcuracoes::where('user_id', auth()->id())->first();
-        //dd($modelo);
+
         if ($modelo) {
             // Atualizar o registro existente
             $modelo->update([
@@ -82,9 +91,11 @@ public function index(Request $request)
             'trace' => $e->getTraceAsString(),
         ]);
 
+        alert()->error('Erro', 'Erro ao salvar os dados: ' . $e->getMessage());
         return redirect()->back()->withErrors('Erro ao salvar os dados: ' . $e->getMessage());
     }
 }
+
 
 
 

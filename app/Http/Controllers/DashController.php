@@ -92,7 +92,7 @@ class DashController extends Controller
         // Calcular o tamanho usado na pasta
         $usedSpaceInBytes = getFolderSize($path);
         $usedSpaceInMB = $usedSpaceInBytes / (1024 * 1024); // Converter para MB
-        $limitInMB = 1; // Limite de 1 MB
+        $limitInMB = $user->size_folder; // Limite de MB do usuario
         $percentUsed = ($usedSpaceInMB / $limitInMB) * 100; // Percentual usado
 
         // Passar as informações para a view

@@ -55,14 +55,20 @@
                 </div>
                 
                 <br>
+                @php
+                    use Carbon\Carbon;
+                    $dataAtual = strtoupper(Carbon::now()->locale('pt_BR')->translatedFormat('d \d\e F \d\e Y'));
+                @endphp
+
                 <div class="row">
                     <div class="col text-end">
                         @foreach ($modeloProc as $cidade)
-                        {{ $cidade->cidade }}
+                            {{ $cidade->cidade }}
                         @endforeach
-                        , 20 DE NOVEMBRO DE 2024
+                        , {{ $dataAtual }}
                     </div>
                 </div>
+
                 <div class="row justify-content-center text-center">
                     <div class="col-6">
                         <div>

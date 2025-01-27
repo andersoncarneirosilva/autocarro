@@ -364,14 +364,22 @@ class Veiculo extends Model
         // Suposição: O nome do usuário está precedido pela palavra "Nome:" ou "Nome do usuário:"
         
         $linhas = explode("\n", $textoPagina);
-                //dd($linhas);
-                $linha = explode("\t", $linhas[54]);
-                //dd($colunas);
-                $tipos = implode(', ', $linha);
-            //dd($outorgante);
-
-        // Caso nenhum nome de usuário seja encontrado
-        return $tipos ;
+        //dd($linhas);
+        $linha = explode("\t", $linhas[54]);
+        //dd($colunas);
+        $tipos = implode(', ', $linha);
+        
+        // Dividir a string por espaços para extrair o segundo nome
+        $tiposArray = explode(' ', $tipos);
+    
+        // Verificar se existe pelo menos 2 palavras, e retornar o segundo nome
+        if (count($tiposArray) > 1) {
+            return $tiposArray[1]; // Retorna o segundo nome
+        }
+    
+        // Caso não haja segundo nome, retorna a string original
+        return $tipos;
     }
+    
     
 }

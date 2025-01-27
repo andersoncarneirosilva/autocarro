@@ -226,10 +226,10 @@ $urlProc = asset('storage/' . $pastaUsuario . 'procuracoes_manual/' . strtoupper
 $pdf->Output('F', $caminhoProc);
 
 // Agora que o arquivo foi gerado, podemos calcular o tamanho
-$tamanhoNovoArquivo = filesize($caminhoProc); // Calcula o tamanho do arquivo gerado em bytes
-
+//$tamanhoNovoArquivo = filesize($caminhoProc); // Calcula o tamanho do arquivo gerado em bytes
+$sizeProc = filesize($caminhoProc);
 // Verifica se há espaço suficiente
-if (($espacoUsado + $tamanhoNovoArquivo) > $limiteBytes) {
+if (($espacoUsado + $sizeProc) > $limiteBytes) {
     // Apaga o arquivo gerado se não houver espaço suficiente
     unlink($caminhoProc);
     
@@ -243,11 +243,13 @@ $data = [
     'endereco' => strtoupper($enderecoFormatado),  // Endereço em maiúsculas
     'cpf' => $request['cpf'],
     'cidade' => strtoupper($request['cidade']),
+
     'marca' => strtoupper($request['marca']),
     'placa' => strtoupper($request['placa']),
     'chassi' => strtoupper($request['chassi']),
     'cor' => strtoupper($request['cor']),
     'ano' => $request['ano_modelo'],
+    'renavam' => $request['renavam'],
     'crv' => $request['tipo_doc'],
     'placaAnterior' => "Não consta",
     'categoria' => "Não consta",
@@ -255,9 +257,22 @@ $data = [
     'combustivel' => "Não consta",
     'infos' => "Não consta",
     'tipo' => $request['tipo'],
-    'arquivo_doc' => "Não consta",
-    'renavam' => $request['renavam'],
+
+    'arquivo_doc' => 0,
+    'size_doc' => 0,
+
     'arquivo_proc' => $urlProc,
+    'size_proc' => $sizeProc,
+
+    'arquivo_atpve' => 0,
+    'size_atpve' => 0,
+
+    'arquivo_proc_assinado' => 0,
+    'size_proc_pdf' => 0,
+
+    'arquivo_proc_assinado' => 0,
+    'size_atpve_pdf' => 0,
+
     'user_id' => $userId,
 ];
 
@@ -288,6 +303,7 @@ if ($this->model->create($data)) {
         
         $dataPorExtenso = $dataAtual->translatedFormat('d \d\e F \d\e Y');
 
+        // SWEET ALERT
         if (empty($configProc->outorgados)) {
             alert()->error('Erro!', 'Por favor, cadastre ao menos um Outorgado antes de prosseguir.')
                 ->persistent(true)
@@ -331,7 +347,7 @@ if ($this->model->create($data)) {
         foreach (Storage::disk('public')->allFiles($pastaUsuario) as $file) {
             $espacoUsado += Storage::disk('public')->size($file);
         }
-
+        dd($espacoUsado);
         // Tamanho do novo arquivo
         $size_doc = $arquivo->getSize(); // Em bytes
         //dd($tamanhoNovoArquivo);
