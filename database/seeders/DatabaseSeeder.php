@@ -17,11 +17,7 @@ class DatabaseSeeder extends Seeder
 
          $this->call([
             UserSeeder::class, // Substitua pelo nome real do seeder
-            DocSeeder::class, // Adicione outros seeders conforme necessário
-            ProcuracaoSeeder::class,
-            ServicoSeeder::class,
             ClienteSeeder::class,
-            ProcRapidaSeeder::class,
         ]);
         
     }
