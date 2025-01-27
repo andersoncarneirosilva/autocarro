@@ -347,7 +347,7 @@ if ($this->model->create($data)) {
         foreach (Storage::disk('public')->allFiles($pastaUsuario) as $file) {
             $espacoUsado += Storage::disk('public')->size($file);
         }
-        dd($espacoUsado);
+        //dd($espacoUsado);
         // Tamanho do novo arquivo
         $size_doc = $arquivo->getSize(); // Em bytes
         //dd($tamanhoNovoArquivo);

@@ -132,7 +132,7 @@
                     <table class="table table-hover table-centered mb-0">
                         <thead class="table-dark">
                             <tr>
-                                <th>#</th>
+                                <th>Ver</th>
                                 <th>Placa</th>
                                 <th>Veículo</th>
                                 <th>Ano/Modelo</th>
@@ -146,7 +146,7 @@
                         <tbody>
                             @foreach ($veiculos as $doc)
                                 <tr>
-                                    <td><a href="{{ route('veiculos.edit', $doc->id) }}" class="">0{{ $doc->id }}</a></td>
+                                    <td><a href="{{ route('veiculos.edit', $doc->id) }}" style="text-decoration: none" class=""><i class="mdi mdi-eye"></i></a></td>
                                     <td>{{ $doc->placa }}</td>
                                     <td>{{ $doc->marca }}</td>
                                     <td>{{ $doc->ano }}</td>
