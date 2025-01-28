@@ -64,7 +64,7 @@ class Veiculo extends Model
                   ->orWhere('renavam', 'LIKE', "%{$search}%");
         })
         ->orderBy('created_at', 'desc') // Ordena pelo mais recente
-        ->paginate(10); // Retorna os resultados paginados
+        ->paginate(20); // Retorna os resultados paginados
 }
 
 
