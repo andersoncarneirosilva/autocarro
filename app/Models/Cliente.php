@@ -27,6 +27,7 @@ class Cliente extends Model
         'bairro',
         'cidade',
         'estado',
+        'complemento',
         'user_id',
     ];
 

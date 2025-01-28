@@ -41,7 +41,7 @@
                 <i class="mdi mdi-harddisk float-end"></i>
                 <h6 class="text-uppercase mt-0">Espaço em disco</h6>
                 <p class="text-muted font-12 mb-0">
-                    {{ number_format($usedSpaceInMB, 0) }} MB ({{ number_format($percentUsed, 0) }}%) de {{ $limitInMB }} MB usados
+                    {{ number_format($usedSpaceInMB, 0) }} MB usados ({{ number_format($percentUsed, 0) }}%) de {{ $limitInMB }} MB
                 </p>
                 <div class="progress mb-3">
                     <div class="progress-bar {{ $percentUsed >= 80 ? 'bg-danger' : '' }}" 

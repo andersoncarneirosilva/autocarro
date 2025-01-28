@@ -60,7 +60,9 @@ class ClientesController extends Controller
             'bairro' => 'required|string|max:255',
             'cidade' => 'required|string|max:255',
             'estado' => 'required|string|max:255',
+            'complemento' => 'nullable|string|max:255', // Complemento é opcional
         ]);
+        
     } catch (\Illuminate\Validation\ValidationException $e) {
         alert()->error('Todos os campos são obrigatórios!');
         return redirect()->route('clientes.create');
@@ -114,8 +116,7 @@ class ClientesController extends Controller
             'bairro' => 'required|string|max:255',
             'cidade' => 'required|string|max:255',
             'estado' => 'required|string|max:255',
-        ], [
-            'required' => 'Todos os campos são obrigatórios.', // Mensagem genérica
+            'complemento' => 'nullable|string|max:255', // Complemento é opcional
         ]);
     
         // Busca o cliente pelo ID
