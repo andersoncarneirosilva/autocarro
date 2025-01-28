@@ -135,7 +135,7 @@
             <div class="d-flex card-header justify-content-between align-items-center">
                 <h4 class="header-title">Últimos veículos cadastrados</h4>
             </div>
-            @if ($emprestimos)
+            @if ($emprestimos->count() != 0)
             <div class="card-body pt-0">
                 <div class="table-responsive">
                     <table class="table table-centered table-nowrap table-hover mb-0">
@@ -174,7 +174,7 @@
                 </div> <!-- end table-responsive-->
             </div> <!-- end card-body-->
             @else
-                <div class="alert alert-warning" role="alert">
+                <div class="alert alert-danger bg-transparent text-danger" role="alert">
                     NENHUM RESULTADO ENCONTRADO!
                 </div>
             @endif
@@ -185,7 +185,7 @@
             <div class="card-header d-flex justify-content-between align-items-center">
                 <h4 class="header-title">Clientes recentes</h4>
             </div>
-
+            @if ($clientes->count() != 0)
             <div class="card-body pt-0">
                 <div class="table-responsive">
                     <table class="table table-centered table-nowrap table-hover mb-0">
@@ -215,6 +215,11 @@
                 </div> <!-- end table-responsive-->
 
             </div> <!-- end card body-->
+            @elseif($clientes->count() == 0)
+            <div class="alert alert-danger bg-transparent text-danger" role="alert">
+                NENHUM RESULTADO ENCONTRADO!
+            </div>
+        @endif
         </div> <!-- end card -->
     </div>
     
