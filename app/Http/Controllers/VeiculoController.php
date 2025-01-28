@@ -675,9 +675,9 @@ $data = [
 
     // Exclui o registro do banco de dados
     if ($doc->delete()) {
-        alert()->success('Procuração excluída com sucesso!');
+        alert()->success('Veículo excluído com sucesso!');
     } else {
-        alert()->error('Erro ao excluir a procuração!');
+        alert()->error('Erro ao excluir o veículo!');
     }
 
     return redirect()->route('veiculos.index');

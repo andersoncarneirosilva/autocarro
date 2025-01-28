@@ -109,7 +109,7 @@
                         </div>
                     
                         <!-- Cidade -->
-                        <div class="col-md-6 col-lg-3">
+                        <div class="col-md-4 col-lg-3">
                             <label for="cidade" class="form-label">Cidade: <span style="color: red;">*</span></label>
                             <div class="input-group">
                                 <input type="text" name="cidade" id="cidade" class="form-control" required>
@@ -117,7 +117,7 @@
                         </div>
                     
                         <!-- Estado -->
-                        <div class="col-md-3 col-lg-2">
+                        <div class="col-md-2 col-lg-2">
                             <label for="uf" class="form-label">Estado: <span style="color: red;">*</span></label>
                             <div class="input-group">
                                 <input type="text" name="estado" id="uf" class="form-control" maxlength="2" required>
