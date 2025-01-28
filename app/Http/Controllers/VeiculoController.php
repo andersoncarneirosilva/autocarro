@@ -36,9 +36,10 @@ class VeiculoController extends Controller
         $text = "Deseja excluir essa procuração?";
         confirmDelete($title, $text);
         
-        $outorgados = Outorgado::all();
-        
         $userId = Auth::id();
+
+        $outorgados = Outorgado::where('user_id', $userId)->get();
+
         $clientes = Cliente::where('user_id', $userId)->get();
         $veiculos = $this->model->getSearch($request->search, $userId);
         $path = storage_path('app/public/documentos/usuario_' . auth()->id());
@@ -686,6 +687,7 @@ $data = [
 
     public function storeAtpve(Request $request, $id){
 
+        //dd($request);
         $userId = Auth::id();
         
         $user = User::find($userId);
@@ -742,7 +744,7 @@ $x += $pdf->GetStringWidth("Eu, "); // Ajusta o X para o nome
 $x += 0; // Ajuste fino para aproximar o nome de "Eu,"
 
 // Sublinha apenas o nome do outorgado
-$this->desenharSublinhado($pdf, $x, 60, $outorgados->nome_outorgado, 140); // Chama o método dentro do controlador
+$this->desenharSublinhado($pdf, $x, 60, $request['nome_outorgado'], 140); // Chama o método dentro do controlador
 $x += 140; // Ajuste após o nome sublinhado
 
 
@@ -755,7 +757,7 @@ $pdf->Text($x = 30, $y = $pdf->GetY(), "CPF/CNPJ:");
 $x += $pdf->GetStringWidth("CPF/CNPJ:"); // Ajusta o X para o CPF/CNPJ
 
 // Sublinha apenas o CPF/CNPJ
-$this->desenharSublinhado($pdf, $x, 69, $outorgados->cpf_outorgado, 56); // Chama o método dentro do controlador para o CPF/CNPJ
+$this->desenharSublinhado($pdf, $x, 69, $request['cpf_outorgado'], 56); // Chama o método dentro do controlador para o CPF/CNPJ
 $x += 56; // Ajuste após o CPF/CNPJ sublinhado
 
 // Continua o texto após o CPF/CNPJ
@@ -813,7 +815,7 @@ $emailText = "e-mail: ";
 $x += $pdf->GetStringWidth($emailText); // Atualiza a posição X após o texto
 
 // Sublinha o email
-$this->desenharSublinhado($pdf, 42, 103, "fernandofantinel@hotmail.com", 80); // Sublinha apenas o email
+$this->desenharSublinhado($pdf, 42, 103, $request['email_outorgado'], 80); // Sublinha apenas o email
 $x += 80; // Ajuste após o "Marca/Modelo" sublinhado
 
 $pdf->Ln(20); // Linha em branco após o texto

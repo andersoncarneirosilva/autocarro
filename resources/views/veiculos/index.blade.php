@@ -277,15 +277,39 @@ aria-hidden="true">
                 <form id="addressForm" method="POST">
                     @csrf <!-- Necessário para o Laravel validar a requisição -->
                     <div class="form-group">
-                        <label>Selecione o cliente: <span style="color: red;">*</span></label>
-                        <select id="idCliente" name="cliente[]" placeholder="Selecione o cliente">
+                        <label for="outorgado">Selecione o outorgado: <span style="color: red;">*</span></label>
+                        <select id="outorgado" name="outorgado" class="form-control" placeholder="Selecione o outorgado">
+                            <option value="">Selecione o outorgado</option>
+                            @foreach ($outorgados as $outorgado)
+                            <option value="{{ $outorgado->id }}" data-nome="{{ $outorgado->nome_outorgado }}" data-cpf="{{ $outorgado->cpf_outorgado }}" data-email="{{ $outorgado->email_outorgado }}">
+                                {{ $outorgado->nome_outorgado }}
+                            </option>
+                            @endforeach
+                        </select>
+                        <input type="hidden" id="nome_outorgado" name="nome_outorgado" value="">
+                        <input type="hidden" id="email_outorgado" name="email_outorgado" value="">
+                        <input type="hidden" id="cpf_outorgado" name="cpf_outorgado" value="">
+                        <script>
+                            document.getElementById('outorgado').addEventListener('change', function () {
+                                const selectedOption = this.options[this.selectedIndex];
+                                document.getElementById('nome_outorgado').value = selectedOption.getAttribute('data-nome') || '';
+                                document.getElementById('email_outorgado').value = selectedOption.getAttribute('data-email') || '';
+                                document.getElementById('cpf_outorgado').value = selectedOption.getAttribute('data-cpf') || '';
+                            });
+                        </script>
+
+                    </div>
+                    <br>
+                    <div class="form-group">
+                        <label for="idCliente">Selecione o cliente: <span style="color: red;">*</span></label>
+                        <select id="idCliente" name="cliente[]" class="form-control" placeholder="Selecione o cliente">
                             <option value="">Selecione o cliente</option>
                             @foreach ($clientes as $cliente)
                                 <option value="{{ $cliente->id }}">{{ $cliente->nome }}</option>
                             @endforeach
                         </select>
-                        
                     </div>
+                    
                     <br>
                     <!-- Campo adicional para valor -->
                     <div class="form-group">

@@ -1,6 +1,6 @@
 @extends('layouts.app')
 
-@section('title', 'Procurações')
+@section('title', 'Outorgados')
 
 @section('content')
 
@@ -36,7 +36,8 @@
                             <tr>
                                 <th>Nome</th>
                                 <th>CPF</th>
-                                <th>CPF</th>
+                                <th>Email</th>
+                                
                                 <th>Ações</th>
                             </tr>
                         </thead>
@@ -46,7 +47,7 @@
                                 <tr>
                                     <td>{{ $out->nome_outorgado }}</td>
                                     <td>{{ $out->cpf_outorgado }}</td>
-                                    <td>{{ $out->end_outorgado }}</td>
+                                    <td>{{ $out->email_outorgado }}</td>
                                     <td class="table-action">
 
                                         <a href="#" class="action-icon" data-id="{{ $out->id }}" onclick="openEditModalOutorgado(event)">
@@ -88,16 +89,20 @@
                 <form action="{{ route('outorgados.store') }}" method="POST" id="form-cad" enctype="multipart/form-data">
                     @csrf
                     <div class="mb-3">
-                        <label for="nome_outorgado" class="form-label">Nome</label>
+                        <label class="form-label">Nome</label>
                         <input type="text" class="form-control" id="nome_outorgado" name="nome_outorgado" required>
                     </div>
                     <div class="mb-3">
-                        <label for="cpf_outorgado" class="form-label">CPF</label>
+                        <label class="form-label">CPF</label>
                         <input type="text" class="form-control" id="cpf_outorgado" name="cpf_outorgado" required>
                     </div>
                     <div class="mb-3">
-                        <label for="end_outorgado" class="form-label">Endereço</label>
+                        <label class="form-label">Endereço</label>
                         <input type="text" class="form-control" id="end_outorgado" name="end_outorgado" required>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Email</label>
+                        <input type="text" class="form-control" name="email_outorgado" required>
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
@@ -174,6 +179,7 @@
             $('#edit_nome_outorgado').val(response.nome_outorgado);
             $('#edit_cpf_outorgado').val(response.cpf_outorgado);
             $('#edit_end_outorgado').val(response.end_outorgado);
+            $('#edit_email_outorgado').val(response.end_outorgado);
 
             // Atualize a ação do formulário para apontar para a rota de edição
             $('#editForm').attr('action', `/outorgados/${docId}`);

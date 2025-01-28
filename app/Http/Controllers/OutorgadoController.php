@@ -54,12 +54,14 @@ class OutorgadoController extends Controller
 
     public function store(Request $request)
 {
+    //dd($request);
     $userId = Auth::id();
     // Dados recebidos da requisição
     $data = [
         'nome_outorgado' => $request->nome_outorgado,
         'cpf_outorgado' => $request->cpf_outorgado,
         'end_outorgado' => $request->end_outorgado,
+        'email_outorgado' => $request->email_outorgado,
         'user_id' => $userId,
     ];
 

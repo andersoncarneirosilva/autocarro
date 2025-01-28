@@ -20,6 +20,7 @@ class Outorgado extends Model
         'nome_outorgado',
         'cpf_outorgado',
         'end_outorgado',
+        'email_outorgado',
         'user_id',
     ];
 
