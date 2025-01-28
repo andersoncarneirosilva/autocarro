@@ -65,7 +65,7 @@
                         @php
                             $isPremium = auth()->user()->plano == "Premium";
                             $isBasicOrIntermediate = in_array(auth()->user()->plano, ["Padrão", "Pro"]);
-                            $isButtonDisabled = ($isPremium && $percentUsed > 100) || 
+                            $isButtonDisabled = ($isPremium && $percentUsed > 1000) || 
                                                 ($isBasicOrIntermediate && (auth()->user()->credito < 1 || $percentUsed > 100));
                         @endphp
 
