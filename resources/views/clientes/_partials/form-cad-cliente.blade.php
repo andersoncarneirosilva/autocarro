@@ -117,7 +117,7 @@
                         </div>
                     
                         <!-- Estado -->
-                        <div class="col-md-2 col-lg-2">
+                        <div class="col-md-2 col-lg-3">
                             <label for="uf" class="form-label">Estado: <span style="color: red;">*</span></label>
                             <div class="input-group">
                                 <input type="text" name="estado" id="uf" class="form-control" maxlength="2" required>
@@ -125,7 +125,7 @@
                         </div>
                     
                         <!-- Complemento -->
-                        <div class="col-md-6 col-lg-4">
+                        <div class="col-md-6 col-lg-6">
                             <label for="complemento" class="form-label">Complemento:</label>
                             <div class="input-group">
                                 <input type="text" name="complemento" id="complemento" class="form-control">

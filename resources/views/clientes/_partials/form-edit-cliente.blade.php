@@ -61,64 +61,71 @@
 
 
                     <h5 class="mb-3 text-uppercase bg-light p-2"><i class="mdi mdi-earth me-1"></i> Endereço</h5>
-<div class="row">
-    <div class="col-md-2">
-        <div class="mb-3">
-            <label for="cep" class="form-label">CEP</label>
-            <div class="input-group">
-                <input type="text" name="cep" class="form-control" id="cep" onblur="pesquisacep(this.value);" value="{{ $cliente->cep ?? old('cep') }}" />
-            </div>
-        </div>
-    </div>
-    <div class="col-md-2">
-        <div class="mb-2">
-            <label for="rua" class="form-label">Logradouro</label>
-            <div class="input-group">
-                <input type="text" name="endereco" id="rua" class="form-control" value="{{ $cliente->endereco ?? old('endereco') }}"/>
-            </div>
-        </div>
-    </div>
-    <div class="col-md-1">
-        <div class="mb-2">
-            <label for="numero" class="form-label">Número</label>
-            <div class="input-group">
-                <input type="text" name="numero" id="numero" class="form-control" value="{{ $cliente->numero ?? old('numero') }}"/>
-            </div>
-        </div>
-    </div>
-    <div class="col-md-2">
-        <div class="mb-3">
-            <label for="bairro" class="form-label">Bairro</label>
-            <div class="input-group">
-                <input type="text" name="bairro" id="bairro" class="form-control" value="{{ $cliente->bairro ?? old('bairro') }}"/>
-            </div>
-        </div>
-    </div>
-    <div class="col-md-2">
-        <div class="mb-3">
-            <label for="cidade" class="form-label">Cidade</label>
-            <div class="input-group">
-                <input type="text" name="cidade" id="cidade" class="form-control" value="{{ $cliente->cidade ?? old('cidade') }}"/>
-            </div>
-        </div>
-    </div>
-    <div class="col-md-1">
-        <div class="mb-3">
-            <label for="uf" class="form-label">Estado</label>
-            <div class="input-group">
-                <input type="text" name="estado" id="uf" class="form-control" value="{{ $cliente->estado ?? old('estado') }}"/>
-            </div>
-        </div>
-    </div>
-    <div class="col-md-2">
-        <div class="mb-3">
-            <label for="complemento" class="form-label">Complemento</label>
-            <div class="input-group">
-                <input type="text" name="complemento" id="complemento" class="form-control" value="{{ $cliente->complemento ?? old('complemento') }}"/>
-            </div>
-        </div>
-    </div>
-</div> <!-- end row -->
+                    <div class="row g-3">
+                        <!-- CEP -->
+                        <div class="col-md-3 col-lg-2">
+                            <label for="cep" class="form-label">CEP</label>
+                            <div class="input-group">
+                                <input type="text" name="cep" class="form-control" id="cep" onblur="pesquisacep(this.value);" 
+                                    value="{{ $cliente->cep ?? old('cep') }}" />
+                            </div>
+                        </div>
+                    
+                        <!-- Logradouro -->
+                        <div class="col-md-6 col-lg-4">
+                            <label for="rua" class="form-label">Logradouro</label>
+                            <div class="input-group">
+                                <input type="text" name="endereco" id="rua" class="form-control" 
+                                    value="{{ $cliente->endereco ?? old('endereco') }}" />
+                            </div>
+                        </div>
+                    
+                        <!-- Número -->
+                        <div class="col-md-3 col-lg-2">
+                            <label for="numero" class="form-label">Número</label>
+                            <div class="input-group">
+                                <input type="text" name="numero" id="numero" class="form-control" 
+                                    value="{{ $cliente->numero ?? old('numero') }}" />
+                            </div>
+                        </div>
+                    
+                        <!-- Bairro -->
+                        <div class="col-md-6 col-lg-4">
+                            <label for="bairro" class="form-label">Bairro</label>
+                            <div class="input-group">
+                                <input type="text" name="bairro" id="bairro" class="form-control" 
+                                    value="{{ $cliente->bairro ?? old('bairro') }}" />
+                            </div>
+                        </div>
+                    
+                        <!-- Cidade -->
+                        <div class="col-md-6 col-lg-3">
+                            <label for="cidade" class="form-label">Cidade</label>
+                            <div class="input-group">
+                                <input type="text" name="cidade" id="cidade" class="form-control" 
+                                    value="{{ $cliente->cidade ?? old('cidade') }}" />
+                            </div>
+                        </div>
+                    
+                        <!-- Estado -->
+                        <div class="col-md-3 col-lg-3">
+                            <label for="uf" class="form-label">Estado</label>
+                            <div class="input-group">
+                                <input type="text" name="estado" id="uf" class="form-control" maxlength="2" 
+                                    value="{{ $cliente->estado ?? old('estado') }}" />
+                            </div>
+                        </div>
+                    
+                        <!-- Complemento -->
+                        <div class="col-md-6 col-lg-6">
+                            <label for="complemento" class="form-label">Complemento</label>
+                            <div class="input-group">
+                                <input type="text" name="complemento" id="complemento" class="form-control" 
+                                    value="{{ $cliente->complemento ?? old('complemento') }}" />
+                            </div>
+                        </div>
+                    </div>
+                    
 
                     <br>                    
                     
