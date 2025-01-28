@@ -194,7 +194,7 @@ class VeiculoController extends Controller
 
 
         // Define o limite de espaço por usuário (em MB)
-$limiteMb = 1; // Limite de 1 MB
+$limiteMb = $user->size_folder;
 $limiteBytes = $limiteMb * 1024 * 1024; // Converte para bytes
 
 // Caminho para a pasta de documentos do usuário
@@ -331,7 +331,7 @@ if ($this->model->create($data)) {
         $arquivo = $request->file('arquivo_doc');
 
         // Define o limite de espaço por usuário (em MB)
-        $limiteMb = 1; // Limite de 100 MB
+        $limiteMb = $user->size_folder; // Limite de 100 MB
         $limiteBytes = $limiteMb * 1024 * 1024; // Converte para bytes
 
         // Caminho para a pasta do usuário
@@ -980,7 +980,7 @@ $pdf->Ln(20); // Linha em branco após o texto
 
 
     // Define o limite de espaço por usuário (em MB)
-$limiteMb = 1; // Limite de 1 MB
+$limiteMb = $user->size_folder;
 $limiteBytes = $limiteMb * 1024 * 1024; // Converte para bytes
 
 // Define o ID do usuário
@@ -1138,7 +1138,7 @@ private function processFileUpload($request, $veiculo, $fileKey, $storagePath, $
 function verificarEspaco($userId, $arquivo)
 {
     // Define o limite de espaço em MB
-    $limiteMb = 100; // Limite de 100 MB
+    $limiteMb = $user->size_folder;
     $limiteBytes = $limiteMb * 1024 * 1024; // Convertido para bytes
 
     // Caminho para a pasta do usuário

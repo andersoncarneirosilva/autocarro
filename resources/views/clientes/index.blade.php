@@ -52,7 +52,7 @@
                         // Formatar o telefone
                         $fone_formatado = preg_replace('/(\d{2})(\d{5})(\d{4})/', '($1) $2.$3', $fone);
                         // Gerar o link com o número sem formatação
-                        $link_whatsapp = "https://wa.me/" . preg_replace('/\D/', '', $fone); 
+                        $link_whatsapp = "https://wa.me/+55" . preg_replace('/\D/', '', $fone); 
                         ?>
                                 <tr>
                                     <td>{{ $cli->nome }}</td>
