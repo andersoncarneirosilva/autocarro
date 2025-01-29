@@ -9,22 +9,21 @@ return new class extends Migration
     /**
      * Run the migrations.
      */
-    public function up(): void
+    public function up()
     {
         Schema::table('veiculos', function (Blueprint $table) {
-            //
-            $table->string('image')->unique()->after('size_atpve_pdf'); 
+            if (!Schema::hasColumn('veiculos', 'image')) {
+                $table->string('image')->nullable()->after('size_atpve_pdf');
+            }
         });
     }
 
-    /**
-     * Reverse the migrations.
-     */
-    public function down(): void
+    public function down()
     {
         Schema::table('veiculos', function (Blueprint $table) {
-            //
-            $table->dropColumn('image');
+            if (Schema::hasColumn('veiculos', 'image')) {
+                $table->dropColumn('image');
+            }
         });
     }
 };
