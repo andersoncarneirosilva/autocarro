@@ -211,7 +211,11 @@
                                                     Baixar ATPVe
                                                     </a>
                                                 @endif --}}
-
+                                                <a href="{{ $doc->arquivo_proc }}" 
+                                                    class="dropdown-item"
+                                                    target="_blank">
+                                                    Baixar Procuração
+                                                </a>
                                                 <a href="javascript:void(0);"
                                                     class="dropdown-item"
                                                     onclick="openProcModal(event, {{ $doc->id }})">
