@@ -325,7 +325,7 @@ if ($this->model->create($data)) {
             //dd($validated);
         } catch (\Illuminate\Validation\ValidationException $e) {
             alert()->error('Selecione o documento em pdf!');
-            return redirect()->route('documentos.index');
+            return redirect()->route('veiculos.index');
         }
         
 
@@ -684,6 +684,251 @@ $data = [
     return redirect()->route('veiculos.index');
 }
 
+public function storeProc(Request $request, $id){
+    //dd($request);
+        
+    $userId = Auth::id(); // Obtém o ID do usuário autenticado
+    // Localiza o usuário logado
+    $user = User::find($userId);
+
+    $configProc = ModeloProcuracoes::where('user_id', $userId)->first();
+
+    $dataAtual = Carbon::now();
+    
+    $dataPorExtenso = $dataAtual->translatedFormat('d \d\e F \d\e Y');
+
+    // SWEET ALERT
+    if (empty($configProc->outorgados)) {
+        alert()->error('Erro!', 'Por favor, cadastre ao menos um Outorgado antes de prosseguir.')
+            ->persistent(true)
+            ->autoClose(5000) // Fecha automaticamente após 5 segundos
+            ->timerProgressBar();
+
+        return redirect()->route('veiculos.index');
+    }
+
+    
+
+    $veiculo = Veiculo::findOrFail($id); // Retorna erro 404 se não encontrar
+
+    //dd($veiculo);
+
+    // Define o limite de espaço por usuário (em MB)
+    $limiteMb = $user->size_folder; // Limite de 100 MB
+    $limiteBytes = $limiteMb * 1024 * 1024; // Converte para bytes
+
+    // Caminho para a pasta do usuário
+    $pastaUsuario = "documentos/usuario_{$userId}/";
+
+    // Garante que a pasta do usuário exista
+    if (!Storage::disk('public')->exists($pastaUsuario)) {
+        Storage::disk('public')->makeDirectory($pastaUsuario, 0777, true);
+    }
+
+    // Calcula o espaço total usado na pasta
+    $espacoUsado = 0;
+    foreach (Storage::disk('public')->allFiles($pastaUsuario) as $file) {
+        $espacoUsado += Storage::disk('public')->size($file);
+    }
+    //dd($espacoUsado);
+    // Tamanho do novo arquivo
+    $size_doc = $veiculo->size_doc; // Em bytes
+    //dd($tamanhoNovoArquivo);
+    // Verifica se há espaço suficiente
+    if (($espacoUsado + $size_doc) > $limiteBytes) {
+        alert()->error('Espaço insuficiente. Você atingiu o limite de armazenamento!');
+
+        return redirect()->route('veiculos.index');
+        return back()->withErrors(['message' => 'Espaço insuficiente. Você atingiu o limite de armazenamento.']);
+    }
+    
+   
+    //teste
+    $pdf = new FPDF();
+        $pdf->SetMargins(10, 10, 10);
+        $pdf->AddPage();  // Adicionar uma página ao PDF
+        //$pdfFpdf->SetFont('Arial', 'B', 16);  // Definir a fonte (Arial, Negrito, tamanho 16)
+        $pdf->SetFont('Arial', 'B', 14);
+
+        $titulo = utf8_decode("PROCURAÇÃO");
+
+        $pdf->Cell(0, 10, $titulo, 0, 1, 'C');
+
+        $larguraTitulo = $pdf->GetStringWidth($titulo);
+        $pdf->Ln(8);
+        $pdf->SetFont('Arial', 'B', 12);
+
+        $enderecoFormatado = $this->forcarAcentosMaiusculos($request->endereco);
+//dd($enderecoFormatado);
+        $nomeFormatado = $this->forcarAcentosMaiusculos($veiculo->nome);
+
+        //dd($nomeFormatado);
+        
+
+        $pdf->Cell(0, 0, "OUTORGANTE: ". strtoupper(iconv("UTF-8", "ISO-8859-1", $nomeFormatado)), 0, 0, 'L');
+        $pdf->Ln(5);
+        $pdf->Cell(10, 0, "CPF: " . $veiculo->cpf, 0, 0, 'L');
+
+        $pdf->Ln(5);
+        $pdf->Cell(0, 0, utf8_decode("ENDEREÇO: " . strtoupper($enderecoFormatado)), 0, 0, 'L');
+
+        $pdf->Ln(5);
+
+        $pdf->SetFont('Arial', '', 11);
+        $pdf->Cell(0, 0, "________________________________________________________________________________________", 0, 0, 'L');
+        $pdf->SetFont('Arial', 'B', 12);
+
+        $pdf->Ln(8);
+
+        // Decodificar o array JSON de outorgados
+        $outorgadosSelecionados = json_decode($configProc->outorgados, true);
+
+        // Buscar dados dos outorgados na tabela
+        $outorgados = Outorgado::whereIn('id', $outorgadosSelecionados)->get();
+
+        // Gerar o PDF com os dados dos outorgados
+        foreach ($outorgados as $outorgado) {
+            // Adicionar informações ao PDF
+            $pdf->Cell(0, 0, utf8_decode("OUTORGADO: {$outorgado->nome_outorgado}"), 0, 0, 'L');
+            $pdf->Ln(5);
+            $pdf->Cell(0, 0, utf8_decode("CPF: {$outorgado->cpf_outorgado}"), 0, 0, 'L');
+            $pdf->Ln(5);
+            $pdf->Cell(0, 0, utf8_decode("ENDEREÇO: {$outorgado->end_outorgado}"), 0, 0, 'L');
+            $pdf->Ln(10); // Espaço extra entre cada outorgado
+        }
+
+
+        //$pdf->Ln(8);
+
+        $pdf->SetFont('Arial', '', 11);
+        $pdf->Cell(0, 0, "________________________________________________________________________________________", 0, 0, 'L');
+
+        $pdf->Ln(8);
+        // Defina as margens manualmente (em mm)
+        $margem_esquerda = 10; // Margem esquerda
+        $margem_direita = 10;  // Margem direita
+
+        // Texto a ser inserido no PDF
+        $text = $configProc->texto_inicial;
+
+        // Remover quebras de linha manuais, caso existam
+        $text = str_replace("\n", " ", $text);
+
+        // Calcular a largura disponível para o texto (considerando as margens)
+        $largura_disponivel = $pdf->GetPageWidth() - $margem_esquerda - $margem_direita;
+
+        // Adicionar o texto justificado, utilizando a largura calculada
+        $pdf->MultiCell($largura_disponivel, 5, utf8_decode($text), 0, 'J');
+
+        $pdf->Ln(8);
+        $pdf->SetFont('Arial', 'B', 12);
+        $pdf->Cell(120, 2, "MARCA: " . strtoupper($veiculo->marca), 0, 0, 'L');
+        $pdf->Cell(0, 2, "PLACA: " . strtoupper($veiculo->placa), 0, 1, 'L');
+        $pdf->Ln(5);
+        $pdf->Cell(120, 2, "CHASSI: " . strtoupper($veiculo->chassi), 0, 0, 'L');
+        $pdf->Cell(0, 2, "COR: " . strtoupper($veiculo->cor), 0, 1, 'L');
+        $pdf->Ln(5);
+        $pdf->Cell(120, 2, "ANO/MODELO: " . strtoupper($veiculo->ano), 0, 0, 'L');
+        $pdf->Cell(0, 2, "RENAVAM: " . strtoupper($veiculo->renavam), 0, 1, 'L');
+
+
+        $pdf->Ln(8);
+        $pdf->SetFont('Arial', '', 11);
+
+        $text2 = "$configProc->texto_final";
+
+        // Remover quebras de linha manuais, caso existam
+        $text2 = str_replace("\n", " ", $text2);
+
+        // Calcular a largura disponível para o texto (considerando as margens)
+        $largura_disponivel2 = $pdf->GetPageWidth() - $margem_esquerda - $margem_direita;
+
+        // Adicionar o texto justificado, utilizando a largura calculada
+        $pdf->MultiCell($largura_disponivel2, 5, utf8_decode($text2), 0, 'J');
+        // Adicionando a data por extenso no PDF
+        $pdf->Cell(0, 10, utf8_decode("$configProc->cidade, $dataPorExtenso"), 0, 1, 'R');  // 'R' para alinhamento à direita
+
+
+
+                                                                                        
+        $pdf->Ln(5);
+        $pdf->Cell(0, 10, "_________________________________________________" , 0, 1, 'C');
+        $pdf->SetFont('Arial', 'B', 12);
+        $pdf->Cell(0, 5, utf8_decode($veiculo->nome), 0, 1, 'C');
+
+
+        // Define o limite de espaço por usuário (em MB)
+$limiteMb = $user->size_folder;
+$limiteBytes = $limiteMb * 1024 * 1024; // Converte para bytes
+
+// Caminho para a pasta de documentos do usuário
+$pastaUsuario = "documentos/usuario_{$userId}/";
+
+// Garante que a pasta do usuário exista
+if (!Storage::disk('public')->exists($pastaUsuario)) {
+    Storage::disk('public')->makeDirectory($pastaUsuario, 0777, true);
+}
+
+// Calcula o espaço total usado na pasta do usuário
+$espacoUsado = 0;
+foreach (Storage::disk('public')->allFiles('app/public/' . $pastaUsuario) as $file) {
+    $espacoUsado += Storage::disk('public')->size($file);
+}
+
+// Caminho para a pasta de procuracoes
+$pastaProc = storage_path('app/public/' . $pastaUsuario . 'procuracoes_manual/');
+if (!File::exists($pastaProc)) {
+    File::makeDirectory($pastaProc, 0777, true); // Cria a pasta se não existir
+}
+
+$numeroRandom = rand(1000, 9999);
+
+$caminhoProc = $pastaProc . strtoupper($veiculo->placa) . '_' . $numeroRandom . '.pdf';
+$urlProc = asset('storage/' . $pastaUsuario . 'procuracoes_manual/' . strtoupper($veiculo->placa) . '_' . $numeroRandom . '.pdf');
+
+// Salvar o PDF
+$pdf->Output('F', $caminhoProc);
+
+// Agora que o arquivo foi gerado, podemos calcular o tamanho
+//$tamanhoNovoArquivo = filesize($caminhoProc); // Calcula o tamanho do arquivo gerado em bytes
+$sizeProc = filesize($caminhoProc);
+// Verifica se há espaço suficiente
+if (($espacoUsado + $sizeProc) > $limiteBytes) {
+    // Apaga o arquivo gerado se não houver espaço suficiente
+    unlink($caminhoProc);
+    
+    alert()->error('Espaço insuficiente. Você atingiu o limite de armazenamento!');
+    return redirect()->route('veiculos.index');
+}
+
+// Dados a serem salvos
+$data = [
+    'nome' => strtoupper($nomeFormatado),
+    'endereco' => strtoupper($enderecoFormatado),
+    'arquivo_proc' => $urlProc,
+    'size_proc' => $sizeProc,
+    'user_id' => $userId,
+
+    'arquivo_proc' => $urlProc,
+    'size_proc' => $sizeProc,
+
+    'user_id' => $userId,
+];
+//dd($data);
+// Encontrar o registro existente pelo ID (substitua o ID com a variável correta)
+$veiculo = Veiculo::find($id); // Ou use Veiculo::findOrFail($id) para garantir que o ID exista
+
+if ($veiculo) {
+    // Atualizar o registro
+    $veiculo->update($data);
+
+    alert()->success('Procuração atualizada com sucesso!');
+    return redirect()->route('veiculos.index');
+} else {
+    alert()->error('Erro ao encontrar o veículo.');
+    return back()->withErrors(['message' => 'Erro ao encontrar o veículo.']);
+}
+}
 
     public function storeAtpve(Request $request, $id){
 

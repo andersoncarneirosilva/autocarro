@@ -187,7 +187,7 @@
 
                                                 <a href="{{ route('veiculos.edit', $doc->id) }}" class="dropdown-item">Editar</a>
 
-                                                <a href="{{ $doc->arquivo_doc }}" 
+                                                {{-- <a href="{{ $doc->arquivo_doc }}" 
                                                     class="dropdown-item {{ $doc->arquivo_doc === 'Não consta' ? 'disabled' : '' }}"
                                                     target="_blank">
                                                     Baixar CRLV
@@ -210,8 +210,13 @@
                                                     aria-disabled="true">
                                                     Baixar ATPVe
                                                     </a>
-                                                @endif
+                                                @endif --}}
 
+                                                <a href="javascript:void(0);"
+                                                    class="dropdown-item"
+                                                    onclick="openProcModal(event, {{ $doc->id }})">
+                                                    Gerar procuração
+                                                </a>
 
                                                 <a href="javascript:void(0);"
                                                     class="dropdown-item {{ $doc->crv === '***' ? 'disabled' : '' }}"
@@ -265,6 +270,38 @@ aria-hidden="true">
         </div><!-- /.modal-content -->
     </div><!-- /.modal-dialog -->
 </div><!-- /.modal -->
+
+<div class="modal fade" id="procModal" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Gerar procuração</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-hidden="true"></button>
+            </div>
+            <div class="modal-body">
+                <form id="procForm" method="POST">
+                    @csrf <!-- Necessário para o Laravel validar a requisição -->
+                    <div class="form-group">
+                        <div class="mb-3">
+                            <label>Endereço: <span style="color: red;">*</span></label>
+                            <div class="col-lg">
+                                <input class="form-control" type="text" name="endereco" required>
+                            </div>
+                        </div>
+                    </div>
+                    <br>
+
+                    <input type="hidden" id="docId" name="docId">
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-light" data-bs-dismiss="modal">Fechar</button>
+                <button type="button" class="btn btn-primary" onclick="submitProc()">Gerar</button>
+            </div>
+        </div>
+    </div>
+</div>
+
 
 <div class="modal fade" id="addressModal" tabindex="-1" role="dialog" aria-labelledby="addressModalLabel" aria-hidden="true">
     <div class="modal-dialog" role="document">
@@ -343,6 +380,29 @@ aria-hidden="true">
     
         // Exibe o modal
         $('#addressModal').modal('show');
+    }
+
+    function openProcModal(event, docId) {
+        // Armazena o ID do documento globalmente
+        window.selectedDocId = docId;
+    
+        // Atualiza o campo oculto no formulário com o ID do documento
+        document.getElementById('docId').value = docId;
+    
+        // Exibe o modal
+        $('#procModal').modal('show');
+    }
+
+    function submitProc() {
+    
+        const docId = window.selectedDocId;
+        //console.log(docId);
+        // Atualiza a ação do formulário para incluir o ID do documento na rota
+        const form = document.getElementById('procForm');
+        form.action = `{{ url('veiculos/store-proc') }}/${docId}`; //secure_url
+    
+        // Envia o formulário
+        form.submit();
     }
     
     function submitAddress() {

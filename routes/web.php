@@ -181,6 +181,7 @@ Route::middleware(['auth'])->group(function () {
 
     // Route::post('/estoque', [EstoqueController::class, 'store'])->name('estoque.store');
     // Route::get('/estoque', [EstoqueController::class, 'index'])->name('estoque.index');
+    Route::post('/veiculos/store-proc/{id}', [VeiculoController::class, 'storeProc'])->name('veiculos.store-proc');
     Route::post('/veiculos/store-atpve/{id}', [VeiculoController::class, 'storeAtpve'])->name('veiculos.store-atpve');
     //Route::get('/veiculos/create-atpve', [VeiculoController::class, 'createAtpve'])->name('veiculos.create-atpve');
     
