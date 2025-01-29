@@ -45,6 +45,7 @@ class Veiculo extends Model
         'arquivo_atpve_assinado',
         'size_proc_pdf',
         'size_atpve_pdf',
+        'image',
         'user_id',
 
     ];
@@ -380,6 +381,29 @@ class Veiculo extends Model
         // Caso não haja segundo nome, retorna a string original
         return $tipos;
     }
+
+    public function extrairModelo($textoPagina){
+        // Suposição: O nome do usuário está precedido pela palavra "Nome:" ou "Nome do usuário:"
+        
+        $linhas = explode("\n", $textoPagina);
+        $word_marca = explode("\t", $linhas[53]);
+        
+        // Obtém a string completa, por exemplo "HONDA/CB 300R"
+        $modelo_completo = implode(', ', $word_marca);
+        
+        // Usa expressão regular para extrair apenas "HONDA/CB"
+        if (preg_match('/^([A-Za-z]+\/[A-Za-z]+)/', $modelo_completo, $matches)) {
+            $modelo = $matches[1]; // Pega o valor "HONDA/CB"
+        } else {
+            // Caso a expressão regular não encontre nada, retorna o modelo completo
+            $modelo = $modelo_completo;
+        }
+    
+        //dd($modelo); // Verifica o resultado
+    
+        return $modelo;
+    }
+    
     
     
 }

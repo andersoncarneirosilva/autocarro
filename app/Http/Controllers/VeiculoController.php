@@ -373,23 +373,22 @@ if ($this->model->create($data)) {
             $textoPagina = $pagina->getText();
             
             $linhas = explode("\n", $textoPagina);
-
+        
             if ($linhas[3] != "SECRETARIA NACIONAL DE TRÂNSITO - SENATRAN") {
                 alert()->error('Selecione um documento 2024.');
                 return redirect()->route('veiculos.index');
             }
-
+        
+            // Extrair dados do veículo
             $marca = $this->model->extrairMarca($textoPagina);
             $placa = $this->model->extrairPlaca($textoPagina);
             $chassi = $this->model->extrairChassi($textoPagina);
             $cor = $this->model->extrairCor($textoPagina);
             $anoModelo = $this->model->extrairAnoModelo($textoPagina);
-            //dd($anoModelo);
             $renavam = $this->model->extrairRevanam($textoPagina);
             $nome = $this->model->extrairNome($textoPagina);
             $cpf = $this->model->extrairCpf($textoPagina);
             $cidade = $this->model->extrairCidade($textoPagina);
-            //dd($cidade);
             $crv = $this->model->extrairCrv($textoPagina);
             $placaAnterior = $this->model->extrairPlacaAnterior($textoPagina);
             $categoria = $this->model->extrairCategoria($textoPagina);
@@ -397,8 +396,34 @@ if ($this->model->create($data)) {
             $combustivel = $this->model->extrairCombustivel($textoPagina);
             $infos = $this->model->extrairInfos($textoPagina);
             $tipo = $this->model->extrairEspecie($textoPagina);
-            //dd($tipo);
+        
+            $modelo = $this->model->extrairModelo($textoPagina);  // Ex: "HONDA/CB"
+            
+            // Verifique a cor
+            $cor = $this->model->extrairCor($textoPagina);  // Ex: "Preto"
+        
+            // Definir o nome da imagem com base no modelo e cor
+            $nomeImagem = strtolower(str_replace(['/', ' '], '_', $modelo)) . '_' . strtolower(str_replace(' ', '_', $cor)) . '.jpg';
+            //dd($nomeImagem);
+// Caminho correto dentro de 'storage/app/public/motos/'
+$caminhoImagemOrigem = "motos/temp/$nomeImagem";  
+$caminhoImagemDestino = $nomeImagem;  
+
+// Verifique se a imagem existe e mova para a pasta correta
+if (Storage::exists($caminhoImagemOrigem)) {
+    Storage::move($caminhoImagemOrigem, $caminhoImagemDestino);
+} else {
+    // Se a imagem não existir, copie uma imagem padrão
+    $imagemPadrao = public_path('images/default.jpg');
+
+    if (file_exists($imagemPadrao)) {
+        Storage::put($caminhoImagemDestino, file_get_contents($imagemPadrao));
+    }
+}
+        
+            // Continuação do processamento...
         }
+        
 
         // Verificar se o veículo já existe com a placa fornecida
         $veiculoExistente = Veiculo::where('placa', $placa)
@@ -587,7 +612,8 @@ $data = [
     'arquivo_doc' => $urlDoc,
     'size_doc' => $size_doc,
     'arquivo_proc' => $urlProc,
-    'size_proc' => $sizeProc, // Adicionando o tamanho do arquivo PDF gerado
+    'size_proc' => $sizeProc,
+    'image' => $nomeImagem,
     'user_id' => $userId,
 ];
 
