@@ -10,16 +10,20 @@ return new class extends Migration
      * Run the migrations.
      */
     public function up()
-{
-    Schema::table('outorgados', function (Blueprint $table) {
-        $table->string('email_outorgado')->unique()->after('end_outorgado'); // Adiciona o campo 'email'
-    });
-}
+    {
+        Schema::table('outorgados', function (Blueprint $table) {
+            if (!Schema::hasColumn('outorgados', 'email_outorgado')) {
+                $table->string('email_outorgado', 255)->after('end_outorgado')->nullable();
+            }
+        });
+    }
 
-public function down()
-{
-    Schema::table('outorgados', function (Blueprint $table) {
-        $table->dropColumn('email_outorgado'); // Remove o campo 'email' em caso de rollback
-    });
-}
+    public function down()
+    {
+        Schema::table('outorgados', function (Blueprint $table) {
+            if (Schema::hasColumn('outorgados', 'email_outorgado')) {
+                $table->dropColumn('email_outorgado');
+            }
+        });
+    }
 };
