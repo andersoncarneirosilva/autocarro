@@ -405,21 +405,27 @@ if ($this->model->create($data)) {
             // Definir o nome da imagem com base no modelo e cor
             $nomeImagem = strtolower(str_replace(['/', ' '], '_', $modelo)) . '_' . strtolower(str_replace(' ', '_', $cor)) . '.jpg';
             //dd($nomeImagem);
-// Caminho correto dentro de 'storage/app/public/motos/'
-$caminhoImagemOrigem = "motos/temp/$nomeImagem";  
-$caminhoImagemDestino = $nomeImagem;  
+            // Caminho correto dentro de 'storage/app/public/motos/'
+            // Caminho da imagem na pasta 'public/motos/'
+            $caminhoImagemOrigem = public_path("motos/$nomeImagem");  
 
-// Verifique se a imagem existe e mova para a pasta correta
-if (Storage::exists($caminhoImagemOrigem)) {
-    Storage::move($caminhoImagemOrigem, $caminhoImagemDestino);
-} else {
-    // Se a imagem não existir, copie uma imagem padrão
-    $imagemPadrao = public_path('images/default.jpg');
+            // Caminho correto dentro de 'storage/app/public/motos/'
+            $caminhoImagemDestino = "motos/$nomeImagem";  
 
-    if (file_exists($imagemPadrao)) {
-        Storage::put($caminhoImagemDestino, file_get_contents($imagemPadrao));
-    }
-}
+            // Verifica se a imagem existe e copia para 'storage/app/public/motos/'
+            if (file_exists($caminhoImagemOrigem)) {
+                Storage::put($caminhoImagemDestino, file_get_contents($caminhoImagemOrigem));
+            } else {
+                // Se a imagem não existir, usa a imagem padrão
+                $imagemPadrao = public_path('images/default.jpg');
+
+                if (file_exists($imagemPadrao)) {
+                    Storage::put($caminhoImagemDestino, file_get_contents($imagemPadrao));
+                }
+            }
+
+            // Gera a URL correta para a imagem
+            $urlImagem = asset("storage/motos/$nomeImagem");
         
             // Continuação do processamento...
         }
