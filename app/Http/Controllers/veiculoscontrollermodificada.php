@@ -398,15 +398,38 @@ if ($this->model->create($data)) {
             $modelo = $this->model->extrairModelo($textoPagina);  // Ex: "HONDA/CB"
             $cor = $this->model->extrairCor($textoPagina);  // Ex: "Preto"
             $tipo = $this->model->extrairEspecie($textoPagina);
-            //dd($tipo);
-            if ($tipo) {
-                $caminhoPasta = storage_path("veiculos/{$tipo}"); // Define o caminho da pasta
-        
-                // Verifica se a pasta já existe, se não, cria
-                if (!File::exists($caminhoPasta)) {
-                    File::makeDirectory($caminhoPasta, 0777, true, true);
-                }
-            }
+            // Definir a pasta correta com base no tipo do veículo
+$pastaTipo = match ($tipo) {
+    'MOTOCICLETA', 'MOTONETA' => 'motos',  // Pasta para motos e motonetas
+    'AUTOMOVEL' => 'carros',  // Pasta para automóveis
+    default => 'outros'  // Caso não se encaixe nas categorias acima
+};
+
+// Gerar o nome da imagem baseado no modelo e cor
+$nomeImagem = strtolower(str_replace(['/', ' '], '_', $modelo)) . '_' . strtolower(str_replace(' ', '_', $cor)) . '.jpg';
+
+// Caminhos da imagem original e destino no storage
+$caminhoImagemOrigem = public_path("$pastaTipo/$nomeImagem");
+$caminhoImagemDestino = "motos/$nomeImagem"; // Sempre salvar em 'storage/app/public/motos/'
+
+// Caminho da imagem padrão baseado no tipo do veículo
+$imagemPadrao = match ($tipo) {
+    'motocicleta', 'motoneta' => public_path('images/default_moto.jpg'),
+    'automovel' => public_path('images/default_carro.jpg'),
+    default => public_path('images/default.png'),
+};
+
+// Verifica se a imagem do veículo existe
+if (file_exists($caminhoImagemOrigem)) {
+    if (!Storage::exists($caminhoImagemDestino)) { // Evita sobrescrever se já existir
+        Storage::put($caminhoImagemDestino, file_get_contents($caminhoImagemOrigem));
+    }
+} else {
+    // Se a imagem não existir, usar a imagem padrão correspondente
+    if (file_exists($imagemPadrao) && !Storage::exists($caminhoImagemDestino)) {
+        Storage::put($caminhoImagemDestino, file_get_contents($imagemPadrao));
+    }
+}
 
         }
         
@@ -599,7 +622,7 @@ $data = [
     'size_doc' => $size_doc,
     'arquivo_proc' => $urlProc,
     'size_proc' => $sizeProc,
-    'image' => "TESTE",
+    'image' => $nomeImagem,
     'user_id' => $userId,
 ];
 

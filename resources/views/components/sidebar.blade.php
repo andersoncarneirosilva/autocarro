@@ -46,7 +46,7 @@
             </li>
             
             <li class="side-nav-item">
-                <a href="{{ route('veiculos.index') }}" class="side-nav-link">
+                <a href="{{ route('veiculos.index') }}/" class="side-nav-link">
                     <i class="uil-car"></i>
                     <span> Veículos </span>
                 </a>
