@@ -141,6 +141,85 @@ class Veiculo extends Model
         return $marca ;
     }
 
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+public function extrairMarcaVeiculo($textoPagina){
+    // Lógica para extrair a marca normalmente
+    $linhas = explode("\n", $textoPagina);  // Divide o texto em linhas
+    $word_marca = explode("\t", $linhas[53]);  // Divide a linha 53 em palavras separadas por tabulação
+    $marca = implode(', ', $word_marca);  // Junta as palavras com vírgula
+
+    // Captura somente a primeira palavra antes da "/"
+    $marcaAntesBarra = explode("/", $marca)[0];  // Divide a string no primeiro "/"
+
+    return trim($marcaAntesBarra);  // Retorna a parte antes do "/"
+}
+
+
+
+public function extrairModeloVeiculo($textoPagina)
+{
+    // Divide o texto em linhas
+    $linhas = explode("\n", $textoPagina);
+
+    // Obtém a linha correta (linha 53, por exemplo)
+    $word_marca = explode("\t", $linhas[53]);
+
+    // Obtém a string completa, por exemplo: "I/RENAULT FLUENCE PRI20A"
+    $modelo_completo = implode(', ', $word_marca);
+    
+    // Expressão regular para capturar a palavra imediatamente após a barra "/"
+    if (preg_match('/\/([A-Za-z]+)/', $modelo_completo, $matches)) {
+        $modelo = $matches[1]; // Pega apenas letras após a barra
+    } else {
+        // Se a regex falhar, tenta remover números e caracteres especiais
+        $modelo = preg_replace('/[^A-Za-z\s]/', '', $modelo_completo);
+    }
+    //dd($modelo);
+    return trim($modelo);
+}
+
+
+public function extrairMarcaImportado($textoPagina) {
+    // Lógica para extrair a marca do veículo importado
+    $linhas = explode("\n", $textoPagina);  // Divide o texto em linhas
+    $word_marca = explode("\t", $linhas[53]);  // Divide a linha 53 em palavras separadas por tabulação
+    $marca = implode(', ', $word_marca);  // Junta as palavras com vírgula
+
+    // Verifica se a marca começa com "I/"
+    if (strpos($marca, "I/") === 0) {
+        // Remove o "I/" e captura a palavra após ele
+        $marca = substr($marca, 2);  // Remove "I/" do início
+        $palavras = explode(" ", $marca);  // Divide a string em palavras
+        $marca = $palavras[0];  // Captura a primeira palavra após "I/"
+
+        return trim($marca);  // Retorna a marca após "I/"
+    }
+
+    // Caso não tenha "I/", continua o processamento normal
+    $palavras = explode(" ", $marca);  // Divide a string em palavras
+    $marca = implode(" ", array_slice($palavras, 0, 2));  // Pega as duas primeiras palavras
+
+    return trim($marca);  // Retorna a marca com as duas primeiras palavras
+}
+
+
+
+
+public function extrairModeloImportado($textoPagina) {
+    // Lógica para extrair o modelo do veículo importado
+    $linhas = explode("\n", $textoPagina);
+    $word_modelo = explode("\t", $linhas[53]); // Supondo que o modelo esteja na linha 54
+    
+    // Captura a segunda palavra e retorna como string
+    $palavras = explode(" ", implode(' ', $word_modelo));
+    $modelo = isset($palavras[1]) ? $palavras[1] : '';
+    //dd($modelo);
+    return trim($modelo);
+}
+
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
     public function extrairChassi($textoPagina){
         // Supondo que o texto é separado em linhas e você está interessado na linha 55
         $linhas = explode("\n", $textoPagina);
@@ -361,49 +440,27 @@ class Veiculo extends Model
         return $infos ;
     }
 
-    public function extrairEspecie($textoPagina){
-        // Suposição: O nome do usuário está precedido pela palavra "Nome:" ou "Nome do usuário:"
-        
-        $linhas = explode("\n", $textoPagina);
-        //dd($linhas);
-        $linha = explode("\t", $linhas[54]);
-        //dd($colunas);
-        $tipos = implode(', ', $linha);
-        
-        // Dividir a string por espaços para extrair o segundo nome
-        $tiposArray = explode(' ', $tipos);
-    
-        // Verificar se existe pelo menos 2 palavras, e retornar o segundo nome
-        if (count($tiposArray) > 1) {
-            return $tiposArray[1]; // Retorna o segundo nome
-        }
-    
-        // Caso não haja segundo nome, retorna a string original
-        return $tipos;
+    public function extrairEspecie($textoPagina)
+{
+    $linhas = explode("\n", $textoPagina);
+    $linha = explode("\t", $linhas[54]);
+    $tipos = implode(', ', $linha);
+
+    // Substitui "MOTONETA" por "MOTOCICLETA"
+    $tipos = str_replace("MOTONETA", "MOTOCICLETA", $tipos);
+
+    // Divide a string por espaços para extrair o segundo nome
+    $tiposArray = explode(' ', $tipos);
+
+    // Verifica se existe pelo menos 2 palavras e retorna a segunda
+    if (count($tiposArray) > 1) {
+        return $tiposArray[1]; // Retorna o segundo nome
     }
 
-    public function extrairModelo($textoPagina){
-        // Suposição: O nome do usuário está precedido pela palavra "Nome:" ou "Nome do usuário:"
-        
-        $linhas = explode("\n", $textoPagina);
-        $word_marca = explode("\t", $linhas[53]);
-        
-        // Obtém a string completa, por exemplo "HONDA/CB 300R"
-        $modelo_completo = implode(', ', $word_marca);
-        
-        // Usa expressão regular para extrair apenas "HONDA/CB"
-        if (preg_match('/^([A-Za-z]+\/[A-Za-z]+)/', $modelo_completo, $matches)) {
-            $modelo = $matches[1]; // Pega o valor "HONDA/CB"
-        } else {
-            // Caso a expressão regular não encontre nada, retorna o modelo completo
-            $modelo = $modelo_completo;
-        }
-    
-        //dd($modelo); // Verifica o resultado
-    
-        return $modelo;
-    }
-    
-    
+    // Caso não haja segundo nome, retorna a string original (já corrigida)
+    return $tipos;
+}
+
+   
     
 }

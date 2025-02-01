@@ -20,13 +20,11 @@
         <!-- Para Mobile -->
         <div class="card ribbon-box d-block d-md-none">
           <div class="card-body">
-              <div class="ribbon ribbon-success float-end"><i class="mdi mdi-access-point me-1"></i> 19.01.2025</div>
+              <div class="ribbon ribbon-success float-end"><i class="mdi mdi-access-point me-1"></i> 01.02.2025</div>
               <h5 class="text-success float-start mt-0">Novidades no App!</h5>
               <div class="ribbon-content">
                   <ul>
-                    <li>Dashboard reformulada</li>
-                    <li>Mostrador de espaço em disco.</li>
-                    <li>Cada veículo tem a sua imagem individual(moto, carro, caminhonete).</li>
+                    <li>Atualizado as imagens para as motos mais comuns</li>
                     <li>Inclusão dos planos Padrão/Pro/Premium.</li>
                     <li>Aba para envio e download dos arquivos na página de detalhes do veículo.</li>
 

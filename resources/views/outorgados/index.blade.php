@@ -86,7 +86,7 @@
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
-                <form action="{{ route('outorgados.store') }}" method="POST" id="form-cad" enctype="multipart/form-data">
+                <form action="{{ route('outorgados.store') }}" method="POST" id="form-cad" enctype="multipart/form-data"  class="needs-validation" novalidate>
                     @csrf
                     <div class="mb-3">
                         <label class="form-label">Nome</label>

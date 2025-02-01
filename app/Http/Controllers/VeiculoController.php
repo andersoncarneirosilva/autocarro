@@ -238,6 +238,26 @@ if (($espacoUsado + $sizeProc) > $limiteBytes) {
     return redirect()->route('veiculos.index');
 }
 
+$input = $request['marca'];
+// Divide a string pelos espaços e barras
+$partes = preg_split('/[\s\/]+/', $input);
+
+// Pega a primeira palavra (marca)
+$marca = strtoupper($partes[0]);
+$modelo = strtoupper($partes[1]);
+//dd($marca);
+$nomeImagem = "storage/veiculos/" . strtolower($request['tipo']) . "/" . 
+                strtolower(str_replace(['/', ' '], '_', $marca)) . '_' .
+                strtolower(str_replace(['/', ' '], '_', $modelo)) . '_' .
+                strtolower(str_replace(' ', '_', $request['cor'])) . '.jpg';
+
+            // Caminho real do arquivo no servidor
+            $caminhoImagem = public_path($nomeImagem);
+
+            // Verifica se a imagem existe, senão define a padrão
+            if (!file_exists($caminhoImagem)) {
+                $nomeImagem = "storage/veiculos/default.png"; // Caminho da imagem padrão
+            }
 // Dados a serem salvos
 $data = [
     'nome' => strtoupper($nomeFormatado),
@@ -258,6 +278,7 @@ $data = [
     'combustivel' => "Não consta",
     'infos' => "Não consta",
     'tipo' => $request['tipo'],
+    'image' => $nomeImagem,
 
     'arquivo_doc' => 0,
     'size_doc' => 0,
@@ -279,7 +300,9 @@ $data = [
 
 // Criar o registro no banco
 if ($this->model->create($data)) {
-    alert()->success('Procuração cadastrada com sucesso!');
+    //SAVE PROC MANUAL
+
+    alert()->success('Veículo cadastrado com sucesso!');
     return redirect()->route('veiculos.index');
 } else {
     alert()->error('Erro ao cadastrar a procuração.');
@@ -395,18 +418,36 @@ if ($this->model->create($data)) {
             $motor = $this->model->extrairMotor($textoPagina);
             $combustivel = $this->model->extrairCombustivel($textoPagina);
             $infos = $this->model->extrairInfos($textoPagina);
-            $modelo = $this->model->extrairModelo($textoPagina);  // Ex: "HONDA/CB"
-            $cor = $this->model->extrairCor($textoPagina);  // Ex: "Preto"
-            $tipo = $this->model->extrairEspecie($textoPagina);
-            //dd($tipo);
-            if ($tipo) {
-                $caminhoPasta = storage_path("veiculos/{$tipo}"); // Define o caminho da pasta
         
-                // Verifica se a pasta já existe, se não, cria
-                if (!File::exists($caminhoPasta)) {
-                    File::makeDirectory($caminhoPasta, 0777, true, true);
-                }
+            $cor = $this->model->extrairCor($textoPagina);
+            $tipo = $this->model->extrairEspecie($textoPagina);
+
+            //dd($marca);
+
+            // Verifica se o veículo é importado
+            if (strpos($marca, "I/") === 0) {
+                $marcaVeiculo = $this->model->extrairMarcaImportado($textoPagina);
+                $modeloVeiculo = $this->model->extrairModeloImportado($textoPagina);
+                //dd("Importado: " . $marcaVeiculo) . " Modelo: " . $modeloVeiculo;
+            } else {
+                $marcaVeiculo = $this->model->extrairMarcaVeiculo($textoPagina);
+                $modeloVeiculo = $this->model->extrairModeloVeiculo($textoPagina);
+                //dd("Não Importado: " . $marcaVeiculo . " Modelo: " . $modeloVeiculo);
             }
+        
+            $nomeImagem = "storage/veiculos/" . strtolower($tipo) . "/$modeloVeiculo/" . 
+                strtolower(str_replace(['/', ' '], '_', $marcaVeiculo)) . '_' .
+                strtolower(str_replace(['/', ' '], '_', $modeloVeiculo)) . '_' .
+                strtolower(str_replace(' ', '_', $cor)) . '.jpg';
+            //dd($nomeImagem);
+            // Caminho real do arquivo no servidor
+            $caminhoImagem = public_path($nomeImagem);
+
+            // Verifica se a imagem existe, senão define a padrão
+            if (!file_exists($caminhoImagem)) {
+                $nomeImagem = "storage/veiculos/default.png"; // Caminho da imagem padrão
+            }
+            
 
         }
         
@@ -576,7 +617,7 @@ $pdf->Output('F', $caminhoProc);
 
 // Obter o tamanho do arquivo PDF em bytes
 $sizeProc = filesize($caminhoProc);
-
+//DATA
 $data = [
     'nome' => strtoupper($nomeFormatado),
     'endereco' => strtoupper($enderecoFormatado),  // Endereço em maiúsculas
@@ -599,19 +640,18 @@ $data = [
     'size_doc' => $size_doc,
     'arquivo_proc' => $urlProc,
     'size_proc' => $sizeProc,
-    'image' => "TESTE",
+    'image' => $nomeImagem,
     'user_id' => $userId,
 ];
 
 
         //Mail::to( config('mail.from.address'))->send(new SendEmail($data, $caminhoProc));
 
+        
+
         if($this->model->create($data)){
 
-            $userId = Auth::id();
-        $usuario = Cliente::where('user_id', $userId)->get();
-
-            if($usuario == "Básico" || $usuario == "Intermediário"){
+            if ($user && ($user->plano == "Padrão" || $user->plano == "Pro")) {
                 $user->decrement('credito');
             }
             
@@ -934,6 +974,9 @@ if ($veiculo) {
     // Atualizar o registro
     $veiculo->update($data);
 
+    if ($user && ($user->plano == "Padrão" || $user->plano == "Pro")) {
+        $user->decrement('credito');
+    }
     alert()->success('Procuração atualizada com sucesso!');
     return redirect()->route('veiculos.index');
 } else {

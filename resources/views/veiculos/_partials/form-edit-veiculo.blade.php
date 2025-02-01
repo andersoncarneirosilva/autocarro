@@ -8,7 +8,7 @@
                         <div class="row align-items-center">
                             <div class="col-auto">
                                 <div class="avatar-lg">
-                                        <img src="{{ asset("storage/motos/$veiculo->image") }}" alt="" class="rounded-circle img-thumbnail">
+                                        <img src="{{ url("$veiculo->image") }}" alt="" class="rounded-circle img-thumbnail">
                                 </div>
                             </div>
                             <div class="col">
