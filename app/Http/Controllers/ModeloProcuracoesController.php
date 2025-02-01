@@ -40,14 +40,15 @@ public function store(Request $request)
 {
     try {
         // Verificar se o número de outorgados excede o limite
-        if (count($request->outorgados) > 3) {
-            alert()->error('Erro!', 'Selecione no máximo 3 outorgados.')
+        if (!is_array($request->outorgados) || count($request->outorgados) > 3 || count($request->outorgados) < 1) {
+            alert()->error('Erro!', 'Selecione ao menos 1 e no máximo 3 outorgados.')
                 ->persistent(true)
                 ->autoClose(5000) // Fecha automaticamente após 5 segundos
                 ->timerProgressBar();
-                return redirect()->route('configuracoes.index');
+            
+            return redirect()->route('configuracoes.index');
         }
-
+        
         $request->validate([
             'texto_inicial' => 'required|string',
             'texto_final' => 'required|string',
@@ -102,6 +103,14 @@ public function store(Request $request)
 
 public function update(Request $request, $id)
 {
+    if (count($request->outorgados) < 1) {
+        alert()->error('Erro!', 'Selecione ao menos 1 outorgado.')
+            ->persistent(true)
+            ->autoClose(5000) // Fecha automaticamente após 5 segundos
+            ->timerProgressBar();
+            return redirect()->route('configuracoes.index');
+    }
+
     // Valide os dados, se necessário
     $validated = $request->validate([
         'texto_inicio' => 'required',

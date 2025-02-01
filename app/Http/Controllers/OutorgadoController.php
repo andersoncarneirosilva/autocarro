@@ -57,27 +57,71 @@ return view('outorgados.index', compact('outs'));
 
     public function store(Request $request)
 {
-    //dd($request);
     $userId = Auth::id();
-    // Dados recebidos da requisição
-    $data = [
-        'nome_outorgado' => $request->nome_outorgado,
-        'cpf_outorgado' => $request->cpf_outorgado,
-        'end_outorgado' => $request->end_outorgado,
-        'email_outorgado' => $request->email_outorgado,
-        'user_id' => $userId,
-    ];
 
-    // Salva o novo outorgado na tabela 'outorgados'
-    $outorgado = $this->model->create($data);
+    // Validação dos dados
+    if (empty($request->nome_outorgado)) {
+        alert()->error('O campo outorgado é obrigatório')
+            ->persistent(true)
+            ->autoClose(5000) // Fecha automaticamente após 5 segundos
+            ->timerProgressBar();
+        
+        return redirect()->route('configuracoes.index');
+    }elseif (empty($request->end_outorgado)) {
+        alert()->error('O campo endereço é obrigatório')
+        ->persistent(true)
+        ->autoClose(5000) // Fecha automaticamente após 5 segundos
+        ->timerProgressBar();
+    
+        return redirect()->route('configuracoes.index');
+    }elseif (empty($request->email_outorgado)) {
+        alert()->error('O campo email é obrigatório')
+        ->persistent(true)
+        ->autoClose(5000) // Fecha automaticamente após 5 segundos
+        ->timerProgressBar();
+    
+        return redirect()->route('outorgados.index');
+    }
+    
+    try {
+        $validated = $request->validate([
+            'nome_outorgado' => 'required|string|max:255',
+            'cpf_outorgado' => 'required|string|size:11|unique:outorgados,cpf_outorgado',
+            'end_outorgado' => 'required|string|max:255',
+            'email_outorgado' => 'required|email|unique:outorgados,email_outorgado',
+        ], [
+            'required' => 'O campo :attribute é obrigatório.',
+            'string' => 'O campo :attribute deve ser um texto válido.',
+            'max' => [
+                'string' => 'O campo :attribute não pode ter mais de :max caracteres.',
+            ],
+            'size' => [
+                'string' => 'O campo :attribute deve ter exatamente :size caracteres.',
+            ],
+            'email' => 'O campo :attribute deve ser um endereço de e-mail válido.',
+            'unique' => 'O campo :attribute já está em uso.',
+        ]);
+    } catch (\Illuminate\Validation\ValidationException $e) {
+        $errorMessages = implode(', ', $e->validator->errors()->all());
+        alert()->error('Erro!', $errorMessages);
 
-        // Alerta de sucesso
+    // Redireciona para a página de listagem
+    return redirect()->route('outorgados.index');
+    }
+
+    // Adiciona o user_id nos dados validados
+    $validated['user_id'] = $userId;
+
+    // Salva o novo outorgado na tabela
+    $this->model->create($validated);
+
+    // Alerta de sucesso
     alert()->success('Outorgado cadastrado com sucesso!');
-
 
     // Redireciona para a página de listagem
     return redirect()->route('outorgados.index');
 }
+
 
 
      
