@@ -24,7 +24,7 @@ class DashController extends Controller
 
     public function index(Request $request){
         //dd(auth()->user());
-        abort(404);
+        //abort(404);
 
         $search = $request->search;
 
