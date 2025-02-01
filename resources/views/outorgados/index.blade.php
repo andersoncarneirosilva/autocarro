@@ -47,7 +47,14 @@
                                 <tr>
                                     <td>{{ $out->nome_outorgado }}</td>
                                     <td>{{ $out->cpf_outorgado }}</td>
-                                    <td>{{ $out->email_outorgado }}</td>
+                                    @php
+                                        $email = $out->email_outorgado;
+                                        $emailParts = explode('@', $email);
+                                        $emailMasked = substr($emailParts[0], 0, 2) . str_repeat('*', strlen($emailParts[0]) - 2) . '@' . $emailParts[1];
+                                    @endphp
+
+                                    <td>{{ $emailMasked }}</td>
+
                                     <td class="table-action">
 
                                         <a href="#" class="action-icon" data-id="{{ $out->id }}" onclick="openEditModalOutorgado(event)">
