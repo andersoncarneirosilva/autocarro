@@ -37,7 +37,7 @@ return view('outorgados.index', compact('outs'));
     
         $doc->update($request->all());
     
-        alert()->success('Procuração editada com sucesso!');
+        alert()->success('Outorgado editado com sucesso!');
         return redirect()->route('outorgados.index');
     }
 
@@ -57,7 +57,7 @@ return view('outorgados.index', compact('outs'));
 
     public function store(Request $request)
 {
-    dd($request);
+    //dd($request);
     $userId = Auth::id();
     // Dados recebidos da requisição
     $data = [

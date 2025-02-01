@@ -16,7 +16,7 @@ class ClienteSeeder extends Seeder
         Cliente::create([
             'nome' => 'MARILENE PRATES CARNEIRO DA SILVA',
             'cpf' => '455.969.210-68',
-            'fone' => '(51)99669.8989)',
+            'fone' => '(51)99669.8989',
             'email' => 'mari@gmail.com',
             'cep' => '92.035-580',
             'endereco' => 'Rua Santa Tereza',

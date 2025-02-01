@@ -136,7 +136,7 @@
                 <h5 class="modal-title" id="editInfoModalLabel">Editar Informações</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
-            @foreach ($outs as $out)
+
             <form action="{{ route('outorgados.update', $out->id) }}" id="edit-form-cad" method="POST">
                 @csrf
                 @method('PUT') <!-- Usado para edições -->
@@ -163,7 +163,41 @@
                     <button type="submit" class="btn btn-primary">Salvar Alterações</button>
                 </div>
             </form>
-            @endforeach
+            <script>
+                $(document).ready(function () {
+                    $('#edit-form-cad').submit(function (event) {
+                        event.preventDefault(); // Evita o recarregamento da página
+
+                        let form = $(this);
+                        let actionUrl = form.attr('action'); // Obtém a URL definida dinamicamente
+
+                        $.ajax({
+                            url: actionUrl,
+                            method: 'PUT',
+                            data: form.serialize(), // Envia os dados do formulário
+                            success: function (response) {
+                                Swal.fire({
+                                    title: 'Sucesso!',
+                                    text: 'As informações foram atualizadas.',
+                                    icon: 'success',
+                                    confirmButtonText: 'OK'
+                                }).then(() => {
+                                    location.reload(); // Recarrega a página após sucesso
+                                });
+                            },
+                            error: function (xhr) {
+                                Swal.fire({
+                                    title: 'Erro!',
+                                    text: 'Não foi possível salvar as alterações.',
+                                    icon: 'error',
+                                    confirmButtonText: 'OK'
+                                });
+                            }
+                        });
+                    });
+                });
+
+            </script>
         </div>
     </div>
 </div>
