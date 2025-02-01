@@ -45,4 +45,17 @@ class Handler extends ExceptionHandler
             //
         });
     }
+
+    public function render($request, Throwable $exception)
+{
+    // Verifica se o erro é 405 (Método Não Permitido)
+    if ($exception instanceof \Symfony\Component\HttpKernel\Exception\MethodNotAllowedHttpException) {
+        return response()->view('errors.405', [], 405);
+    }
+
+    // Adicione outras verificações de erro se necessário...
+
+    return parent::render($request, $exception);
+}
+
 }
