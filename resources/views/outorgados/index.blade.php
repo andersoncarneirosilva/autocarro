@@ -136,7 +136,8 @@
                 <h5 class="modal-title" id="editInfoModalLabel">Editar Informações</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
-            <form id="edit-form-cad" method="POST">
+            @foreach ($outs as $out)
+            <form action="{{ route('outorgados.update', $out->id) }}" id="edit-form-cad" method="POST">
                 @csrf
                 @method('PUT') <!-- Usado para edições -->
                 <div class="modal-body">
@@ -152,15 +153,21 @@
                         <label for="end_outorgado" class="form-label">Endereço</label>
                         <input type="text" class="form-control" id="edit_end_outorgado" name="end_outorgado" required>
                     </div>
+                    <div class="mb-3">
+                        <label class="form-label">Email</label>
+                        <input type="text" class="form-control" id="edit_email_outorgado" name="email_outorgado" required>
+                    </div>
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fechar</button>
                     <button type="submit" class="btn btn-primary">Salvar Alterações</button>
                 </div>
             </form>
+            @endforeach
         </div>
     </div>
 </div>
+
 <script>
     function openEditModalOutorgado(event) {
     event.preventDefault();
@@ -179,7 +186,7 @@
             $('#edit_nome_outorgado').val(response.nome_outorgado);
             $('#edit_cpf_outorgado').val(response.cpf_outorgado);
             $('#edit_end_outorgado').val(response.end_outorgado);
-            $('#edit_email_outorgado').val(response.end_outorgado);
+            $('#edit_email_outorgado').val(response.email_outorgado);
 
             // Atualize a ação do formulário para apontar para a rota de edição
             $('#editForm').attr('action', `/outorgados/${docId}`);

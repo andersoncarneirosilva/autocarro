@@ -24,8 +24,11 @@ class OutorgadoController extends Controller
 
         $userId = Auth::id();
         $outs = $this->model->getSearch($request->search, $userId);
-        //dd($docs);
-        return view('outorgados.index', compact('outs'));
+
+
+
+return view('outorgados.index', compact('outs'));
+
     }
 
     public function update(Request $request, $id){
@@ -54,7 +57,7 @@ class OutorgadoController extends Controller
 
     public function store(Request $request)
 {
-    //dd($request);
+    dd($request);
     $userId = Auth::id();
     // Dados recebidos da requisição
     $data = [
