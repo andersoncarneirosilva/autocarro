@@ -124,14 +124,14 @@ class OutorgadoController extends Controller
             ->autoClose(5000) // Fecha automaticamente após 5 segundos
             ->timerProgressBar();
         
-        return redirect()->route('configuracoes.index');
+        return redirect()->route('outorgados.index');
     }elseif (empty($request->end_outorgado)) {
         alert()->error('O campo endereço é obrigatório')
         ->persistent(true)
         ->autoClose(5000) // Fecha automaticamente após 5 segundos
         ->timerProgressBar();
     
-        return redirect()->route('configuracoes.index');
+        return redirect()->route('outorgados.index');
     }elseif (empty($request->email_outorgado)) {
         alert()->error('O campo email é obrigatório')
         ->persistent(true)
