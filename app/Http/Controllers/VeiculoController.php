@@ -1418,6 +1418,7 @@ public function update(Request $request, $id)
     // Processar os uploads de arquivos
     $this->processFileUpload($request, $veiculo, 'arquivo_proc_assinado', $pastaUsuario . 'procuracoes_assinadas', 'arquivo_proc_assinado', 'size_proc_pdf', 10); // Limite de 10 MB
     $this->processFileUpload($request, $veiculo, 'arquivo_atpve_assinado', $pastaUsuario . 'atpves_assinadas', 'arquivo_atpve_assinado', 'size_atpve_pdf', 10); // Limite de 10 MB
+    $this->processFileUpload($request, $veiculo, 'arquivo_doc', $pastaUsuario . 'documentos', 'arquivo_doc', 'size_doc', 10); // Novo campo de documento
 
     // Salvar as alterações no banco de dados
     $veiculo->save();
@@ -1426,6 +1427,7 @@ public function update(Request $request, $id)
     alert()->success('Documento enviado com sucesso!');
     return redirect()->route('veiculos.edit', $id);
 }
+
 
 private function processFileUpload($request, $veiculo, $fileKey, $storagePath, $fieldName, $sizeFieldName, $limiteMb)
 {
