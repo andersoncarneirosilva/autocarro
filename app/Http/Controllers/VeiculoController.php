@@ -257,7 +257,7 @@ $nomeImagem = "storage/veiculos/" . strtolower($request['tipo']) . "/" .
 
             // Verifica se a imagem existe, senão define a padrão
             if (!file_exists($caminhoImagem)) {
-                $nomeImagem = "storage/veiculos/default.png"; // Caminho da imagem padrão
+                $nomeImagem = "storage/veiculos/default.jpg"; // Caminho da imagem padrão
             }
 // DATA PROC MANUAL
 $data = [
