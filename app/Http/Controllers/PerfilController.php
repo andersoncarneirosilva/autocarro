@@ -52,28 +52,57 @@ class PerfilController extends Controller
         return view('perfil.edit', compact('user'));
     }
 
-    public function update(Request $request, $id){
-
-        //dd($request);
-        $data = $request->all();
-        //dd($data);
-        if(!$request->password){
-            alert()->error('Preencha o campo senha!');
-            return redirect()->route('perfil.index');    
+    public function update(Request $request, $id)
+    {
+        // Buscar o usuário no banco de dados
+        if (!$user = $this->model->find($id)) {
+            alert()->error('Usuário não encontrado!');
+            return redirect()->route('perfil.index');
         }
-        if(!$request->password_confirm){
-            alert()->error('Preencha o campo confirmar senha!');
-            return redirect()->route('perfil.index');    
+    
+        // Atualizar a senha apenas se preenchida
+        if ($request->filled('password') || $request->filled('password_confirm')) {
+            if (!$request->filled('password')) {
+                alert()->error('Preencha o campo senha!');
+                return redirect()->route('perfil.index');
+            }
+            if (!$request->filled('password_confirm')) {
+                alert()->error('Preencha o campo confirmar senha!');
+                return redirect()->route('perfil.index');
+            }
+            if ($request->password !== $request->password_confirm) {
+                alert()->error('Senhas não coincidem!');
+                return redirect()->route('perfil.index');
+            }
+    
+            $user->password = bcrypt($request->password);
         }
-        if($request->password != $request->password_confirm){
-            alert()->error('Senhas não coicidem!');
-            return redirect()->route('perfil.index');    
+    
+        // Atualizar a imagem se for enviada
+        if ($request->hasFile('image') && $request->file('image')->isValid()) {
+            $extension = $request->file('image')->getClientOriginalExtension();
+            $userFolder = "usuarios/" . auth()->user()->name . "/foto";
+            $fileName = uniqid() . "." . $extension; // Nome único
+    
+            // Salva a imagem e obtém o caminho
+            $imagePath = $request->file('image')->storeAs($userFolder, $fileName, 'public');
+    
+            // Depuração para garantir que o caminho da imagem foi obtido corretamente
+            //dd($imagePath); 
+    
+            // Atualiza o caminho da imagem no banco de dados
+            $user->image = $imagePath;
         }
-        if(!$user = $this->model->find($id))
-            return redirect()->route('perfil.index');    
-
-        $user->update($data);
+    
+        // Salvar as alterações
+        $user->save();
+    
         alert()->success('Perfil editado com sucesso!');
         return redirect()->route('perfil.index');
     }
+    
+
+
+
+
 }

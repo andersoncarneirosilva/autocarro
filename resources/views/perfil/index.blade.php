@@ -48,7 +48,7 @@
     <div class="col-xl-8 col-lg-7">
         <div class="card">
             <div class="card-body">
-                <form action="{{ route('perfil.update', auth()->user()->id) }}" method="POST">
+                <form action="{{ route('perfil.update', auth()->user()->id) }}" method="POST" enctype="multipart/form-data" >
                     @csrf
                     @method('PUT')
                 <h5 class="mb-3 text-uppercase p-2"><i class="mdi mdi-account-circle me-1"></i> Informações pessoais</h5>
@@ -65,8 +65,16 @@
                                 <label for="userpassword" class="form-label">Confirmar senha</label>
                                 <input type="password" class="form-control" name="password_confirm">
                             </div>
-                        </div> <!-- end col -->
+                        </div>
                     </div> <!-- end row -->
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="mb-3">
+                                <label class="form-label">Foto do perfil</label>
+                                <input class="form-control" type="file" name="image">
+                            </div>
+                        </div>
+                    </div>
                     
                     <div class="text-end">
                         <button type="submit" class="btn btn-success btn-sm">Salvar</button>
