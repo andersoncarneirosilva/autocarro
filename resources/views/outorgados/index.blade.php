@@ -142,7 +142,7 @@
                 <h5 class="modal-title" id="editInfoModalLabel">Editar Informações</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
-            <form id="edit-form-cad" method="POST">
+            <form id="edit-form-cad" method="POST" class="needs-validation" novalidate>
                 @csrf
                 @method('PUT') <!-- Usado para edições -->
                 <div class="modal-body">

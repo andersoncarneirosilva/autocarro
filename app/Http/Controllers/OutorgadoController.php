@@ -31,26 +31,75 @@ class OutorgadoController extends Controller
 
     public function update(Request $request, $id)
 {
-    $outorgado = Outorgado::find($id);
-    if (!$outorgado) {
-        return redirect()->route('outorgados.index')->with('error', 'Outorgado não encontrado.');
+    //dd($request);
+    // Verifica se o campo nome_outorgado está vazio
+    if (empty($request->nome_outorgado)) {
+        alert()->error('O campo outorgado é obrigatório')
+            ->persistent(true)
+            ->autoClose(3000) // Fecha automaticamente após 3 segundos
+            ->timerProgressBar();
+        
+        return redirect()->route('outorgados.index');
+    }
+    if (empty($request->cpf_outorgado)) {
+        alert()->error('O campo cpf é obrigatório')
+            ->persistent(true)
+            ->autoClose(3000) // Fecha automaticamente após 3 segundos
+            ->timerProgressBar();
+        
+        return redirect()->route('outorgados.index');
+    }
+    if (empty($request->end_outorgado)) {
+        alert()->error('O campo endereço é obrigatório')
+            ->persistent(true)
+            ->autoClose(3000) // Fecha automaticamente após 3 segundos
+            ->timerProgressBar();
+        
+        return redirect()->route('outorgados.index');
+    }
+    if (empty($request->email_outorgado)) {
+        alert()->error('O campo email é obrigatório')
+            ->persistent(true)
+            ->autoClose(3000) // Fecha automaticamente após 3 segundos
+            ->timerProgressBar();
+        
+        return redirect()->route('outorgados.index');
     }
 
-    // Validação e atualização dos dados
+    // Validação dos dados do formulário
     $validated = $request->validate([
         'nome_outorgado' => 'required|string|max:255',
         'cpf_outorgado' => 'required|string|max:14',
         'end_outorgado' => 'required|string|max:255',
+        'email_outorgado' => 'required|email|max:255', // Validar o email
     ]);
 
-    $outorgado->update($validated);
-    alert()->success('Outorgado atualizado com sucesso')
-    ->persistent(true)
-    ->autoClose(3000) // Fecha automaticamente após 5 segundos
-    ->timerProgressBar();
+    // Recupera o modelo Outorgado a ser atualizado
+    $outorgado = Outorgado::find($id);
 
+    // Verifica se o Outorgado existe
+    if (!$outorgado) {
+        alert()->error('Outorgado não encontrado')
+            ->persistent(true)
+            ->autoClose(3000)
+            ->timerProgressBar();
+        
+        return redirect()->route('outorgados.index');
+    }
+
+    // Atualiza os dados do Outorgado
+    $outorgado->update($validated);
+
+    // Alerta de sucesso
+    alert()->success('Outorgado atualizado com sucesso')
+        ->persistent(true)
+        ->autoClose(3000)
+        ->timerProgressBar();
+
+    // Redireciona para a página de listagem
     return redirect()->route('outorgados.index');
 }
+
 
 
 
