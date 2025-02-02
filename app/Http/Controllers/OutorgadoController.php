@@ -25,35 +25,44 @@ class OutorgadoController extends Controller
         $userId = Auth::id();
         $outs = $this->model->getSearch($request->search, $userId);
 
-
-
-return view('outorgados.index', compact('outs'));
+        return view('outorgados.index', compact('outs'));
 
     }
 
-    public function update(Request $request, $id){
-
-        $doc = Outorgado::findOrFail($id);
-    
-        $doc->update($request->all());
-    
-        alert()->success('Outorgado editado com sucesso!');
-        return redirect()->route('outorgados.index');
+    public function update(Request $request, $id)
+{
+    $outorgado = Outorgado::find($id);
+    if (!$outorgado) {
+        return redirect()->route('outorgados.index')->with('error', 'Outorgado não encontrado.');
     }
 
-    public function show($id){
-    $configuracao = Outorgado::find($id);
-//dd($configuracao);
-    if (!$configuracao) {
-        return response()->json(['error' => 'Configuração não encontrada'], 404);
-    }
+    // Validação e atualização dos dados
+    $validated = $request->validate([
+        'nome_outorgado' => 'required|string|max:255',
+        'cpf_outorgado' => 'required|string|max:14',
+        'end_outorgado' => 'required|string|max:255',
+    ]);
 
-    return response()->json($configuracao);
+    $outorgado->update($validated);
+    alert()->success('Outorgado atualizado com sucesso')
+    ->persistent(true)
+    ->autoClose(3000) // Fecha automaticamente após 5 segundos
+    ->timerProgressBar();
+
+    return redirect()->route('outorgados.index');
 }
 
-    // public function create(){
-    //     return view('category.create');
-    // }
+
+
+    public function show($id){
+        $configuracao = Outorgado::find($id);
+        
+        if (!$configuracao) {
+            return response()->json(['error' => 'Configuração não encontrada'], 404);
+        }
+
+        return response()->json($configuracao);
+    }
 
     public function store(Request $request)
 {

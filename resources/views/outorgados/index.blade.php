@@ -54,7 +54,6 @@
                                     @endphp
 
                                     <td>{{ $emailMasked }}</td>
-
                                     <td class="table-action">
 
                                         <a href="#" class="action-icon" data-id="{{ $out->id }}" onclick="openEditModalOutorgado(event)">
@@ -143,8 +142,7 @@
                 <h5 class="modal-title" id="editInfoModalLabel">Editar Informações</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
-
-            <form action="{{ route('outorgados.update', $out->id) }}" id="edit-form-cad" method="POST">
+            <form id="edit-form-cad" method="POST">
                 @csrf
                 @method('PUT') <!-- Usado para edições -->
                 <div class="modal-body">
@@ -161,8 +159,8 @@
                         <input type="text" class="form-control" id="edit_end_outorgado" name="end_outorgado" required>
                     </div>
                     <div class="mb-3">
-                        <label class="form-label">Email</label>
-                        <input type="text" class="form-control" id="edit_email_outorgado" name="email_outorgado" required>
+                        <label for="edit_email_outorgado" class="form-label">Email</label>
+                        <input type="email" class="form-control" id="edit_email_outorgado" name="email_outorgado" required>
                     </div>
                 </div>
                 <div class="modal-footer">
@@ -170,67 +168,31 @@
                     <button type="submit" class="btn btn-primary">Salvar Alterações</button>
                 </div>
             </form>
-            <script>
-                $(document).ready(function () {
-                    $('#edit-form-cad').submit(function (event) {
-                        event.preventDefault(); // Evita o recarregamento da página
-
-                        let form = $(this);
-                        let actionUrl = form.attr('action'); // Obtém a URL definida dinamicamente
-
-                        $.ajax({
-                            url: actionUrl,
-                            method: 'PUT',
-                            data: form.serialize(), // Envia os dados do formulário
-                            success: function (response) {
-                                Swal.fire({
-                                    title: 'Sucesso!',
-                                    text: 'As informações foram atualizadas.',
-                                    icon: 'success',
-                                    confirmButtonText: 'OK'
-                                }).then(() => {
-                                    location.reload(); // Recarrega a página após sucesso
-                                });
-                            },
-                            error: function (xhr) {
-                                Swal.fire({
-                                    title: 'Erro!',
-                                    text: 'Não foi possível salvar as alterações.',
-                                    icon: 'error',
-                                    confirmButtonText: 'OK'
-                                });
-                            }
-                        });
-                    });
-                });
-
-            </script>
+            
         </div>
     </div>
 </div>
-
 <script>
     function openEditModalOutorgado(event) {
     event.preventDefault();
 
     // Obtenha o ID do documento
-    //const docId = event.currentTarget.getAttribute('data-id');
     const docId = event.target.closest('a').getAttribute('data-id');
+
     // Faça uma requisição AJAX para buscar os dados
     console.log(docId);
     $.ajax({
         url: `/outorgados/${docId}`,
         method: 'GET',
         success: function(response) {
-            //console.log(response);
             // Preencha os campos do modal com os dados do documento
             $('#edit_nome_outorgado').val(response.nome_outorgado);
             $('#edit_cpf_outorgado').val(response.cpf_outorgado);
             $('#edit_end_outorgado').val(response.end_outorgado);
             $('#edit_email_outorgado').val(response.email_outorgado);
 
-            // Atualize a ação do formulário para apontar para a rota de edição
-            $('#editForm').attr('action', `/outorgados/${docId}`);
+            // Atualize a ação do formulário para apontar para a rota de edição com o ID
+            $('#edit-form-cad').attr('action', `/outorgados/${docId}`); // Atualizando a action com o ID
 
             // Exiba o modal
             $('#editInfoModal').modal('show');
@@ -245,6 +207,7 @@
         }
     });
 }
+
 </script>
 <script>
     document.addEventListener('DOMContentLoaded', function () {
@@ -369,25 +332,25 @@
 
     // Adiciona evento no envio do formulário
     document.getElementById('edit-form-cad').addEventListener('submit', function (e) {
-        e.preventDefault(); // Impede o envio do formulário para verificar antes
-        const cpfInput = document.getElementById('edit_cpf_outorgado');
+    e.preventDefault(); // Impede o envio do formulário para verificar antes
+    const cpfInput = document.getElementById('edit_cpf_outorgado');
 
-        if (validarCPF(cpfInput.value)) {
-            // CPF válido, aqui você pode prosseguir com o envio do formulário
-            //alert('CPF válido!');
-             e.target.submit(); // Envia o formulário caso o CPF seja válido
-        } else {
-            // Exibe o SweetAlert com erro por 5 segundos
-            Swal.fire({
-                icon: 'error',
-                title: 'CPF Inválido!',
-                text: 'O CPF informado não é válido.',
-                timer: 5000, // Exibe por 5 segundos
-                showConfirmButton: true, // Remove o botão de confirmação
-                timerProgressBar: true,
-            });
-        }
-    });
+    if (validarCPF(cpfInput.value)) {
+        // CPF válido, aqui você pode prosseguir com o envio do formulário
+        e.target.submit(); // Envia o formulário caso o CPF seja válido
+    } else {
+        // Exibe o SweetAlert com erro por 5 segundos
+        Swal.fire({
+            icon: 'error',
+            title: 'CPF Inválido!',
+            text: 'O CPF informado não é válido.',
+            timer: 5000, // Exibe por 5 segundos
+            showConfirmButton: true, // Remove o botão de confirmação
+            timerProgressBar: true,
+        });
+    }
+});
+
 </script>
 
     @endsection
