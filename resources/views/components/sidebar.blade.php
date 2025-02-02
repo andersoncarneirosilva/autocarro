@@ -1,7 +1,7 @@
 <div class="leftside-menu">
 
     <!-- Brand Logo Light -->
-    <a href="/" class="logo logo-light">
+    <a href="#" class="logo logo-light">
         <span class="logo-lg">
             <img src="{{ url('assets/images/logo.png') }}" alt="logo">
         </span>
@@ -11,7 +11,7 @@
     </a>
 
     <!-- Brand Logo Dark -->
-    <a href="/" class="logo logo-dark">
+    <a href="#" class="logo logo-dark">
         <span class="logo-lg">
             <img src="{{ url('assets/images/logo-dark.png') }}" alt="dark logo">
         </span>

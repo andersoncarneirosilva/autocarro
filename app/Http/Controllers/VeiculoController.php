@@ -391,12 +391,12 @@ if ($this->model->create($data)) {
 
         $pdf = $parser->parseFile($arquivo);
         
+        //dd($pdf);
         
         foreach ($pdf->getPages() as $numeroPagina => $pagina) {
             $textoPagina = $pagina->getText();
             
             $linhas = explode("\n", $textoPagina);
-        
             if ($linhas[3] != "SECRETARIA NACIONAL DE TRÂNSITO - SENATRAN") {
                 alert()->error('Selecione um documento 2024.');
                 return redirect()->route('veiculos.index');
