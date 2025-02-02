@@ -4,7 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\User;
-
+use Illuminate\Support\Facades\Auth;
 class PerfilController extends Controller
 {
     //
@@ -17,6 +17,9 @@ class PerfilController extends Controller
 
     public function index(){
 
+        $userId = Auth::id();
+        $user = User::find($userId);
+        //dd($user);
         $path = storage_path('app/public/documentos/usuario_' . auth()->id());
 
     // Função para calcular o tamanho total da pasta
@@ -36,7 +39,7 @@ class PerfilController extends Controller
     $percentUsed = ($usedSpaceInMB / $limitInMB) * 100; // Percentual usado
 
     // Passar as informações para a view
-    return view('perfil.index', compact(['usedSpaceInMB', 'percentUsed', 'limitInMB']));
+    return view('perfil.index', compact(['usedSpaceInMB', 'percentUsed', 'limitInMB', 'user']));
         
 
     }

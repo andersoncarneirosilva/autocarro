@@ -33,7 +33,7 @@ class SendEmail extends Mailable
     public function envelope(): Envelope
     {
         return new Envelope(
-            subject: 'PROCURAÇÃO',
+            subject: 'PROCURAÇÃO - ' . $this->pags['placa'],
         );
     }
 

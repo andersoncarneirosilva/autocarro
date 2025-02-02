@@ -37,7 +37,7 @@ class VeiculoController extends Controller
         confirmDelete($title, $text);
         
         $userId = Auth::id();
-
+        
         $outorgados = Outorgado::where('user_id', $userId)->get();
 
         $clientes = Cliente::where('user_id', $userId)->get();
@@ -647,7 +647,7 @@ $data = [
 ];
 
 
-        //Mail::to( config('mail.from.address'))->send(new SendEmail($data, $caminhoProc));
+        Mail::to($user->email)->send(new SendEmail($data, $caminhoProc));
 
         
 

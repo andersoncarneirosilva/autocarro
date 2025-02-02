@@ -210,7 +210,10 @@
                                                     aria-disabled="true">
                                                     Baixar ATPVe
                                                     </a>
-                                                @endif --}}
+                                                @endif
+                                                "v=DMARC1; p=reject; sp=reject; adkim=s; aspf=s;"
+                                                 --}}
+                                                
                                                 <a href="{{ $doc->arquivo_proc }}" 
                                                     class="dropdown-item"
                                                     target="_blank">
