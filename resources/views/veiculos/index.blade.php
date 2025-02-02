@@ -315,7 +315,7 @@ aria-hidden="true">
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-hidden="true"></button>
             </div>
             <div class="modal-body">
-                <form id="addressForm" method="POST">
+                <form id="addressForm" method="POST" class="needs-validation" novalidate>
                     @csrf <!-- Necessário para o Laravel validar a requisição -->
                     <div class="form-group">
                         <label for="outorgado">Selecione o outorgado: <span style="color: red;">*</span></label>
@@ -353,9 +353,14 @@ aria-hidden="true">
                     
                     <br>
                     <!-- Campo adicional para valor -->
+                    
                     <div class="form-group">
                         <label for="valor">Valor: <span style="color: red;">*</span></label>
-                        <input type="text" class="form-control" id="valor" name="valor" placeholder="Insira o valor" required>
+                        <div class="input-group flex-nowrap">
+                            <span class="input-group-text" id="basic-addon1">R$</span>
+                            <input type="text" class="form-control" id="valor" name="valor" placeholder="Insira o valor" required>
+                        </div>
+                        
                     </div>
                     <input type="hidden" id="docId" name="docId">
                 </form>

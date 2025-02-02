@@ -72,6 +72,7 @@ class VeiculoController extends Controller
     }
     
     public function storeProcManual(Request $request){
+        
 
         $userId = Auth::id();
         $user = User::find($userId);
@@ -739,7 +740,16 @@ $data = [
 
 public function storeProc(Request $request, $id){
     //dd($request);
+    
+    if (empty($request->endereco)) {
+        alert()->error('O campo endereço é obrigatório')
+            ->persistent(true)
+            ->autoClose(5000) // Fecha automaticamente após 5 segundos
+            ->timerProgressBar();
         
+        return redirect()->route('veiculos.index');
+    }
+    
     $userId = Auth::id(); // Obtém o ID do usuário autenticado
     // Localiza o usuário logado
     $user = User::find($userId);
@@ -989,6 +999,23 @@ if ($veiculo) {
     public function storeAtpve(Request $request, $id){
 
         //dd($request);
+        if (empty($request->outorgado)) {
+            alert()->error('O campo outorgado é obrigatório')
+                ->persistent(true)
+                ->autoClose(5000) // Fecha automaticamente após 5 segundos
+                ->timerProgressBar();
+            
+            return redirect()->route('veiculos.index');
+        }
+        if (empty($request->valor)) {
+            alert()->error('O campo valor é obrigatório')
+                ->persistent(true)
+                ->autoClose(5000) // Fecha automaticamente após 5 segundos
+                ->timerProgressBar();
+            
+            return redirect()->route('veiculos.index');
+        }
+
         $userId = Auth::id();
         
         $user = User::find($userId);
