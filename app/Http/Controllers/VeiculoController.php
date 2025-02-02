@@ -258,7 +258,7 @@ $nomeImagem = "storage/veiculos/" . strtolower($request['tipo']) . "/" .
             if (!file_exists($caminhoImagem)) {
                 $nomeImagem = "storage/veiculos/default.png"; // Caminho da imagem padrão
             }
-// Dados a serem salvos
+// DATA PROC MANUAL
 $data = [
     'nome' => strtoupper($nomeFormatado),
     'endereco' => strtoupper($enderecoFormatado),  // Endereço em maiúsculas
@@ -272,6 +272,7 @@ $data = [
     'ano' => $request['ano_modelo'],
     'renavam' => $request['renavam'],
     'crv' => $request['tipo_doc'],
+    'cidade' => "Não consta",
     'placaAnterior' => "Não consta",
     'categoria' => "Não consta",
     'motor' => "Não consta",
@@ -1314,6 +1315,7 @@ Storage::disk('public')->put($filePath, $pdfContent);
 
 // Calcula o tamanho do novo arquivo
 $tamanhoNovoArquivo = Storage::disk('public')->size($filePath); // Em bytes
+$sizeAtpve = $tamanhoNovoArquivo;
 
 // Verifica se há espaço suficiente
 if (($espacoUsado + $tamanhoNovoArquivo) > $limiteBytes) {
@@ -1327,8 +1329,10 @@ if (($espacoUsado + $tamanhoNovoArquivo) > $limiteBytes) {
 // Retornar o link do PDF para download/visualização
 $fileUrl = asset('storage/' . $pastaAtpves . 'atpve_' . $estoque->placa . '_' . $numeroRandom . '.pdf');
 
+// DATA ATPVE
 $data = [
     'arquivo_atpve' => $fileUrl,
+    'size_atpve' => $sizeAtpve,
 ];
 
 
