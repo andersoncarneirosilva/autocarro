@@ -17,7 +17,7 @@
 
     <!-- App css -->
     <link href="assets/css/app-saas.min.css" rel="stylesheet" type="text/css" id="app-style" />
-
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <!-- Icons css -->
     <link href="assets/css/icons.min.css" rel="stylesheet" type="text/css" />
 </head>
@@ -68,9 +68,8 @@
                             Tudo que você precisa para centralizar e otimizar seus processos está aqui!
                         </p>
                         
-                        <a href="https://api.whatsapp.com/send/?phone=51999047299&text&type=phone_number&app_absent=0" 
-                        target="_blank" 
-                        class="btn btn-lg font-16 btn-success">Solicite um Teste grátis <i class="mdht ms-1"></i></a>
+                        <a href="{{ route('register') }}" 
+                        class="btn btn-lg font-16 btn-success">Teste grátis <i class="mdht ms-1"></i></a>
                         {{-- <a href="" target="_blank" class="btn btn-lg font-16 btn-info">Check Demos</a> --}}
                     </div>
                 </div>
@@ -480,12 +479,22 @@
                 </div>
 
                 <div class="col-md-7">
-                    @if (session('success'))
-    <div class="alert alert-success alert-dismissible fade show" role="alert">
-        {{ session('success') }}
-        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-    </div>
+                    @if(session('alert'))
+    <script>
+        Swal.fire({
+            icon: '{{ session("alert.type") }}',
+            title: '{{ session("alert.message") }}',
+            html: '<p>Entraremos em contato assim que possível.</p>',  // Subtítulo adicional
+            timer: {{ session("alert.autoClose") }},
+            showConfirmButton: true,  // Habilita o botão "OK"
+            confirmButtonText: 'OK',  // Texto do botão "OK"
+            timerProgressBar: true
+        });
+    </script>
 @endif
+
+                
+
 
 <form action="{{ route('contato.enviar') }}" method="POST">
     @csrf
@@ -602,7 +611,7 @@
     <!-- END FOOTER -->
     <!-- Vendor js -->
     <script src="assets/js/vendor.min.js"></script>
-
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/sweetalert/2.1.0/sweetalert.min.js"></script>
     <!-- App js -->
     <script src="assets/js/app.min.js"></script>
 

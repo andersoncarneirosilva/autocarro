@@ -8,8 +8,8 @@ use App\Mail\ContatoMail;
 
 class ContatoController extends Controller
 {
-    public function enviarEmail(Request $request)
-{
+    public function enviarEmail(Request $request){
+        
     $request->validate([
         'nome' => 'required|string|max:255',
         'email' => 'required|email',
@@ -25,7 +25,15 @@ class ContatoController extends Controller
     //dd($dados);
     // Enviar e-mail
     Mail::to(env('MAIL_FROM_ADDRESS'))->send(new ContatoMail($dados));
-    alert()->success('E-mail enviado com sucesso!');
+
+    session()->flash('alert', [
+        'type' => 'success',
+        'message' => 'E-mail enviado com sucesso!',
+        'autoClose' => 5000, // Fecha após 5 segundos
+        'persistent' => true
+    ]);
+
     return redirect('/');
-}
+
+    }
 }

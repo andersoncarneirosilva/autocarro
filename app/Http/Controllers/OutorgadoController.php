@@ -116,6 +116,7 @@ class OutorgadoController extends Controller
     public function store(Request $request)
 {
     $userId = Auth::id();
+    $data = $request->all();
 
     // Validação dos dados
     if (empty($request->nome_outorgado)) {
@@ -141,37 +142,13 @@ class OutorgadoController extends Controller
         return redirect()->route('outorgados.index');
     }
     
-    try {
-        $validated = $request->validate([
-            'nome_outorgado' => 'required|string|max:255',
-            'cpf_outorgado' => 'required|string|size:11|unique:outorgados,cpf_outorgado',
-            'end_outorgado' => 'required|string|max:255',
-            'email_outorgado' => 'required|email|unique:outorgados,email_outorgado',
-        ], [
-            'required' => 'O campo :attribute é obrigatório.',
-            'string' => 'O campo :attribute deve ser um texto válido.',
-            'max' => [
-                'string' => 'O campo :attribute não pode ter mais de :max caracteres.',
-            ],
-            'size' => [
-                'string' => 'O campo :attribute deve ter exatamente :size caracteres.',
-            ],
-            'email' => 'O campo :attribute deve ser um endereço de e-mail válido.',
-            'unique' => 'O campo :attribute já está em uso.',
-        ]);
-    } catch (\Illuminate\Validation\ValidationException $e) {
-        $errorMessages = implode(', ', $e->validator->errors()->all());
-        alert()->error('Erro!', $errorMessages);
 
-    // Redireciona para a página de listagem
-    return redirect()->route('outorgados.index');
-    }
 
     // Adiciona o user_id nos dados validados
-    $validated['user_id'] = $userId;
+    $data['user_id'] = $userId;
 
     // Salva o novo outorgado na tabela
-    $this->model->create($validated);
+    $this->model->create($data);
 
     // Alerta de sucesso
     alert()->success('Outorgado cadastrado com sucesso!');

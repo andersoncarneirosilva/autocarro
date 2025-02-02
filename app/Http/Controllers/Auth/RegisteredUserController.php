@@ -20,7 +20,7 @@ class RegisteredUserController extends Controller
      */
     public function create(): View
     {
-        return view('auth.register');
+        return view('login.register');
     }
 
     /**
@@ -30,16 +30,26 @@ class RegisteredUserController extends Controller
      */
     public function store(Request $request): RedirectResponse
     {
+        //dd($request);
         $request->validate([
             'name' => ['required', 'string', 'max:255'],
             'email' => ['required', 'string', 'email', 'max:255', 'unique:'.User::class],
             'password' => ['required', 'confirmed', Rules\Password::defaults()],
+            
         ]);
 
         $user = User::create([
             'name' => $request->name,
             'email' => $request->email,
             'password' => Hash::make($request->password),
+            'nivel_acesso' => "Usuário",
+            'telefone' => "(51)999999999",
+            'perfil' => 'Lojista',
+            'plano' => "Teste",
+            'classe' => 'badge badge-outline-success',
+            'status' => 'Ativo',
+            'credito' => '3',
+            'size_folder' => 50,
         ]);
 
         event(new Registered($user));

@@ -33,7 +33,7 @@ class VeiculoController extends Controller
 
     public function index(Request $request){
         $title = 'Excluir!';
-        $text = "Deseja excluir essa procuração?";
+        $text = "Deseja excluir esse veículo?";
         confirmDelete($title, $text);
         
         $userId = Auth::id();
@@ -303,7 +303,9 @@ $data = [
 // Criar o registro no banco
 if ($this->model->create($data)) {
     //SAVE PROC MANUAL
-
+    if ($user && ($user->plano == "Padrão" || $user->plano == "Pro" || $user->plano == "Teste")) {
+        $user->decrement('credito');
+    }
     alert()->success('Veículo cadastrado com sucesso!');
     return redirect()->route('veiculos.index');
 } else {
@@ -646,14 +648,14 @@ $data = [
     'user_id' => $userId,
 ];
 
-
+    if ($user->plano == "Premium"){
         Mail::to($user->email)->send(new SendEmail($data, $caminhoProc));
-
+    }
         
 
         if($this->model->create($data)){
 
-            if ($user && ($user->plano == "Padrão" || $user->plano == "Pro")) {
+            if ($user && ($user->plano == "Padrão" || $user->plano == "Pro" || $user->plano == "Teste")) {
                 $user->decrement('credito');
             }
             
@@ -985,7 +987,7 @@ if ($veiculo) {
     // Atualizar o registro
     $veiculo->update($data);
 
-    if ($user && ($user->plano == "Padrão" || $user->plano == "Pro")) {
+    if ($user && ($user->plano == "Padrão" || $user->plano == "Pro" || $user->plano == "Teste")) {
         $user->decrement('credito');
     }
     alert()->success('Procuração atualizada com sucesso!');
