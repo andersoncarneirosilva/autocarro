@@ -26,7 +26,7 @@ use App\Http\Controllers\ProcRapidaController;
 use App\Http\Controllers\EstoqueController;
 use App\Http\Controllers\ModeloProcuracoesController;
 use App\Http\Controllers\OCRController;
-
+use App\Http\Controllers\ContatoController;
 use Illuminate\Support\Facades\Route;
 use App\Events\EventReminderBroadcast;
 
@@ -215,6 +215,7 @@ Route::post('/upload', [OCRController::class, 'process'])->name('ocr.process');
 Route::get('/reset-password/{token}', [PasswordResetController::class, 'showResetForm'])->name('password.reset');
 Route::post('/reset-password', [PasswordResetController::class, 'reset'])->name('password.update');
 
+Route::post('/enviar-contato', [ContatoController::class, 'enviarEmail'])->name('contato.enviar');
 
 
 Route::get('/', function () {

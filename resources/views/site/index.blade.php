@@ -459,7 +459,7 @@
 
 
     <!-- START CONTACT -->
-    {{-- <section class="py-5 bg-light-lighten border-top border-bottom border-light">
+    <section class="py-5 bg-light-lighten border-top border-bottom border-light">
         <div class="container">
             <div class="row">
                 <div class="col-lg-12">
@@ -480,41 +480,51 @@
                 </div>
 
                 <div class="col-md-7">
-                    <form>
-                        <div class="row mt-4">
-                            <div class="col-lg-6">
-                                <div class="mb-2">
-                                    <label for="fullname" class="form-label">Nome</label>
-                                    <input class="form-control form-control-light py-2" type="text" id="fullname" placeholder="Seu nome...">
-                                </div>
-                            </div>
-                            <div class="col-lg-6">
-                                <div class="mb-2">
-                                    <label for="emailaddress" class="form-label">Email</label>
-                                    <input class="form-control form-control-light py-2" type="email" required="" id="emailaddress" placeholder="Seu melhor email...">
-                                </div>
-                            </div>
-                        </div>
+                    @if (session('success'))
+    <div class="alert alert-success alert-dismissible fade show" role="alert">
+        {{ session('success') }}
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+@endif
 
-                        <div class="row mt-1">
-                            <div class="col-lg-12">
-                                <div class="mb-2">
-                                    <label for="comments" class="form-label">Mensagem</label>
-                                    <textarea id="comments" rows="4" class="form-control form-control-light" placeholder="Deixe sua mensagem aqui..."></textarea>
-                                </div>
-                            </div>
-                        </div>
+<form action="{{ route('contato.enviar') }}" method="POST">
+    @csrf
+    <div class="row mt-4">
+        <div class="col-lg-6">
+            <div class="mb-2">
+                <label for="fullname" class="form-label">Nome</label>
+                <input class="form-control form-control-light py-2" type="text" id="fullname" name="nome" placeholder="Seu nome...">
+            </div>
+        </div>
+        <div class="col-lg-6">
+            <div class="mb-2">
+                <label for="emailaddress" class="form-label">Email</label>
+                <input class="form-control form-control-light py-2" type="email" id="emailaddress" name="email" placeholder="Seu melhor email..." required>
+            </div>
+        </div>
+    </div>
 
-                        <div class="row mt-2">
-                            <div class="col-12 text-end">
-                                <button class="btn btn-primary">Enviar <i class="mdi mdi-telegram ms-1"></i> </button>
-                            </div>
-                        </div>
-                    </form>
+    <div class="row mt-1">
+        <div class="col-lg-12">
+            <div class="mb-2">
+                <label for="comments" class="form-label">Mensagem</label>
+                <textarea id="comments" rows="4" class="form-control form-control-light" name="mensagem" placeholder="Deixe sua mensagem aqui..."></textarea>
+            </div>
+        </div>
+    </div>
+
+    <div class="row mt-2">
+        <div class="col-12 text-end">
+            <button type="submit" class="btn btn-primary">Enviar <i class="mdi mdi-telegram ms-1"></i></button>
+        </div>
+    </div>
+</form>
+
+                    
                 </div>
             </div>
         </div>
-    </section> --}}
+    </section>
     <!-- END CONTACT -->
 
     <!-- START FOOTER -->
