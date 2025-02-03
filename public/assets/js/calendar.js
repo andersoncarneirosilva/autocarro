@@ -63,7 +63,7 @@ $('#show-toast-btn').on('click', () => {
         this.$formEvent.removeClass("was-validated");
         if (this.$btnDeleteEvent.length) this.$btnDeleteEvent.show();
         if (this.$modalTitle.length) this.$modalTitle.text("Editar evento");
-        console.log("Abriu");
+        
         this.$modal.show();
 
     

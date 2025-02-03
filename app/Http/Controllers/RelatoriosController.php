@@ -6,8 +6,7 @@ use Illuminate\Http\Request;
 use Barryvdh\DomPDF\Facade as PDF;
 
 use App\Models\Cliente;
-use App\Models\Documento;
-use App\Models\Procuracao;
+use App\Models\Veiculo;
 use App\Models\Ordem;
 use Illuminate\Support\Facades\Auth;
 
@@ -55,20 +54,10 @@ class RelatoriosController extends Controller
             return view('relatorios.resultado-clientes', compact('dados', 'tipo', 'dataInicial', 'dataFinal'));
             break;
 
-        case 'Procurações':
-            // Adiciona a restrição para o usuário logado, se necessário
-            $dados = Procuracao::where('user_id', $userId)
-                               ->whereBetween('created_at', [
-                                   $dataInicial . ' 00:00:00',
-                                   $dataFinal . ' 23:59:59'
-                               ])
-                               ->get();
-            return view('relatorios.resultado-procs', compact('dados', 'tipo', 'dataInicial', 'dataFinal'));
-            break;
 
         case 'Veículos':
             // Adiciona a restrição para o usuário logado, se necessário
-            $dados = Documento::where('user_id', $userId)
+            $dados = Veiculo::where('user_id', $userId)
                               ->whereBetween('created_at', [
                                   $dataInicial . ' 00:00:00',
                                   $dataFinal . ' 23:59:59'
@@ -156,7 +145,7 @@ class RelatoriosController extends Controller
         $dataI = $request['dataInicial'];
         $dataF = $request['dataFinal'];
 
-        $dados = Documento::whereBetween('created_at', [
+        $dados = Veiculo::whereBetween('created_at', [
             $dataI . ' 00:00:00',
             $dataF . ' 23:59:59'
         ])->get();
@@ -208,7 +197,7 @@ class RelatoriosController extends Controller
     public function gerarRelatorioVeiculos()
     {
         // Obtém os dados dos clientes do banco de dados
-        $dados = Documento::all();
+        $dados = Veiculo::all();
 
         // Renderiza a view com os dados
         //$pdf = PDF::loadView('relatorios.clientes', compact('clientes'));

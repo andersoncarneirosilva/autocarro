@@ -30,7 +30,6 @@
                     <select class="form-select" id="tipo-relatorio" name="tipo-relatorio" required>
                         <option value="" selected>-- Selecione o tipo --</option>
                         <option value="Clientes">Clientes</option>
-                        <option value="Procurações">Procurações</option>
                         <option value="Veículos">Veículos</option>
                     </select>
                 </div>
