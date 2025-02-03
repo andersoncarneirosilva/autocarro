@@ -35,7 +35,7 @@
 	              <input type="password" class="form-control rounded-left" name="password" placeholder="Senha" required>
 	            </div>
 				<div class="form-group d-flex">
-					<input type="password_confirmation" class="form-control rounded-left" name="password_confirmation" placeholder="Confirmar Senha" required>
+					<input type="password" class="form-control rounded-left" name="password_confirmation" placeholder="Confirmar Senha" required>
 				  </div>
 
                 <x-input-error :messages="$errors->get('email')" class="mt-2" />
