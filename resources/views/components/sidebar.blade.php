@@ -13,7 +13,7 @@
     <!-- Brand Logo Dark -->
     <a href="#" class="logo logo-dark">
         <span class="logo-lg">
-            <img src="{{ url('assets/images/logo-dark.png') }}" alt="dark logo">
+            <img src="{{ asset('assets/images/logo-dark.png') }}?v={{ time() }}" alt="dark logo">
         </span>
         <span class="logo-sm">
             <img src="{{ url('assets/images/logo-dark-sm.png') }}" alt="small logo">
