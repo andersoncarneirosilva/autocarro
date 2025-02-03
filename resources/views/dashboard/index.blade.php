@@ -20,7 +20,7 @@
         <!-- Para Mobile -->
         <div class="card ribbon-box d-block d-md-none">
           <div class="card-body">
-              <div class="ribbon ribbon-success float-end"><i class="mdi mdi-access-point me-1"></i> 01.02.2025</div>
+              <div class="ribbon ribbon-success float-end"><i class="mdi mdi-access-point me-1"></i> 02.02.2025</div>
               <h5 class="text-success float-start mt-0">Novidades no App!</h5>
               <div class="ribbon-content">
                   <ul>

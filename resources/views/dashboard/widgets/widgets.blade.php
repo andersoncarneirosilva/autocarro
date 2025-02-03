@@ -183,43 +183,33 @@
     <div class="col-xl-5">
         <div class="card">
             <div class="card-header d-flex justify-content-between align-items-center">
-                <h4 class="header-title">Clientes recentes</h4>
+                <h4 class="header-title">Agenda</h4>
+
             </div>
-            @if ($clientes->count() != 0)
+
             <div class="card-body pt-0">
-                <div class="table-responsive">
-                    <table class="table table-centered table-nowrap table-hover mb-0">
-                        <tbody>
-                            @foreach ($clientes as $cliente)
-                            <tr>
-                                <td>
-                                    <div class="d-flex align-items-start">
-                                        <div>
-                                            <h5 class="mt-0 mb-1">{{ $cliente->nome }}</h5>
-                                            <span class="font-13">{{ $cliente->email }}</span>
-                                        </div>
-                                    </div>
-                                </td>
-                                <td>
-                                    <span class="text-muted font-13">Fone/WhatsApp</span> <br>
-                                    <p class="mb-0">
-                                        <a href="https://api.whatsapp.com/send/?phone=51999047299&text&type=phone_number&app_absent=0" 
-                                            style="text-decoration: none; color: rgb(9, 146, 20);" 
-                                            target="_blank"><i class="mdi mdi-whatsapp me-1"></i>{{ $cliente->fone }}
-                                        </a></p>
-                                </td>
-                            </tr>
+                <div class="row">
+                    <div class="col-md-7">
+                        <div class="calendar-widget"></div>
+                    </div>
+                    
+                    <div class="col-md-5">
+                        <ul class="list-unstyled mt-1">
+                            @foreach($events as $event)
+                            <li class="mb-4">
+                                <p class="text-muted mb-1 font-13">
+                                    <i class="mdi mdi-calendar"></i> {{ \Carbon\Carbon::parse($event->event_date)->format('d/m/Y - H:i') }}
+
+                                </p>
+                                <h5>{{ $event->title }}</h5>
+                            </li>
                             @endforeach
-                        </tbody>
-                    </table>
-                </div> <!-- end table-responsive-->
+                        </ul>
+                    </div> <!-- end col -->
+                </div>
+                <!-- end row -->
 
             </div> <!-- end card body-->
-            @elseif($clientes->count() == 0)
-            <div class="alert alert-danger bg-transparent text-danger" role="alert">
-                NENHUM RESULTADO ENCONTRADO!
-            </div>
-        @endif
         </div> <!-- end card -->
     </div>
     

@@ -63,7 +63,7 @@ $('#show-toast-btn').on('click', () => {
         this.$formEvent.removeClass("was-validated");
         if (this.$btnDeleteEvent.length) this.$btnDeleteEvent.show();
         if (this.$modalTitle.length) this.$modalTitle.text("Editar evento");
-
+        console.log("Abriu");
         this.$modal.show();
 
     
@@ -144,25 +144,23 @@ $('#show-toast-btn').on('click', () => {
 
             // Função chamada quando o evento é movido
             eventDrop: function(info) {
-                // Obtemos a data do evento
-let rawDate = info.event.start.toISOString(); 
-
-// Convertemos a data para um objeto Date
-let localDate = new Date(rawDate);
-
-// Ajusta para o fuso horário de São Paulo (GMT-3), subtraindo 3 horas em milissegundos
-localDate.setHours(localDate.getHours() - 3);
-
-// Formata para o formato Y-m-d H:i:s (sem o "T" e sem o "Z")
-let formattedDate = localDate.toISOString().replace('T', ' ').slice(0, 19); 
-
-// Dados do evento
-let eventData = {
-    id: info.event.id,
-    title: info.event.title, // Certifique-se de usar info.event.title
-    event_date: formattedDate, // Data ajustada corretamente
-    category: info.event.classNames[0] // Categoria do evento
-};
+                // Obtém a data do evento e ajusta o fuso horário para GMT-3
+                let rawDate = info.event.start.toISOString(); 
+                let localDate = new Date(rawDate);
+                localDate.setHours(localDate.getHours() - 3);
+            
+                // Formata para o formato Y-m-d H:i:s
+                let formattedDate = localDate.toISOString().replace('T', ' ').slice(0, 19);
+            
+                // Dados do evento
+                let eventData = {
+                    id: info.event.id,
+                    title: info.event.title, // Título do evento
+                    event_date: formattedDate, // Data ajustada corretamente
+                    category: info.event.classNames[0] // Categoria do evento
+                };
+            
+                // Enviar solicitação para atualizar o evento no banco de dados
                 fetch(`/calendar/move/${eventData.id}`, {
                     method: 'PUT',
                     headers: {
@@ -171,14 +169,23 @@ let eventData = {
                     },
                     body: JSON.stringify(eventData)
                 })
-
                 .then(response => response.json())
                 .then(data => {
-                    //console.log('Evento atualizado com sucesso:', data);
-
+                    if (data && data.id) {
+                        // ✅ Exibir notificação após mover evento com sucesso
+                        showNotification(
+                            "Evento atualizado com sucesso!",
+                            data.title,        // Novo título
+                            data.event_date,   // Nova data formatada
+                            data.category      // Nova categoria
+                        );
+                    } else {
+                        console.error("Erro ao mover o evento. Resposta inesperada:", data);
+                    }
                 })
                 .catch(error => console.error('Erro ao tentar mover o evento:', error));
             }
+            
             
             
             ,
@@ -192,7 +199,7 @@ let eventData = {
                 })
                 .then(response => response.json())
                 .then(events => {
-                    //console.log(events);
+                    console.log(events);
                     // Passe cada evento para o FullCalendar
                     successCallback(events.map(event => {
                         return {
@@ -221,6 +228,7 @@ let eventData = {
         a.$btnSaveEvent.on("click", function(e) {
             e.preventDefault();
             var form = a.$formEvent[0];  // Obtém o formulário
+            
 
             // Verifica se o formulário é válido
             if (form.checkValidity()) {
@@ -245,9 +253,11 @@ let eventData = {
                         // Formatar a data para o formato correto 'YYYY-MM-DD HH:mm:ss'
                         let formattedDate = saoPauloDate.toISOString().slice(0, 19).replace('T', ' ');
                         //console.log("DATA formatada CADASTRO:", formattedDate);  // Verifique a data formatada
+                        
                     } else {
                         //console.error("Data inválida fornecida:", eventData.event_date);
                     }
+                    
                 } else {
                     //console.error("Data não fornecida ou inválida.");
                 }
@@ -282,28 +292,32 @@ let eventData = {
                         body: JSON.stringify(eventData),
                     })
                     .then(response => response.json())
-                    
                     .then(data => {
-                   
-                        // Verifica se a resposta contém o evento esperado
                         if (data && data.id) {
-                            // Atualiza o evento no calendário com os novos dados
+                            // Atualiza o evento no calendário
                             var eventToUpdate = a.$calendarObj.getEventById(a.$selectedEvent.id);
                             if (eventToUpdate) {
-                                eventToUpdate.setProp("title", eventData.title);  // Atualiza o título do evento
-                                eventToUpdate.setProp("classNames", [eventData.category]);  // Atualiza a categoria
-                                eventToUpdate.setStart(data.event_date); 
-                                eventToUpdate.setAllDay(data.all_day === 1);  // Atualiza o status de 'allDay' (1 é verdadeiro, 0 é falso)
-                            } else {
-                                //console.error('Evento não encontrado no calendário para atualizar');
+                                eventToUpdate.setProp("title", eventData.title);
+                                eventToUpdate.setProp("classNames", [eventData.category]);
+                                eventToUpdate.setStart(data.event_date);
+                                eventToUpdate.setAllDay(data.all_day === 1);
+                    
+                                // ✅ Exibir notificação após atualização bem-sucedida
+                                showNotification(
+                                    "Evento atualizado com Sucesso!",
+                                    data.title,        // Novo título
+                                    data.event_date,   // Nova data
+                                    data.category      // Nova categoria
+                                );
                             }
                         } else {
-                            //console.error("Erro ao atualizar o evento. Resposta inesperada:", data);  // Log caso a resposta não tenha os dados esperados
+                            console.error("Erro ao atualizar o evento. Resposta inesperada:", data);
                         }
                     })
                     .catch(error => {
-                        //console.error('Erro ao tentar atualizar o evento:', error);  // Log de erro
+                        console.error("Erro na requisição:", error);
                     });
+                    
                     
                 } else {
 
@@ -352,7 +366,9 @@ fetch('/calendar', {
         data.event.event_date,
         data.event.category
     );
-
+    form.reset();
+    //console.log(form);
+    //document.getElementById("form-event").reset();
     // Adiciona a classe "noti-icon-badge" ao span do navbar
     const navbarBadge = document.querySelector('.noti-icon-badge');
     if (navbarBadge) {

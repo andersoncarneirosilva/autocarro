@@ -8,6 +8,7 @@ use Illuminate\Http\Request;
 use App\Models\Documento;
 use App\Models\Veiculo;
 use App\Models\Cliente;
+use App\Models\Event;
 use Illuminate\Support\Facades\Auth;
 use Carbon\Carbon;
 use App\Models\User;
@@ -25,7 +26,8 @@ class DashController extends Controller
     public function index(Request $request){
         //dd(auth()->user());
         //abort(404);
-
+        $events = Event::all();
+        //dd($event);
         $search = $request->search;
 
         $userId = Auth::id();
@@ -109,6 +111,7 @@ class DashController extends Controller
                                                 'porcentagem',
                                                 'usedSpaceInMB', 
                                                 'percentUsed', 
-                                                'limitInMB']));
+                                                'limitInMB',
+                                                'events']));
     }
 }

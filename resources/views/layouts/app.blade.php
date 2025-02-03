@@ -29,7 +29,7 @@
 
         <!-- Icons css -->
         <link href="{{ url('assets/css/icons.min.css') }}" rel="stylesheet" type="text/css" />
-        
+        <link href="{{ url('assets/vendor/bootstrap-datepicker/css/bootstrap-datepicker.min.css') }}" rel="stylesheet" type="text/css" />
         {{-- <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" /> --}}
 
         <script src="https://kit.fontawesome.com/6c4df5f46b.js" crossorigin="anonymous"></script>
@@ -45,7 +45,24 @@
         <!-- Plugin css -->
         <link rel="stylesheet" href="{{ url('assets/vendor/jquery-toast-plugin/jquery.toast.min.css') }}">
         <script src="{{ url('assets/js/notificacoes.js') }}"></script>
-        
+        <script>
+          $(document).ready(function () {
+    $('.datepicker').datepicker({
+        format: 'dd/mm/yyyy',   // Formato de data brasileiro
+        language: 'pt-BR',      // Define o idioma como Português Brasil
+        autoclose: true,        // Fecha automaticamente ao selecionar a data
+        todayHighlight: true    // Destaca a data atual
+    });
+
+    // Para calendários inline
+    $('.calendar-widget').datepicker({
+        format: 'dd/mm/yyyy',
+        language: 'pt-BR',
+        todayHighlight: true
+    });
+});
+
+        </script>
             
         
         
@@ -165,7 +182,9 @@
         <script src="{{ url('assets/js/ui/component.fileupload.js') }}"></script>
         <!-- App js -->
         <script src="{{ url('assets/js/app.min.js') }}"></script>
-        
+        <script src="{{ url('assets/vendor/bootstrap-datepicker/js/bootstrap-datepicker.min.js') }}"></script>
+        <script src="{{ url('assets/vendor/bootstrap-datepicker/locales/bootstrap-datepicker.pt-BR.min.js') }}"></script>
+
         
         <script src="{{ url('assets/vendor/handlebars/handlebars.min.js') }}"></script>
         <script src="{{ url('assets/vendor/typeahead.js/typeahead.bundle.min.js') }}"></script>

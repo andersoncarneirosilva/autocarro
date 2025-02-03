@@ -248,9 +248,7 @@
                                         </div> <!-- end .p-2-->
                                     </div> <!-- end col -->
                                 </div> <!-- end col-->
-                                @endif
-
-                                @if (!empty($veiculo->arquivo_atpve_assinado))
+                                @elseif (!empty($veiculo->arquivo_atpve_assinado))
                                 <div class="col-xxl-3 col-lg-6">
                                     <p class="text-muted mb-2 font-13"><strong>ATPVe</strong></p>
                                     <div class="card m-1 shadow-none border">
@@ -271,6 +269,10 @@
                                         </div> <!-- end .p-2-->
                                     </div> <!-- end col -->
                                 </div> <!-- end col-->
+                                @else
+                                <div class="alert alert-danger bg-transparent text-danger" role="alert">
+                                    NENHUM RESULTADO ENCONTRADO!
+                                </div>
                                 @endif
                             </div> <!-- end row-->
                         </div>
