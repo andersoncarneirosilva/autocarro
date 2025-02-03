@@ -21,7 +21,7 @@
 		      	<div class="py-5 d-flex align-items-center justify-content-center">
                     <img src="{{ url('assets/images/logo-dark.png') }}" alt="">
 		      	</div>
-		      	{{-- <h3 class="text-center mb-4">Have an account?</h3> --}}
+		      	{{-- <h3 class="text-center mb-4">Have an account?imagem atualizada</h3> --}}
 				  <x-auth-session-status class="mb-4" :status="session('status')" />
                   <form method="POST" action="{{ route('register') }}">
                     @csrf
