@@ -74,6 +74,16 @@
                         </div>
                     @endif
             </div>
+            @if ($errors->any())
+                <script>
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Erro no cadastro!',
+                        html: '{!! implode("<br>", $errors->all()) !!}',
+                    });
+                </script>
+            @endif
+
         </div>
     </div>
     <div class="row">
@@ -92,7 +102,7 @@
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
-                <form action="{{ route('outorgados.store') }}" method="POST" id="form-cad" enctype="multipart/form-data"  class="needs-validation" novalidate>
+                <form action="{{ route('outorgados.store') }}" method="POST" id="form-cad" enctype="multipart/form-data" >
                     @csrf
                     <div class="mb-3">
                         <label class="form-label">Nome</label>
@@ -142,7 +152,7 @@
                 <h5 class="modal-title" id="editInfoModalLabel">Editar Informações</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
-            <form id="edit-form-cad" method="POST" class="needs-validation" novalidate>
+            <form id="edit-form-cad" method="POST">
                 @csrf
                 @method('PUT') <!-- Usado para edições -->
                 <div class="modal-body">
@@ -235,7 +245,7 @@
     });
 </script>
 
-<script>
+{{-- <script>
     // Função para validar CPF
     function validarCPF(cpf) {
         // Remove caracteres não numéricos
@@ -292,9 +302,9 @@
             });
         }
     });
-</script>
+</script> --}}
 
-<script>
+{{-- <script>
     // Função para validar CPF
     function validarCPF(cpf) {
         // Remove caracteres não numéricos
@@ -351,6 +361,6 @@
     }
 });
 
-</script>
+</script> --}}
 
     @endsection

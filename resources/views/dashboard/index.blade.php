@@ -28,7 +28,6 @@
                     <li>Inclusão dos planos Padrão/Pro/Premium.</li>
                     <li>Aba para envio e download dos arquivos na página de detalhes do veículo.</li>
                     <li>Campo para enviar o crlv caso o cadastro seja manual</li>
-                    <li></li>
                   </ul>
               </div>
           </div> <!-- end card-body -->

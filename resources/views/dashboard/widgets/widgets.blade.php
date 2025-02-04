@@ -26,7 +26,7 @@
                         <span class="link-danger">R${{ auth()->user()->credito }},00</span>
                         <h4 class="m-0 fw-normal cta-box-title">
                             <a href="https://api.whatsapp.com/send/?phone=51999047299&text&type=phone_number&app_absent=0" target="_blank" style="color: #0fb14a;">
-                            Chame no whats
+                            Solicitar créditos
                         </a></h4>
                     @else
                         <span class="link">R${{ auth()->user()->credito }},00</span>

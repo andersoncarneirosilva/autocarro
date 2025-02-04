@@ -115,47 +115,34 @@ class OutorgadoController extends Controller
 
     public function store(Request $request)
 {
-    $userId = Auth::id();
+    $request->validate([
+        'nome_outorgado'  => 'required|string|max:255',
+        'end_outorgado'   => 'required|string|max:255',
+        'email_outorgado' => 'required|email|max:255|unique:outorgados,email_outorgado',
+        'cpf_outorgado'   => 'required|string|unique:outorgados,cpf_outorgado', // Validação do CPF
+    ], [
+        'nome_outorgado.required'  => 'O campo outorgado é obrigatório.',
+        'end_outorgado.required'   => 'O campo endereço é obrigatório.',
+        'email_outorgado.required' => 'O campo e-mail é obrigatório.',
+        'email_outorgado.email'    => 'O e-mail informado não é válido.',
+        'email_outorgado.unique'   => 'O e-mail informado já está cadastrado.',
+        'cpf_outorgado.required'   => 'O campo CPF é obrigatório.',
+        'cpf_outorgado.cpf'        => 'O CPF informado não é válido.',
+        'cpf_outorgado.unique'     => 'O CPF informado já está cadastrado.',
+    ]);
+
+    // Adiciona o user_id aos dados
     $data = $request->all();
+    $data['user_id'] = Auth::id();
 
-    // Validação dos dados
-    if (empty($request->nome_outorgado)) {
-        alert()->error('O campo outorgado é obrigatório')
-            ->persistent(true)
-            ->autoClose(5000) // Fecha automaticamente após 5 segundos
-            ->timerProgressBar();
-        
-        return redirect()->route('outorgados.index');
-    }elseif (empty($request->end_outorgado)) {
-        alert()->error('O campo endereço é obrigatório')
-        ->persistent(true)
-        ->autoClose(5000) // Fecha automaticamente após 5 segundos
-        ->timerProgressBar();
-    
-        return redirect()->route('outorgados.index');
-    }elseif (empty($request->email_outorgado)) {
-        alert()->error('O campo email é obrigatório')
-        ->persistent(true)
-        ->autoClose(5000) // Fecha automaticamente após 5 segundos
-        ->timerProgressBar();
-    
-        return redirect()->route('outorgados.index');
-    }
-    
-
-
-    // Adiciona o user_id nos dados validados
-    $data['user_id'] = $userId;
-
-    // Salva o novo outorgado na tabela
+    // Salva no banco de dados
     $this->model->create($data);
 
-    // Alerta de sucesso
-    alert()->success('Outorgado cadastrado com sucesso!');
-
-    // Redireciona para a página de listagem
-    return redirect()->route('outorgados.index');
+    return response()->json(['success' => 'Outorgado cadastrado com sucesso!']);
 }
+
+
+
 
 
 
