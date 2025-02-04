@@ -250,6 +250,10 @@
                         <div class="alert alert-danger bg-transparent text-danger" role="alert">
                             NENHUM RESULTADO ENCONTRADO!
                         </div>
+                        <br>
+                        <div class="alert alert-info bg-transparent text-info" role="alert">
+                            Acesse a página Outorgados e Procuração para configurar o modelo de textos.
+                        </div>
                     @endif
             </div>
         </div>

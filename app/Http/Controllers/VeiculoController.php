@@ -32,6 +32,9 @@ class VeiculoController extends Controller
 
 
     public function index(Request $request){
+
+        //abort(419);
+
         $title = 'Excluir!';
         $text = "Deseja excluir esse veículo?";
         confirmDelete($title, $text);

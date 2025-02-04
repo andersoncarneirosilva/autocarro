@@ -19,7 +19,7 @@ class OutorgadoController extends Controller
     public function index(Request $request){
 
         $title = 'Excluir!';
-        $text = "Deseja tests excluir esse outorgado?";
+        $text = "Deseja excluir esse outorgado?";
         confirmDelete($title, $text);
 
         $userId = Auth::id();
