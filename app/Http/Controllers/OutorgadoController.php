@@ -138,7 +138,13 @@ class OutorgadoController extends Controller
     // Salva no banco de dados
     $this->model->create($data);
 
-    return response()->json(['success' => 'Outorgado cadastrado com sucesso!']);
+    alert()->success('Outorgado cadastrado com sucesso')
+        ->persistent(true)
+        ->autoClose(3000)
+        ->timerProgressBar();
+
+    // Redireciona para a página de listagem
+    return redirect()->route('outorgados.index');
 }
 
 

@@ -84,7 +84,7 @@
             <li class="side-nav-item">
                 <a href="{{ route('calendar.index') }}" class="side-nav-link">
                     <i class="uil-calender"></i>
-                    <span class="badge bg-danger text-white float-end">Novo</span>
+                    {{-- <span class="badge bg-danger text-white float-end">Novo</span> --}}
                     <span> Calendário </span>
                 </a>
             </li>

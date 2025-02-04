@@ -19,7 +19,7 @@
 				<div class="col-md-6 col-lg-5">
 					<div class="login-wrap p-4 p-md-5">
 		      	<div class="py-5 d-flex align-items-center justify-content-center">
-                    <img src="{{ asset('assets/images/logo-dark.png') }}?v={{ time() }}" alt="">
+                    <img src="{{ asset('assets/images/logo-dark.png') }}?v={{ time() }}" alt="Proc Online">
 		      	</div>
 		      	{{-- <h3 class="text-center mb-4">Have an account?</h3> --}}
 				  <x-auth-session-status class="mb-4" :status="session('status')" />
