@@ -219,6 +219,13 @@
                                                     target="_blank">
                                                     Baixar Procuração
                                                 </a>
+                                                <a href="{{ $doc->arquivo_atpve ?? '#' }}" 
+                                                    class="dropdown-item {{ empty($doc->arquivo_atpve) ? 'disabled' : '' }}" 
+                                                    target="_blank">
+                                                     Baixar ATPVe
+                                                 </a>
+                                                 
+
                                                 <a href="javascript:void(0);"
                                                     class="dropdown-item"
                                                     onclick="openProcModal(event, {{ $doc->id }})">
@@ -433,7 +440,7 @@ aria-hidden="true">
     
         // Atualiza a ação do formulário para incluir o ID do documento na rota
         const form = document.getElementById('addressForm');
-        form.action = `{{ secure_url('veiculos/store-atpve') }}/${docId}`; //secure_url
+        form.action = `{{ url('veiculos/store-atpve') }}/${docId}`; //secure_url
     
         // Envia o formulário
         form.submit();

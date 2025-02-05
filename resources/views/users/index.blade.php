@@ -45,7 +45,7 @@
                         <thead class="table-dark">
                             <tr>
                                 <th>Nome</th>
-                                <th>E-mail</th>
+                                {{-- <th>E-mail</th> --}}
                                 <th>Telefone</th>
                                 <th>Nícel de acesso</th>
                                 <th>Perfil</th>
@@ -66,7 +66,7 @@
                                     @endif
                                     {{ $user->name }}
                                 </td>
-                                <td>{{ $user->email }}</td>
+                                {{-- <td>{{ $user->email }}</td> --}}
                                 <td>{{ $user->telefone }}</td>
                                 <td>{{ $user->nivel_acesso }}</td>
                                 <td>{{ $user->perfil }}</td>
