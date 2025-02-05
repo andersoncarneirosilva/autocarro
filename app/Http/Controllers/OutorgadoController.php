@@ -154,16 +154,41 @@ class OutorgadoController extends Controller
 
      
 
-     public function destroy($id){
-        if(!$docs = $this->model->find($id)){
-            alert()->error('Erro ao excluír o pagamento!');
-        }
-    
-        if($docs->delete()){
-            alert()->success('Outorgado excluído com sucesso!');
-        }
-
+public function destroy($id)
+{
+    // Verifica se o Outorgado existe
+    if (!$docs = $this->model->find($id)) {
+        alert()->error('Erro ao excluir o Outorgado!');
         return redirect()->route('outorgados.index');
     }
+
+    // Busca todos os registros que contenham esse outorgado na tabela modeloprocuracoes
+    $procuracoes = ModeloProcuracoes::whereJsonContains('outorgados', (string) $id)->get();
+
+    foreach ($procuracoes as $procuracao) {
+        // Decodifica o array JSON
+        $outorgados = json_decode($procuracao->outorgados, true);
+
+        // Remove o ID do outorgado da lista
+        $outorgados = array_diff($outorgados, [(string) $id]);
+
+        if (empty($outorgados)) {
+            // Se não houver mais outorgados, excluir a modeloprocuracao
+            $procuracao->delete();
+        } else {
+            // Atualiza a coluna outorgados sem o ID removido
+            $procuracao->outorgados = json_encode(array_values($outorgados));
+            $procuracao->save();
+        }
+    }
+
+    // Exclui o Outorgado
+    if ($docs->delete()) {
+        alert()->success('Outorgado excluído com sucesso!');
+    }
+
+    return redirect()->route('outorgados.index');
+}
+
 
 }
