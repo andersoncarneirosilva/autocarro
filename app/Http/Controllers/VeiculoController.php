@@ -15,7 +15,8 @@ use App\Models\User;
 use App\Models\ModeloProcuracoes;
 
 use Carbon\Carbon;
-use App\Mail\SendEmail;
+use App\Mail\SendEmailProc;
+use App\Mail\SendEmailAtpve;
 use FPDF;
 use Mail;
 use TesseractOCR;
@@ -262,59 +263,62 @@ $nomeImagem = "storage/veiculos/" . strtolower($request['tipo']) . "/" .
             if (!file_exists($caminhoImagem)) {
                 $nomeImagem = "storage/veiculos/default.jpg"; // Caminho da imagem padrão
             }
-// DATA PROC MANUAL
-$data = [
-    'nome' => strtoupper($nomeFormatado),
-    'endereco' => strtoupper($enderecoFormatado),  // Endereço em maiúsculas
-    'cpf' => $request['cpf'],
-    'cidade' => strtoupper($request['cidade']),
+            //DATA PROC MANUAL
+            $data = [
+                'nome' => strtoupper($nomeFormatado),
+                'endereco' => strtoupper($enderecoFormatado),  // Endereço em maiúsculas
+                'cpf' => $request['cpf'],
+                'cidade' => strtoupper($request['cidade']),
 
-    'marca' => strtoupper($request['marca']),
-    'placa' => strtoupper($request['placa']),
-    'chassi' => strtoupper($request['chassi']),
-    'cor' => strtoupper($request['cor']),
-    'ano' => $request['ano_modelo'],
-    'renavam' => $request['renavam'],
-    'crv' => $request['tipo_doc'],
-    'cidade' => "Não consta",
-    'placaAnterior' => "Não consta",
-    'categoria' => "Não consta",
-    'motor' => "Não consta",
-    'combustivel' => "Não consta",
-    'infos' => "Não consta",
-    'tipo' => $request['tipo'],
-    'image' => $nomeImagem,
+                'marca' => strtoupper($request['marca']),
+                'placa' => strtoupper($request['placa']),
+                'chassi' => strtoupper($request['chassi']),
+                'cor' => strtoupper($request['cor']),
+                'ano' => $request['ano_modelo'],
+                'renavam' => $request['renavam'],
+                'crv' => $request['tipo_doc'],
+                'cidade' => "Não consta",
+                'placaAnterior' => "Não consta",
+                'categoria' => "Não consta",
+                'motor' => "Não consta",
+                'combustivel' => "Não consta",
+                'infos' => "Não consta",
+                'tipo' => $request['tipo'],
+                'image' => $nomeImagem,
 
-    'arquivo_doc' => 0,
-    'size_doc' => 0,
+                'arquivo_doc' => 0,
+                'size_doc' => 0,
 
-    'arquivo_proc' => $urlProc,
-    'size_proc' => $sizeProc,
+                'arquivo_proc' => $urlProc,
+                'size_proc' => $sizeProc,
 
-    'arquivo_atpve' => 0,
-    'size_atpve' => 0,
+                'arquivo_atpve' => 0,
+                'size_atpve' => 0,
 
-    'arquivo_proc_assinado' => 0,
-    'size_proc_pdf' => 0,
+                'arquivo_proc_assinado' => 0,
+                'size_proc_pdf' => 0,
 
-    'arquivo_proc_assinado' => 0,
-    'size_atpve_pdf' => 0,
+                'arquivo_proc_assinado' => 0,
+                'size_atpve_pdf' => 0,
 
-    'user_id' => $userId,
-];
+                'user_id' => $userId,
+            ];
 
-// Criar o registro no banco
-if ($this->model->create($data)) {
-    //SAVE PROC MANUAL
-    if ($user && ($user->plano == "Padrão" || $user->plano == "Pro" || $user->plano == "Teste")) {
-        $user->decrement('credito');
-    }
-    alert()->success('Veículo cadastrado com sucesso!');
-    return redirect()->route('veiculos.index');
-} else {
-    alert()->error('Erro ao cadastrar a procuração.');
-    return back()->withErrors(['message' => 'Erro ao cadastrar a procuração.']);
-}
+            if ($user->plano == "Premium"){
+                Mail::to($user->email)->send(new SendEmailProc($data, $caminhoProc));
+            }
+            // Criar o registro no banco
+            if ($this->model->create($data)) {
+                //SAVE PROC MANUAL
+                if ($user && ($user->plano == "Padrão" || $user->plano == "Pro" || $user->plano == "Teste")) {
+                    $user->decrement('credito');
+                }
+                alert()->success('Veículo cadastrado com sucesso!');
+                return redirect()->route('veiculos.index');
+            } else {
+                alert()->error('Erro ao cadastrar a procuração.');
+                return back()->withErrors(['message' => 'Erro ao cadastrar a procuração.']);
+            }
     }
 
 
@@ -624,7 +628,7 @@ $pdf->Output('F', $caminhoProc);
 
 // Obter o tamanho do arquivo PDF em bytes
 $sizeProc = filesize($caminhoProc);
-//DATA
+//DATA STORE
 $data = [
     'nome' => strtoupper($nomeFormatado),
     'endereco' => strtoupper($enderecoFormatado),  // Endereço em maiúsculas
@@ -652,7 +656,7 @@ $data = [
 ];
 
     if ($user->plano == "Premium"){
-        Mail::to($user->email)->send(new SendEmail($data, $caminhoProc));
+        Mail::to($user->email)->send(new SendEmailProc($data, $caminhoProc));
     }
         
 
@@ -969,22 +973,25 @@ if (($espacoUsado + $sizeProc) > $limiteBytes) {
     return redirect()->route('veiculos.index');
 }
 
-// Dados a serem salvos
+//DATA STORE PROC
 $data = [
     'nome' => strtoupper($nomeFormatado),
     'endereco' => strtoupper($enderecoFormatado),
     'arquivo_proc' => $urlProc,
     'size_proc' => $sizeProc,
     'user_id' => $userId,
-
+    'placa' => $veiculo->placa,
     'arquivo_proc' => $urlProc,
     'size_proc' => $sizeProc,
 
     'user_id' => $userId,
 ];
-//dd($data);
-// Encontrar o registro existente pelo ID (substitua o ID com a variável correta)
-$veiculo = Veiculo::find($id); // Ou use Veiculo::findOrFail($id) para garantir que o ID exista
+
+if ($user->plano == "Premium"){
+    Mail::to($user->email)->send(new SendEmailProc($data, $caminhoProc));
+}
+
+$veiculo = Veiculo::find($id);
 
 if ($veiculo) {
     // Atualizar o registro
@@ -1360,16 +1367,20 @@ if (($espacoUsado + $tamanhoNovoArquivo) > $limiteBytes) {
 
 // Retornar o link do PDF para download/visualização
 $fileUrl = asset('storage/' . $pastaAtpves . 'atpve_' . $estoque->placa . '_' . $numeroRandom . '.pdf');
+$fileAbsolutePath = storage_path('app/public/' . $filePath);
 
 // DATA ATPVE
 $data = [
     'arquivo_atpve' => $fileUrl,
     'size_atpve' => $sizeAtpve,
+    'placa' => $estoque->placa,
 ];
 
 
-    //dd($data);
-    // Busca o registro pelo ID e atualiza
+    if ($user->plano == "Premium"){
+        Mail::to($user->email)->send(new SendEmailAtpve($data, $fileAbsolutePath));
+    }
+
     $record = $this->model->findOrFail($id);
     $record->update($data);
 
@@ -1427,7 +1438,9 @@ public function update(Request $request, $id)
 
     // Salvar as alterações no banco de dados
     $veiculo->save();
-
+    if ($user->plano == "Premium"){
+        Mail::to($user->email)->send(new SendEmailProc($data, $caminhoProc));
+    }
     // Redirecionar com mensagem de sucesso
     alert()->success('Documento enviado com sucesso!');
     return redirect()->route('veiculos.edit', $id);

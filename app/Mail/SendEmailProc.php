@@ -2,7 +2,6 @@
 
 namespace App\Mail;
 
-use App\Models\Procuracao;
 use Illuminate\Bus\Queueable;
 use Illuminate\Mail\Mailable;
 use Illuminate\Mail\Mailables\Attachment;
@@ -10,7 +9,7 @@ use Illuminate\Mail\Mailables\Content;
 use Illuminate\Mail\Mailables\Envelope;
 use Illuminate\Queue\SerializesModels;
 
-class SendEmail extends Mailable
+class SendEmailProc extends Mailable
 {
     use Queueable, SerializesModels;
 
@@ -24,7 +23,7 @@ class SendEmail extends Mailable
         //
         $this->pags = $pags;
         $this->filePath = $filePath;
-        //dd($pags);
+        //dd($filePath);
     }
 
     /**
@@ -33,7 +32,7 @@ class SendEmail extends Mailable
     public function envelope(): Envelope
     {
         return new Envelope(
-            subject: 'PROCURAÇÃO - ' . $this->pags['placa'],
+            subject: 'Procuração - ' . $this->pags['placa'],
         );
     }
 
@@ -43,7 +42,7 @@ class SendEmail extends Mailable
     public function content(): Content
     {
         return new Content(
-            view: 'emails.send-email',
+            view: 'emails.send-email-proc',
         );
     }
 
@@ -51,7 +50,7 @@ class SendEmail extends Mailable
     {
         return $this->from( config('mail.from.address') )
                     ->subject('Contato do site')
-                    ->view('emails.send-email')
+                    ->view('emails.send-email-proc')
                     ->with('data', $this->pags);
     }
 

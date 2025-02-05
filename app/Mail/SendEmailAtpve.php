@@ -9,7 +9,7 @@ use Illuminate\Mail\Mailables\Content;
 use Illuminate\Mail\Mailables\Envelope;
 use Illuminate\Queue\SerializesModels;
 
-class SendEmailTenant extends Mailable
+class SendEmailAtpve extends Mailable
 {
     use Queueable, SerializesModels;
 
@@ -18,9 +18,12 @@ class SendEmailTenant extends Mailable
      */
     public $pags;
 
-    public function __construct($pags)
+    public function __construct($pags, $filePath)
     {
+        //
         $this->pags = $pags;
+        $this->filePath = $filePath;
+        //dd($filePath);
     }
 
     /**
@@ -29,7 +32,7 @@ class SendEmailTenant extends Mailable
     public function envelope(): Envelope
     {
         return new Envelope(
-            subject: 'ProcOnline',
+            subject: 'Solicitação ATPVe - ' . $this->pags['placa'],
         );
     }
 
@@ -39,7 +42,7 @@ class SendEmailTenant extends Mailable
     public function content(): Content
     {
         return new Content(
-            view: 'emails.send-email-tenant',
+            view: 'emails.send-email-atpve',
         );
     }
 
@@ -47,7 +50,7 @@ class SendEmailTenant extends Mailable
     {
         return $this->from( config('mail.from.address') )
                     ->subject('Contato do site')
-                    ->view('emails.send-email-tenant')
+                    ->view('emails.send-email-atpve')
                     ->with('data', $this->pags);
     }
 
@@ -58,8 +61,11 @@ class SendEmailTenant extends Mailable
      */
     public function attachments(): array
     {
+        $fileName = $this->pags['placa'] . '.pdf'; // Nome do arquivo baseado na placa
         return [
-            //Attachment::fromPath('public/storage/contracheques/contracheque-Anderson.pdf'),
+            Attachment::fromPath($this->filePath)
+                ->as($fileName) // Nomeia o anexo com a placa
+                ->withMime('application/pdf'),
         ];
     }
 }

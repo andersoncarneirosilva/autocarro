@@ -251,8 +251,8 @@
                             NENHUM RESULTADO ENCONTRADO!
                         </div>
                         <br>
-                        <div class="alert alert-info bg-transparent text-info" role="alert">
-                            Acesse a página Outorgados e Procuração para configurar o modelo de textos.
+                        <div class="alert alert-light text-bg-light border-0" role="alert">
+                            Acesse a página <a href="{{ route('outorgados.index')}}">Outorgados</a> e <a href="{{ route('configuracoes.index')}}">Procuração</a> para configurar o modelo de textos.
                         </div>
                     @endif
             </div>
@@ -433,7 +433,7 @@ aria-hidden="true">
     
         // Atualiza a ação do formulário para incluir o ID do documento na rota
         const form = document.getElementById('addressForm');
-        form.action = `{{ secure_url('veiculos/store-atpve') }}/${docId}`; //secure_url
+        form.action = `{{ url('veiculos/store-atpve') }}/${docId}`; //secure_url
     
         // Envia o formulário
         form.submit();
