@@ -19,7 +19,7 @@
 </div>
 <br>
 
-@include('includes/validations-form')
+
 
 <form action="{{ route('veiculos.update', $veiculo->id) }}" method="POST" enctype="multipart/form-data" id="edit-car-form">
     @csrf

@@ -44,6 +44,9 @@
         <script src="{{ url('js/mask-phone.js') }}"></script>
         <!-- Plugin css -->
         <link rel="stylesheet" href="{{ url('assets/vendor/jquery-toast-plugin/jquery.toast.min.css') }}">
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
+
         <script src="{{ url('assets/js/notificacoes.js') }}"></script>
         <script>
           $(document).ready(function () {

@@ -1,3 +1,10 @@
+@if(session('success'))
+    <script>
+        toastr.success("{{ session('success') }}");
+    </script>
+@endif
+
+
 <div class="row">
     <div class="col-sm-12">
         <!-- Profile -->

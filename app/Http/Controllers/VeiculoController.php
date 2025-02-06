@@ -1217,8 +1217,8 @@ $x += 40;
 
 $pdf->Text($x, $y, iconv('UTF-8', 'ISO-8859-1', " MUNICÍPIO:"));
 $x += $pdf->GetStringWidth(" MUNICÍPIO:");
-
-$this->desenharSublinhado($pdf, 146, 177, $cliente->cidade, 40);
+$municipio = iconv('UTF-8', 'ISO-8859-1//TRANSLIT', $cliente->cidade);
+$this->desenharSublinhado($pdf, 146, 177, $municipio, 40);
 $x += 40;
 
 $pdf->Ln(10);
@@ -1227,10 +1227,10 @@ $pdf->Ln(10);
 // Posição inicial do texto
 $x = 30;
 $y = $pdf->GetY();
-$pdf->Text($x, $y, "Logradouro:Rua/Av.");
+$pdf->Text($x, $y, "Logradouro: ");
 
 // Ajusta posição para o endereço e sublinha
-$x += $pdf->GetStringWidth("Logradouro:Rua/Av.");
+$x += $pdf->GetStringWidth("Logradouro: ");
 $endereco = iconv('UTF-8', 'ISO-8859-1//TRANSLIT', $cliente->endereco);
 $this->desenharSublinhado($pdf, $x, 186, $endereco, 80);
 
@@ -1252,15 +1252,16 @@ $x = 30;
 $y = $pdf->GetY();
 $pdf->Text($x, $y, "Complemento:");
 $x += $pdf->GetStringWidth("Complemento:");
-$this->desenharSublinhado($pdf, $x, 195, $cliente->complemento, 40);
+$complemento = iconv('UTF-8', 'ISO-8859-1//TRANSLIT', $cliente->complemento);
+$this->desenharSublinhado($pdf, $x, 195, $complemento, 40);
 $x += 40;
 
 // Texto "N."
 $pdf->Text($x, $y, " Bairro:");
 $x += $pdf->GetStringWidth(" Bairro:");
-
+$bairro = iconv('UTF-8', 'ISO-8859-1//TRANSLIT', $cliente->bairro);
 // Ajusta para o número e sublinha
-$this->desenharSublinhado($pdf, $x, 195, $cliente->bairro, 40);
+$this->desenharSublinhado($pdf, $x, 195, $bairro, 40);
 $x += 100;
 
 $pdf->Ln(10); // Linha em branco após o texto
