@@ -16,6 +16,7 @@ use App\Models\ModeloProcuracoes;
 
 use Carbon\Carbon;
 use App\Mail\SendEmailProc;
+use App\Mail\SendEmailProcAtualizada;
 use App\Mail\SendEmailAtpve;
 use FPDF;
 use Mail;
@@ -1419,7 +1420,9 @@ public function edit($id){
 public function update(Request $request, $id)
 {
     $userId = Auth::id(); // Obtém o ID do usuário autenticado
+    $user = User::find($userId);
     $numeroRandom = rand(1000, 9999);
+
     // Recuperar o registro do veículo pelo ID
     $veiculo = Veiculo::findOrFail($id);
 
@@ -1431,6 +1434,8 @@ public function update(Request $request, $id)
     // Caminho base para o usuário
     $pastaUsuario = "documentos/usuario_{$userId}/";
 
+    $data = $veiculo->placa;
+
     // Processar os uploads de arquivos
     $this->processFileUpload($request, $veiculo, 'arquivo_proc_assinado', $pastaUsuario . 'procuracoes_assinadas', 'arquivo_proc_assinado', 'size_proc_pdf', 10); // Limite de 10 MB
     $this->processFileUpload($request, $veiculo, 'arquivo_atpve_assinado', $pastaUsuario . 'atpves_assinadas', 'arquivo_atpve_assinado', 'size_atpve_pdf', 10); // Limite de 10 MB
@@ -1438,13 +1443,17 @@ public function update(Request $request, $id)
 
     // Salvar as alterações no banco de dados
     $veiculo->save();
-    if ($user->plano == "Premium"){
-        Mail::to($user->email)->send(new SendEmailProc($data, $caminhoProc));
-    }
+
+    // Enviar e-mail apenas para usuários Premium
+    // if ($user->plano == "Premium" && $caminhoProc) {
+    //     Mail::to($user->email)->send(new SendEmailProcAtualizada($data, $caminhoProc));
+    // }
+
     // Redirecionar com mensagem de sucesso
-    alert()->success('Documento enviado com sucesso!');
+    alert()->success('Documento atualizado com sucesso!');
     return redirect()->route('veiculos.edit', $id);
 }
+
 
 
 private function processFileUpload($request, $veiculo, $fileKey, $storagePath, $fieldName, $sizeFieldName, $limiteMb)
@@ -1515,6 +1524,23 @@ function verificarEspaco($userId, $arquivo)
 
     return true; // Espaço disponível
 }
+
+public function destroyDoc($id)
+{
+    //dd($id);
+    $veiculo = Veiculo::findOrFail($id);
+
+    // Remove o arquivo do armazenamento, se necessário
+    if ($veiculo->arquivo_doc && Storage::exists($veiculo->arquivo_doc)) {
+        Storage::delete($veiculo->arquivo_doc);
+    }
+
+    // Remove o caminho do arquivo do banco de dados
+    $veiculo->update(['arquivo_doc' => 0, 'size_doc' => 0]);
+
+    return back()->with('success', 'Documento excluído com sucesso.');
+}
+
 
 
 }

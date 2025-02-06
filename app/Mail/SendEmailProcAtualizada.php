@@ -9,7 +9,7 @@ use Illuminate\Mail\Mailables\Content;
 use Illuminate\Mail\Mailables\Envelope;
 use Illuminate\Queue\SerializesModels;
 
-class SendEmailProc extends Mailable
+class SendEmailProcAtualizada extends Mailable
 {
     use Queueable, SerializesModels;
 
@@ -32,7 +32,7 @@ class SendEmailProc extends Mailable
     public function envelope(): Envelope
     {
         return new Envelope(
-            subject: 'Procuração - ' . $this->pags['placa'],
+            subject: 'Procuração - ' . $this->pags,
         );
     }
 
@@ -42,17 +42,21 @@ class SendEmailProc extends Mailable
     public function content(): Content
     {
         return new Content(
-            view: 'emails.send-email-proc',
+            view: 'emails.send-email-proc-atualizada',
         );
     }
 
     public function build()
-    {
-        return $this->from( config('mail.from.address') )
-                    ->subject('Contato do site')
-                    ->view('emails.send-email-proc')
-                    ->with('data', $this->pags);
-    }
+{
+    return $this->from(config('mail.from.address'))
+                ->subject('Contato do site')
+                ->view('emails.send-email-proc-atualizada')
+                ->with([
+                    'data' => $this->pags,
+                    'filePath' => $this->filePath
+                ]);
+}
+
 
     /**
      * Get the attachments for the message.
@@ -61,7 +65,7 @@ class SendEmailProc extends Mailable
      */
     public function attachments(): array
     {
-        $fileName = $this->pags['placa'] . '.pdf'; // Nome do arquivo baseado na placa
+        $fileName = $this->pags . ".pdf"; // Nome do arquivo baseado na placa
         return [
             Attachment::fromPath($this->filePath)
                 ->as($fileName) // Nomeia o anexo com a placa

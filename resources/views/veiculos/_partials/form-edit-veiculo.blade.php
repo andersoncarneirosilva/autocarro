@@ -66,7 +66,7 @@
 
                     <p class="text-muted mb-2 font-13"><strong>Ano/Modelo:</strong><span class="ms-2">{{ $veiculo->ano }}</span></p>
 
-                    <p class="text-muted mb-2 font-13"><strong>Chassi:</strong><span class="ms-2">{{ $veiculo->chassi }}</span></p>
+                    {{-- <p class="text-muted mb-2 font-13"><strong>Chassi:</strong><span class="ms-2">{{ $veiculo->chassi }}</span></p>
 
                     <p class="text-muted mb-2 font-13"><strong>Renavam:</strong><span class="ms-2">{{ $veiculo->renavam }}</span></p>
 
@@ -80,7 +80,7 @@
 
                     <p class="text-muted mb-2 font-13"><strong>Combustível:</strong><span class="ms-2">{{ $veiculo->combustivel }}</span></p>
 
-                    <p class="text-muted mb-2 font-13"><strong>Observações:</strong><span class="ms-2">{{ $veiculo->infos }}</span></p>
+                    <p class="text-muted mb-2 font-13"><strong>Observações:</strong><span class="ms-2">{{ $veiculo->infos }}</span></p> --}}
                 </div>
             </div> 
         </div> 
@@ -104,16 +104,16 @@
                 <div class="tab-content">
                     <div class="tab-pane show active" id="aboutme" role="tabpanel">
                         <form>
-                            <h5 class="mb-4 text-uppercase"><i class="mdi mdi-account-circle me-1"></i> Enviar documentos assinados</h5>
+                            <h5 class="mb-4 text-uppercase"><i class="mdi mdi-file me-1"></i> Enviar documentos</h5>
                             <div class="row">
-                                {{-- @if ($veiculo->arquivo_doc === "0") --}}
+                                @if ($veiculo->arquivo_doc === "0")
                                 <div class="col-md-6">
                                     <div class="mb-3">
                                         <label for="firstname" class="form-label">CRLV</label>
                                         <input class="form-control" type="file" name="arquivo_doc">
                                     </div>
                                 </div>
-                                {{-- @endif --}}
+                                @endif
                                 <div class="col-md-6">
                                     <div class="mb-3">
                                         <label for="firstname" class="form-label">Procuração assinada</label>
@@ -166,12 +166,39 @@
                                                 <div class="col ps-0">
                                                     <a href="{{ $veiculo->arquivo_doc }}" target="_blank" class="text-muted fw-bold">CRLV</a>
                                                     <p class="mb-0 font-13">{{ number_format($veiculo->size_doc / 1024, 2, ',', '.') }} KB</p>
-
+                                                </div>
+                                                <div class="col-auto">
+                                                    <form action="{{ route('veiculos.excluir_doc', $veiculo->id) }}" method="POST" id="deleteForm">
+                                                        @csrf
+                                                        @method('DELETE')
+                                                        <a href="#" class="text-secondary" id="deleteIcon">
+                                                            <i class="mdi mdi-trash-can-outline"></i>
+                                                        </a>
+                                                    </form>
+                                                    <script>
+                                                        document.getElementById('deleteIcon').addEventListener('click', function(event) {
+                                                            event.preventDefault(); // Impede o envio do formulário inicialmente
+                                                    
+                                                            Swal.fire({
+                                                                title: 'Deseja excluir este documento?',
+                                                                text: "Essa ação não pode ser desfeita!",
+                                                                icon: 'warning',
+                                                                showCancelButton: true,
+                                                                confirmButtonText: 'Sim, excluir!',
+                                                                cancelButtonText: 'Cancelar',
+                                                            }).then((result) => {
+                                                                if (result.isConfirmed) {
+                                                                    document.getElementById('deleteForm').submit(); // Envia o formulário se o usuário confirmar
+                                                                }
+                                                            });
+                                                        });
+                                                    </script>
                                                 </div>
                                             </div> <!-- end row -->
                                         </div> <!-- end .p-2-->
                                     </div> <!-- end col -->
                                 </div> <!-- end col-->
+                                
                                 @endif
 
                                 @if (!empty($veiculo->arquivo_proc))
