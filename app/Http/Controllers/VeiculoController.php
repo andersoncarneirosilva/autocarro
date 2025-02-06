@@ -1538,7 +1538,39 @@ public function destroyDoc($id)
     // Remove o caminho do arquivo do banco de dados
     $veiculo->update(['arquivo_doc' => 0, 'size_doc' => 0]);
 
-    return back()->with('success', 'Documento excluído com sucesso.');
+    return back()->with('success', 'CRLV excluído com sucesso.');
+}
+
+public function destroyProc($id)
+{
+    //dd($id);
+    $veiculo = Veiculo::findOrFail($id);
+
+    // Remove o arquivo do armazenamento, se necessário
+    if ($veiculo->arquivo_proc && Storage::exists($veiculo->arquivo_proc)) {
+        Storage::delete($veiculo->arquivo_proc);
+    }
+
+    // Remove o caminho do arquivo do banco de dados
+    $veiculo->update(['arquivo_proc' => 0, 'size_proc' => 0]);
+
+    return back()->with('success', 'Procuração excluída com sucesso.');
+}
+
+public function destroyAtpve($id)
+{
+    //dd($id);
+    $veiculo = Veiculo::findOrFail($id);
+
+    // Remove o arquivo do armazenamento, se necessário
+    if ($veiculo->arquivo_atpve && Storage::exists($veiculo->arquivo_atpve)) {
+        Storage::delete($veiculo->arquivo_atpve);
+    }
+
+    // Remove o caminho do arquivo do banco de dados
+    $veiculo->update(['arquivo_atpve' => 0, 'size_atpve' => 0]);
+
+    return back()->with('success', 'Atpve excluída com sucesso.');
 }
 
 

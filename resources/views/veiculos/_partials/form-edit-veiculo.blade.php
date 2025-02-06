@@ -151,101 +151,156 @@
                             <div class="row mx-n1 g-0">
 
                                 @if (!empty($veiculo->arquivo_doc))
-                                <div class="col-xxl-3 col-lg-6">
-                                    <p class="text-muted mb-2 font-13"><strong>CRLV</strong></p>
-                                    <div class="card m-1 shadow-none border">
-                                        <div class="p-2">
-                                            <div class="row align-items-center">
-                                                <div class="col-auto">
-                                                    <div class="avatar-sm">
-                                                        <span class="avatar-title bg-light text-reset rounded">
-                                                            <i class="mdi mdi-file-pdf-box font-24"></i>
-                                                        </span>
+                                    <div class="col-xxl-3 col-lg-6">
+                                        <p class="text-muted mb-2 font-13"><strong>CRLV</strong></p>
+                                        <div class="card m-1 shadow-none border">
+                                            <div class="p-2">
+                                                <div class="row align-items-center">
+                                                    <div class="col-auto">
+                                                        <div class="avatar-sm">
+                                                            <span class="avatar-title bg-light text-reset rounded">
+                                                                <i class="mdi mdi-file-pdf-box font-24"></i>
+                                                            </span>
+                                                        </div>
                                                     </div>
-                                                </div>
-                                                <div class="col ps-0">
-                                                    <a href="{{ $veiculo->arquivo_doc }}" target="_blank" class="text-muted fw-bold">CRLV</a>
-                                                    <p class="mb-0 font-13">{{ number_format($veiculo->size_doc / 1024, 2, ',', '.') }} KB</p>
-                                                </div>
-                                                <div class="col-auto">
-                                                    <form action="{{ route('veiculos.excluir_doc', $veiculo->id) }}" method="POST" id="deleteForm">
-                                                        @csrf
-                                                        @method('DELETE')
-                                                        <a href="#" class="text-secondary" id="deleteIcon">
-                                                            <i class="mdi mdi-trash-can-outline"></i>
-                                                        </a>
-                                                    </form>
-                                                    <script>
-                                                        document.getElementById('deleteIcon').addEventListener('click', function(event) {
-                                                            event.preventDefault(); // Impede o envio do formulário inicialmente
-                                                    
-                                                            Swal.fire({
-                                                                title: 'Deseja excluir este documento?',
-                                                                text: "Essa ação não pode ser desfeita!",
-                                                                icon: 'warning',
-                                                                showCancelButton: true,
-                                                                confirmButtonText: 'Sim, excluir!',
-                                                                cancelButtonText: 'Cancelar',
-                                                            }).then((result) => {
-                                                                if (result.isConfirmed) {
-                                                                    document.getElementById('deleteForm').submit(); // Envia o formulário se o usuário confirmar
-                                                                }
+                                                    <div class="col ps-0">
+                                                        <a href="{{ $veiculo->arquivo_doc }}" target="_blank" class="text-muted fw-bold">CRLV</a>
+                                                        <p class="mb-0 font-13">{{ number_format($veiculo->size_doc / 1024, 2, ',', '.') }} KB</p>
+                                                    </div>
+                                                    <div class="col-auto">
+                                                        <form action="{{ route('veiculos.excluir_doc', $veiculo->id) }}" method="POST" id="deleteForm">
+                                                            @csrf
+                                                            @method('DELETE')
+                                                            <a href="#" class="text-secondary" id="deleteIcon">
+                                                                <i class="mdi mdi-trash-can-outline"></i>
+                                                            </a>
+                                                        </form>
+                                                        <script>
+                                                            document.getElementById('deleteIcon').addEventListener('click', function(event) {
+                                                                event.preventDefault(); // Impede o envio do formulário inicialmente
+                                                        
+                                                                Swal.fire({
+                                                                    title: 'Deseja excluir este documento?',
+                                                                    text: "Essa ação não pode ser desfeita!",
+                                                                    icon: 'warning',
+                                                                    showCancelButton: true,
+                                                                    confirmButtonText: 'Sim, excluir!',
+                                                                    cancelButtonText: 'Cancelar',
+                                                                }).then((result) => {
+                                                                    if (result.isConfirmed) {
+                                                                        document.getElementById('deleteForm').submit(); // Envia o formulário se o usuário confirmar
+                                                                    }
+                                                                });
                                                             });
-                                                        });
-                                                    </script>
-                                                </div>
-                                            </div> <!-- end row -->
-                                        </div> <!-- end .p-2-->
-                                    </div> <!-- end col -->
-                                </div> <!-- end col-->
+                                                        </script>
+                                                    </div>
+                                                </div> <!-- end row -->
+                                            </div> <!-- end .p-2-->
+                                        </div> <!-- end col -->
+                                    </div> <!-- end col-->
                                 
                                 @endif
 
                                 @if (!empty($veiculo->arquivo_proc))
-                                <div class="col-xxl-3 col-lg-6">
-                                    <p class="text-muted mb-2 font-13"><strong>Procuração</strong></p>
-                                    <div class="card m-1 shadow-none border">
-                                        <div class="p-2">
-                                            <div class="row align-items-center">
-                                                <div class="col-auto">
-                                                    <div class="avatar-sm">
-                                                        <span class="avatar-title bg-light text-reset rounded">
-                                                            <i class="mdi mdi-file-pdf-box font-24"></i>
-                                                        </span>
+                                    <div class="col-xxl-3 col-lg-6">
+                                        <p class="text-muted mb-2 font-13"><strong>Procuração</strong></p>
+                                        <div class="card m-1 shadow-none border">
+                                            <div class="p-2">
+                                                <div class="row align-items-center">
+                                                    <div class="col-auto">
+                                                        <div class="avatar-sm">
+                                                            <span class="avatar-title bg-light text-reset rounded">
+                                                                <i class="mdi mdi-file-pdf-box font-24"></i>
+                                                            </span>
+                                                        </div>
                                                     </div>
-                                                </div>
-                                                <div class="col ps-0">
-                                                    <a href="{{ $veiculo->arquivo_proc }}" target="_blank" class="text-muted fw-bold">Procuração</a>
-                                                    <p class="mb-0 font-13">{{ number_format($veiculo->size_proc / 1024, 2, ',', '.') }} KB</p>
-
-                                                </div>
-                                            </div> <!-- end row -->
-                                        </div> <!-- end .p-2-->
-                                    </div> <!-- end col -->
-                                </div> <!-- end col-->
+                                                    <div class="col ps-0">
+                                                        <a href="{{ $veiculo->arquivo_proc }}" target="_blank" class="text-muted fw-bold">Procuração</a>
+                                                        <p class="mb-0 font-13">{{ number_format($veiculo->size_proc / 1024, 2, ',', '.') }} KB</p>
+                                                    </div>
+                                                    <div class="col-auto">
+                                                        <form action="{{ route('veiculos.excluir_proc', $veiculo->id) }}" method="POST" id="deleteProcForm">
+                                                            @csrf
+                                                            @method('DELETE')
+                                                            <a href="#" class="text-secondary" id="deleteProcIcon">
+                                                                <i class="mdi mdi-trash-can-outline"></i>
+                                                            </a>
+                                                        </form>
+                                                        <script>
+                                                            document.getElementById('deleteProcIcon').addEventListener('click', function(event) {
+                                                                event.preventDefault(); // Impede o envio do formulário inicialmente
+                                                        
+                                                                Swal.fire({
+                                                                    title: 'Deseja excluir esta procuração?',
+                                                                    text: "Essa ação não pode ser desfeita!",
+                                                                    icon: 'warning',
+                                                                    showCancelButton: true,
+                                                                    confirmButtonText: 'Sim, excluir!',
+                                                                    cancelButtonText: 'Cancelar',
+                                                                }).then((result) => {
+                                                                    if (result.isConfirmed) {
+                                                                        document.getElementById('deleteProcForm').submit(); // Envia o formulário se o usuário confirmar
+                                                                    }
+                                                                });
+                                                            });
+                                                        </script>
+                                                    </div>
+                                                </div> <!-- end row -->
+                                            </div> <!-- end .p-2-->
+                                        </div> <!-- end col -->
+                                    </div> <!-- end col-->
+                                
                                 @endif
 
                                 @if (!empty($veiculo->arquivo_atpve))
-                                <div class="col-xxl-3 col-lg-6">
-                                    <p class="text-muted mb-2 font-13"><strong>ATPVe</strong></p>
-                                    <div class="card m-1 shadow-none border">
-                                        <div class="p-2">
-                                            <div class="row align-items-center">
-                                                <div class="col-auto">
-                                                    <div class="avatar-sm">
-                                                        <span class="avatar-title bg-light text-reset rounded">
-                                                            <i class="mdi mdi-file-pdf-box font-24"></i>
-                                                        </span>
+                                    <div class="col-xxl-3 col-lg-6">
+                                        <p class="text-muted mb-2 font-13"><strong>ATPVe</strong></p>
+                                        <div class="card m-1 shadow-none border">
+                                            <div class="p-2">
+                                                <div class="row align-items-center">
+                                                    <div class="col-auto">
+                                                        <div class="avatar-sm">
+                                                            <span class="avatar-title bg-light text-reset rounded">
+                                                                <i class="mdi mdi-file-pdf-box font-24"></i>
+                                                            </span>
+                                                        </div>
                                                     </div>
-                                                </div>
-                                                <div class="col ps-0">
-                                                    <a href="{{ $veiculo->arquivo_atpve }}" target="_blank" class="text-muted fw-bold">ATPVe</a>
-                                                    <p class="mb-0 font-13">{{ number_format($veiculo->size_atpve / 1024, 2, ',', '.') }} KB</p>
-                                                </div>
-                                            </div> <!-- end row -->
-                                        </div> <!-- end .p-2-->
-                                    </div> <!-- end col -->
-                                </div> <!-- end col-->
+                                                    <div class="col ps-0">
+                                                        <a href="{{ $veiculo->arquivo_atpve }}" target="_blank" class="text-muted fw-bold">ATPVe</a>
+                                                        <p class="mb-0 font-13">{{ number_format($veiculo->size_atpve / 1024, 2, ',', '.') }} KB</p>
+                                                    </div>
+                                                    <div class="col-auto">
+                                                        <form action="{{ route('veiculos.excluir_atpve', $veiculo->id) }}" method="POST" id="deleteAtpveForm">
+                                                            @csrf
+                                                            @method('DELETE')
+                                                            <a href="#" class="text-secondary" id="deleteAtpveIcon">
+                                                                <i class="mdi mdi-trash-can-outline"></i>
+                                                            </a>
+                                                        </form>
+                                                        <script>
+                                                            document.getElementById('deleteAtpveIcon').addEventListener('click', function(event) {
+                                                                event.preventDefault(); // Impede o envio do formulário inicialmente
+                                                        
+                                                                Swal.fire({
+                                                                    title: 'Deseja excluir esta atpve?',
+                                                                    text: "Essa ação não pode ser desfeita!",
+                                                                    icon: 'warning',
+                                                                    showCancelButton: true,
+                                                                    confirmButtonText: 'Sim, excluir!',
+                                                                    cancelButtonText: 'Cancelar',
+                                                                }).then((result) => {
+                                                                    if (result.isConfirmed) {
+                                                                        document.getElementById('deleteAtpveForm').submit(); // Envia o formulário se o usuário confirmar
+                                                                    }
+                                                                });
+                                                            });
+                                                        </script>
+                                                    </div>
+                                                </div> <!-- end row -->
+                                            </div> <!-- end .p-2-->
+                                        </div> <!-- end col -->
+                                    </div> <!-- end col-->
+                                
                                 @endif
                             </div> <!-- end row-->
                         </div>
