@@ -1083,9 +1083,9 @@ $x += $pdf->GetStringWidth("Eu, "); // Ajusta o X para o nome
 
 // Reduz a distância entre "Eu," e o nome do outorgado
 $x += 0; // Ajuste fino para aproximar o nome de "Eu,"
-
+$nome_outorgado = iconv('UTF-8', 'ISO-8859-1//TRANSLIT', $request['nome_outorgado']);
 // Sublinha apenas o nome do outorgado
-$this->desenharSublinhado($pdf, $x, 60, $request['nome_outorgado'], 140); // Chama o método dentro do controlador
+$this->desenharSublinhado($pdf, $x, 60, $nome_outorgado, 140); // Chama o método dentro do controlador
 $x += 140; // Ajuste após o nome sublinhado
 
 
