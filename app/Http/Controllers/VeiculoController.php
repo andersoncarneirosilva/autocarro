@@ -1362,7 +1362,7 @@ $sizeAtpve = $tamanhoNovoArquivo;
 if (($espacoUsado + $tamanhoNovoArquivo) > $limiteBytes) {
     // Remove o arquivo PDF temporário caso o limite seja excedido
     unlink($filePath);
-
+//teste 
     alert()->error('Espaço insuficiente. Você atingiu o limite de armazenamento!');
     return redirect()->route('veiculos.index')->withErrors(['message' => 'Espaço insuficiente. Você atingiu o limite de armazenamento.']);
 }
