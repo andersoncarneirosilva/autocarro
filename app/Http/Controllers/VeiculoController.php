@@ -1351,7 +1351,7 @@ $fileName = 'atpve_' . $estoque->placa . '_' . $numeroRandom . '.pdf';
 $filePath = $pastaAtpves . $fileName;
 
 // Gera o arquivo PDF
-$pdfContent = $pdf->Output('S'); // Salva o conteúdo do PDF em formato string
+$pdfContent = $pdf->Output('F'); // Salva o conteúdo do PDF em formato string
 Storage::disk('public')->put($filePath, $pdfContent);
 
 // Calcula o tamanho do novo arquivo
