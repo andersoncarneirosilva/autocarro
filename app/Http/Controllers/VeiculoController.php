@@ -315,7 +315,8 @@ $nomeImagem = "storage/veiculos/" . strtolower($request['tipo']) . "/" .
                 if ($user && ($user->plano == "Padrão" || $user->plano == "Pro" || $user->plano == "Teste")) {
                     $user->decrement('credito');
                 }
-                alert()->success('Veículo cadastrado com sucesso!');
+                return back()->with('success', 'Veículo cadastrado com sucesso!');
+
                 return redirect()->route('veiculos.index');
             } else {
                 alert()->error('Erro ao cadastrar a procuração.');
@@ -668,7 +669,7 @@ $data = [
                 $user->decrement('credito');
             }
             
-            alert()->success('Veículo cadastrado com sucesso!');
+            return back()->with('success', 'Veículo cadastrado com sucesso!');
 
             return redirect()->route('veiculos.index');
         }
@@ -709,14 +710,14 @@ $data = [
 
     // Tenta localizar o documento no banco de dados
     if (!$doc = $this->model->find($id)) {
-        alert()->error('Erro ao excluir a procuração!');
+        return back()->with('error', 'Erro ao excluir a procuração!');
         return redirect()->route('veiculos.index');
     }
 
     // Recupera o veículo associado ao documento
     $veiculo = \App\Models\Veiculo::where('id', $id)->first();
     if (!$veiculo) {
-        alert()->error('Veículo não encontrado para o documento!');
+        return back()->with('error', 'Erro ao excluir a procuração!');
         return redirect()->route('veiculos.index');
     }
 
