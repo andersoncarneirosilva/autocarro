@@ -3,6 +3,13 @@
 @section('title', 'Veículos')
 
 @section('content')
+
+@if(session('success'))
+    <script>
+        toastr.success("{{ session('success') }}");
+    </script>
+@endif
+
 <script>
     document.addEventListener('DOMContentLoaded', function () {
         const selectElement = document.getElementById('idCliente');
@@ -257,11 +264,13 @@
                         <div class="alert alert-danger bg-transparent text-danger" role="alert">
                             NENHUM RESULTADO ENCONTRADO!
                         </div>
-                        <br>
+                    @endif
+                    @if(!$modeloProc) 
                         <div class="alert alert-light text-bg-light border-0" role="alert">
                             Acesse a página <a href="{{ route('outorgados.index')}}">Outorgados</a> e <a href="{{ route('configuracoes.index')}}">Procuração</a> para configurar o modelo de textos.
                         </div>
                     @endif
+
             </div>
         </div>
     </div>

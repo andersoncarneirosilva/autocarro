@@ -47,6 +47,7 @@ class VeiculoController extends Controller
 
         $clientes = Cliente::where('user_id', $userId)->get();
         $veiculos = $this->model->getSearch($request->search, $userId);
+        $modeloProc = ModeloProcuracoes::exists();
         $path = storage_path('app/public/documentos/usuario_' . auth()->id());
 
         // Função para calcular o tamanho total da pasta
@@ -65,7 +66,7 @@ class VeiculoController extends Controller
         $limitInMB = 1; // Limite de 1 MB
         $percentUsed = ($usedSpaceInMB / $limitInMB) * 100; // Percentual usado
 
-        return view('veiculos.index', compact(['clientes', 'usedSpaceInMB', 'percentUsed', 'outorgados', 'limitInMB', 'veiculos']));
+        return view('veiculos.index', compact(['clientes', 'usedSpaceInMB', 'percentUsed', 'outorgados', 'limitInMB', 'veiculos', 'modeloProc']));
     }
 
     public function create(){
@@ -740,9 +741,9 @@ $data = [
 
     // Exclui o registro do banco de dados
     if ($doc->delete()) {
-        alert()->success('Veículo excluído com sucesso!');
+        return back()->with('success', 'Veículo excluído com sucesso!');
     } else {
-        alert()->error('Erro ao excluir o veículo!');
+        return back()->with('success', 'Erro ao excluir o veículo!');
     }
 
     return redirect()->route('veiculos.index');
@@ -1001,11 +1002,11 @@ if ($veiculo) {
     if ($user && ($user->plano == "Padrão" || $user->plano == "Pro" || $user->plano == "Teste")) {
         $user->decrement('credito');
     }
-    alert()->success('Procuração atualizada com sucesso!');
+    return back()->with('success', 'Procuração atualizada com sucesso.');
     return redirect()->route('veiculos.index');
 } else {
     alert()->error('Erro ao encontrar o veículo.');
-    return back()->withErrors(['message' => 'Erro ao encontrar o veículo.']);
+    return back()->withErrors('success', 'Erro ao encontrar o veículo.');
 }
 }
 
@@ -1386,7 +1387,7 @@ $data = [
     $record = $this->model->findOrFail($id);
     $record->update($data);
 
-    alert()->success('ATPVe gerada com sucesso!');
+    return back()->with('success', 'ATPVe gerada com sucesso.');
 
     return redirect()->route('veiculos.index');
 }
@@ -1451,8 +1452,8 @@ public function update(Request $request, $id)
     // }
 
     // Redirecionar com mensagem de sucesso
-    alert()->success('Documento atualizado com sucesso!');
-    return redirect()->route('veiculos.edit', $id);
+    return redirect()->route('veiculos.edit', $id)->with('success', 'CRLV cadastrado com sucesso.');
+
 }
 
 
