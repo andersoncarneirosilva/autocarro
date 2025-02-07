@@ -20,13 +20,12 @@
         <!-- Para Mobile -->
         <div class="card ribbon-box d-block d-md-none">
           <div class="card-body">
-              <div class="ribbon ribbon-success float-end"><i class="mdi mdi-access-point me-1"></i> 05.02.2025</div>
+              <div class="ribbon ribbon-success float-end"><i class="mdi mdi-access-point me-1"></i> 07.02.2025</div>
               <h5 class="text-success float-start mt-0">Novidades no App!</h5>
               <div class="ribbon-content">
                   <ul>
-                    <li>Campo para enviar o crlv caso o cadastro seja manual</li>
-                    <li>Botão Baixar ATPVe adicionado as ações.</li>
-                    <li>Adicionada a possiblidade de exluir o CRLV</li>
+                    <li>Adicionada a possiblidade de exluir os documentos</li>
+                    <li>Correção no envio dos documentos assinados</li>
 
                   </ul>
               </div>
