@@ -1422,14 +1422,26 @@ public function edit($id){
 
 public function update(Request $request, $id)
 {
-    $userId = Auth::id(); // Obtém o ID do usuário autenticado
+    // Obtém o ID do usuário autenticado
+    $userId = Auth::id();
     $user = User::find($userId);
-    $numeroRandom = rand(1000, 9999);
 
-    // Recuperar o registro do veículo pelo ID
+    // Recuperar o veículo
     $veiculo = Veiculo::findOrFail($id);
 
-    // Atualizar o campo 'crv' (caso necessário)
+    // Inicializa um array para armazenar mensagens de sucesso
+    $mensagens = [];
+
+    // Verifica se pelo menos um arquivo foi enviado
+    if (
+        !$request->hasFile('arquivo_proc_assinado') &&
+        !$request->hasFile('arquivo_atpve_assinado') &&
+        !$request->hasFile('arquivo_doc')
+    ) {
+        return redirect()->back()->with('error', 'Nenhum arquivo foi enviado.');
+    }
+
+    // Atualizar o campo 'crv' se necessário
     if ($request->has('crv')) {
         $veiculo->crv = $request->input('crv');
     }
@@ -1437,25 +1449,30 @@ public function update(Request $request, $id)
     // Caminho base para o usuário
     $pastaUsuario = "documentos/usuario_{$userId}/";
 
-    $data = $veiculo->placa;
+    // Processar os uploads de arquivos e adicionar mensagens personalizadas
+    if ($request->hasFile('arquivo_proc_assinado')) {
+        $this->processFileUpload($request, $veiculo, 'arquivo_proc_assinado', $pastaUsuario . 'procuracoes_assinadas', 'arquivo_proc_assinado', 'size_proc_pdf', 10);
+        $mensagens[] = 'Procuração assinada cadastrada com sucesso.';
+    }
 
-    // Processar os uploads de arquivos
-    $this->processFileUpload($request, $veiculo, 'arquivo_proc_assinado', $pastaUsuario . 'procuracoes_assinadas', 'arquivo_proc_assinado', 'size_proc_pdf', 10); // Limite de 10 MB
-    $this->processFileUpload($request, $veiculo, 'arquivo_atpve_assinado', $pastaUsuario . 'atpves_assinadas', 'arquivo_atpve_assinado', 'size_atpve_pdf', 10); // Limite de 10 MB
-    $this->processFileUpload($request, $veiculo, 'arquivo_doc', $pastaUsuario . 'documentos', 'arquivo_doc', 'size_doc', 10); // Novo campo de documento
+    if ($request->hasFile('arquivo_atpve_assinado')) {
+        $this->processFileUpload($request, $veiculo, 'arquivo_atpve_assinado', $pastaUsuario . 'atpves_assinadas', 'arquivo_atpve_assinado', 'size_atpve_pdf', 10);
+        $mensagens[] = 'Solicitação de ATPVe assinada cadastrada com sucesso.';
+    }
+
+    if ($request->hasFile('arquivo_doc')) {
+        $this->processFileUpload($request, $veiculo, 'arquivo_doc', $pastaUsuario . 'documentos', 'arquivo_doc', 'size_doc', 10);
+        $mensagens[] = 'CRLV cadastrado com sucesso.';
+    }
 
     // Salvar as alterações no banco de dados
     $veiculo->save();
 
-    // Enviar e-mail apenas para usuários Premium
-    // if ($user->plano == "Premium" && $caminhoProc) {
-    //     Mail::to($user->email)->send(new SendEmailProcAtualizada($data, $caminhoProc));
-    // }
-
-    // Redirecionar com mensagem de sucesso
-    return redirect()->route('veiculos.edit', $id)->with('success', 'CRLV cadastrado com sucesso.');
-
+    // Retorna a mensagem personalizada de acordo com os arquivos enviados
+    return redirect()->route('veiculos.edit', $id)->with('success', implode(' ', $mensagens));
 }
+
+
 
 
 
@@ -1576,6 +1593,36 @@ public function destroyAtpve($id)
     return back()->with('success', 'Atpve excluída com sucesso.');
 }
 
+public function destroyProcAssinado($id)
+{
+    //dd($id);
+    $veiculo = Veiculo::findOrFail($id);
 
+    // Remove o arquivo do armazenamento, se necessário
+    if ($veiculo->arquivo_proc_assinado && Storage::exists($veiculo->arquivo_proc_assinado)) {
+        Storage::delete($veiculo->arquivo_proc_assinado);
+    }
+
+    // Remove o caminho do arquivo do banco de dados
+    $veiculo->update(['arquivo_proc_assinado' => 0, 'size_proc_pdf' => 0]);
+
+    return back()->with('success', 'Procuração excluída com sucesso.');
+}
+
+public function destroyAtpveAssinado($id)
+{
+    //dd($id);
+    $veiculo = Veiculo::findOrFail($id);
+
+    // Remove o arquivo do armazenamento, se necessário
+    if ($veiculo->arquivo_atpve_assinado && Storage::exists($veiculo->arquivo_atpve_assinado)) {
+        Storage::delete($veiculo->arquivo_atpve_assinado);
+    }
+
+    // Remove o caminho do arquivo do banco de dados
+    $veiculo->update(['arquivo_atpve_assinado' => 0, 'size_atpve_pdf' => 0]);
+
+    return back()->with('success', 'Solicitação de ATPVe excluída com sucesso.');
+}
 
 }

@@ -4,6 +4,12 @@
     </script>
 @endif
 
+@if(session('error'))
+    <script>
+        toastr.error("{{ session('error') }}");
+    </script>
+@endif
+
 
 <div class="row">
     <div class="col-sm-12">
@@ -110,7 +116,7 @@
                 </ul>
                 <div class="tab-content">
                     <div class="tab-pane show active" id="aboutme" role="tabpanel">
-                        <form>
+                        <form action="{{ route('veiculos.update', $veiculo->id)}}">
                             <h5 class="mb-4 text-uppercase"><i class="mdi mdi-file me-1"></i> Enviar documentos</h5>
                             <div class="row">
                                 @if ($veiculo->arquivo_doc === "0")
@@ -132,7 +138,7 @@
                                         <label for="firstname" class="form-label">ATPVe assinada</label>
                                         <input class="form-control" type="file" name="arquivo_atpve_assinado">
                                     </div>
-                                </div> <!-- end col -->
+                                </div>
                             </div> <!-- end row -->
                             @if ($veiculo->crv === "***")
                             <div class="row">
@@ -187,8 +193,8 @@
                                                                 event.preventDefault(); // Impede o envio do formulário inicialmente
                                                         
                                                                 Swal.fire({
-                                                                    title: 'Deseja excluir este documento?',
-                                                                    text: "Essa ação não pode ser desfeita!",
+                                                                    title: 'Atenção',
+                                                                    text: "Deseja excluir este documento?",
                                                                     icon: 'warning',
                                                                     showCancelButton: true,
                                                                     confirmButtonText: 'Sim, excluir!',
@@ -238,8 +244,8 @@
                                                                 event.preventDefault(); // Impede o envio do formulário inicialmente
                                                         
                                                                 Swal.fire({
-                                                                    title: 'Deseja excluir esta procuração?',
-                                                                    text: "Essa ação não pode ser desfeita!",
+                                                                    title: 'Atenção',
+                                                                    text: "Deseja excluir esta procuração?",
                                                                     icon: 'warning',
                                                                     showCancelButton: true,
                                                                     confirmButtonText: 'Sim, excluir!',
@@ -289,8 +295,8 @@
                                                                 event.preventDefault(); // Impede o envio do formulário inicialmente
                                                         
                                                                 Swal.fire({
-                                                                    title: 'Deseja excluir esta atpve?',
-                                                                    text: "Essa ação não pode ser desfeita!",
+                                                                    title: 'Atenção',
+                                                                    text: "Deseja excluir esta solicitação atpve?",
                                                                     icon: 'warning',
                                                                     showCancelButton: true,
                                                                     confirmButtonText: 'Sim, excluir!',
@@ -318,7 +324,7 @@
 
                                 @if (!empty($veiculo->arquivo_proc_assinado))
                                 <div class="col-xxl-3 col-lg-6">
-                                    <p class="text-muted mb-2 font-13"><strong>Procuração</strong></p>
+                                    <p class="text-muted mb-2 font-13"><strong>Procuração Assinada</strong></p>
                                     <div class="card m-1 shadow-none border">
                                         <div class="p-2">
                                             <div class="row align-items-center">
@@ -333,13 +339,42 @@
                                                     <a href="{{ $veiculo->arquivo_proc_assinado }}" target="_blank" class="text-muted fw-bold">Procuração</a>
                                                     <p class="mb-0 font-13">{{ number_format($veiculo->size_proc_pdf / 1024, 2, ',', '.') }} KB</p>
                                                 </div>
+                                                <div class="col-auto">
+                                                    <form action="{{ route('veiculos.excluir_proc_assinado', $veiculo->id) }}" method="POST" id="deleteProcAssinadoForm">
+                                                        @csrf
+                                                        @method('DELETE')
+                                                        <a href="#" class="text-secondary" id="deleteProcAssinadoIcon">
+                                                            <i class="mdi mdi-trash-can-outline"></i>
+                                                        </a>
+                                                    </form>
+                                                    <script>
+                                                        document.getElementById('deleteProcAssinadoIcon').addEventListener('click', function(event) {
+                                                            event.preventDefault(); // Impede o envio do formulário inicialmente
+                                                    
+                                                            Swal.fire({
+                                                                title: 'Atenção',
+                                                                text: "Deseja excluir esta procuração?",
+                                                                icon: 'warning',
+                                                                showCancelButton: true,
+                                                                confirmButtonText: 'Sim, excluir!',
+                                                                cancelButtonText: 'Cancelar',
+                                                            }).then((result) => {
+                                                                if (result.isConfirmed) {
+                                                                    document.getElementById('deleteProcAssinadoForm').submit(); // Envia o formulário se o usuário confirmar
+                                                                }
+                                                            });
+                                                        });
+                                                    </script>
+                                                </div>
                                             </div> <!-- end row -->
                                         </div> <!-- end .p-2-->
                                     </div> <!-- end col -->
                                 </div> <!-- end col-->
-                                @elseif (!empty($veiculo->arquivo_atpve_assinado))
+                                
+                                @endif
+                                @if (!empty($veiculo->arquivo_atpve_assinado))
                                 <div class="col-xxl-3 col-lg-6">
-                                    <p class="text-muted mb-2 font-13"><strong>ATPVe</strong></p>
+                                    <p class="text-muted mb-2 font-13"><strong>Solicitação de ATPVe Assinada</strong></p>
                                     <div class="card m-1 shadow-none border">
                                         <div class="p-2">
                                             <div class="row align-items-center">
@@ -354,11 +389,40 @@
                                                     <a href="{{ $veiculo->arquivo_atpve_assinado }}" target="_blank" class="text-muted fw-bold">ATPVe</a>
                                                     <p class="mb-0 font-13">{{ number_format($veiculo->size_atpve_pdf / 1024, 2, ',', '.') }} KB</p>
                                                 </div>
+                                                <div class="col-auto">
+                                                    <form action="{{ route('veiculos.excluir_atpve_assinado', $veiculo->id) }}" method="POST" id="deleteAtpveAssinadoForm">
+                                                        @csrf
+                                                        @method('DELETE')
+                                                        <a href="#" class="text-secondary" id="deleteAtpveAssinadoIcon">
+                                                            <i class="mdi mdi-trash-can-outline"></i>
+                                                        </a>
+                                                    </form>
+                                                    <script>
+                                                        document.getElementById('deleteAtpveAssinadoIcon').addEventListener('click', function(event) {
+                                                            event.preventDefault(); // Impede o envio do formulário inicialmente
+                                                    
+                                                            Swal.fire({
+                                                                title: 'Atenção',
+                                                                text: "Deseja excluir esta solicitação atpve?",
+                                                                icon: 'warning',
+                                                                showCancelButton: true,
+                                                                confirmButtonText: 'Sim, excluir!',
+                                                                cancelButtonText: 'Cancelar',
+                                                            }).then((result) => {
+                                                                if (result.isConfirmed) {
+                                                                    document.getElementById('deleteAtpveAssinadoForm').submit(); // Envia o formulário se o usuário confirmar
+                                                                }
+                                                            });
+                                                        });
+                                                    </script>
+                                                </div>
                                             </div> <!-- end row -->
                                         </div> <!-- end .p-2-->
                                     </div> <!-- end col -->
                                 </div> <!-- end col-->
-                                @else
+                                
+                                @endif
+                                @if(empty($veiculo->arquivo_atpve_assinado || $veiculo->arquivo_proc_assinado))
                                 <div class="alert alert-danger bg-transparent text-danger" role="alert">
                                     NENHUM RESULTADO ENCONTRADO!
                                 </div>

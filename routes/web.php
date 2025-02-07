@@ -181,6 +181,10 @@ Route::middleware(['auth'])->group(function () {
 
     // Route::post('/estoque', [EstoqueController::class, 'store'])->name('estoque.store');
     // Route::get('/estoque', [EstoqueController::class, 'index'])->name('estoque.index');
+    Route::delete('/veiculos/enviar_email/{id}', [VeiculoController::class, 'enviarEmail'])->name('veiculos.enviar_email');
+
+    Route::delete('/veiculos/excluir_atpve_assinado/{id}', [VeiculoController::class, 'destroyAtpveAssinado'])->name('veiculos.excluir_atpve_assinado');
+    Route::delete('/veiculos/excluir_proc_assinado/{id}', [VeiculoController::class, 'destroyProcAssinado'])->name('veiculos.excluir_proc_assinado');
     Route::delete('/veiculos/excluir_atpve/{id}', [VeiculoController::class, 'destroyAtpve'])->name('veiculos.excluir_atpve');
     Route::delete('/veiculos/excluir_proc/{id}', [VeiculoController::class, 'destroyProc'])->name('veiculos.excluir_proc');
     Route::delete('/veiculos/excluir_doc/{id}', [VeiculoController::class, 'destroyDoc'])->name('veiculos.excluir_doc');
