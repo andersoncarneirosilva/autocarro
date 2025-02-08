@@ -308,8 +308,8 @@ $partes = preg_split('/[\s\/]+/', $input);
 
 // Pega a primeira palavra (marca)
 $marca = strtoupper($partes[0]);
-$modelo = strtoupper($partes[1]);
 //dd($marca);
+$modelo = strtoupper($partes[1]);
 $nomeImagem = "storage/veiculos/" . strtolower($request['tipo']) . "/" . 
                 strtolower(str_replace(['/', ' '], '_', $marca)) . '_' .
                 strtolower(str_replace(['/', ' '], '_', $modelo)) . '_' .
@@ -359,26 +359,26 @@ $nomeImagem = "storage/veiculos/" . strtolower($request['tipo']) . "/" .
 
                 'arquivo_proc_assinado' => 0,
                 'size_atpve_pdf' => 0,
-
+                'status' => "Ativo",
                 'user_id' => $userId,
             ];
 
+            //dd($data);
+
             if ($user->plano == "Premium"){
-                Mail::to($user->email)->send(new SendEmailProc($data, $caminhoProc));
+               // Mail::to($user->email)->send(new SendEmailProc($data, $caminhoProc));
             }
             // Criar o registro no banco
             if ($this->model->create($data)) {
-                //SAVE PROC MANUAL
+                // SAVE PROC MANUAL
                 if ($user && ($user->plano == "Padrão" || $user->plano == "Pro" || $user->plano == "Teste")) {
                     $user->decrement('credito');
                 }
-                return back()->with('success', 'Veículo cadastrado com sucesso!');
-
-                return redirect()->route('veiculos.index');
+                return redirect()->route('veiculos.index')->with('success', 'Veículo cadastrado com sucesso!');
             } else {
-                alert()->error('Erro ao cadastrar a procuração.');
-                return back()->withErrors(['message' => 'Erro ao cadastrar a procuração.']);
+                return back()->with(['error' => 'Erro ao cadastrar a procuração.']);
             }
+            
     }
 
 
@@ -712,6 +712,7 @@ $data = [
     'arquivo_proc' => $urlProc,
     'size_proc' => $sizeProc,
     'image' => $nomeImagem,
+    'status' => "Ativo",
     'user_id' => $userId,
 ];
 
