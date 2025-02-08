@@ -153,7 +153,7 @@
                         <tbody>
                             @foreach ($veiculos as $doc)
                                 <tr>
-                                    <td><a href="{{ route('veiculos.edit', $doc->id) }}" title="Visualizar" style="text-decoration: none;" class="">
+                                    <td><a href="{{ route('veiculos.show', $doc->id) }}" title="Visualizar" style="text-decoration: none;" class="">
                                             <i class="mdi mdi-eye"></i>
                                         </a>
                                     </td>

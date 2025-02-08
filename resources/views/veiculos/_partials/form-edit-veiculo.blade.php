@@ -31,12 +31,17 @@
 
                                     <ul class="mb-0 list-inline text-light">
                                         <li class="list-inline-item me-3">
-                                            <h5 class="mb-1 text-white">Cor</h5>
-                                            <p class="mb-0 font-13 text-white-50">{{ $veiculo->cor }}</p>
+                                            <h5 class="mb-1 text-white">Placa</h5>
+                                            <p class="mb-0 font-13 text-white-50">{{ $veiculo->placa }}</p>
+                                            
                                         </li>
                                         <li class="list-inline-item">
                                             <h5 class="mb-1 text-white">Ano</h5>
                                             <p class="mb-0 font-13 text-white-50">{{ $veiculo->ano }}</p>
+                                        </li>
+                                        <li class="list-inline-item">
+                                            <h5 class="mb-1 text-white">Cor</h5>
+                                            <p class="mb-0 font-13 text-white-50">{{ $veiculo->cor }}</p>
                                         </li>
                                     </ul>
                                 </div>
@@ -66,36 +71,162 @@
                 <img src="/storage/{{ $veiculo->image }}" class="rounded-circle avatar-lg img-thumbnail" alt="user-image">
                 @else
                     <img src="{{ url('assets/img/icon_user.png') }}" class="rounded-circle avatar-lg img-thumbnail" alt="user-image">
-                @endif--}}
-
+                @endif --}}
+            
                 {{-- <h4 class="mb-0 mt-2">{{ $veiculo->marca }}</h4> --}}
+            
+                <div class="row">
+                    @if (!empty($veiculo->arquivo_doc))
+                        <div class="col-12" style="text-align: left;">
+                            <p class="text-muted mb-2 font-13"><strong>DOCUMENTOS GERADOS</strong></p>
+                            <div class="shadow-none border rounded p-2">
+                                <div class="row align-items-center">
+                                    <div class="col-auto">
+                                        <div class="avatar-sm">
+                                            <span class="avatar-title bg-light text-reset rounded">
+                                                <i class="mdi mdi-file-pdf-box font-24"></i>
+                                            </span>
+                                        </div>
+                                    </div>
+                                    <div class="col ps-0" style="text-align: left;">
+                                        <a href="{{ $veiculo->arquivo_doc }}" target="_blank" class="text-muted fw-bold">CRLV</a>
+                                        <p class="mb-0 font-13">{{ number_format($veiculo->size_doc / 1024, 2, ',', '.') }} KB</p>
+                                    </div>
+                                    <div class="col-auto">
+                                        <form action="{{ route('veiculos.excluir_doc', $veiculo->id) }}" method="POST" id="deleteForm">
+                                            @csrf
+                                            @method('DELETE')
+                                            <a href="#" class="text-secondary font-20" id="deleteIcon">
+                                                <i class="mdi mdi-trash-can-outline"></i>
+                                            </a>
+                                        </form>
+                                        <script>
+                                            document.getElementById('deleteIcon').addEventListener('click', function(event) {
+                                                event.preventDefault(); // Impede o envio do formulário inicialmente
+                                            
+                                                Swal.fire({
+                                                    title: 'Atenção',
+                                                    text: "Deseja excluir este documento?",
+                                                    icon: 'warning',
+                                                    showCancelButton: true,
+                                                    confirmButtonText: 'Sim, excluir!',
+                                                    cancelButtonText: 'Cancelar',
+                                                }).then((result) => {
+                                                    if (result.isConfirmed) {
+                                                        document.getElementById('deleteForm').submit(); // Envia o formulário se o usuário confirmar
+                                                    }
+                                                });
+                                            });
+                                        </script>
+                                    </div>
+                                </div> <!-- end row -->
+                            </div> <!-- end shadow-none border rounded -->
+                        </div> <!-- end col-12 -->
+                    @endif
+                </div> <!-- end row -->
+                <br>
+                <div class="row">
+                    @if (!empty($veiculo->arquivo_proc))
+                        <div class="col-12">
+                            <div class="shadow-none border rounded p-2">
+                                <div class="row align-items-center">
+                                    <div class="col-auto">
+                                        <div class="avatar-sm">
+                                            <span class="avatar-title bg-light text-reset rounded">
+                                                <i class="mdi mdi-file-pdf-box font-24"></i>
+                                            </span>
+                                        </div>
+                                    </div>
+                                    <div class="col ps-0" style="text-align: left;">
+                                        <a href="{{ $veiculo->arquivo_proc }}" target="_blank" class="text-muted fw-bold">Procuração</a>
+                                        <p class="mb-0 font-13">{{ number_format($veiculo->size_proc / 1024, 2, ',', '.') }} KB</p>
+                                    </div>
+                                    <div class="col-auto">
+                                        <form action="{{ route('veiculos.excluir_proc', $veiculo->id) }}" method="POST" id="deleteProcForm">
+                                            @csrf
+                                            @method('DELETE')
+                                            <a href="#" class="text-secondary font-20" id="deleteProcIcon">
+                                                <i class="mdi mdi-trash-can-outline"></i>
+                                            </a>
+                                        </form>
+                                        <script>
+                                            document.getElementById('deleteProcIcon').addEventListener('click', function(event) {
+                                                event.preventDefault(); // Impede o envio do formulário inicialmente
+                                            
+                                                Swal.fire({
+                                                    title: 'Atenção',
+                                                    text: "Deseja excluir esta procuração?",
+                                                    icon: 'warning',
+                                                    showCancelButton: true,
+                                                    confirmButtonText: 'Sim, excluir!',
+                                                    cancelButtonText: 'Cancelar',
+                                                }).then((result) => {
+                                                    if (result.isConfirmed) {
+                                                        document.getElementById('deleteProcForm').submit(); // Envia o formulário se o usuário confirmar
+                                                    }
+                                                });
+                                            });
+                                        </script>
+                                    </div>
+                                </div> <!-- end row -->
+                            </div> <!-- end shadow-none border rounded -->
+                        </div> <!-- end col-12 -->
+                    @endif
+                </div> <!-- end row -->
+                <br>
+                <div class="row">
+                    @if (!empty($veiculo->arquivo_atpve))
+                        <div class="col-12">
+                            <div class="shadow-none border rounded p-2">
+                                <div class="row align-items-center">
+                                    <div class="col-auto">
+                                        <div class="avatar-sm">
+                                            <span class="avatar-title bg-light text-reset rounded">
+                                                <i class="mdi mdi-file-pdf-box font-24"></i>
+                                            </span>
+                                        </div>
+                                    </div>
+                                    <div class="col ps-0" style="text-align: left;">
+                                        <a href="{{ $veiculo->arquivo_atpve }}" target="_blank" class="text-muted fw-bold">ATPVe</a>
+                                        <p class="mb-0 font-13">{{ number_format($veiculo->size_atpve / 1024, 2, ',', '.') }} KB</p>
+                                    </div>
+                                    <div class="col-auto">
+                                        <form action="{{ route('veiculos.excluir_atpve', $veiculo->id) }}" method="POST" id="deleteAtpveForm">
+                                            @csrf
+                                            @method('DELETE')
+                                            <a href="#" class="text-secondary font-20" id="deleteAtpveIcon">
+                                                <i class="mdi mdi-trash-can-outline"></i>
+                                            </a>
+                                        </form>
+                                        <script>
+                                            document.getElementById('deleteAtpveIcon').addEventListener('click', function(event) {
+                                                event.preventDefault(); // Impede o envio do formulário inicialmente
+                                            
+                                                Swal.fire({
+                                                    title: 'Atenção',
+                                                    text: "Deseja excluir esta solicitação ATPVe?",
+                                                    icon: 'warning',
+                                                    showCancelButton: true,
+                                                    confirmButtonText: 'Sim, excluir!',
+                                                    cancelButtonText: 'Cancelar',
+                                                }).then((result) => {
+                                                    if (result.isConfirmed) {
+                                                        document.getElementById('deleteAtpveForm').submit(); // Envia o formulário se o usuário confirmar
+                                                    }
+                                                });
+                                            });
+                                        </script>
+                                    </div>
+                                </div> <!-- end row -->
+                            </div> <!-- end shadow-none border rounded -->
+                        </div> <!-- end col-12 -->
+                    @endif
 
-                <div class="text-start mt-3">
-                    <p class="text-muted mb-2 font-13"><strong>Informações do veículo</strong></p>
-                    <hr>
-                    <p class="text-muted mb-2 font-13"><strong>Placa:</strong><span class="ms-2">{{ $veiculo->placa }}</span></p>
-
-                    <p class="text-muted mb-2 font-13"><strong>Cor:</strong><span class="ms-2 ">{{ $veiculo->cor }}</span></p>
-
-                    <p class="text-muted mb-2 font-13"><strong>Ano/Modelo:</strong><span class="ms-2">{{ $veiculo->ano }}</span></p>
-
-                    {{-- <p class="text-muted mb-2 font-13"><strong>Chassi:</strong><span class="ms-2">{{ $veiculo->chassi }}</span></p>
-
-                    <p class="text-muted mb-2 font-13"><strong>Renavam:</strong><span class="ms-2">{{ $veiculo->renavam }}</span></p>
-
-                    <p class="text-muted mb-2 font-13"><strong>Cidade:</strong><span class="ms-2">{{ $veiculo->cidade }}</span></p>
-
-                    <p class="text-muted mb-2 font-13"><strong>CRV:</strong><span class="ms-2">{{ $veiculo->crv }}</span></p>
-
-                    <p class="text-muted mb-2 font-13"><strong>Categoria:</strong><span class="ms-2">{{ $veiculo->categoria }}</span></p>
-
-                    <p class="text-muted mb-2 font-13"><strong>Motor:</strong><span class="ms-2">{{ $veiculo->motor }}</span></p>
-
-                    <p class="text-muted mb-2 font-13"><strong>Combustível:</strong><span class="ms-2">{{ $veiculo->combustivel }}</span></p>
-
-                    <p class="text-muted mb-2 font-13"><strong>Observações:</strong><span class="ms-2">{{ $veiculo->infos }}</span></p> --}}
                 </div>
-            </div> 
+                <br>
+
+            </div> <!-- end card-body -->
+             
         </div> 
     </div>
     
@@ -116,7 +247,7 @@
                 </ul>
                 <div class="tab-content">
                     <div class="tab-pane show active" id="aboutme" role="tabpanel">
-                        <form action="{{ route('veiculos.update', $veiculo->id)}}">
+                        <form action="{{ route('veiculos.update', $veiculo->id)}}" method="POST">
                             <h5 class="mb-4 text-uppercase"><i class="mdi mdi-file me-1"></i> Enviar documentos</h5>
                             <div class="row">
                                 @if ($veiculo->arquivo_doc === "0")
@@ -154,7 +285,7 @@
                                 <a href="{{ route('veiculos.index')}}" class="btn btn-secondary btn-sm">Voltar</a>
                                 <button type="submit" class="btn btn-success btn-sm">Enviar</button>
                             </div>
-                        </form>
+                        
                     </div> <!-- end tab-pane -->
                     <!-- end about me section content -->
 
@@ -163,158 +294,11 @@
                             <h5 class="mb-3 text-uppercase"><i class="mdi mdi-file-document-outline me-1"></i> Documentos gerados</h5>
                             <div class="row mx-n1 g-0">
 
-                                @if (!empty($veiculo->arquivo_doc))
-                                    <div class="col-xxl-3 col-lg-6">
-                                        <p class="text-muted mb-2 font-13"><strong>CRLV</strong></p>
-                                        <div class="card m-1 shadow-none border">
-                                            <div class="p-2">
-                                                <div class="row align-items-center">
-                                                    <div class="col-auto">
-                                                        <div class="avatar-sm">
-                                                            <span class="avatar-title bg-light text-reset rounded">
-                                                                <i class="mdi mdi-file-pdf-box font-24"></i>
-                                                            </span>
-                                                        </div>
-                                                    </div>
-                                                    <div class="col ps-0">
-                                                        <a href="{{ $veiculo->arquivo_doc }}" target="_blank" class="text-muted fw-bold">CRLV</a>
-                                                        <p class="mb-0 font-13">{{ number_format($veiculo->size_doc / 1024, 2, ',', '.') }} KB</p>
-                                                    </div>
-                                                    <div class="col-auto">
-                                                        <form action="{{ route('veiculos.excluir_doc', $veiculo->id) }}" method="POST" id="deleteForm">
-                                                            @csrf
-                                                            @method('DELETE')
-                                                            <a href="#" class="text-secondary" id="deleteIcon">
-                                                                <i class="mdi mdi-trash-can-outline"></i>
-                                                            </a>
-                                                        </form>
-                                                        <script>
-                                                            document.getElementById('deleteIcon').addEventListener('click', function(event) {
-                                                                event.preventDefault(); // Impede o envio do formulário inicialmente
-                                                        
-                                                                Swal.fire({
-                                                                    title: 'Atenção',
-                                                                    text: "Deseja excluir este documento?",
-                                                                    icon: 'warning',
-                                                                    showCancelButton: true,
-                                                                    confirmButtonText: 'Sim, excluir!',
-                                                                    cancelButtonText: 'Cancelar',
-                                                                }).then((result) => {
-                                                                    if (result.isConfirmed) {
-                                                                        document.getElementById('deleteForm').submit(); // Envia o formulário se o usuário confirmar
-                                                                    }
-                                                                });
-                                                            });
-                                                        </script>
-                                                    </div>
-                                                </div> <!-- end row -->
-                                            </div> <!-- end .p-2-->
-                                        </div> <!-- end col -->
-                                    </div> <!-- end col-->
-                                
-                                @endif
 
-                                @if (!empty($veiculo->arquivo_proc))
-                                    <div class="col-xxl-3 col-lg-6">
-                                        <p class="text-muted mb-2 font-13"><strong>Procuração</strong></p>
-                                        <div class="card m-1 shadow-none border">
-                                            <div class="p-2">
-                                                <div class="row align-items-center">
-                                                    <div class="col-auto">
-                                                        <div class="avatar-sm">
-                                                            <span class="avatar-title bg-light text-reset rounded">
-                                                                <i class="mdi mdi-file-pdf-box font-24"></i>
-                                                            </span>
-                                                        </div>
-                                                    </div>
-                                                    <div class="col ps-0">
-                                                        <a href="{{ $veiculo->arquivo_proc }}" target="_blank" class="text-muted fw-bold">Procuração</a>
-                                                        <p class="mb-0 font-13">{{ number_format($veiculo->size_proc / 1024, 2, ',', '.') }} KB</p>
-                                                    </div>
-                                                    <div class="col-auto">
-                                                        <form action="{{ route('veiculos.excluir_proc', $veiculo->id) }}" method="POST" id="deleteProcForm">
-                                                            @csrf
-                                                            @method('DELETE')
-                                                            <a href="#" class="text-secondary" id="deleteProcIcon">
-                                                                <i class="mdi mdi-trash-can-outline"></i>
-                                                            </a>
-                                                        </form>
-                                                        <script>
-                                                            document.getElementById('deleteProcIcon').addEventListener('click', function(event) {
-                                                                event.preventDefault(); // Impede o envio do formulário inicialmente
-                                                        
-                                                                Swal.fire({
-                                                                    title: 'Atenção',
-                                                                    text: "Deseja excluir esta procuração?",
-                                                                    icon: 'warning',
-                                                                    showCancelButton: true,
-                                                                    confirmButtonText: 'Sim, excluir!',
-                                                                    cancelButtonText: 'Cancelar',
-                                                                }).then((result) => {
-                                                                    if (result.isConfirmed) {
-                                                                        document.getElementById('deleteProcForm').submit(); // Envia o formulário se o usuário confirmar
-                                                                    }
-                                                                });
-                                                            });
-                                                        </script>
-                                                    </div>
-                                                </div> <!-- end row -->
-                                            </div> <!-- end .p-2-->
-                                        </div> <!-- end col -->
-                                    </div> <!-- end col-->
-                                
-                                @endif
 
-                                @if (!empty($veiculo->arquivo_atpve))
-                                    <div class="col-xxl-3 col-lg-6">
-                                        <p class="text-muted mb-2 font-13"><strong>ATPVe</strong></p>
-                                        <div class="card m-1 shadow-none border">
-                                            <div class="p-2">
-                                                <div class="row align-items-center">
-                                                    <div class="col-auto">
-                                                        <div class="avatar-sm">
-                                                            <span class="avatar-title bg-light text-reset rounded">
-                                                                <i class="mdi mdi-file-pdf-box font-24"></i>
-                                                            </span>
-                                                        </div>
-                                                    </div>
-                                                    <div class="col ps-0">
-                                                        <a href="{{ $veiculo->arquivo_atpve }}" target="_blank" class="text-muted fw-bold">ATPVe</a>
-                                                        <p class="mb-0 font-13">{{ number_format($veiculo->size_atpve / 1024, 2, ',', '.') }} KB</p>
-                                                    </div>
-                                                    <div class="col-auto">
-                                                        <form action="{{ route('veiculos.excluir_atpve', $veiculo->id) }}" method="POST" id="deleteAtpveForm">
-                                                            @csrf
-                                                            @method('DELETE')
-                                                            <a href="#" class="text-secondary" id="deleteAtpveIcon">
-                                                                <i class="mdi mdi-trash-can-outline"></i>
-                                                            </a>
-                                                        </form>
-                                                        <script>
-                                                            document.getElementById('deleteAtpveIcon').addEventListener('click', function(event) {
-                                                                event.preventDefault(); // Impede o envio do formulário inicialmente
-                                                        
-                                                                Swal.fire({
-                                                                    title: 'Atenção',
-                                                                    text: "Deseja excluir esta solicitação atpve?",
-                                                                    icon: 'warning',
-                                                                    showCancelButton: true,
-                                                                    confirmButtonText: 'Sim, excluir!',
-                                                                    cancelButtonText: 'Cancelar',
-                                                                }).then((result) => {
-                                                                    if (result.isConfirmed) {
-                                                                        document.getElementById('deleteAtpveForm').submit(); // Envia o formulário se o usuário confirmar
-                                                                    }
-                                                                });
-                                                            });
-                                                        </script>
-                                                    </div>
-                                                </div> <!-- end row -->
-                                            </div> <!-- end .p-2-->
-                                        </div> <!-- end col -->
-                                    </div> <!-- end col-->
                                 
-                                @endif
+
+                                
                             </div> <!-- end row-->
                         </div>
                         <hr>

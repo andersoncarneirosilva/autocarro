@@ -181,6 +181,12 @@ Route::middleware(['auth'])->group(function () {
 
     // Route::post('/estoque', [EstoqueController::class, 'store'])->name('estoque.store');
     // Route::get('/estoque', [EstoqueController::class, 'index'])->name('estoque.index');
+
+
+
+
+
+
     Route::delete('/veiculos/enviar_email/{id}', [VeiculoController::class, 'enviarEmail'])->name('veiculos.enviar_email');
 
     Route::delete('/veiculos/excluir_atpve_assinado/{id}', [VeiculoController::class, 'destroyAtpveAssinado'])->name('veiculos.excluir_atpve_assinado');
@@ -193,12 +199,12 @@ Route::middleware(['auth'])->group(function () {
     Route::post('/veiculos/store-atpve/{id}', [VeiculoController::class, 'storeAtpve'])->name('veiculos.store-atpve');
     //Route::get('/veiculos/create-atpve', [VeiculoController::class, 'createAtpve'])->name('veiculos.create-atpve');
     
-    Route::get('/veiculos/{id}/edit', [VeiculoController::class, 'edit'])->name('veiculos.edit');
     Route::put('/veiculos/desarquivar/{id}', [VeiculoController::class, 'desarquivar'])->name('veiculos.desarquivar');
     Route::put('/veiculos/arquivar/{id}', [VeiculoController::class, 'arquivar'])->name('veiculos.arquivar');
     Route::delete('/veiculos/{id}', [VeiculoController::class, 'destroy'])->name('veiculos.destroy');
-    Route::put('/veiculos/{id}', [VeiculoController::class, 'update'])->name('veiculos.update');
-    Route::get('/veiculos/{id}/edit', [VeiculoController::class, 'edit'])->name('veiculos.edit');
+    
+    Route::put('/veiculos/update/{id}', [VeiculoController::class, 'update'])->name('veiculos.update');
+    Route::get('/veiculos/edit/{id}', [VeiculoController::class, 'edit'])->name('veiculos.edit');
     Route::get('/veiculos', [VeiculoController::class, 'index'])->name('veiculos.index');
     Route::get('/veiculos/arquivados', [VeiculoController::class, 'indexArquivados'])->name('veiculos.arquivados');
     Route::get('/veiculos/create-proc-manual', [VeiculoController::class, 'createProcManual'])->name('veiculos.create-proc-manual');
@@ -206,7 +212,16 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/veiculos/create', [VeiculoController::class, 'create'])->name('veiculos.create');
     Route::post('/veiculos/store-proc-manual', [VeiculoController::class, 'storeProcManual'])->name('veiculos.store-proc-manual');
     Route::post('/veiculos', [VeiculoController::class, 'store'])->name('veiculos.store');
-    Route::get('/veiculos/{id}', [VeiculoController::class, 'show'])->name('veiculos.show');
+    Route::get('/veiculos/show/{id}', [VeiculoController::class, 'show'])->name('veiculos.show');
+
+
+
+
+
+
+
+
+
 
     Route::get('/modeloprocs/{id}', [ModeloProcuracoesController::class, 'show'])->name('modeloprocs.show');
     Route::put('/modeloprocs/{id}', [ModeloProcuracoesController::class, 'update'])->name('modeloprocs.update');

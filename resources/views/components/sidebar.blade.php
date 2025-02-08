@@ -55,6 +55,7 @@
             <li class="side-nav-item">
                 <a href="{{ route('veiculos.arquivados') }}/" class="side-nav-link">
                     <i class="uil-car-slash"></i>
+                    <span class="badge bg-danger text-white float-end">Novo</span>
                     <span> Arquivados </span>
                 </a>
             </li>
@@ -105,13 +106,12 @@
                 </a>
             </li>
             
-            <li class="side-nav-item">
+            {{-- <li class="side-nav-item">
                 <a href="{{ route('calendar.index') }}" class="side-nav-link">
                     <i class="uil-calender"></i>
-                    {{-- <span class="badge bg-danger text-white float-end">Novo</span> --}}
                     <span> Calendário </span>
                 </a>
-            </li>
+            </li> --}}
 
             {{-- @endcan --}}
             <li class="side-nav-item">

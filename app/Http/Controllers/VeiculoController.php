@@ -717,7 +717,7 @@ $data = [
 ];
 
     if ($user->plano == "Premium"){
-        Mail::to($user->email)->send(new SendEmailProc($data, $caminhoProc));
+        //Mail::to($user->email)->send(new SendEmailProc($data, $caminhoProc));
     }
         
 
@@ -1089,7 +1089,7 @@ $data = [
 ];
 
 if ($user->plano == "Premium"){
-    Mail::to($user->email)->send(new SendEmailProc($data, $caminhoProc));
+    //Mail::to($user->email)->send(new SendEmailProc($data, $caminhoProc));
 }
 
 $veiculo = Veiculo::find($id);
@@ -1480,7 +1480,7 @@ $data = [
 
 
     if ($user->plano == "Premium"){
-        Mail::to($user->email)->send(new SendEmailAtpve($data, $fileAbsolutePath));
+        //Mail::to($user->email)->send(new SendEmailAtpve($data, $fileAbsolutePath));
     }
 
     $record = $this->model->findOrFail($id);
@@ -1498,21 +1498,18 @@ function desenharSublinhado($pdf, $x, $y, $texto, $largura) {
 }
 
 public function show($id){
-    if(!$user = $this->model->find($id)){
-        return redirect()->route('users.index');
+    //dd($id);
+    if(!$veiculo = $this->model->find($id)){
+        return redirect()->route('veiculos.index');
     }
 
-    $title = 'Excluir!';
-    $text = "Deseja excluir esse usuário?";
-    confirmDelete($title, $text);
-    
-    return view('veiculos.show', compact('user'));
+    return view('veiculos.show', compact('veiculo'));
 }
 
 public function edit($id){
         
     if(!$veiculo = $this->model->find($id)){
-        return redirect()->route('users.index');
+        return redirect()->route('veiculos.index');
     }
 
     return view('veiculos.edit', compact('veiculo'));
@@ -1520,6 +1517,7 @@ public function edit($id){
 
 public function update(Request $request, $id)
 {
+    //dd($request);
     // Obtém o ID do usuário autenticado
     $userId = Auth::id();
     $user = User::find($userId);
@@ -1567,7 +1565,7 @@ public function update(Request $request, $id)
     $veiculo->save();
 
     // Retorna a mensagem personalizada de acordo com os arquivos enviados
-    return redirect()->route('veiculos.edit', $id)->with('success', implode(' ', $mensagens));
+    return redirect()->route('veiculos.show', $id)->with('success', implode(' ', $mensagens));
 }
 
 

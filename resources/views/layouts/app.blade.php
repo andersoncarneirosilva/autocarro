@@ -6,6 +6,11 @@
         <meta charset="utf-8" />
         <title>@yield('title')</title>
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        
+        <meta name="keywords" content="Gerenciamento de documentação, veículos, Procuração, CRLV, Solicitação de ATPVe, documentos veiculares">
+        <meta name="description" content="Gerenciamento de documentação de veículos. Procuração, CRLV, solicitação de ATPVe e muito mais.">
+        
+
         <!-- App favicon -->
         <meta name="csrf-token" content="{{ csrf_token() }}">
 
