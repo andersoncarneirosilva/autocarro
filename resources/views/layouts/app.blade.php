@@ -136,7 +136,7 @@
 
     <body>
         <!-- Pre-loader -->
-        <div id="preloader">
+        {{-- <div id="preloader">
             <div id="status">
               <div class="bouncing-loader">
                 <div>P</div>
@@ -145,7 +145,7 @@
                 <div>C</div>
               </div>
             </div>
-          </div>
+          </div> --}}
           
     <!-- End Preloader-->
         <!-- Begin page -->
