@@ -16943,32 +16943,47 @@ html[data-theme=dark] .text-secondary {
   }
 }
 .bouncing-loader {
-  display: -webkit-box;
-  display: -ms-flexbox;
   display: flex;
-  -webkit-box-pack: center;
-      -ms-flex-pack: center;
-          justify-content: center;
+  justify-content: center;
+  font-size: 20px;
+  font-weight: bold;
+  font-family: Arial, sans-serif;
 }
+
 .bouncing-loader > div {
-  width: 13px;
-  height: 13px;
-  margin: 32px 3px;
-  background: var(--ct-primary);
-  border-radius: 50%;
-  -webkit-animation: bouncing-loader 0.6s infinite alternate;
-          animation: bouncing-loader 0.6s infinite alternate;
+  margin: 32px 5px;
+  animation: bouncing-loader 0.6s infinite alternate;
 }
+
+.bouncing-loader > div:nth-child(1) {
+  animation-delay: 0s;
+  color: #313a46;
+}
+
 .bouncing-loader > div:nth-child(2) {
-  -webkit-animation-delay: 0.2s;
-          animation-delay: 0.2s;
-  background: #fa5c7c;
+  animation-delay: 0.2s;
+  color: #313a46;
 }
+
 .bouncing-loader > div:nth-child(3) {
-  -webkit-animation-delay: 0.4s;
-          animation-delay: 0.4s;
-  background: #0acf97;
+  animation-delay: 0.4s;
+  color: #313a46;
 }
+
+.bouncing-loader > div:nth-child(4) {
+  animation-delay: 0.6s;
+  color: #313a46;
+}
+
+@keyframes bouncing-loader {
+  from {
+    transform: translateY(0);
+  }
+  to {
+    transform: translateY(-10px);
+  }
+}
+
 
 .hero-section {
   position: relative;

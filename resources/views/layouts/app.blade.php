@@ -134,15 +134,17 @@
 
     <body>
         <!-- Pre-loader -->
-    <div id="preloader">
-        <div id="status">
-            <div class="bouncing-loader">
-                <div></div>
-                <div></div>
-                <div></div>
+        <div id="preloader">
+            <div id="status">
+              <div class="bouncing-loader">
+                <div>P</div>
+                <div>R</div>
+                <div>O</div>
+                <div>C</div>
+              </div>
             </div>
-        </div>
-    </div>
+          </div>
+          
     <!-- End Preloader-->
         <!-- Begin page -->
         <div class="wrapper">
