@@ -24,7 +24,9 @@
 <script src="https://cdn.jsdelivr.net/npm/choices.js/public/assets/scripts/choices.min.js"></script>
 
         <!-- App css -->
-        <link href="{{ url('assets/css/app-saas.css') }}" rel="stylesheet" type="text/css" id="app-style" />
+        
+        <link rel="stylesheet" href="{{ asset('css/style.css') }}?v={{ time() }}">
+
         <script src="https://cdn.jsdelivr.net/npm/apexcharts@3.41.0"></script>
 
         <!-- Icons css -->
