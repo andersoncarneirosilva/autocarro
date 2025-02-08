@@ -51,7 +51,24 @@
                     <span> Veículos </span>
                 </a>
             </li>
-            
+
+            {{-- <li class="side-nav-item">
+                <a data-bs-toggle="collapse" href="#sidebarCar" aria-expanded="false" aria-controls="sidebarLayouts" class="side-nav-link">
+                    <i class="uil-cog"></i>
+                    <span> Veículos </span>
+                    <span class="menu-arrow"></span>
+                </a>
+                <div class="collapse" id="sidebarCar">
+                    <ul class="side-nav-second-level">
+                        <li>
+                            <a href="{{ route('veiculos.index') }}">Listagem</a>
+                        </li>
+                        <li>
+                            <a href="{{ route('veiculos.arquivados') }}">Arquivados</a>
+                        </li>
+                    </ul>
+                </div>
+            </li> --}}
             {{-- @can('access-admin')
             <li class="side-nav-item">
                 <a href="{{ route('documentos.index') }}" class="side-nav-link">

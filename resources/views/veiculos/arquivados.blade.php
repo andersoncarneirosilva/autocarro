@@ -29,10 +29,10 @@
             <div class="page-title-right">
                 <ol class="breadcrumb m-0">
                     <li class="breadcrumb-item"><a href="{{ route('dashboard.index') }}">Dashboard</a></li>
-                    <li class="breadcrumb-item active">Veículos</li>
+                    <li class="breadcrumb-item active">Veículos arquivados</li>
                 </ol>
             </div>
-            <h3 class="page-title">Veículos 
+            <h3 class="page-title">Veículos arquivados
                 {{-- <button type="button" 
                     class="btn btn-warning btn-sm opacity-75 text-dark" 
                     data-bs-toggle="modal" 
@@ -67,7 +67,7 @@
         <div class="row">
             <div class="col-sm-12">
                 <div class="card-header d-flex justify-content-between align-items-center">
-                    <h4 class="header-title">Veículos cadastrados</h4>
+                    <h4 class="header-title">Cadastros arquivados</h4>
                     <div class="dropdown">
                         @php
                             $isPremium = auth()->user()->plano == "Premium";
@@ -192,62 +192,12 @@
                                             </button>
                                             <div class="dropdown-menu dropdown-menu-animated dropdown-menu-end">
 
-                                                <a href="{{ route('veiculos.edit', $doc->id) }}" class="dropdown-item">Editar</a>
-
-                                                {{-- <a href="{{ $doc->arquivo_doc }}" 
-                                                    class="dropdown-item {{ $doc->arquivo_doc === 'Não consta' ? 'disabled' : '' }}"
-                                                    target="_blank">
-                                                    Baixar CRLV
-                                                </a>
-                                                <a href="{{ $doc->arquivo_proc }}" 
-                                                    class="dropdown-item"
-                                                    target="_blank">
-                                                    Baixar Procuração
-                                                </a>
-                                                @if(!empty($doc->arquivo_atpve))
-                                                    <a href="{{ $doc->arquivo_atpve }}" 
-                                                    class="dropdown-item" 
-                                                    target="_blank">
-                                                    Baixar ATPVe
-                                                    </a>
-                                                @else
-                                                    <a href="#" 
-                                                    class="dropdown-item disabled" 
-                                                    tabindex="-1" 
-                                                    aria-disabled="true">
-                                                    Baixar ATPVe
-                                                    </a>
-                                                @endif
-                                                "v=DMARC1; p=reject; sp=reject; adkim=s; aspf=s;"
-                                                 --}}
                                                 
-                                                <a href="{{ $doc->arquivo_proc }}" 
-                                                    class="dropdown-item"
-                                                    target="_blank">
-                                                    Baixar Procuração
-                                                </a>
-                                                <a href="{{ $doc->arquivo_atpve ?? '#' }}" 
-                                                    class="dropdown-item {{ empty($doc->arquivo_atpve) ? 'disabled' : '' }}" 
-                                                    target="_blank">
-                                                     Baixar ATPVe
-                                                 </a>
-                                                 
-                                                <a href="javascript:void(0);"
-                                                    class="dropdown-item"
-                                                    onclick="openProcModal(event, {{ $doc->id }})">
-                                                    Gerar procuração
-                                                </a>
-
-                                                <a href="javascript:void(0);"
-                                                    class="dropdown-item {{ $doc->crv === '***' ? 'disabled' : '' }}"
-                                                    onclick="{{ $doc->crv === '***' ? 'return false;' : "openAddressModal(event, $doc->id)" }}">
-                                                    Gerar Solicitação ATPVe
-                                                </a>
 
                                                 <a href="{{ route('veiculos.destroy', $doc->id) }}" 
                                                     data-confirm-delete="true"
                                                     class="dropdown-item">
-                                                    Arquivar
+                                                    Excluir
                                                 </a>
 
                                             </div>

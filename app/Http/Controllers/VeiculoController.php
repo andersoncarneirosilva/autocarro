@@ -69,6 +69,42 @@ class VeiculoController extends Controller
         return view('veiculos.index', compact(['clientes', 'usedSpaceInMB', 'percentUsed', 'outorgados', 'limitInMB', 'veiculos', 'modeloProc']));
     }
 
+    public function indexArquivados(Request $request){
+
+        //abort(419);
+
+        $title = 'Excluir!';
+        $text = "Deseja excluir esse veículo?";
+        confirmDelete($title, $text);
+        
+        $userId = Auth::id();
+        
+        $outorgados = Outorgado::where('user_id', $userId)->get();
+
+        $clientes = Cliente::where('user_id', $userId)->get();
+        $veiculos = $this->model->getSearch($request->search, $userId);
+        $modeloProc = ModeloProcuracoes::exists();
+        $path = storage_path('app/public/documentos/usuario_' . auth()->id());
+
+        // Função para calcular o tamanho total da pasta
+        function getFolderSize($folder)
+        {
+            $size = 0;
+            foreach (glob(rtrim($folder, '/') . '/*', GLOB_NOSORT) as $file) {
+                $size += is_file($file) ? filesize($file) : getFolderSize($file);
+            }
+            return $size;
+        }
+
+        // Calcular o tamanho usado na pasta
+        $usedSpaceInBytes = getFolderSize($path);
+        $usedSpaceInMB = $usedSpaceInBytes / (1024 * 1024); // Converter para MB
+        $limitInMB = 1; // Limite de 1 MB
+        $percentUsed = ($usedSpaceInMB / $limitInMB) * 100; // Percentual usado
+
+        return view('veiculos.arquivados', compact(['clientes', 'usedSpaceInMB', 'percentUsed', 'outorgados', 'limitInMB', 'veiculos', 'modeloProc']));
+    }
+
     public function create(){
         return view('veiculos.create');
     }

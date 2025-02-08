@@ -198,6 +198,7 @@ Route::middleware(['auth'])->group(function () {
     Route::put('/veiculos/{id}', [VeiculoController::class, 'update'])->name('veiculos.update');
     Route::get('/veiculos/{id}/edit', [VeiculoController::class, 'edit'])->name('veiculos.edit');
     Route::get('/veiculos', [VeiculoController::class, 'index'])->name('veiculos.index');
+    Route::get('/veiculos/arquivados', [VeiculoController::class, 'indexArquivados'])->name('veiculos.arquivados');
     Route::get('/veiculos/create-proc-manual', [VeiculoController::class, 'createProcManual'])->name('veiculos.create-proc-manual');
     
     Route::get('/veiculos/create', [VeiculoController::class, 'create'])->name('veiculos.create');
