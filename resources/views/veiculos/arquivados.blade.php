@@ -66,80 +66,12 @@
     <div class="card-body">
         <div class="row">
             <div class="col-sm-12">
-                <div class="card-header d-flex justify-content-between align-items-center">
-                    <h4 class="header-title">Cadastros arquivados</h4>
-                    <div class="dropdown">
-                        @php
-                            $isPremium = auth()->user()->plano == "Premium";
-                            $isBasicOrIntermediate = in_array(auth()->user()->plano, ["Padrão", "Pro", "Teste"]);
-                            $isButtonDisabled = ($isPremium && $percentUsed > 1000) || 
-                                                ($isBasicOrIntermediate && (auth()->user()->credito < 1 || $percentUsed > 100));
-                        @endphp
 
-                        <div class="dropdown btn-group">
-                            <button class="btn btn-primary btn-sm dropdown-toggle" 
-                                    type="button" 
-                                    data-bs-toggle="dropdown" 
-                                    aria-haspopup="true" 
-                                    aria-expanded="false" 
-                                    @if($isButtonDisabled) disabled @endif>
-                                Cadastrar
-                            </button>
-                            <div class="dropdown-menu dropdown-menu-animated dropdown-menu-end">
-                                <a href="#" data-bs-toggle="modal" data-bs-target="#standard-modal" class="dropdown-item">
-                                    Cadastro automático
-                                </a>
-                                <a href="{{ route('veiculos.create-proc-manual') }}" class="dropdown-item">
-                                    Cadastro manual
-                                </a>
-                            </div>
-                        </div>
-
-                        {{-- @if(auth()->user()->plano == "Premium")
-                        <div class="dropdown btn-group">
-                            <button class="btn btn-primary btn-sm dropdown-toggle" 
-                                    type="button" 
-                                    data-bs-toggle="dropdown" 
-                                    aria-haspopup="true" 
-                                    aria-expanded="false" 
-                                    @if($percentUsed > 100) disabled @endif>
-                                Cadastrar
-                            </button>
-                            <div class="dropdown-menu dropdown-menu-animated dropdown-menu-end">
-                                <a href="#" data-bs-toggle="modal" data-bs-target="#standard-modal" class="dropdown-item">
-                                    Cadastro automático
-                                </a>
-                            <a href="{{ route('veiculos.create-proc-manual')}}" class="dropdown-item">Cadastro manual</a>
-                            </div>
-                        </div>
-                        @endif
-                        @if(auth()->user()->plano == "Básico" || auth()->user()->plano == "Intermediário" || auth()->user()->credito < 0)
-                        <div class="dropdown btn-group">
-                            <button class="btn btn-primary btn-sm dropdown-toggle" 
-                                    type="button" 
-                                    data-bs-toggle="dropdown" 
-                                    aria-haspopup="true" 
-                                    aria-expanded="false" 
-                                    @if($percentUsed > 100) disabled @endif>
-                                Cadastrar
-                            </button>
-                            <div class="dropdown-menu dropdown-menu-animated dropdown-menu-end">
-                                <a href="#" data-bs-toggle="modal" data-bs-target="#standard-modal" class="dropdown-item">
-                                    Cadastro automático
-                                </a>
-                            <a href="{{ route('veiculos.create-proc-manual')}}" class="dropdown-item">Cadastro manual</a>
-                            </div>
-                        </div>
-                        @endif --}}
-
-                    </div>
-                </div>
                 @if ($veiculos->total() != 0)
                 <div class="table-responsive-sm">
                     <table class="table table-hover table-centered mb-0">
                         <thead class="table-dark">
                             <tr>
-                                <th>Ver</th>
                                 <th>Placa</th>
                                 <th>Veículo</th>
                                 <th>Ano/Modelo</th>
@@ -153,10 +85,7 @@
                         <tbody>
                             @foreach ($veiculos as $doc)
                                 <tr>
-                                    <td><a href="{{ route('veiculos.edit', $doc->id) }}" title="Visualizar" style="text-decoration: none;" class="">
-                                            <i class="mdi mdi-eye"></i>
-                                        </a>
-                                    </td>
+
                                     <td>{{ $doc->placa }}</td>
                                     <td>{{ $doc->marca }}</td>
                                     <td>{{ $doc->ano }}</td>
@@ -192,6 +121,30 @@
                                             </button>
                                             <div class="dropdown-menu dropdown-menu-animated dropdown-menu-end">
 
+                                                <form action="{{ route('veiculos.desarquivar', $doc->id) }}" method="POST" style="display: none;" id="form-desarquivar-{{ $doc->id }}">
+                                                    @csrf
+                                                    @method('PUT')
+                                                </form>
+                                                
+                                                <a href="#" onclick="confirmRestore({{ $doc->id }});" class="dropdown-item">
+                                                    Restaurar
+                                                </a>
+                                                
+                                                <script>
+                                                    function confirmRestore(id) {
+                                                        Swal.fire({
+                                                            title: "Restaurar!",
+                                                            text: "Deseja restaurar este veículo?",
+                                                            icon: "warning",
+                                                            showCancelButton: true,
+                                                            confirmButtonText: "Sim, restaurar!"
+                                                        }).then((result) => {
+                                                            if (result.isConfirmed) {
+                                                                document.getElementById('form-desarquivar-' + id).submit();
+                                                            }
+                                                        });
+                                                    }
+                                                </script>
                                                 
 
                                                 <a href="{{ route('veiculos.destroy', $doc->id) }}" 
@@ -223,13 +176,20 @@
         </div>
     </div>
     <div class="row">
-        {{ $veiculos->appends([
-            'search' => request()->get('search', '')
-        ])->links('components.pagination') }}
+        <!-- Mensagem de quantidade exibida -->
+        <div class="col-sm-12 col-md-5 d-flex align-items-center">
+            <p class="mb-0">Exibindo {{ $quantidadePaginaAtual }} de {{ $quantidadeTotal }} veículos cadastrados</p>
+        </div>
+    
+        <!-- Paginação alinhada à direita -->
+        <div class="col-sm-12 col-md-7 d-flex justify-content-end align-items-center">
+            {{ $veiculos->appends([
+                'search' => request()->get('search', '')
+            ])->links('components.pagination') }}
+        </div>
     </div>
                                                 
 
-</div>
 
 <div id="standard-modal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="standard-modalLabel"
 aria-hidden="true">

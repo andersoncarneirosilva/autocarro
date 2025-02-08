@@ -38,7 +38,7 @@ class VeiculoController extends Controller
         //abort(419);
 
         $title = 'Excluir!';
-        $text = "Deseja excluir esse veículo?";
+        $text = "Deseja arquivar esse veículo?";
         confirmDelete($title, $text);
         
         $userId = Auth::id();
@@ -46,7 +46,14 @@ class VeiculoController extends Controller
         $outorgados = Outorgado::where('user_id', $userId)->get();
 
         $clientes = Cliente::where('user_id', $userId)->get();
+
         $veiculos = $this->model->getSearch($request->search, $userId);
+        $quantidadePaginaAtual = $veiculos->count();
+        $quantidadeTotal = $this->model
+                            ->where('user_id', $userId)
+                            ->where('status', 'Ativo')
+                            ->count();
+
         $modeloProc = ModeloProcuracoes::exists();
         $path = storage_path('app/public/documentos/usuario_' . auth()->id());
 
@@ -66,7 +73,7 @@ class VeiculoController extends Controller
         $limitInMB = 1; // Limite de 1 MB
         $percentUsed = ($usedSpaceInMB / $limitInMB) * 100; // Percentual usado
 
-        return view('veiculos.index', compact(['clientes', 'usedSpaceInMB', 'percentUsed', 'outorgados', 'limitInMB', 'veiculos', 'modeloProc']));
+        return view('veiculos.index', compact(['clientes', 'usedSpaceInMB', 'percentUsed', 'outorgados', 'limitInMB', 'veiculos', 'modeloProc', 'quantidadePaginaAtual', 'quantidadeTotal']));
     }
 
     public function indexArquivados(Request $request){
@@ -82,7 +89,13 @@ class VeiculoController extends Controller
         $outorgados = Outorgado::where('user_id', $userId)->get();
 
         $clientes = Cliente::where('user_id', $userId)->get();
-        $veiculos = $this->model->getSearch($request->search, $userId);
+        $veiculos = $this->model->getSearchArquivados($request->search, $userId);
+        $quantidadePaginaAtual = $veiculos->count();
+        $quantidadeTotal = $this->model
+                            ->where('user_id', $userId)
+                            ->where('status', 'Arquivado')
+                            ->count();
+
         $modeloProc = ModeloProcuracoes::exists();
         $path = storage_path('app/public/documentos/usuario_' . auth()->id());
 
@@ -102,7 +115,15 @@ class VeiculoController extends Controller
         $limitInMB = 1; // Limite de 1 MB
         $percentUsed = ($usedSpaceInMB / $limitInMB) * 100; // Percentual usado
 
-        return view('veiculos.arquivados', compact(['clientes', 'usedSpaceInMB', 'percentUsed', 'outorgados', 'limitInMB', 'veiculos', 'modeloProc']));
+        return view('veiculos.arquivados', compact(['clientes', 
+                                                    'usedSpaceInMB', 
+                                                    'percentUsed', 
+                                                    'outorgados', 
+                                                    'limitInMB', 
+                                                    'veiculos', 
+                                                    'modeloProc',
+                                                    'quantidadePaginaAtual',
+                                                    'quantidadeTotal']));
     }
 
     public function create(){
@@ -738,6 +759,46 @@ $data = [
         return $texto;
     }
 
+    public function arquivar($id)
+{
+    $userId = Auth::id(); // Obtém o ID do usuário autenticado
+
+    // Busca o registro garantindo que pertença ao usuário logado
+    $veiculo = $this->model->where('id', $id)
+        ->where('user_id', $userId)
+        ->first();
+
+    // Verifica se o veículo foi encontrado
+    if (!$veiculo) {
+        return back()->with('error', 'Erro ao arquivar o veículo!');
+    }
+
+    // Atualiza o status para "Arquivado"
+    $veiculo->update(['status' => 'Arquivado']);
+
+    return back()->with('success', 'Veículo arquivado com sucesso!');
+}
+
+public function desarquivar($id)
+{
+    $userId = Auth::id(); // Obtém o ID do usuário autenticado
+
+    // Busca o registro garantindo que pertença ao usuário logado
+    $veiculo = $this->model->where('id', $id)
+        ->where('user_id', $userId)
+        ->first();
+
+    // Verifica se o veículo foi encontrado
+    if (!$veiculo) {
+        return back()->with('error', 'Erro ao restaurar o veículo!');
+    }
+
+    // Atualiza o status para "Arquivado"
+    $veiculo->update(['status' => 'Ativo']);
+
+    return back()->with('success', 'Veículo restaurado com sucesso!');
+}
+
 
     public function destroy($id)
 {
@@ -780,7 +841,7 @@ $data = [
     if ($doc->delete()) {
         return back()->with('success', 'Veículo excluído com sucesso!');
     } else {
-        return back()->with('success', 'Erro ao excluir o veículo!');
+        return back()->with('error', 'Erro ao excluir o veículo!');
     }
 
     return redirect()->route('veiculos.index');

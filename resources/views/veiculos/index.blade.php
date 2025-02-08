@@ -244,11 +244,38 @@
                                                     Gerar Solicitação ATPVe
                                                 </a>
 
-                                                <a href="{{ route('veiculos.destroy', $doc->id) }}" 
-                                                    data-confirm-delete="true"
-                                                    class="dropdown-item">
+                                                <!-- Formulário Oculto para Arquivar -->
+                                                <form action="{{ route('veiculos.arquivar', $doc->id) }}" method="POST" style="display: none;" id="form-arquivar-{{ $doc->id }}">
+                                                    @csrf
+                                                    @method('PUT')
+                                                </form>
+
+                                                <!-- Link para Arquivar com SweetAlert -->
+                                                <a href="#" onclick="confirmArchive({{ $doc->id }});" class="dropdown-item">
                                                     Arquivar
                                                 </a>
+
+                                                <!-- SweetAlert2 -->
+                                                <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+                                                <script>
+                                                    function confirmArchive(id) {
+                                                        Swal.fire({
+                                                            title: "Arquivar Veículo",
+                                                            text: "Tem certeza que deseja arquivar este veículo?",
+                                                            icon: "warning",
+                                                            showCancelButton: true,
+                                                            confirmButtonText: "Sim, arquivar!",
+                                                            cancelButtonText: "Cancelar"
+                                                        }).then((result) => {
+                                                            if (result.isConfirmed) {
+                                                                document.getElementById('form-arquivar-' + id).submit();
+                                                            }
+                                                        });
+                                                    }
+                                                </script>
+
+                                                
 
                                             </div>
                                         </div>
@@ -270,16 +297,34 @@
                     @endif
 
             </div>
+
+            <br><br>
+            
+
+
+        </div>
+        
+        
+
+    </div>
+    
+    <div class="row">
+        <!-- Mensagem de quantidade exibida -->
+        <div class="col-sm-12 col-md-5 d-flex align-items-center">
+            <p class="mb-0">Exibindo {{ $quantidadePaginaAtual }} de {{ $quantidadeTotal }} veículos cadastrados</p>
+        </div>
+    
+        <!-- Paginação alinhada à direita -->
+        <div class="col-sm-12 col-md-7 d-flex justify-content-end align-items-center">
+            {{ $veiculos->appends([
+                'search' => request()->get('search', '')
+            ])->links('components.pagination') }}
         </div>
     </div>
-    <div class="row">
-        {{ $veiculos->appends([
-            'search' => request()->get('search', '')
-        ])->links('components.pagination') }}
-    </div>
+    
+    
                                                 
 
-</div>
 
 <div id="standard-modal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="standard-modalLabel"
 aria-hidden="true">

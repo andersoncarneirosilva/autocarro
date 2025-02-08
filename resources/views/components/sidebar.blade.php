@@ -52,6 +52,13 @@
                 </a>
             </li>
 
+            <li class="side-nav-item">
+                <a href="{{ route('veiculos.arquivados') }}/" class="side-nav-link">
+                    <i class="uil-car-slash"></i>
+                    <span> Arquivados </span>
+                </a>
+            </li>
+
             {{-- <li class="side-nav-item">
                 <a data-bs-toggle="collapse" href="#sidebarCar" aria-expanded="false" aria-controls="sidebarLayouts" class="side-nav-link">
                     <i class="uil-cog"></i>
