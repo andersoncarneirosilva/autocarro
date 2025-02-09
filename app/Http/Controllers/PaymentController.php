@@ -157,7 +157,7 @@ public function handleNotification(Request $request)
     return response()->json(['status' => 'success']);
 }
 
-}
+
 
 
 
