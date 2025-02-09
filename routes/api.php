@@ -13,7 +13,7 @@ use App\Http\Controllers\PaymentController;
 | be assigned to the "api" middleware group. Make something great!
 |
 */
-Route::post('/webhook/payment-updated', [PaymentController::class, 'webhook'])->name('webhook.payment');
+Route::post('/payment-updated', [PaymentController::class, 'webhook'])->name('payment.updated');
 Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
 });
