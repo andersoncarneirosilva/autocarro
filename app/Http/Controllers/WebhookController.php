@@ -7,10 +7,12 @@ class WebhookController extends Controller
 {
     public function paymentUpdated(Request $request)
     {
-        // Log dos dados recebidos
-        Log::info('Webhook Mercado Pago recebido:', $request->all());
+        // Log de depuração para verificar os dados recebidos
+        Log::info('Notificação de pagamento atualizada:', $request->all());
 
-        // Aqui você pode processar os dados da notificação
-        return response()->json(['status' => 'success']);
+        // Aqui, você pode processar os dados recebidos da notificação
+        // Exemplo: atualizar o status de pagamento do usuário no banco de dados
+
+        return response()->json(['status' => 'success']); // Resposta de sucesso
     }
 }
