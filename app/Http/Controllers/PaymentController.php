@@ -143,40 +143,20 @@ public function handleNotification(Request $request)
 
     public function webhook(Request $request)
 {
-    Log::info('Webhook Recebido', $request->all());
+    Log::info('📥 Webhook Recebido:', $request->all());
 
-    $paymentId = $request->input('data.id');
-    if (!$paymentId) {
+    // Verificar se a chave 'data' existe e se tem um 'id'
+    if (!$request->has('data') || !isset($request->input('data')['id'])) {
+        Log::error('🚨 ID de pagamento não encontrado no Webhook.', ['dados' => $request->all()]);
         return response()->json(['status' => 'error', 'message' => 'ID de pagamento não encontrado'], 400);
     }
 
-    // Consultar detalhes do pagamento
-    $accessToken = env('MERCADO_PAGO_ACCESS_TOKEN');
-    $response = Http::withHeaders([
-        'Authorization' => 'Bearer ' . $accessToken,
-    ])->get("https://api.mercadopago.com/v1/payments/{$paymentId}");
-
-    if ($response->failed()) {
-        Log::error('Erro ao buscar pagamento no Mercado Pago', ['response' => $response->json()]);
-        return response()->json(['status' => 'error', 'message' => 'Erro ao buscar pagamento'], 500);
-    }
-
-    $paymentData = $response->json();
-    Log::info('Detalhes do pagamento:', $paymentData);
-
-    // Atualizar o status do pagamento no banco de dados (se necessário)
-    // Exemplo: atualizar status do usuário se o pagamento foi aprovado
-    if ($paymentData['status'] == 'approved') {
-        $user = User::where('email', $paymentData['payer']['email'])->first();
-        if ($user) {
-            $user->credito += $paymentData['transaction_amount'];
-            $user->save();
-            Log::info('Crédito atualizado para o usuário.', ['user_id' => $user->id, 'new_credito' => $user->credito]);
-        }
-    }
+    $paymentId = $request->input('data.id');
+    Log::info('✅ ID do pagamento recebido:', ['payment_id' => $paymentId]);
 
     return response()->json(['status' => 'success']);
 }
+
 
 
 }
