@@ -142,20 +142,36 @@ public function handleNotification(Request $request)
 
 
     public function webhook(Request $request)
-{
-    Log::info('📥 Webhook Recebido:', $request->all());
-
-    // Verifique se o token está presente no payload
-    if (!$request->has('token')) {
-        Log::error('🚨 Token de pagamento não encontrado no Webhook.', ['dados' => $request->all()]);
-        return response()->json(['status' => 'error', 'message' => 'Token de pagamento não encontrado no Webhook.'], 400);
+    {
+        Log::info('📥 Webhook Recebido:', $request->all());
+    
+        if (!$request->has('token')) {
+            Log::error('🚨 Token de pagamento não encontrado no Webhook.', ['dados' => $request->all()]);
+            return response()->json(['status' => 'error', 'message' => 'Token de pagamento não encontrado no Webhook.'], 400);
+        }
+    
+        $paymentToken = $request->input('token');
+        Log::info('✅ Token de pagamento recebido:', ['payment_token' => $paymentToken]);
+    
+        // Verificar o status do pagamento
+        return $this->checkPaymentStatus($paymentToken);
     }
+    
 
-    $paymentToken = $request->input('token');
-    Log::info('✅ Token de pagamento recebido:', ['payment_token' => $paymentToken]);
+public function checkPaymentStatus($paymentToken)
+{
+    $mp = new \MercadoPago\MP('YOUR_ACCESS_TOKEN');
+    $payment = $mp->get("/v1/payments/{$paymentToken}");
 
-    // Retorne o token para o frontend, se necessário
-    return response()->json(['status' => 'success', 'payment_token' => $paymentToken]);
+    if ($payment['status'] == 'approved') {
+        // O pagamento foi aprovado
+        Log::info('✅ Pagamento aprovado:', ['payment' => $payment]);
+        return response()->json(['status' => 'success', 'message' => 'Pagamento aprovado']);
+    } else {
+        // O pagamento não foi aprovado
+        Log::error('🚨 Pagamento não aprovado:', ['payment' => $payment]);
+        return response()->json(['status' => 'error', 'message' => 'Pagamento não aprovado']);
+    }
 }
 
 
