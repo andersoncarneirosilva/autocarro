@@ -142,12 +142,12 @@ public function handleNotification(Request $request)
 
     public function handleWebhook(Request $request)
     {
-        // Lógica para processar o webhook
-        $data = $request->all();
+        // Verifique o conteúdo da solicitação recebida
+        Log::info('Recebendo webhook', $request->all());
 
-        // Aqui você pode validar a assinatura ou processar os dados do pagamento
+        // Se necessário, você pode fazer validações e processar o pagamento
+        // Exemplo: Verifique a assinatura ou qualquer outro dado importante
 
-        // Responda com sucesso
         return response()->json(['status' => 'success']);
     }
 
