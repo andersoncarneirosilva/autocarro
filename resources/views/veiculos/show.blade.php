@@ -34,34 +34,34 @@
 <div class="row">
     <div class="col-sm-12">
         <!-- Profile -->
-        <div class="card bg-primary">
+        <div class="card border border-secondary shadow">
             <div class="card-body profile-user-box">
                 <div class="row">
                     <div class="col-sm-8">
                         <div class="row align-items-center">
                             <div class="col-auto">
                                 <div class="avatar-lg">
-                                        <img src="{{ url("$veiculo->image") }}" alt="" class="rounded-circle img-thumbnail">
+                                        <img src="{{ url("$veiculo->image") }}" alt="" class="rounded-circle img-thumbnail border border-secondary">
                                 </div>
                             </div>
                             <div class="col">
                                 <div>
-                                    <h4 class="mt-1 mb-1 text-white">Marca</h4>
-                                    <p class="font-13 text-white-50">{{ $veiculo->marca }}</p>
+                                    <h4 class="mt-1 mb-1 ">Marca</h4>
+                                    <p class="font-13">{{ $veiculo->marca }}</p>
 
-                                    <ul class="mb-0 list-inline text-light">
+                                    <ul class="mb-0 list-inline">
                                         <li class="list-inline-item me-3">
-                                            <h5 class="mb-1 text-white">Placa</h5>
-                                            <p class="mb-0 font-13 text-white-50">{{ $veiculo->placa }}</p>
+                                            <h5 class="mb-1 ">Placa</h5>
+                                            <p class="mb-0 font-13 ">{{ $veiculo->placa }}</p>
                                             
                                         </li>
                                         <li class="list-inline-item">
-                                            <h5 class="mb-1 text-white">Ano</h5>
-                                            <p class="mb-0 font-13 text-white-50">{{ $veiculo->ano }}</p>
+                                            <h5 class="mb-1 ">Ano</h5>
+                                            <p class="mb-0 font-13 ">{{ $veiculo->ano }}</p>
                                         </li>
                                         <li class="list-inline-item">
-                                            <h5 class="mb-1 text-white">Cor</h5>
-                                            <p class="mb-0 font-13 text-white-50">{{ $veiculo->cor }}</p>
+                                            <h5 class="mb-1">Cor</h5>
+                                            <p class="mb-0 font-13 ">{{ $veiculo->cor }}</p>
                                         </li>
                                     </ul>
                                 </div>
@@ -85,7 +85,7 @@
 
 <div class="row">
     <div class="col-xl-4 col-lg-5">
-        <div class="card text-center">
+        <div class="card">
             <div class="card-body">
                 {{-- @if($veiculo->image)
                 <img src="/storage/{{ $veiculo->image }}" class="rounded-circle avatar-lg img-thumbnail" alt="user-image">
@@ -342,13 +342,17 @@
                             </div> <!-- end shadow-none border rounded -->
                         </div> <!-- end col-12 -->
                     @endif
-                    @if(empty($veiculo->arquivo_atpve_assinado || $veiculo->arquivo_proc_assinado))
-                                <div class="alert alert-danger bg-transparent text-danger" role="alert">
-                                    NENHUM RESULTADO ENCONTRADO!
-                                </div>
-                                @endif
+                    
                 </div> <!-- end row -->
-
+                <div class="row">
+                    <div class="col-12">
+                    @if(empty($veiculo->arquivo_atpve_assinado || $veiculo->arquivo_proc_assinado))
+                        <div class="alert alert-danger bg-transparent text-danger" role="alert">
+                            NENHUM RESULTADO ENCONTRADO!
+                        </div>
+                    @endif
+                    </div>
+                </div>
             </div> <!-- end card-body -->
              
         </div> 

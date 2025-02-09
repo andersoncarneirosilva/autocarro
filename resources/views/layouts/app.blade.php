@@ -10,7 +10,7 @@
         <meta name="keywords" content="Gerenciamento de documentação, veículos, Procuração, CRLV, Solicitação de ATPVe, documentos veiculares">
         <meta name="description" content="Gerenciamento de documentação de veículos. Procuração, CRLV, solicitação de ATPVe e muito mais.">
         
-
+        
         <!-- App favicon -->
         <meta name="csrf-token" content="{{ csrf_token() }}">
 
@@ -55,6 +55,7 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
 
         <script src="{{ url('assets/js/notificacoes.js') }}"></script>
+        <script src="https://sdk.mercadopago.com/js/v2"></script>
         <script>
           $(document).ready(function () {
     $('.datepicker').datepicker({

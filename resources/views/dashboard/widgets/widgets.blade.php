@@ -25,7 +25,7 @@
                     @elseif(auth()->user()->credito <= 2)
                         <span class="link-danger">R${{ auth()->user()->credito }},00</span>
                         <h4 class="m-0 fw-normal cta-box-title">
-                            <a href="https://api.whatsapp.com/send/?phone=51999047299&text&type=phone_number&app_absent=0" target="_blank" style="color: #0fb14a;">
+                            <a href="{{ url('pagamentos') }}" style="color: #0fb14a;">
                             Solicitar créditos
                         </a></h4>
                     @else

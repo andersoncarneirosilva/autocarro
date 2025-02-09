@@ -29,10 +29,13 @@ use App\Http\Controllers\OCRController;
 use App\Http\Controllers\ContatoController;
 use Illuminate\Support\Facades\Route;
 use App\Events\EventReminderBroadcast;
-
+use App\Http\Controllers\MercadoPagoController;
 
 
 Route::middleware(['auth'])->group(function () {
+
+    Route::post('/process-payment', [PaymentController::class, 'processPayment'])->name('process_payment');
+    Route::get('/pagamentos', [PaymentController::class, 'index'])->name('pagamentos.index');
     Route::get('/notifications', [NotificationController::class, 'getNotifications'])->middleware('auth');
     
     //USUARIOS
@@ -131,17 +134,6 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/relatorio-veiculos', [RelatoriosController::class, 'gerarRelatorioVeiculos'])->name('relatorio-veiculos');
     Route::get('/relatorio-procuracoes', [RelatoriosController::class, 'gerarRelatorioProc'])->name('relatorio-procuracoes');
 
-
-    Route::get('/upload', function () {
-        return view('upload'); // Retorna a view do formulário de upload
-    })->name('upload.form'); // Nomeie a rota para o formulário de upload
-    
-    Route::get('/upload', function () {
-        return view('upload'); // Sua página de upload
-    })->name('upload.form'); // Nomeia a rota para o formulário de upload
-    
-    Route::post('/upload', [PdfController::class, 'uploadPdf'])->name('upload.pdf'); // Rota para o processamento do PDF
-    Route::post('/show-text', [PdfController::class, 'showExtractedText']); // Rota para exibir o texto extraído
     
     Route::get('/cidades/{id}', [CidadeController::class, 'show'])->name('cidades.show');
     Route::put('/cidades/{id}', [CidadeController::class, 'update'])->name('cidades.update');
@@ -149,8 +141,7 @@ Route::middleware(['auth'])->group(function () {
     Route::post('/cidades', [CidadeController::class, 'store'])->name('cidades.store');
     Route::get('/cidades', [CidadeController::class, 'index'])->name('cidades.index');
 
-    Route::post('/pagamentos', [PaymentController::class, 'createPayment'])->name('pagamentos.store');
-    Route::get('/pagamentos', [PaymentController::class, 'index'])->name('pagamentos.index');
+
 
     Route::get('/ordensdeservicos/buscarservicos', [OrdemController::class, 'buscarServicos'])->name('ordensdeservicos.buscarservicos');
     Route::get('/ordensdeservicos/buscar', [OrdemController::class, 'buscarClientes'])->name('ordensdeservicos.buscar');
@@ -232,8 +223,7 @@ Route::post('/modeloprocuracoes/store', [ModeloProcuracoesController::class, 'st
 Route::get('/modeloprocuracoes/select/{id}', [ModeloProcuracoesController::class, 'select'])->name('modeloprocuracoes.select');
 Route::post('/modeloprocuracoes/confirm/{id}', [ModeloProcuracoesController::class, 'confirm'])->name('modeloprocuracoes.confirm');
 
-Route::get('/ocr', [OCRController::class, 'index'])->name('ocr.index');
-Route::post('/upload', [OCRController::class, 'process'])->name('ocr.process');
+
 
 });
 

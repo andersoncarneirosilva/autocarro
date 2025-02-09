@@ -32,6 +32,7 @@
           </div> <!-- end card-body -->
       </div> <!-- end card-->
       
+      
 {{-- @can('access-lojista')
 
 @endcan --}}
