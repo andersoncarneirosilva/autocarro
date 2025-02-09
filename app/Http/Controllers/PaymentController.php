@@ -142,12 +142,27 @@ public function handleNotification(Request $request)
 
     public function handleWebhook(Request $request)
     {
-        // Verifique o conteúdo da solicitação recebida
-        Log::info('Recebendo webhook', $request->all());
+        // Recuperar a assinatura da requisição
+        $signature = $request->header('X-MercadoPago-Signature');
+        
+        // Recuperar o corpo da requisição (json)
+        $body = $request->getContent();
 
-        // Se necessário, você pode fazer validações e processar o pagamento
-        // Exemplo: Verifique a assinatura ou qualquer outro dado importante
+        // Calcular a assinatura esperada com a chave secreta
+        $secretKey = env('MP_SECRET_KEY');
+        $calculatedSignature = hash_hmac('sha256', $body, $secretKey);
 
+        // Comparar a assinatura recebida com a assinatura calculada
+        if ($signature !== $calculatedSignature) {
+            // Se as assinaturas não coincidirem, retorna erro 401
+            return response()->json(['error' => 'Unauthorized'], 401);
+        }
+
+        // Se a assinatura for válida, prossiga com o processamento
+        Log::info('Recebendo webhook do Mercado Pago:', $request->all());
+
+        // Aqui você pode processar os dados recebidos e atualizar o status do pagamento, etc.
+        
         return response()->json(['status' => 'success']);
     }
 
