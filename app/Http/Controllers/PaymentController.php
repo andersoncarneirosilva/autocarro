@@ -127,5 +127,17 @@ class PaymentController extends Controller
     }
 }
 
+public function handleNotification(Request $request)
+    {
+        // Exemplo de log para depuração
+        Log::info('Notificação recebida:', $request->all());
+
+        // Aqui você pode implementar o tratamento dos dados da notificação
+        // e realizar as ações necessárias, como atualizar o status de pagamento
+        // ou qualquer outra lógica que precise ser executada.
+
+        return response()->json(['status' => 'success']); // Retorna a resposta de sucesso
+    }
+
 
 }
