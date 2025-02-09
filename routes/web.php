@@ -37,7 +37,7 @@ Route::middleware(['auth'])->group(function () {
 
     Route::post('/pagamentos', 'PaymentController@paymentUpdated');
 
-    Route::post('/process-payment', [PaymentController::class, 'processPayment'])->name('process_payment');
+    Route::post('/process-payment', [PaymentController::class, 'processPayment'])->name('process.payment');
     // routes/web.php
 Route::post('/pagamentos', [PaymentController::class, 'handleWebhook']);
 
