@@ -34,8 +34,8 @@ use App\Http\Controllers\MercadoPagoController;
 
 Route::middleware(['auth'])->group(function () {
 
-    Route::post('/webhook/payment-updated', 'WebhookController@paymentUpdated')->withoutMiddleware(['auth']);
-    Route::post('/payment-updated', 'PaymentController@paymentUpdated');
+
+    Route::post('/pagamentos', 'PaymentController@paymentUpdated');
 
     Route::post('/process-payment', [PaymentController::class, 'processPayment'])->name('process_payment');
     // routes/web.php
