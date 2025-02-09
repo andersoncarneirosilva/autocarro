@@ -148,7 +148,7 @@ public function handleNotification(Request $request)
     // Verificar se a chave 'data' existe e se tem um 'id'
     if (!$request->has('data') || !isset($request->input('data')['id'])) {
         Log::error('🚨 ID de pagamento não encontrado no Webhook.', ['dados' => $request->all()]);
-        return response()->json(['status' => 'error', 'message' => 'ID de pagamento não encontrado'], 400);
+        return response()->json(['status' => 'error', 'message' => 'ID de pagamento não encontrado no Webhook.'], 400);
     }
 
     $paymentId = $request->input('data.id');
