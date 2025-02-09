@@ -33,6 +33,8 @@ use App\Http\Controllers\MercadoPagoController;
 
 
 Route::middleware(['auth'])->group(function () {
+    
+    Route::post('/webhook/payment-updated', 'WebhookController@paymentUpdated');
 
     Route::post('/payment-updated', 'PaymentController@paymentUpdated');
 
