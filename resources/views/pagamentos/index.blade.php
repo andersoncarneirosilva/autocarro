@@ -48,8 +48,11 @@ const bricksBuilder = mp.bricks();
           },
         },
         paymentMethods: {
-          atm: "all",
-                  bankTransfer: "all",
+            creditCard: "all",
+            atm: "all",
+            bankTransfer: "all",
+            debitCard: "all",
+			ticket: "all",
           maxInstallments: 1
         },
       },
