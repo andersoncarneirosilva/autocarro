@@ -143,20 +143,24 @@ public function handleNotification(Request $request)
 
     public function webhook(Request $request)
 {
-    Log::info('📥 Webhook Recebido:', $request->all());
+    Log::info('📥 Webhook Recebido:', $request->all());  // Log completo dos dados
 
-    // Acessar o ID diretamente, se não estiver em 'data'
-    if (!isset($request->input('data')['id']) && !isset($request->input('id'))) {
+    // Verificar se a chave 'data' existe e se tem um 'id'
+    if (!$request->has('data')) {
+        Log::error('🚨 Webhook não contém a chave "data".', ['dados' => $request->all()]);
+        return response()->json(['status' => 'error', 'message' => 'Webhook não contém a chave "data".'], 400);
+    }
+
+    if (!isset($request->input('data')['id'])) {
         Log::error('🚨 ID de pagamento não encontrado no Webhook.', ['dados' => $request->all()]);
         return response()->json(['status' => 'error', 'message' => 'ID de pagamento não encontrado no Webhook.'], 400);
     }
 
-    $paymentId = $request->input('data.id', $request->input('id'));
+    $paymentId = $request->input('data.id');
     Log::info('✅ ID do pagamento recebido:', ['payment_id' => $paymentId]);
 
     return response()->json(['status' => 'success']);
 }
-
 
 
 
