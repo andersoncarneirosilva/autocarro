@@ -140,4 +140,15 @@ public function handleNotification(Request $request)
     }
 
 
+    public function handleWebhook(Request $request)
+    {
+        // Verifique o conteúdo da solicitação recebida
+        Log::info('Recebendo webhook', $request->all());
+
+        // Se necessário, você pode fazer validações e processar o pagamento
+        // Exemplo: Verifique a assinatura ou qualquer outro dado importante
+
+        return response()->json(['status' => 'success']);
+    }
+
 }
