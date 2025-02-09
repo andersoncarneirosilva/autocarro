@@ -157,6 +157,51 @@ public function handleNotification(Request $request)
     return response()->json(['status' => 'success']);
 }
 
+public function createPreference(Request $request)
+{
+    try {
+        $accessToken = env('MERCADO_PAGO_ACCESS_TOKEN');
+
+        $preferenceData = [
+            "items" => [
+                [
+                    "title" => "Produto Exemplo",
+                    "quantity" => 1,
+                    "unit_price" => 10000, // Valor total
+                ]
+            ],
+            "payer" => [
+                "email" => $request->input('payer_email')
+            ],
+            "back_urls" => [
+                "success" => url('/success'),
+                "failure" => url('/failure'),
+                "pending" => url('/pending')
+            ],
+            "auto_return" => "approved",
+        ];
+
+        $response = Http::withHeaders([
+            'Authorization' => 'Bearer ' . $accessToken,
+        ])->post('https://api.mercadopago.com/checkout/preferences', $preferenceData);
+
+        $preference = $response->json();
+
+        if ($response->successful()) {
+            return response()->json([
+                'status' => 'success',
+                'preferenceId' => $preference['id']
+            ]);
+        } else {
+            Log::error('Erro ao criar a preferência', ['response' => $preference]);
+            return response()->json(['status' => 'error', 'message' => 'Erro ao criar a preferência'], 500);
+        }
+
+    } catch (\Exception $e) {
+        Log::error('Erro ao criar preferência: ' . $e->getMessage());
+        return response()->json(['status' => 'error', 'message' => 'Erro interno'], 500);
+    }
+}
 
 
 }
