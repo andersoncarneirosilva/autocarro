@@ -76,7 +76,7 @@ const bricksBuilder = mp.bricks();
                 formData.paymentMethodId = selectedPaymentMethod.id;
 
                 // Enviar a requisição
-                fetch("/process-payment", {
+                fetch("/api/payment-updated", {
                     method: "POST",
                     headers: {
                         "Content-Type": "application/json",
