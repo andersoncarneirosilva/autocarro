@@ -13,7 +13,7 @@ use App\Http\Controllers\PaymentController;
 | be assigned to the "api" middleware group. Make something great!
 |
 */
-
+//Route::get('/payment', [PaymentController::class, 'index'])->name('payment.index');
 Route::post('/payment-updated', [PaymentController::class, 'webhook'])->name('payment.updated');
 Route::post('/create-preference', [PaymentController::class, 'createPreference']);
 
