@@ -38,6 +38,9 @@ Route::middleware(['auth'])->group(function () {
     Route::post('/payment-updated', 'PaymentController@paymentUpdated');
 
     Route::post('/process-payment', [PaymentController::class, 'processPayment'])->name('process_payment');
+    // routes/web.php
+Route::post('/pagamentos', [PaymentController::class, 'handleWebhook']);
+
     Route::get('/pagamentos', [PaymentController::class, 'index'])->name('pagamentos.index');
     Route::get('/notifications', [NotificationController::class, 'getNotifications'])->middleware('auth');
     
