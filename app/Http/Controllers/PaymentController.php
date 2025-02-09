@@ -143,7 +143,7 @@ public function handleNotification(Request $request)
 
     public function webhook(Request $request)
 {
-    Log::info('📥 Webhook Recebido:', $request->all());  // Log completo dos dados
+    Log::info('📥 Webhook Recebido:', $request->all());
 
     // Verifique se o token está presente no payload
     if (!$request->has('token')) {
@@ -154,8 +154,10 @@ public function handleNotification(Request $request)
     $paymentToken = $request->input('token');
     Log::info('✅ Token de pagamento recebido:', ['payment_token' => $paymentToken]);
 
-    return response()->json(['status' => 'success']);
+    // Retorne o token para o frontend, se necessário
+    return response()->json(['status' => 'success', 'payment_token' => $paymentToken]);
 }
+
 
 
 

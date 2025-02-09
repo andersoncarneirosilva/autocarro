@@ -94,29 +94,29 @@
   
                 // Enviar a requisição
                 fetch("/api/payment-updated", {
-                  method: "POST",
-                  headers: {
-                    "Content-Type": "application/json",
-                    "X-CSRF-TOKEN": csrfToken, // Adiciona o token CSRF nos cabeçalhos
-                  },
-                  body: JSON.stringify(formData),
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json",
+                        "X-CSRF-TOKEN": csrfToken,
+                    },
+                    body: JSON.stringify(formData),
                 })
-                  .then((response) => response.json())
-                  .then((data) => {
-                    console.log('Resposta do servidor no script:', data);  // Verifique o conteúdo da resposta
-                    if (data.status === 'success') {
-                      alert(data.message);  // Exibe a mensagem de sucesso
-                      resolve();  // Indica que o pagamento foi processado com sucesso
+                .then((response) => response.json())
+                .then((data) => {
+                    console.log('Resposta do servidor no script:', data);
+
+                    // Verifique se a resposta contém a chave desejada (exemplo: "payment_token")
+                    if (data.payment_token) {
+                        alert('Token de pagamento recebido: ' + data.payment_token);  // Exibe o token recebido
                     } else {
-                      alert('Erro no pagamento: ' + data.message);  // Exibe a mensagem de erro
-                      reject();  // Indica que houve um erro no pagamento
+                        alert('Erro no pagamento: ' + data.message);  // Exibe a mensagem de erro, se houver
                     }
-                  })
-                  .catch((error) => {
+                })
+                .catch((error) => {
                     console.error('Erro na requisição:', error);
                     alert('Erro na comunicação com o servidor.');
-                    reject();  // Caso ocorra erro na requisição
-                  });
+                });
+
               });
             },
   
