@@ -9,20 +9,20 @@ class WebhookController extends Controller
 {
     public function paymentUpdated(Request $request)
     {
-        // Verificar token de autenticação (supondo que o token seja passado no cabeçalho Authorization)
-        $token = $request->header('Authorization');
+        // Verificar a assinatura secreta
+        $secret = 'e43ce5c0e39755009f7c04f83627ba0040a9bc03c13f60ba15599a343d0e2725';
+        $signature = $request->header('X-MercadoPago-Signature');
 
-        if ($token !== 'Seu_Token_Autenticacao') {
-            Log::error('Token de autenticação inválido');
+        if ($signature !== $secret) {
+            Log::error('Assinatura inválida', ['signature' => $signature]);
             return response()->json(['error' => 'Unauthorized'], 401);
         }
 
-        // Log de depuração para verificar os dados recebidos
-        Log::info('Notificação de pagamento atualizada:', $request->all());
+        Log::info('Webhook do Mercado Pago', $request->all());
 
-        // Aqui, você pode processar os dados recebidos da notificação
-        // Exemplo: atualizar o status de pagamento do usuário no banco de dados
+        // Lógica para processar a notificação, por exemplo, atualizar o pagamento no banco de dados
+        // Exemplo: Payment::updateStatus($request->input('data.id'), $request->input('data.status'));
 
-        return response()->json(['status' => 'success']); // Resposta de sucesso
+        return response()->json(['status' => 'success']);
     }
 }

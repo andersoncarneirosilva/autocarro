@@ -68,6 +68,7 @@ class Kernel extends HttpKernel
     protected $routeMiddleware = [
         // Outros middlewares
         'uppercase' => \App\Http\Middleware\UppercaseInput::class,
+        'auth' => \App\Http\Middleware\Authenticate::class,
     ];
     
 }
