@@ -6,6 +6,8 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Auth;
 use Log;
+use MercadoPago\MP;
+
 
 class PaymentController extends Controller
 {
@@ -160,7 +162,7 @@ public function handleNotification(Request $request)
 
 public function checkPaymentStatus($paymentToken)
 {
-    $mp = new \MercadoPago\MP('YOUR_ACCESS_TOKEN');
+    $mp = new \MercadoPago\MP('TEST-8914757128151217-052016-2aecf8b6d63e0a16384bbcb38ac43421-168922160');
     $payment = $mp->get("/v1/payments/{$paymentToken}");
 
     if ($payment['status'] == 'approved') {

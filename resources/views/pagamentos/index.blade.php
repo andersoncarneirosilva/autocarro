@@ -114,7 +114,7 @@
                 })
                 .catch((error) => {
                     console.error('Erro na requisição:', error);
-                    alert('Erro na comunicação com o servidor.');
+                    alert('Erro na comunicação com o servidor. Detalhes: ' + error.message);
                 });
 
               });
