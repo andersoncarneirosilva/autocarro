@@ -7,7 +7,8 @@ use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Auth;
 use Log;
 use MercadoPago\MP;
-
+use GuzzleHttp\Client;
+use Illuminate\Support\Facades\Log;
 
 class PaymentController extends Controller
 {
@@ -160,21 +161,45 @@ public function handleNotification(Request $request)
     }
     
 
-public function checkPaymentStatus($paymentToken)
-{
-    $mp = new \MercadoPago\MP('TEST-8914757128151217-052016-2aecf8b6d63e0a16384bbcb38ac43421-168922160');
-    $payment = $mp->get("/v1/payments/{$paymentToken}");
-
-    if ($payment['status'] == 'approved') {
-        // O pagamento foi aprovado
-        Log::info('✅ Pagamento aprovado:', ['payment' => $payment]);
-        return response()->json(['status' => 'success', 'message' => 'Pagamento aprovado']);
-    } else {
-        // O pagamento não foi aprovado
-        Log::error('🚨 Pagamento não aprovado:', ['payment' => $payment]);
-        return response()->json(['status' => 'error', 'message' => 'Pagamento não aprovado']);
+    
+    
+    public function checkPaymentStatus($paymentToken)
+    {
+        // Criação do cliente Guzzle
+        $client = new Client();
+    
+        // URL da API Mercado Pago
+        $url = "https://api.mercadopago.com/v1/payments/{$paymentToken}";
+    
+        try {
+            // Requisição GET para verificar o pagamento
+            $response = $client->get($url, [
+                'headers' => [
+                    'Authorization' => 'Bearer TEST-8914757128151217-052016-2aecf8b6d63e0a16384bbcb38ac43421-168922160',  // Substitua com seu access_token
+                    'Content-Type' => 'application/json',
+                ]
+            ]);
+    
+            // Decodificar a resposta JSON
+            $payment = json_decode($response->getBody(), true);
+    
+            // Verificar o status do pagamento
+            if ($payment['status'] == 'approved') {
+                // O pagamento foi aprovado
+                Log::info('✅ Pagamento aprovado:', ['payment' => $payment]);
+                return response()->json(['status' => 'success', 'message' => 'Pagamento aprovado']);
+            } else {
+                // O pagamento não foi aprovado
+                Log::error('🚨 Pagamento não aprovado:', ['payment' => $payment]);
+                return response()->json(['status' => 'error', 'message' => 'Pagamento não aprovado']);
+            }
+        } catch (\Exception $e) {
+            // Caso ocorra algum erro na requisição
+            Log::error('🚨 Erro na requisição para verificar pagamento:', ['error' => $e->getMessage()]);
+            return response()->json(['status' => 'error', 'message' => 'Erro ao verificar o status do pagamento']);
+        }
     }
-}
+    
 
 
 
