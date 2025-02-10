@@ -64,4 +64,35 @@ class PaymentController extends Controller
         }
     }
 
+    public function createPreference(Request $request)
+    {
+        $accessToken = env('MERCADO_PAGO_ACCESS_TOKEN'); // Definir no .env
+        $url = "https://api.mercadopago.com/checkout/preferences";
+
+        $response = Http::withToken($accessToken)->post($url, [
+            "items" => [
+                [
+                    "title" => "Produto Teste",
+                    "quantity" => 1,
+                    "unit_price" => $request->amount / 100
+                ]
+            ],
+            "payer" => [
+                "email" => $request->payer_email
+            ],
+            "back_urls" => [
+                "success" => url('/pagamento-sucesso'),
+                "failure" => url('/pagamento-falha'),
+                "pending" => url('/pagamento-pendente')
+            ],
+            "auto_return" => "approved"
+        ]);
+
+        if ($response->failed()) {
+            return response()->json(["error" => "Erro ao criar a preferência"], 500);
+        }
+
+        return response()->json(["preferenceId" => $response->json()["id"]]);
+    }
+
 }
