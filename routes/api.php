@@ -14,7 +14,7 @@ use App\Http\Controllers\PaymentController;
 |
 */
 //Route::get('/payment', [PaymentController::class, 'index'])->name('payment.index');
-Route::post('/payment-updated', [PaymentController::class, 'webhook'])->name('payment.updated');
+//Route::post('/payment-updated', [PaymentController::class, 'webhook'])->name('payment.updated');
 Route::post('/create-preference', [PaymentController::class, 'createPreference']);
 
 Route::post('/payment-updated', [PaymentController::class, 'handleWebhook']);
