@@ -56,7 +56,7 @@
             payer: {
               firstName: "Anderson",
               lastName: "Carneiro",
-              email: "test_user_123456@testuser.com",
+              email: "andersonqipoa@gmail.com",
             },
           },
           customization: {
