@@ -150,21 +150,21 @@ class PaymentController extends Controller
 public function paymentSuccess(Request $request)
 {
     // Pode processar dados adicionais do pagamento, se necessário
-    return view('payment.success');
+    return view('pagamentos.sucesso');
 }
 
 // Método para quando o pagamento falhar
 public function paymentFailure(Request $request)
 {
     // Pode processar dados adicionais sobre a falha do pagamento
-    return view('payment.failure');
+    return view('pagamentos.failure');
 }
 
 // Método para quando o pagamento for pendente
 public function paymentPending(Request $request)
 {
     // Pode processar dados adicionais sobre o status pendente do pagamento
-    return view('payment.pending');
+    return view('pagamentos.pending');
 }
 
 }
