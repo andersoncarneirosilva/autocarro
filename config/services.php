@@ -31,12 +31,15 @@ return [
         'region' => env('AWS_DEFAULT_REGION', 'us-east-1'),
     ],
 
-    'mercadopago' => [ 
+    'mercadopago' => [
+        'access_token' => env('MP_ACCESS_TOKEN'),
+    ],
+    // 'mercadopago' => [ 
 
-        'token' => env('MERCADO_PAGO_ACCESS_TOKEN'), 
+    //     'token' => env('MERCADO_PAGO_ACCESS_TOKEN'), 
 
-        'public_key' => env('MERCADO_PAGO_PUBLIC_KEY'), 
+    //     'public_key' => env('MERCADO_PAGO_PUBLIC_KEY'), 
 
-    ], 
+    // ], 
 
 ];

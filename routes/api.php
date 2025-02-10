@@ -17,6 +17,7 @@ use App\Http\Controllers\PaymentController;
 Route::post('/payment-updated', [PaymentController::class, 'webhook'])->name('payment.updated');
 Route::post('/create-preference', [PaymentController::class, 'createPreference']);
 
+Route::post('/payment-updated', [PaymentController::class, 'handleWebhook']);
 Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
 });
