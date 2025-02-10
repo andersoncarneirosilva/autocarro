@@ -40,7 +40,15 @@ Route::middleware(['auth'])->group(function () {
     //Route::post('/process-payment', [PaymentController::class, 'processPayment'])->name('process.payment');
     // routes/web.php
 //Route::post('/pagamentos', [PaymentController::class, 'handleWebhook']);
+// Rota para a página de sucesso (quando o pagamento for aprovado)
+    Route::get('/pagamento-sucesso', [PaymentController::class, 'paymentSuccess'])->name('payment.success');
 
+    // Rota para a página de falha (quando o pagamento falhar)
+    Route::get('/pagamento-falha', [PaymentController::class, 'paymentFailure'])->name('payment.failure');
+
+    // Rota para a página pendente (quando o pagamento ficar pendente)
+    Route::get('/pagamento-pendente', [PaymentController::class, 'paymentPending'])->name('payment.pending');
+    
     Route::get('/pagamentos', [PaymentController::class, 'index'])->name('pagamentos.index');
     Route::get('/notifications', [NotificationController::class, 'getNotifications'])->middleware('auth');
     
