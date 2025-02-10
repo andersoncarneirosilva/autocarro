@@ -40,7 +40,7 @@ class PaymentController extends Controller
 
     private function getPaymentDetails($paymentId)
     {
-        $accessToken = env('MP_ACCESS_TOKEN');
+        $accessToken = env('MERCADO_PAGO_ACCESS_TOKEN');
         $url = "https://api.mercadopago.com/v1/payments/{$paymentId}";
 
         $response = Http::withToken($accessToken)->get($url);
@@ -128,11 +128,9 @@ class PaymentController extends Controller
 
     return response()->json([
         'status' => 'success',
-        'payment_id' => $response->json()['id'],
-        'payment_status' => $response->json()['status'],
-        'status_detail' => $response->json()['status_detail']
+        'payment_token' => $response->json()['id'],
+        'status_detail' => $response->json()['status']
     ]);
-    
 }
 
 
