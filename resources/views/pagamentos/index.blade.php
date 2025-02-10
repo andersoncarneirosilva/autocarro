@@ -92,28 +92,30 @@
   
                 // Enviar a requisição
                 fetch("/api/payment-updated", {
-                    method: "POST",
-                    headers: {
-                        "Content-Type": "application/json",
-                        "X-CSRF-TOKEN": csrfToken,
-                    },
-                    body: JSON.stringify(formData),
-                })
-                .then((response) => response.json())
-                .then((data) => {
-                    console.log('Resposta do servidor no script:', data);
+    method: "POST",
+    headers: {
+        "Content-Type": "application/json",
+        "X-CSRF-TOKEN": csrfToken,
+    },
+    body: JSON.stringify(formData),
+})
+.then((response) => response.json())
+.then((data) => {
+    console.log('Resposta do servidor no script:', data);
 
-                    // Verifique se a resposta contém a chave desejada (exemplo: "payment_token")
-                    if (data.payment_token) {
-                        alert('Token de pagamento recebido: ' + data.payment_token);  // Exibe o token recebido
-                    } else {
-                        alert('Erro no pagamento: ' + data.message);  // Exibe a mensagem de erro, se houver
-                    }
-                })
-                .catch((error) => {
-                    console.error('Erro na requisição:', error);
-                    alert('Erro na comunicação com o servidor. Detalhes: ' + error.message);
-                });
+    if (data.payment_token) {
+        alert('Pagamento realizado com sucesso! Token: ' + data.payment_token);
+    } else if (data.status === 'success') {
+        alert('Pagamento confirmado! Status: ' + data.status_detail);
+    } else {
+        alert('Erro no pagamento: ' + (data.message || 'Desconhecido'));
+    }
+})
+.catch((error) => {
+    console.error('Erro na requisição:', error);
+    alert('Erro na comunicação com o servidor. Detalhes: ' + error.message);
+});
+
 
               });
             },

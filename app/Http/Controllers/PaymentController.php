@@ -18,24 +18,39 @@ class PaymentController extends Controller
     }
 
     public function handleWebhook(Request $request)
-    {
-        Log::info('Webhook recebido:', $request->all());
+{
+    Log::info('Webhook recebido:', $request->all());
 
-        // Verifica se é um evento de atualização de pagamento
-        if ($request->type === 'payment' && $request->action === 'payment.updated') {
-            $paymentId = $request->data['id'];
+    if (!isset($request->type) || !isset($request->action)) {
+        Log::error('Erro: Requisição inválida', $request->all());
+        return response()->json(['error' => 'Invalid request'], 400);
+    }
 
-            // Buscar detalhes do pagamento via API do Mercado Pago
-            $payment = $this->getPaymentDetails($paymentId);
+    if ($request->type === 'payment' && $request->action === 'payment.updated') {
+        $paymentId = $request->data['id'] ?? null;
 
-            if ($payment) {
-                // Atualizar status no banco de dados
-                $this->updatePaymentStatus($payment);
-            }
+        if (!$paymentId) {
+            Log::error('Erro: ID do pagamento ausente', $request->all());
+            return response()->json(['error' => 'Payment ID missing'], 400);
         }
 
-        return response()->json(['status' => 'success']);
+        // Buscar detalhes do pagamento no Mercado Pago
+        $payment = $this->getPaymentDetails($paymentId);
+
+        if ($payment) {
+            $this->updatePaymentStatus($payment);
+
+            return response()->json([
+                'status' => 'success',
+                'payment_token' => $payment['id'], // Retorna o ID do pagamento
+                'status_detail' => $payment['status'] // Retorna o status do pagamento
+            ]);
+        }
     }
+
+    return response()->json(['error' => 'Payment not found'], 404);
+}
+
 
     private function getPaymentDetails($paymentId)
     {
