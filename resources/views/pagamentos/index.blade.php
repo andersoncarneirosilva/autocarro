@@ -105,10 +105,8 @@
 
     if (data.payment_token) {
         alert('Pagamento realizado com sucesso! Token: ' + data.payment_token);
-    } else if (data.status === 'success') {
-        alert('Pagamento confirmado! Status: ' + data.status_detail);
     } else {
-        alert('Erro no pagamento: ' + (data.message || 'Desconhecido'));
+        alert('Erro no pagamento: ' + (data.error || 'Desconhecido'));
     }
 })
 .catch((error) => {
