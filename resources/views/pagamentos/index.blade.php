@@ -56,7 +56,7 @@
             payer: {
               firstName: "Anderson",
               lastName: "Carneiro",
-              email: "andersonqipoa@gmail.com",
+              email: "test_user_123456@testuser.com",
             },
           },
           customization: {
@@ -109,7 +109,7 @@
                 })
                 .catch(error => {
                     console.error('Erro ao processar pagamento:', error);
-                    alert('Erro ao processar pagamento.');
+                    alert('Erro ao processar pagamento script.', error);
                 });
 
 

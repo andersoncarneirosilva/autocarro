@@ -98,7 +98,7 @@ class PaymentController extends Controller
 
     public function processPayment(Request $request)
 {
-    $accessToken = env('MP_ACCESS_TOKEN'); // Definir no .env
+    $accessToken = env('MERCADO_PAGO_ACCESS_TOKEN'); // Definir no .env
     $url = "https://api.mercadopago.com/v1/payments";
 
     // Capturar os dados da requisição
@@ -108,23 +108,32 @@ class PaymentController extends Controller
         "description" => "Compra em Proconline",
         "installments" => $request->installments,
         "payment_method_id" => $request->payment_method_id,
-        "issuer_id" => $request->issuer_id,
+        //"issuer_id" => $request->issuer_id,
         "payer" => [
             "email" => $request->payer['email'],
             "identification" => [
                 "type" => $request->payer['identification']['type'],
                 "number" => $request->payer['identification']['number']
             ]
-        ]
+        ],
+        //"binary_mode" => true
     ];
 
     // Enviar requisição para o Mercado Pago
     $response = Http::withToken($accessToken)->post($url, $paymentData);
 
     if ($response->failed()) {
-        Log::error('Erro ao processar pagamento:', $response->json());
-        return response()->json(['error' => 'Erro ao processar pagamento'], 400);
+        Log::error('Erro ao processar pagamento controller:', [
+            'status_code' => $response->status(),
+            'response_body' => $response->body()
+        ]);
+        
+        return response()->json([
+            'error' => 'Erro ao processar pagamento controller',
+            'details' => $response->json()
+        ], 400);
     }
+    
 
     return response()->json([
         'status' => 'success',
