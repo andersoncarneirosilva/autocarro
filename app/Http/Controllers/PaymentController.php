@@ -37,5 +37,31 @@ class PaymentController extends Controller
         return response()->json(['status' => 'success']);
     }
 
+    private function getPaymentDetails($paymentId)
+    {
+        $accessToken = env('MP_ACCESS_TOKEN');
+        $url = "https://api.mercadopago.com/v1/payments/{$paymentId}";
+
+        $response = Http::withToken($accessToken)->get($url);
+
+        if ($response->successful()) {
+            return $response->json();
+        }
+
+        Log::error('Erro ao buscar pagamento: ' . $response->body());
+        return null;
+    }
+
+    private function updatePaymentStatus($payment)
+    {
+        $order = Order::where('payment_id', $payment['id'])->first();
+
+        if ($order) {
+            $order->status = $payment['status']; // Ex: approved, pending, rejected
+            $order->save();
+
+            Log::info("Pedido {$order->id} atualizado para {$payment['status']}");
+        }
+    }
 
 }
