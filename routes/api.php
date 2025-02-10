@@ -16,9 +16,13 @@ use App\Http\Controllers\PaymentController;
 //Route::get('/payment', [PaymentController::class, 'index'])->name('payment.index');
 //Route::post('/payment-updated', [PaymentController::class, 'webhook'])->name('payment.updated');
 Route::post('/create-preference', [PaymentController::class, 'createPreference']);
-Route::post('/payment-updated', [PaymentController::class, 'processPayment']);
 
-Route::post('/payment-updated', [PaymentController::class, 'handleWebhook']);
+// Rota para processar pagamentos do frontend
+Route::post('/process-payment', [PaymentController::class, 'processPayment']);
+
+// Rota para receber notificações Webhook do Mercado Pago
+Route::post('/webhook-payment', [PaymentController::class, 'handleWebhook']);
+
 Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
 });

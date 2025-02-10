@@ -128,9 +128,11 @@ class PaymentController extends Controller
 
     return response()->json([
         'status' => 'success',
-        'payment_token' => $response->json()['id'],
-        'status_detail' => $response->json()['status']
+        'payment_id' => $response->json()['id'],
+        'payment_status' => $response->json()['status'],
+        'status_detail' => $response->json()['status_detail']
     ]);
+    
 }
 
 

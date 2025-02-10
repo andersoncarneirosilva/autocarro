@@ -91,28 +91,26 @@
                 formData.paymentMethodId = selectedPaymentMethod.id;
   
                 // Enviar a requisição
-                fetch("/api/payment-updated", {
-    method: "POST",
-    headers: {
-        "Content-Type": "application/json",
-        "X-CSRF-TOKEN": csrfToken,
-    },
-    body: JSON.stringify(formData),
-})
-.then((response) => response.json())
-.then((data) => {
-    console.log('Resposta do servidor no script:', data);
-
-    if (data.payment_token) {
-        alert('Pagamento realizado com sucesso! Token: ' + data.payment_token);
-    } else {
-        alert('Erro no pagamento: ' + (data.error || 'Desconhecido'));
-    }
-})
-.catch((error) => {
-    console.error('Erro na requisição:', error);
-    alert('Erro na comunicação com o servidor. Detalhes: ' + error.message);
-});
+                fetch("/api/process-payment", {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json",
+                        "X-CSRF-TOKEN": csrfToken,
+                    },
+                    body: JSON.stringify(formData),
+                })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.payment_status === "approved") {
+                        window.location.href = "/pagamento-sucesso"; // Página de sucesso
+                    } else {
+                        window.location.href = "/pagamento-falha"; // Página de erro
+                    }
+                })
+                .catch(error => {
+                    console.error('Erro ao processar pagamento:', error);
+                    alert('Erro ao processar pagamento.');
+                });
 
 
               });
