@@ -18,25 +18,26 @@ class PaymentController extends Controller
     }
 
     public function handleWebhook(Request $request)
-{
-    Log::info('Webhook recebido:', $request->all());
-
-    if ($request->type === 'payment' && isset($request->data['id'])) {
-        $paymentId = $request->data['id'];
-
-        // Busca os detalhes do pagamento no Mercado Pago
-        $payment = $this->getPaymentDetails($paymentId);
-
-        if ($payment) {
-            // Atualiza o status do pagamento no banco de dados
-            $this->updatePaymentStatus($payment);
+    {
+        Log::info('Webhook recebido:', $request->all());
+    
+        if ($request->type === 'payment' && isset($request->data['id'])) {
+            $paymentId = $request->data['id'];
+    
+            // Busca os detalhes do pagamento no Mercado Pago
+            $payment = $this->getPaymentDetails($paymentId);
+    
+            if ($payment) {
+                // Atualiza o status do pagamento no banco de dados
+                $this->updatePaymentStatus($payment);
+            }
+        } else {
+            Log::warning("Evento Webhook não reconhecido:", $request->all());
         }
-    } else {
-        Log::warning("Evento Webhook não reconhecido:", $request->all());
+    
+        return response()->json(['status' => 'success']);
     }
-
-    return response()->json(['status' => 'success']);
-}
+    
 
 
 
