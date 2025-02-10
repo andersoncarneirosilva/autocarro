@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Auth;
 use Log;
+use GuzzleHttp\Client;
 
 class PaymentController extends Controller
 {
@@ -140,40 +141,109 @@ public function handleNotification(Request $request)
     }
 
 
-
     public function webhook(Request $request)
 {
     Log::info('📥 Webhook Recebido:', $request->all());
 
-    // Verifique se o token está presente no payload
-    if (!$request->has('token')) {
-        Log::error('🚨 Token de pagamento não encontrado no Webhook.', ['dados' => $request->all()]);
-        return response()->json(['status' => 'error', 'message' => 'Token de pagamento não encontrado no Webhook.'], 400);
+    // Buscar o 'id' do pagamento dentro do objeto "data"
+    $paymentId = $request->input('data.id'); 
+
+    if (!$paymentId) {
+        Log::error('🚨 Nenhum identificador de pagamento encontrado no Webhook.', ['dados' => $request->all()]);
+        return response()->json(['status' => 'error', 'message' => 'Nenhum identificador de pagamento encontrado no Webhook.'], 400);
     }
 
-    $paymentToken = $request->input('token');
-    Log::info('✅ Token de pagamento recebido:', ['payment_token' => $paymentToken]);
+    Log::info('✅ Identificador de pagamento encontrado:', ['payment_id' => $paymentId]);
 
-    // Retorne o token para o frontend, se necessário
-    return response()->json(['status' => 'success', 'payment_token' => $paymentToken]);
+    // Agora, use esse identificador para verificar o status do pagamento
+    return $this->checkPixPaymentStatus($paymentId);
 }
 
-public function checkPaymentStatus($paymentToken)
+
+    
+    public function checkPaymentStatus($paymentId)
 {
-    $mp = new \MercadoPago\MP('YOUR_ACCESS_TOKEN');
-    $payment = $mp->get("/v1/payments/{$paymentToken}");
+    $accessToken = 'SEU_ACCESS_TOKEN_AQUI';
 
-    if ($payment['status'] == 'approved') {
-        // O pagamento foi aprovado
-        Log::info('✅ Pagamento aprovado:', ['payment' => $payment]);
-        return response()->json(['status' => 'success', 'message' => 'Pagamento aprovado']);
-    } else {
-        // O pagamento não foi aprovado
-        Log::error('🚨 Pagamento não aprovado:', ['payment' => $payment]);
-        return response()->json(['status' => 'error', 'message' => 'Pagamento não aprovado']);
+    $client = new Client();
+    $url = "https://api.mercadopago.com/v1/payments/{$paymentId}";
+
+    try {
+        $response = $client->get($url, [
+            'headers' => [
+                'Authorization' => "Bearer {$accessToken}",
+                'Content-Type'  => 'application/json',
+            ],
+        ]);
+
+        $data = json_decode($response->getBody(), true);
+
+        if (isset($data['status'])) {
+            Log::info('✅ Status do pagamento verificado:', ['payment' => $data]);
+            return response()->json(['status' => 'success', 'payment_status' => $data['status']]);
+        } else {
+            Log::error('🚨 Erro ao verificar status do pagamento:', ['response' => $data]);
+            return response()->json(['error' => 'Erro ao verificar status do pagamento'], 400);
+        }
+    } catch (\Exception $e) {
+        Log::error('🚨 Erro ao verificar status do pagamento:', ['error' => $e->getMessage()]);
+        return response()->json(['error' => 'Erro ao verificar status do pagamento'], 500);
     }
 }
 
+    
+    public function createPayment(Request $request)
+{
+    $accessToken = 'TEST-8914757128151217-052016-2aecf8b6d63e0a16384bbcb38ac43421-168922160';
+
+    $client = new Client();
+    $url = "https://api.mercadopago.com/v1/payments";
+
+    try {
+        $response = $client->post($url, [
+            'headers' => [
+                'Authorization' => "Bearer {$accessToken}",
+                'Content-Type' => 'application/json',
+            ],
+            'json' => [
+                'token' => $request->input('token'),
+                'transaction_amount' => $request->input('transaction_amount'),
+                'payment_method_id' => $request->input('payment_method_id'),
+                'payer' => [
+                    'email' => $request->input('payer.email'),
+                    'identification' => [
+                        'type' => $request->input('payer.identification.type'),
+                        'number' => $request->input('payer.identification.number'),
+                    ],
+                ],
+                'installments' => $request->input('installments'),
+            ],
+        ]);
+
+        $data = json_decode($response->getBody(), true);
+
+        if (isset($data['id'])) {
+            Log::info("✅ Pagamento criado com sucesso!", ['payment_id' => $data['id']]);
+
+            return response()->json([
+                'status' => 'success',
+                'payment_id' => $data['id'],
+                'payment_status' => $data['status'],
+            ]);
+        } else {
+            Log::error("🚨 Erro ao criar pagamento", ['response' => $data]);
+            return response()->json(['error' => 'Erro ao criar pagamento'], 400);
+        }
+    } catch (\Exception $e) {
+        Log::error("🚨 Erro ao criar pagamento", ['error' => $e->getMessage()]);
+        return response()->json(['error' => 'Erro ao criar pagamento'], 500);
+    }
+}
+
+
+
+
+    
 
 
 

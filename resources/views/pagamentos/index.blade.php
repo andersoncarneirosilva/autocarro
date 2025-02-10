@@ -67,10 +67,8 @@
             },
             paymentMethods: {
               creditCard: "all",
-              atm: "all",
-              bankTransfer: "all",
-              debitCard: "all",
-              ticket: "all",
+                      debitCard: "all",
+                      atm: "all",
               maxInstallments: 1
             },
           },
