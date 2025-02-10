@@ -30,7 +30,7 @@ class PaymentController extends Controller
 
     private function getPaymentDetails($paymentId)
     {
-        MercadoPago\SDK::setAccessToken(env('MP_ACCESS_TOKEN'));
+        MercadoPago\SDK::setAccessToken(env('MERCADO_PAGO_ACCESS_TOKEN'));
 
         try {
             return MercadoPago\Payment::find_by_id($paymentId);
