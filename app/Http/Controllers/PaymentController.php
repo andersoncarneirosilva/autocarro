@@ -16,25 +16,38 @@ class PaymentController extends Controller
     }
 
     public function handleWebhook(Request $request)
-    {
-        Log::info('Webhook recebido:', $request->all());
-    
-        if ($request->type === 'payment' && isset($request->data['id'])) {
+{
+    try {
+        $accessToken = env('MERCADO_PAGO_ACCESS_TOKEN');
+
+        if ($request->type === "payment" && isset($request->data['id'])) {
             $paymentId = $request->data['id'];
-    
-            // Busca os detalhes do pagamento no Mercado Pago
-            $payment = $this->getPaymentDetails($paymentId);
-    
-            if ($payment) {
-                // Atualiza o status do pagamento no banco de dados
-                $this->updatePaymentStatus($payment);
+
+            $paymentResponse = Http::withToken($accessToken)
+                ->get("https://api.mercadopago.com/v1/payments/{$paymentId}");
+
+            if ($paymentResponse->failed()) {
+                Log::error("Erro ao buscar status do pagamento: " . $paymentResponse->body());
+                return response()->json(["error" => "Erro ao buscar pagamento"], 500);
             }
-        } else {
-            Log::warning("Evento Webhook não reconhecido:", $request->all());
+
+            $paymentData = $paymentResponse->json();
+            Log::info("Webhook recebido: " . json_encode($paymentData));
+
+            // Atualizar status do pagamento
+            $this->updatePaymentStatus($paymentData);
+
+            return response()->json(["message" => "Webhook processado com sucesso"]);
         }
-    
-        return response()->json(['status' => 'success']);
+
+        return response()->json(["message" => "Nenhuma ação necessária"]);
+
+    } catch (\Exception $e) {
+        Log::error("Erro no webhook: " . $e->getMessage());
+        return response()->json(["error" => "Erro interno"], 500);
     }
+}
+
 
     private function getPaymentDetails($paymentId)
     {
@@ -69,21 +82,21 @@ class PaymentController extends Controller
 {
     // Verificar se o pagamento foi aprovado
     if ($payment['status'] === 'approved') {
-        // Pegar o usuário autenticado
-        $userId = Auth::id();
-        $user = User::find($userId);
+        // Recuperar o usuário usando o external_reference (deve ser salvo na criação do pagamento)
+        $user = User::where('id', $payment['external_reference'])->first();
 
         if ($user) {
             // Adicionar o crédito ao usuário
-            $user->credito += $payment['transaction_amount']; // Usando o valor da transação do pagamento
+            $user->credito += $payment['transaction_amount']; 
             $user->save();
 
             Log::info("Crédito de {$payment['transaction_amount']} adicionado ao usuário {$user->id}");
         } else {
-            Log::error("Usuário autenticado não encontrado para o pagamento ID {$payment['id']}");
+            Log::error("Usuário não encontrado para pagamento ID {$payment['id']} - External Reference: {$payment['external_reference']}");
         }
     }
 }
+
 
 
 public function createPreference(Request $request)
@@ -112,6 +125,7 @@ public function createPreference(Request $request)
             "payer" => [
                 "email" => $request->payer_email
             ],
+            "external_reference" => auth()->id(), // Salva o ID do usuário autenticado
             "back_urls" => [
                 "success" => url('/pagamento-sucesso'),
                 "failure" => url('/pagamento-falha'),
