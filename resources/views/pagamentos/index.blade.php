@@ -37,8 +37,8 @@
             'X-CSRF-TOKEN': csrfToken
           },
           body: JSON.stringify({
-            amount: 1,
-            payer_email: ""
+            amount: 10,
+            payer_email: "andersonqipoa@gmail.com"
           })
         });
   
