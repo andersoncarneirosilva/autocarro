@@ -86,23 +86,31 @@ class PaymentController extends Controller
     }
 
     private function updatePaymentStatus($payment)
-{
-    // Verificar se o pagamento foi aprovado
-    if ($payment['status'] === 'approved') {
-        // Recuperar o usuário usando o external_reference (deve ser salvo na criação do pagamento)
-        $user = User::where('id', $payment['external_reference'])->first();
-        Log::info("Dados do usuário: {$user}");
-        if ($user) {
-            // Adicionar o crédito ao usuário
-            $user->credito += $payment['transaction_amount']; 
+    {
+        Log::info("Entrou na funcao updtePaymentStatus");
+        if ($payment['status'] === 'approved') {
+            // Verificar se external_reference está presente
+            if (!isset($payment['external_reference']) || empty($payment['external_reference'])) {
+                Log::error("Pagamento ID {$payment['id']} não contém external_reference.");
+                return;
+            }
+    
+            // Buscar o usuário pelo external_reference
+            $user = User::where('id', $payment['external_reference'])->first();
+            
+            if (!$user) {
+                Log::error("Usuário não encontrado para pagamento ID {$payment['id']} - External Reference: {$payment['external_reference']}");
+                return;
+            }
+    
+            // Adicionar crédito ao usuário
+            $user->credito += $payment['transaction_amount'];
             $user->save();
-
-            Log::info("Crédito de {$payment['transaction_amount']} adicionado ao usuário {$user->id}");
-        } else {
-            Log::error("Usuário não encontrado para pagamento ID {$payment['id']} - External Reference: {$payment['external_reference']}");
+    
+            Log::info("Crédito de {$payment['transaction_amount']} adicionado ao usuário ID {$user->id}");
         }
     }
-}
+    
 
 
 
