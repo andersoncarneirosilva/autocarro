@@ -104,12 +104,12 @@
                     if (data.payment_status === "approved") {
                         window.location.href = "/pagamento-sucesso"; // Página de sucesso
                     } else {
-                        console.log(data);
+                        window.location.href = "/pagamento-falha"; // Página de erro
                     }
                 })
                 .catch(error => {
                     console.error('Erro ao processar pagamento:', error);
-                    alert('Erro ao processar pagamento script.', error);
+                    alert('Erro ao processar pagamento.');
                 });
 
 

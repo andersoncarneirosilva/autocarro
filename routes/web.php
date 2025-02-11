@@ -44,10 +44,10 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/pagamento-sucesso', [PaymentController::class, 'paymentSuccess'])->name('pagamentos.sucesso');
 
     // Rota para a página de falha (quando o pagamento falhar)
-    Route::get('/pagamento-falha', [PaymentController::class, 'paymentFailure'])->name('pagamentos.failure');
+    Route::get('/pagamento-falha', [PaymentController::class, 'paymentFailure'])->name('pagamentos.falha');
 
     // Rota para a página pendente (quando o pagamento ficar pendente)
-    Route::get('/pagamento-pendente', [PaymentController::class, 'paymentPending'])->name('pagamentos.pending');
+    Route::get('/pagamento-pendente', [PaymentController::class, 'paymentPending'])->name('pagamentos.pendente');
 
     Route::get('/pagamentos', [PaymentController::class, 'index'])->name('pagamentos.index');
     Route::get('/notifications', [NotificationController::class, 'getNotifications'])->middleware('auth');

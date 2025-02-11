@@ -157,14 +157,14 @@ public function paymentSuccess(Request $request)
 public function paymentFailure(Request $request)
 {
     // Pode processar dados adicionais sobre a falha do pagamento
-    return view('pagamentos.failure');
+    return view('pagamentos.falha');
 }
 
 // Método para quando o pagamento for pendente
 public function paymentPending(Request $request)
 {
     // Pode processar dados adicionais sobre o status pendente do pagamento
-    return view('pagamentos.pending');
+    return view('pagamentos.pendente');
 }
 
 }
