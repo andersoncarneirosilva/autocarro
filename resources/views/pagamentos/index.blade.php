@@ -37,7 +37,7 @@
             'X-CSRF-TOKEN': csrfToken
           },
           body: JSON.stringify({
-            amount: 10000,
+            amount: 1,
             payer_email: "andersonqipoa@gmail.com"
           })
         });
@@ -51,7 +51,7 @@
   
         const settings = {
           initialization: {
-            amount: 10000,
+            amount: 1,
             preferenceId: preferenceData.preferenceId,  // Use o preferenceId retornado aqui
             payer: {
               firstName: "Anderson",
@@ -66,10 +66,10 @@
               },
             },
             paymentMethods: {
-              creditCard: "all",
-                      debitCard: "all",
-                      atm: "all",
-                      bankTransfer: "all",
+                creditCard: "all",
+                debitCard: "all",
+                atm: "all",
+                bankTransfer: "all",
               maxInstallments: 1
             },
           },
