@@ -86,17 +86,27 @@ class PaymentController extends Controller
 }
 
 
-    public function createPreference(Request $request)
-    {
-        $accessToken = env('MERCADO_PAGO_ACCESS_TOKEN'); // Definir no .env
+public function createPreference(Request $request)
+{
+    try {
+        $accessToken = env('MERCADO_PAGO_ACCESS_TOKEN');
+
+        if (!$accessToken) {
+            Log::error("Mercado Pago: Access Token não encontrado.");
+            return response()->json(["error" => "Erro na configuração do Mercado Pago"], 500);
+        }
+
         $url = "https://api.mercadopago.com/checkout/preferences";
+
+        $amount = floatval($request->amount); // Garante que o valor é numérico
 
         $response = Http::withToken($accessToken)->post($url, [
             "items" => [
                 [
                     "title" => "Produto Teste",
                     "quantity" => 1,
-                    "unit_price" => $request->amount / 100
+                    "currency_id" => "BRL", // Adicionado para evitar problemas de moeda
+                    "unit_price" => $amount
                 ]
             ],
             "payer" => [
@@ -111,11 +121,17 @@ class PaymentController extends Controller
         ]);
 
         if ($response->failed()) {
-            return response()->json(["error" => "Erro ao criar a preferência"], 500);
+            Log::error("Erro ao criar a preferência: " . $response->body());
+            return response()->json(["error" => "Erro ao criar a preferência", "details" => $response->json()], 500);
         }
 
         return response()->json(["preferenceId" => $response->json()["id"]]);
+
+    } catch (\Exception $e) {
+        Log::error("Exceção ao criar preferência: " . $e->getMessage());
+        return response()->json(["error" => "Erro interno ao processar a solicitação"], 500);
     }
+}
 
     public function processPayment(Request $request)
     {
