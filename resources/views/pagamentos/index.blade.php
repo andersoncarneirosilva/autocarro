@@ -29,7 +29,7 @@
   
     const renderPaymentBrick = async () => {
       try {
-        // Requisição para obter um preferenceId do backend
+        // Requisição para obter um preferenceId do basckend
         const preferenceResponse = await fetch('/api/create-preference', {
           method: 'POST',
           headers: {
