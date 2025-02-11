@@ -22,22 +22,22 @@
 </div>
 <script>
     const csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
-    const mp = new MercadoPago('APP_USR-46c2384a-3f32-4ff9-9b96-b4497129462b', {
+    const mp = new MercadoPago('TEST-83c1af18-f3a5-4077-bc98-e72379b980b1', {
       locale: 'pt'
     });
     const bricksBuilder = mp.bricks();
   
     const renderPaymentBrick = async () => {
       try {
-        // Requisição para obter um preferenceId do basckend
-        const preferenceResponse = await fetch('api/create-preference', {
+        // Requisição para obter um preferenceId do backend
+        const preferenceResponse = await fetch('/api/create-preference', {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
             'X-CSRF-TOKEN': csrfToken
           },
           body: JSON.stringify({
-            amount: 10,
+            amount: 10000,
             payer_email: "andersonqipoa@gmail.com"
           })
         });
@@ -51,7 +51,7 @@
   
         const settings = {
           initialization: {
-            amount: 10,
+            amount: 10000,
             preferenceId: preferenceData.preferenceId,  // Use o preferenceId retornado aqui
             payer: {
               firstName: "Anderson",
