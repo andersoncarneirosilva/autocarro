@@ -51,7 +51,7 @@
   
         const settings = {
           initialization: {
-            amount: 10000,
+            amount: 1,
             preferenceId: preferenceData.preferenceId,  // Use o preferenceId retornado aqui
             payer: {
               firstName: "Anderson",
