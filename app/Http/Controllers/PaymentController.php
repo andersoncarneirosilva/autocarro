@@ -16,25 +16,49 @@ class PaymentController extends Controller
     }
 
     public function handleWebhook(Request $request)
-    {
-        Log::info('Webhook recebido:', $request->all());
-    
-        if ($request->type === 'payment' && isset($request->data['id'])) {
+{
+    try {
+        $accessToken = env('MERCADO_PAGO_ACCESS_TOKEN');
+
+        // Verifica se a notificação recebida é de pagamento
+        if ($request->type === "payment" && isset($request->data['id'])) {
             $paymentId = $request->data['id'];
-    
-            // Busca os detalhes do pagamento no Mercado Pago
-            $payment = $this->getPaymentDetails($paymentId);
-    
-            if ($payment) {
-                // Atualiza o status do pagamento no banco de dados
-                $this->updatePaymentStatus($payment);
+
+            // Faz uma requisição para buscar o status real do pagamento
+            $paymentResponse = Http::withToken($accessToken)
+                ->get("https://api.mercadopago.com/v1/payments/{$paymentId}");
+
+            if ($paymentResponse->failed()) {
+                Log::error("Erro ao buscar status do pagamento: " . $paymentResponse->body());
+                return response()->json(["error" => "Erro ao buscar pagamento"], 500);
             }
-        } else {
-            Log::warning("Evento Webhook não reconhecido:", $request->all());
+
+            $paymentData = $paymentResponse->json();
+            $status = $paymentData['status']; // Exemplo: "approved", "in_process", "rejected"
+
+            // Registrar no log para depuração
+            Log::info("Pagamento ID: $paymentId - Status: $status");
+
+            // Aqui você pode atualizar o banco de dados com o status real do pagamento
+            if ($status === "approved") {
+                // Atualizar banco de dados, marcar como pago
+                return response()->json(["message" => "Pagamento aprovado!"]);
+            } elseif ($status === "in_process") {
+                return response()->json(["message" => "Pagamento em análise."]);
+            } elseif ($status === "rejected") {
+                return response()->json(["message" => "Pagamento recusado."]);
+            } else {
+                return response()->json(["message" => "Pagamento em outro status: $status"]);
+            }
         }
-    
-        return response()->json(['status' => 'success']);
+
+        return response()->json(["message" => "Webhook recebido, mas sem ação necessária."]);
+
+    } catch (\Exception $e) {
+        Log::error("Erro no webhook: " . $e->getMessage());
+        return response()->json(["error" => "Erro interno"], 500);
     }
+}
 
     private function getPaymentDetails($paymentId)
     {
