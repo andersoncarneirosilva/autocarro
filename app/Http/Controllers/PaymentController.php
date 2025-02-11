@@ -122,6 +122,16 @@ class PaymentController extends Controller
         //"binary_mode" => true
     ];
 
+    // Adicionar informações de identificação se não for PIX
+    if ($request->payment_method_id !== 'pix') {
+        if (isset($request->payer['identification'])) {
+            $paymentData['payer']['identification'] = [
+                'type' => $request->payer['identification']['type'],
+                'number' => $request->payer['identification']['number']
+            ];
+        }
+    }
+
     // Enviar requisição para o Mercado Pago
     $response = Http::withToken($accessToken)->post($url, $paymentData);
 

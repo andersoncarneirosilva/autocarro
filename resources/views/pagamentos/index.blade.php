@@ -69,6 +69,7 @@
               creditCard: "all",
                       debitCard: "all",
                       atm: "all",
+                      bankTransfer: "all",
               maxInstallments: 1
             },
           },
