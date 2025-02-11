@@ -30,7 +30,7 @@
     const renderPaymentBrick = async () => {
       try {
         // Requisição para obter um preferenceId do basckend
-        const preferenceResponse = await fetch('/api/create-preference', {
+        const preferenceResponse = await fetch('api/create-preference', {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
