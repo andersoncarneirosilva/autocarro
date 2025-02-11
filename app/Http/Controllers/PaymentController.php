@@ -40,7 +40,7 @@ class PaymentController extends Controller
 
             $paymentData = $paymentResponse->json();
             Log::info("Pagamento recebido: ", $paymentData);
-
+            Log::info("Enviando pagamento");
             $this->updatePaymentStatus($paymentData);
 
             return response()->json(["message" => "Webhook processado com sucesso"]);
