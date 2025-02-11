@@ -91,7 +91,7 @@ class PaymentController extends Controller
     if ($payment['status'] === 'approved') {
         // Recuperar o usuário usando o external_reference (deve ser salvo na criação do pagamento)
         $user = User::where('id', $payment['external_reference'])->first();
-
+        Log::info("Dados do usuário: {$user}");
         if ($user) {
             // Adicionar o crédito ao usuário
             $user->credito += $payment['transaction_amount']; 
