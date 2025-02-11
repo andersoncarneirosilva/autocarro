@@ -66,71 +66,56 @@ class PaymentController extends Controller
     }
 
     private function updatePaymentStatus($payment)
-    {
-        // Verificar se o pagamento foi aprovado
-        if ($payment['status'] === 'approved') {
-            // Pegar o usuário autenticado
-            $userId = Auth::id();
-            $user = User::find($userId);
-    
-            // Log de depuração para verificar o usuário
-            Log::info("Verificando usuário: {$userId}");
-    
-            if ($user) {
-                // Log para verificar o valor do pagamento
-                Log::info("Valor da transação: {$payment['transaction_amount']}");
-    
-                // Adicionar o crédito ao usuário
-                $user->credito += $payment['transaction_amount']; // Usando o valor da transação do pagamento
-                $user->save();
-    
-                // Log para confirmar o crédito adicionado
-                Log::info("Crédito de {$payment['transaction_amount']} adicionado ao usuário {$user->id}. Novo saldo: {$user->credito}");
-            } else {
-                Log::error("Usuário autenticado não encontrado para o pagamento ID {$payment['id']}");
-            }
+{
+    // Verificar se o pagamento foi aprovado
+    if ($payment['status'] === 'approved') {
+        // Pegar o usuário autenticado
+        $userId = Auth::id();
+        $user = User::find($userId);
+
+        if ($user) {
+            // Adicionar o crédito ao usuário
+            $user->credito += $payment['transaction_amount']; // Usando o valor da transação do pagamento
+            $user->save();
+
+            Log::info("Crédito de {$payment['transaction_amount']} adicionado ao usuário {$user->id}");
+        } else {
+            Log::error("Usuário autenticado não encontrado para o pagamento ID {$payment['id']}");
         }
     }
-    
+}
 
 
     public function createPreference(Request $request)
-{
-    $accessToken = env('MERCADO_PAGO_ACCESS_TOKEN'); // Definir no .env
-    $url = "https://api.mercadopago.com/checkout/preferences";
+    {
+        $accessToken = env('MERCADO_PAGO_ACCESS_TOKEN'); // Definir no .env
+        $url = "https://api.mercadopago.com/checkout/preferences";
 
-    $response = Http::withToken($accessToken)->post($url, [
-        "items" => [
-            [
-                "title" => "Produto Teste",
-                "quantity" => 1,
-                "unit_price" => $request->amount / 100
-            ]
-        ],
-        "payer" => [
-            "email" => $request->payer_email
-        ],
-        "back_urls" => [
-            "success" => url('/pagamento-sucesso'),
-            "failure" => url('/pagamento-falha'),
-            "pending" => url('/pagamento-pendente')
-        ],
-        "auto_return" => "approved"
-    ]);
-
-    // Verificar se houve falha na requisição
-    if ($response->failed()) {
-        Log::error('Erro ao criar a preferência:', [
-            'status_code' => $response->status(),
-            'response_body' => $response->body()
+        $response = Http::withToken($accessToken)->post($url, [
+            "items" => [
+                [
+                    "title" => "Produto Teste",
+                    "quantity" => 1,
+                    "unit_price" => $request->amount / 100
+                ]
+            ],
+            "payer" => [
+                "email" => $request->payer_email
+            ],
+            "back_urls" => [
+                "success" => url('/pagamento-sucesso'),
+                "failure" => url('/pagamento-falha'),
+                "pending" => url('/pagamento-pendente')
+            ],
+            "auto_return" => "approved"
         ]);
-        
-        return response()->json(["error" => "Erro ao criar a preferência"], 500);
+
+        if ($response->failed()) {
+            return response()->json(["error" => "Erro ao criar a preferência"], 500);
+        }
+
+        return response()->json(["preferenceId" => $response->json()["id"]]);
     }
-
-    return response()->json(["preferenceId" => $response->json()["id"]]);
-}
-
 
     public function processPayment(Request $request)
     {
