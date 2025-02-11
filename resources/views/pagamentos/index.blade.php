@@ -38,7 +38,7 @@
           },
           body: JSON.stringify({
             amount: 1,
-            payer_email: "andersonqipoa@gmail.com"
+            payer_email: ""
           })
         });
   
