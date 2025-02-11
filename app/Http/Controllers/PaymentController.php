@@ -18,21 +18,34 @@ class PaymentController extends Controller
     public function handleWebhook(Request $request)
 {
     try {
+        // Log para depuração
+        Log::info('Webhook recebido:', $request->all());
+
         $accessToken = env('MERCADO_PAGO_ACCESS_TOKEN');
 
+        // Verifica se o webhook é de pagamento e se tem um ID válido
         if ($request->type === "payment" && isset($request->data['id'])) {
             $paymentId = $request->data['id'];
 
+            // Buscar detalhes do pagamento
             $paymentResponse = Http::withToken($accessToken)
                 ->get("https://api.mercadopago.com/v1/payments/{$paymentId}");
 
+            // Se a requisição falhar, registrar erro no log
             if ($paymentResponse->failed()) {
                 Log::error("Erro ao buscar status do pagamento: " . $paymentResponse->body());
                 return response()->json(["error" => "Erro ao buscar pagamento"], 500);
             }
 
             $paymentData = $paymentResponse->json();
-            Log::info("Webhook recebido: " . json_encode($paymentData));
+
+            // Verificar se realmente recebemos os dados corretamente
+            if (!isset($paymentData['id'])) {
+                Log::error("Resposta inválida ao buscar pagamento", $paymentData);
+                return response()->json(["error" => "Resposta inválida ao buscar pagamento"], 500);
+            }
+
+            Log::info("Pagamento recebido: ", $paymentData);
 
             // Atualizar status do pagamento
             $this->updatePaymentStatus($paymentData);
@@ -40,6 +53,8 @@ class PaymentController extends Controller
             return response()->json(["message" => "Webhook processado com sucesso"]);
         }
 
+        // Se não for um evento de pagamento
+        Log::warning("Evento Webhook não reconhecido:", $request->all());
         return response()->json(["message" => "Nenhuma ação necessária"]);
 
     } catch (\Exception $e) {
