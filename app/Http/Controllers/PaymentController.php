@@ -42,19 +42,34 @@ class PaymentController extends Controller
 
 
     private function getPaymentDetails($paymentId)
-    {
-        $accessToken = env('MERCADO_PAGO_ACCESS_TOKEN');
-        $url = "https://api.mercadopago.com/v1/payments/{$paymentId}";
+{
+    $accessToken = env('MERCADO_PAGO_ACCESS_TOKEN');
+    $url = "https://api.mercadopago.com/v1/payments/{$paymentId}";
 
+    $retryCount = 0;
+    $maxRetries = 3;
+    $response = null;
+
+    while ($retryCount < $maxRetries) {
         $response = Http::withToken($accessToken)->get($url);
 
         if ($response->successful()) {
             return $response->json();
         }
 
-        Log::error('Erro ao buscar pagamento: ' . $response->body());
-        return null;
+        // Caso a requisição falhe, faz uma nova tentativa
+        if ($response->status() == 404) {
+            Log::warning("Pagamento não encontrado. Tentando novamente... (Tentativa: " . ($retryCount + 1) . ")");
+        }
+
+        $retryCount++;
+        sleep(2); // Aguarda 2 segundos antes de tentar novamente
     }
+
+    Log::error('Erro ao buscar pagamento após múltiplas tentativas: ' . $response->body());
+    return null;
+}
+
 
     private function updatePaymentStatus($payment)
     {
