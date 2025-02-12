@@ -113,55 +113,116 @@ class PaymentController extends Controller
     }
     
 
-
-
-public function createPreference(Request $request)
-{
-    try {
-        $accessToken = env('MERCADO_PAGO_ACCESS_TOKEN');
-
-        if (!$accessToken) {
-            Log::error("Mercado Pago: Access Token não encontrado.");
-            return response()->json(["error" => "Erro na configuração do Mercado Pago"], 500);
+    public function createPreference(Request $request)
+    {
+        try {
+            $accessToken = env('MERCADO_PAGO_ACCESS_TOKEN');
+    
+            if (!$accessToken) {
+                Log::error("Mercado Pago: Access Token não encontrado.");
+                return response()->json(["error" => "Erro na configuração do Mercado Pago"], 500);
+            }
+    
+            $url = "https://api.mercadopago.com/checkout/preferences";
+    
+            $amount = floatval($request->amount); // Garante que o valor é numérico
+            $paymentMethod = $request->payment_method ?? 'default'; // Método de pagamento recebido
+    
+            $response = Http::withToken($accessToken)->post($url, [
+                "items" => [
+                    [
+                        "title" => "Produto Teste",
+                        "quantity" => 1,
+                        "currency_id" => "BRL",
+                        "unit_price" => $amount
+                    ]
+                ],
+                "payer" => [
+                    "email" => $request->payer_email
+                ],
+                "external_reference" => auth()->id(),
+                "payment_methods" => [
+                    "excluded_payment_types" => [["id" => "ticket"]], // Exemplo: excluir boleto se necessário
+                    "installments" => 1 // Apenas 1 parcela para PIX
+                ],
+                "back_urls" => [
+                    "success" => url('/pagamento-sucesso'),
+                    "failure" => url('/pagamento-falha'),
+                    "pending" => url('/pagamento-pendente')
+                ],
+                "auto_return" => "approved"
+            ]);
+    
+            if ($response->failed()) {
+                Log::error("Erro ao criar a preferência: " . $response->body());
+                return response()->json(["error" => "Erro ao criar a preferência", "details" => $response->json()], 500);
+            }
+    
+            $preferenceId = $response->json()["id"];
+    
+            Log::info("Preferência criada com sucesso: ID {$preferenceId}");
+    
+            // Se for PIX, redireciona para a página de pagamento pendente
+            if ($paymentMethod === 'pix') {
+                return redirect()->route('pagamentos.pendente')->with(['preferenceId' => $preferenceId]);
+            }
+    
+            return response()->json(["preferenceId" => $preferenceId]);
+    
+        } catch (\Exception $e) {
+            Log::error("Exceção ao criar preferência: " . $e->getMessage());
+            return response()->json(["error" => "Erro interno ao processar a solicitação"], 500);
         }
-
-        $url = "https://api.mercadopago.com/checkout/preferences";
-
-        $amount = floatval($request->amount); // Garante que o valor é numérico
-
-        $response = Http::withToken($accessToken)->post($url, [
-            "items" => [
-                [
-                    "title" => "Produto Teste",
-                    "quantity" => 1,
-                    "currency_id" => "BRL", // Adicionado para evitar problemas de moeda
-                    "unit_price" => $amount
-                ]
-            ],
-            "payer" => [
-                "email" => $request->payer_email
-            ],
-            "external_reference" => auth()->id(), // Salva o ID do usuário autenticado
-            "back_urls" => [
-                "success" => url('/pagamento-sucesso'),
-                "failure" => url('/pagamento-falha'),
-                "pending" => url('/pagamento-pendente')
-            ],
-            "auto_return" => "approved"
-        ]);
-
-        if ($response->failed()) {
-            Log::error("Erro ao criar a preferência: " . $response->body());
-            return response()->json(["error" => "Erro ao criar a preferência", "details" => $response->json()], 500);
-        }
-
-        return response()->json(["preferenceId" => $response->json()["id"]]);
-
-    } catch (\Exception $e) {
-        Log::error("Exceção ao criar preferência: " . $e->getMessage());
-        return response()->json(["error" => "Erro interno ao processar a solicitação"], 500);
     }
-}
+    
+
+// public function createPreference(Request $request)
+// {
+//     try {
+//         $accessToken = env('MERCADO_PAGO_ACCESS_TOKEN');
+
+//         if (!$accessToken) {
+//             Log::error("Mercado Pago: Access Token não encontrado.");
+//             return response()->json(["error" => "Erro na configuração do Mercado Pago"], 500);
+//         }
+
+//         $url = "https://api.mercadopago.com/checkout/preferences";
+
+//         $amount = floatval($request->amount); // Garante que o valor é numérico
+
+//         $response = Http::withToken($accessToken)->post($url, [
+//             "items" => [
+//                 [
+//                     "title" => "Produto Teste",
+//                     "quantity" => 1,
+//                     "currency_id" => "BRL", // Adicionado para evitar problemas de moeda
+//                     "unit_price" => $amount
+//                 ]
+//             ],
+//             "payer" => [
+//                 "email" => $request->payer_email
+//             ],
+//             "external_reference" => auth()->id(), // Salva o ID do usuário autenticado
+//             "back_urls" => [
+//                 "success" => url('/pagamento-sucesso'),
+//                 "failure" => url('/pagamento-falha'),
+//                 "pending" => url('/pagamento-pendente')
+//             ],
+//             "auto_return" => "approved"
+//         ]);
+
+//         if ($response->failed()) {
+//             Log::error("Erro ao criar a preferência: " . $response->body());
+//             return response()->json(["error" => "Erro ao criar a preferência", "details" => $response->json()], 500);
+//         }
+
+//         return response()->json(["preferenceId" => $response->json()["id"]]);
+
+//     } catch (\Exception $e) {
+//         Log::error("Exceção ao criar preferência: " . $e->getMessage());
+//         return response()->json(["error" => "Erro interno ao processar a solicitação"], 500);
+//     }
+// }
 
     public function processPayment(Request $request)
     {
