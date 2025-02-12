@@ -41,7 +41,6 @@ class PaymentController extends Controller
             $paymentData = $paymentResponse->json();
             Log::info("Resposta do Mercado Pago: " . json_encode($paymentResponse->json()));
 
-            Log::info("Pagamento recebido: ", $paymentData);
             Log::info("Chamando updatePaymentStatus para pagamento ID {$paymentData['id']}");
             $this->updatePaymentStatus($paymentData);
 
