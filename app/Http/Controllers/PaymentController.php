@@ -14,47 +14,87 @@ class PaymentController extends Controller
         $userId = Auth::id();
         return view('pagamentos.index', compact(['userId']));
     }
-
     public function handleWebhook(Request $request)
-{
-    try {
-        Log::info('Webhook recebido:', $request->all());
-
-        $accessToken = env('MERCADO_PAGO_ACCESS_TOKEN');
-
-        if ($request->type === "payment" && isset($request->data['id'])) {
-            $paymentId = $request->data['id'];
-
-            $paymentResponse = Http::withToken($accessToken)
-                ->get("https://api.mercadopago.com/v1/payments/{$paymentId}");
-
-            if ($paymentResponse->status() === 404) {
-                Log::warning("Pagamento não encontrado: ID {$paymentId}");
-                return response()->json(["message" => "Pagamento não encontrado"], 200);
+    {
+        try {
+            Log::info('Webhook recebido:', $request->all());
+    
+            $accessToken = env('MERCADO_PAGO_ACCESS_TOKEN');
+    
+            if ($request->type === "payment" && isset($request->data['id'])) {
+                $paymentId = $request->data['id'];
+    
+                // Buscar detalhes do pagamento
+                $paymentData = $this->getPaymentDetails($paymentId);
+    
+                if (!$paymentData) {
+                    Log::warning("Pagamento não encontrado: ID {$paymentId}");
+                    return response()->json(["message" => "Pagamento não encontrado"], 200);
+                }
+    
+                Log::info("Resposta do Mercado Pago: " . json_encode($paymentData));
+    
+                // Verificar se tem external_reference antes de continuar
+                if (!isset($paymentData['external_reference']) || empty($paymentData['external_reference'])) {
+                    Log::error("Pagamento ID {$paymentData['id']} não contém external_reference.");
+                    return response()->json(["message" => "Pagamento sem external_reference"], 200);
+                }
+    
+                Log::info("Chamando updatePaymentStatus para pagamento ID {$paymentData['id']}");
+                $this->updatePaymentStatus($paymentData);
+    
+                return response()->json(["message" => "Webhook processado com sucesso"]);
             }
-
-            if ($paymentResponse->failed()) {
-                Log::error("Erro ao buscar status do pagamento: " . $paymentResponse->body());
-                return response()->json(["error" => "Erro ao buscar pagamento"], 500);
-            }
-
-            $paymentData = $paymentResponse->json();
-            Log::info("Resposta do Mercado Pago: " . json_encode($paymentResponse->json()));
-
-            Log::info("Chamando updatePaymentStatus para pagamento ID {$paymentData['id']}");
-            $this->updatePaymentStatus($paymentData);
-
-            return response()->json(["message" => "Webhook processado com sucesso"]);
+    
+            Log::warning("Evento Webhook não reconhecido:", $request->all());
+            return response()->json(["message" => "Nenhuma ação necessária"]);
+    
+        } catch (\Exception $e) {
+            Log::error("Erro no webhook: " . $e->getMessage());
+            return response()->json(["error" => "Erro interno"], 500);
         }
-
-        Log::warning("Evento Webhook não reconhecido:", $request->all());
-        return response()->json(["message" => "Nenhuma ação necessária"]);
-
-    } catch (\Exception $e) {
-        Log::error("Erro no webhook: " . $e->getMessage());
-        return response()->json(["error" => "Erro interno"], 500);
     }
-}
+    
+//     public function handleWebhook(Request $request)
+// {
+//     try {
+//         Log::info('Webhook recebido:', $request->all());
+
+//         $accessToken = env('MERCADO_PAGO_ACCESS_TOKEN');
+
+//         if ($request->type === "payment" && isset($request->data['id'])) {
+//             $paymentId = $request->data['id'];
+
+//             $paymentResponse = Http::withToken($accessToken)
+//                 ->get("https://api.mercadopago.com/v1/payments/{$paymentId}");
+
+//             if ($paymentResponse->status() === 404) {
+//                 Log::warning("Pagamento não encontrado: ID {$paymentId}");
+//                 return response()->json(["message" => "Pagamento não encontrado"], 200);
+//             }
+
+//             if ($paymentResponse->failed()) {
+//                 Log::error("Erro ao buscar status do pagamento: " . $paymentResponse->body());
+//                 return response()->json(["error" => "Erro ao buscar pagamento"], 500);
+//             }
+
+//             $paymentData = $paymentResponse->json();
+//             Log::info("Resposta do Mercado Pago: " . json_encode($paymentResponse->json()));
+
+//             Log::info("Chamando updatePaymentStatus para pagamento ID {$paymentData['id']}");
+//             $this->updatePaymentStatus($paymentData);
+
+//             return response()->json(["message" => "Webhook processado com sucesso"]);
+//         }
+
+//         Log::warning("Evento Webhook não reconhecido:", $request->all());
+//         return response()->json(["message" => "Nenhuma ação necessária"]);
+
+//     } catch (\Exception $e) {
+//         Log::error("Erro no webhook: " . $e->getMessage());
+//         return response()->json(["error" => "Erro interno"], 500);
+//     }
+// }
 
 
     private function getPaymentDetails($paymentId)
