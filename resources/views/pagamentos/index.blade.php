@@ -12,7 +12,7 @@
                     <li class="breadcrumb-item active">Dashboard</li>
                 </ol>
             </div>
-            <h3 class="page-title">Dashboard</h3>
+            <h3 class="page-title">Pagamentos</h3>
         </div>
     </div>
 </div>

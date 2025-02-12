@@ -125,8 +125,8 @@ class PaymentController extends Controller
     
             $url = "https://api.mercadopago.com/checkout/preferences";
     
-            $amount = floatval($request->amount); // Garante que o valor é numérico
-            $paymentMethod = $request->payment_method ?? 'default'; // Método de pagamento recebido
+            $amount = floatval($request->amount);
+            $paymentMethod = $request->payment_method ?? 'default';
     
             $response = Http::withToken($accessToken)->post($url, [
                 "items" => [
@@ -142,8 +142,8 @@ class PaymentController extends Controller
                 ],
                 "external_reference" => auth()->id(),
                 "payment_methods" => [
-                    "excluded_payment_types" => [["id" => "ticket"]], // Exemplo: excluir boleto se necessário
-                    "installments" => 1 // Apenas 1 parcela para PIX
+                    "excluded_payment_types" => [["id" => "ticket"]],
+                    "installments" => 1
                 ],
                 "back_urls" => [
                     "success" => url('/pagamento-sucesso'),
@@ -159,12 +159,22 @@ class PaymentController extends Controller
             }
     
             $preferenceId = $response->json()["id"];
-    
             Log::info("Preferência criada com sucesso: ID {$preferenceId}");
     
-            // Se for PIX, redireciona para a página de pagamento pendente
-            if ($paymentMethod === 'pix') {
-                return redirect()->route('pagamentos.pendente')->with(['preferenceId' => $preferenceId]);
+            // Verifica o status do pagamento
+            $paymentCheckUrl = "https://api.mercadopago.com/v1/payments/{$preferenceId}";
+            $paymentResponse = Http::withToken($accessToken)->get($paymentCheckUrl);
+    
+            if ($paymentResponse->successful()) {
+                $paymentData = $paymentResponse->json();
+    
+                Log::info("Pagamento criado com status: {$paymentData['status']}");
+    
+                if ($paymentData['status'] === 'pending' && $paymentMethod === 'pix') {
+                    return redirect()->route('pagamentos.pendente')->with(['preferenceId' => $preferenceId]);
+                }
+            } else {
+                Log::error("Erro ao verificar status do pagamento: " . $paymentResponse->body());
             }
     
             return response()->json(["preferenceId" => $preferenceId]);
