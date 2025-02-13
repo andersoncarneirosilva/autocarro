@@ -54,7 +54,46 @@ class PaymentController extends Controller
             return response()->json(["error" => "Erro interno"], 500);
         }
     }
+
     
+    public function createPixPayment(Request $request)
+    {
+        try {
+            $accessToken = env('MERCADO_PAGO_ACCESS_TOKEN');
+    
+            if (!$accessToken) {
+                Log::error("Mercado Pago: Access Token não encontrado.");
+                return response()->json(["error" => "Erro na configuração do Mercado Pago"], 500);
+            }
+    
+            $url = "https://api.mercadopago.com/v1/payments";
+    
+            $response = Http::withToken($accessToken)->post($url, [
+                "transaction_amount" => floatval($request->amount), 
+                "payment_method_id" => "pix", 
+                "payer" => [
+                    "email" => $request->payer_email
+                ]
+            ]);
+    
+            if ($response->failed()) {
+                Log::error("Erro ao criar pagamento PIX: " . $response->body());
+                return response()->json(["error" => "Erro ao criar pagamento PIX", "details" => $response->json()], 500);
+            }
+    
+            $paymentData = $response->json();
+    
+            return response()->json([
+                "qr_code" => $paymentData["point_of_interaction"]["transaction_data"]["qr_code"],
+                "qr_code_base64" => $paymentData["point_of_interaction"]["transaction_data"]["qr_code_base64"],
+                "ticket_url" => $paymentData["point_of_interaction"]["transaction_data"]["ticket_url"]
+            ]);
+    
+        } catch (\Exception $e) {
+            Log::error("Exceção ao criar pagamento PIX: " . $e->getMessage());
+            return response()->json(["error" => "Erro interno ao processar o pagamento"], 500);
+        }
+    }    
 //     public function handleWebhook(Request $request)
 // {
 //     try {

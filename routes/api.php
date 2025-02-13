@@ -20,6 +20,8 @@ Route::post('/create-preference', [PaymentController::class, 'createPreference']
 // Rota para processar pagamentos do frontend
 Route::post('/process-payment', [PaymentController::class, 'processPayment']);
 
+Route::post('/create-pix-payment', [PaymentController::class, 'createPixPayment']);
+
 // Rota para receber notificações Webhook do Mercado Pago
 Route::post('/webhook-payment', [PaymentController::class, 'handleWebhook']);
 
