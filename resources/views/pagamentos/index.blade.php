@@ -126,20 +126,31 @@
             </div>
 
             <!-- Container para pagamento PIX (oculto por padrão) -->
-            <div id="pixPaymentContainer" class="border p-3 rounded" style="display: none;">
-                <!-- Botão para pagamento PIX -->
-                <button id="pixPaymentButton" class="btn btn-success" onclick="processPixPayment()">Pagar com PIX</button>
+<div id="pixPaymentContainer" class="border p-3 rounded" style="display: none;">
+    <!-- Botão para pagamento PIX -->
+    <button id="pixPaymentButton" class="btn btn-success">Gerar Código PIX</button>
 
-                <!-- Container para exibir o QR Code PIX -->
-                <div id="pixContainer" style="display: none;">
-                    <h3>Escaneie o QR Code para pagar com PIX:</h3>
-                    <img id="pixQrCode" src="" alt="QR Code PIX" style="width: 300px;">
-                    <a id="pixTicketUrl" href="#" target="_blank">Visualizar Boleto PIX</a>
-                </div>
-
-                <!-- Mensagem de erro (oculta por padrão) -->
-                <p id="pixErrorMessage" style="color: red; display: none;">Erro ao processar pagamento PIX.</p>
+    <!-- Container para exibir o QR Code PIX -->
+    <div id="pixContainer" style="display: none;">
+        <p class="mb-0 ps-3 pt-1">Escaneie o QR Code para pagar com PIX.</p>
+        <img id="pixQrCode" src="" alt="QR Code PIX" style="width: 300px;">
+        
+        <!-- Input para copiar o código PIX (atualmente oculto) -->
+        <div class="mt-3" id="pixCodeContainer" style="display: none;">
+            <label for="pixCodeInput" class="form-label">Código PIX</label>
+            <div class="input-group">
+                <input type="text" id="pixCodeInput" class="form-control" readonly>
+                <button class="btn btn-secondary" onclick="copyPixCode()">Copiar</button>
             </div>
+        </div>
+    </div>
+
+    <!-- Mensagem de erro (oculta por padrão) -->
+    <p id="pixErrorMessage" style="color: red; display: none;">Erro ao processar pagamento PIX.</p>
+</div>
+
+
+
           </div>
 
           <!-- Resumo do Pedido -->
@@ -208,10 +219,73 @@
 
 </script>
 
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        const pixPaymentButton = document.getElementById("pixPaymentButton");
+        const pixQrCode = document.getElementById("pixQrCode");
+        const pixContainer = document.getElementById("pixContainer");
+        const pixCodeContainer = document.getElementById("pixCodeContainer");
 
+        if (pixPaymentButton) {
+            pixPaymentButton.addEventListener("click", async () => {
+                try {
+                    const response = await fetch('/api/create-pix-payment', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                            'X-CSRF-TOKEN': csrfToken
+                        },
+                        body: JSON.stringify({
+                            amount: 1,
+                            payer_email: "andersonqipoa@gmail.com"
+                        })
+                    });
 
+                    if (!response.ok) {
+                        throw new Error(`Erro na API: ${response.status} ${response.statusText}`);
+                    }
 
-</div>
+                    const pixData = await response.json();
+                    console.log("Dados recebidos da API:", pixData);
+
+                    // Verifica se o QR Code foi retornado
+                    if (pixData.qr_code_base64) {
+                        pixQrCode.src = "data:image/png;base64," + pixData.qr_code_base64;
+                        pixContainer.style.display = "block";
+                    } else {
+                        console.error("Erro: Nenhum QR Code retornado pela API.");
+                        alert("Erro ao gerar o QR Code PIX.");
+                    }
+
+                    // Verifica se o código PIX foi retornado
+                    if (pixData.pix_code) {
+                        console.log("Código PIX recebido:", pixData.pix_code); // Verificar o código PIX
+                        const pixCodeInput = document.getElementById("pixCodeInput");
+                        pixCodeInput.value = pixData.pix_code;
+                        pixCodeContainer.style.display = "block";  // Torna o campo de código PIX visível
+                    } else {
+                        console.log("Código PIX não foi retornado pela API.");
+                        pixCodeContainer.style.display = "none";  // Oculta o campo de código PIX se não for retornado
+                    }
+
+                } catch (error) {
+                    console.error("Erro ao criar pagamento PIX:", error);
+                    alert("Erro ao processar pagamento PIX. Veja o console para mais detalhes.");
+                }
+            });
+        } else {
+            console.warn("O botão pixPaymentButton não foi encontrado no DOM.");
+        }
+    });
+
+    // Função para copiar o código PIX
+    function copyPixCode() {
+        const pixCodeInput = document.getElementById("pixCodeInput");
+        pixCodeInput.select();
+        document.execCommand("copy");
+        alert("Código PIX copiado!");
+    }
+</script>
 
 <script>
   const csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
@@ -318,40 +392,7 @@ const renderPaymentBrick = async () => {
    }
 };
 
-// Única definição do clique do botão PIX
-document.getElementById("pixPaymentButton").addEventListener("click", async () => {
-   try {
-       const pixResponse = await fetch('/api/create-pix-payment', {
-           method: 'POST',
-           headers: {
-               'Content-Type': 'application/json',
-               'X-CSRF-TOKEN': csrfToken
-           },
-           body: JSON.stringify({
-               amount: 1,
-               payer_email: "andersonqipoa@gmail.com"
-           })
-       });
 
-       const pixData = await pixResponse.json();
-       
-       // Verificar o que está sendo retornado da API
-       console.log(pixData); // Adicionando log para depuração
-
-       if (pixData.qr_code_base64) {
-           document.getElementById("pixQrCode").src = "data:image/png;base64," + pixData.qr_code_base64;
-           document.getElementById("pixContainer").style.display = "block";
-       }
-
-       if (pixData.ticket_url) {
-           document.getElementById("pixTicketUrl").href = pixData.ticket_url;
-       }
-
-   } catch (error) {
-       console.error("Erro ao criar pagamento PIX:", error);
-       alert("Erro ao processar pagamento PIX.");
-   }
-});
 
 // Chama a função para renderizar o brick de pagamento
 renderPaymentBrick();
