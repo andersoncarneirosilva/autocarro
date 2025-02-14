@@ -44,7 +44,7 @@
       <div class="card-body">
         <div class="row">
           <!-- Pagamento com Cartão -->
-          <div class="col-lg-12">
+          {{-- <div class="col-lg-12">
             <div class="border p-3 mb-3 rounded">
               <div class="table-responsive">
                 <table class="table table-borderless table-nowrap table-centered mb-0">
@@ -101,7 +101,7 @@
               
             </div>
             </div>
-          </div>
+          </div> --}}
 
           <div class="col-lg-8">
             <div class="border p-3 mb-3 rounded">
@@ -182,7 +182,7 @@
 
           <!-- Resumo do Pedido -->
           <!-- Resumo do Pedido -->
-          <div class="col-lg-4">
+          {{-- <div class="col-lg-4">
             <div class="border p-3 rounded">
                 <h4 class="header-title mb-3 text-center">Resumo do Pedido</h4>
                 <div class="table-responsive">
@@ -200,7 +200,7 @@
                     <button class="btn btn-primary btn-lg w-100">Finalizar Compra</button>
                 </div>
             </div>
-          </div>
+          </div> --}}
         </div> <!-- row -->
       </div> <!-- card-body -->
     </div> <!-- card -->
