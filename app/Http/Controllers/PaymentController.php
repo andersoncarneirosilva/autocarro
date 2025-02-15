@@ -12,6 +12,9 @@ class PaymentController extends Controller
     public function index(Request $request)
     {
         $userId = Auth::id();
+        $user_id = User::find($userId);
+        $userEmail = $user_id->email;
+        //dd($userEmail);
         return view('planos.index', compact(['userId']));
     }
 
@@ -26,6 +29,9 @@ class PaymentController extends Controller
 
     public function paginaPagamento()
     {
+        $userId = Auth::id();
+        $user_id = User::find($userId);
+        $userEmail = $user_id->email;
         // Recupera os dados do plano armazenados na sessão
         $plano = session('plano');
         $preco = session('preco');
@@ -34,7 +40,7 @@ class PaymentController extends Controller
             return redirect('/')->with('error', 'Por favor, selecione um plano antes de prosseguir.');
         }
 
-        return view('pagamento.index', compact('plano', 'preco'));
+        return view('pagamento.index', compact('plano', 'preco', 'userEmail'));
     }
 
     public function handleWebhook(Request $request)
