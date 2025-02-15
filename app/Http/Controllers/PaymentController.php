@@ -137,9 +137,9 @@ public function createPixPayment(Request $request)
         ]);
 
         //Log::info("Tentando salvar");
-        //$user->external_reference = $response->json()["external_reference"]; // Salva o preference ID como external_reference
-        //$user->save();
-        //Log::info("Salvou");
+        $user->external_reference = $response->json()["id"]; // Salva o preference ID como external_reference
+        $user->save();
+        Log::info("Salvou");
         if ($response->failed()) {
             Log::error("Erro ao criar pagamento PIX: " . $response->body());
             return response()->json(["error" => "Erro ao criar pagamento PIX", "details" => $response->json()], 500);
