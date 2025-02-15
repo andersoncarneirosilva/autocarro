@@ -54,7 +54,7 @@
                                     </p>
                                 </td>
                                 <td class="text-end">
-                                    Total: R$ {{ number_format($preco) }}
+                                    Total: R$ {{ number_format($preco, 2, ',', '.') }}
                                 </td>
                             </tr>
                         </tbody>
