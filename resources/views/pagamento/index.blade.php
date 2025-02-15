@@ -191,7 +191,8 @@
 
 <script>
     const csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
- const mp = new MercadoPago('TEST-83c1af18-f3a5-4077-bc98-e72379b980b1', {
+ //const mp = new MercadoPago('TEST-83c1af18-f3a5-4077-bc98-e72379b980b1', {
+ const mp = new MercadoPago('APP_USR-46c2384a-3f32-4ff9-9b96-b4497129462b', {
      locale: 'pt'
  });
  const bricksBuilder = mp.bricks();
