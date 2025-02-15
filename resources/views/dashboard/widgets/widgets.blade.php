@@ -25,8 +25,8 @@
                     @elseif(auth()->user()->credito <= 2)
                         <span class="link-danger">R${{ auth()->user()->credito }},00</span>
                         <h4 class="m-0 fw-normal cta-box-title">
-                            <a href="{{ url('pagamentos') }}" style="color: #0fb14a;">
-                            Solicitar créditos
+                            <a href="{{ url('planos') }}" style="color: #0fb14a;">
+                            Adicionar créditos
                         </a></h4>
                     @else
                         <span class="link">R${{ auth()->user()->credito }},00</span>

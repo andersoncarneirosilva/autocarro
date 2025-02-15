@@ -1,0 +1,28 @@
+@extends('layouts.app')
+
+@section('title', 'Proconline')
+
+@section('content')
+
+<div class="row">
+    <div class="col-12">
+        <div class="page-title-box">
+            <div class="page-title-right">
+                <ol class="breadcrumb m-0">
+                    <li class="breadcrumb-item"><a href="{{ route('dashboard.index') }}">Dashboard</a></li>
+                    <li class="breadcrumb-item"><a href="{{ route('pedidos.index') }}">Pedidos</a></li>
+                    <li class="breadcrumb-item active">Adicionar pedido</li>
+                </ol>
+            </div>
+            <h3 class="page-title">Adicionar créditos</h3>
+        </div>
+    </div>
+</div>
+<br>
+{{-- Form para o cadastrar os usuarios do sistema --}}
+<form action="{{ route('pedidos.store') }}" method="POST" enctype="multipart/form-data" id="idFormUser" class="form-horizontal">
+    @csrf
+    @include('pedidos._partials.form-cad-pedidos')
+</form>
+
+@endsection

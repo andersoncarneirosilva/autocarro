@@ -155,6 +155,10 @@
                             <a href="{{ route('users.index') }}">Usuários</a>
                         </li>
                         @endcan
+
+                        <li>
+                            <a href="{{ route('planos.index') }}">Planos</a>
+                        </li>
                     </ul>
                 </div>
             </li>

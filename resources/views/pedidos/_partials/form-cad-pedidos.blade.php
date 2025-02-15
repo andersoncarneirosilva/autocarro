@@ -1,13 +1,3 @@
-
-
-@extends('layouts.app')
-
-@section('title', 'Dashboard')
-
-@section('content')
-
-<!-- Toast Bootstrap no canto superior direito -->
-<!-- Toast Bootstrap no canto superior direito -->
 <div class="position-fixed top-0 end-0 p-3" style="z-index: 1050; margin-top: 70px;">
     <div id="toastPix" class="toast align-items-center text-bg-success border-0" role="alert" aria-live="assertive" aria-atomic="true">
         <div class="d-flex">
@@ -20,19 +10,6 @@
 </div>
 
 
-<div class="row">
-    <div class="col-12">
-        <div class="page-title-box">
-            <div class="page-title-right">
-                <ol class="breadcrumb m-0">
-                    <li class="breadcrumb-item active">Dashboard</li>
-                </ol>
-            </div>
-            <h3 class="page-title">Adicionar créditos</h3>
-        </div>
-    </div>
-</div>
-<br>
 <div class="row">
   <div class="col-lg-12">
     
@@ -374,5 +351,3 @@
             });
     });
 </script>
-
-@endsection

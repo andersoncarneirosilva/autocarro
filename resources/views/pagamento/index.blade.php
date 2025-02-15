@@ -1,12 +1,7 @@
-
-
 @extends('layouts.app')
-
-@section('title', 'Dashboard')
 
 @section('content')
 
-<!-- Toast Bootstrap no canto superior direito -->
 <!-- Toast Bootstrap no canto superior direito -->
 <div class="position-fixed top-0 end-0 p-3" style="z-index: 1050; margin-top: 70px;">
     <div id="toastPix" class="toast align-items-center text-bg-success border-0" role="alert" aria-live="assertive" aria-atomic="true">
@@ -44,32 +39,29 @@
       <div class="card-body">
         <div class="row">
           <div class="col-lg-4">
-            <div class="border p-3 rounded">
-                <h4 class="header-title mb-3 text-center">Resumo do Pedido</h4>
-                <select class="form-select mb-3">
-                    <option selected value="">Adicionar créditos</option>
-                    <option value="1">- R$ 10</option>
-                    <option value="20">- R$ 20</option>
-                    <option value="30">- R$ 30</option>
-                    <option value="50">- R$ 50</option>
-                    <option value="100">- R$ 100</option>
-                </select>
-                <div class="table-responsive">
-                    <table class="table mb-0">
+
+                <div class="border p-3 rounded">
+                    <h4 class="header-title mb-3 text-center">Resumo do Pedido</h4>
+                    <div class="table-responsive">
+                    <table class="table table-nowrap table-centered mb-0">
                         <tbody>
-                            <tr class="fw-bold">
-                                <td>Total:</td>
-                                <td class="text-end"><span id="total">R$7,50</span></td>
+                            <tr>
+                                <td>
+                                    <p class="m-0 d-inline-block align-middle">
+                                        <a href="apps-ecommerce-products-details.html" class="text-body fw-semibold">Plano {{ $plano }}</a>
+                                        <br>
+                                        <li>20 documentos</li>
+                                    </p>
+                                </td>
+                                <td class="text-end">
+                                    Total: R$ {{ number_format($preco) }}
+                                </td>
                             </tr>
                         </tbody>
                     </table>
                 </div>
-                <!-- Botão de pagamento -->
-                {{-- <div class="d-grid mt-3">
-                    <button class="btn btn-primary btn-lg w-100">Finalizar Compra</button>
-                </div> --}}
+
             </div>
-            <br>
           </div>
 
           <div class="col-lg-8">
@@ -116,42 +108,36 @@
 <!-- Container para pagamento PIX (oculto por padrão) -->
 <div id="pixPaymentContainer" class="border mt-3 p-3 rounded" style="display: none;">
     <!-- Botão para pagamento PIX -->
-    <button id="pixPaymentButton" class="btn btn-success" onclick="processPixPayment()">Pagar com PIX</button>
+    <button id="pixPaymentButton" class="btn btn-success" style="display: block;" onclick="processPixPayment()">Pagar com PIX</button>
+
+    <!-- Spinner de carregamento (inicialmente oculto) -->
+
+
+    
+
+    <div id="pixLoading" style="display: none; margin-top: 10px;">
+        <strong>Gerando QR Code...</strong>
+        <div class="spinner-border ms-auto" role="status" aria-hidden="true"></div>
+    </div>
 
     <!-- Container para exibir o QR Code PIX -->
-    <div id="pixContainer" style="display: none;">
+    <div id="pixContainer" style="display: none; margin-top: 10px;">
         <h3>Escaneie o QR Code para pagar com PIX:</h3>
-        <img id="pixQrCode" src="" alt="QR Code PIX" style="width: 300px;">
+        <img id="pixQrCode" src="" alt="QR Code PIX" style="width: 250px;">
         <a id="pixTicketUrl" href="#" target="_blank"></a>
     </div>
-    
-    <div class="input-group">
-        <div class="col-sm-6">
-        <input type="text" id="pixCopiaCola" class="form-control" readonly>
-        </div>
-        <div class="col-sm-6">
-            <button class="btn btn-outline-secondary" id="btCopiar" type="button">Copiar</button>
-            </div>
-    </div>
+
+    <!-- Input para Copia e Cola -->
+    <input type="hidden" id="pixCopiaCola" class="form-control" readonly style="display: none;">
+    <button class="btn btn-outline-secondary" id="btCopiar" type="button" style="display: none;">Copiar</button>
+
+
     <!-- Mensagem de erro (oculta por padrão) -->
     <p id="pixErrorMessage" style="color: red; display: none;">Erro ao processar pagamento PIX.</p>
 </div>
 
 
-
-
-            
-            
-            
-            
-
-
-
           </div>
-
-          <!-- Resumo do Pedido -->
-          <!-- Resumo do Pedido -->
-          
         </div> <!-- row -->
       </div> <!-- card-body -->
     </div> <!-- card -->
@@ -219,7 +205,7 @@
                  'X-CSRF-TOKEN': csrfToken
              },
              body: JSON.stringify({
-                 amount: 1,
+                amount: {{ $preco }},
                  payer_email: "andersonqipoa@gmail.com"
              })
          });
@@ -233,7 +219,7 @@
  
          const settings = {
              initialization: {
-                 amount: 1,
+                 amount: {{ $preco }},
                  preferenceId: preferenceData.preferenceId,
                  payer: {
                      firstName: "Anderson",
@@ -308,45 +294,54 @@
      }
  };
  
- // Única definição do clique do botão PIX
  document.getElementById("pixPaymentButton").addEventListener("click", async () => {
-     try {
-         const pixResponse = await fetch('/api/create-pix-payment', {
-             method: 'POST',
-             headers: {
-                 'Content-Type': 'application/json',
-                 'X-CSRF-TOKEN': csrfToken
-             },
-             body: JSON.stringify({
-                 amount: 1,
-                 payer_email: "andersonqipoa@gmail.com"
-             })
-         });
- 
-         const pixData = await pixResponse.json();
-         
-         // Verificar o que está sendo retornado da API
-         console.log(pixData); // Adicionando log para depuração
- 
-         if (pixData.qr_code_base64) {
-             document.getElementById("pixQrCode").src = "data:image/png;base64," + pixData.qr_code_base64;
-             document.getElementById("pixContainer").style.display = "block";
-         }
-         if(pixData.qr_code){
+    try {
+        // Exibe o spinner e esconde o conteúdo
+        document.getElementById("pixLoading").style.display = "block";
+        document.getElementById("pixContainer").style.display = "none";
+        document.getElementById("pixCopiaCola").style.display = "none";
+        document.getElementById("btCopiar").style.display = "none";
+        document.getElementById("pixPaymentButton").style.display = "none";
+        const pixResponse = await fetch('/api/create-pix-payment', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'X-CSRF-TOKEN': csrfToken
+            },
+            body: JSON.stringify({
+                amount: {{ $preco }},
+                payer_email: "andersonqipoa@gmail.com"
+            })
+        });
+
+        const pixData = await pixResponse.json();
+
+        console.log(pixData); // Debugging
+
+        // Esconde o spinner
+        document.getElementById("pixLoading").style.display = "none";
+        document.getElementById("pixLoading").style.display = "none";
+
+        if (pixData.qr_code_base64) {
+            document.getElementById("pixQrCode").src = "data:image/png;base64," + pixData.qr_code_base64;
+            document.getElementById("pixContainer").style.display = "block";
+        }
+        if (pixData.qr_code) {
             document.getElementById("pixCopiaCola").style.display = "block";
             document.getElementById("pixCopiaCola").value = pixData.qr_code;
             document.getElementById("btCopiar").style.display = "block";
-         }
- 
-         if (pixData.ticket_url) {
-             document.getElementById("pixTicketUrl").href = pixData.ticket_url;
-         }
- 
-     } catch (error) {
-         console.error("Erro ao criar pagamento PIX:", error);
-         alert("Erro ao processar pagamento PIX.");
-     }
- });
+        }
+
+        if (pixData.ticket_url) {
+            document.getElementById("pixTicketUrl").href = pixData.ticket_url;
+        }
+
+    } catch (error) {
+        console.error("Erro ao criar pagamento PIX:", error);
+        alert("Erro ao processar pagamento PIX.");
+        document.getElementById("pixLoading").style.display = "none"; // Esconde o spinner em caso de erro
+    }
+});
  
  // Chama a função para renderizar o brick de pagamento
  renderPaymentBrick();

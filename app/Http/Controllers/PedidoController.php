@@ -1,40 +1,84 @@
 <?php
 
 namespace App\Http\Controllers;
-use App\Models\User; 
+
+use App\Models\Pedido;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Log;
+use App\Models\User;
 
-class PaymentController extends Controller
+class PedidoController extends Controller
 {
-    public function index(Request $request)
+    /**
+     * Display a listing of the resource.
+     */
+    public function __construct(Pedido $pedido)
     {
+        $this->model = $pedido;
+    }
+
+    public function index()
+    {
+        //
+        $title = 'Excluir!';
+        $text = "Deseja arquivar esse veículo?";
+        confirmDelete($title, $text);
+        
         $userId = Auth::id();
-        return view('planos.index', compact(['userId']));
+        $pedidos = Pedido::where('user_id', $userId)->paginate(10);
+
+        return view('pedidos.index', compact(['pedidos']));
     }
 
-    public function selecionarPlano(Request $request)
+    /**
+     * Show the form for creating a new resource.
+     */
+    public function create()
     {
-        // Recebe os dados do plano e redireciona para a página de pagamento
-        return redirect()->route('pagamento.index')->with([
-            'plano' => $request->input('plano'),
-            'preco' => $request->input('preco')
-        ]);
+        //
+        return view('pedidos.create');
     }
 
-    public function paginaPagamento()
+    /**
+     * Store a newly created resource in storage.
+     */
+    public function store(Request $request)
     {
-        // Recupera os dados do plano armazenados na sessão
-        $plano = session('plano');
-        $preco = session('preco');
+        //
+    }
 
-        if (!$plano || !$preco) {
-            return redirect('/')->with('error', 'Por favor, selecione um plano antes de prosseguir.');
-        }
+    /**
+     * Display the specified resource.
+     */
+    public function show(Pedido $pedido)
+    {
+        //
+    }
 
-        return view('pagamento.index', compact('plano', 'preco'));
+    /**
+     * Show the form for editing the specified resource.
+     */
+    public function edit(Pedido $pedido)
+    {
+        //
+    }
+
+    /**
+     * Update the specified resource in storage.
+     */
+    public function update(Request $request, Pedido $pedido)
+    {
+        //
+    }
+
+    /**
+     * Remove the specified resource from storage.
+     */
+    public function destroy(Pedido $pedido)
+    {
+        //
     }
 
     public function handleWebhook(Request $request)
@@ -362,72 +406,77 @@ public function createPreference(Request $request)
     }
 }
 
-    public function processPayment(Request $request)
-    {
-        $accessToken = env('MERCADO_PAGO_ACCESS_TOKEN'); // Definir no .env
-        $url = "https://api.mercadopago.com/v1/payments";
+public function processPayment(Request $request)
+{
+    $accessToken = env('MERCADO_PAGO_ACCESS_TOKEN'); // Definir no .env
+    $url = "https://api.mercadopago.com/v1/payments";
 
-        // Capturar os dados da requisição
-        $paymentData = [
-            "transaction_amount" => $request->transaction_amount,
-            "token" => $request->token,
-            "description" => "Compra em Proconline",
-            "installments" => $request->installments,
-            "payment_method_id" => $request->payment_method_id,
-            //"issuer_id" => $request->issuer_id,
-            "payer" => [
-                "email" => $request->payer['email']
-            ]
+    // Capturar os dados da requisição
+    $paymentData = [
+        "transaction_amount" => $request->transaction_amount,
+        "token" => $request->token,
+        "description" => "Compra em Proconline",
+        "installments" => $request->installments,
+        "payment_method_id" => $request->payment_method_id,
+        "payer" => [
+            "email" => $request->payer['email']
+        ]
+    ];
+
+    // Adicionar identificação se não for PIX
+    if ($request->payment_method_id !== 'pix' && isset($request->payer['identification'])) {
+        $paymentData['payer']['identification'] = [
+            'type' => $request->payer['identification']['type'],
+            'number' => $request->payer['identification']['number']
         ];
+    }
 
-        // Adicionar informações de identificação se não for PIX
-        if ($request->payment_method_id !== 'pix' && isset($request->payer['identification'])) {
-            $paymentData['payer']['identification'] = [
-                'type' => $request->payer['identification']['type'],
-                'number' => $request->payer['identification']['number']
-            ];
-        }
+    // Enviar requisição para o Mercado Pago
+    $response = Http::withToken($accessToken)->post($url, $paymentData);
+    Log::info("Response: " . json_encode($response->json()));
 
-        // Enviar requisição para o Mercado Pago
-        $response = Http::withToken($accessToken)->post($url, $paymentData);
-        Log::info("Response: $response");
-        if ($response->failed()) {
-            Log::error('Erro ao processar pagamento controller:', [
-                'status_code' => $response->status(),
-                'response_body' => $response->body()
-            ]);
-            
-            return response()->json([
-                'error' => 'Erro ao processar pagamento controller',
-                'details' => $response->json()
-            ], 400);
-        }
-        
-        return response()->json([
-            'status' => 'success',
-            'payment_id' => $response->json()['id'],
-            'payment_status' => $response->json()['status'], // Exemplo: "approved", "pending", "rejected"
-            'status_detail' => $response->json()['status_detail'] // Exemplo: "accredited"
+    if ($response->failed()) {
+        Log::error('Erro ao processar pagamento:', [
+            'status_code' => $response->status(),
+            'response_body' => $response->body()
         ]);
 
-        $userId = Auth::id();
-        $user = User::find($userId);
-        //$user = User::where('id', $payment['external_reference'])->first();
-        Log::info("Usuário $user");
-        if (!$user) {
-            Log::info("Usuário não encontrado para pagamento ID {$payment['id']} - External Reference: {$payment['external_reference']}");
-            return;
-        }
-    
-        // Se o pagamento foi aprovado, adiciona crédito ao usuário
-        if ($payment['status'] === 'approved') {
-            $user->credito += $payment['transaction_amount'];
-            $user->save();
-    
-            Log::info("Crédito de {$payment['transaction_amount']} adicionado ao usuário ID {$user->id}");
-            return;
-        }
+        return response()->json([
+            'error' => 'Erro ao processar pagamento',
+            'details' => $response->json()
+        ], 400);
     }
+
+    // Captura os dados do pagamento
+    $payment = $response->json();
+    
+    // Buscar o usuário autenticado
+    $userId = Auth::id();
+    $user = User::find($userId);
+    Log::info("Usuário: $user->id}");
+    if (!$user) {
+        Log::error("Usuário não encontrado para pagamento ID {$payment['id']}");
+        return response()->json(['error' => 'Usuário não encontrado'], 404);
+    }
+
+    // Se o pagamento foi aprovado, adiciona crédito ao usuário
+    if ($payment['status'] === 'approved') {
+        $user->credito += $payment['transaction_amount'];
+        $user->save();
+
+        Log::info("Crédito de {$payment['transaction_amount']} adicionado ao usuário ID {$user->id}");
+    }
+
+    // Retorna a resposta JSON
+    return response()->json([
+        'status' => 'success',
+        'payment_id' => $payment['id'],
+        'payment_status' => $payment['status'], // "approved", "pending", "rejected"
+        'status_detail' => $payment['status_detail'], // Exemplo: "accredited"
+        'credito_atual' => $user->credito // Retorna o novo saldo do usuário
+    ]);
+}
+
 
     // Método para quando o pagamento for bem-sucedido
     public function paymentSuccess(Request $request)

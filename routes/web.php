@@ -17,7 +17,6 @@ use App\Http\Controllers\ServicosController;
 use App\Http\Controllers\RelatoriosController;
 use App\Http\Controllers\PdfController;
 use App\Http\Controllers\CidadeController;
-use App\Http\Controllers\PaymentController;
 use App\Http\Controllers\PasswordResetController;
 use App\Http\Controllers\NotificationController;
 use App\Http\Controllers\TextoInicioController;
@@ -30,17 +29,18 @@ use App\Http\Controllers\ContatoController;
 use Illuminate\Support\Facades\Route;
 use App\Events\EventReminderBroadcast;
 use App\Http\Controllers\MercadoPagoController;
+use App\Http\Controllers\PaymentController;
 
 
 Route::middleware(['auth'])->group(function () {
 
+    Route::post('/checkout', [PaymentController::class, 'selecionarPlano'])->name('checkout');
+    Route::get('/pagamento', [PaymentController::class, 'paginaPagamento'])->name('pagamento.index');
 
-    //Route::post('/pagamentos', 'PaymentController@paymentUpdated');
-
-    //Route::post('/process-payment', [PaymentController::class, 'processPayment'])->name('process.payment');
-    // routes/web.php
-//Route::post('/pagamentos', [PaymentController::class, 'handleWebhook']);
-// Rota para a página de sucesso (quando o pagamento for aprovado)
+    Route::get('/planos', [PaymentController::class, 'index'])->name('planos.index');
+    // Route::get('/pedidos/create', [PedidoController::class, 'create'])->name('pedidos.create');
+    // Route::post('/pedidos', [PedidoController::class, 'store'])->name('pedidos.store');
+    
     Route::get('/pagamento-sucesso', [PaymentController::class, 'paymentSuccess'])->name('pagamentos.sucesso');
 
     // Rota para a página de falha (quando o pagamento falhar)
@@ -49,7 +49,6 @@ Route::middleware(['auth'])->group(function () {
     // Rota para a página pendente (quando o pagamento ficar pendente)
     Route::get('/pagamento-pendente', [PaymentController::class, 'paymentPending'])->name('pagamentos.pendente');
 
-    Route::get('/pagamentos', [PaymentController::class, 'index'])->name('pagamentos.index');
     Route::get('/notifications', [NotificationController::class, 'getNotifications'])->middleware('auth');
     
     //USUARIOS
