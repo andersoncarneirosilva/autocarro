@@ -91,6 +91,9 @@ class PaymentController extends Controller
     
     public function createPixPayment(Request $request)
     {
+        $userId = Auth::id();
+        $user = User::where('id', $userId)->first();
+
         try {
             $accessToken = env('MERCADO_PAGO_ACCESS_TOKEN');
     
@@ -100,14 +103,14 @@ class PaymentController extends Controller
             }
     
             $url = "https://api.mercadopago.com/v1/payments";
-    
+            
             $response = Http::withToken($accessToken)->post($url, [
                 "transaction_amount" => floatval($request->amount), 
                 "payment_method_id" => "pix", 
                 "payer" => [
                     "email" => $request->payer_email
                 ],
-                "external_reference" => auth()->id() ?? "pedido_" . time(), // Defina uma referência única
+                "external_reference" => $user->id ?? "pedido_" . time(), // Defina uma referência única
             ]);
     
             if ($response->failed()) {
