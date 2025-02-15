@@ -63,15 +63,14 @@ class PaymentController extends Controller
 
             Log::info("Resposta do Mercado Pago: " . json_encode($paymentData));
 
-            // Verificar se tem external_reference antes de continuar
-            if (!isset($paymentData['external_reference']) || empty($paymentData['external_reference'])) {
+            // Verificar se existe external_reference
+            if (empty($paymentData['external_reference'])) {
                 Log::error("Pagamento ID {$paymentData['id']} não contém external_reference.");
                 return response()->json(["message" => "Pagamento sem external_reference"], 200);
             }
 
-            // Buscar o usuário com base na external_reference
-            $userId = Auth::id();
-            $user = User::where('id', $userId)->first();
+            // Buscar o usuário com base no external_reference
+            $user = User::where('external_reference', $paymentData['external_reference'])->first();
 
             if (!$user) {
                 Log::error("Usuário não encontrado para external_reference {$paymentData['external_reference']}");
@@ -93,6 +92,7 @@ class PaymentController extends Controller
         return response()->json(["error" => "Erro interno"], 500);
     }
 }
+
 
     
 public function createPixPayment(Request $request)
@@ -194,7 +194,7 @@ public function createPixPayment(Request $request)
 
 
     private function updatePaymentStatus($payment){
-        
+
     Log::info("Entrou na função updatePaymentStatus para pagamento ID {$payment['id']} com status {$payment['status']}");
 
     if (!isset($payment['status'])) {
