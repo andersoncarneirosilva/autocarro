@@ -172,6 +172,7 @@ class PaymentController extends Controller
     }
 
     // Buscar o usuário pelo external_reference
+    $userId = Auth::id();
     $user = User::where('id', $userId)->first();
 
     if (!$user) {
