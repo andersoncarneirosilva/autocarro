@@ -64,7 +64,8 @@ class PaymentController extends Controller
             }
 
             // Buscar o usuário com base na external_reference
-            $user = User::where('external_reference', $paymentData['external_reference'])->first();
+            $userId = Auth::id();
+            $user = User::where('id', $userId)->first();
 
             if (!$user) {
                 Log::error("Usuário não encontrado para external_reference {$paymentData['external_reference']}");
