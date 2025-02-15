@@ -38,45 +38,54 @@ class PaymentController extends Controller
     }
 
     public function handleWebhook(Request $request)
-    {
-        try {
-            Log::info('Webhook recebido:', $request->all());
-    
-            $accessToken = env('MERCADO_PAGO_ACCESS_TOKEN');
-    
-            if ($request->type === "payment" && isset($request->data['id'])) {
-                $paymentId = $request->data['id'];
-    
-                // Buscar detalhes do pagamento
-                $paymentData = $this->getPaymentDetails($paymentId);
-    
-                if (!$paymentData) {
-                    Log::warning("Pagamento não encontrado: ID {$paymentId}");
-                    return response()->json(["message" => "Pagamento não encontrado"], 200);
-                }
-    
-                Log::info("Resposta do Mercado Pago: " . json_encode($paymentData));
-    
-                // Verificar se tem external_reference antes de continuar
-                if (!isset($paymentData['external_reference']) || empty($paymentData['external_reference'])) {
-                    Log::error("Pagamento ID {$paymentData['id']} não contém external_reference.");
-                    return response()->json(["message" => "Pagamento sem external_reference"], 200);
-                }
-    
-                Log::info("Chamando updatePaymentStatus para pagamento ID {$paymentData['id']}");
-                $this->updatePaymentStatus($paymentData);
-    
-                return response()->json(["message" => "Webhook processado com sucesso"]);
+{
+    try {
+        Log::info('Webhook recebido:', $request->all());
+
+        $accessToken = env('MERCADO_PAGO_ACCESS_TOKEN');
+
+        if ($request->type === "payment" && isset($request->data['id'])) {
+            $paymentId = $request->data['id'];
+
+            // Buscar detalhes do pagamento
+            $paymentData = $this->getPaymentDetails($paymentId, $accessToken);
+
+            if (!$paymentData) {
+                Log::warning("Pagamento não encontrado: ID {$paymentId}");
+                return response()->json(["message" => "Pagamento não encontrado"], 200);
             }
-    
-            Log::warning("Evento Webhook não reconhecido:", $request->all());
-            return response()->json(["message" => "Nenhuma ação necessária"]);
-    
-        } catch (\Exception $e) {
-            Log::error("Erro no webhook: " . $e->getMessage());
-            return response()->json(["error" => "Erro interno"], 500);
+
+            Log::info("Resposta do Mercado Pago: " . json_encode($paymentData));
+
+            // Verificar se tem external_reference antes de continuar
+            if (!isset($paymentData['external_reference']) || empty($paymentData['external_reference'])) {
+                Log::error("Pagamento ID {$paymentData['id']} não contém external_reference.");
+                return response()->json(["message" => "Pagamento sem external_reference"], 200);
+            }
+
+            // Buscar o usuário com base na external_reference
+            $user = User::where('external_reference', $paymentData['external_reference'])->first();
+
+            if (!$user) {
+                Log::error("Usuário não encontrado para external_reference {$paymentData['external_reference']}");
+                return response()->json(["message" => "Usuário não encontrado"], 404);
+            }
+
+            // Chama a função para atualizar o status do pagamento
+            Log::info("Chamando updatePaymentStatus para pagamento ID {$paymentData['id']}");
+            $this->updatePaymentStatus($paymentData, $user);
+
+            return response()->json(["message" => "Webhook processado com sucesso"]);
         }
+
+        Log::warning("Evento Webhook não reconhecido:", $request->all());
+        return response()->json(["message" => "Nenhuma ação necessária"], 200);
+
+    } catch (\Exception $e) {
+        Log::error("Erro no webhook: " . $e->getMessage());
+        return response()->json(["error" => "Erro interno"], 500);
     }
+}
 
     
     public function createPixPayment(Request $request)
@@ -149,31 +158,37 @@ class PaymentController extends Controller
         return null;
     }
     private function updatePaymentStatus($payment)
-    {
-        Log::info("Entrou na função updatePaymentStatus para pagamento ID {$payment['id']} com status {$payment['status']}");
-    
-        if (!isset($payment['status'])) {
-            Log::error("Pagamento ID {$payment['id']} não contém status válido.");
-            return;
-        }
-    
-        if (!isset($payment['external_reference']) || empty($payment['external_reference'])) {
-            Log::error("Pagamento ID {$payment['id']} não contém external_reference.");
-            return;
-        }
-    
-        // Buscar o usuário pelo external_reference
-        
-    
-        // Se for pagamento PIX pendente, direciona para página correta
-        if ($payment['status'] === 'pending' && $payment['payment_method_id'] === 'pix') {
-            Log::info("Pagamento PIX pendente para usuário ID {$user->id}. Aguardando confirmação.");
-            return;
-        }
-    
-        // Se status não for tratado, logamos para análise
-        Log::warning("Status não tratado para pagamento ID {$payment['id']}: {$payment['status']}");
+{
+    Log::info("Entrou na função updatePaymentStatus para pagamento ID {$payment['id']} com status {$payment['status']}");
+
+    if (!isset($payment['status'])) {
+        Log::error("Pagamento ID {$payment['id']} não contém status válido.");
+        return;
     }
+
+    if (!isset($payment['external_reference']) || empty($payment['external_reference'])) {
+        Log::error("Pagamento ID {$payment['id']} não contém external_reference.");
+        return;
+    }
+
+    // Buscar o usuário pelo external_reference
+    $user = User::where('external_reference', $payment['external_reference'])->first();
+
+    if (!$user) {
+        Log::error("Usuário não encontrado para external_reference {$payment['external_reference']}");
+        return;
+    }
+
+    // Se for pagamento PIX pendente, direciona para página correta
+    if ($payment['status'] === 'pending' && $payment['payment_method_id'] === 'pix') {
+        Log::info("Pagamento PIX pendente para usuário ID {$user->id}. Aguardando confirmação.");
+        return;
+    }
+
+    // Se status não for tratado, logamos para análise
+    Log::warning("Status não tratado para pagamento ID {$payment['id']}: {$payment['status']}");
+}
+
 
 
 public function createPreference(Request $request)
