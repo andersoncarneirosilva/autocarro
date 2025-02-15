@@ -96,7 +96,8 @@ class PaymentController extends Controller
                 "payment_method_id" => "pix", 
                 "payer" => [
                     "email" => $request->payer_email
-                ]
+                ],
+                "external_reference" => auth()->id() ?? "pedido_" . time(), // Defina uma referência única
             ]);
     
             if ($response->failed()) {
