@@ -198,6 +198,9 @@ class PaymentController extends Controller
 
 public function createPreference(Request $request)
 {
+    $userId = Auth::id();
+    $user = User::where('id', $userId)->first();
+
     try {
         $accessToken = env('MERCADO_PAGO_ACCESS_TOKEN');
 
@@ -222,7 +225,7 @@ public function createPreference(Request $request)
             "payer" => [
                 "email" => $request->payer_email
             ],
-            "external_reference" => auth()->id() ?? "pedido_" . time(), // Defina uma referência única
+            "external_reference" => $user->id ?? "pedido_" . time(), // Defina uma referência única
             "back_urls" => [
                 "success" => url('/pagamento-sucesso'),
                 "failure" => url('/pagamento-falha'),
