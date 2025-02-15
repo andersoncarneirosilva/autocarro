@@ -49,6 +49,10 @@
         <!-- Incluindo o jQuery Toast -->
         <script src="{{ url('js/mask-cep.js') }}"></script>
         <script src="{{ url('js/mask-phone.js') }}"></script>
+
+        {{-- <script src="{{ url('assets/js/pagamento.js') }}?v={{ time() }}"></script> --}}
+
+
         <!-- Plugin css -->
         <link rel="stylesheet" href="{{ url('assets/vendor/jquery-toast-plugin/jquery.toast.min.css') }}">
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css">

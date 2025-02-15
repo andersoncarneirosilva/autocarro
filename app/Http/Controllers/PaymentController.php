@@ -95,52 +95,73 @@ class PaymentController extends Controller
 }
 
     
-    public function createPixPayment(Request $request)
-    {
-        $userId = Auth::id();
-        $user = User::where('id', $userId)->first();
+public function createPixPayment(Request $request)
+{
+    
 
-        try {
-            $accessToken = env('MERCADO_PAGO_ACCESS_TOKEN');
-    
-            if (!$accessToken) {
-                Log::error("Mercado Pago: Access Token não encontrado.");
-                return response()->json(["error" => "Erro na configuração do Mercado Pago"], 500);
-            }
-    
-            $url = "https://api.mercadopago.com/v1/payments";
-            
-            $response = Http::withToken($accessToken)->post($url, [
-                "transaction_amount" => floatval($request->amount), 
-                "payment_method_id" => "pix", 
-                "payer" => [
-                    "email" => $request->payer_email
-                ],
-                "external_reference" => $user->id ?? "pedido_" . time(), // Defina uma referência única
-            ]);
-    
-            if ($response->failed()) {
-                Log::error("Erro ao criar pagamento PIX: " . $response->body());
-                return response()->json(["error" => "Erro ao criar pagamento PIX", "details" => $response->json()], 500);
-            }
-    
-            $paymentData = $response->json();
-    
-            return response()->json([
-                "qr_code" => $paymentData["point_of_interaction"]["transaction_data"]["qr_code"],
-                "qr_code_base64" => $paymentData["point_of_interaction"]["transaction_data"]["qr_code_base64"],
-                "ticket_url" => $paymentData["point_of_interaction"]["transaction_data"]["ticket_url"]
-            ]);
-    
-        } catch (\Exception $e) {
-            Log::error("Exceção ao criar pagamento PIX: " . $e->getMessage());
-            return response()->json(["error" => "Erro interno ao processar o pagamento"], 500);
+    Log::info("Entrou na : createPixPayment");
+    // Obtém o usuário autenticado
+    // $userId = Auth::id();
+    // if (!$userId) {
+    //     Log::error("Usuário não autenticado.");
+    //     return response()->json(["error" => "Usuário não autenticado"], 401);
+    // }
+
+    // $user = User::find($userId);
+    // if (!$user) {
+    //     Log::error("Usuário não encontrado.");
+    //     return response()->json(["error" => "Usuário não encontrado"], 404);
+    // }
+
+    try {
+        $accessToken = env('MERCADO_PAGO_ACCESS_TOKEN');
+        Log::info("Access Token usado:", ["token" => $accessToken]);
+        if (!$accessToken) {
+            Log::error("Mercado Pago: Access Token não encontrado.");
+            return response()->json(["error" => "Erro na configuração do Mercado Pago"], 500);
         }
-    }    
+
+        $url = "https://api.mercadopago.com/v1/payments";
+
+        // Envia a solicitação de pagamento para o Mercado Pago
+        $response = Http::withToken($accessToken)->post($url, [
+            "transaction_amount" => floatval($request->amount), 
+            "payment_method_id" => "pix", 
+            "payer" => [
+                "email" => $request->payer_email
+            ],
+            //"external_reference" => "pedido_" . time(), // Defina uma referência única
+        ]);
+
+        // Log::info("Tentando salvar");
+        // $user->external_reference = $response->json()["external_reference"]; // Salva o preference ID como external_reference
+        // $user->save();
+        // Log::info("Salvou");
+        if ($response->failed()) {
+            Log::error("Erro ao criar pagamento PIX: " . $response->body());
+            return response()->json(["error" => "Erro ao criar pagamento PIX", "details" => $response->json()], 500);
+        }
+
+        $paymentData = $response->json();
+
+        return response()->json([
+            "qr_code" => $paymentData["point_of_interaction"]["transaction_data"]["qr_code"] ?? null,
+            "qr_code_base64" => $paymentData["point_of_interaction"]["transaction_data"]["qr_code_base64"] ?? null,
+            "ticket_url" => $paymentData["point_of_interaction"]["transaction_data"]["ticket_url"] ?? null
+        ]);
+
+    } catch (\Exception $e) {
+        Log::error("Exceção ao criar pagamento PIX: " . $e->getMessage());
+        return response()->json(["error" => "Erro interno ao processar o pagamento"], 500);
+    }
+}
+
+ 
 
 
     private function getPaymentDetails($paymentId)
     {
+        Log::info("Entrou na : getPaymentDetails");
         $accessToken = env('MERCADO_PAGO_ACCESS_TOKEN');
         $url = "https://api.mercadopago.com/v1/payments/{$paymentId}";
 
@@ -253,72 +274,83 @@ public function createPreference(Request $request)
     }
 }
 
-    public function processPayment(Request $request)
-    {
-        $accessToken = env('MERCADO_PAGO_ACCESS_TOKEN'); // Definir no .env
-        $url = "https://api.mercadopago.com/v1/payments";
+public function processPayment(Request $request)
+{
+    $accessToken = env('MERCADO_PAGO_ACCESS_TOKEN'); // Definir no .env
+    $url = "https://api.mercadopago.com/v1/payments";
 
-        // Capturar os dados da requisição
-        $paymentData = [
-            "transaction_amount" => $request->transaction_amount,
-            "token" => $request->token,
-            "description" => "Compra em Proconline",
-            "installments" => $request->installments,
-            "payment_method_id" => $request->payment_method_id,
-            //"issuer_id" => $request->issuer_id,
-            "payer" => [
-                "email" => $request->payer['email']
-            ]
+    // Capturar os dados da requisição
+    $paymentData = [
+        "transaction_amount" => $request->transaction_amount,
+        "token" => $request->token,
+        "description" => "Compra em Proconline",
+        "installments" => $request->installments,
+        "payment_method_id" => $request->payment_method_id,
+        "payer" => [
+            "email" => $request->payer['email']
+        ],
+        // Adiciona o external_reference
+        "external_reference" => $request->external_reference,
+    ];
+
+    // Adicionar informações de identificação se não for PIX
+    if ($request->payment_method_id !== 'pix' && isset($request->payer['identification'])) {
+        $paymentData['payer']['identification'] = [
+            'type' => $request->payer['identification']['type'],
+            'number' => $request->payer['identification']['number']
         ];
+    }
 
-        // Adicionar informações de identificação se não for PIX
-        if ($request->payment_method_id !== 'pix' && isset($request->payer['identification'])) {
-            $paymentData['payer']['identification'] = [
-                'type' => $request->payer['identification']['type'],
-                'number' => $request->payer['identification']['number']
-            ];
-        }
+    // Enviar requisição para o Mercado Pago
+    $response = Http::withToken($accessToken)->post($url, $paymentData);
+    Log::info("Response: " . $response);
 
-        // Enviar requisição para o Mercado Pago
-        $response = Http::withToken($accessToken)->post($url, $paymentData);
-        Log::info("Response: $response");
-        if ($response->failed()) {
-            Log::error('Erro ao processar pagamento controller:', [
-                'status_code' => $response->status(),
-                'response_body' => $response->body()
-            ]);
-            
-            return response()->json([
-                'error' => 'Erro ao processar pagamento controller',
-                'details' => $response->json()
-            ], 400);
-        }
+    if ($response->failed()) {
+        Log::error('Erro ao processar pagamento controller:', [
+            'status_code' => $response->status(),
+            'response_body' => $response->body()
+        ]);
         
         return response()->json([
-            'status' => 'success',
-            'payment_id' => $response->json()['id'],
-            'payment_status' => $response->json()['status'], // Exemplo: "approved", "pending", "rejected"
-            'status_detail' => $response->json()['status_detail'] // Exemplo: "accredited"
-        ]);
-
-        $userId = Auth::id();
-        $user = User::find($userId);
-        //$user = User::where('id', $payment['external_reference'])->first();
-        Log::info("Usuário $user");
-        if (!$user) {
-            Log::info("Usuário não encontrado para pagamento ID {$payment['id']} - External Reference: {$payment['external_reference']}");
-            return;
-        }
-    
-        // Se o pagamento foi aprovado, adiciona crédito ao usuário
-        if ($payment['status'] === 'approved') {
-            $user->credito += $payment['transaction_amount'];
-            $user->save();
-    
-            Log::info("Crédito de {$payment['transaction_amount']} adicionado ao usuário ID {$user->id}");
-            return;
-        }
+            'error' => 'Erro ao processar pagamento controller',
+            'details' => $response->json()
+        ], 400);
     }
+
+    // Processar resposta do pagamento
+    $payment = $response->json();
+    $paymentId = $payment['id'];
+    $paymentStatus = $payment['status'];
+    $externalReference = $payment['external_reference'];
+
+    // Recuperar o usuário associado ao external_reference
+    $user = User::where('external_reference', $externalReference)->first();
+
+    Log::info("Usuário encontrado para external_reference $externalReference: " . json_encode($user));
+
+    if (!$user) {
+        Log::error("Usuário não encontrado para external_reference $externalReference");
+        return response()->json([
+            'error' => 'Usuário não encontrado para o pagamento'
+        ], 404);
+    }
+
+    // Se o pagamento foi aprovado, adiciona crédito ao usuário
+    if ($paymentStatus === 'approved') {
+        $user->credito += $payment['transaction_amount'];
+        $user->save();
+
+        Log::info("Crédito de {$payment['transaction_amount']} adicionado ao usuário ID {$user->id}");
+    }
+
+    return response()->json([
+        'status' => 'success',
+        'payment_id' => $paymentId,
+        'payment_status' => $paymentStatus, // Exemplo: "approved", "pending", "rejected"
+        'status_detail' => $payment['status_detail'] // Exemplo: "accredited"
+    ]);
+}
+
 
     // Método para quando o pagamento for bem-sucedido
     public function paymentSuccess(Request $request)

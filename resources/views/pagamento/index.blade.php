@@ -169,6 +169,7 @@ document.getElementById("pixPaymentButton").addEventListener("click", async () =
         });
 
         const pixData = await pixResponse.json();
+        
 
         // Esconde o spinner
         document.getElementById("pixLoading").style.display = "none";
@@ -188,8 +189,8 @@ document.getElementById("pixPaymentButton").addEventListener("click", async () =
         }
 
     } catch (error) {
-        console.error("Erro ao criar pagamento PIX:", error);
-        alert("Erro ao processar pagamento PIX.");
+        console.error("Erro ao criar pagamento PIX catch script:", error);
+        //alert("Erro ao processar pagamento PIX.");
         document.getElementById("pixLoading").style.display = "none"; // Esconde o spinner em caso de erro
     }
 });
@@ -213,5 +214,6 @@ document.getElementById("btCopiar").addEventListener("click", function () {
         });
 });
 </script>
+
 
 @endsection

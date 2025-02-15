@@ -37,6 +37,7 @@ Route::middleware(['auth'])->group(function () {
     Route::post('/checkout', [PaymentController::class, 'selecionarPlano'])->name('checkout');
     Route::get('/pagamento', [PaymentController::class, 'paginaPagamento'])->name('pagamento.index');
 
+
     Route::get('/planos', [PaymentController::class, 'index'])->name('planos.index');
     // Route::get('/pedidos/create', [PedidoController::class, 'create'])->name('pedidos.create');
     // Route::post('/pedidos', [PedidoController::class, 'store'])->name('pedidos.store');
