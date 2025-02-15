@@ -37,7 +37,7 @@ Route::middleware(['auth'])->group(function () {
     Route::post('/checkout', [PaymentController::class, 'selecionarPlano'])->name('checkout');
     Route::get('/pagamento', [PaymentController::class, 'paginaPagamento'])->name('pagamento.index');
 
-
+    
     Route::get('/planos', [PaymentController::class, 'index'])->name('planos.index');
     // Route::get('/pedidos/create', [PedidoController::class, 'create'])->name('pedidos.create');
     // Route::post('/pedidos', [PedidoController::class, 'store'])->name('pedidos.store');
@@ -248,8 +248,8 @@ Route::post('/reset-password', [PasswordResetController::class, 'reset'])->name(
 Route::post('/enviar-contato', [ContatoController::class, 'enviarEmail'])->name('contato.enviar');
 
 
+
 Route::get('/', function () {
     return view('site.index');
 });
-
 require __DIR__.'/auth.php';

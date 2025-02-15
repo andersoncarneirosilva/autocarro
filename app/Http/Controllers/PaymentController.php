@@ -40,7 +40,7 @@ class PaymentController extends Controller
             return redirect('/')->with('error', 'Por favor, selecione um plano antes de prosseguir.');
         }
 
-        return view('pagamento.index', compact('plano', 'preco', 'userEmail'));
+        return view('pagamento.index', compact('plano', 'preco', 'userEmail', 'user_id'));
     }
 
     public function handleWebhook(Request $request)
@@ -98,20 +98,23 @@ class PaymentController extends Controller
 public function createPixPayment(Request $request)
 {
     
-
     Log::info("Entrou na : createPixPayment");
     // Obtém o usuário autenticado
-    // $userId = Auth::id();
-    // if (!$userId) {
-    //     Log::error("Usuário não autenticado.");
-    //     return response()->json(["error" => "Usuário não autenticado"], 401);
-    // }
+    $token = $request->bearerToken();
+    Log::info("Token recebido: " . $token);
+    if (!$token) {
+        Log::error("Token de autenticação não encontrado.");
+        return response()->json(["error" => "Token de autenticação não encontrado"], 401);
+    }
 
-    // $user = User::find($userId);
-    // if (!$user) {
-    //     Log::error("Usuário não encontrado.");
-    //     return response()->json(["error" => "Usuário não encontrado"], 404);
-    // }
+    // Tente obter o usuário com o token
+    $user = Auth::user();
+
+    
+    if (!$user) {
+        Log::error("Usuário não autenticado.");
+        return response()->json(["error" => "Usuário não autenticado"], 401);
+    }
 
     try {
         $accessToken = env('MERCADO_PAGO_ACCESS_TOKEN');
@@ -133,10 +136,10 @@ public function createPixPayment(Request $request)
             //"external_reference" => "pedido_" . time(), // Defina uma referência única
         ]);
 
-        // Log::info("Tentando salvar");
-        // $user->external_reference = $response->json()["external_reference"]; // Salva o preference ID como external_reference
-        // $user->save();
-        // Log::info("Salvou");
+        //Log::info("Tentando salvar");
+        //$user->external_reference = $response->json()["external_reference"]; // Salva o preference ID como external_reference
+        //$user->save();
+        //Log::info("Salvou");
         if ($response->failed()) {
             Log::error("Erro ao criar pagamento PIX: " . $response->body());
             return response()->json(["error" => "Erro ao criar pagamento PIX", "details" => $response->json()], 500);

@@ -124,7 +124,7 @@ function processPixPayment() {
         document.getElementById('btCopiar').style.display = 'none';
 
         // Simula a geração do QR Code (substitua pela lógica real)
-        const qrCodeSrc = "assets/images/payments/qr-code.png";  // Substitua pela URL do QR Code real
+        const qrCodeSrc = "#";  // Substitua pela URL do QR Code real
         const boletoLink = "#"; // Substitua pelo link do boleto do PIX
 
         if (qrCodeSrc && boletoLink) {
@@ -156,17 +156,32 @@ document.getElementById("pixPaymentButton").addEventListener("click", async () =
         document.getElementById("pixPaymentButton").style.display = "none";
         document.getElementById("divGerarPix").style.display = "none";
 
+        // const pixResponse = await fetch('/api/create-pix-payment', {
+        //     method: 'POST',
+        //     headers: {
+        //         'Content-Type': 'application/json',
+        //         'X-CSRF-TOKEN': csrfToken
+        //     },
+        //     body: JSON.stringify({
+        //         amount: {{ $preco }},
+        //         payer_email: @json($userEmail)
+        //     })
+        // });
+
         const pixResponse = await fetch('/api/create-pix-payment', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-                'X-CSRF-TOKEN': csrfToken
-            },
-            body: JSON.stringify({
-                amount: {{ $preco }},
-                payer_email: @json($userEmail)
-            })
-        });
+    method: 'POST',
+    headers: {
+        'Content-Type': 'application/json',
+        'X-CSRF-TOKEN': csrfToken,
+        'Authorization': 'Bearer TEST-83c1af18-f3a5-4077-bc98-e72379b980b1' // Passando o token no cabeçalho
+    },
+    body: JSON.stringify({
+        amount: {{ $preco }},
+        payer_email: @json($userEmail)
+    })
+});
+
+
 
         const pixData = await pixResponse.json();
         

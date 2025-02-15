@@ -2,30 +2,23 @@
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
-//use App\Http\Controllers\PaymentController;
 use App\Http\Controllers\PaymentController;
-/*
-|--------------------------------------------------------------------------
-| API Routes
-|--------------------------------------------------------------------------
-|
-| Here is where you can register API routes for your application. These
-| routes are loaded by the RouteServiceProvider and all of them will
-| be assigned to the "api" middleware group. Make something great!
-|
-*/
-//Route::get('/payment', [PaymentController::class, 'index'])->name('payment.index');
-//Route::post('/payment-updated', [PaymentController::class, 'webhook'])->name('payment.updated');
-Route::post('/create-preference', [PaymentController::class, 'createPreference']);
 
-// Rota para processar pagamentos do frontend
-Route::post('/process-payment', [PaymentController::class, 'processPayment']);
+// Rota para criar preferência
+Route::post('/create-preference', [PaymentController::class, 'createPreference'])->middleware('auth:sanctum');
 
+// Rota para processar pagamentos
+Route::post('/process-payment', [PaymentController::class, 'processPayment'])->middleware('auth:sanctum');
+
+// Rota para criar pagamento PIX, deve ser protegida por autenticação
+
+//Route::middleware('auth:sanctum')->post('/create-pix-payment', [PaymentController::class, 'createPixPayment']);
 Route::post('/create-pix-payment', [PaymentController::class, 'createPixPayment']);
 
-// Rota para receber notificações Webhook do Mercado Pago
+// Rota para receber notificações de webhook
 Route::post('/webhook-payment', [PaymentController::class, 'handleWebhook']);
 
+// Rota para retornar usuário autenticado (semelhante ao exemplo)
 Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
 });
