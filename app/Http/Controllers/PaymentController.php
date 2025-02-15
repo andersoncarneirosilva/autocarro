@@ -117,46 +117,6 @@ class PaymentController extends Controller
             return response()->json(["error" => "Erro interno ao processar o pagamento"], 500);
         }
     }    
-//     public function handleWebhook(Request $request)
-// {
-//     try {
-//         Log::info('Webhook recebido:', $request->all());
-
-//         $accessToken = env('MERCADO_PAGO_ACCESS_TOKEN');
-
-//         if ($request->type === "payment" && isset($request->data['id'])) {
-//             $paymentId = $request->data['id'];
-
-//             $paymentResponse = Http::withToken($accessToken)
-//                 ->get("https://api.mercadopago.com/v1/payments/{$paymentId}");
-
-//             if ($paymentResponse->status() === 404) {
-//                 Log::warning("Pagamento não encontrado: ID {$paymentId}");
-//                 return response()->json(["message" => "Pagamento não encontrado"], 200);
-//             }
-
-//             if ($paymentResponse->failed()) {
-//                 Log::error("Erro ao buscar status do pagamento: " . $paymentResponse->body());
-//                 return response()->json(["error" => "Erro ao buscar pagamento"], 500);
-//             }
-
-//             $paymentData = $paymentResponse->json();
-//             Log::info("Resposta do Mercado Pago: " . json_encode($paymentResponse->json()));
-
-//             Log::info("Chamando updatePaymentStatus para pagamento ID {$paymentData['id']}");
-//             $this->updatePaymentStatus($paymentData);
-
-//             return response()->json(["message" => "Webhook processado com sucesso"]);
-//         }
-
-//         Log::warning("Evento Webhook não reconhecido:", $request->all());
-//         return response()->json(["message" => "Nenhuma ação necessária"]);
-
-//     } catch (\Exception $e) {
-//         Log::error("Erro no webhook: " . $e->getMessage());
-//         return response()->json(["error" => "Erro interno"], 500);
-//     }
-// }
 
 
     private function getPaymentDetails($paymentId)
@@ -213,106 +173,7 @@ class PaymentController extends Controller
         // Se status não for tratado, logamos para análise
         Log::warning("Status não tratado para pagamento ID {$payment['id']}: {$payment['status']}");
     }
-    
-    // private function updatePaymentStatus($payment)
-    // {
-    //     Log::info("Entrou na funcao updtePaymentStatus");
-    //     if ($payment['status'] === 'approved') {
-    //         // Verificar se external_reference está presente
-    //         if (!isset($payment['external_reference']) || empty($payment['external_reference'])) {
-    //             Log::error("Pagamento ID {$payment['id']} não contém external_reference.");
-    //             return;
-    //         }
-    
-    //         // Buscar o usuário pelo external_reference
-    //         $user = User::where('id', $payment['external_reference'])->first();
-            
-    //         if (!$user) {
-    //             Log::error("Usuário não encontrado para pagamento ID {$payment['id']} - External Reference: {$payment['external_reference']}");
-    //             return;
-    //         }
-    
-    //         // Adicionar crédito ao usuário
-    //         $user->credito += $payment['transaction_amount'];
-    //         $user->save();
-    
-    //         Log::info("Crédito de {$payment['transaction_amount']} adicionado ao usuário ID {$user->id}");
-    //     }
-    // }
-    
 
-    // public function createPreference(Request $request)
-    // {
-    //     try {
-    //         $accessToken = env('MERCADO_PAGO_ACCESS_TOKEN');
-    
-    //         if (!$accessToken) {
-    //             Log::error("Mercado Pago: Access Token não encontrado.");
-    //             return response()->json(["error" => "Erro na configuração do Mercado Pago"], 500);
-    //         }
-    
-    //         $url = "https://api.mercadopago.com/checkout/preferences";
-    
-    //         $amount = floatval($request->amount);
-    //         $paymentMethod = $request->payment_method ?? 'default';
-    
-    //         $response = Http::withToken($accessToken)->post($url, [
-    //             "items" => [
-    //                 [
-    //                     "title" => "Produto Teste",
-    //                     "quantity" => 1,
-    //                     "currency_id" => "BRL",
-    //                     "unit_price" => $amount
-    //                 ]
-    //             ],
-    //             "payer" => [
-    //                 "email" => $request->payer_email
-    //             ],
-    //             "external_reference" => auth()->id(),
-    //             "payment_methods" => [
-    //                 "excluded_payment_types" => [["id" => "ticket"]],
-    //                 "installments" => 1
-    //             ],
-    //             "back_urls" => [
-    //                 "success" => url('/pagamento-sucesso'),
-    //                 "failure" => url('/pagamento-falha'),
-    //                 "pending" => url('/pagamento-pendente')
-    //             ],
-    //             "auto_return" => "approved"
-    //         ]);
-    
-    //         if ($response->failed()) {
-    //             Log::error("Erro ao criar a preferência: " . $response->body());
-    //             return response()->json(["error" => "Erro ao criar a preferência", "details" => $response->json()], 500);
-    //         }
-    
-    //         $preferenceId = $response->json()["id"];
-    //         Log::info("Preferência criada com sucesso: ID {$preferenceId}");
-    
-    //         // Verifica o status do pagamento
-    //         $paymentCheckUrl = "https://api.mercadopago.com/v1/payments/{$preferenceId}";
-    //         $paymentResponse = Http::withToken($accessToken)->get($paymentCheckUrl);
-    
-    //         if ($paymentResponse->successful()) {
-    //             $paymentData = $paymentResponse->json();
-    
-    //             Log::info("Pagamento criado com status: {$paymentData['status']}");
-    
-    //             if ($paymentData['status'] === 'pending' && $paymentMethod === 'pix') {
-    //                 return redirect()->route('pagamentos.pendente')->with(['preferenceId' => $preferenceId]);
-    //             }
-    //         } else {
-    //             Log::error("Erro ao verificar status do pagamento: " . $paymentResponse->body());
-    //         }
-    
-    //         return response()->json(["preferenceId" => $preferenceId]);
-    
-    //     } catch (\Exception $e) {
-    //         Log::error("Exceção ao criar preferência: " . $e->getMessage());
-    //         return response()->json(["error" => "Erro interno ao processar a solicitação"], 500);
-    //     }
-    // }
-    
 
 public function createPreference(Request $request)
 {
@@ -340,7 +201,7 @@ public function createPreference(Request $request)
             "payer" => [
                 "email" => $request->payer_email
             ],
-            "external_reference" => auth()->id(), // Salva o ID do usuário autenticado
+            "external_reference" => auth()->id() ?? "pedido_" . time(), // Defina uma referência única
             "back_urls" => [
                 "success" => url('/pagamento-sucesso'),
                 "failure" => url('/pagamento-falha'),
