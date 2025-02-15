@@ -146,7 +146,7 @@ public function createPixPayment(Request $request)
         }
 
         $paymentData = $response->json();
-
+        Log::info("Detalhes do pagamento", ["payment_data" => $paymentData]);
         return response()->json([
             "qr_code" => $paymentData["point_of_interaction"]["transaction_data"]["qr_code"] ?? null,
             "qr_code_base64" => $paymentData["point_of_interaction"]["transaction_data"]["qr_code_base64"] ?? null,
@@ -191,8 +191,10 @@ public function createPixPayment(Request $request)
         Log::error('Erro ao buscar pagamento após múltiplas tentativas: ' . $response->body());
         return null;
     }
-    private function updatePaymentStatus($payment)
-{
+
+
+    private function updatePaymentStatus($payment){
+        
     Log::info("Entrou na função updatePaymentStatus para pagamento ID {$payment['id']} com status {$payment['status']}");
 
     if (!isset($payment['status'])) {
@@ -200,8 +202,9 @@ public function createPixPayment(Request $request)
         return;
     }
 
-    if (!isset($payment['external_reference']) || empty($payment['external_reference'])) {
-        Log::error("Pagamento ID {$payment['id']} não contém external_reference.");
+    // Verificar se o external_reference existe e não está vazio
+    if (empty($payment['external_reference'])) {
+        Log::error("Pagamento ID {$payment['id']} não contém external_reference válido.");
         return;
     }
 
@@ -210,7 +213,7 @@ public function createPixPayment(Request $request)
     $user = User::where('id', $userId)->first();
 
     if (!$user) {
-        Log::error("Usuário não encontrado para external_reference {$payment['external_reference']}");
+        Log::error("Usuário não encontrado para ID {$userId}.");
         return;
     }
 
@@ -223,6 +226,7 @@ public function createPixPayment(Request $request)
     // Se status não for tratado, logamos para análise
     Log::warning("Status não tratado para pagamento ID {$payment['id']}: {$payment['status']}");
 }
+
 
 
 
