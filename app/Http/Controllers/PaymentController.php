@@ -133,7 +133,7 @@ public function createPixPayment(Request $request)
             "payer" => [
                 "email" => $request->payer_email
             ],
-            //"external_reference" => "pedido_" . time(), // Defina uma referência única
+            "external_reference" => auth()->id() ?? "pedido_" . time(), // Defina uma referência única
         ]);
 
         //Log::info("Tentando salvar");
@@ -230,153 +230,153 @@ public function createPixPayment(Request $request)
 
 
 
-public function createPreference(Request $request)
-{
-    $userId = Auth::id();
-    $user = User::where('id', $userId)->first();
+// public function createPreference(Request $request)
+// {
+//     $userId = Auth::id();
+//     $user = User::where('id', $userId)->first();
 
-    try {
-        $accessToken = env('MERCADO_PAGO_ACCESS_TOKEN');
+//     try {
+//         $accessToken = env('MERCADO_PAGO_ACCESS_TOKEN');
 
-        if (!$accessToken) {
-            Log::error("Mercado Pago: Access Token não encontrado.");
-            return response()->json(["error" => "Erro na configuração do Mercado Pago"], 500);
-        }
+//         if (!$accessToken) {
+//             Log::error("Mercado Pago: Access Token não encontrado.");
+//             return response()->json(["error" => "Erro na configuração do Mercado Pago"], 500);
+//         }
 
-        $url = "https://api.mercadopago.com/checkout/preferences";
+//         $url = "https://api.mercadopago.com/checkout/preferences";
 
-        $amount = floatval($request->amount); // Garante que o valor é numérico
+//         $amount = floatval($request->amount); // Garante que o valor é numérico
 
-        $response = Http::withToken($accessToken)->post($url, [
-            "items" => [
-                [
-                    "title" => "Produto Teste",
-                    "quantity" => 1,
-                    "currency_id" => "BRL", // Adicionado para evitar problemas de moeda
-                    "unit_price" => $amount
-                ]
-            ],
-            "payer" => [
-                "email" => $request->payer_email
-            ],
-            "external_reference" => $user->id ?? "pedido_" . time(), // Defina uma referência única
-            "back_urls" => [
-                "success" => url('/pagamento-sucesso'),
-                "failure" => url('/pagamento-falha'),
-                "pending" => url('/pagamento-pendente')
-            ],
-            "auto_return" => "approved"
-        ]);
+//         $response = Http::withToken($accessToken)->post($url, [
+//             "items" => [
+//                 [
+//                     "title" => "Produto Teste",
+//                     "quantity" => 1,
+//                     "currency_id" => "BRL", // Adicionado para evitar problemas de moeda
+//                     "unit_price" => $amount
+//                 ]
+//             ],
+//             "payer" => [
+//                 "email" => $request->payer_email
+//             ],
+//             "external_reference" => $user->id ?? "pedido_" . time(), // Defina uma referência única
+//             "back_urls" => [
+//                 "success" => url('/pagamento-sucesso'),
+//                 "failure" => url('/pagamento-falha'),
+//                 "pending" => url('/pagamento-pendente')
+//             ],
+//             "auto_return" => "approved"
+//         ]);
 
-        if ($response->failed()) {
-            Log::error("Erro ao criar a preferência: " . $response->body());
-            return response()->json(["error" => "Erro ao criar a preferência", "details" => $response->json()], 500);
-        }
+//         if ($response->failed()) {
+//             Log::error("Erro ao criar a preferência: " . $response->body());
+//             return response()->json(["error" => "Erro ao criar a preferência", "details" => $response->json()], 500);
+//         }
 
-        return response()->json(["preferenceId" => $response->json()["id"]]);
+//         return response()->json(["preferenceId" => $response->json()["id"]]);
 
-    } catch (\Exception $e) {
-        Log::error("Exceção ao criar preferência: " . $e->getMessage());
-        return response()->json(["error" => "Erro interno ao processar a solicitação"], 500);
-    }
-}
+//     } catch (\Exception $e) {
+//         Log::error("Exceção ao criar preferência: " . $e->getMessage());
+//         return response()->json(["error" => "Erro interno ao processar a solicitação"], 500);
+//     }
+// }
 
-public function processPayment(Request $request)
-{
-    $accessToken = env('MERCADO_PAGO_ACCESS_TOKEN'); // Definir no .env
-    $url = "https://api.mercadopago.com/v1/payments";
+// public function processPayment(Request $request)
+// {
+//     $accessToken = env('MERCADO_PAGO_ACCESS_TOKEN'); // Definir no .env
+//     $url = "https://api.mercadopago.com/v1/payments";
 
-    // Capturar os dados da requisição
-    $paymentData = [
-        "transaction_amount" => $request->transaction_amount,
-        "token" => $request->token,
-        "description" => "Compra em Proconline",
-        "installments" => $request->installments,
-        "payment_method_id" => $request->payment_method_id,
-        "payer" => [
-            "email" => $request->payer['email']
-        ],
-        // Adiciona o external_reference
-        "external_reference" => $request->external_reference,
-    ];
+//     // Capturar os dados da requisição
+//     $paymentData = [
+//         "transaction_amount" => $request->transaction_amount,
+//         "token" => $request->token,
+//         "description" => "Compra em Proconline",
+//         "installments" => $request->installments,
+//         "payment_method_id" => $request->payment_method_id,
+//         "payer" => [
+//             "email" => $request->payer['email']
+//         ],
+//         // Adiciona o external_reference
+//         "external_reference" => $request->external_reference,
+//     ];
 
-    // Adicionar informações de identificação se não for PIX
-    if ($request->payment_method_id !== 'pix' && isset($request->payer['identification'])) {
-        $paymentData['payer']['identification'] = [
-            'type' => $request->payer['identification']['type'],
-            'number' => $request->payer['identification']['number']
-        ];
-    }
+//     // Adicionar informações de identificação se não for PIX
+//     if ($request->payment_method_id !== 'pix' && isset($request->payer['identification'])) {
+//         $paymentData['payer']['identification'] = [
+//             'type' => $request->payer['identification']['type'],
+//             'number' => $request->payer['identification']['number']
+//         ];
+//     }
 
-    // Enviar requisição para o Mercado Pago
-    $response = Http::withToken($accessToken)->post($url, $paymentData);
-    Log::info("Response: " . $response);
+//     // Enviar requisição para o Mercado Pago
+//     $response = Http::withToken($accessToken)->post($url, $paymentData);
+//     Log::info("Response: " . $response);
 
-    if ($response->failed()) {
-        Log::error('Erro ao processar pagamento controller:', [
-            'status_code' => $response->status(),
-            'response_body' => $response->body()
-        ]);
+//     if ($response->failed()) {
+//         Log::error('Erro ao processar pagamento controller:', [
+//             'status_code' => $response->status(),
+//             'response_body' => $response->body()
+//         ]);
         
-        return response()->json([
-            'error' => 'Erro ao processar pagamento controller',
-            'details' => $response->json()
-        ], 400);
-    }
+//         return response()->json([
+//             'error' => 'Erro ao processar pagamento controller',
+//             'details' => $response->json()
+//         ], 400);
+//     }
 
-    // Processar resposta do pagamento
-    $payment = $response->json();
-    $paymentId = $payment['id'];
-    $paymentStatus = $payment['status'];
-    $externalReference = $payment['external_reference'];
+//     // Processar resposta do pagamento
+//     $payment = $response->json();
+//     $paymentId = $payment['id'];
+//     $paymentStatus = $payment['status'];
+//     $externalReference = $payment['external_reference'];
 
-    // Recuperar o usuário associado ao external_reference
-    $user = User::where('external_reference', $externalReference)->first();
+//     // Recuperar o usuário associado ao external_reference
+//     $user = User::where('external_reference', $externalReference)->first();
 
-    Log::info("Usuário encontrado para external_reference $externalReference: " . json_encode($user));
+//     Log::info("Usuário encontrado para external_reference $externalReference: " . json_encode($user));
 
-    if (!$user) {
-        Log::error("Usuário não encontrado para external_reference $externalReference");
-        return response()->json([
-            'error' => 'Usuário não encontrado para o pagamento'
-        ], 404);
-    }
+//     if (!$user) {
+//         Log::error("Usuário não encontrado para external_reference $externalReference");
+//         return response()->json([
+//             'error' => 'Usuário não encontrado para o pagamento'
+//         ], 404);
+//     }
 
-    // Se o pagamento foi aprovado, adiciona crédito ao usuário
-    if ($paymentStatus === 'approved') {
-        $user->credito += $payment['transaction_amount'];
-        $user->save();
+//     // Se o pagamento foi aprovado, adiciona crédito ao usuário
+//     if ($paymentStatus === 'approved') {
+//         $user->credito += $payment['transaction_amount'];
+//         $user->save();
 
-        Log::info("Crédito de {$payment['transaction_amount']} adicionado ao usuário ID {$user->id}");
-    }
+//         Log::info("Crédito de {$payment['transaction_amount']} adicionado ao usuário ID {$user->id}");
+//     }
 
-    return response()->json([
-        'status' => 'success',
-        'payment_id' => $paymentId,
-        'payment_status' => $paymentStatus, // Exemplo: "approved", "pending", "rejected"
-        'status_detail' => $payment['status_detail'] // Exemplo: "accredited"
-    ]);
-}
+//     return response()->json([
+//         'status' => 'success',
+//         'payment_id' => $paymentId,
+//         'payment_status' => $paymentStatus, // Exemplo: "approved", "pending", "rejected"
+//         'status_detail' => $payment['status_detail'] // Exemplo: "accredited"
+//     ]);
+// }
 
 
-    // Método para quando o pagamento for bem-sucedido
-    public function paymentSuccess(Request $request)
-    {
-        // Pode processar dados adicionais do pagamento, se necessário
-        return view('pagamentos.sucesso');
-    }
+//     // Método para quando o pagamento for bem-sucedido
+//     public function paymentSuccess(Request $request)
+//     {
+//         // Pode processar dados adicionais do pagamento, se necessário
+//         return view('pagamentos.sucesso');
+//     }
 
-    // Método para quando o pagamento falhar
-    public function paymentFailure(Request $request)
-    {
-        // Pode processar dados adicionais sobre a falha do pagamento
-        return view('pagamentos.falha');
-    }
+//     // Método para quando o pagamento falhar
+//     public function paymentFailure(Request $request)
+//     {
+//         // Pode processar dados adicionais sobre a falha do pagamento
+//         return view('pagamentos.falha');
+//     }
 
-    // Método para quando o pagamento for pendente
-    public function paymentPending(Request $request)
-    {
-        // Pode processar dados adicionais sobre o status pendente do pagamento
-        return view('pagamentos.pendente');
-    }
+//     // Método para quando o pagamento for pendente
+//     public function paymentPending(Request $request)
+//     {
+//         // Pode processar dados adicionais sobre o status pendente do pagamento
+//         return view('pagamentos.pendente');
+//     }
 }
