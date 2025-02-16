@@ -144,7 +144,7 @@ public function createPixPayment(Request $request)
         // Salvar o pedido no banco de dados
         $pedido = new Pedido();
         $pedido->valor = $request->amount;
-        $pedido->status = 'pendente';
+        $pedido->status = 'pending';
         $pedido->class_status = 'badge badge-outline-warning';
         $pedido->user_id = $user->id;
         $pedido->external_reference = $response->json()["id"];

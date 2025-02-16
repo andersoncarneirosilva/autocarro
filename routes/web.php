@@ -41,7 +41,16 @@ Route::middleware(['auth'])->group(function () {
             return response()->json(['status' => 'unauthorized'], 401);
         }
     
-        return response()->json(['status' => $user->payment_status]);
+        // Buscar o pedido mais recente do usuário
+        $pedido = Pedido::where('user_id', $user->id)
+                        ->orderBy('created_at', 'desc')
+                        ->first();
+    
+        if (!$pedido) {
+            return response()->json(['status' => 'no_order_found']);
+        }
+    
+        return response()->json(['status' => $pedido->status]);
     });
     
     Route::post('/checkout', [PaymentController::class, 'selecionarPlano'])->name('checkout');
