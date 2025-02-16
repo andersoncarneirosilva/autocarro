@@ -32,6 +32,7 @@ class User extends Authenticatable
         'credito',
         'size_folder',
         'external_reference',
+        'payment_status',
     ];
 
     /**

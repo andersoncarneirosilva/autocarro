@@ -207,23 +207,37 @@ public function createPixPayment(Request $request)
             return;
         }
     
-        // Buscar o usuário pelo external_reference correto
-        $user = User::where('external_reference', $payment['id'])->first();
+        // Buscar o usuário pelo external_reference
+        $user = User::where('external_reference', $payment['external_reference'])->first();
     
         if (!$user) {
             Log::error("Usuário não encontrado para external_reference {$payment['external_reference']}.");
             return;
         }
     
-        // Se for pagamento PIX pendente, direciona para página correta
+        // Se for pagamento PIX pendente
         if ($payment['status'] === 'pending' && $payment['payment_method_id'] === 'pix') {
             Log::info("Pagamento PIX pendente para usuário ID {$user->id}. Aguardando confirmação.");
+            return;
+        }
+    
+        // ✅ Novo tratamento para pagamento aprovado
+        if ($payment['status'] === 'approved') {
+            Log::info("Pagamento aprovado para usuário ID {$user->id}. Atualizando status...");
+    
+            // Exemplo: Atualizar o status do usuário ou da compra
+            $user->payment_status = 'paid'; // Certifique-se de que esta coluna existe no banco de dados
+            $user->save();
+    
+            Log::info("Status de pagamento atualizado para 'paid'.");
+    
             return;
         }
     
         // Se status não for tratado, logamos para análise
         Log::warning("Status não tratado para pagamento ID {$payment['id']}: {$payment['status']}");
     }
+    
     
 
 
