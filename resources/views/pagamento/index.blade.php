@@ -237,7 +237,7 @@ document.getElementById("btCopiar").addEventListener("click", function () {
             let data = await response.json();
 
             if (data.status === 'paid') {
-                window.location.href = "{{ route('pagamento-confirmado') }}"; // Usa a rota Laravel
+                window.location.href = "{{ route('pagamento-sucesso') }}"; // Usa a rota Laravel
             }
         } catch (error) {
             console.error("Erro ao verificar pagamento:", error);
