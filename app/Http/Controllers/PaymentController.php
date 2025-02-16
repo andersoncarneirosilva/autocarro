@@ -244,6 +244,7 @@ public function createPixPayment(Request $request)
             Log::info("Pagamento aprovado para pedido ID {$pedido->id}. Atualizando status...");
     
             // Atualiza o status do pedido
+            $pedido->class_status = 'badge badge-outline-success';
             $pedido->status = 'paid';
             $pedido->save();
     
