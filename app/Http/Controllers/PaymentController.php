@@ -68,7 +68,7 @@ class PaymentController extends Controller
                 Log::error("Pagamento ID {$paymentData['id']} não contém external_reference.");
                 return response()->json(["message" => "Pagamento sem external_reference"], 200);
             }
-
+            Log::info("handleWebhook - Pagamento ID external_reference: {$paymentData['id']}");
             // Buscar o usuário com base no external_reference
             $user = User::where('external_reference', $paymentData['external_reference'])->first();
 
