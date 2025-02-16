@@ -30,6 +30,7 @@ use Illuminate\Support\Facades\Route;
 use App\Events\EventReminderBroadcast;
 use App\Http\Controllers\MercadoPagoController;
 use App\Http\Controllers\PaymentController;
+use App\Http\Controllers\AssinaturaController;
 
 
 Route::middleware(['auth'])->group(function () {
@@ -51,7 +52,7 @@ Route::middleware(['auth'])->group(function () {
             return response()->json(['status' => 'unauthorized'], 401);
         }
     
-        $pedido = \App\Models\Pedido::where('user_id', $user->id)
+        $pedido = \App\Models\Assinatura::where('user_id', $user->id)
                     ->orderBy('created_at', 'desc')
                     ->first();
     
@@ -66,6 +67,7 @@ Route::middleware(['auth'])->group(function () {
     Route::post('/checkout', [PaymentController::class, 'selecionarPlano'])->name('checkout');
     Route::get('/pagamento', [PaymentController::class, 'paginaPagamento'])->name('pagamento.index');
 
+    Route::get('/assinatura', [AssinaturaController::class, 'index'])->name('assinatura.index');
     
     Route::get('/planos', [PaymentController::class, 'index'])->name('planos.index');
     // Route::get('/pedidos/create', [PedidoController::class, 'create'])->name('pedidos.create');

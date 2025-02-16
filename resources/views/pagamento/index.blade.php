@@ -38,92 +38,75 @@
     <div class="card">
       <div class="card-body">
         <div class="row">
-          <div class="col-lg-4">
-
+            <!-- Coluna para o resumo do pedido -->
+            <div class="col-lg-4">
                 <div class="border p-3 rounded">
                     <h4 class="header-title mb-3 text-center">Resumo do Pedido</h4>
-                    <div class="table-responsive">
-                    <table class="table table-nowrap table-centered mb-0">
-                        <tbody>
-                            <tr>
-                                <td>
-                                    <p class="m-0 d-inline-block align-middle">
-                                        <a href="apps-ecommerce-products-details.html" class="text-body fw-semibold">Plano {{ $plano }}</a>
-                                        <br>
-                                        <li>20 documentos</li>
-                                    </p>
-                                </td>
-                                <td class="text-end">
-                                    Total: R$ {{ number_format($preco, 2, ',', '.') }}
-                                </td>
-                            </tr>
-                        </tbody>
-                    </table>
-                </div>
-
-            </div>
-          </div>
-
-          <div class="col-lg-8">
-
-            <!-- Pagamento via PIX -->
-            <div class="border p-3 rounded" id="divGerarPix">
-                <div class="row align-items-center">
-                    <div class="col-9">
-                        <div class="form-check">
-                            <!-- Botão para gerar o QR Code (inicialmente visível) -->
-                            <button id="pixPaymentButton" class="btn btn-success" style="display: block;" onclick="processPixPayment()">Gerar QR Code</button>
-            
-                            <!-- Botão de "Loading..." (inicialmente oculto) -->
-                            <button class="btn btn-success" id="pixPaymentButtonLoading" type="button" disabled style="display: none;">
-                                <span class="spinner-border spinner-border-sm me-1" role="status" aria-hidden="true"></span>
-                                Gerando QR Code...
-                            </button>
+                    <div class="d-flex justify-content-between align-items-center">
+                        <div>
+                            <span>Plano {{ $plano }}</span>
+                            <br>
+                            <span>20 documentos</span>
+                        </div>
+                        <div class="text-end">
+                            <span>Total: R$ {{ number_format($preco, 2, ',', '.') }}</span>
                         </div>
                     </div>
-                    <div class="col-3 text-end">
-                        <img src="assets/images/payments/pix.png" class="img-fluid" alt="PIX-img" width="75px">
+                </div>
+            </div>
+        
+            <!-- Coluna para o pagamento via PIX -->
+            <div class="col-lg-8">
+                <div class="border p-3 rounded" id="divGerarPix">
+                    <div class="row align-items-center">
+                        <div class="col-9">
+                            <div class="form-check">
+                                <!-- Botão para gerar o QR Code (inicialmente visível) -->
+                                <button id="pixPaymentButton" class="btn btn-success" style="display: block;" onclick="processPixPayment()">Gerar QR Code</button>
+        
+                                <!-- Botão de "Loading..." (inicialmente oculto) -->
+                                <button class="btn btn-success" id="pixPaymentButtonLoading" type="button" disabled style="display: none;">
+                                    <span class="spinner-border spinner-border-sm me-1" role="status" aria-hidden="true"></span>
+                                    Gerando QR Code...
+                                </button>
+                            </div>
+                        </div>
+                        <div class="col-3 text-end">
+                            <img src="assets/images/payments/pix.png" class="img-fluid" alt="PIX-img" width="75px">
+                        </div>
                     </div>
                 </div>
+        
+                <div id="pixPaymentContainer" class="border p-3 rounded" style="display: none;">
+                    <!-- Container para exibir o QR Code PIX -->
+                    <div id="pixContainer" style="display: none;">
+                        <h4 class="header-title mb-3">Escaneie o QR Code para pagar com PIX:</h4>
+                        <img id="pixQrCode" src="" alt="QR Code PIX" style="width: 250px;">
+                        <a id="pixTicketUrl" href="#" target="_blank"></a>
+                    </div>
+        
+                    <!-- Input para Copia e Cola -->
+                    <input type="hidden" id="pixCopiaCola" class="form-control" readonly style="display: none;">
+                    <button class="btn btn-outline-secondary" id="btCopiar" type="button" style="display: none;">Copiar</button>
+        
+                    <!-- Timer de 5 minutos -->
+                    <div id="timer" style="display: none; margin-top: 10px;">
+                        <h5>Tempo restante:</h5>
+                        <span id="timerDisplay">05:00</span>
+                    </div>
+        
+                    <div class="col-6">
+                        <a href="{{ route('planos.index') }}" id="linkPlanos" style="display: none;" class="btn btn-info btn-sm mt-2">
+                            <i class="mdi mdi-view-dashboard-outline me-1"></i> Escolha o plano novamente
+                        </a>
+                    </div>
+        
+                    <!-- Mensagem de erro (oculta por padrão) -->
+                    <p id="pixErrorMessage" style="color: red; display: none;">Erro ao processar pagamento PIX.</p>
+                </div>
             </div>
-            
-
-            <div id="pixPaymentContainer" class="border p-3 rounded" style="display: none;">
-                <!-- Container para exibir o QR Code PIX -->
-                <div id="pixContainer" style="display: none;">
-                    <h4 class="header-title mb-3">Escaneie o QR Code para pagar com PIX:</h4>
-                    <img id="pixQrCode" src="" alt="QR Code PIX" style="width: 250px;">
-                    <a id="pixTicketUrl" href="#" target="_blank"></a>
-                </div>
-            
-                <!-- Input para Copia e Cola -->
-                <input type="hidden" id="pixCopiaCola" class="form-control" readonly style="display: none;">
-                <button class="btn btn-outline-secondary" id="btCopiar" type="button" style="display: none;">Copiar</button>
-            
-                <!-- Timer de 5 minutos -->
-                <div id="timer" style="display: none; margin-top: 10px;">
-                    <h5>Tempo restante:</h5>
-                    <span id="timerDisplay">05:00</span>
-                </div>
-
-                <div class="col-6">
-                    <a href="{{ route('planos.index') }}" id="linkPlanos" style="display: none;" class="btn btn-info btn-sm mt-2">
-                        <i class="mdi mdi-view-dashboard-outline me-1"></i> Escolha o plano novamente
-                    </a>
-                </div>
-
-                
-            
-                <!-- Mensagem de erro (oculta por padrão) -->
-                <p id="pixErrorMessage" style="color: red; display: none;">Erro ao processar pagamento PIX.</p>
-            </div>
-            
-
-
-
-
-          </div>
-        </div> <!-- row -->
+        </div>
+        
       </div> <!-- card-body -->
     </div> <!-- card -->
   </div> <!-- col-12 -->

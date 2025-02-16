@@ -18,7 +18,18 @@
 </div>
 <br>
 
-<h1>Ocorreu um erro no seu pagamento.</h1>
-<p>Infelizmente, não conseguimos processar o pagamento. Tente novamente ou entre em contato com o suporte.</p>
+<div class="row">
+    <div class="col-sm-12">
+        <div class="text-center">
+            <h3 class="">Ocorreu um erro no seu pagamento!</h3>
+            <p class="text-muted mt-3">Infelizmente, não conseguimos processar o pagamento. Tente novamente ou entre em contato com o suporte.</p>
+
+            <a href="{{ route('dashboard.index') }}" class="btn btn-success btn-sm mt-2">
+                <i class="mdi mdi-view-dashboard-outline me-1"></i> Ir para Dashboard
+            </a>
+        </div>
+    </div><!-- end col -->
+</div>
+
 
 @endsection

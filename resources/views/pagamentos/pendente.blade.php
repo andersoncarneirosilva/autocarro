@@ -18,7 +18,18 @@
 </div>
 <br>
 
-<h1>Pagamento Pendente</h1>
-<p>Seu pagamento está em análise. Aguarde a confirmação do pagamento.</p>
+<div class="row">
+    <div class="col-sm-12">
+        <div class="text-center">
+            <h3 class="">Pagamento Pendente!</h3>
+            <p class="text-muted mt-3">Seu pagamento está em análise. Aguarde a confirmação do pagamento.</p>
+
+            <a href="{{ route('dashboard.index') }}" class="btn btn-success btn-sm mt-2">
+                <i class="mdi mdi-view-dashboard-outline me-1"></i> Ir para Dashboard
+            </a>
+        </div>
+    </div><!-- end col -->
+</div>
+
 
 @endsection

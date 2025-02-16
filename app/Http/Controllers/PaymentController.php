@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 use App\Models\User;
-use App\Models\Pedido;
+use App\Models\Assinatura;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Http;
@@ -74,7 +74,7 @@ class PaymentController extends Controller
                 Log::info("handleWebhook - Pagamento external_reference: {$externalReference}");
     
                 // Buscar o pedido na tabela pedidos
-                $pedido = Pedido::where('external_reference', $externalReference)->first();
+                $pedido = Assinatura::where('external_reference', $externalReference)->first();
     
                 if (!$pedido) {
                     Log::error("handleWebhook - Pedido não encontrado para external_reference {$externalReference}");
@@ -142,13 +142,17 @@ public function createPixPayment(Request $request)
         ]);
 
         // Salvar o pedido no banco de dados
-        $pedido = new Pedido();
+        $pedido = new Assinatura();
         $pedido->valor = $request->amount;
         $pedido->status = 'pending';
         $pedido->class_status = 'badge badge-outline-warning';
         $pedido->user_id = $user->id;
         $pedido->external_reference = $response->json()["id"];
+        $pedido->data_inicio = now(); // Define a data de início como a data atual
+        $pedido->data_fim = now()->addDays(30); // Define a data de fim para daqui a 30 dias
+        $pedido->plano = $request->plano ?? 'Padrão'; // Defina um valor padrão ou pegue do request
         $pedido->save();
+
 
         if ($response->failed()) {
             Log::error("Erro ao criar pagamento PIX: " . $response->body());
@@ -218,7 +222,7 @@ public function createPixPayment(Request $request)
         }
     
         // Buscar o pedido pelo external_reference
-        $pedido = \App\Models\Pedido::where('external_reference', $payment['id'])->first();
+        $pedido = \App\Models\Assinatura::where('external_reference', $payment['id'])->first();
     
         if (!$pedido) {
             Log::error("updatePaymentStatus - Pedido não encontrado para external_reference {$payment['id']}.");
@@ -226,7 +230,7 @@ public function createPixPayment(Request $request)
         }
     
         // Buscar o usuário associado ao pedido
-        $user = \App\Models\User::find($pedido->user_id);
+        $user = \App\Models\Assinatura::find($pedido->user_id);
     
         if (!$user) {
             Log::error("updatePaymentStatus - Usuário não encontrado para pedido ID {$pedido->id}.");

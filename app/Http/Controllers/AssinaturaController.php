@@ -1,36 +1,32 @@
 <?php
 
 namespace App\Http\Controllers;
-
-use App\Models\Pedido;
+use App\Models\User;
+use App\Models\Assinatura;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Log;
-use App\Models\User;
 
-class PedidoController extends Controller
+class AssinaturaController extends Controller
 {
     /**
      * Display a listing of the resource.
      */
-    public function __construct(Pedido $pedido)
-    {
-        $this->model = $pedido;
-    }
-
     public function index()
-    {
-        //
-        $title = 'Excluir!';
-        $text = "Deseja arquivar esse veículo?";
-        confirmDelete($title, $text);
-        
-        $userId = Auth::id();
-        $pedidos = Pedido::where('user_id', $userId)->paginate(10);
+{
+    // Obtemos o ID do usuário logado
+    $userId = Auth::id();
 
-        return view('pedidos.index', compact(['pedidos']));
-    }
+    // Buscamos as assinaturas do usuário com o filtro 'Ativo'
+    $assinaturas = Assinatura::where('user_id', $userId)
+                              ->orderBy('created_at', 'desc') // Ordena pelo mais recente
+                              ->paginate(20); // Retorna os resultados paginados
+    //DD($assinaturas);
+    // Retorna a view com os dados
+    return view('assinatura.index', compact('userId', 'assinaturas'));
+}
+
 
     /**
      * Show the form for creating a new resource.
@@ -38,7 +34,6 @@ class PedidoController extends Controller
     public function create()
     {
         //
-        return view('pedidos.create');
     }
 
     /**
@@ -52,7 +47,7 @@ class PedidoController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(Pedido $pedido)
+    public function show(Assinatura $assinatura)
     {
         //
     }
@@ -60,7 +55,7 @@ class PedidoController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(Pedido $pedido)
+    public function edit(Assinatura $assinatura)
     {
         //
     }
@@ -68,7 +63,7 @@ class PedidoController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, Pedido $pedido)
+    public function update(Request $request, Assinatura $assinatura)
     {
         //
     }
@@ -76,9 +71,8 @@ class PedidoController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Pedido $pedido)
+    public function destroy(Assinatura $assinatura)
     {
         //
     }
-
 }

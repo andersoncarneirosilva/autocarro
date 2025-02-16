@@ -47,7 +47,7 @@
                                 <th>Nome</th>
                                 {{-- <th>E-mail</th> --}}
                                 <th>Telefone</th>
-                                <th>Nícel de acesso</th>
+                                <th>Nível de acesso</th>
                                 <th>Perfil</th>
                                 <th>Plano</th>
                                 <th>Status</th>
