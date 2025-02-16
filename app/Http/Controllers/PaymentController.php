@@ -202,16 +202,16 @@ public function createPixPayment(Request $request)
         }
     
         // Verificar se o external_reference existe e não está vazio
-        if (empty($payment['external_reference'])) {
+        if (empty($payment['id'])) {
             Log::error("Pagamento ID {$payment['id']} não contém external_reference válido.");
             return;
         }
     
         // Buscar o usuário pelo external_reference
-        $user = User::where('external_reference', $payment['external_reference'])->first();
+        $user = User::where('external_reference', $payment['id'])->first();
     
         if (!$user) {
-            Log::error("Usuário não encontrado para external_reference {$payment['external_reference']}.");
+            Log::error("updatePaymentStatus - Usuário não encontrado para external_reference {$payment['id']}.");
             return;
         }
     
