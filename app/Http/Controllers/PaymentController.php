@@ -193,39 +193,38 @@ public function createPixPayment(Request $request)
     }
 
 
-    private function updatePaymentStatus($payment){
-
-    Log::info("Entrou na função updatePaymentStatus para pagamento ID {$payment['id']} com status {$payment['status']}");
-
-    if (!isset($payment['status'])) {
-        Log::error("Pagamento ID {$payment['id']} não contém status válido.");
-        return;
+    private function updatePaymentStatus($payment) {
+        Log::info("Entrou na função updatePaymentStatus para pagamento ID {$payment['id']} com status {$payment['status']}");
+    
+        if (!isset($payment['status'])) {
+            Log::error("Pagamento ID {$payment['id']} não contém status válido.");
+            return;
+        }
+    
+        // Verificar se o external_reference existe e não está vazio
+        if (empty($payment['external_reference'])) {
+            Log::error("Pagamento ID {$payment['id']} não contém external_reference válido.");
+            return;
+        }
+    
+        // Buscar o usuário pelo external_reference correto
+        $user = User::where('external_reference', $payment['id'])->first();
+    
+        if (!$user) {
+            Log::error("Usuário não encontrado para external_reference {$payment['external_reference']}.");
+            return;
+        }
+    
+        // Se for pagamento PIX pendente, direciona para página correta
+        if ($payment['status'] === 'pending' && $payment['payment_method_id'] === 'pix') {
+            Log::info("Pagamento PIX pendente para usuário ID {$user->id}. Aguardando confirmação.");
+            return;
+        }
+    
+        // Se status não for tratado, logamos para análise
+        Log::warning("Status não tratado para pagamento ID {$payment['id']}: {$payment['status']}");
     }
-
-    // Verificar se o external_reference existe e não está vazio
-    if (empty($payment['external_reference'])) {
-        Log::error("Pagamento ID {$payment['id']} não contém external_reference válido.");
-        return;
-    }
-
-    // Buscar o usuário pelo external_reference
-    $userId = Auth::id();
-    $user = User::where('id', $userId)->first();
-
-    if (!$user) {
-        Log::error("Usuário não encontrado para ID {$user->id}.");
-        return;
-    }
-
-    // Se for pagamento PIX pendente, direciona para página correta
-    if ($payment['status'] === 'pending' && $payment['payment_method_id'] === 'pix') {
-        Log::info("Pagamento PIX pendente para usuário ID {$user->id}. Aguardando confirmação.");
-        return;
-    }
-
-    // Se status não for tratado, logamos para análise
-    Log::warning("Status não tratado para pagamento ID {$payment['id']}: {$payment['status']}");
-}
+    
 
 
 
