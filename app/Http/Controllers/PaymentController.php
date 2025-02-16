@@ -70,7 +70,7 @@ class PaymentController extends Controller
             }
             Log::info("handleWebhook - Pagamento ID external_reference: {$paymentData['id']}");
             // Buscar o usuário com base no external_reference
-            $user = User::where('external_reference', $paymentData['external_reference'])->first();
+            $user = User::where('external_reference', $paymentData['id'])->first();
 
             if (!$user) {
                 Log::error("handleWebhook - Usuário não encontrado para external_reference {$paymentData['external_reference']}");
