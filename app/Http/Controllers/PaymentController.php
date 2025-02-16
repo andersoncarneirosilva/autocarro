@@ -1,7 +1,8 @@
 <?php
 
 namespace App\Http\Controllers;
-use App\Models\User; 
+use App\Models\User;
+use App\Models\Pedido;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Http;
@@ -136,10 +137,15 @@ public function createPixPayment(Request $request)
             "external_reference" => $user->id ?? "pedido_" . time(), // Defina uma referência única
         ]);
 
-        //Log::info("Tentando salvar");
-        $user->external_reference = $response->json()["id"]; // Salva o preference ID como external_reference
-        $user->save();
-        
+        // Salvar o pedido no banco de dados
+        $pedido = new Pedido();
+        $pedido->valor = $request->amount;
+        $pedido->status = 'pendente';
+        $pedido->class_status = 'badge badge-outline-warning';
+        $pedido->user_id = $user->id;
+        $pedido->external_reference = $response->json()["id"];
+        $pedido->save();
+
         if ($response->failed()) {
             Log::error("Erro ao criar pagamento PIX: " . $response->body());
             return response()->json(["error" => "Erro ao criar pagamento PIX", "details" => $response->json()], 500);

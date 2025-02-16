@@ -13,6 +13,7 @@ class Pedido extends Model
         'valor',
         'class_status',
         'status',
+        'external_reference',
         'user_id',
 
 
