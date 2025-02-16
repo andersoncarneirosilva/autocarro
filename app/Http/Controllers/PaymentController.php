@@ -46,7 +46,7 @@ class PaymentController extends Controller
     public function handleWebhook(Request $request)
 {
     try {
-        Log::info('Webhook recebido:', $request->all());
+        Log::info('handleWebhook - Recebido:', $request->all());
 
         $accessToken = env('MERCADO_PAGO_ACCESS_TOKEN');
 
@@ -57,11 +57,11 @@ class PaymentController extends Controller
             $paymentData = $this->getPaymentDetails($paymentId, $accessToken);
 
             if (!$paymentData) {
-                Log::warning("Pagamento não encontrado: ID {$paymentId}");
+                Log::warning("handleWebhook - Pagamento não encontrado: ID {$paymentId}");
                 return response()->json(["message" => "Pagamento não encontrado"], 200);
             }
 
-            Log::info("Resposta do Mercado Pago: " . json_encode($paymentData));
+            Log::info("handleWebhook - Resposta do Mercado Pago: " . json_encode($paymentData));
 
             // Verificar se existe external_reference
             if (empty($paymentData['external_reference'])) {
@@ -73,18 +73,18 @@ class PaymentController extends Controller
             $user = User::where('external_reference', $paymentData['external_reference'])->first();
 
             if (!$user) {
-                Log::error("Usuário não encontrado para external_reference {$paymentData['external_reference']}");
+                Log::error("handleWebhook - Usuário não encontrado para external_reference {$paymentData['external_reference']}");
                 return response()->json(["message" => "Usuário não encontrado"], 404);
             }
 
             // Chama a função para atualizar o status do pagamento
-            Log::info("Chamando updatePaymentStatus para pagamento ID {$paymentData['id']}");
+            Log::info("handleWebhook - Chamando updatePaymentStatus para pagamento ID {$paymentData['id']}");
             $this->updatePaymentStatus($paymentData, $user);
 
             return response()->json(["message" => "Webhook processado com sucesso"]);
         }
 
-        Log::warning("Evento Webhook não reconhecido:", $request->all());
+        Log::warning("handleWebhook - Evento Webhook não reconhecido:", $request->all());
         return response()->json(["message" => "Nenhuma ação necessária"], 200);
 
     } catch (\Exception $e) {
@@ -101,7 +101,7 @@ public function createPixPayment(Request $request)
     Log::info("Entrou na : createPixPayment");
     // Obtém o usuário autenticado
     $token = $request->bearerToken();
-    Log::info("Token recebido: " . $token);
+    
     if (!$token) {
         Log::error("Token de autenticação não encontrado.");
         return response()->json(["error" => "Token de autenticação não encontrado"], 401);
@@ -118,7 +118,7 @@ public function createPixPayment(Request $request)
 
     try {
         $accessToken = env('MERCADO_PAGO_ACCESS_TOKEN');
-        Log::info("Access Token usado:", ["token" => $accessToken]);
+        
         if (!$accessToken) {
             Log::error("Mercado Pago: Access Token não encontrado.");
             return response()->json(["error" => "Erro na configuração do Mercado Pago"], 500);
@@ -139,14 +139,14 @@ public function createPixPayment(Request $request)
         //Log::info("Tentando salvar");
         $user->external_reference = $response->json()["id"]; // Salva o preference ID como external_reference
         $user->save();
-        Log::info("Salvou");
+        
         if ($response->failed()) {
             Log::error("Erro ao criar pagamento PIX: " . $response->body());
             return response()->json(["error" => "Erro ao criar pagamento PIX", "details" => $response->json()], 500);
         }
 
         $paymentData = $response->json();
-        Log::info("Detalhes do pagamento", ["payment_data" => $paymentData]);
+        
         return response()->json([
             "qr_code" => $paymentData["point_of_interaction"]["transaction_data"]["qr_code"] ?? null,
             "qr_code_base64" => $paymentData["point_of_interaction"]["transaction_data"]["qr_code_base64"] ?? null,
