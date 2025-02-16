@@ -230,5 +230,20 @@ document.getElementById("btCopiar").addEventListener("click", function () {
 });
 </script>
 
+<script>
+    setInterval(async function() {
+        try {
+            let response = await fetch('/check-payment-status');
+            let data = await response.json();
+
+            if (data.status === 'paid') {
+                window.location.href = "{{ route('pagamento-confirmado') }}"; // Usa a rota Laravel
+            }
+        } catch (error) {
+            console.error("Erro ao verificar pagamento:", error);
+        }
+    }, 2000);
+</script>
+
 
 @endsection

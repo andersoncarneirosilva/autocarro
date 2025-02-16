@@ -227,6 +227,7 @@ public function createPixPayment(Request $request)
     
             // Exemplo: Atualizar o status do usuário ou da compra
             $user->payment_status = 'paid'; // Certifique-se de que esta coluna existe no banco de dados
+            $user->credito += $payment['transaction_amount'];
             $user->save();
     
             Log::info("Status de pagamento atualizado para 'paid'.");

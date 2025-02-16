@@ -34,6 +34,16 @@ use App\Http\Controllers\PaymentController;
 
 Route::middleware(['auth'])->group(function () {
 
+    Route::get('/check-payment-status', function (Request $request) {
+        $user = Auth::user(); // Obtém o usuário autenticado
+    
+        if (!$user) {
+            return response()->json(['status' => 'unauthorized'], 401);
+        }
+    
+        return response()->json(['status' => $user->payment_status]);
+    });
+    
     Route::post('/checkout', [PaymentController::class, 'selecionarPlano'])->name('checkout');
     Route::get('/pagamento', [PaymentController::class, 'paginaPagamento'])->name('pagamento.index');
 
