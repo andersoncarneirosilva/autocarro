@@ -153,7 +153,7 @@
                 clearInterval(timerInterval); // Para o timer quando o tempo acabar
                 document.getElementById('linkPlanos').style.display = 'block';
             }
-        }, 10);
+        }, 1000);
     }
     </script>
     
