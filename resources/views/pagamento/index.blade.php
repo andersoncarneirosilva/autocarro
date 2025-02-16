@@ -200,7 +200,8 @@ document.getElementById("pixPaymentButton").addEventListener("click", async () =
             },
             body: JSON.stringify({
                 amount: {{ $preco }},
-                payer_email: @json($userEmail)
+                payer_email: @json($userEmail),
+                plano: @json($plano) 
             })
         });
 

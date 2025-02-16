@@ -54,8 +54,8 @@
                             <tr>
                                 <th>Plano</th>
                                 <th>Valor</th>
-                                <th>Data Inicio</th>
-                                <th>Data Fim</th>
+                                <th>Data Início</th>
+                                <th>Data Término</th>
                                 <th>Status</th>
                             </tr>
                         </thead>
@@ -64,9 +64,25 @@
                             <tr>
                                 <td>{{ $assinatura->plano }}</td>
                                 <td>R${{ $assinatura->valor }},00</td>
-                                <td>{{ $assinatura->data_inicio }}</td>
-                                <td>{{ $assinatura->data_fim }}</td>
-                                <td><span class="{{ $assinatura->class_status }}">{{ $assinatura->status }}</span></td>
+                                <td>{{ \Carbon\Carbon::parse($assinatura->data_inicio)->format('d/m/Y') }}</td>
+                                <td>{{ \Carbon\Carbon::parse($assinatura->data_fim)->format('d/m/Y') }}</td>
+                                @php
+                                    $statusTraduzido = [
+                                        'pending' => 'Pendente',
+                                        'approved' => 'Aprovado',
+                                        'in_process' => 'Em Processamento',
+                                        'rejected' => 'Rejeitado',
+                                        'cancelled' => 'Cancelado',
+                                        'refunded' => 'Reembolsado',
+                                        'charged_back' => 'Estornado'
+                                    ];
+                                @endphp
+
+                                <td>
+                                    <span class="{{ $assinatura->class_status }}">
+                                        {{ $statusTraduzido[$assinatura->status] ?? $assinatura->status }}
+                                    </span>
+                                </td>
 
                             </tr>
                             @endforeach
