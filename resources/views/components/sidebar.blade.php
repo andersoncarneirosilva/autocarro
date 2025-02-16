@@ -40,7 +40,7 @@
 
             <li class="side-nav-item">
                 <a href="{{ route('dashboard.index') }}" class="side-nav-link">
-                    <i class="uil-home-alt"></i>
+                    <i class="uil-apps"></i>
                     <span> Dashboard </span>
                 </a>
             </li>
@@ -137,12 +137,12 @@
             </li>
             @endcan --}}
             <li class="side-nav-item">
-                <a data-bs-toggle="collapse" href="#sidebarLayoutss" aria-expanded="false" aria-controls="sidebarLayouts" class="side-nav-link">
+                <a data-bs-toggle="collapse" href="#configuracao" aria-expanded="false" aria-controls="sidebarLayouts" class="side-nav-link">
                     <i class="uil-cog"></i>
                     <span> Configurações </span>
                     <span class="menu-arrow"></span>
                 </a>
-                <div class="collapse" id="sidebarLayoutss">
+                <div class="collapse" id="configuracao">
                     <ul class="side-nav-second-level">
                         <li>
                             <a href="{{ route('outorgados.index') }}">Outorgados</a>

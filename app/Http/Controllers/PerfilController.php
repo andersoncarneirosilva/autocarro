@@ -22,8 +22,10 @@ class PerfilController extends Controller
 
         $assinatura = $user->assinaturas()->latest()->first();
 
-        if (!$assinatura || now()->gt($assinatura->data_fim) || $assinatura->status == "pending") {
-            return redirect()->route('assinatura.expirada')->with('error', 'Sua assinatura expirou.');
+        if(!$user->plano == "Teste" || !$user->plano == "Premium"){
+            if (!$assinatura || now()->gt($assinatura->data_fim) || $assinatura->status == "pending") {
+                return redirect()->route('assinatura.expirada')->with('error', 'Sua assinatura expirou.');
+            }
         }
         //dd($user);
         $path = storage_path('app/public/documentos/usuario_' . auth()->id());
