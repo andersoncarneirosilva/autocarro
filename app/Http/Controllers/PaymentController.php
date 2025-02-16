@@ -213,7 +213,7 @@ public function createPixPayment(Request $request)
     $user = User::where('id', $userId)->first();
 
     if (!$user) {
-        Log::error("Usuário não encontrado para ID {$userId}.");
+        Log::error("Usuário não encontrado para ID {$user->id}.");
         return;
     }
 
