@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Cliente;
+use App\Models\User;
 use App\Models\Documento;
 use Smalot\PdfParser\Parser;
 use Illuminate\Support\Facades\Auth;
@@ -27,7 +28,13 @@ class ClientesController extends Controller
 
         // Obtendo o ID do usuário logado
     $userId = Auth::id();
+    $user = User::find($userId);
 
+    $assinatura = $user->assinaturas()->latest()->first();
+
+    if (!$assinatura || now()->gt($assinatura->data_fim) || $assinatura->status == "pending") {
+        return redirect()->route('assinatura.expirada')->with('error', 'Sua assinatura expirou.');
+    }
     // Filtrando os clientes do usuário logado e realizando a pesquisa
     $clientes = $this->model->getClientes($request->search, $userId);
         //dd($docs);

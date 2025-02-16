@@ -38,6 +38,8 @@
 
 @endcan --}}
 
+<!-- Bootstrap -->
+
 
 @include('dashboard.widgets.widgets')
 @include('dashboard.widgets.content')

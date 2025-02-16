@@ -53,7 +53,12 @@ class User extends Authenticatable
     protected $casts = [
         'email_verified_at' => 'datetime',
     ];
-
+    
+    public function assinaturas()
+    {
+        return $this->hasMany(Assinatura::class, 'user_id');
+    }
+    
     public function veiculos()
     {
         return $this->hasMany(Veiculo::class);

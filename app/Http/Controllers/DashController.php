@@ -32,6 +32,12 @@ class DashController extends Controller
 
         $userId = Auth::id();
         $user = User::find($userId);
+
+        $assinatura = $user->assinaturas()->latest()->first();
+
+        if (!$assinatura || now()->gt($assinatura->data_fim) || $assinatura->status == "pending") {
+            return redirect()->route('assinatura.expirada')->with('error', 'Sua assinatura expirou.');
+        }
         
         $emprestimos = Veiculo::where('user_id', $userId)
                             ->orderBy('created_at', 'desc')

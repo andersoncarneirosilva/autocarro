@@ -26,6 +26,12 @@ class ConfiguracoesController extends Controller
 
     $userId = Auth::id();
     $user = User::find($userId);
+
+    $assinatura = $user->assinaturas()->latest()->first();
+
+    if (!$assinatura || now()->gt($assinatura->data_fim) || $assinatura->status == "pending") {
+        return redirect()->route('assinatura.expirada')->with('error', 'Sua assinatura expirou.');
+    }
     //dd($user);
     // Paginar os registros de Outorgado
     $outorgados = Outorgado::where('user_id', $userId)->get();

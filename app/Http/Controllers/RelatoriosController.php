@@ -4,7 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Barryvdh\DomPDF\Facade as PDF;
-
+use App\Models\User;
 use App\Models\Cliente;
 use App\Models\Veiculo;
 use App\Models\Ordem;
@@ -16,6 +16,13 @@ class RelatoriosController extends Controller
     public function index(Request $request){
 
         $userId = Auth::id();
+        $user = User::find($userId);
+
+        $assinatura = $user->assinaturas()->latest()->first();
+
+        if (!$assinatura || now()->gt($assinatura->data_fim) || $assinatura->status == "pending") {
+            return redirect()->route('assinatura.expirada')->with('error', 'Sua assinatura expirou.');
+        }
 
         $title = 'Excluir!';
         $text = "Deseja excluir esse veículo?";

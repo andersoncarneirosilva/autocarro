@@ -40,9 +40,9 @@
                 <div class="card-header d-flex justify-content-between align-items-center">
                     <h4 class="header-title">Minhas assinaturas</h4>
                     <div class="dropdown">
-                        {{-- @can('access-admin') 
-                    <a href="{{ route('users.create')}}" class="btn btn-primary btn-sm">Cadastrar</a>
-                    @endcan --}}
+                    
+                    <a href="{{ route('planos.index')}}" class="btn btn-primary btn-sm">Adicionar créditos</a>
+                    
                         {{-- <button class="btn btn-secondary btn-sm" id="deleteAllSelectedRecord" disabled><i
                                 class="fa-solid fa-trash"></i></button> --}}
                     </div>
@@ -68,6 +68,7 @@
                                 <td>{{ \Carbon\Carbon::parse($assinatura->data_fim)->format('d/m/Y') }}</td>
                                 @php
                                     $statusTraduzido = [
+                                        'paid' => 'Aprovado',
                                         'pending' => 'Pendente',
                                         'approved' => 'Aprovado',
                                         'in_process' => 'Em Processamento',

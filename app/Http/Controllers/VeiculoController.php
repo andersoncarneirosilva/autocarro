@@ -42,11 +42,17 @@ class VeiculoController extends Controller
         confirmDelete($title, $text);
         
         $userId = Auth::id();
-        
+        $user = User::find($userId);
         $outorgados = Outorgado::where('user_id', $userId)->get();
 
         $clientes = Cliente::where('user_id', $userId)->get();
 
+        $assinatura = $user->assinaturas()->latest()->first();
+
+        if (!$assinatura || now()->gt($assinatura->data_fim) || $assinatura->status == "pending") {
+            return redirect()->route('assinatura.expirada')->with('error', 'Sua assinatura expirou.');
+        }
+        
         $veiculos = $this->model->getSearch($request->search, $userId);
         $quantidadePaginaAtual = $veiculos->count();
         $quantidadeTotal = $this->model
@@ -85,6 +91,13 @@ class VeiculoController extends Controller
         confirmDelete($title, $text);
         
         $userId = Auth::id();
+        $user = User::find($userId);
+
+        $assinatura = $user->assinaturas()->latest()->first();
+
+        if (!$assinatura || now()->gt($assinatura->data_fim) || $assinatura->status == "pending") {
+            return redirect()->route('assinatura.expirada')->with('error', 'Sua assinatura expirou.');
+        }
         
         $outorgados = Outorgado::where('user_id', $userId)->get();
 

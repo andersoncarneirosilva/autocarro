@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Outorgado;
+use App\Models\User;
 use App\Models\ModeloProcuracoes;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
@@ -23,6 +24,13 @@ class OutorgadoController extends Controller
         confirmDelete($title, $text);
 
         $userId = Auth::id();
+    $user = User::find($userId);
+
+    $assinatura = $user->assinaturas()->latest()->first();
+
+    if (!$assinatura || now()->gt($assinatura->data_fim) || $assinatura->status == "pending") {
+        return redirect()->route('assinatura.expirada')->with('error', 'Sua assinatura expirou.');
+    }
         $outs = $this->model->getSearch($request->search, $userId);
 
         return view('outorgados.index', compact('outs'));

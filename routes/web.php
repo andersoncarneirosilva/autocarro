@@ -35,15 +35,10 @@ use App\Http\Controllers\AssinaturaController;
 
 Route::middleware(['auth'])->group(function () {
 
-    // Route::get('/check-payment-status', function (Request $request) {
-    //     $user = Auth::user(); // Obtém o usuário autenticado
+    Route::get('/assinatura-expirada', function () {
+        return view('assinatura.expirada');
+    })->name('assinatura.expirada');
     
-    //     if (!$user) {
-    //         return response()->json(['status' => 'unauthorized'], 401);
-    //     }
-    
-    //     return response()->json(['status' => $user->payment_status]);
-    // });
     Route::get('/check-payment-status', function (Request $request) {
         $user = Auth::user();
     

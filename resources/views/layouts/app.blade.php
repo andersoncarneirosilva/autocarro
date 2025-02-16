@@ -31,7 +31,7 @@
         <!-- App css -->
 
         <link rel="stylesheet" href="{{ url('assets/css/app-saas.css') }}?v={{ time() }}" type="text/css" id="app-style" >
-
+        
         <script src="https://cdn.jsdelivr.net/npm/apexcharts@3.41.0"></script>
 
         <!-- Icons css -->
