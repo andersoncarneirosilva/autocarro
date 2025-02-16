@@ -217,30 +217,42 @@ public function createPixPayment(Request $request)
             return;
         }
     
-        // Buscar o usuário pelo external_reference
-        $user = User::where('external_reference', $payment['id'])->first();
+        // Buscar o pedido pelo external_reference
+        $pedido = \App\Models\Pedido::where('external_reference', $payment['id'])->first();
+    
+        if (!$pedido) {
+            Log::error("updatePaymentStatus - Pedido não encontrado para external_reference {$payment['id']}.");
+            return;
+        }
+    
+        // Buscar o usuário associado ao pedido
+        $user = \App\Models\User::find($pedido->user_id);
     
         if (!$user) {
-            Log::error("updatePaymentStatus - Usuário não encontrado para external_reference {$payment['id']}.");
+            Log::error("updatePaymentStatus - Usuário não encontrado para pedido ID {$pedido->id}.");
             return;
         }
     
         // Se for pagamento PIX pendente
         if ($payment['status'] === 'pending' && $payment['payment_method_id'] === 'pix') {
-            Log::info("Pagamento PIX pendente para usuário ID {$user->id}. Aguardando confirmação.");
+            Log::info("Pagamento PIX pendente para pedido ID {$pedido->id}. Aguardando confirmação.");
             return;
         }
     
         // ✅ Novo tratamento para pagamento aprovado
         if ($payment['status'] === 'approved') {
-            Log::info("Pagamento aprovado para usuário ID {$user->id}. Atualizando status...");
+            Log::info("Pagamento aprovado para pedido ID {$pedido->id}. Atualizando status...");
     
-            // Exemplo: Atualizar o status do usuário ou da compra
-            $user->payment_status = 'paid'; // Certifique-se de que esta coluna existe no banco de dados
+            // Atualiza o status do pedido
+            $pedido->status = 'paid';
+            $pedido->save();
+    
+            // Adiciona crédito ao usuário referente ao valor do pedido
+            $user->payment_status = 'paid';
             $user->credito += $payment['transaction_amount'];
             $user->save();
     
-            Log::info("Status de pagamento atualizado para 'paid'.");
+            Log::info("Status do pedido atualizado para 'paid' e crédito adicionado ao usuário ID {$user->id}.");
     
             return;
         }
@@ -248,5 +260,6 @@ public function createPixPayment(Request $request)
         // Se status não for tratado, logamos para análise
         Log::warning("Status não tratado para pagamento ID {$payment['id']}: {$payment['status']}");
     }
+    
     
 }
