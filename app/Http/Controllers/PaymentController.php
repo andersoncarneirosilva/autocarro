@@ -45,54 +45,58 @@ class PaymentController extends Controller
     }
 
     public function handleWebhook(Request $request)
-{
-    try {
-        Log::info('handleWebhook - Recebido:', $request->all());
-
-        $accessToken = env('MERCADO_PAGO_ACCESS_TOKEN');
-
-        if ($request->type === "payment" && isset($request->data['id'])) {
-            $paymentId = $request->data['id'];
-
-            // Buscar detalhes do pagamento
-            $paymentData = $this->getPaymentDetails($paymentId, $accessToken);
-
-            if (!$paymentData) {
-                Log::warning("handleWebhook - Pagamento não encontrado: ID {$paymentId}");
-                return response()->json(["message" => "Pagamento não encontrado"], 200);
+    {
+        try {
+            Log::info('handleWebhook - Recebido:', $request->all());
+    
+            $accessToken = env('MERCADO_PAGO_ACCESS_TOKEN');
+    
+            if ($request->type === "payment" && isset($request->data['id'])) {
+                $paymentId = $request->data['id'];
+    
+                // Buscar detalhes do pagamento
+                $paymentData = $this->getPaymentDetails($paymentId, $accessToken);
+    
+                if (!$paymentData) {
+                    Log::warning("handleWebhook - Pagamento não encontrado: ID {$paymentId}");
+                    return response()->json(["message" => "Pagamento não encontrado"], 200);
+                }
+    
+                Log::info("handleWebhook - Resposta do Mercado Pago: " . json_encode($paymentData));
+    
+                // Verificar se existe external_reference
+                if (empty($paymentData['id'])) {
+                    Log::error("Pagamento ID {$paymentData['id']} não contém external_reference.");
+                    return response()->json(["message" => "Pagamento sem external_reference"], 200);
+                }
+    
+                $externalReference = $paymentData['id'];
+                Log::info("handleWebhook - Pagamento external_reference: {$externalReference}");
+    
+                // Buscar o pedido na tabela pedidos
+                $pedido = Pedido::where('external_reference', $externalReference)->first();
+    
+                if (!$pedido) {
+                    Log::error("handleWebhook - Pedido não encontrado para external_reference {$externalReference}");
+                    return response()->json(["message" => "Pedido não encontrado"], 404);
+                }
+    
+                // Chama a função para atualizar o status do pagamento
+                Log::info("handleWebhook - Chamando updatePaymentStatus para pagamento ID {$paymentData['id']}");
+                $this->updatePaymentStatus($paymentData, $pedido);
+    
+                return response()->json(["message" => "Webhook processado com sucesso"]);
             }
-
-            Log::info("handleWebhook - Resposta do Mercado Pago: " . json_encode($paymentData));
-
-            // Verificar se existe external_reference
-            if (empty($paymentData['external_reference'])) {
-                Log::error("Pagamento ID {$paymentData['id']} não contém external_reference.");
-                return response()->json(["message" => "Pagamento sem external_reference"], 200);
-            }
-            Log::info("handleWebhook - Pagamento ID external_reference: {$paymentData['id']}");
-            // Buscar o usuário com base no external_reference
-            $user = User::where('external_reference', $paymentData['id'])->first();
-
-            if (!$user) {
-                Log::error("handleWebhook - Usuário não encontrado para external_reference {$paymentData['external_reference']}");
-                return response()->json(["message" => "Usuário não encontrado"], 404);
-            }
-
-            // Chama a função para atualizar o status do pagamento
-            Log::info("handleWebhook - Chamando updatePaymentStatus para pagamento ID {$paymentData['id']}");
-            $this->updatePaymentStatus($paymentData, $user);
-
-            return response()->json(["message" => "Webhook processado com sucesso"]);
+    
+            Log::warning("handleWebhook - Evento Webhook não reconhecido:", $request->all());
+            return response()->json(["message" => "Nenhuma ação necessária"], 200);
+    
+        } catch (\Exception $e) {
+            Log::error("Erro no webhook: " . $e->getMessage());
+            return response()->json(["error" => "Erro interno"], 500);
         }
-
-        Log::warning("handleWebhook - Evento Webhook não reconhecido:", $request->all());
-        return response()->json(["message" => "Nenhuma ação necessária"], 200);
-
-    } catch (\Exception $e) {
-        Log::error("Erro no webhook: " . $e->getMessage());
-        return response()->json(["error" => "Erro interno"], 500);
     }
-}
+    
 
 
     
