@@ -97,10 +97,20 @@ class PaymentController extends Controller
     
 public function createPixPayment(Request $request)
 {
-    Log::info("Entrou na : createPixPayment");
     
+    Log::info("Entrou na : createPixPayment");
     // Obtém o usuário autenticado
+    $token = $request->bearerToken();
+    Log::info("Token recebido: " . $token);
+    if (!$token) {
+        Log::error("Token de autenticação não encontrado.");
+        return response()->json(["error" => "Token de autenticação não encontrado"], 401);
+    }
+
+    // Tente obter o usuário com o token
     $user = Auth::user();
+
+    
     if (!$user) {
         Log::error("Usuário não autenticado.");
         return response()->json(["error" => "Usuário não autenticado"], 401);
@@ -114,24 +124,22 @@ public function createPixPayment(Request $request)
             return response()->json(["error" => "Erro na configuração do Mercado Pago"], 500);
         }
 
-        // Criação de um external_reference único
-        $externalReference = $user->id ?? "pedido_" . time(); // Usando user ID ou uma string única
-
-        // Salve o external_reference no banco de dados do usuário
-        $user->external_reference = $externalReference;
-        $user->save();
+        $url = "https://api.mercadopago.com/v1/payments";
 
         // Envia a solicitação de pagamento para o Mercado Pago
-        $url = "https://api.mercadopago.com/v1/payments";
         $response = Http::withToken($accessToken)->post($url, [
-            "transaction_amount" => floatval($request->amount),
-            "payment_method_id" => "pix",
+            "transaction_amount" => floatval($request->amount), 
+            "payment_method_id" => "pix", 
             "payer" => [
                 "email" => $request->payer_email
             ],
-            "external_reference" => $externalReference,  // Envia o external_reference gerado
+            "external_reference" => $user->id ?? "pedido_" . time(), // Defina uma referência única
         ]);
 
+        //Log::info("Tentando salvar");
+        $user->external_reference = $response->json()["id"]; // Salva o preference ID como external_reference
+        $user->save();
+        Log::info("Salvou");
         if ($response->failed()) {
             Log::error("Erro ao criar pagamento PIX: " . $response->body());
             return response()->json(["error" => "Erro ao criar pagamento PIX", "details" => $response->json()], 500);
@@ -139,7 +147,6 @@ public function createPixPayment(Request $request)
 
         $paymentData = $response->json();
         Log::info("Detalhes do pagamento", ["payment_data" => $paymentData]);
-        
         return response()->json([
             "qr_code" => $paymentData["point_of_interaction"]["transaction_data"]["qr_code"] ?? null,
             "qr_code_base64" => $paymentData["point_of_interaction"]["transaction_data"]["qr_code_base64"] ?? null,
@@ -151,7 +158,6 @@ public function createPixPayment(Request $request)
         return response()->json(["error" => "Erro interno ao processar o pagamento"], 500);
     }
 }
-
 
  
 
