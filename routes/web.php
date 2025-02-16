@@ -34,25 +34,35 @@ use App\Http\Controllers\PaymentController;
 
 Route::middleware(['auth'])->group(function () {
 
+    // Route::get('/check-payment-status', function (Request $request) {
+    //     $user = Auth::user(); // Obtém o usuário autenticado
+    
+    //     if (!$user) {
+    //         return response()->json(['status' => 'unauthorized'], 401);
+    //     }
+    
+    //     return response()->json(['status' => $user->payment_status]);
+    // });
     Route::get('/check-payment-status', function (Request $request) {
-        $user = Auth::user(); // Obtém o usuário autenticado
+        $user = Auth::user();
     
         if (!$user) {
+            Log::error("Usuário não autenticado ao verificar pagamento.");
             return response()->json(['status' => 'unauthorized'], 401);
         }
     
-        // Buscar o pedido mais recente do usuário
-        $pedido = Pedido::where('user_id', $user->id)
-                        ->orderBy('created_at', 'desc')
-                        ->first();
+        $pedido = \App\Models\Pedido::where('user_id', $user->id)
+                    ->orderBy('created_at', 'desc')
+                    ->first();
     
         if (!$pedido) {
+            Log::error("Nenhum pedido encontrado para o usuário ID {$user->id}");
             return response()->json(['status' => 'no_order_found']);
         }
     
         return response()->json(['status' => $pedido->status]);
     });
-    
+
     Route::post('/checkout', [PaymentController::class, 'selecionarPlano'])->name('checkout');
     Route::get('/pagamento', [PaymentController::class, 'paginaPagamento'])->name('pagamento.index');
 
