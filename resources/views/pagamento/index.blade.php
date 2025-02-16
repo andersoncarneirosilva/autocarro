@@ -173,7 +173,7 @@ document.getElementById("pixPaymentButton").addEventListener("click", async () =
     headers: {
         'Content-Type': 'application/json',
         'X-CSRF-TOKEN': csrfToken,
-        'Authorization': 'Bearer TEST-83c1af18-f3a5-4077-bc98-e72379b980b1' // Passando o token no cabeçalho
+        'Authorization': 'Bearer APP_USR-46c2384a-3f32-4ff9-9b96-b4497129462b' // Passando o token no cabeçalho
     },
     body: JSON.stringify({
         amount: {{ $preco }},
