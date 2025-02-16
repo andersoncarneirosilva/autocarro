@@ -66,44 +66,51 @@
 
           <div class="col-lg-8">
 
-
-
-
             <!-- Pagamento via PIX -->
-<div class="border p-3 rounded" id="divGerarPix">
-    <div class="row align-items-center">
-        <div class="col-9">
-            <div class="form-check">
-                <button id="pixPaymentButton" class="btn btn-success" style="display: block;" onclick="processPixPayment()">Gerar QR Code PIX</button>
+            <div class="border p-3 rounded" id="divGerarPix">
+                <div class="row align-items-center">
+                    <div class="col-9">
+                        <div class="form-check">
+                            <!-- Botão para gerar o QR Code (inicialmente visível) -->
+                            <button id="pixPaymentButton" class="btn btn-success" style="display: block;" onclick="processPixPayment()">Gerar QR Code</button>
+            
+                            <!-- Botão de "Loading..." (inicialmente oculto) -->
+                            <button class="btn btn-success" id="pixPaymentButtonLoading" type="button" disabled style="display: none;">
+                                <span class="spinner-border spinner-border-sm me-1" role="status" aria-hidden="true"></span>
+                                Gerando QR Code...
+                            </button>
+                        </div>
+                    </div>
+                    <div class="col-3 text-end">
+                        <img src="assets/images/payments/pix.png" class="img-fluid" alt="PIX-img" width="75px">
+                    </div>
+                </div>
             </div>
-        </div>
-        <div class="col-3 text-end">
-            <img src="assets/images/payments/pix.png" class="img-fluid" alt="PIX-img" width="75px">
-        </div>
-    </div>
-</div>
+            
 
-<!-- Container para pagamento PIX (oculto por padrão) -->
-<div id="pixPaymentContainer" class="border p-3 rounded" style="display: none;">
-    <div id="pixLoading" style="display: none;">
-        <strong>Gerando QR Code...</strong>
-        <div class="spinner-border ms-auto" role="status" aria-hidden="true"></div>
-    </div>
+            <div id="pixPaymentContainer" class="border p-3 rounded" style="display: none;">
+                <!-- Container para exibir o QR Code PIX -->
+                <div id="pixContainer" style="display: none;">
+                    <h4 class="header-title mb-3">Escaneie o QR Code para pagar com PIX:</h4>
+                    <img id="pixQrCode" src="" alt="QR Code PIX" style="width: 250px;">
+                    <a id="pixTicketUrl" href="#" target="_blank"></a>
+                </div>
+            
+                <!-- Input para Copia e Cola -->
+                <input type="hidden" id="pixCopiaCola" class="form-control" readonly style="display: none;">
+                <button class="btn btn-outline-secondary" id="btCopiar" type="button" style="display: none;">Copiar</button>
+            
+                <!-- Timer de 5 minutos -->
+                <div id="timer" style="display: none; margin-top: 10px;">
+                    <h5>Tempo restante:</h5>
+                    <span id="timerDisplay">05:00</span>
+                </div>
+            
+                <!-- Mensagem de erro (oculta por padrão) -->
+                <p id="pixErrorMessage" style="color: red; display: none;">Erro ao processar pagamento PIX.</p>
+            </div>
+            
 
-    <!-- Container para exibir o QR Code PIX -->
-    <div id="pixContainer" style="display: none; margin-top: 10px;">
-        <h3>Escaneie o QR Code para pagar com PIX:</h3>
-        <img id="pixQrCode" src="" alt="QR Code PIX" style="width: 250px;">
-        <a id="pixTicketUrl" href="#" target="_blank"></a>
-    </div>
-
-    <!-- Input para Copia e Cola -->
-    <input type="hidden" id="pixCopiaCola" class="form-control" readonly style="display: none;">
-    <button class="btn btn-outline-secondary" id="btCopiar" type="button" style="display: none;">Copiar</button>
-
-    <!-- Mensagem de erro (oculta por padrão) -->
-    <p id="pixErrorMessage" style="color: red; display: none;">Erro ao processar pagamento PIX.</p>
-</div>
 
 
 
@@ -114,16 +121,48 @@
   </div> <!-- col-12 -->
 </div>
 <!-- Toast Bootstrap -->
+
+<script>
+let timerInterval;
+let remainingTime = 300; // 5 minutos em segundos (300 segundos)
+
+function startTimer() {
+    // Exibe o timer na tela
+    document.getElementById('timer').style.display = 'block';
+
+    // Atualiza o tempo a cada segundo
+    timerInterval = setInterval(() => {
+        const minutes = Math.floor(remainingTime / 60);
+        const seconds = remainingTime % 60;
+
+        // Exibe o tempo formatado como MM:SS
+        document.getElementById('timerDisplay').textContent = `${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')}`;
+
+        // Decrementa o tempo
+        if (remainingTime > 0) {
+            remainingTime--;
+        } else {
+            clearInterval(timerInterval); // Para o timer quando o tempo acabar
+            alert('O tempo para o pagamento expirou!');
+        }
+    }, 1000);
+}
+</script>
+
 <script>
 function processPixPayment() {
     try {
-        // Exibe o spinner enquanto o QR Code está sendo gerado
-        document.getElementById('pixLoading').style.display = 'block';
+        // Exibe o botão com spinner e esconde o botão de "Gerar QR Code"
+        document.getElementById('pixPaymentButton').style.display = 'none';
+        document.getElementById('pixPaymentButtonLoading').style.display = 'inline-block';
+
+        // Oculta o conteúdo anterior
         document.getElementById('pixContainer').style.display = 'none';
         document.getElementById('pixCopiaCola').style.display = 'none';
         document.getElementById('btCopiar').style.display = 'none';
+        document.getElementById('pixPaymentContainer').style.display = 'none';
 
-        // Simula a geração do QR Code (substitua pela lógica real)
+        // Lógica de criação do QR Code (substitua com sua lógica real)
         const qrCodeSrc = "#";  // Substitua pela URL do QR Code real
         const boletoLink = "#"; // Substitua pelo link do boleto do PIX
 
@@ -131,67 +170,62 @@ function processPixPayment() {
             document.getElementById('pixQrCode').src = qrCodeSrc;
             document.getElementById('pixTicketUrl').href = boletoLink;
             document.getElementById('pixContainer').style.display = 'block';
-            document.getElementById('pixErrorMessage').style.display = 'none'; // Ocultar mensagem de erro
+            document.getElementById('pixErrorMessage').style.display = 'none'; // Oculta a mensagem de erro
             document.getElementById('pixPaymentContainer').style.display = 'block';
+            document.getElementById('timer').style.display = 'block';
         } else {
             throw new Error("Informações do pagamento PIX não estão disponíveis.");
         }
     } catch (error) {
         document.getElementById('pixErrorMessage').style.display = 'block';
-        document.getElementById('pixContainer').style.display = 'none'; // Ocultar QR Code em caso de erro
+        document.getElementById('pixContainer').style.display = 'none'; // Oculta QR Code em caso de erro
     } finally {
-        document.getElementById('pixLoading').style.display = 'none';
+        // Esconde o spinner e o botão de "Loading..."
+        document.getElementById('pixPaymentButtonLoading').style.display = 'none';
     }
 }
 
-// Lógica de pagamento PIX
+// Lógica de pagamento PIX (enviar requisição)
 const csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
 document.getElementById("pixPaymentButton").addEventListener("click", async () => {
     try {
         // Exibe o spinner e esconde o conteúdo
-        document.getElementById("pixLoading").style.display = "block";
+        document.getElementById("pixPaymentButtonLoading").style.display = "inline-block";
         document.getElementById("pixContainer").style.display = "none";
         document.getElementById("pixCopiaCola").style.display = "none";
         document.getElementById("btCopiar").style.display = "none";
-        document.getElementById("pixPaymentButton").style.display = "none";
-        document.getElementById("divGerarPix").style.display = "none";
+        document.getElementById("pixPaymentButton").style.display = "none";  // Esconde o botão "Gerar QR Code"
+        document.getElementById("divGerarPix").style.display = "block"; // Esconde toda a área de gerar PIX
+        document.getElementById('pixPaymentContainer').style.display = 'none';
 
-        // const pixResponse = await fetch('/api/create-pix-payment', {
-        //     method: 'POST',
-        //     headers: {
-        //         'Content-Type': 'application/json',
-        //         'X-CSRF-TOKEN': csrfToken
-        //     },
-        //     body: JSON.stringify({
-        //         amount: {{ $preco }},
-        //         payer_email: @json($userEmail)
-        //     })
-        // });
-
+        // Faz a requisição para gerar o pagamento PIX
         const pixResponse = await fetch('/api/create-pix-payment', {
-    method: 'POST',
-    headers: {
-        'Content-Type': 'application/json',
-        'X-CSRF-TOKEN': csrfToken,
-        'Authorization': 'Bearer APP_USR-46c2384a-3f32-4ff9-9b96-b4497129462b' // Passando o token no cabeçalho
-    },
-    body: JSON.stringify({
-        amount: {{ $preco }},
-        payer_email: @json($userEmail)
-    })
-});
-
-
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'X-CSRF-TOKEN': csrfToken,
+                'Authorization': 'Bearer APP_USR-46c2384a-3f32-4ff9-9b96-b4497129462b' // Token Mercado Pago
+            },
+            body: JSON.stringify({
+                amount: {{ $preco }},
+                payer_email: @json($userEmail)
+            })
+        });
 
         const pixData = await pixResponse.json();
         
+        // Inicia o timer de 5 minutos
+        startTimer();
 
         // Esconde o spinner
-        document.getElementById("pixLoading").style.display = "none";
+        document.getElementById('pixPaymentContainer').style.display = 'block';
+        document.getElementById("pixPaymentButtonLoading").style.display = "none";
+
 
         if (pixData.qr_code_base64) {
             document.getElementById("pixQrCode").src = "data:image/png;base64," + pixData.qr_code_base64;
             document.getElementById("pixContainer").style.display = "block";
+            document.getElementById("divGerarPix").style.display = "none"; 
         }
         if (pixData.qr_code) {
             document.getElementById("pixCopiaCola").style.display = "block";
@@ -204,12 +238,12 @@ document.getElementById("pixPaymentButton").addEventListener("click", async () =
         }
 
     } catch (error) {
-        console.error("Erro ao criar pagamento PIX catch script:", error);
-        //alert("Erro ao processar pagamento PIX.");
-        document.getElementById("pixLoading").style.display = "none"; // Esconde o spinner em caso de erro
+        console.error("Erro ao criar pagamento PIX:", error);
+        document.getElementById("pixPaymentButtonLoading").style.display = "none"; // Esconde o spinner em caso de erro
     }
 });
 
+// Função para copiar o código PIX
 document.getElementById("btCopiar").addEventListener("click", function () {
     const pixCodeInput = document.getElementById("pixCopiaCola");
 
@@ -229,6 +263,7 @@ document.getElementById("btCopiar").addEventListener("click", function () {
         });
 });
 </script>
+
 
 <script>
     setInterval(async function() {
