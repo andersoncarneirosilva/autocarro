@@ -43,7 +43,7 @@ Route::middleware(['auth'])->group(function () {
     
         return response()->json(['status' => $user->payment_status]);
     });
-    
+
     Route::post('/checkout', [PaymentController::class, 'selecionarPlano'])->name('checkout');
     Route::get('/pagamento', [PaymentController::class, 'paginaPagamento'])->name('pagamento.index');
 
@@ -52,7 +52,9 @@ Route::middleware(['auth'])->group(function () {
     // Route::get('/pedidos/create', [PedidoController::class, 'create'])->name('pedidos.create');
     // Route::post('/pedidos', [PedidoController::class, 'store'])->name('pedidos.store');
     
-    Route::get('/pagamento-sucesso', [PaymentController::class, 'paymentSuccess'])->name('pagamentos.sucesso');
+    Route::get('/pagamento-confirmado', function () {
+    return view('pagamentos.sucesso'); // Retorna a view correta
+});
 
     // Rota para a página de falha (quando o pagamento falhar)
     Route::get('/pagamento-falha', [PaymentController::class, 'paymentFailure'])->name('pagamentos.falha');
