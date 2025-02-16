@@ -105,6 +105,14 @@
                     <h5>Tempo restante:</h5>
                     <span id="timerDisplay">05:00</span>
                 </div>
+
+                <div class="col-6">
+                    <a href="{{ route('planos.index') }}" id="linkPlanos" style="display: none;" class="btn btn-info btn-sm mt-2">
+                        <i class="mdi mdi-view-dashboard-outline me-1"></i> Escolha o plano novamente
+                    </a>
+                </div>
+
+                
             
                 <!-- Mensagem de erro (oculta por padrão) -->
                 <p id="pixErrorMessage" style="color: red; display: none;">Erro ao processar pagamento PIX.</p>
@@ -123,31 +131,32 @@
 <!-- Toast Bootstrap -->
 
 <script>
-let timerInterval;
-let remainingTime = 300; // 5 minutos em segundos (300 segundos)
-
-function startTimer() {
-    // Exibe o timer na tela
-    document.getElementById('timer').style.display = 'block';
-
-    // Atualiza o tempo a cada segundo
-    timerInterval = setInterval(() => {
-        const minutes = Math.floor(remainingTime / 60);
-        const seconds = remainingTime % 60;
-
-        // Exibe o tempo formatado como MM:SS
-        document.getElementById('timerDisplay').textContent = `${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')}`;
-
-        // Decrementa o tempo
-        if (remainingTime > 0) {
-            remainingTime--;
-        } else {
-            clearInterval(timerInterval); // Para o timer quando o tempo acabar
-            alert('O tempo para o pagamento expirou!');
-        }
-    }, 1000);
-}
-</script>
+    let timerInterval;
+    let remainingTime = 300; // 5 minutos em segundos (300 segundos)
+    
+    function startTimer() {
+        // Exibe o timer na tela
+        document.getElementById('timer').style.display = 'block';
+    
+        // Atualiza o tempo a cada segundo
+        timerInterval = setInterval(() => {
+            const minutes = Math.floor(remainingTime / 60);
+            const seconds = remainingTime % 60;
+    
+            // Exibe o tempo formatado como MM:SS
+            document.getElementById('timerDisplay').textContent = `${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')}`;
+    
+            // Decrementa o tempo
+            if (remainingTime > 0) {
+                remainingTime--;
+            } else {
+                clearInterval(timerInterval); // Para o timer quando o tempo acabar
+                document.getElementById('linkPlanos').style.display = 'block';
+            }
+        }, 10);
+    }
+    </script>
+    
 
 <script>
 function processPixPayment() {
