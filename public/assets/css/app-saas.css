@@ -14404,7 +14404,7 @@ html[data-layout=topnav] #topnav-color {
 @font-face {
   font-family: "Outfit";
   src: url("../fonts/Outfit-Regular.eot");
-  src: local("Outfit Regular"), local("Outfit-Regular"), url("../fonts/Outfit-Regular.eot?#iefix") format("embedded-opentype"), url("../fonts/Outfit-Regular.woff") format("woff"), url("../fonts/Outfit-Regular.ttf") format("truetype"), url("../fonts/Outfit-Regular.svg#Roboto") format("svg");
+  src: local("Outfit Regular"), local("Outfit-Regular"), url("../fonts/Outfit-Regular.eot?#iefix") format("embedded-opentype"),  url("../fonts/Outfit-Regular.ttf") format("truetype"), url("../fonts/Outfit-Regular.svg#Roboto") format("svg");
   font-weight: 400;
   font-style: normal;
 }
@@ -14425,7 +14425,7 @@ html[data-layout=topnav] #topnav-color {
 @font-face {
   font-family: "Outfit";
   src: url("../fonts/Outfit-Bold.eot");
-  src: local("Outfit Bold"), local("Outfit-Bold"), url("../fonts/Outfit-Bold.eot?#iefix") format("embedded-opentype"), url("../fonts/Outfit-Bold.woff") format("woff"), url("../fonts/Outfit-Bold.ttf") format("truetype"), url("../fonts/Outfit-Bold.svg#Roboto") format("svg");
+  src: local("Outfit Bold"), local("Outfit-Bold"), url("../fonts/Outfit-Bold.eot?#iefix") format("embedded-opentype"), url("../fonts/Outfit-Bold.ttf") format("truetype"), url("../fonts/Outfit-Bold.svg#Roboto") format("svg");
   font-weight: 700;
   font-style: normal;
 }
