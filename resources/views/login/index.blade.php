@@ -38,7 +38,7 @@
 
                             <div class="text-center w-75 m-auto">
                                 <h4 class="text-dark-50 text-center pb-0 fw-bold">Acesso</h4>
-                                <p class="text-muted mb-4">Digite seu endereço de e-mail e senha para acessar o painel de administração.</p>
+                                <p class="text-muted mb-4">Painel de administração</p>
                             </div>
 
                             <x-auth-session-status class="mb-4" :status="session('status')" />
