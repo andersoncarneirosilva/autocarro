@@ -42,10 +42,11 @@ class PasswordResetLinkController extends Controller
 
     // Criar a URL de redefinição de senha
     $resetUrl = url(route('password.reset', ['token' => $token, 'email' => $user->email], false));
-
+    
     // Enviar o e-mail personalizado
     Mail::to($user->email)->send(new CustomResetPasswordMail($resetUrl));
 
-    return back()->with('status', 'O link de redefinição de senha foi enviado para o e-mail.');
+    // 🔹 Redirecionar para a página `confirm-email`
+    return redirect()->route('confirm.email', ['email' => $request->email]);
 }
 }

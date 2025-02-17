@@ -3,6 +3,9 @@
 return [
     'required' => 'O campo :attribute é obrigatório.',
     'email' => 'O campo :attribute deve ser um endereço de e-mail válido.',
+    'unique' => [
+        'email' => 'Este e-mail já está em uso.',
+    ],
     'min' => [
         'string' => 'O campo :attribute deve ter no mínimo :min caracteres.',
     ],

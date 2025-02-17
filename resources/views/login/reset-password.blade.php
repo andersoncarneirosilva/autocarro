@@ -7,7 +7,7 @@
     <title>ProcOnline</title>
     <!-- App favicon -->
     <link rel="shortcut icon" href="{{ url('assets/images/favicon.ico') }}">
-
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <!-- Theme Config Js -->
     <script src="{{ url('assets/js/hyper-config.js') }}"></script>
 
@@ -26,7 +26,7 @@
                     <div class="card">
                         <!-- Logo-->
                         <div class="card-header py-4 text-center bg-primary">
-                            <a href="index.html">
+                            <a href="{{ url('/') }}">
                                 <span><img src="{{ url('assets/images/logo.png') }}" alt="logo" height="22"></span>
                             </a>
                         </div>

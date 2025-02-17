@@ -6,7 +6,9 @@
     <meta charset="utf-8" />
     <title>ProcOnline</title>
     <!-- App favicon -->
-    <link rel="shortcut icon" href="assets/images/favicon.ico">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <link rel="shortcut icon" href="{{ url('assets/images/favicon.ico') }}">
 
     <!-- Theme Config Js -->
     <script src="{{ url('assets/js/hyper-config.js') }}"></script>
@@ -22,7 +24,7 @@
     <div class="account-pages pt-2 pt-sm-5 pb-4 pb-sm-5 position-relative">
         <div class="container">
             <div class="row justify-content-center">
-                <div class="col-xxl-4 col-lg-5">
+                <div class="col-md-8 col-lg-6 col-xl-5">
                     <div class="card">
 
                         <!-- Logo -->
@@ -68,8 +70,8 @@
                                     </div>
                                 </div>
 
-                                <div class="mb-3 mb-0 text-center">
-                                    <button class="btn btn-primary" type="submit"> Acessar </button>
+                                <div class="d-grid">
+                                    <button class="btn btn-primary btn-sm" type="submit"> Acessar </button>
                                 </div>
 								
                             </form>
@@ -79,7 +81,7 @@
 
                     <div class="row mt-3">
                         <div class="col-12 text-center">
-                            <p class="text-muted">Não tem uma conta? <a href="pages-register.html" class="text-muted ms-1"><b>Cadastre-se</b></a></p>
+                            <p class="text-muted">Não tem uma conta? <a href="{{ route('register') }}" class="text-muted ms-1"><b>Cadastre-se</b></a></p>
                         </div> <!-- end col -->
                     </div>
                     <!-- end row -->
@@ -97,10 +99,10 @@
         <script>document.write(new Date().getFullYear())</script> © Proconline - proconline.com.br
     </footer>
     <!-- Vendor js -->
-    <script src="assets/js/vendor.min.js"></script>
+    <script src="{{ url('assets/js/vendor.min.js') }}"></script>
 
     <!-- App js -->
-    <script src="assets/js/app.min.js"></script>
+    <script src="{{ url('assets/js/app.min.js') }}"></script>
 
 </body>
 

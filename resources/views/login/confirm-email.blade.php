@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="en">
 
@@ -6,8 +5,10 @@
     <meta charset="utf-8" />
     <title>ProcOnline</title>
     <!-- App favicon -->
-    <link rel="shortcut icon" href="{{ url('assets/images/favicon.ico') }}">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <link rel="shortcut icon" href="{{ url('assets/images/favicon.ico') }}">
+
     <!-- Theme Config Js -->
     <script src="{{ url('assets/js/hyper-config.js') }}"></script>
 
@@ -22,7 +23,7 @@
     <div class="account-pages pt-2 pt-sm-5 pb-4 pb-sm-5 position-relative">
         <div class="container">
             <div class="row justify-content-center">
-                <div class="col-md-8 col-lg-6 col-xl-5">
+                <div class="col-xxl-4 col-lg-5">
                     <div class="card">
                         <!-- Logo -->
                         <div class="card-header py-4 text-center bg-primary">
@@ -33,33 +34,26 @@
 
                         <div class="card-body p-4">
 
-                            <div class="text-center w-75 m-auto">
-                                <h4 class="text-dark-50 text-center mt-0 fw-bold">Redefinir senha</h4>
-                                <p class="text-muted mb-4">Informe seu email que enviaremos um link para redefinir sua senha.</p>
+                            <div class="text-center m-auto">
+                                <img src="{{ url('assets/images/svg/mail_sent.svg') }}" alt="mail sent image" height="64">
+                                <h4 class="text-dark-50 text-center mt-4 fw-bold">Por favor, verifique seu e-mail</h4>
+                                <p class="text-muted mb-2">
+                                    Um e-mail foi enviado para <b>{{ $email }}</b>.
+                                </p>
+                                <p class="text-muted mb-4">
+                                    Por favor, verifique sua caixa de entrada e clique no link recebido para redefinir sua senha. Caso não encontre, verifique a pasta de spam.
+                                </p>
                             </div>
 
-                            <form method="POST" action="{{ route('password.email') }}">
-                                @csrf
-                                <div class="mb-3">
-                                    <label for="emailaddress" class="form-label">Email</label>
-                                    <input class="form-control" type="email" name="email" placeholder="Informe seu email">
+                            {{-- <form action="index.html">
+                                <div class="mb-0 text-center">
+                                    <button class="btn btn-primary" type="submit"><i class="mdi mdi-home me-1"></i> Back to Home</button>
                                 </div>
-                                <x-input-error class="alert alert-danger border border-danger text-danger bg-transparent" :messages="$errors->get('email')"/>
-                                    <x-auth-session-status class="alert alert-success border border-success text-success bg-transparent" :status="session('status')" />
-                                <div class="d-grid">
-                                    <button class="btn btn-sm btn-primary" type="submit">Redefinir senha</button>
-                                </div>
-                            </form>
+                            </form> --}}
+
                         </div> <!-- end card-body-->
                     </div>
-                    <!-- end card -->
-
-                    <div class="row mt-3">
-                        <div class="col-12 text-center">
-                            <p class="text-muted">Voltar para o<a href="{{ url('login') }}" class="text-muted ms-1"><b>login</b></a></p>
-                        </div> <!-- end col -->
-                    </div>
-                    <!-- end row -->
+                    <!-- end card-->
 
                 </div> <!-- end col -->
             </div>
