@@ -9,5 +9,9 @@ return [
     'max' => [
         'string' => 'O campo :attribute não pode ter mais de :max caracteres.',
     ],
-    // Adicione mais regras conforme necessário
+    'confirmed' => 'A confirmação de :attribute não confere.',
+    'password' => [
+        'min' => 'A senha deve ter pelo menos :min caracteres.',
+        'confirmed' => 'A confirmação da senha não confere.',
+    ],
 ];

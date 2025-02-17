@@ -1,6 +1,7 @@
 <?php
 
 return [
+    'password' => 'A senha deve ter pelo menos seis caracteres e corresponder à confirmação.',
     'reset' => 'Sua senha foi redefinida!',
     'sent' => 'Enviamos um link para redefinição de senha para o seu e-mail!',
     'throttled' => 'Por favor, espere antes de tentar novamente.',
