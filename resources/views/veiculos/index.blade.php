@@ -192,7 +192,7 @@
                                             </button>
                                             <div class="dropdown-menu dropdown-menu-animated dropdown-menu-end">
 
-                                                <a href="{{ route('veiculos.edit', $doc->id) }}" class="dropdown-item">Editar</a>
+                                                <a href="{{ route('veiculos.show', $doc->id) }}" class="dropdown-item">Editar</a>
 
                                                 {{-- <a href="{{ $doc->arquivo_doc }}" 
                                                     class="dropdown-item {{ $doc->arquivo_doc === 'Não consta' ? 'disabled' : '' }}"
