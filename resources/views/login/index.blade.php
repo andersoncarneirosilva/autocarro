@@ -30,7 +30,7 @@
                         <!-- Logo -->
                         <div class="card-header py-4 text-center bg-primary">
                             <a href="{{ url('/') }}">
-                                <span><img src="{{ url('assets/images/logo.png') }}" alt="logo" height="22"></span>
+                                <span><img src="{{ url('assets/images/logo.png') }}?v={{ time() }}" alt="logo" height="22"></span>
                             </a>
                         </div>
 

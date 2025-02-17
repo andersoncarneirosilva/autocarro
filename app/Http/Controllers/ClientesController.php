@@ -32,11 +32,11 @@ class ClientesController extends Controller
 
     $assinatura = $user->assinaturas()->latest()->first();
 
-        if(!$user->plano == "Teste" || !$user->plano == "Premium"){
-            if (!$assinatura || now()->gt($assinatura->data_fim) || $assinatura->status == "pending") {
-                return redirect()->route('assinatura.expirada')->with('error', 'Sua assinatura expirou.');
-            }
+    if($user->plano == "Padrão" || $user->plano == "Pro"){
+        if (!$assinatura || now()->gt($assinatura->data_fim) || $assinatura->status == "pending") {
+            return redirect()->route('assinatura.expirada')->with('error', 'Sua assinatura expirou.');
         }
+    }
     // Filtrando os clientes do usuário logado e realizando a pesquisa
     $clientes = $this->model->getClientes($request->search, $userId);
         //dd($docs);
