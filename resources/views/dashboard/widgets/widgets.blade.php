@@ -131,7 +131,7 @@
     <div class="col-xxl-6">
         <div class="card">
             <div class="card-header d-flex justify-content-between align-items-center">
-                <h4 class="header-title">Monthly Progress</h4>
+                <h4 class="header-title">Últimos cadastros</h4>
                 <div class="dropdown">
                     <a href="#" class="dropdown-toggle arrow-none card-drop" data-bs-toggle="dropdown" aria-expanded="false">
                         <i class="mdi mdi-dots-vertical"></i>
