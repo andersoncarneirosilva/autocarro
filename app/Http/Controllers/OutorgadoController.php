@@ -8,6 +8,8 @@ use App\Models\User;
 use App\Models\ModeloProcuracoes;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Validation\Rule;
+
 class OutorgadoController extends Controller
 {
     protected $model;
@@ -128,18 +130,31 @@ class OutorgadoController extends Controller
     $request->validate([
         'nome_outorgado'  => 'required|string|max:255',
         'end_outorgado'   => 'required|string|max:255',
-        'email_outorgado' => 'required|email|max:255|unique:outorgados,email_outorgado',
-        'cpf_outorgado'   => 'required|string|unique:outorgados,cpf_outorgado', // Validação do CPF
+        'email_outorgado' => [
+            'required',
+            'email',
+            'max:255',
+            Rule::unique('outorgados', 'email_outorgado')->where(function ($query) {
+                return $query->where('user_id', auth()->id());
+            }),
+        ],
+        'cpf_outorgado'   => [
+            'required',
+            'string',
+            Rule::unique('outorgados', 'cpf_outorgado')->where(function ($query) {
+                return $query->where('user_id', auth()->id());
+            }),
+        ],
     ], [
         'nome_outorgado.required'  => 'O campo outorgado é obrigatório.',
         'end_outorgado.required'   => 'O campo endereço é obrigatório.',
         'email_outorgado.required' => 'O campo e-mail é obrigatório.',
         'email_outorgado.email'    => 'O e-mail informado não é válido.',
-        'email_outorgado.unique'   => 'O e-mail informado já está cadastrado.',
+        'email_outorgado.unique'   => 'O e-mail informado já está cadastrado para este usuário.',
         'cpf_outorgado.required'   => 'O campo CPF é obrigatório.',
-        'cpf_outorgado.cpf'        => 'O CPF informado não é válido.',
-        'cpf_outorgado.unique'     => 'O CPF informado já está cadastrado.',
+        'cpf_outorgado.unique'     => 'O CPF informado já está cadastrado para este usuário.',
     ]);
+    
 
     // Adiciona o user_id aos dados
     $data = $request->all();
