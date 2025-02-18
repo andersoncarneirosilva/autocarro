@@ -21,11 +21,10 @@
                     <div class="card-body text-center">
                         <p class="card-pricing-plan-name fw-bold text-uppercase">Básico</p>
                         <i class="card-pricing-icon ri-user-line text-primary"></i>
-                        <h2 class="card-pricing-price">R$150 <span>/ mês</span></h2>
+                        <h2 class="card-pricing-price">R$100 <span>/ mês</span></h2>
                         <ul class="card-pricing-features">
-                            <li>100 documentos</li>
-                            <li>512 MB de armazenamento</li>
-                            <li>1 usuário</li>
+                            <li>Gerar procuração</li>
+                            <li>10 documentos</li>
                             <li>Suporte 24/7</li>
                         </ul>
                         <form action="{{ route('checkout') }}" method="POST">

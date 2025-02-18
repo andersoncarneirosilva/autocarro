@@ -103,7 +103,7 @@
             <table>
                 <tr>
                     <td class="logo">
-                        <img src="images/relatorio/logo-top.png" alt="Logo">
+                        <img src="images/logo-dark.png" alt="Logo">
                     </td>
                     <td class="header-title">
                         <h1>Relatório de Veículos</h1>
@@ -129,6 +129,7 @@
                     <th>Cor</th>
                     <th>Renavam</th>
                     <th>Proprietário</th>
+                    <th>Data cadastro</th>
                 </tr>
             </thead>
             <tbody>
@@ -140,6 +141,7 @@
                     <td>{{ $item->cor }}</td>
                     <td>{{ $item->renavam }}</td>
                     <td>{{ $item->nome }}</td>
+                    <td>{{ Carbon\Carbon::parse($item->created_at)->format('d/m/Y') }}</td>
                 </tr>
                 @endforeach
             </tbody>

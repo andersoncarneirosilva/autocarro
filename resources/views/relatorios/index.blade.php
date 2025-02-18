@@ -19,36 +19,36 @@
 </div>
 
 
-<div class="card">
+<div class="card shadow-sm border-0">
     <div class="card-body">
-       
+        <h5 class="card-title mb-3">Gerar Relatório</h5>
         <form id="formRel" action="{{ route('relatorio.gerar') }}" method="POST">
             @csrf
-            <div class="row align-items-end gy-3">
-                <div class="col-sm-3">
-                    <label for="tipo-relatorio" class="form-label">Tipo de relatório</label>
+            <div class="row row-cols-1 row-cols-md-4 g-3 align-items-end">
+                <div class="col">
+                    <label for="tipo-relatorio" class="form-label fw-semibold">Tipo de relatório</label>
                     <select class="form-select" id="tipo-relatorio" name="tipo-relatorio" required>
-                        <option value="" selected>-- Selecione o tipo --</option>
+                        <option value="" selected>-- Selecione --</option>
                         <option value="Clientes">Clientes</option>
                         <option value="Veículos">Veículos</option>
                     </select>
                 </div>
-                <div class="col-sm-3">
-                    <label for="data-inicial" class="form-label">Data Inicial</label>
+                <div class="col">
+                    <label for="data-inicial" class="form-label fw-semibold">Data Inicial</label>
                     <input class="form-control" id="data-inicial" name="data-inicial" type="date" required>
                 </div>
-                <div class="col-sm-3">
-                    <label for="data-final" class="form-label">Data Final</label>
+                <div class="col">
+                    <label for="data-final" class="form-label fw-semibold">Data Final</label>
                     <input class="form-control" id="data-final" name="data-final" type="date" required>
                 </div>
-                <div class="col-sm-3 d-flex justify-content-end">
-                    <button type="submit" class="btn btn-primary btn-sm">Pesquisar</button>
+                <div class="col text-md-end text-center mt-2 mt-md-0">
+                    <button type="submit" class="btn btn-primary px-4">Pesquisar</button>
                 </div>
             </div>
         </form>
-        
     </div>
 </div>
+
 
 
 
