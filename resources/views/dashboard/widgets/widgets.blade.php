@@ -127,37 +127,58 @@
 {{-- ////////////////////////////////////////////////////////////////////////////////////////////////////////// --}}
 {{-- ////////////////////////////////////////////////////////////////////////////////////////////////////////// --}}
 {{-- ////////////////////////////////////////////////////////////////////////////////////////////////////////// --}}
-
-
 <div class="row">
-    <div class="col-xl-7 col-lg-12 order-lg-2 order-xl-1">
+    <div class="col-xxl-6">
         <div class="card">
-            <div class="d-flex card-header justify-content-between align-items-center">
-                <h4 class="header-title">Últimos veículos cadastrados</h4>
+            <div class="card-header d-flex justify-content-between align-items-center">
+                <h4 class="header-title">Monthly Progress</h4>
+                <div class="dropdown">
+                    <a href="#" class="dropdown-toggle arrow-none card-drop" data-bs-toggle="dropdown" aria-expanded="false">
+                        <i class="mdi mdi-dots-vertical"></i>
+                    </a>
+                    <div class="dropdown-menu dropdown-menu-end">
+                        <!-- item-->
+                        <a href="javascript:void(0);" class="dropdown-item">Today</a>
+                        <!-- item-->
+                        <a href="javascript:void(0);" class="dropdown-item">Yesterday</a>
+                        <!-- item-->
+                        <a href="javascript:void(0);" class="dropdown-item">Last Week</a>
+                        <!-- item-->
+                        <a href="javascript:void(0);" class="dropdown-item">Last Month</a>
+                    </div>
+                </div>
             </div>
             @if ($emprestimos->count() != 0)
             <div class="card-body pt-0">
-                <div class="table-responsive">
-                    <table class="table table-centered table-nowrap table-hover mb-0">
+                <div class="table-responsive mt-n2">
+                    <table class="table table-centered table-hover table-nowrap mb-0">
+                        <thead>
+                            <tr>
+                                <th scope="col">Marca</th>
+                                <th scope="col">Placa</th>
+                                <th scope="col">Ano/Modelo</th>
+                                <th scope="col">Cor</th>
+                                <th scope="col">Doc</th>
+                            </tr>
+                        </thead>
                         <tbody>
                             
                             @foreach ($emprestimos as $emp)
                             <tr>
                                 <td>
-                                    <span class="text-muted font-13">MARCA</span>
-                                    <h5 class="font-14 my-0"><a href="#" class="text-body">{{ $emp->marca }}</a></h5>
+                                    <div class="d-flex align-items-center">
+                                        <div class="flex-shrink-0">
+                                            <img class="rounded-circle" src="{{ url("$emp->image") }}" alt="Avtar image" width="31">
+                                        </div>
+                                        <div class="flex-grow-1 ms-2">
+                                            {{ $emp->marca }}
+                                        </div>
+                                    </div>
                                 </td>
+                                <td>{{ $emp->placa }}</td>
+                                <td>{{ $emp->ano }}</td>
                                 <td>
-                                    <span class="text-muted font-13">Placa</span> <br>
-                                    <span class="font-14 mt-0 fw-normal">{{ $emp->placa }}</span>
-                                </td>
-                                <td>
-                                    <span class="text-muted font-13">Cor</span>
-                                    <h5 class="font-14 mt-0 fw-normal">{{ $emp->cor }}</h5>
-                                </td>
-                                <td>
-                                    <span class="text-muted font-13">Ano/Modelo</span>
-                                    <h5 class="font-14 mt-0 fw-normal">{{ $emp->ano }}</h5>
+                                    {{ $emp->cor }}
                                 </td>
                                 <td>
                                     @if($emp->crv === "***")
@@ -167,51 +188,99 @@
                                         <span class="badge badge-outline-success">DIGITAL</span>
                                     @endif
                                 </td>
-                            </tr>
+                            </tr> <!-- end tr -->
                             @endforeach
+                            
                         </tbody>
                     </table>
-                </div> <!-- end table-responsive-->
-            </div> <!-- end card-body-->
+                </div>
+            </div>
             @else
                 <div class="alert alert-danger bg-transparent text-danger" role="alert">
                     NENHUM RESULTADO ENCONTRADO!
                 </div>
             @endif
-        </div> <!-- end card-->
-    </div> <!-- end col-->
-    <div class="col-xl-5">
+        </div>
+    </div> <!-- end col -->
+
+    <div class="col-md-6 col-xxl-3">
         <div class="card">
             <div class="card-header d-flex justify-content-between align-items-center">
-                <h4 class="header-title">Agenda</h4>
-
+                <h4 class="header-title">Documentos</h4>
             </div>
 
-            <div class="card-body pt-0">
-                <div class="row">
-                    <div class="col-md-7">
-                        <div class="calendar-widget"></div>
+            <div class="card-body pt-2">
+                <div class="mb-4">
+                    <div class="d-flex align-items-center mb-2">
+                        <div class="flex-shrink-0">
+                            <i class="mdi mdi-file-edit widget-icon bg-primary-lighten text-primary"></i>
+                        </div>
+                        <div class="flex-grow-1 ms-2">
+                            <h5 class="my-0 fw-semibold">CRLV</h5>
+                        </div>
+                        <h5 class="my-0">145</h5>
                     </div>
-                    
-                    <div class="col-md-5">
-                        <ul class="list-unstyled mt-1">
-                            @foreach($events as $event)
-                            <li class="mb-4">
-                                <p class="text-muted mb-1 font-13">
-                                    <i class="mdi mdi-calendar"></i> {{ \Carbon\Carbon::parse($event->event_date)->format('d/m/Y - H:i') }}
-
-                                </p>
-                                <h5>{{ $event->title }}</h5>
-                            </li>
-                            @endforeach
-                        </ul>
-                    </div> <!-- end col -->
+                    <div class="progress" style="height: 6px;">
+                        <div class="progress-bar" role="progressbar" style="width: 91%" aria-valuenow="91" aria-valuemin="0" aria-valuemax="100"></div>
+                    </div>
                 </div>
-                <!-- end row -->
 
-            </div> <!-- end card body-->
-        </div> <!-- end card -->
-    </div>
-    
+                <div class="mb-4">
+                    <div class="d-flex align-items-center mb-2">
+                        <div class="flex-shrink-0">
+                            <i class="mdi mdi-account-multiple widget-icon bg-success-lighten text-success"></i>
+                        </div>
+                        <div class="flex-grow-1 ms-2">
+                            <h5 class="my-0 fw-semibold">Procuração</h5>
+                        </div>
+                        <h5 class="my-0">40</h5>
+                    </div>
+                    <div class="progress" style="height: 6px;">
+                        <div class="progress-bar bg-success" role="progressbar" style="width: 47%" aria-valuenow="47" aria-valuemin="0" aria-valuemax="100"></div>
+                    </div>
+                </div>
 
+                <div class="mb-4">
+                    <div class="d-flex align-items-center mb-2">
+                        <div class="flex-shrink-0">
+                            <i class="mdi mdi-account-multiple-plus widget-icon bg-danger-lighten text-danger"></i>
+                        </div>
+                        <div class="flex-grow-1 ms-2">
+                            <h5 class="my-0 fw-semibold">Solicitação ATPVe</h5>
+                        </div>
+                        <h5 class="my-0">68</h5>
+                    </div>
+                    <div class="progress" style="height: 6px;">
+                        <div class="progress-bar bg-danger" role="progressbar" style="width: 68%" aria-valuenow="68" aria-valuemin="0" aria-valuemax="100"></div>
+                    </div>
+                </div>
+
+                <div class="">
+                    <div class="d-flex align-items-center mb-2">
+                        <div class="flex-shrink-0">
+                            <i class="mdi mdi-emoticon-happy widget-icon bg-info-lighten text-info"></i>
+                        </div>
+                        <div class="flex-grow-1 ms-2">
+                            <h5 class="my-0 fw-semibold">Veículos</h5>
+                        </div>
+                        <h5 class="my-0">44</h5>
+                    </div>
+                    <div class="progress" style="height: 6px;">
+                        <div class="progress-bar bg-info" role="progressbar" style="width: 44%" aria-valuenow="90" aria-valuemin="0" aria-valuemax="100"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div> <!-- end col -->
+
+    <div class="col-md-6 col-xxl-3">
+        <div class="card">
+            <div class="card-header d-flex justify-content-between align-items-center">
+                <h4 class="header-title">Calendário</h4>
+            </div>
+            <div class="card-body px-2 pb-2 pt-0 mt-n2">
+                <div class="calendar-widget"></div>
+            </div>
+        </div>
+    </div> <!-- end col -->
 </div>
