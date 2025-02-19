@@ -1639,7 +1639,7 @@ public function update(Request $request, $id)
 
     if ($request->hasFile('arquivo_atpve_assinado')) {
         $this->processFileUpload($request, $veiculo, 'arquivo_atpve_assinado', $pastaUsuario . 'atpves_assinadas', 'arquivo_atpve_assinado', 'size_atpve_pdf', 10);
-        $mensagens[] = 'Solicitação de ATPVe assinada cadastrada com sucesso.';
+        $mensagens[] = 'ATPVe assinada cadastrada com sucesso.';
     }
 
     if ($request->hasFile('arquivo_doc')) {
@@ -1689,7 +1689,7 @@ private function processFileUpload($request, $veiculo, $fileKey, $storagePath, $
         }
         $numeroRandom = rand(1000, 9999);
         // Salva o arquivo no disco 'public' e retorna o caminho correto
-        $fileName = $veiculo->placa . '_' . $numeroRandom . '_assinado.pdf';
+        $fileName = 'atpve_' . $veiculo->placa . '_' . $numeroRandom . '_assinado.pdf';
         $filePath = $arquivo->storeAs($storagePath, $fileName, ['disk' => 'public']);
 
         // Atualiza os campos no modelo
@@ -1804,7 +1804,7 @@ public function destroyAtpveAssinado($id)
     // Remove o caminho do arquivo do banco de dados
     $veiculo->update(['arquivo_atpve_assinado' => 0, 'size_atpve_pdf' => 0]);
 
-    return back()->with('success', 'Solicitação de ATPVe excluída com sucesso.');
+    return back()->with('success', 'ATPVe excluída com sucesso.');
 }
 
 }

@@ -41,41 +41,19 @@ class OutorgadoController extends Controller
 
     }
 
-    public function update(Request $request, $id)
-{
-    //dd($request);
+    public function update(Request $request, $id){
     // Verifica se o campo nome_outorgado está vazio
     if (empty($request->nome_outorgado)) {
-        alert()->error('O campo outorgado é obrigatório')
-            ->persistent(true)
-            ->autoClose(3000) // Fecha automaticamente após 3 segundos
-            ->timerProgressBar();
-        
-        return redirect()->route('outorgados.index');
+        return redirect()->route('outorgados.index')->with('error', 'O campo outorgado é obrigatório!');
     }
     if (empty($request->cpf_outorgado)) {
-        alert()->error('O campo cpf é obrigatório')
-            ->persistent(true)
-            ->autoClose(3000) // Fecha automaticamente após 3 segundos
-            ->timerProgressBar();
-        
-        return redirect()->route('outorgados.index');
+        return redirect()->route('outorgados.index')->with('error', 'O campo cpf é obrigatório!');
     }
     if (empty($request->end_outorgado)) {
-        alert()->error('O campo endereço é obrigatório')
-            ->persistent(true)
-            ->autoClose(3000) // Fecha automaticamente após 3 segundos
-            ->timerProgressBar();
-        
-        return redirect()->route('outorgados.index');
+        return redirect()->route('outorgados.index')->with('error', 'O campo endereço é obrigatório!');
     }
     if (empty($request->email_outorgado)) {
-        alert()->error('O campo email é obrigatório')
-            ->persistent(true)
-            ->autoClose(3000) // Fecha automaticamente após 3 segundos
-            ->timerProgressBar();
-        
-        return redirect()->route('outorgados.index');
+        return redirect()->route('outorgados.index')->with('error', 'O campo email é obrigatório!');
     }
 
     // Validação dos dados do formulário
@@ -88,28 +66,17 @@ class OutorgadoController extends Controller
 
     // Recupera o modelo Outorgado a ser atualizado
     $outorgado = Outorgado::find($id);
-
-    // Verifica se o Outorgado existe
+    
     if (!$outorgado) {
-        alert()->error('Outorgado não encontrado')
-            ->persistent(true)
-            ->autoClose(3000)
-            ->timerProgressBar();
-        
-        return redirect()->route('outorgados.index');
+        // Verifica se o Outorgado existe
+        return redirect()->route('outorgados.index')->with('error', 'Outorgado não encontrado!');
     }
 
     // Atualiza os dados do Outorgado
     $outorgado->update($validated);
 
     // Alerta de sucesso
-    alert()->success('Outorgado atualizado com sucesso')
-        ->persistent(true)
-        ->autoClose(3000)
-        ->timerProgressBar();
-
-    // Redireciona para a página de listagem
-    return redirect()->route('outorgados.index');
+    return redirect()->route('outorgados.index')->with('success', 'Outorgado atualizado com sucesso!');
 }
 
 
@@ -163,13 +130,8 @@ class OutorgadoController extends Controller
     // Salva no banco de dados
     $this->model->create($data);
 
-    alert()->success('Outorgado cadastrado com sucesso')
-        ->persistent(true)
-        ->autoClose(3000)
-        ->timerProgressBar();
-
     // Redireciona para a página de listagem
-    return redirect()->route('outorgados.index');
+    return redirect()->route('outorgados.index')->with('success', 'Outorgado cadastrado com sucesso!');
 }
 
 
@@ -209,7 +171,7 @@ public function destroy($id)
 
     // Exclui o Outorgado
     if ($docs->delete()) {
-        alert()->success('Outorgado excluído com sucesso!');
+        return redirect()->route('outorgados.index')->with('success', 'Outorgado excluído com sucesso!');
     }
 
     return redirect()->route('outorgados.index');

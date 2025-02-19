@@ -224,7 +224,7 @@
                                             
                                                 Swal.fire({
                                                     title: 'Atenção',
-                                                    text: "Deseja excluir esta solicitação ATPVe?",
+                                                    text: "Deseja excluir esta ATPVe?",
                                                     icon: 'warning',
                                                     showCancelButton: true,
                                                     confirmButtonText: 'Sim, excluir!',
@@ -308,7 +308,7 @@
                                         </div>
                                     </div>
                                     <div class="col ps-0" style="text-align: left;">
-                                        <a href="{{ $veiculo->arquivo_atpve_assinado }}" target="_blank" class="text-muted fw-bold">Solicitação de ATPVe Assinada</a>
+                                        <a href="{{ $veiculo->arquivo_atpve_assinado }}" target="_blank" class="text-muted fw-bold">ATPVe Assinada</a>
                                         <p class="mb-0 font-13">{{ number_format($veiculo->size_atpve_pdf / 1024, 2, ',', '.') }} KB</p>
                                     </div>
                                     <div class="col-auto">
@@ -325,7 +325,7 @@
                                         
                                                 Swal.fire({
                                                     title: 'Atenção',
-                                                    text: "Deseja excluir esta solicitação ATPVe?",
+                                                    text: "Deseja excluir esta ATPVe?",
                                                     icon: 'warning',
                                                     showCancelButton: true,
                                                     confirmButtonText: 'Sim, excluir!',

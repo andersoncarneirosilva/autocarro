@@ -32,7 +32,26 @@ class DashController extends Controller
 
         $userId = Auth::id();
         $user = User::find($userId);
-        //dd($user);
+
+        //Contagem de veículos cadastrados
+        $veiculosCount = $user->veiculos()->count();
+        $crlvCount = Veiculo::where('user_id', Auth::id())
+                            ->whereNotNull('arquivo_doc')
+                            ->where('arquivo_doc', '!=', '0')
+                            ->count();
+        
+        $procCount = Veiculo::where('user_id', Auth::id())
+                            ->whereNotNull('arquivo_proc_assinado')
+                            ->where('arquivo_proc_assinado', '!=', '0')
+                            ->count();
+
+        $atpveCount = Veiculo::where('user_id', Auth::id())
+                            ->whereNotNull('arquivo_atpve_assinado')
+                            ->where('arquivo_atpve_assinado', '!=', '0')
+                            ->count();
+
+        $clientesCount = $user->clientes()->count();
+
         $assinatura = $user->assinaturas()->latest()->first();
 
         if($user->plano == "Padrão" || $user->plano == "Pro"){
@@ -120,6 +139,11 @@ class DashController extends Controller
                                                 'usedSpaceInMB', 
                                                 'percentUsed', 
                                                 'limitInMB',
-                                                'events']));
+                                                'events',
+                                                'crlvCount',
+                                                'procCount',
+                                                'atpveCount',
+                                                'clientesCount',
+                                                'veiculosCount']));
     }
 }

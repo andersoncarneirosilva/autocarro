@@ -64,6 +64,10 @@ class User extends Authenticatable
         return $this->hasMany(Veiculo::class);
     }
 
+    public function clientes(){
+        return $this->hasMany(Cliente::class);
+    }
+
     public function getUsers(string|null $search = null){
 
         $users = $this->where(function ($query) use ($search) {
