@@ -72,9 +72,10 @@
                         @php
                             $isPremium = auth()->user()->plano == "Premium";
                             $isBasicOrIntermediate = in_array(auth()->user()->plano, ["Padrão", "Pro", "Teste"]);
-                            $isButtonDisabled = ($isPremium && $percentUsed > 1000) || 
-                                                ($isBasicOrIntermediate && (auth()->user()->credito < 1 || $percentUsed > 100));
+
+                            $isButtonDisabled = (!$isPremium && (auth()->user()->credito < 1 || $percentUsed > 100));
                         @endphp
+
 
                         <div class="dropdown btn-group">
                             <button class="btn btn-primary btn-sm dropdown-toggle" 
@@ -492,7 +493,7 @@ aria-hidden="true">
     
         // Atualiza a ação do formulário para incluir o ID do documento na rota
         const form = document.getElementById('addressForm');
-        form.action = `{{ secure_url('veiculos/store-atpve') }}/${docId}`; //secure_url
+        form.action = `{{ url('veiculos/store-atpve') }}/${docId}`; //secure_url
     
         // Envia o formulário
         form.submit();
