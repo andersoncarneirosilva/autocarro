@@ -19,30 +19,41 @@
 <br>
 <div class="row">
     <div class="col-xl-4 col-lg-5">
-        <div class="card text-center">
+        <div class="card">
             <div class="card-body">
-                @if(auth()->user()->image)
-                <img src="storage/{{ auth()->user()->image }}" class="rounded-circle avatar-lg img-thumbnail" alt="user-image">
+                <span class="float-start m-2 me-4">
+                    @if(auth()->user()->image)
+                <img src="storage/{{ auth()->user()->image }}" class="rounded-circle img-thumbnail" style="height: 100px;">
                 @else
                 <img src="{{ url("assets/img/icon_user.png") }}" alt="" class="rounded-circle avatar-lg img-thumbnail">
                 @endif
-                <h4 class="mb-0 mt-2">{{ auth()->user()->name }}</h4>
-                <p class="text-muted font-14">{{ auth()->user()->perfil }}</p>
-              
-                <div class="text-start mt-3">
-                    <p class="text-muted mb-2 font-13"><strong>Nome: :</strong> <span class="ms-2">{{ auth()->user()->name }}</span></p>
+                
+                </span>
+                <div class="">
+                    <h4 class="mt-1 mb-1">{{ auth()->user()->name }}</h4>
+                    <p class="font-13"> {{ auth()->user()->email }}</p>
 
-                    <p class="text-muted mb-2 font-13"><strong>Telefone:</strong><span class="ms-2">{{ auth()->user()->telefone }}</span></p>
-
-                    <p class="text-muted mb-2 font-13"><strong>Email:</strong> <span class="ms-2 ">{{ auth()->user()->email }}</span></p>
-                    
+                    <ul class="mb-0 list-inline">
+                        <li class="list-inline-item me-3">
+                            <h5 class="mb-1">Fone</h5>
+                            <p class="mb-0 font-13">{{ auth()->user()->telefone }}</p>
+                        </li>
+                        <li class="list-inline-item">
+                            <h5 class="mb-1">Perfil</h5>
+                            <p class="mb-0 font-13">{{ auth()->user()->perfil }}</p>
+                        </li>
+                    </ul>
                 </div>
-                <div class="text-start mt-3">
-                    <h4><span class="badge rounded-pill p-1 px-2 badge-success-lighten text-uppercase">PLANO {{ auth()->user()->plano }}</span></h4>
-                </div>
-            </div> <!-- end card-body -->
-        </div> <!-- end card -->
-
+                <!-- end div-->
+            </div> <!-- end card-body-->
+        </div>
+        <div class="card">
+            <div class="card-body">
+                <h5 class="mb-1">Plano: <span class="badge rounded-pill p-1 px-2 badge-success-lighten"> {{ auth()->user()->plano }}</span></h5>
+                
+            </div>
+        </div>
+        
     </div> <!-- end col-->
 
     <div class="col-xl-8 col-lg-7">
