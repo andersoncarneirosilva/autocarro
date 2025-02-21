@@ -95,44 +95,6 @@
                                 </a>
                             </div>
                         </div>
-
-                        {{-- @if(auth()->user()->plano == "Premium")
-                        <div class="dropdown btn-group">
-                            <button class="btn btn-primary btn-sm dropdown-toggle" 
-                                    type="button" 
-                                    data-bs-toggle="dropdown" 
-                                    aria-haspopup="true" 
-                                    aria-expanded="false" 
-                                    @if($percentUsed > 100) disabled @endif>
-                                Cadastrar
-                            </button>
-                            <div class="dropdown-menu dropdown-menu-animated dropdown-menu-end">
-                                <a href="#" data-bs-toggle="modal" data-bs-target="#standard-modal" class="dropdown-item">
-                                    Cadastro automático
-                                </a>
-                            <a href="{{ route('veiculos.create-proc-manual')}}" class="dropdown-item">Cadastro manual</a>
-                            </div>
-                        </div>
-                        @endif
-                        @if(auth()->user()->plano == "Básico" || auth()->user()->plano == "Intermediário" || auth()->user()->credito < 0)
-                        <div class="dropdown btn-group">
-                            <button class="btn btn-primary btn-sm dropdown-toggle" 
-                                    type="button" 
-                                    data-bs-toggle="dropdown" 
-                                    aria-haspopup="true" 
-                                    aria-expanded="false" 
-                                    @if($percentUsed > 100) disabled @endif>
-                                Cadastrar
-                            </button>
-                            <div class="dropdown-menu dropdown-menu-animated dropdown-menu-end">
-                                <a href="#" data-bs-toggle="modal" data-bs-target="#standard-modal" class="dropdown-item">
-                                    Cadastro automático
-                                </a>
-                            <a href="{{ route('veiculos.create-proc-manual')}}" class="dropdown-item">Cadastro manual</a>
-                            </div>
-                        </div>
-                        @endif --}}
-
                     </div>
                 </div>
                 @if ($veiculos->total() != 0)
@@ -193,34 +155,7 @@
                                             </button>
                                             <div class="dropdown-menu dropdown-menu-animated dropdown-menu-end">
 
-                                                <a href="{{ route('veiculos.show', $doc->id) }}" class="dropdown-item">Editar</a>
-
-                                                {{-- <a href="{{ $doc->arquivo_doc }}" 
-                                                    class="dropdown-item {{ $doc->arquivo_doc === 'Não consta' ? 'disabled' : '' }}"
-                                                    target="_blank">
-                                                    Baixar CRLV
-                                                </a>
-                                                <a href="{{ $doc->arquivo_proc }}" 
-                                                    class="dropdown-item"
-                                                    target="_blank">
-                                                    Baixar Procuração
-                                                </a>
-                                                @if(!empty($doc->arquivo_atpve))
-                                                    <a href="{{ $doc->arquivo_atpve }}" 
-                                                    class="dropdown-item" 
-                                                    target="_blank">
-                                                    Baixar ATPVe
-                                                    </a>
-                                                @else
-                                                    <a href="#" 
-                                                    class="dropdown-item disabled" 
-                                                    tabindex="-1" 
-                                                    aria-disabled="true">
-                                                    Baixar ATPVe
-                                                    </a>
-                                                @endif
-                                                "v=DMARC1; p=reject; sp=reject; adkim=s; aspf=s;"
-                                                 --}}
+                                                <a href="{{ route('veiculos.show', $doc->id) }}" class="dropdown-item">Ver/Editar</a>
                                                 
                                                 <a href="{{ $doc->arquivo_proc }}" 
                                                     class="dropdown-item"
@@ -230,7 +165,7 @@
                                                 <a href="{{ $doc->arquivo_atpve ?? '#' }}" 
                                                     class="dropdown-item {{ empty($doc->arquivo_atpve) ? 'disabled' : '' }}" 
                                                     target="_blank">
-                                                     Baixar ATPVe
+                                                     Baixar Solicitação ATPVe
                                                  </a>
                                                  
                                                 <a href="javascript:void(0);"
@@ -256,8 +191,11 @@
                                                     Arquivar
                                                 </a>
 
-                                                <!-- SweetAlert2 -->
-                                                <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+                                                <a href="{{ route('veiculos.destroy', $doc->id) }}" 
+                                                    data-confirm-delete="true"
+                                                    class="dropdown-item text-danger">
+                                                    Excluir
+                                                </a>
 
                                                 <script>
                                                     function confirmArchive(id) {
@@ -303,25 +241,33 @@
             
 
 
+        </div><br>
+        <div class="row d-flex align-items-center justify-content-between">
+            <!-- Texto de exibição alinhado à esquerda -->
+            <div class="col-sm-12 col-md-5 d-flex align-items-center">
+                <div class="dataTables_info" id="basic-datatable_info" role="status" aria-live="polite">
+                    Exibindo {{ $quantidadePaginaAtual }} de {{ $quantidadeTotal }} veículos cadastrados
+                </div>
+            </div>
+        
+            <!-- Paginação alinhada ao final (direita) -->
+            <div class="col-sm-12 col-md-7 d-flex align-items-center justify-content-end">
+                <div class="dataTables_paginate paging_simple_numbers">
+                    {{ $veiculos->appends([
+                        'search' => request()->get('search', '')
+                    ])->links('components.pagination') }}
+                </div>
+            </div>
         </div>
+        
+
+        
         
         
 
     </div>
     
-    <div class="row">
-        <!-- Mensagem de quantidade exibida -->
-        <div class="col-sm-12 col-md-5 d-flex align-items-center">
-            <p class="mb-0">Exibindo {{ $quantidadePaginaAtual }} de {{ $quantidadeTotal }} veículos cadastrados</p>
-        </div>
     
-        <!-- Paginação alinhada à direita -->
-        <div class="col-sm-12 col-md-7 d-flex justify-content-end align-items-center">
-            {{ $veiculos->appends([
-                'search' => request()->get('search', '')
-            ])->links('components.pagination') }}
-        </div>
-    </div>
     
     
                                                 

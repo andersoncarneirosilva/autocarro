@@ -174,18 +174,22 @@
 
             </div>
         </div>
-    </div>
-    <div class="row">
-        <!-- Mensagem de quantidade exibida -->
+    </div><br>
+    <div class="row d-flex align-items-center justify-content-between">
+        <!-- Texto de exibição alinhado à esquerda -->
         <div class="col-sm-12 col-md-5 d-flex align-items-center">
-            <p class="mb-0">Exibindo {{ $quantidadePaginaAtual }} de {{ $quantidadeTotal }} veículos cadastrados</p>
+            <div class="dataTables_info" id="basic-datatable_info" role="status" aria-live="polite">
+                Exibindo {{ $quantidadePaginaAtual }} de {{ $quantidadeTotal }} veículos arquivados
+            </div>
         </div>
     
-        <!-- Paginação alinhada à direita -->
-        <div class="col-sm-12 col-md-7 d-flex justify-content-end align-items-center">
-            {{ $veiculos->appends([
-                'search' => request()->get('search', '')
-            ])->links('components.pagination') }}
+        <!-- Paginação alinhada ao final (direita) -->
+        <div class="col-sm-12 col-md-7 d-flex align-items-center justify-content-end">
+            <div class="dataTables_paginate paging_simple_numbers">
+                {{ $veiculos->appends([
+                    'search' => request()->get('search', '')
+                ])->links('components.pagination') }}
+            </div>
         </div>
     </div>
                                                 
