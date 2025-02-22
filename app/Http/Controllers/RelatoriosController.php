@@ -148,19 +148,19 @@ class RelatoriosController extends Controller
 
     public function gerarPdfVeiculos(Request $request)
 {
-    $dataI = $request->input('dataInicial');
-    $dataF = $request->input('dataFinal');
+    $dataInicial = $request->input('dataInicial');
+    $dataFinal = $request->input('dataFinal');
 
     // Obtém apenas os veículos do usuário autenticado com paginação
     $dados = Veiculo::where('user_id', auth()->id())
         ->whereBetween('created_at', [
-            $dataI . ' 00:00:00',
-            $dataF . ' 23:59:59'
+            $dataInicial . ' 00:00:00',
+            $dataFinal . ' 23:59:59'
         ])
-        ->paginate(10); // Paginação com 10 itens por página
+        ->get(); // Paginação com 10 itens por página
 
     // Renderiza a view com os dados filtrados
-    $view = view('relatorios.veiculos', compact('dados', 'dataI', 'dataF'))->render();
+    $view = view('relatorios.veiculos', compact('dados', 'dataInicial', 'dataFinal'))->render();
     
     // Gera o PDF com DomPDF
     $pdf = app('dompdf.wrapper');
