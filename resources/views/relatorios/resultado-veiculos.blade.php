@@ -71,6 +71,7 @@
                 <table class="table table-hover table-centered mb-0">
                     <thead class="table-dark">
                         <tr>
+                            <th>#</th>
                             <th>Veículo</th>
                             <th>Placa</th>
                             <th>Ano/Modelo</th>
@@ -83,6 +84,7 @@
                     <tbody>
                         @forelse($dados as $item)
                             <tr>
+                                <td>{{ $loop->iteration }}</td>
                                 <td>{{ $item->marca }}</td>
                                 <td>{{ $item->placa }}</td>
                                 <td>{{ $item->ano }}</td>
@@ -99,6 +101,7 @@
                     </tbody>
                 </table>
             </div>
+            
         </div>
     </div>
 </div>

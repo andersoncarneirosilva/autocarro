@@ -147,26 +147,31 @@ class RelatoriosController extends Controller
         return $pdf->stream('relatorio_ordens_de_servico.pdf');
     }
 
-    public function gerarPdfVeiculos(Request $request){
+    public function gerarPdfVeiculos(Request $request)
+{
+    $dataI = $request->input('dataInicial');
+    $dataF = $request->input('dataFinal');
 
-        $data = $request->all();
-        //dd($data);
-        $dataI = $request['dataInicial'];
-        $dataF = $request['dataFinal'];
-
-        $dados = Veiculo::whereBetween('created_at', [
+    // Obtém apenas os veículos do usuário autenticado com paginação
+    $dados = Veiculo::where('user_id', auth()->id())
+        ->whereBetween('created_at', [
             $dataI . ' 00:00:00',
             $dataF . ' 23:59:59'
-        ])->get();
+        ])
+        ->paginate(10); // Paginação com 10 itens por página
 
-        $view = view('relatorios.veiculos', compact('dados'))->render();
-        $pdf = app('dompdf.wrapper');
-        $pdf->loadHTML($view)
-        ->setPaper('a4', 'landscape');
+    // Renderiza a view com os dados filtrados
+    $view = view('relatorios.veiculos', compact('dados', 'dataI', 'dataF'))->render();
+    
+    // Gera o PDF com DomPDF
+    $pdf = app('dompdf.wrapper');
+    $pdf->loadHTML($view)->setPaper('a4', 'landscape');
 
-        // Retorna o PDF para download
-        return $pdf->stream('relatorio_veiculos.pdf');
-    }
+    // Retorna o PDF para o navegador
+    return $pdf->stream('relatorio_veiculos.pdf');
+}
+
+
 
 
     public function gerarRelatorioClientes()

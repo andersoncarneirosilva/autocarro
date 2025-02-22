@@ -123,6 +123,7 @@
         <table>
             <thead>
                 <tr>
+                    <th>#</th>
                     <th>Veículo</th>
                     <th>Placa</th>
                     <th>Ano/Modelo</th>
@@ -133,8 +134,9 @@
                 </tr>
             </thead>
             <tbody>
-                @foreach ($dados as $item)
+                @foreach ($dados as $index => $item)
                 <tr>
+                    <td>{{ $loop->iteration }}</td>
                     <td>{{ $item->marca }}</td>
                     <td>{{ $item->placa }}</td>
                     <td>{{ $item->ano }}</td>
@@ -146,6 +148,7 @@
                 @endforeach
             </tbody>
         </table>
+        
 
         <div class="footer">
             <p>Relatório gerado automaticamente.</p>
