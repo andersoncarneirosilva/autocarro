@@ -66,12 +66,11 @@ class RelatoriosController extends Controller
 
         case 'Veículos':
             // Adiciona a restrição para o usuário logado, se necessário
-            $dados = Veiculo::where('user_id', $userId)
-                              ->whereBetween('created_at', [
-                                  $dataInicial . ' 00:00:00',
-                                  $dataFinal . ' 23:59:59'
-                              ])
-                              ->get();
+            $dados = Veiculo::where('user_id', auth()->id())
+                            ->whereBetween('created_at', [
+                                $dataInicial . ' 00:00:00',
+                                $dataFinal . ' 23:59:59'
+                            ])->get();
             return view('relatorios.resultado-veiculos', compact('dados', 'tipo', 'dataInicial', 'dataFinal'));
             break;
 
