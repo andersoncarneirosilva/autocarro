@@ -38,7 +38,7 @@
                         <div class="col-md-3">
                             <div class="mb-3">
                                 <label for="useremail" class="form-label">Nível de acesso</label>
-                                <select class="form-select" name="nivel_acesso">
+                                <select class="form-select" name="nivel_acesso" required>
                                     <option value="">Selecione o nível</option>
                                     <option value="Administrador">Administrador</option>
                                     <option value="Usuario">Usuário</option>
@@ -83,14 +83,15 @@
                             <div class="mb-3">
                                 <label for="social-insta" class="form-label">Confirmar senha</label>
                                 <div class="input-group">
-                                    <input type="password" name="password_confirm" id="password_confirm" class="form-control"/>
+                                    <input type="password" name="password_confirmation" id="password_confirmation" class="form-control"/>
+
                                 </div>
                             </div>
                         </div>
 
                         <input type="hidden" name="classe" value="badge badge-outline-success" class="form-control"/>
                         <input type="hidden" name="status" value="Ativo" class="form-control"/>
-                        <input type="hidden" name="credito" value="10" class="form-control"/>
+                        <input type="hidden" name="credito" value="100" class="form-control"/>
 
 
                     </div> <!-- end row -->

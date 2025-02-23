@@ -38,7 +38,7 @@ class VeiculoController extends Controller
         //abort(419);
 
         $title = 'Excluir!';
-        $text = "Deseja arquivar esse veículo?";
+        $text = "Deseja excluir este veículo?";
         confirmDelete($title, $text);
         
         $userId = Auth::id();

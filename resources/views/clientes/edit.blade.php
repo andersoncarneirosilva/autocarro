@@ -17,14 +17,14 @@
         </div>
     </div>
 </div>
-@if ($errors->any())
+{{-- @if ($errors->any())
     <div class="alert alert-warning alert-dismissible fade show" role="alert">
         <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
         <strong>Atenção - </strong>Todos os campos são obrigatórios.
     </div>
 @endif
 
-@include('includes/validations-form')
+@include('includes/validations-form') --}}
 
 <form action="{{ route('clientes.update', $cliente->id) }}" method="POST" enctype="multipart/form-data" id="edit-user-form">
     @csrf

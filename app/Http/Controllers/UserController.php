@@ -61,9 +61,11 @@ class UserController extends Controller
                 'credito' => 'required|string|max:255',
             ]);
             //dd($validated);
+            //dd($validated); // 🔴 ADICIONE ESTA LINHA PARA TESTAR SE A VALIDAÇÃO ESTÁ FUNCIONANDO
         } catch (\Illuminate\Validation\ValidationException $e) {
-            alert()->error('Todos os campos são obrigatórios!');
-                //return redirect()->route('users.create');
+            $mensagemErro = implode("\n", $e->validator->errors()->all());
+            alert()->error('Todos os campos são obrigatórios!', $mensagemErro);
+            return redirect()->route('users.create')->withErrors($e->validator)->withInput();
         }
 
         $data['password'] = bcrypt($request->password);
@@ -83,9 +85,8 @@ class UserController extends Controller
         }
         
         if($this->model->create($data)){
-            /* session()->flash('success', 'Usuário cadastrado com sucesso!'); */
-            alert()->success('Usuário cadastrado com sucesso!');
-            return redirect()->route('users.index');
+
+            return redirect()->route('users.index')->with('success', 'Usuário cadastrado com sucesso!');
         }
     }
     
@@ -122,25 +123,21 @@ class UserController extends Controller
         }
 
         $user->update($data);
-        alert()->success('Usuário editado com sucesso!');
-
-        return redirect()->route('users.index');
+        return redirect()->route('users.index')->with('success', 'Usuário editado com sucesso!');
     }
 
     public function destroy($id){
         //dd($id);
         if (Auth::user()->id === (int) $id) {
-            alert()->error('Você não pode se excluir!');
-            return redirect()->route('users.index');
+            return redirect()->route('users.index')->with('error', 'Você não pode se excluir!');
         }
 
         if(!$user = $this->model->find($id)){
-            return redirect()->route('users.index');
+            return redirect()->route('users.index')->with('error', 'Usuário não encontrado!');
         }
         
         if($user->delete()){
-            alert()->success('Usuário excluído com sucesso!');
-            return redirect()->route('users.index'); 
+            return redirect()->route('users.index')->with('success', 'Usuário excluído com sucesso!');
         }
     }
     

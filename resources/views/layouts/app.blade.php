@@ -1,152 +1,155 @@
-
 <!DOCTYPE html>
 <html lang="pt-BR">
 
-    <head>
-        <meta charset="utf-8" />
-        <title>@yield('title')</title>
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        
-        <meta name="keywords" content="Gerenciamento de documentação, veículos, Procuração, CRLV, Solicitação de ATPVe, documentos veiculares">
-        <meta name="description" content="Gerenciamento de documentação de veículos. Procuração, CRLV, solicitação de ATPVe e muito mais.">
-        
-        
-        <!-- App favicon -->
-        <meta name="csrf-token" content="{{ csrf_token() }}">
+<head>
+    <meta charset="utf-8" />
+    <title>@yield('title')</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-        <link rel="shortcut icon" href="{{ url('images/favicon.ico') }}">
-        <!-- Daterangepicker css -->
-        <link href="{{ url('assets/vendor/select2/css/select2.min.css')}}" rel="stylesheet" type="text/css" />
-        <link rel="stylesheet" href="{{ url('assets/vendor/daterangepicker/daterangepicker.css') }}">
-
-        <!-- Vector Map css -->
-        <link rel="stylesheet" href="{{ url('assets/vendor/admin-resources/jquery.vectormap/jquery-jvectormap-1.2.2.css') }}">
-        <!-- Theme Config Js -->
-        <script src="{{ url('assets/js/hyper-config.js') }}"></script>
-        <link href="https://cdn.jsdelivr.net/npm/fullcalendar@5.11.0/main.min.css" rel="stylesheet">
-
-        <link href="https://cdn.jsdelivr.net/npm/choices.js/public/assets/styles/choices.min.css" rel="stylesheet" />
-<script src="https://cdn.jsdelivr.net/npm/choices.js/public/assets/scripts/choices.min.js"></script>
-
-        <!-- App css -->
-
-        <link rel="stylesheet" href="{{ url('assets/css/app-saas.css') }}?v={{ time() }}" type="text/css" id="app-style" >
-        
-        <script src="https://cdn.jsdelivr.net/npm/apexcharts@3.41.0"></script>
-
-        <!-- Icons css -->
-        <link href="{{ url('assets/css/icons.min.css') }}" rel="stylesheet" type="text/css" />
-        <link href="{{ url('assets/vendor/bootstrap-datepicker/css/bootstrap-datepicker.min.css') }}" rel="stylesheet" type="text/css" />
-        {{-- <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" /> --}}
-
-        <script src="https://kit.fontawesome.com/6c4df5f46b.js" crossorigin="anonymous"></script>
-        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/vanilla-masker/1.1.0/vanilla-masker.min.js"></script>
-        
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/sweetalert/2.1.0/sweetalert.min.js"></script>
-        <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/inputmask/5.0.8/jquery.inputmask.min.js"></script>
-        <!-- Incluindo o jQuery Toast -->
-        <script src="{{ url('js/mask-cep.js') }}"></script>
-        <script src="{{ url('js/mask-phone.js') }}"></script>
-
-        {{-- <script src="{{ url('assets/js/pagamento.js') }}?v={{ time() }}"></script> --}}
+    <meta name="keywords"
+        content="Gerenciamento de documentação, veículos, Procuração, CRLV, Solicitação de ATPVe, documentos veiculares">
+    <meta name="description"
+        content="Gerenciamento de documentação de veículos. Procuração, CRLV, solicitação de ATPVe e muito mais.">
 
 
-        <!-- Plugin css -->
-        <link rel="stylesheet" href="{{ url('assets/vendor/jquery-toast-plugin/jquery.toast.min.css') }}">
-        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css">
-<script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
+    <!-- App favicon -->
+    <meta name="csrf-token" content="{{ csrf_token() }}">
 
-        <script src="{{ url('assets/js/notificacoes.js') }}"></script>
-        <script src="https://sdk.mercadopago.com/js/v2"></script>
-        <script>
-          $(document).ready(function () {
-    $('.datepicker').datepicker({
-        format: 'dd/mm/yyyy',   // Formato de data brasileiro
-        language: 'pt-BR',      // Define o idioma como Português Brasil
-        autoclose: true,        // Fecha automaticamente ao selecionar a data
-        todayHighlight: true    // Destaca a data atual
-    });
+    <link rel="shortcut icon" href="{{ url('images/favicon.ico') }}">
+    <!-- Daterangepicker css -->
+    <link href="{{ url('assets/vendor/select2/css/select2.min.css') }}" rel="stylesheet" type="text/css" />
+    <link rel="stylesheet" href="{{ url('assets/vendor/daterangepicker/daterangepicker.css') }}">
 
-    // Para calendários inline
-    $('.calendar-widget').datepicker({
-        format: 'dd/mm/yyyy',
-        language: 'pt-BR',
-        todayHighlight: true
-    });
-});
+    <!-- Vector Map css -->
+    <link rel="stylesheet"
+        href="{{ url('assets/vendor/admin-resources/jquery.vectormap/jquery-jvectormap-1.2.2.css') }}">
+    <!-- Theme Config Js -->
+    <script src="{{ url('assets/js/hyper-config.js') }}"></script>
+    <link href="https://cdn.jsdelivr.net/npm/fullcalendar@5.11.0/main.min.css" rel="stylesheet">
 
-        </script>
-            
-        
-        
-        
-        
-        
-        <!-- Select2 css -->
-        
+    <link href="https://cdn.jsdelivr.net/npm/choices.js/public/assets/styles/choices.min.css" rel="stylesheet" />
+    <script src="https://cdn.jsdelivr.net/npm/choices.js/public/assets/scripts/choices.min.js"></script>
 
-        <!--  Select2 Js -->
-        
-        
-        <style>
-            
-            *,
-            *::before,
-            *::after {
-                box-sizing: border-box;
-            }
-        
-            .filter-select {
-                background-color: transparent;
-                border: none;
-                padding: 0 1em 0 0;
-                margin: 0;
-                font-family: inherit;
-                font-size: inherit;
-                cursor: inherit;
-                width: auto;
-                line-height: inherit;
-                outline: none;
-                color: var(--ct-body-color);
-            }
-        
-            .filter-btn {
-                padding: 0.25em 0.5em;
-                font-size: inherit;
-                cursor: pointer;
-                border-radius: 4px;
-                color: var(--ct-body-color);
-                border: none;
-                color: #333;
-            }
-        
-            .card {
-                box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-                border: none;
-            }
-        
-            .card-body {
-                padding: 0.5rem;
-            }
-        
-            .filter-select-container {
-                display: flex;
-                align-items: center;
-                gap: 0.5rem;
-            }
-            .select2-container {
-    z-index: 1055 !important; /* Certifique-se de que o z-index é maior que o do modal */
-}
+    <!-- App css -->
 
-        </style>
+    <link rel="stylesheet" href="{{ url('assets/css/app-saas.css') }}?v={{ time() }}" type="text/css"
+        id="app-style">
 
-    </head>
+    <script src="https://cdn.jsdelivr.net/npm/apexcharts@3.41.0"></script>
 
-    <body>
-        <!-- Pre-loader -->
-        {{-- <div id="preloader">
+    <!-- Icons css -->
+    <link href="{{ url('assets/css/icons.min.css') }}" rel="stylesheet" type="text/css" />
+    <link href="{{ url('assets/vendor/bootstrap-datepicker/css/bootstrap-datepicker.min.css') }}" rel="stylesheet"
+        type="text/css" />
+    {{-- <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" /> --}}
+
+    <script src="https://kit.fontawesome.com/6c4df5f46b.js" crossorigin="anonymous"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/vanilla-masker/1.1.0/vanilla-masker.min.js"></script>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/sweetalert/2.1.0/sweetalert.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/inputmask/5.0.8/jquery.inputmask.min.js"></script>
+    <!-- Incluindo o jQuery Toast -->
+    <script src="{{ url('js/mask-cep.js') }}"></script>
+    <script src="{{ url('js/mask-phone.js') }}"></script>
+
+    {{-- <script src="{{ url('assets/js/pagamento.js') }}?v={{ time() }}"></script> --}}
+
+
+    <!-- Plugin css -->
+    <link rel="stylesheet" href="{{ url('assets/vendor/jquery-toast-plugin/jquery.toast.min.css') }}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
+
+    <script src="{{ url('assets/js/notificacoes.js') }}"></script>
+    <script src="https://sdk.mercadopago.com/js/v2"></script>
+    <script>
+        $(document).ready(function() {
+            $('.datepicker').datepicker({
+                format: 'dd/mm/yyyy', // Formato de data brasileiro
+                language: 'pt-BR', // Define o idioma como Português Brasil
+                autoclose: true, // Fecha automaticamente ao selecionar a data
+                todayHighlight: true // Destaca a data atual
+            });
+
+            // Para calendários inline
+            $('.calendar-widget').datepicker({
+                format: 'dd/mm/yyyy',
+                language: 'pt-BR',
+                todayHighlight: true
+            });
+        });
+    </script>
+
+
+
+
+
+
+    <!-- Select2 css -->
+
+
+    <!--  Select2 Js -->
+
+
+    <style>
+        *,
+        *::before,
+        *::after {
+            box-sizing: border-box;
+        }
+
+        .filter-select {
+            background-color: transparent;
+            border: none;
+            padding: 0 1em 0 0;
+            margin: 0;
+            font-family: inherit;
+            font-size: inherit;
+            cursor: inherit;
+            width: auto;
+            line-height: inherit;
+            outline: none;
+            color: var(--ct-body-color);
+        }
+
+        .filter-btn {
+            padding: 0.25em 0.5em;
+            font-size: inherit;
+            cursor: pointer;
+            border-radius: 4px;
+            color: var(--ct-body-color);
+            border: none;
+            color: #333;
+        }
+
+        .card {
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            border: none;
+        }
+
+        .card-body {
+            padding: 0.5rem;
+        }
+
+        .filter-select-container {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .select2-container {
+            z-index: 1055 !important;
+            /* Certifique-se de que o z-index é maior que o do modal */
+        }
+    </style>
+
+</head>
+
+<body>
+    <!-- Pre-loader -->
+    {{-- <div id="preloader">
             <div id="status">
               <div class="bouncing-loader">
                 <div>P</div>
@@ -156,72 +159,73 @@
               </div>
             </div>
           </div> --}}
-          
+
     <!-- End Preloader-->
-        <!-- Begin page -->
-        <div class="wrapper">
-            <!-- ========== Topbar Start ========== -->
-            @include('components.navbar')
-            <!-- ========== Topbar End ========== -->
+    <!-- Begin page -->
+    <div class="wrapper">
+        <!-- ========== Topbar Start ========== -->
+        @include('components.navbar')
+        <!-- ========== Topbar End ========== -->
 
-            <!-- ========== Left Sidebar Start ========== -->
-            @include('components.sidebar')
-            <!-- ========== Left Sidebar End ========== -->
+        <!-- ========== Left Sidebar Start ========== -->
+        @include('components.sidebar')
+        <!-- ========== Left Sidebar End ========== -->
 
-            <div class="content-page">
-                <div class="content">
-                    <div class="container-fluid">
-                        <div class="row">
+        <div class="content-page">
+            <div class="content">
+                <div class="container-fluid">
+                    {{-- <div class="row">
                             <div class="col-12">
-                                <div class="page-title-box">
-                                    
+                                <div class="page-title-box"> --}}
 
-                                        
-                                    
-                                    
 
-                                    
-                                    @include('sweetalert::alert')
-                                    @yield('content')
-                                </div>
+
+
+
+
+
+                    @include('sweetalert::alert')
+                    @yield('content')
+                    {{-- </div>
                             </div>
-                        </div>
-                    </div>
+                        </div> --}}
                 </div>
-                
-                <!-- Footer Start -->
-                @include('components.footer')
-                <!-- end Footer -->
-                
             </div>
-        </div> 
-        <!-- Chart js --> 
-        <script src="{{ url('assets/vendor/chart.js/chart.min.js') }}"></script>
-        <!-- Vendor js -->
-        <script src="{{ url('assets/js/vendor.min.js') }}"></script>   
-        <script src="{{ url('assets/vendor/select2/js/select2.min.js')}}"></script>
-        <script src="{{ url('assets/vendor/daterangepicker/moment.min.js') }}"></script>
-        <script src="{{ url('assets/vendor/daterangepicker/daterangepicker.js') }}"></script>
-        <!-- Input Mask js -->
-        <script src="{{ url('assets/vendor/jquery-mask-plugin/jquery.mask.min.js')}}"></script>
-        <!-- plugin js -->
-        <script src="{{ url('assets/vendor/dropzone/min/dropzone.min.js') }}"></script>
-        <!-- init js -->
-        <script src="{{ url('assets/js/ui/component.fileupload.js') }}"></script>
-        <!-- App js -->
-        <script src="{{ url('assets/js/app.min.js') }}"></script>
-        <script src="{{ url('assets/vendor/bootstrap-datepicker/js/bootstrap-datepicker.min.js') }}"></script>
-        <script src="{{ url('assets/vendor/bootstrap-datepicker/locales/bootstrap-datepicker.pt-BR.min.js') }}"></script>
 
-        
-        <script src="{{ url('assets/vendor/handlebars/handlebars.min.js') }}"></script>
-        <script src="{{ url('assets/vendor/typeahead.js/typeahead.bundle.min.js') }}"></script>
-        <!-- Script do Select2 -->
-        <script src="{{ url('assets/vendor/jquery-toast-plugin/jquery.toast.min.js') }}"></script>
-        <!-- Toastr Demo js -->
-        <script src="{{ url('assets/vendor/fullcalendar/index.global.min.js') }}"></script>
-        <script src="https://cdn.jsdelivr.net/npm/fullcalendar@5.11.0/main.min.js"></script>
-        <script src="{{ url('assets/js/calendar.js') }}"></script>
+            <!-- Footer Start -->
+            @include('components.footer')
+            <!-- end Footer -->
 
-    </body>
-</html> 
+        </div>
+    </div>
+    <!-- Chart js -->
+    <script src="{{ url('assets/vendor/chart.js/chart.min.js') }}"></script>
+    <!-- Vendor js -->
+    <script src="{{ url('assets/js/vendor.min.js') }}"></script>
+    <script src="{{ url('assets/vendor/select2/js/select2.min.js') }}"></script>
+    <script src="{{ url('assets/vendor/daterangepicker/moment.min.js') }}"></script>
+    <script src="{{ url('assets/vendor/daterangepicker/daterangepicker.js') }}"></script>
+    <!-- Input Mask js -->
+    <script src="{{ url('assets/vendor/jquery-mask-plugin/jquery.mask.min.js') }}"></script>
+    <!-- plugin js -->
+    <script src="{{ url('assets/vendor/dropzone/min/dropzone.min.js') }}"></script>
+    <!-- init js -->
+    <script src="{{ url('assets/js/ui/component.fileupload.js') }}"></script>
+    <!-- App js -->
+    <script src="{{ url('assets/js/app.min.js') }}"></script>
+    <script src="{{ url('assets/vendor/bootstrap-datepicker/js/bootstrap-datepicker.min.js') }}"></script>
+    <script src="{{ url('assets/vendor/bootstrap-datepicker/locales/bootstrap-datepicker.pt-BR.min.js') }}"></script>
+
+
+    <script src="{{ url('assets/vendor/handlebars/handlebars.min.js') }}"></script>
+    <script src="{{ url('assets/vendor/typeahead.js/typeahead.bundle.min.js') }}"></script>
+    <!-- Script do Select2 -->
+    <script src="{{ url('assets/vendor/jquery-toast-plugin/jquery.toast.min.js') }}"></script>
+    <!-- Toastr Demo js -->
+    <script src="{{ url('assets/vendor/fullcalendar/index.global.min.js') }}"></script>
+    <script src="https://cdn.jsdelivr.net/npm/fullcalendar@5.11.0/main.min.js"></script>
+    <script src="{{ url('assets/js/calendar.js') }}"></script>
+
+</body>
+
+</html>

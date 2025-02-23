@@ -84,10 +84,10 @@ class ClientesController extends Controller
     $cliente = $this->model->create($validatedData);
 
     if ($cliente) {
-        alert()->success('Cliente cadastrado com sucesso!');
-    }
+        return redirect()->route('clientes.index')->with('success', 'Cliente cadastrado com sucesso!');
 
-    return redirect()->route('clientes.index');
+    }
+    return redirect()->route('clientes.index')->with('error', 'Erro ao cadastrar cliente!');
 }
 
 
@@ -141,8 +141,7 @@ class ClientesController extends Controller
         $cliente->update($validatedData);
     
         // Mensagem de sucesso
-        alert()->success('Cliente atualizado com sucesso!');
-        return redirect()->route('clientes.index');
+        return redirect()->route('clientes.index')->with('success', 'Cliente atualizado com sucesso!');
     }
     
 
@@ -161,8 +160,8 @@ class ClientesController extends Controller
          $cli->delete();
      
          // Retorna com mensagem de sucesso
-         alert()->success('Cliente excluído com sucesso!');
-         return redirect()->route('clientes.index');
+         //alert()->success('Cliente excluído com sucesso!');
+         return back()->with('success', 'Cliente excluído com sucesso!');
      }
      
 

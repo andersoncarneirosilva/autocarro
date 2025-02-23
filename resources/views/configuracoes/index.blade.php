@@ -89,7 +89,7 @@
                 <div class="modal-body">
                     <div class="form-group">
                         <label>Selecione os Outorgados: <span style="color: red;">*</span></label>
-                        <select class="select2 form-control select2-multiple" id="outorgadosSelect"  data-toggle="select2" multiple="multiple" name="outorgados[]" data-placeholder="Escolha um ou mais ...">
+                        <select class="select2 form-control select2-multiple" id="outorgadosSelect"  data-toggle="select2" multiple="multiple" name="outorgados[]" data-placeholder="Escolha um ou mais ..." required>
                             <option value="">Selecione o cliente</option>
                             @foreach ($outorgados as $out)
                                 <option value="{{ $out->id }}">{{ $out->nome_outorgado }}</option>
@@ -98,15 +98,15 @@
                     </div>  
                     <div class="form-group">
                         <label for="texto_inicial">Texto Inicial: <span style="color: red;">*</span></label>
-                        <textarea name="texto_inicial"  class="form-control"  rows="5"></textarea>
+                        <textarea name="texto_inicial"  class="form-control"  rows="5" required></textarea>
                     </div>   
                     <div class="form-group">
                         <label for="texto_inicial">Texto Final: <span style="color: red;">*</span></label>
-                        <textarea name="texto_final" class="form-control" rows="5"></textarea>
+                        <textarea name="texto_final" class="form-control" rows="5" required></textarea>
                     </div>  
                     <div class="form-group">
                         <label for="nome_outorgado" class="form-label">Cidade: <span style="color: red;">*</span></label>
-                        <input class="form-control" name="cidade"/>
+                        <input class="form-control" name="cidade" required/>
                     </div>         
                 </div>
                 <div class="modal-footer">
@@ -131,7 +131,7 @@
                 <div class="modal-body">
                     <div class="form-group">
                         <label>Selecione os Outorgados: <span style="color: red;">*</span></label>
-                        <select class="select2 form-control select2-multiple" data-toggle="select2" id="edit_outorgados" multiple="multiple" name="outorgados[]" data-placeholder="Escolha um ou mais ...">
+                        <select class="select2 form-control select2-multiple" data-toggle="select2" id="edit_outorgados" multiple="multiple" name="outorgados[]" data-placeholder="Escolha um ou mais ..." required>
                             <option value="">Selecione o cliente</option>
                             @foreach ($outorgados as $out)
                                 <option value="{{ $out->id }}">{{ $out->nome_outorgado }}</option>
@@ -142,17 +142,17 @@
                     <br>
                     <div class="form-group">
                         <label for="texto_inicial">Texto Inicial: <span style="color: red;">*</span></label>
-                        <textarea name="texto_inicial" id="edit_text_inicial" class="form-control"  rows="5"></textarea>
+                        <textarea name="texto_inicial" id="edit_text_inicial" class="form-control"  rows="5" required></textarea>
                     </div>
                     <br>   
                     <div class="form-group">
                         <label for="texto_inicial">Texto Final: <span style="color: red;">*</span></label>
-                        <textarea name="texto_final" id="edit_text_final" class="form-control" rows="5"></textarea>
+                        <textarea name="texto_final" id="edit_text_final" class="form-control" rows="5" required></textarea>
                     </div>  
                     <br>
                     <div class="form-group">
                         <label for="nome_outorgado" class="form-label">Cidade: <span style="color: red;">*</span></label>
-                        <input class="form-control" id="edit_cidade" name="cidade"/>
+                        <input class="form-control" id="edit_cidade" name="cidade" required/>
                     </div>         
                 </div>
                 <div class="modal-footer">
