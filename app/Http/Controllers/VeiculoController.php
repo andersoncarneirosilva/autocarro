@@ -63,6 +63,7 @@ class VeiculoController extends Controller
                             ->count();
 
         $modeloProc = ModeloProcuracoes::exists();
+        $modeloOut = Outorgado::exists();
         $path = storage_path('app/public/documentos/usuario_' . auth()->id());
 
         // Função para calcular o tamanho total da pasta
@@ -81,7 +82,17 @@ class VeiculoController extends Controller
         $limitInMB = 1; // Limite de 1 MB
         $percentUsed = ($usedSpaceInMB / $limitInMB) * 100; // Percentual usado
 
-        return view('veiculos.index', compact(['clientes', 'usedSpaceInMB', 'percentUsed', 'outorgados', 'limitInMB', 'veiculos', 'modeloProc', 'quantidadePaginaAtual', 'quantidadeTotal']));
+        return view('veiculos.index', compact(['clientes', 
+                                                'usedSpaceInMB', 
+                                                'percentUsed', 
+                                                'outorgados', 
+                                                'limitInMB', 
+                                                'veiculos', 
+                                                'modeloProc',
+                                                'modeloOut',
+                                                'quantidadePaginaAtual', 
+                                                'quantidadeTotal'
+                                            ]));
     }
 
     public function indexArquivados(Request $request){

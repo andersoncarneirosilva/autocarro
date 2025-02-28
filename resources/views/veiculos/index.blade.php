@@ -237,11 +237,14 @@
                             NENHUM RESULTADO ENCONTRADO!
                         </div>
                     @endif
+                    @if (!$modeloOut)
+                        <div class="alert alert-light text-bg-light border-0" role="alert">
+                            Acesse a página <a href="{{ route('outorgados.index') }}">Outorgados</a> para realizar o cadastro.
+                        </div>
+                    @endif
                     @if (!$modeloProc)
                         <div class="alert alert-light text-bg-light border-0" role="alert">
-                            Acesse a página <a href="{{ route('outorgados.index') }}">Outorgados</a> e <a
-                                href="{{ route('configuracoes.index') }}">Procuração</a> para configurar o modelo de
-                            textos.
+                            Acesse a página <a href="{{ route('configuracoes.index') }}">Procuração</a> para configurar um modelo.
                         </div>
                     @endif
 
@@ -252,6 +255,7 @@
 
 
             </div><br>
+            @if ($veiculos->total() != 0)
             <div class="row d-flex align-items-center justify-content-between">
                 <!-- Texto de exibição alinhado à esquerda -->
                 <div class="col-sm-12 col-md-5 d-flex align-items-center">
@@ -259,6 +263,7 @@
                         Exibindo {{ $quantidadePaginaAtual }} de {{ $quantidadeTotal }} veículos cadastrados
                     </div>
                 </div>
+                
 
                 <!-- Paginação alinhada ao final (direita) -->
                 <div class="col-sm-12 col-md-7 d-flex align-items-center justify-content-end">
@@ -269,6 +274,7 @@
                     </div>
                 </div>
             </div>
+            @endif
 
 
 
