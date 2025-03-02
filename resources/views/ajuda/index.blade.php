@@ -22,6 +22,7 @@
 
 <div class="card">
     <div class="card-body">
+        <h5 class="card-title mt-2">Dicas de como utilizar o sistema</h5>
         <div class="row">
             <div class="accordion custom-accordion" id="custom-accordion-one">
                 <div class="card mb-0">
@@ -30,13 +31,12 @@
                             <a class="custom-accordion-title d-block"
                                 data-bs-toggle="collapse" href="#collapseFour"
                                 aria-expanded="true" aria-controls="collapseFour">
-                                Como cadastrar um veículo? <i
-                                    class="mdi mdi-chevron-down accordion-arrow"></i>
+                                Como cadastrar um veículo?
                             </a>
                         </h5>
                     </div>
                         
-                    <div id="collapseFour" class="collapse"
+                    <div id="collapseFour" class="collapse show"
                         aria-labelledby="headingFour"
                         data-bs-parent="#custom-accordion-one">
                         <div class="card-body">
@@ -46,7 +46,7 @@
                                 <li>Insira o endereço do outorgado e o documento em PDF.</li>
                             </ul>
                             <div class="mb-3">
-                                <video controls width="640" height="360">
+                                <video controls class="w-100" style="max-width: 640px; height: auto;">
                                     <source src="https://proconline.com.br/cadastrar-veiculo.mp4" type="video/mp4">
                                     Seu navegador não suporta a tag de vídeo.
                                 </video>
@@ -61,8 +61,7 @@
                             <a class="custom-accordion-title collapsed d-block"
                                 data-bs-toggle="collapse" href="#collapseFive"
                                 aria-expanded="false" aria-controls="collapseFive">
-                                Como gerar uma solicitação de ATPVe? <i
-                                    class="mdi mdi-chevron-down accordion-arrow"></i>
+                                Como gerar uma solicitação de ATPVe?
                             </a>
                         </h5>
                     </div>
@@ -76,7 +75,7 @@
                                 <li>Insira o endereço do outorgado e o documento em PDF.</li>
                             </ul>
                             <div class="mb-3">
-                                <video controls width="640" height="360">
+                                <video controls class="w-100" style="max-width: 640px; height: auto;">
                                     <source src="https://proconline.com.br/gerar-atpve.mp4" type="video/mp4">
                                     Seu navegador não suporta a tag de vídeo.
                                 </video>
@@ -85,7 +84,7 @@
                     </div>
                 </div>
 
-                
+
             </div>
         </div>
     </div>
