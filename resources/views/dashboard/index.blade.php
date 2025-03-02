@@ -20,13 +20,13 @@
         <!-- Para Mobile -->
         <div class="card ribbon-box d-block d-md-none">
           <div class="card-body">
-              <div class="ribbon ribbon-success float-end"><i class="mdi mdi-access-point me-1"></i> 18.02.2025</div>
+              <div class="ribbon ribbon-success float-end"><i class="mdi mdi-access-point me-1"></i> 02.03.2025</div>
               <h5 class="text-success float-start mt-0">Novidades no App!</h5>
               <div class="ribbon-content">
                   <ul>
-                    <li>Adicionado a página de veículos arquivados</li>
                     <li>Adicionado o método de pagamento via PIX</li>
                     <li>Página assinaturas adicionada ao menu do perfil</li>
+                    <li>Adicionada a página ajuda</li>
                   </ul>
               </div>
           </div> <!-- end card-body -->
