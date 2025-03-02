@@ -120,8 +120,8 @@
             <div class="card-header d-flex justify-content-between align-items-center">
                 <h4 class="header-title">Últimos veículos</h4>
             </div>
-            @if ($emprestimos->count() != 0)
-                <div class="card-body pt-0">
+            <div class="card-body pt-0">
+                @if ($emprestimos->count() != 0)
                     <div class="table-responsive">
                         <table class="table table-centered table-hover table-nowrap mb-0">
                             <thead>
@@ -134,14 +134,12 @@
                                 </tr>
                             </thead>
                             <tbody>
-
                                 @foreach ($emprestimos as $emp)
                                     <tr>
                                         <td>
                                             <div class="d-flex align-items-center">
                                                 <div class="flex-shrink-0">
-                                                    <img class="rounded-circle" src="{{ url("$emp->image") }}"
-                                                        alt="" width="31">
+                                                    <img class="rounded-circle" src="{{ url("$emp->image") }}" alt="" width="31">
                                                 </div>
                                                 <div class="flex-grow-1 ms-2">
                                                     {{ $emp->marca }}
@@ -150,31 +148,28 @@
                                         </td>
                                         <td>{{ $emp->placa }}</td>
                                         <td>{{ $emp->ano }}</td>
-                                        <td>
-                                            {{ $emp->cor }}
-                                        </td>
+                                        <td>{{ $emp->cor }}</td>
                                         <td>
                                             @if ($emp->crv === '***')
                                                 <span class="badge badge-outline-danger">FÍSICO</span>
                                             @else
-                                                <!-- Mostre uma mensagem ou deixe em branco -->
                                                 <span class="badge badge-outline-success">DIGITAL</span>
                                             @endif
                                         </td>
                                     </tr> <!-- end tr -->
                                 @endforeach
-
                             </tbody>
                         </table>
-                        @else
-                            <div class="alert alert-danger bg-transparent text-danger" role="alert">
-                                NENHUM RESULTADO ENCONTRADO!
-                            </div>
-                        @endif
                     </div>
-                </div>
-            </div> <!-- end col -->
-    </div>
+                @else
+                    <div class="alert alert-danger bg-transparent text-danger" role="alert">
+                        NENHUM RESULTADO ENCONTRADO!
+                    </div>
+                @endif
+            </div>
+        </div>
+    </div> <!-- end col -->
+
     <div class="col-md-6 col-xxl-3">
         <div class="card">
             <div class="card-header d-flex justify-content-between align-items-center">
@@ -216,7 +211,6 @@
                         </div>
                         <h5 class="my-0">{{ $procCount }}</h5>
                     </div>
-
                 </div>
 
                 <div class="mb-4">
@@ -229,7 +223,6 @@
                         </div>
                         <h5 class="my-0">{{ $atpveCount }}</h5>
                     </div>
-
                 </div>
 
                 <div class="">

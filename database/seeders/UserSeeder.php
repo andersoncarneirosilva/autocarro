@@ -23,6 +23,7 @@ class UserSeeder extends Seeder
             'classe' => 'badge badge-outline-success',
             'status' => 'Ativo',
             'credito' => '10',
+            'size_folder' => '100',
         ]);
     }
 }
