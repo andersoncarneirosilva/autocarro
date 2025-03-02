@@ -1,4 +1,5 @@
 <?php
+
 // app/Events/NewEventCreated.php
 
 namespace App\Events;
@@ -8,7 +9,6 @@ namespace App\Events;
 use App\Models\Event;
 use Illuminate\Broadcasting\Channel;
 use Illuminate\Broadcasting\InteractsWithSockets;
-use Illuminate\Broadcasting\PresenceChannel;
 use Illuminate\Contracts\Broadcasting\ShouldBroadcast;
 use Illuminate\Foundation\Events\Dispatchable;
 use Illuminate\Queue\SerializesModels;
@@ -32,7 +32,7 @@ class NewEventCreated implements ShouldBroadcast
     public function broadcastWith()
     {
         return [
-            'title' => 'Novo evento criado: ' . $this->event->title
+            'title' => 'Novo evento criado: '.$this->event->title,
         ];
     }
 }

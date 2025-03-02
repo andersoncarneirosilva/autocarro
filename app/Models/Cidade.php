@@ -18,5 +18,5 @@ class Cidade extends Model
      */
     protected $fillable = [
         'cidade',
-    ];    
+    ];
 }

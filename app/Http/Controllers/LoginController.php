@@ -1,5 +1,7 @@
 <?php
+
 namespace App\Http\Controllers;
+
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
@@ -18,7 +20,7 @@ class LoginController extends Controller
     public function login(Request $request)
     {
         // Validação dos dados
-        //dd($request);
+        // dd($request);
         $validator = Validator::make($request->all(), [
             'email' => 'required|email',
             'password' => 'required|min:6',
@@ -27,8 +29,8 @@ class LoginController extends Controller
         // Se a validação falhar, redireciona com os erros
         if ($validator->fails()) {
             return redirect()->route('login')
-                             ->withErrors($validator)  // Passa os erros para a view
-                             ->withInput();             // Mantém os dados do formulário
+                ->withErrors($validator)  // Passa os erros para a view
+                ->withInput();             // Mantém os dados do formulário
         }
 
         // Se a validação passar, tenta fazer o login
@@ -38,9 +40,8 @@ class LoginController extends Controller
 
         // Se o login falhar, exibe erro de credenciais
         return redirect()->route('login')
-                         ->withErrors(['email' => 'Credenciais inválidas.']);  // Exibe mensagem de erro
+            ->withErrors(['email' => 'Credenciais inválidas.']);  // Exibe mensagem de erro
     }
-
 
     // Processa o logout
     public function logout(Request $request)

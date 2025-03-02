@@ -21,8 +21,4 @@ class Testemunha extends Model
         'cpf_testemunha',
         'end_testemunha',
     ];
-
-    
-
-    
 }

@@ -19,7 +19,7 @@ return new class extends Migration
             $table->string('status')->default('pending');
             $table->date('data_inicio');
             $table->date('data_fim');
-            $table->string('external_reference')->nullable(); 
+            $table->string('external_reference')->nullable();
             $table->foreignId('user_id')->constrained()->onDelete('cascade');
             $table->timestamps();
         });

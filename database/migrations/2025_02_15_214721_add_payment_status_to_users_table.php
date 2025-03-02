@@ -9,13 +9,15 @@ return new class extends Migration
     /**
      * Run the migrations.
      */
-    public function up() {
+    public function up()
+    {
         Schema::table('users', function (Blueprint $table) {
             $table->string('payment_status')->nullable()->after('email'); // Adiciona a coluna depois do email
         });
     }
 
-    public function down() {
+    public function down()
+    {
         Schema::table('users', function (Blueprint $table) {
             $table->dropColumn('payment_status');
         });

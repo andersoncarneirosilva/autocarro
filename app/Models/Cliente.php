@@ -31,23 +31,19 @@ class Cliente extends Model
         'user_id',
     ];
 
-    public function getClientes(?string $search = null, $userId)
-{
-    return $this->where('user_id', $userId) // Filtro pelo usuário logado
-        ->when($search, function ($query) use ($search) {
-            // Se houver pesquisa, filtra por nome ou CPF
-            $query->where('nome', 'LIKE', "%{$search}%")
-                  ->orWhere('cpf', 'LIKE', "%{$search}%");
-        })
-        ->paginate(10); // Retorna os resultados paginados
-}
-
+    public function getClientes(?string $search, $userId)
+    {
+        return $this->where('user_id', $userId) // Filtro pelo usuário logado
+            ->when($search, function ($query) use ($search) {
+                // Se houver pesquisa, filtra por nome ou CPF
+                $query->where('nome', 'LIKE', "%{$search}%")
+                    ->orWhere('cpf', 'LIKE', "%{$search}%");
+            })
+            ->paginate(10); // Retorna os resultados paginados
+    }
 
     public function ordens()
     {
         return $this->hasMany(Ordem::class);
     }
-
-    
-    
 }

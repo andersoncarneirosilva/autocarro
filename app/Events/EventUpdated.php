@@ -4,9 +4,9 @@ namespace App\Events;
 
 use App\Models\Event;
 use Illuminate\Broadcasting\Channel;
-use Illuminate\Queue\SerializesModels;
 use Illuminate\Broadcasting\InteractsWithSockets;
 use Illuminate\Contracts\Broadcasting\ShouldBroadcast;
+use Illuminate\Queue\SerializesModels;
 
 class EventUpdated implements ShouldBroadcast
 {

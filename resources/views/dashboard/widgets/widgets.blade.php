@@ -13,21 +13,22 @@
             <div class="card-body">
                 <i class="uil uil-window-restore float-end"></i>
                 <h6 class="text-uppercase mt-0">
-                    @if(auth()->user()->plano == "Premium")
+                    @if (auth()->user()->plano == 'Premium')
                         Plano
                     @else
                         Crédito
                     @endif
                 </h6>
                 <h4 class="my-1" id="active-views-count">
-                    @if(auth()->user()->plano == "Premium")
+                    @if (auth()->user()->plano == 'Premium')
                         <span class="link">Premium</span>
                     @elseif(auth()->user()->credito <= 2)
                         <span class="link-danger">R${{ auth()->user()->credito }},00</span>
                         <h4 class="m-0 fw-normal cta-box-title">
                             <a href="{{ url('planos') }}" style="color: #0fb14a;">
-                            Adicionar créditos
-                        </a></h4>
+                                Adicionar créditos
+                            </a>
+                        </h4>
                     @else
                         <span class="link">R${{ auth()->user()->credito }},00</span>
                     @endif
@@ -41,36 +42,21 @@
                 <i class="mdi mdi-harddisk float-end"></i>
                 <h6 class="text-uppercase mt-0">Espaço em disco</h6>
                 <p class="text-muted font-12 mb-0">
-                    {{ number_format($usedSpaceInMB, 0) }} MB usados ({{ number_format($percentUsed, 0) }}%) de {{ $limitInMB }} MB
+                    {{ number_format($usedSpaceInMB, 0) }} MB usados ({{ number_format($percentUsed, 0) }}%) de
+                    {{ $limitInMB }} MB
                 </p>
                 <div class="progress mb-3">
-                    <div class="progress-bar {{ $percentUsed >= 80 ? 'bg-danger' : '' }}" 
-                        role="progressbar" 
-                        style="width: {{ $percentUsed }}%" 
-                        aria-valuenow="{{ $percentUsed }}" 
-                        aria-valuemin="0" 
+                    <div class="progress-bar {{ $percentUsed >= 80 ? 'bg-danger' : '' }}" role="progressbar"
+                        style="width: {{ $percentUsed }}%" aria-valuenow="{{ $percentUsed }}" aria-valuemin="0"
                         aria-valuemax="100">
                         {{ number_format($percentUsed, 0) }}%
                     </div>
                 </div>
-                
-                
+
+
             </div>
         </div>
-        {{-- <div class="card overflow-hidden">
-            <div class="card-body">
-                <div class="d-flex align-items-center">
-                    <div>
-                        <h4 class="m-0 fw-normal cta-box-title">Precisa de suporte?</h4>
-                        <h4 class="m-0 fw-normal cta-box-title"><a href="https://api.whatsapp.com/send/?phone=51999047299&text&type=phone_number&app_absent=0" target="_blank" style="color: #0fb14a;">
-                            <i class="uil uil-whatsapp"></i> Chame no whats
-                        </a></h4>
-                    </div>
-                    <img class="ms-3 float-end" src="assets/images/svg/email-campaign.svg" width="92" alt="Generic placeholder image">
-                </div>
-            </div>
-            <!-- end card-body -->
-        </div> --}}
+
     </div> <!-- end col -->
 
     <div class="col-xl-9 col-lg-8">
@@ -80,9 +66,9 @@
 
                 <div dir="ltr">
                     <script>
-                        document.addEventListener('DOMContentLoaded', function () {
+                        document.addEventListener('DOMContentLoaded', function() {
                             var countDocs = @json($countDocs); // Agora isso será um array com contagens por mês
-                    
+
                             var options = {
                                 chart: {
                                     type: 'bar',
@@ -94,14 +80,14 @@
                                         columnWidth: '30%', // Define a largura das barras como porcentagem
                                     }
                                 },
-                                series: [
-                                    {
-                                        name: 'Veículos',
-                                        data: countDocs // Usando o array com as contagens mensais
-                                    }
-                                ],
+                                series: [{
+                                    name: 'Veículos',
+                                    data: countDocs // Usando o array com as contagens mensais
+                                }],
                                 xaxis: {
-                                    categories: ['Janeiro', 'Fevereiro', 'Março', 'Abril', 'Maio', 'Junho', 'Julho', 'Agosto', 'Setembro', 'Outubro', 'Novembro', 'Dezembro']
+                                    categories: ['Janeiro', 'Fevereiro', 'Março', 'Abril', 'Maio', 'Junho', 'Julho', 'Agosto',
+                                        'Setembro', 'Outubro', 'Novembro', 'Dezembro'
+                                    ]
                                 },
                                 title: {
                                     text: 'Lançamento anual de veículos',
@@ -109,13 +95,13 @@
                                 },
                                 colors: ['#008FFB']
                             };
-                    
+
                             var chart = new ApexCharts(document.querySelector("#chart"), options);
                             chart.render();
                         });
                     </script>
-                    
-                        <div id="chart" class="apex-charts" style="width: 100%; height: 200px; margin: auto;"></div>
+
+                    <div id="chart" class="apex-charts" style="width: 100%; height: 200px; margin: auto;"></div>
                 </div>
             </div> <!-- end card-body-->
         </div> <!-- end card-->
@@ -128,63 +114,63 @@
 {{-- ////////////////////////////////////////////////////////////////////////////////////////////////////////// --}}
 {{-- ////////////////////////////////////////////////////////////////////////////////////////////////////////// --}}
 <div class="row">
+    
     <div class="col-xxl-6">
         <div class="card">
             <div class="card-header d-flex justify-content-between align-items-center">
-                <h4 class="header-title">Últimos cadastros</h4>
+                <h4 class="header-title">Últimos veículos</h4>
             </div>
             @if ($emprestimos->count() != 0)
-            <div class="card-body pt-0">
-                {{-- <div class="table-responsive mt-n2"> --}}
-                <div class="table-responsive">
-                    <table class="table table-centered table-hover table-nowrap mb-0">
-                        <thead>
-                            <tr>
-                                <th scope="col">Marca</th>
-                                <th scope="col">Placa</th>
-                                <th scope="col">Ano/Modelo</th>
-                                <th scope="col">Cor</th>
-                                <th scope="col">Doc</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            
-                            @foreach ($emprestimos as $emp)
-                            <tr>
-                                <td>
-                                    <div class="d-flex align-items-center">
-                                        <div class="flex-shrink-0">
-                                            <img class="rounded-circle" src="{{ url("$emp->image") }}" alt="" width="31">
-                                        </div>
-                                        <div class="flex-grow-1 ms-2">
-                                            {{ $emp->marca }}
-                                        </div>
-                                    </div>
-                                </td>
-                                <td>{{ $emp->placa }}</td>
-                                <td>{{ $emp->ano }}</td>
-                                <td>
-                                    {{ $emp->cor }}
-                                </td>
-                                <td>
-                                    @if($emp->crv === "***")
-                                    <span class="badge badge-outline-danger">FÍSICO</span>
-                                    @else
-                                        <!-- Mostre uma mensagem ou deixe em branco -->
-                                        <span class="badge badge-outline-success">DIGITAL</span>
-                                    @endif
-                                </td>
-                            </tr> <!-- end tr -->
-                            @endforeach
-                            
-                        </tbody>
-                    </table>
-                </div>
-            </div>
-            @else
-                <div class="alert alert-danger bg-transparent text-danger" role="alert">
-                    NENHUM RESULTADO ENCONTRADO!
-                </div>
+                <div class="card-body pt-0">
+                    <div class="table-responsive">
+                        <table class="table table-centered table-hover table-nowrap mb-0">
+                            <thead>
+                                <tr>
+                                    <th scope="col">Marca</th>
+                                    <th scope="col">Placa</th>
+                                    <th scope="col">Ano/Modelo</th>
+                                    <th scope="col">Cor</th>
+                                    <th scope="col">Doc</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+
+                                @foreach ($emprestimos as $emp)
+                                    <tr>
+                                        <td>
+                                            <div class="d-flex align-items-center">
+                                                <div class="flex-shrink-0">
+                                                    <img class="rounded-circle" src="{{ url("$emp->image") }}"
+                                                        alt="" width="31">
+                                                </div>
+                                                <div class="flex-grow-1 ms-2">
+                                                    {{ $emp->marca }}
+                                                </div>
+                                            </div>
+                                        </td>
+                                        <td>{{ $emp->placa }}</td>
+                                        <td>{{ $emp->ano }}</td>
+                                        <td>
+                                            {{ $emp->cor }}
+                                        </td>
+                                        <td>
+                                            @if ($emp->crv === '***')
+                                                <span class="badge badge-outline-danger">FÍSICO</span>
+                                            @else
+                                                <!-- Mostre uma mensagem ou deixe em branco -->
+                                                <span class="badge badge-outline-success">DIGITAL</span>
+                                            @endif
+                                        </td>
+                                    </tr> <!-- end tr -->
+                                @endforeach
+
+                            </tbody>
+                        </table>
+                    </div>
+                @else
+                    <div class="alert alert-danger bg-transparent text-danger" role="alert">
+                        NENHUM RESULTADO ENCONTRADO!
+                    </div>
             @endif
         </div>
     </div> <!-- end col -->
@@ -272,4 +258,3 @@
         </div>
     </div> <!-- end col -->
 </div>
-

@@ -23,7 +23,7 @@ class Parcela extends Model
         'class_status',
         'status',
         'vencimento_at',
-        'emprestimo_id'
+        'emprestimo_id',
     ];
 
     /*public static function pesquisaStatus($id)
@@ -32,7 +32,7 @@ class Parcela extends Model
             ->where('emprestimo_id', $id)
             ->where('status', 'PENDENTE')
             ->count();
-        
+
         if($data == 0){
             DB::table('emprestimos')
                 ->where('id', $id)
@@ -42,5 +42,4 @@ class Parcela extends Model
         return $data;
     }*/
 
-    
 }

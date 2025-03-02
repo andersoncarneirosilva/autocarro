@@ -2,8 +2,8 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
 use App\Models\Servico;
+use Illuminate\Http\Request;
 
 class ServicosController extends Controller
 {
@@ -14,14 +14,16 @@ class ServicosController extends Controller
         $this->model = $serv;
     }
 
-    public function index(Request $request){
+    public function index(Request $request)
+    {
 
         $title = 'Excluir!';
-        $text = "Deseja excluir esse serviço?";
+        $text = 'Deseja excluir esse serviço?';
         confirmDelete($title, $text);
 
         $servs = Servico::paginate(10);
-        //dd($servs);
+
+        // dd($servs);
         return view('servicos.index', compact('servs'));
     }
 
@@ -29,8 +31,9 @@ class ServicosController extends Controller
     //     return view('subcategory.create');
     // }
 
-    public function store(Request $request){
-        
+    public function store(Request $request)
+    {
+
         try {
             $validated = $request->validate([
                 'nome_servico' => 'required|string|max:255',
@@ -39,27 +42,31 @@ class ServicosController extends Controller
             ]);
         } catch (\Illuminate\Validation\ValidationException $e) {
             alert()->error('Todos os campos são obrigatórios!');
+
             return redirect()->route('servicos.index');
         }
-    
+
         if ($this->model->create($validated)) {
             alert()->success('Serviço cadastrado com sucesso!');
+
             return redirect()->route('servicos.index');
         }
-    
+
         alert()->error('Erro ao cadastrar o serviço!');
+
         return redirect()->route('servicos.index');
     }
-    
 
-    public function destroy($id){
-        if(!$doc = $this->model->find($id)){
+    public function destroy($id)
+    {
+        if (! $doc = $this->model->find($id)) {
             alert()->error('Erro ao excluír o serviço!');
         }
-       
-        if($doc->delete()){
+
+        if ($doc->delete()) {
             alert()->success('Serviço excluído com sucesso!');
         }
-         return redirect()->route('servicos.index');
+
+        return redirect()->route('servicos.index');
     }
 }

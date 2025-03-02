@@ -2,9 +2,10 @@
 
 namespace App\Http\Middleware;
 
+use Closure;
 use Illuminate\Auth\Middleware\Authenticate as Middleware;
-use Illuminate\Http\Request;
-use Closure; // Importe o Closure
+use Illuminate\Http\Request; // Importe o Closure
+
 class Authenticate extends Middleware
 {
     /**
@@ -16,16 +17,16 @@ class Authenticate extends Middleware
     }
 
     public function handle($request, Closure $next, ...$guards)
-{
-    // Obter o domínio da requisição (exemplo: tenant1.localhost)
-    $tenantDomain = $request->getHost(); // Obtém o domínio completo
+    {
+        // Obter o domínio da requisição (exemplo: tenant1.localhost)
+        $tenantDomain = $request->getHost(); // Obtém o domínio completo
 
-    // Se você precisar apenas do nome do domínio sem o "www", você pode usar algo como:
-    $tenantDomain = explode('.', $tenantDomain)[0]; // Extrai o subdomínio
+        // Se você precisar apenas do nome do domínio sem o "www", você pode usar algo como:
+        $tenantDomain = explode('.', $tenantDomain)[0]; // Extrai o subdomínio
 
-    // Definir o cookie dinamicamente com base no domínio do tenant
-    config(['session.cookie' => $tenantDomain . '_session']);
+        // Definir o cookie dinamicamente com base no domínio do tenant
+        config(['session.cookie' => $tenantDomain.'_session']);
 
-    return parent::handle($request, $next, ...$guards);
-}
+        return parent::handle($request, $next, ...$guards);
+    }
 }

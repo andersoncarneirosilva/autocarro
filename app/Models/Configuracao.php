@@ -30,8 +30,4 @@ class Configuracao extends Model
         'arquivo_doc',
         'arquivo_proc',
     ];
-
-    
-
-    
 }

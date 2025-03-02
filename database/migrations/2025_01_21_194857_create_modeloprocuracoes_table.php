@@ -18,9 +18,9 @@ return new class extends Migration
             $table->text('texto_inicial')->nullable();
             $table->text('texto_final')->nullable();
             $table->string('cidade')->nullable();
-            
+
             $table->foreignId('user_id')->constrained()->onDelete('cascade');
-            
+
             $table->timestamps();
         });
     }

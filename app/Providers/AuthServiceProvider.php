@@ -1,9 +1,10 @@
 <?php
 
 namespace App\Providers;
+
 use App\Models\User;
-use Illuminate\Support\Facades\Gate;
 use Illuminate\Foundation\Support\Providers\AuthServiceProvider as ServiceProvider;
+use Illuminate\Support\Facades\Gate;
 
 class AuthServiceProvider extends ServiceProvider
 {
@@ -23,22 +24,22 @@ class AuthServiceProvider extends ServiceProvider
     {
         // Definindo a política de acesso
         Gate::define('access-admin', function (User $user) {
-            //dd($user);
+            // dd($user);
             return $user->nivel_acesso == 'Administrador';
         });
 
         Gate::define('access-user', function (User $user) {
-            //dd($user);
+            // dd($user);
             return $user->nivel_acesso == 'Usuário';
         });
 
         Gate::define('access-lojista', function (User $user) {
-            //dd($user);
+            // dd($user);
             return $user->perfil == 'Lojista';
         });
 
         Gate::define('access-despachante', function (User $user) {
-            //dd($user);
+            // dd($user);
             return $user->perfil == 'Despachante';
         });
     }

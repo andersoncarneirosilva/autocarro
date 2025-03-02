@@ -5,9 +5,6 @@ namespace App\Http\Controllers;
 use App\Models\Pedido;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Http;
-use Illuminate\Support\Facades\Log;
-use App\Models\User;
 
 class PedidoController extends Controller
 {
@@ -23,9 +20,9 @@ class PedidoController extends Controller
     {
         //
         $title = 'Excluir!';
-        $text = "Deseja arquivar esse veículo?";
+        $text = 'Deseja arquivar esse veículo?';
         confirmDelete($title, $text);
-        
+
         $userId = Auth::id();
         $pedidos = Pedido::where('user_id', $userId)->paginate(10);
 
@@ -80,5 +77,4 @@ class PedidoController extends Controller
     {
         //
     }
-
 }

@@ -1,8 +1,8 @@
 <?php
 
+use App\Http\Controllers\PaymentController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\PaymentController;
 
 // Rota para criar preferência
 Route::post('/create-preference', [PaymentController::class, 'createPreference'])->middleware('auth:sanctum');
@@ -12,7 +12,7 @@ Route::post('/process-payment', [PaymentController::class, 'processPayment'])->m
 
 // Rota para criar pagamento PIX, deve ser protegida por autenticação
 
-//Route::middleware('auth:sanctum')->post('/create-pix-payment', [PaymentController::class, 'createPixPayment']);
+// Route::middleware('auth:sanctum')->post('/create-pix-payment', [PaymentController::class, 'createPixPayment']);
 Route::post('/create-pix-payment', [PaymentController::class, 'createPixPayment']);
 
 // Rota para receber notificações de webhook

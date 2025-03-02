@@ -23,7 +23,7 @@ class SendEmailAtpve extends Mailable
         //
         $this->pags = $pags;
         $this->filePath = $filePath;
-        //dd($filePath);
+        // dd($filePath);
     }
 
     /**
@@ -32,7 +32,7 @@ class SendEmailAtpve extends Mailable
     public function envelope(): Envelope
     {
         return new Envelope(
-            subject: 'Solicitação ATPVe - ' . $this->pags['placa'],
+            subject: 'Solicitação ATPVe - '.$this->pags['placa'],
         );
     }
 
@@ -48,10 +48,10 @@ class SendEmailAtpve extends Mailable
 
     public function build()
     {
-        return $this->from( config('mail.from.address') )
-                    ->subject('Contato do site')
-                    ->view('emails.send-email-atpve')
-                    ->with('data', $this->pags);
+        return $this->from(config('mail.from.address'))
+            ->subject('Contato do site')
+            ->view('emails.send-email-atpve')
+            ->with('data', $this->pags);
     }
 
     /**
@@ -61,7 +61,8 @@ class SendEmailAtpve extends Mailable
      */
     public function attachments(): array
     {
-        $fileName = $this->pags['placa'] . '.pdf'; // Nome do arquivo baseado na placa
+        $fileName = $this->pags['placa'].'.pdf'; // Nome do arquivo baseado na placa
+
         return [
             Attachment::fromPath($this->filePath)
                 ->as($fileName) // Nomeia o anexo com a placa

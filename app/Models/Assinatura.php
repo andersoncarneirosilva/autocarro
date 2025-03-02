@@ -21,6 +21,4 @@ class Assinatura extends Model
 
         'user_id',
     ];
-
-    
 }

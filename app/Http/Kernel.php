@@ -70,5 +70,4 @@ class Kernel extends HttpKernel
         'uppercase' => \App\Http\Middleware\UppercaseInput::class,
         'auth' => \App\Http\Middleware\Authenticate::class,
     ];
-    
 }

@@ -11,13 +11,11 @@ class InitializeTenantByDomain
     /**
      * Handle an incoming request.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \Closure  $next
      * @return mixed
      */
     public function handle(Request $request, Closure $next)
     {
-        //dd($request);
+        // dd($request);
         // Tente identificar o tenant com base no domínio
         try {
             Tenancy::initializeForDomain($request->getHost());

@@ -69,11 +69,11 @@ return [
             'model' => App\Models\User::class,
         ],
         'tenant' => [
-                'driver' => 'eloquent',
-                'model' => App\Models\User::class,
-                'table' => 'users', // Certifique-se de que esta é a tabela correta no contexto do tenant
+            'driver' => 'eloquent',
+            'model' => App\Models\User::class,
+            'table' => 'users', // Certifique-se de que esta é a tabela correta no contexto do tenant
 
-            ],
+        ],
         // 'users' => [
         //     'driver' => 'database',
         //     'table' => 'users',

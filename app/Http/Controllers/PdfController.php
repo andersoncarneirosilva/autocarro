@@ -14,7 +14,7 @@ class PdfController extends Controller
         $outputDir = storage_path('app/public/extracted_images');
 
         // Garante que o diretório de saída existe
-        if (!file_exists($outputDir)) {
+        if (! file_exists($outputDir)) {
             mkdir($outputDir, 0777, true);
         }
 
@@ -24,6 +24,7 @@ class PdfController extends Controller
 
         if ($returnCode !== 0) {
             \Log::error("Erro ao executar o comando: $command");
+
             return response()->json(['error' => 'Falha ao extrair imagens do PDF'], 500);
         }
 
@@ -32,6 +33,7 @@ class PdfController extends Controller
 
         if (empty($images)) {
             \Log::error("Nenhuma imagem foi extraída do PDF: $pdfPath");
+
             return response()->json(['error' => 'Nenhuma imagem foi extraída do PDF'], 500);
         }
 
@@ -39,8 +41,8 @@ class PdfController extends Controller
         $fullText = '';
         foreach ($images as $imagePath) {
             $text = $this->ocrImage($imagePath);
-            \Log::info("Texto extraído da imagem {$imagePath}: " . $text);
-            $fullText .= $text . "\n";
+            \Log::info("Texto extraído da imagem {$imagePath}: ".$text);
+            $fullText .= $text."\n";
         }
 
         // Retorna o texto extraído

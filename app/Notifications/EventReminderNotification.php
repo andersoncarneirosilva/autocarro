@@ -2,11 +2,11 @@
 
 namespace App\Notifications;
 
+use App\Models\Event;
 use Illuminate\Bus\Queueable;
-use Illuminate\Notifications\Notification;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Notifications\Messages\MailMessage;
-use App\Models\Event;
+use Illuminate\Notifications\Notification;
 
 class EventReminderNotification extends Notification implements ShouldQueue
 {
@@ -27,11 +27,11 @@ class EventReminderNotification extends Notification implements ShouldQueue
     public function toMail($notifiable)
     {
         return (new MailMessage)
-                    ->subject('Lembrete: Evento Próximo')
-                    ->line("Seu evento '{$this->event->title}' começará em menos de uma hora.")
-                    ->line('Horário: ' . $this->event->event_date)
-                    ->action('Ver Evento', url('/events/' . $this->event->id))
-                    ->line('Não perca!');
+            ->subject('Lembrete: Evento Próximo')
+            ->line("Seu evento '{$this->event->title}' começará em menos de uma hora.")
+            ->line('Horário: '.$this->event->event_date)
+            ->action('Ver Evento', url('/events/'.$this->event->id))
+            ->line('Não perca!');
     }
 
     public function toArray($notifiable)
@@ -42,4 +42,3 @@ class EventReminderNotification extends Notification implements ShouldQueue
         ];
     }
 }
-

@@ -6,7 +6,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
-use Illuminate\Support\Facades\DB;
+
 class Outorgado extends Model
 {
     use HasApiTokens, HasFactory, Notifiable;
@@ -24,19 +24,14 @@ class Outorgado extends Model
         'user_id',
     ];
 
-
-    public function getSearch(?string $search = null, $userId)
-        {
-            return $this->where('user_id', $userId) // Filtro pelo usuário logado
-                ->when($search, function ($query) use ($search) {
-                    // Se houver pesquisa, filtra por renavam ou placa
-                    $query->where('nome', 'LIKE', "%{$search}%")
-                          ->orWhere('cpf', 'LIKE', "%{$search}%");
-                })
-                ->paginate(10); // Retorna os resultados paginados
-        }
-
-    
-
-    
+    public function getSearch(?string $search, $userId)
+    {
+        return $this->where('user_id', $userId) // Filtro pelo usuário logado
+            ->when($search, function ($query) use ($search) {
+                // Se houver pesquisa, filtra por renavam ou placa
+                $query->where('nome', 'LIKE', "%{$search}%")
+                    ->orWhere('cpf', 'LIKE', "%{$search}%");
+            })
+            ->paginate(10); // Retorna os resultados paginados
+    }
 }

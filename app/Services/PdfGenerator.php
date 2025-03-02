@@ -7,7 +7,7 @@ use FPDF;
 class PdfGenerator extends FPDF
 {
     // Cabeçalho do PDF
-    function Header()
+    public function Header()
     {
         // Adiciona o logo no canto superior esquerdo
         $this->Image(public_path('images/clientes/logo.png'), 10, 6, 30); // Ajuste o caminho e tamanho conforme necessário
@@ -18,10 +18,10 @@ class PdfGenerator extends FPDF
     }
 
     // Rodapé do PDF
-    function Footer()
+    public function Footer()
     {
         $this->SetY(-15);
         $this->SetFont('Arial', 'I', 8);
-        $this->Cell(0, 10, 'Pagina ' . $this->PageNo(), 0, 0, 'C');
+        $this->Cell(0, 10, 'Pagina '.$this->PageNo(), 0, 0, 'C');
     }
 }

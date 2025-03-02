@@ -20,9 +20,9 @@ class CustomResetPasswordMail extends Mailable
     public function build()
     {
         return $this->view('emails.custom-reset-password')
-                    ->subject('Redefina sua senha')
-                    ->with([
-                        'url' => $this->url,
-                    ]);
+            ->subject('Redefina sua senha')
+            ->with([
+                'url' => $this->url,
+            ]);
     }
 }

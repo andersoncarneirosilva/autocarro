@@ -82,7 +82,7 @@ return [
     |
     */
 
-    //'locale' => 'en',
+    // 'locale' => 'en',
     'locale' => 'pt_BR',
 
     /*
@@ -197,8 +197,7 @@ return [
         App\Providers\RouteServiceProvider::class,
         RealRashid\SweetAlert\SweetAlertServiceProvider::class,
         Barryvdh\DomPDF\ServiceProvider::class,
-        
-        
+
     ],
 
     /*
@@ -211,10 +210,9 @@ return [
     | the aliases are "lazy" loaded so they don't hinder performance.
     |
     */
-    
 
     'aliases' => Facade::defaultAliases()->merge([
         'PDF' => Barryvdh\DomPDF\Facade::class,
     ])->toArray(),
-    
+
 ];

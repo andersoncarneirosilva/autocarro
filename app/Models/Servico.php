@@ -28,7 +28,7 @@ class Servico extends Model
             ->where('emprestimo_id', $id)
             ->where('status', 'PENDENTE')
             ->count();
-        
+
         if($data == 0){
             DB::table('emprestimos')
                 ->where('id', $id)
@@ -38,5 +38,4 @@ class Servico extends Model
         return $data;
     }*/
 
-    
 }

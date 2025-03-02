@@ -16,6 +16,5 @@ class Pedido extends Model
         'external_reference',
         'user_id',
 
-
     ];
 }

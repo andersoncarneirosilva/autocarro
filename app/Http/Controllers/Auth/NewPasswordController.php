@@ -7,9 +7,9 @@ use Illuminate\Auth\Events\PasswordReset;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Password;
 use Illuminate\Support\Str;
-use Illuminate\Support\Facades\Log;
 use Illuminate\Validation\Rules;
 use Illuminate\View\View;
 
@@ -29,39 +29,40 @@ class NewPasswordController extends Controller
      * @throws \Illuminate\Validation\ValidationException
      */
     public function store(Request $request): RedirectResponse
-{
-    // Depuração: Verificar os dados recebidos
-    Log::info('Dados recebidos para resetar senha', $request->all());
+    {
+        // Depuração: Verificar os dados recebidos
+        Log::info('Dados recebidos para resetar senha', $request->all());
 
-    $request->validate([
-        'token' => ['required'],
-        'email' => ['required', 'email'],
-        'password' => ['required', 'confirmed', Rules\Password::defaults()],
-    ]);
+        $request->validate([
+            'token' => ['required'],
+            'email' => ['required', 'email'],
+            'password' => ['required', 'confirmed', Rules\Password::defaults()],
+        ]);
 
-    // Tentativa de redefinição de senha
-    $status = Password::reset(
-        $request->only('email', 'password', 'password_confirmation', 'token'),
-        function ($user) use ($request) {
-            Log::info('Usuário encontrado para redefinição', ['email' => $user->email]);
+        // Tentativa de redefinição de senha
+        $status = Password::reset(
+            $request->only('email', 'password', 'password_confirmation', 'token'),
+            function ($user) use ($request) {
+                Log::info('Usuário encontrado para redefinição', ['email' => $user->email]);
 
-            $user->forceFill([
-                'password' => Hash::make($request->password),
-                'remember_token' => Str::random(60),
-            ])->save();
+                $user->forceFill([
+                    'password' => Hash::make($request->password),
+                    'remember_token' => Str::random(60),
+                ])->save();
 
-            event(new PasswordReset($user));
+                event(new PasswordReset($user));
+            }
+        );
+
+        if ($status == Password::PASSWORD_RESET) {
+            Log::info('Senha redefinida com sucesso para '.$request->email);
+
+            return redirect()->route('login')->with('status', __($status));
+        } else {
+            Log::error('Erro ao redefinir senha', ['status' => $status]);
+
+            return back()->withInput($request->only('email'))
+                ->withErrors(['email' => __($status)]);
         }
-    );
-
-    if ($status == Password::PASSWORD_RESET) {
-        Log::info('Senha redefinida com sucesso para ' . $request->email);
-        return redirect()->route('login')->with('status', __($status));
-    } else {
-        Log::error('Erro ao redefinir senha', ['status' => $status]);
-        return back()->withInput($request->only('email'))
-            ->withErrors(['email' => __($status)]);
     }
-}
-
 }

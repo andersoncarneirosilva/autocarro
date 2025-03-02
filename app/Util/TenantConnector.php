@@ -2,10 +2,10 @@
 
 namespace App\Util;
 
-use Illuminate\Support\Facades\Config;
-use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Crypt;
 use App\Models\Tenant;
+use Illuminate\Support\Facades\Config;
+use Illuminate\Support\Facades\Crypt;
+use Illuminate\Support\Facades\DB;
 
 class TenantConnector
 {
@@ -20,7 +20,6 @@ class TenantConnector
         $config['username'] = $tenant->username;
         $config['password'] = Crypt::decrypt($tenant->password);
 
-        Config::set("database.connections.tenant", $config);
+        Config::set('database.connections.tenant', $config);
     }
-
 }

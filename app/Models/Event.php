@@ -15,5 +15,5 @@ class Event extends Model
         'event_date',
     ];
 
-    protected $dates = ['event_date']; 
+    protected $dates = ['event_date'];
 }

@@ -1,61 +1,55 @@
 <?php
 
-use App\Http\Controllers\PerfilController;
-use App\Http\Controllers\UserController;
-use App\Http\Controllers\DocumentosController;
-use App\Http\Controllers\ApiController;
-use App\Http\Controllers\DashController;
+use App\Http\Controllers\AssinaturaController;
 use App\Http\Controllers\CalendarController;
-use App\Http\Controllers\EmployeeController;
-use App\Http\Controllers\VeiculoController;
-use App\Http\Controllers\ProcuracaoController;
-use App\Http\Controllers\ConfiguracoesController;
-use App\Http\Controllers\OutorgadoController;
-use App\Http\Controllers\TextoPoderesController;
-use App\Http\Controllers\ClientesController;
-use App\Http\Controllers\ServicosController;
-use App\Http\Controllers\RelatoriosController;
-use App\Http\Controllers\PdfController;
 use App\Http\Controllers\CidadeController;
-use App\Http\Controllers\PasswordResetController;
-use App\Http\Controllers\NotificationController;
-use App\Http\Controllers\TextoInicioController;
-use App\Http\Controllers\OrdemController;
-use App\Http\Controllers\ProcRapidaController;
+use App\Http\Controllers\ClientesController;
+use App\Http\Controllers\ConfiguracoesController;
+use App\Http\Controllers\ContatoController;
+use App\Http\Controllers\DashController;
+use App\Http\Controllers\DocumentosController;
 use App\Http\Controllers\EstoqueController;
 use App\Http\Controllers\ModeloProcuracoesController;
-use App\Http\Controllers\OCRController;
-use App\Http\Controllers\ContatoController;
-use Illuminate\Support\Facades\Route;
-use App\Events\EventReminderBroadcast;
-use App\Http\Controllers\MercadoPagoController;
+use App\Http\Controllers\NotificationController;
+use App\Http\Controllers\OrdemController;
+use App\Http\Controllers\OutorgadoController;
+use App\Http\Controllers\PasswordResetController;
 use App\Http\Controllers\PaymentController;
-use App\Http\Controllers\AssinaturaController;
-
+use App\Http\Controllers\PerfilController;
+use App\Http\Controllers\ProcuracaoController;
+use App\Http\Controllers\RelatoriosController;
+use App\Http\Controllers\ServicosController;
+use App\Http\Controllers\TextoInicioController;
+use App\Http\Controllers\TextoPoderesController;
+use App\Http\Controllers\UserController;
+use App\Http\Controllers\VeiculoController;
+use Illuminate\Support\Facades\Route;
 
 Route::middleware(['auth'])->group(function () {
 
     Route::get('/assinatura-expirada', function () {
         return view('assinatura.expirada');
     })->name('assinatura.expirada');
-    
+
     Route::get('/check-payment-status', function (Request $request) {
         $user = Auth::user();
-    
-        if (!$user) {
-            Log::error("Usuário não autenticado ao verificar pagamento.");
+
+        if (! $user) {
+            Log::error('Usuário não autenticado ao verificar pagamento.');
+
             return response()->json(['status' => 'unauthorized'], 401);
         }
-    
+
         $pedido = \App\Models\Assinatura::where('user_id', $user->id)
-                    ->orderBy('created_at', 'desc')
-                    ->first();
-    
-        if (!$pedido) {
+            ->orderBy('created_at', 'desc')
+            ->first();
+
+        if (! $pedido) {
             Log::error("Nenhum pedido encontrado para o usuário ID {$user->id}");
+
             return response()->json(['status' => 'no_order_found']);
         }
-    
+
         return response()->json(['status' => $pedido->status]);
     });
 
@@ -63,11 +57,11 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/pagamento', [PaymentController::class, 'paginaPagamento'])->name('pagamento.index');
 
     Route::get('/assinatura', [AssinaturaController::class, 'index'])->name('assinatura.index');
-    
+
     Route::get('/planos', [PaymentController::class, 'index'])->name('planos.index');
     // Route::get('/pedidos/create', [PedidoController::class, 'create'])->name('pedidos.create');
     // Route::post('/pedidos', [PedidoController::class, 'store'])->name('pedidos.store');
-    
+
     Route::get('/pagamento-confirmado', function () {
         return view('pagamentos.sucesso'); // Retorna a view correta
     })->name('pagamento.confirmado');
@@ -79,8 +73,8 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/pagamento-pendente', [PaymentController::class, 'paymentPending'])->name('pagamentos.pendente');
 
     Route::get('/notifications', [NotificationController::class, 'getNotifications'])->middleware('auth');
-    
-    //USUARIOS
+
+    // USUARIOS
     /* Route::delete('/users', [UserController::class, 'deleteAll'])->name('users.delete'); */
     Route::delete('/users/{id}', [UserController::class, 'destroy'])->name('users.destroy');
     Route::put('/users/{id}', [UserController::class, 'update'])->name('users.update');
@@ -90,24 +84,21 @@ Route::middleware(['auth'])->group(function () {
     Route::post('/users', [UserController::class, 'store'])->name('users.store');
     Route::get('/users/{id}', [UserController::class, 'show'])->name('users.show');
 
-    //DASHBOARD
+    // DASHBOARD
     Route::get('/dashboard', [DashController::class, 'index'])->name('dashboard.index');
 
-    //PERFIL
+    // PERFIL
     Route::put('/perfil/{id}', [PerfilController::class, 'update'])->name('perfil.update');
     Route::get('/perfil/{id}/edit', [PerfilController::class, 'edit'])->name('perfil.edit');
     Route::get('/perfil', [PerfilController::class, 'index'])->name('perfil.index');
 
- 
-
-    //DOCUMENTOS
+    // DOCUMENTOS
     Route::post('documentos/gerarProc/{id}/{doc}', [DocumentosController::class, 'gerarProc'])->name('documentos.gerarProc');
     Route::get('/documentos/{id}', [DocumentosController::class, 'show'])->name('documentos.show');
     Route::delete('/documentos/{id}', [DocumentosController::class, 'destroy'])->name('documentos.destroy');
     Route::get('/documentos', [DocumentosController::class, 'index'])->name('documentos.index');
     Route::post('/documentos', [DocumentosController::class, 'store'])->name('documentos.store');
 
-    
     Route::put('/calendar/update/{id}', [CalendarController::class, 'update']);
     Route::put('/calendar/move/{id}', [CalendarController::class, 'update']);
     Route::delete('/calendar/delete/{id}', [CalendarController::class, 'destroy'])->name('calendar.destroy');
@@ -115,7 +106,6 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/calendar/events', [CalendarController::class, 'getEvents']);
     Route::post('/calendar', [CalendarController::class, 'store']);
 
-    
     Route::delete('/procuracoes/{id}', [ProcuracaoController::class, 'destroy'])->name('procuracoes.destroy');
     Route::get('/procuracoes/create', [ProcuracaoController::class, 'create'])->name('procuracoes.create');
     Route::get('/procuracoes', [ProcuracaoController::class, 'index'])->name('procuracoes.index');
@@ -163,9 +153,6 @@ Route::middleware(['auth'])->group(function () {
     Route::POST('/rel-clientes', [RelatoriosController::class, 'gerarPdfClientes'])->name('rel-clientes');
     Route::POST('/rel-veiculos', [RelatoriosController::class, 'gerarPdfVeiculos'])->name('rel-veiculos');
 
-
-
-
     Route::post('/relatorios', [RelatoriosController::class, 'gerarRelatoriosSelect'])->name('relatorio.gerar');
 
     Route::get('/relatorios', [RelatoriosController::class, 'index'])->name('relatorios.index');
@@ -176,19 +163,16 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/relatorio-veiculos', [RelatoriosController::class, 'gerarRelatorioVeiculos'])->name('relatorio-veiculos');
     Route::get('/relatorio-procuracoes', [RelatoriosController::class, 'gerarRelatorioProc'])->name('relatorio-procuracoes');
 
-    
     Route::get('/cidades/{id}', [CidadeController::class, 'show'])->name('cidades.show');
     Route::put('/cidades/{id}', [CidadeController::class, 'update'])->name('cidades.update');
     Route::delete('/cidades/{id}', [CidadeController::class, 'destroy'])->name('cidades.destroy');
     Route::post('/cidades', [CidadeController::class, 'store'])->name('cidades.store');
     Route::get('/cidades', [CidadeController::class, 'index'])->name('cidades.index');
 
-
-
     Route::get('/ordensdeservicos/buscarservicos', [OrdemController::class, 'buscarServicos'])->name('ordensdeservicos.buscarservicos');
     Route::get('/ordensdeservicos/buscar', [OrdemController::class, 'buscarClientes'])->name('ordensdeservicos.buscar');
     Route::get('/ordensdeservicos', [OrdemController::class, 'index'])->name('ordensdeservicos.index');
-    
+
     // Route::get('/ordem-servico/{id}/rel-ordem', [OrdemController::class, 'gerarPDFOrdemServico'])->name('rel-ordem');
     // Route::delete('/ordensdeservicos/{id}', [OrdemController::class, 'destroy'])->name('ordensdeservicos.destroy');
     // Route::get('/ordensdeservicos/{id}/marcar-pago', [OrdemController::class, 'marcarpago'])->name('ordensdeservicos.marcarpago');
@@ -201,11 +185,10 @@ Route::middleware(['auth'])->group(function () {
 
     // Route::resource('ordensdeservicos', OrdemController::class);
 
+    // DOC RAPIDO
 
-    //DOC RAPIDO
-    
     // Route::get('/estoque/create-atpve', [EstoqueController::class, 'createAtpve'])->name('estoque.create-atpve');
-    
+
     // Route::get('/estoque/{id}', [EstoqueController::class, 'show'])->name('estoque.show');
     // Route::put('/estoque/{id}', [EstoqueController::class, 'update'])->name('estoque.update');
     // Route::delete('/estoque/{id}', [EstoqueController::class, 'destroy'])->name('estoque.destroy');
@@ -214,11 +197,6 @@ Route::middleware(['auth'])->group(function () {
 
     // Route::post('/estoque', [EstoqueController::class, 'store'])->name('estoque.store');
     // Route::get('/estoque', [EstoqueController::class, 'index'])->name('estoque.index');
-
-
-
-
-
 
     Route::delete('/veiculos/enviar_email/{id}', [VeiculoController::class, 'enviarEmail'])->name('veiculos.enviar_email');
 
@@ -230,52 +208,38 @@ Route::middleware(['auth'])->group(function () {
 
     Route::post('/veiculos/store-proc/{id}', [VeiculoController::class, 'storeProc'])->name('veiculos.store-proc');
     Route::post('/veiculos/store-atpve/{id}', [VeiculoController::class, 'storeAtpve'])->name('veiculos.store-atpve');
-    //Route::get('/veiculos/create-atpve', [VeiculoController::class, 'createAtpve'])->name('veiculos.create-atpve');
-    
+    // Route::get('/veiculos/create-atpve', [VeiculoController::class, 'createAtpve'])->name('veiculos.create-atpve');
+
     Route::put('/veiculos/desarquivar/{id}', [VeiculoController::class, 'desarquivar'])->name('veiculos.desarquivar');
     Route::put('/veiculos/arquivar/{id}', [VeiculoController::class, 'arquivar'])->name('veiculos.arquivar');
     Route::delete('/veiculos/{id}', [VeiculoController::class, 'destroy'])->name('veiculos.destroy');
-    
+
     Route::put('/veiculos/update/{id}', [VeiculoController::class, 'update'])->name('veiculos.update');
     Route::get('/veiculos/edit/{id}', [VeiculoController::class, 'edit'])->name('veiculos.edit');
     Route::get('/veiculos', [VeiculoController::class, 'index'])->name('veiculos.index');
     Route::get('/veiculos/arquivados', [VeiculoController::class, 'indexArquivados'])->name('veiculos.arquivados');
     Route::get('/veiculos/create-proc-manual', [VeiculoController::class, 'createProcManual'])->name('veiculos.create-proc-manual');
-    
+
     Route::get('/veiculos/create', [VeiculoController::class, 'create'])->name('veiculos.create');
     Route::post('/veiculos/store-proc-manual', [VeiculoController::class, 'storeProcManual'])->name('veiculos.store-proc-manual');
     Route::post('/veiculos', [VeiculoController::class, 'store'])->name('veiculos.store');
     Route::get('/veiculos/show/{id}', [VeiculoController::class, 'show'])->name('veiculos.show');
-
-
-
-
-
-
-
-
-
 
     Route::get('/modeloprocs/{id}', [ModeloProcuracoesController::class, 'show'])->name('modeloprocs.show');
     Route::put('/modeloprocs/{id}', [ModeloProcuracoesController::class, 'update'])->name('modeloprocs.update');
     Route::post('/modeloprocs', [ModeloProcuracoesController::class, 'store'])->name('modeloprocs.store');
 
     Route::get('/modeloprocuracoes/create', [ModeloProcuracoesController::class, 'create'])->name('modeloprocuracoes.create');
-Route::post('/modeloprocuracoes/store', [ModeloProcuracoesController::class, 'store'])->name('modeloprocuracoes.store');
-Route::get('/modeloprocuracoes/select/{id}', [ModeloProcuracoesController::class, 'select'])->name('modeloprocuracoes.select');
-Route::post('/modeloprocuracoes/confirm/{id}', [ModeloProcuracoesController::class, 'confirm'])->name('modeloprocuracoes.confirm');
-
-
+    Route::post('/modeloprocuracoes/store', [ModeloProcuracoesController::class, 'store'])->name('modeloprocuracoes.store');
+    Route::get('/modeloprocuracoes/select/{id}', [ModeloProcuracoesController::class, 'select'])->name('modeloprocuracoes.select');
+    Route::post('/modeloprocuracoes/confirm/{id}', [ModeloProcuracoesController::class, 'confirm'])->name('modeloprocuracoes.confirm');
 
 });
-
 
 Route::get('/reset-password/{token}', [PasswordResetController::class, 'showResetForm'])->name('password.reset');
 Route::post('/reset-password', [PasswordResetController::class, 'reset'])->name('password.update');
 
 Route::post('/enviar-contato', [ContatoController::class, 'enviarEmail'])->name('contato.enviar');
-
-
 
 Route::get('/', function () {
     return view('site.index');

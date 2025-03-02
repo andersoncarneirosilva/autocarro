@@ -2,15 +2,11 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
 use App\Models\Cliente;
 use App\Models\User;
-use App\Models\Documento;
-use Smalot\PdfParser\Parser;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use Carbon\Carbon;
-use FPDF;
-use App\Rules\ValidCPF;
+
 class ClientesController extends Controller
 {
     protected $model;
@@ -20,93 +16,94 @@ class ClientesController extends Controller
         $this->model = $cliente;
     }
 
-    public function index(Request $request){
+    public function index(Request $request)
+    {
 
         $title = 'Atenção';
-        $text = "Deseja excluir esse cliente?";
+        $text = 'Deseja excluir esse cliente?';
         confirmDelete($title, $text);
 
         // Obtendo o ID do usuário logado
-    $userId = Auth::id();
-    $user = User::find($userId);
+        $userId = Auth::id();
+        $user = User::find($userId);
 
-    $assinatura = $user->assinaturas()->latest()->first();
+        $assinatura = $user->assinaturas()->latest()->first();
 
-    if($user->plano == "Padrão" || $user->plano == "Pro"){
-        if (!$assinatura || now()->gt($assinatura->data_fim) || $assinatura->status == "pending") {
-            return redirect()->route('assinatura.expirada')->with('error', 'Sua assinatura expirou.');
+        if ($user->plano == 'Padrão' || $user->plano == 'Pro') {
+            if (! $assinatura || now()->gt($assinatura->data_fim) || $assinatura->status == 'pending') {
+                return redirect()->route('assinatura.expirada')->with('error', 'Sua assinatura expirou.');
+            }
         }
-    }
-    // Filtrando os clientes do usuário logado e realizando a pesquisa
-    $clientes = $this->model->getClientes($request->search, $userId);
-        //dd($docs);
+        // Filtrando os clientes do usuário logado e realizando a pesquisa
+        $clientes = $this->model->getClientes($request->search, $userId);
+
+        // dd($docs);
         return view('clientes.index', compact('clientes'));
     }
 
-
-
-    
-    
-     public function create(){
-         return view('clientes.create');
-     }
-
-     public function store(Request $request)
-{
-    $userId = Auth::id(); // Obtendo o ID do usuário logado
-    $data = $request->all(); // Obtendo todos os dados da requisição
-
-    try {
-        // Validação dos dados do cliente
-        $validatedData = $request->validate([
-            'nome' => 'required|string|max:255',
-            'cpf' => 'required|string|max:255',
-            'fone' => 'required|string|max:255',
-            'email' => 'required|email|max:255',
-            'cep' => 'required|string|max:255',
-            'endereco' => 'required|string|max:255',
-            'numero' => 'required|string|max:255',
-            'bairro' => 'required|string|max:255',
-            'cidade' => 'required|string|max:255',
-            'estado' => 'required|string|max:255',
-            'complemento' => 'nullable|string|max:255', // Complemento é opcional
-        ]);
-        
-    } catch (\Illuminate\Validation\ValidationException $e) {
-        alert()->error('Todos os campos são obrigatórios!');
-        return redirect()->route('clientes.create');
+    public function create()
+    {
+        return view('clientes.create');
     }
 
-    // Adicionando o user_id ao array de dados
-    $validatedData['user_id'] = $userId;
+    public function store(Request $request)
+    {
+        $userId = Auth::id(); // Obtendo o ID do usuário logado
+        $data = $request->all(); // Obtendo todos os dados da requisição
 
-    // Criação do cliente no banco de dados
-    $cliente = $this->model->create($validatedData);
+        try {
+            // Validação dos dados do cliente
+            $validatedData = $request->validate([
+                'nome' => 'required|string|max:255',
+                'cpf' => 'required|string|max:255',
+                'fone' => 'required|string|max:255',
+                'email' => 'required|email|max:255',
+                'cep' => 'required|string|max:255',
+                'endereco' => 'required|string|max:255',
+                'numero' => 'required|string|max:255',
+                'bairro' => 'required|string|max:255',
+                'cidade' => 'required|string|max:255',
+                'estado' => 'required|string|max:255',
+                'complemento' => 'nullable|string|max:255', // Complemento é opcional
+            ]);
 
-    if ($cliente) {
-        return redirect()->route('clientes.index')->with('success', 'Cliente cadastrado com sucesso!');
+        } catch (\Illuminate\Validation\ValidationException $e) {
+            alert()->error('Todos os campos são obrigatórios!');
 
+            return redirect()->route('clientes.create');
+        }
+
+        // Adicionando o user_id ao array de dados
+        $validatedData['user_id'] = $userId;
+
+        // Criação do cliente no banco de dados
+        $cliente = $this->model->create($validatedData);
+
+        if ($cliente) {
+            return redirect()->route('clientes.index')->with('success', 'Cliente cadastrado com sucesso!');
+
+        }
+
+        return redirect()->route('clientes.index')->with('error', 'Erro ao cadastrar cliente!');
     }
-    return redirect()->route('clientes.index')->with('error', 'Erro ao cadastrar cliente!');
-}
 
+    public function buscarClientes(Request $request)
+    {
+        $search = $request->get('term');
+        $clientes = Cliente::where('nome', 'like', "%$search%")->get();
 
-     public function buscarClientes(Request $request)
-     {
-         $search = $request->get('term');
-         $clientes = Cliente::where('nome', 'like', "%$search%")->get();
-     
-         return response()->json($clientes->map(function ($cliente) {
-             return ['id' => $cliente->id, 'text' => $cliente->nome];
-         }));
-     }
+        return response()->json($clientes->map(function ($cliente) {
+            return ['id' => $cliente->id, 'text' => $cliente->nome];
+        }));
+    }
 
-    public function edit($id){
-        
-        if(!$cliente = $this->model->find($id)){
+    public function edit($id)
+    {
+
+        if (! $cliente = $this->model->find($id)) {
             return redirect()->route('clientes.index');
         }
-        //dd($cliente);
+        // dd($cliente);
 
         return view('clientes.edit', compact('cliente'));
     }
@@ -127,42 +124,41 @@ class ClientesController extends Controller
             'estado' => 'required|string|max:255',
             'complemento' => 'nullable|string|max:255', // Complemento é opcional
         ]);
-    
+
         // Busca o cliente pelo ID
         $cliente = $this->model->find($id);
-    
+
         // Verifica se o cliente existe
-        if (!$cliente) {
+        if (! $cliente) {
             alert()->error('Erro: Cliente não encontrado!');
+
             return redirect()->route('clientes.index');
         }
-    
+
         // Atualiza o cliente com os dados validados
         $cliente->update($validatedData);
-    
+
         // Mensagem de sucesso
         return redirect()->route('clientes.index')->with('success', 'Cliente atualizado com sucesso!');
     }
-    
 
-     public function destroy($id)
-     {
-         // Procura o cliente pelo ID
-         $cli = $this->model->find($id);
-     
-         // Verifica se o cliente existe
-         if (!$cli) {
-             alert()->error('Erro ao excluir: Cliente não encontrado!');
-             return redirect()->route('clientes.index');
-         }
-     
-         // Exclui o cliente
-         $cli->delete();
-     
-         // Retorna com mensagem de sucesso
-         //alert()->success('Cliente excluído com sucesso!');
-         return back()->with('success', 'Cliente excluído com sucesso!');
-     }
-     
+    public function destroy($id)
+    {
+        // Procura o cliente pelo ID
+        $cli = $this->model->find($id);
 
+        // Verifica se o cliente existe
+        if (! $cli) {
+            alert()->error('Erro ao excluir: Cliente não encontrado!');
+
+            return redirect()->route('clientes.index');
+        }
+
+        // Exclui o cliente
+        $cli->delete();
+
+        // Retorna com mensagem de sucesso
+        // alert()->success('Cliente excluído com sucesso!');
+        return back()->with('success', 'Cliente excluído com sucesso!');
+    }
 }

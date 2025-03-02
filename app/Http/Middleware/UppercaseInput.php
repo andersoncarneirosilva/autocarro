@@ -17,6 +17,7 @@ class UppercaseInput
             if (in_array($key, $this->exclude)) {
                 return $value; // Retorna o valor original se estiver na lista de exclusão
             }
+
             return is_string($value) ? strtoupper($value) : $value; // Converte para maiúsculas
         }, $request->all(), array_keys($request->all())));
 

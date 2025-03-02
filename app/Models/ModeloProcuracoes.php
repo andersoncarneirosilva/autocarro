@@ -10,7 +10,6 @@ class ModeloProcuracoes extends Model
     use HasFactory;
 
     protected $table = 'modeloprocuracoes';
-  
 
     protected $fillable = [
         'outorgados',
@@ -19,5 +18,4 @@ class ModeloProcuracoes extends Model
         'cidade',
         'user_id',
     ];
-
 }

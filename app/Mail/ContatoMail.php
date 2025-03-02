@@ -1,8 +1,8 @@
 <?php
+
 namespace App\Mail;
 
 use Illuminate\Bus\Queueable;
-use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Mail\Mailable;
 use Illuminate\Queue\SerializesModels;
 
@@ -19,9 +19,9 @@ class ContatoMail extends Mailable
 
     public function build()
     {
-        //dd($this->dados);
+        // dd($this->dados);
         return $this->subject('Nova mensagem de contato')
-                    ->view('emails.contato')
-                    ->with('dados', $this->dados);
+            ->view('emails.contato')
+            ->with('dados', $this->dados);
     }
 }

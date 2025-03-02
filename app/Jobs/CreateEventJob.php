@@ -4,15 +4,17 @@ namespace App\Jobs;
 
 use App\Models\Event;
 use Illuminate\Bus\Queueable;
-use Illuminate\Queue\SerializesModels;
-use Illuminate\Contracts\Queue\ShouldQueue;  // Garantir que o Job implementa ShouldQueue
+use Illuminate\Contracts\Queue\ShouldQueue;
+use Illuminate\Queue\SerializesModels;  // Garantir que o Job implementa ShouldQueue
 
 class CreateEventJob implements ShouldQueue
 {
     use Queueable, SerializesModels;
 
     protected $title;
+
     protected $event_date;
+
     protected $category;
 
     public function __construct($title, $event_date, $category)
@@ -31,10 +33,10 @@ class CreateEventJob implements ShouldQueue
                 'category' => $this->category,
             ]);
 
-            \Log::info("Evento criado com sucesso: " . $event->id);
+            \Log::info('Evento criado com sucesso: '.$event->id);
 
         } catch (\Exception $e) {
-            \Log::error('Erro ao criar evento: ' . $e->getMessage());
+            \Log::error('Erro ao criar evento: '.$e->getMessage());
         }
     }
 }

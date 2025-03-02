@@ -6,7 +6,7 @@ use Stancl\Tenancy\Database\Models\Domain;
 use Stancl\Tenancy\Database\Models\Tenant;
 
 return [
-    //'tenant_model' => Tenant::class,
+    // 'tenant_model' => Tenant::class,
     'tenant_model' => \App\Models\Tenant::class,
     'id_generator' => Stancl\Tenancy\UUIDGenerator::class,
 
@@ -21,12 +21,10 @@ return [
     //      'localhost',
     //  ],
 
-     'central_domains' => [
-         '143.140.148.157',
-         'webprosites.com.br',
-     ],
-
-    
+    'central_domains' => [
+        '143.140.148.157',
+        'webprosites.com.br',
+    ],
 
     /**
      * Tenancy bootstrappers are executed when tenancy is initialized.
@@ -51,7 +49,6 @@ return [
          * Connection used as a "template" for the dynamically created tenant database connection.
          * Note: don't name your template connection tenant. That name is reserved by package.
          */
-        
 
         /**
          * Tenant database names are created like this:

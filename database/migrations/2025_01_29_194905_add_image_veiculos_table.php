@@ -12,7 +12,7 @@ return new class extends Migration
     public function up()
     {
         Schema::table('veiculos', function (Blueprint $table) {
-            if (!Schema::hasColumn('veiculos', 'image')) {
+            if (! Schema::hasColumn('veiculos', 'image')) {
                 $table->string('image')->nullable()->after('size_atpve_pdf');
             }
         });

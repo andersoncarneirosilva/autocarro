@@ -2,16 +2,14 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\DashModel;
-use App\Models\Procuracao;
-use Illuminate\Http\Request;
-use App\Models\Documento;
-use App\Models\Veiculo;
 use App\Models\Cliente;
+use App\Models\DashModel;
 use App\Models\Event;
-use Illuminate\Support\Facades\Auth;
-use Carbon\Carbon;
 use App\Models\User;
+use App\Models\Veiculo;
+use Carbon\Carbon;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 
 class DashController extends Controller
@@ -23,51 +21,52 @@ class DashController extends Controller
         $this->model = $info;
     }
 
-    public function index(Request $request){
-        //dd(auth()->user());
-        //abort(404);
+    public function index(Request $request)
+    {
+        // dd(auth()->user());
+        // abort(404);
         $events = Event::all();
-        //dd($event);
+        // dd($event);
         $search = $request->search;
 
         $userId = Auth::id();
         $user = User::find($userId);
 
-        //Contagem de veículos cadastrados
+        // Contagem de veículos cadastrados
         $veiculosCount = $user->veiculos()->count();
         $crlvCount = Veiculo::where('user_id', Auth::id())
-                            ->whereNotNull('arquivo_doc')
-                            ->where('arquivo_doc', '!=', '0')
-                            ->count();
-        
+            ->whereNotNull('arquivo_doc')
+            ->where('arquivo_doc', '!=', '0')
+            ->count();
+
         $procCount = Veiculo::where('user_id', Auth::id())
-                            ->whereNotNull('arquivo_proc_assinado')
-                            ->where('arquivo_proc_assinado', '!=', '0')
-                            ->count();
+            ->whereNotNull('arquivo_proc_assinado')
+            ->where('arquivo_proc_assinado', '!=', '0')
+            ->count();
 
         $atpveCount = Veiculo::where('user_id', Auth::id())
-                            ->whereNotNull('arquivo_atpve_assinado')
-                            ->where('arquivo_atpve_assinado', '!=', '0')
-                            ->count();
+            ->whereNotNull('arquivo_atpve_assinado')
+            ->where('arquivo_atpve_assinado', '!=', '0')
+            ->count();
 
         $clientesCount = $user->clientes()->count();
 
         $assinatura = $user->assinaturas()->latest()->first();
 
-        if($user->plano == "Padrão" || $user->plano == "Pro"){
-            if (!$assinatura || now()->gt($assinatura->data_fim) || $assinatura->status == "pending") {
+        if ($user->plano == 'Padrão' || $user->plano == 'Pro') {
+            if (! $assinatura || now()->gt($assinatura->data_fim) || $assinatura->status == 'pending') {
                 return redirect()->route('assinatura.expirada')->with('error', 'Sua assinatura expirou.');
             }
         }
-        
+
         $emprestimos = Veiculo::where('user_id', $userId)
-                            ->orderBy('created_at', 'desc')
-                            ->take(5)
-                            ->get();
+            ->orderBy('created_at', 'desc')
+            ->take(5)
+            ->get();
         $clientes = Cliente::where('user_id', $userId)->get();
 
-        //dd($emprestimos);
-        //$users = $this->model->getUsersDash();
+        // dd($emprestimos);
+        // $users = $this->model->getUsersDash();
         $countDocs = $this->model->getCountDocs();
         $countProcs = $this->model->getCountProcs();
         $countOrder = $this->model->getCountOrdens();
@@ -83,17 +82,16 @@ class DashController extends Controller
 
         // Soma o valor total da coluna "valor" na tabela "ordens" para o mês atual
         $totalOrdensAtual = DB::table('ordems')
-                                    ->whereMonth('created_at', $currentMonth)
-                                    ->whereYear('created_at', $currentYear)
-                                    ->where('status', 'PAGO')
-                                    ->sum('valor_total');
-
+            ->whereMonth('created_at', $currentMonth)
+            ->whereYear('created_at', $currentYear)
+            ->where('status', 'PAGO')
+            ->sum('valor_total');
 
         // Soma o valor total da coluna "valor" na tabela "ordens" para o mês anterior
         $totalOrdensAnterior = DB::table('ordems')
-                                    ->whereMonth('created_at', $previousMonth)
-                                    ->whereYear('created_at', $previousYear)
-                                    ->sum('valor_total');
+            ->whereMonth('created_at', $previousMonth)
+            ->whereYear('created_at', $previousYear)
+            ->sum('valor_total');
 
         // Calcula a porcentagem de crescimento ou queda entre o mês atual e o mês anterior
         $porcentagem = 0;
@@ -105,7 +103,7 @@ class DashController extends Controller
 
         \Carbon\Carbon::setLocale('pt_BR'); // Define o idioma do Carbon
         $today = Carbon::now()->translatedFormat('d \d\e F \d\e Y'); // Exemplo: "02 de janeiro de 2025"
-        
+
         // Caminho para a pasta de documentos
         $path = storage_path("app/public/documentos/usuario_{$userId}");
 
@@ -113,9 +111,10 @@ class DashController extends Controller
         function getFolderSize($folder)
         {
             $size = 0;
-            foreach (glob(rtrim($folder, '/') . '/*', GLOB_NOSORT) as $file) {
+            foreach (glob(rtrim($folder, '/').'/*', GLOB_NOSORT) as $file) {
                 $size += is_file($file) ? filesize($file) : getFolderSize($file);
             }
+
             return $size;
         }
 
@@ -126,24 +125,24 @@ class DashController extends Controller
         $percentUsed = ($usedSpaceInMB / $limitInMB) * 100; // Percentual usado
 
         // Passar as informações para a view
-        return view('dashboard.index', compact(['countDocs', 
-                                                'countProcs', 
-                                                'countOrder', 
-                                                'countCnh', 
-                                                'clientes',
-                                                'emprestimos', 
-                                                'today', 
-                                                'totalOrdensAtual',
-                                                'totalOrdensAnterior',
-                                                'porcentagem',
-                                                'usedSpaceInMB', 
-                                                'percentUsed', 
-                                                'limitInMB',
-                                                'events',
-                                                'crlvCount',
-                                                'procCount',
-                                                'atpveCount',
-                                                'clientesCount',
-                                                'veiculosCount']));
+        return view('dashboard.index', compact(['countDocs',
+            'countProcs',
+            'countOrder',
+            'countCnh',
+            'clientes',
+            'emprestimos',
+            'today',
+            'totalOrdensAtual',
+            'totalOrdensAnterior',
+            'porcentagem',
+            'usedSpaceInMB',
+            'percentUsed',
+            'limitInMB',
+            'events',
+            'crlvCount',
+            'procCount',
+            'atpveCount',
+            'clientesCount',
+            'veiculosCount']));
     }
 }

@@ -5,7 +5,7 @@ namespace App\Observers;
 use App\Models\Emprestimo;
 use App\Models\Parcela;
 use Illuminate\Support\Facades\Log;
-use Illuminate\Support\Facades\DB;
+
 class ParcelaObserver
 {
     /**
@@ -14,7 +14,7 @@ class ParcelaObserver
     public function created(Parcela $parcela): void
     {
         //
-        //Log::info("Parcela sendo criada");
+        // Log::info("Parcela sendo criada");
     }
 
     /**
@@ -22,25 +22,24 @@ class ParcelaObserver
      */
     public function updated(Parcela $parcela): void
     {
-        
-        
-        $conta = Parcela::where('emprestimo_id', $parcela->emprestimo_id)
-                ->where('status', 'PENDENTE')
-                ->orWhere('status', 'ATRASADO')
-                ->count();
 
-        if($conta == 0){
+        $conta = Parcela::where('emprestimo_id', $parcela->emprestimo_id)
+            ->where('status', 'PENDENTE')
+            ->orWhere('status', 'ATRASADO')
+            ->count();
+
+        if ($conta == 0) {
             $emprestimo = Emprestimo::where('id', $parcela->emprestimo_id)->first();
-            if($emprestimo){
-            $emprestimo->fill([
-                'status' => 'PAGO',
-                'class_status' => 'badge badge-success-lighten',
+            if ($emprestimo) {
+                $emprestimo->fill([
+                    'status' => 'PAGO',
+                    'class_status' => 'badge badge-success-lighten',
                 ]);
                 $emprestimo->save();
-            }else{
+            } else {
                 Log::info($emprestimo);
             }
-                
+
         }
     }
 

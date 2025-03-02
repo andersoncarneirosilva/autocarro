@@ -22,5 +22,4 @@ return new class extends Migration
             $table->dropColumn('external_reference');
         });
     }
-
 };

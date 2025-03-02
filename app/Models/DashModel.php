@@ -4,10 +4,9 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Support\Facades\DB;
-use App\Models\Adiantamento;
-use Carbon\Carbon;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
+
 class DashModel extends Model
 {
     use HasFactory;
@@ -19,29 +18,33 @@ class DashModel extends Model
         return $users;
     } */
 
-    public function getCountDocs(){
+    public function getCountDocs()
+    {
         $counts = [];
         $userId = Auth::id(); // Obtém o ID do usuário logado
-    
+
         for ($month = 1; $month <= 12; $month++) {
             $countMonth = DB::table('veiculos')
-                            ->whereMonth('created_at', $month)
-                            ->where('user_id', $userId) // Filtra pelo ID do usuário
-                            ->count();
+                ->whereMonth('created_at', $month)
+                ->where('user_id', $userId) // Filtra pelo ID do usuário
+                ->count();
             $counts[] = $countMonth;
         }
-    
+
         return $counts;
     }
-    
-    
 
-    public function getCountProcs(){
+    public function getCountProcs()
+    {
         $countAd = DB::table('procuracaos')->count();
+
         return $countAd;
     }
-    public function getCountOrdens(){
+
+    public function getCountOrdens()
+    {
         $countOrder = DB::table('ordems')->count();
+
         return $countOrder;
     }
 }

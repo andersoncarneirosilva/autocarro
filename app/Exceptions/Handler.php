@@ -46,38 +46,37 @@ class Handler extends ExceptionHandler
         });
     }
 
-//     public function render($request, Throwable $exception)
-// {
-//     // Verifica se o erro é 404 (Página Não Encontrada)
-//     if ($exception instanceof \Symfony\Component\HttpKernel\Exception\NotFoundHttpException) {
-//         return response()->view('errors.404', [], 404);
-//     }
+    //     public function render($request, Throwable $exception)
+    // {
+    //     // Verifica se o erro é 404 (Página Não Encontrada)
+    //     if ($exception instanceof \Symfony\Component\HttpKernel\Exception\NotFoundHttpException) {
+    //         return response()->view('errors.404', [], 404);
+    //     }
 
-//     // Verifica se o erro é 403 (Proibido)
-//     if ($exception instanceof \Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException) {
-//         return response()->view('errors.403', [], 403);
-//     }
+    //     // Verifica se o erro é 403 (Proibido)
+    //     if ($exception instanceof \Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException) {
+    //         return response()->view('errors.403', [], 403);
+    //     }
 
-//     // Verifica se o erro é 405 (Método Não Permitido)
-//     if ($exception instanceof \Symfony\Component\HttpKernel\Exception\MethodNotAllowedHttpException) {
-//         return response()->view('errors.405', [], 405);
-//     }
+    //     // Verifica se o erro é 405 (Método Não Permitido)
+    //     if ($exception instanceof \Symfony\Component\HttpKernel\Exception\MethodNotAllowedHttpException) {
+    //         return response()->view('errors.405', [], 405);
+    //     }
 
-//     // Verifica se o erro é 500 (Erro Interno do Servidor)
-//     if ($exception instanceof \Symfony\Component\HttpKernel\Exception\HttpException && $exception->getStatusCode() == 500) {
-//         return response()->view('errors.500', [], 500);
-//     }
+    //     // Verifica se o erro é 500 (Erro Interno do Servidor)
+    //     if ($exception instanceof \Symfony\Component\HttpKernel\Exception\HttpException && $exception->getStatusCode() == 500) {
+    //         return response()->view('errors.500', [], 500);
+    //     }
 
-//     // Verifica se o erro é 401 (Não Autorizado)
-//     if ($exception instanceof \Illuminate\Auth\AuthenticationException) {
-//         return response()->view('errors.401', [], 401);
-//     }
+    //     // Verifica se o erro é 401 (Não Autorizado)
+    //     if ($exception instanceof \Illuminate\Auth\AuthenticationException) {
+    //         return response()->view('errors.401', [], 401);
+    //     }
 
-//     // Você pode adicionar outras verificações conforme necessário para outros códigos de erro HTTP
+    //     // Você pode adicionar outras verificações conforme necessário para outros códigos de erro HTTP
 
-//     // Para todos os outros erros, chamamos o método padrão do Laravel para renderizar a página de erro
-//     return parent::render($request, $exception);
-// }
-
+    //     // Para todos os outros erros, chamamos o método padrão do Laravel para renderizar a página de erro
+    //     return parent::render($request, $exception);
+    // }
 
 }

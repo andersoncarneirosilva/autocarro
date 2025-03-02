@@ -29,29 +29,31 @@
         });
     </script>
 
-    <div class="row">
-        <div class="col-12">
-            <div class="page-title-box">
-                <div class="page-title-right">
-                    <ol class="breadcrumb m-0">
-                        <li class="breadcrumb-item"><a href="{{ route('dashboard.index') }}">Dashboard</a></li>
-                        <li class="breadcrumb-item active">Veículos</li>
-                    </ol>
-                </div>
-                <h3 class="page-title">Veículos
-                    {{-- <button type="button" 
-                    class="btn btn-warning btn-sm opacity-75 text-dark" 
+<div class="row">
+    <div class="col-12">
+        <div class="page-title-box">
+            <div class="page-title-right">
+                <ol class="breadcrumb m-0">
+                    <li class="breadcrumb-item"><a href="{{ route('dashboard.index') }}">Dashboard</a></li>
+                    <li class="breadcrumb-item active">Veículos</li>
+                </ol>
+            </div>
+            <div class="d-flex align-items-center">
+                <h3 class="page-title mb-0">Veículos</h3>
+                <button type="button" 
+                    class="btn btn-sm text-dark" 
                     data-bs-toggle="modal" 
                     data-bs-target="#dicas">
-                    <i class="mdi mdi-lightbulb-on-outline"></i>
-                </button> --}}
-                </h3>
+                    <i class="mdi mdi-help-circle-outline fs-4"></i>
+                </button>
             </div>
         </div>
     </div>
+</div>
 
-    {{-- <div id="dicas" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="standard-modalLabel" aria-hidden="true">
-    <div class="modal-dialog">
+
+<div id="dicas" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="standard-modalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
         <div class="modal-content">
             <div class="modal-header">
                 <h4 class="modal-title" id="standard-modalLabel">Dica</h4>
@@ -59,15 +61,25 @@
             </div>
             <div class="modal-body">
                 <h5>Gerando uma procuração</h5>
-                <li>Clique no botão cadastrar e selecione o cadastro automático.</li>
-                <li>Insira o endereço do outorgado e o documento em pdf.</li>
+                <ul>
+                    <li>Clique no botão cadastrar e selecione o cadastro automático.</li>
+                    <li>Insira o endereço do outorgado e o documento em PDF.</li>
+                </ul>
+                <div class="ratio ratio-16x9 mb-3">
+                    <iframe src="https://www.youtube.com/embed/R3njyHN8iwg?si=bKuT81LtQshmSt21&amp;controls=0" 
+                        title="YouTube video player" frameborder="0" 
+                        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" 
+                        referrerpolicy="strict-origin-when-cross-origin" allowfullscreen>
+                    </iframe>
+                </div>
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-light" data-bs-dismiss="modal">Fechar</button>
             </div>
-        </div><!-- /.modal-content -->
-    </div><!-- /.modal-dialog -->
-</div><!-- /.modal --> --}}
+        </div>
+    </div>
+</div>
+
     <div class="card">
         <div class="card-body">
             <div class="row">

@@ -28,7 +28,7 @@ class StoreUpdateUserFormRequest extends FormRequest
             'email' => [
                 'required',
                 'email',
-                //unique = unico para a tabela users
+                // unique = unico para a tabela users
                 "unique:users,email,{$id},id",
             ],
             'senha' => [
@@ -40,10 +40,10 @@ class StoreUpdateUserFormRequest extends FormRequest
                 'nullable',
                 'image',
                 'max:2048',
-            ]
+            ],
         ];
 
-        if($this->method('PUT')) {
+        if ($this->method('PUT')) {
             $rules['senha'] = [
                 'required',
                 'min:6',

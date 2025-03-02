@@ -16,6 +16,7 @@ class WebhookController extends Controller
 
         if ($signature !== $secret) {
             Log::error('Assinatura inválida', ['signature' => $signature]);
+
             return response()->json(['error' => 'Unauthorized'], 401);
         }
 

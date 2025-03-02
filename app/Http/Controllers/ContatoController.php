@@ -2,38 +2,39 @@
 
 namespace App\Http\Controllers;
 
+use App\Mail\ContatoMail;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Mail;
-use App\Mail\ContatoMail;
 
 class ContatoController extends Controller
 {
-    public function enviarEmail(Request $request){
-        
-    $request->validate([
-        'nome' => 'required|string|max:255',
-        'email' => 'required|email',
-        'mensagem' => 'required|string',
-    ]);
+    public function enviarEmail(Request $request)
+    {
 
-    // Captura os dados do formulário
-    $dados = [
-        'nome' => $request->input('nome'),
-        'email' => $request->input('email'),
-        'mensagem' => $request->input('mensagem'),
-    ];
-    //dd($dados);
-    // Enviar e-mail
-    Mail::to(env('MAIL_FROM_ADDRESS'))->send(new ContatoMail($dados));
+        $request->validate([
+            'nome' => 'required|string|max:255',
+            'email' => 'required|email',
+            'mensagem' => 'required|string',
+        ]);
 
-    session()->flash('alert', [
-        'type' => 'success',
-        'message' => 'E-mail enviado com sucesso!',
-        'autoClose' => 5000, // Fecha após 5 segundos
-        'persistent' => true
-    ]);
+        // Captura os dados do formulário
+        $dados = [
+            'nome' => $request->input('nome'),
+            'email' => $request->input('email'),
+            'mensagem' => $request->input('mensagem'),
+        ];
+        // dd($dados);
+        // Enviar e-mail
+        Mail::to(env('MAIL_FROM_ADDRESS'))->send(new ContatoMail($dados));
 
-    return redirect('/');
+        session()->flash('alert', [
+            'type' => 'success',
+            'message' => 'E-mail enviado com sucesso!',
+            'autoClose' => 5000, // Fecha após 5 segundos
+            'persistent' => true,
+        ]);
+
+        return redirect('/');
 
     }
 }

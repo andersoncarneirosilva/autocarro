@@ -35,7 +35,6 @@ return [
 
     'connections' => [
 
-
         'mysql' => [
             'driver' => 'mysql',
             'url' => env('DATABASE_URL'),

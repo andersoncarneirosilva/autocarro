@@ -2,15 +2,16 @@
 
 namespace App\Console\Commands;
 
-use Illuminate\Console\Command;
+use App\Events\EventReminderBroadcast;
 use App\Models\Event; // Seu modelo de eventos
-use App\Events\EventReminderBroadcast; // O evento de broadcast que será emitido
-use Carbon\Carbon;
+use Carbon\Carbon; // O evento de broadcast que será emitido
+use Illuminate\Console\Command;
 
 class NotificaEvents extends Command
 {
     // Nome e descrição do comando
     protected $signature = 'events:notify-upcoming';
+
     protected $description = 'Notifica usuários sobre eventos que ocorrerão em uma hora';
 
     public function handle()
@@ -26,6 +27,7 @@ class NotificaEvents extends Command
 
         if ($events->isEmpty()) {
             $this->info('Nenhum evento para notificar.');
+
             return;
         }
 

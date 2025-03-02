@@ -14,7 +14,7 @@ class TenantHandler
         $tenant = Tenant::findOrFail($request->tenant);
 
         TenantConnector::connect($tenant);
-        
+
         return $next($request);
     }
 }

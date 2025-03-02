@@ -8,10 +8,9 @@ class PagamentosController extends Controller
 {
     protected $model;
 
-    public function index(Request $request){
+    public function index(Request $request)
+    {
 
-     
         return view('pagamentos.index');
     }
-
 }

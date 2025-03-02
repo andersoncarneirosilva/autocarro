@@ -28,7 +28,6 @@ class EmprestimosFormRequest extends FormRequest
 
         ];
 
-
         return $rules;
     }
 }

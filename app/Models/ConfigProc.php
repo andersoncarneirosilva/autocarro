@@ -26,8 +26,4 @@ class ConfigProc extends Model
         'texto_poderes',
         'texto_final',
     ];
-
-    
-
-    
 }

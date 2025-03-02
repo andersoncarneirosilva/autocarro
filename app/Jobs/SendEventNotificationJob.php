@@ -19,8 +19,6 @@ class SendEventNotificationJob implements ShouldQueue
 
     /**
      * Cria uma nova instância do job.
-     *
-     * @param Event $event
      */
     public function __construct(Event $event)
     {
@@ -48,6 +46,6 @@ class SendEventNotificationJob implements ShouldQueue
             $user->notify(new EventCreatedNotification($eventData));
         }
 
-        \Log::info('Notificação enviada para todos os usuários sobre o evento: ' . $this->event->created_at);
+        \Log::info('Notificação enviada para todos os usuários sobre o evento: '.$this->event->created_at);
     }
 }
