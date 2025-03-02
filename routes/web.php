@@ -173,6 +173,11 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/ordensdeservicos/buscar', [OrdemController::class, 'buscarClientes'])->name('ordensdeservicos.buscar');
     Route::get('/ordensdeservicos', [OrdemController::class, 'index'])->name('ordensdeservicos.index');
 
+
+    Route::get('/ajuda', function () {
+        return view('ajuda.index'); // Retorna a view ajuda.blade.php
+    })->name('ajuda.index');
+
     // Route::get('/ordem-servico/{id}/rel-ordem', [OrdemController::class, 'gerarPDFOrdemServico'])->name('rel-ordem');
     // Route::delete('/ordensdeservicos/{id}', [OrdemController::class, 'destroy'])->name('ordensdeservicos.destroy');
     // Route::get('/ordensdeservicos/{id}/marcar-pago', [OrdemController::class, 'marcarpago'])->name('ordensdeservicos.marcarpago');

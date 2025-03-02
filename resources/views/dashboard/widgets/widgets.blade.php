@@ -166,15 +166,15 @@
 
                             </tbody>
                         </table>
+                        @else
+                            <div class="alert alert-danger bg-transparent text-danger" role="alert">
+                                NENHUM RESULTADO ENCONTRADO!
+                            </div>
+                        @endif
                     </div>
-                @else
-                    <div class="alert alert-danger bg-transparent text-danger" role="alert">
-                        NENHUM RESULTADO ENCONTRADO!
-                    </div>
-            @endif
-        </div>
-    </div> <!-- end col -->
-
+                </div>
+            </div> <!-- end col -->
+    </div>
     <div class="col-md-6 col-xxl-3">
         <div class="card">
             <div class="card-header d-flex justify-content-between align-items-center">
