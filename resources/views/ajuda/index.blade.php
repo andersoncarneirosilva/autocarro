@@ -24,22 +24,17 @@
     <div class="card-body">
         <h5 class="card-title mt-2">Dicas de como utilizar o sistema</h5>
         <div class="row">
-            <div class="accordion custom-accordion" id="custom-accordion-one">
-                <div class="card mb-0">
-                    <div class="card-header" id="headingFour">
-                        <h5 class="m-0">
-                            <a class="custom-accordion-title d-block"
-                                data-bs-toggle="collapse" href="#collapseFour"
-                                aria-expanded="true" aria-controls="collapseFour">
-                                Como cadastrar um veículo?
-                            </a>
-                        </h5>
-                    </div>
-                        
-                    <div id="collapseFour" class="collapse show"
-                        aria-labelledby="headingFour"
-                        data-bs-parent="#custom-accordion-one">
-                        <div class="card-body">
+            <div class="accordion" id="accordionExample">
+                <div class="accordion-item">
+                    <h2 class="accordion-header" id="headingOne">
+                        <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOne"
+                            aria-expanded="true" aria-controls="collapseOne">
+                            Como cadastrar um veículo?
+                        </button>
+                    </h2>
+                    <div id="collapseOne" class="accordion-collapse collapse show" aria-labelledby="headingOne"
+                        data-bs-parent="#accordionExample">
+                        <div class="accordion-body">
                             <h5>Cadastrar o veículo e baixar a procuração</h5>
                             <ul>
                                 <li>Clique no botão cadastrar e selecione o cadastro automático.</li>
@@ -52,23 +47,18 @@
                                 </video>
                             </div>
                         </div>
-                        
                     </div>
                 </div>
-                <div class="card mb-0">
-                    <div class="card-header" id="headingFive">
-                        <h5 class="m-0">
-                            <a class="custom-accordion-title collapsed d-block"
-                                data-bs-toggle="collapse" href="#collapseFive"
-                                aria-expanded="false" aria-controls="collapseFive">
-                                Como gerar uma solicitação de ATPVe?
-                            </a>
-                        </h5>
-                    </div>
-                    <div id="collapseFive" class="collapse"
-                        aria-labelledby="headingFive"
-                        data-bs-parent="#custom-accordion-one">
-                        <div class="card-body">
+                <div class="accordion-item">
+                    <h2 class="accordion-header" id="headingTwo">
+                        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
+                            data-bs-target="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
+                            Como gerar uma solicitação de ATPVe?
+                        </button>
+                    </h2>
+                    <div id="collapseTwo" class="accordion-collapse collapse" aria-labelledby="headingTwo"
+                        data-bs-parent="#accordionExample">
+                        <div class="accordion-body">
                             <h5>Cadastrar o veículo e baixar a procuração</h5>
                             <ul>
                                 <li>Clique no botão cadastrar e selecione o cadastro automático.</li>
@@ -84,8 +74,8 @@
                     </div>
                 </div>
 
-
             </div>
+        
         </div>
     </div>
 </div>
