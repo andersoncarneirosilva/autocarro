@@ -66,12 +66,12 @@
                     <li>Insira o endereço do outorgado e o documento em PDF.</li>
                 </ul>
                 <div class="ratio ratio-16x9 mb-3">
-                    <iframe src="https://www.youtube.com/embed/R3njyHN8iwg?si=bKuT81LtQshmSt21&amp;controls=0" 
-                        title="YouTube video player" frameborder="0" 
-                        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" 
-                        referrerpolicy="strict-origin-when-cross-origin" allowfullscreen>
-                    </iframe>
+                    <video controls>
+                        <source src="https://proconline.com.br/cadastrar-veiculo.mp4" type="video/mp4">
+                        Seu navegador não suporta a tag de vídeo.
+                    </video>
                 </div>
+                
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-light" data-bs-dismiss="modal">Fechar</button>
