@@ -61,7 +61,7 @@
                             <a class="custom-accordion-title collapsed d-block"
                                 data-bs-toggle="collapse" href="#collapseFive"
                                 aria-expanded="false" aria-controls="collapseFive">
-                                Q. Can this theme work with WordPress? <i
+                                Como gerar uma solicitação de ATPVe? <i
                                     class="mdi mdi-chevron-down accordion-arrow"></i>
                             </a>
                         </h5>
@@ -70,7 +70,17 @@
                         aria-labelledby="headingFive"
                         data-bs-parent="#custom-accordion-one">
                         <div class="card-body">
-                            ...
+                            <h5>Cadastrar o veículo e baixar a procuração</h5>
+                            <ul>
+                                <li>Clique no botão cadastrar e selecione o cadastro automático.</li>
+                                <li>Insira o endereço do outorgado e o documento em PDF.</li>
+                            </ul>
+                            <div class="mb-3">
+                                <video controls width="640" height="360">
+                                    <source src="https://proconline.com.br/gerar-atpve.mp4" type="video/mp4">
+                                    Seu navegador não suporta a tag de vídeo.
+                                </video>
+                            </div>
                         </div>
                     </div>
                 </div>
