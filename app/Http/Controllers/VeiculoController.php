@@ -563,18 +563,18 @@ class VeiculoController extends Controller
                 // dd("Não Importado: " . $marcaVeiculo . " Modelo: " . $modeloVeiculo);
             }
 
-            $nomeImagem = 'storage/veiculos/'.strtolower($tipo)."/$modeloVeiculo/".
+            $nomeImagem = 'images/veiculos/'.strtolower($tipo)."/$modeloVeiculo/".
                 strtolower(str_replace(['/', ' '], '_', $marcaVeiculo)).'_'.
                 strtolower(str_replace(['/', ' '], '_', $modeloVeiculo)).'_'.
                 strtolower(str_replace(' ', '_', $cor)).'.jpg';
-            // dd($nomeImagem);
+             //dd($nomeImagem);
             // Caminho real do arquivo no servidor
             $caminhoImagem = public_path($nomeImagem);
 
             // Verifica se a imagem existe, senão define a padrão
-            if (! file_exists($caminhoImagem)) {
-                $nomeImagem = 'storage/veiculos/default.jpg'; // Caminho da imagem padrão
-            }
+            // if (! file_exists($caminhoImagem)) {
+            //     $nomeImagem = 'images/veiculos/default.jpg'; // Caminho da imagem padrão
+            // }
 
         }
 

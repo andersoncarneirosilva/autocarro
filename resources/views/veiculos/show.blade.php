@@ -43,8 +43,11 @@
                             <div class="row align-items-center">
                                 <div class="col-auto">
                                     <div class="avatar-lg">
-                                        <img src="{{ url("$veiculo->image") }}" alt=""
-                                            class="rounded-circle img-thumbnail">
+                                        <img src="{{ url("$veiculo->image") }}" 
+                                        alt="Imagem do veículo"
+                                        class="rounded-circle img-thumbnail"
+                                        onerror="this.onerror=null;this.src='{{ url('images/veiculos/default.jpg') }}';">
+
                                     </div>
                                 </div>
                                 <div class="col">
