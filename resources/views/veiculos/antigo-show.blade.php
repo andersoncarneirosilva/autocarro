@@ -32,78 +32,80 @@
     </div>
     <br>
 
+
+    <div class="row">
+        <div class="col-sm-12">
+            <!-- Profile -->
+            <div class="card border  shadow">
+                <div class="card-body profile-user-box">
+                    <div class="row">
+                        <div class="col-sm-8">
+                            <div class="row align-items-center">
+                                <div class="col-auto">
+                                    <div class="avatar-lg">
+                                        <img src="{{ url("$veiculo->image") }}" 
+                                        alt="Imagem do veículo"
+                                        class="rounded-circle img-thumbnail"
+                                        onerror="this.onerror=null;this.src='{{ url('images/veiculos/default.jpg') }}';">
+
+                                    </div>
+                                </div>
+                                <div class="col">
+                                    <div>
+                                        <h4 class="mt-1 mb-1 ">Marca</h4>
+                                        <p class="font-13">{{ $veiculo->marca }}</p>
+
+                                        <ul class="mb-0 list-inline">
+                                            <li class="list-inline-item me-3">
+                                                <h5 class="mb-1 ">Placa</h5>
+                                                <p class="mb-0 font-13 ">{{ $veiculo->placa }}</p>
+
+                                            </li>
+                                            <li class="list-inline-item">
+                                                <h5 class="mb-1 ">Ano</h5>
+                                                <p class="mb-0 font-13 ">{{ $veiculo->ano }}</p>
+                                            </li>
+                                            <li class="list-inline-item">
+                                                <h5 class="mb-1">Cor</h5>
+                                                <p class="mb-0 font-13 ">{{ $veiculo->cor }}</p>
+                                            </li>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+                        </div> <!-- end col-->
+
+                        {{-- <div class="col-sm-4">
+                            <div class="text-center mt-sm-0 mt-3 text-sm-end">
+                                <button type="button" class="btn btn-sm btn-danger" data-bs-toggle="modal" data-bs-target="#veiculoModal">
+                                    <i class="mdi mdi-file-outline me-1"></i> Detalhes
+                                </button>
+                            </div>
+                        </div> <!-- end col--> --}}
+                    </div> <!-- end row -->
+
+                </div> <!-- end card-body/ profile-user-box-->
+            </div><!--end profile/ card -->
+        </div> <!-- end col-->
+    </div>
+
     <div class="row">
         <div class="col-xl-4 col-lg-5">
-            @php
-    // Supondo que a variável $veiculo->marca seja "HONDA/CB 300R"
-    $marcaCompleta = $veiculo->marca; // Exemplo: "HONDA/CB 300R"
-    $marcaArray = explode('/', $marcaCompleta); // Divide a string pela barra
-
-    // Verifica se a marca foi dividida corretamente
-    $marca = strtoupper($marcaArray[0]); // A marca é a primeira parte antes da barra
-    $tipoModelo = isset($marcaArray[1]) ? $marcaArray[1] : ''; // O tipo e modelo ficam após a barra
-
-    // Divide o tipo e modelo com base no espaço
-    $tipoModeloArray = explode(' ', $tipoModelo);
-    $tipo = isset($tipoModeloArray[0]) ? $tipoModeloArray[0] : ''; // Tipo (CB)
-    $modelo = isset($tipoModeloArray[1]) ? $tipoModeloArray[1] : ''; // Modelo (300)
-@endphp
-
-<div class="card text-center">
-    <div class="card-body" 
-         style="background-image: url('{{ url('images/veiculos/fundo_' . strtolower($marca) . '_' . strtolower($tipo) . '_' . strtolower($modelo) . '.jpg') }}'); background-size: cover; background-position: center; border-radius: 5px;">
-        <div class="row">
-            <div class="col-12 d-flex justify-content-center">
-                <div class="avatar-container mt-2">
-                    <img src="{{ url($veiculo->image) }}" class="rounded-circle avatar-lg img-thumbnail"
-                         alt="profile-image"
-                         onerror="this.onerror=null;this.src='{{ url('images/veiculos/default.jpg') }}';">
-                </div>
-            </div>
-            <h4 class="mb-0 mt-2 text-white">{{ $veiculo->marca }}</h4>
-            <scpan class="mt-1 text-white mb-2">{{ $veiculo->placa }}</span>
-        </div>
-    </div>
-</div>
-
-            <div class="card text-center">
-                <div class="card-body">
-                    <div class="row mt-3">
-                        <!-- Título de Informações do Veículo -->
-                        <div class="col-12">
-                            <h5 class="text-start"><i class="mdi mdi-car me-1"></i> Informações do Veículo</h5>
-                            <hr>
-                        </div>
-
-                        <!-- Coluna 1: Marca e Placa -->
-                        <div class="col-md-6 text-start">
-                            <p class="text-muted mb-2 font-13"><strong>Marca: </strong> <span>{{ $veiculo->marca }}</span>
-                            </p>
-                            <p class="text-muted mb-2 font-13"><strong>Placa: </strong> <span>{{ $veiculo->placa }}</span>
-                            </p>
-                        </div>
-
-                        <!-- Coluna 2: Ano/Modelo e Cor -->
-                        <div class="col-md-6 text-start">
-                            <p class="text-muted mb-2 font-13"><strong>Ano/Modelo: </strong>
-                                <span>{{ $veiculo->ano }}</span></p>
-                            <p class="text-muted mb-1 font-13"><strong>Cor: </strong> <span>{{ $veiculo->cor }}</span></p>
-                        </div>
-                    </div>
-
-                    <hr>
-
-                    <!-- Botão Detalhes -->
-                    <button type="button" class="btn btn-sm btn-success mb-2" data-bs-toggle="modal"
-                        data-bs-target="#veiculoModal">
-                        <i class="mdi mdi-file-outline me-1"></i> Detalhes
-                    </button>
-                </div> <!-- end card-body -->
-            </div> <!-- end card -->
-
             <div class="card">
                 <div class="card-body">
-
+                    <div class="row mb-2">
+                        <div class="col-auto">
+                            <button type="button" class="btn btn-sm btn-primary" data-bs-toggle="modal" data-bs-target="#veiculoModal">
+                                <i class="mdi mdi-file-outline me-1"></i> Detalhes
+                            </button>
+                        </div>
+                        <div class="col-auto">
+                            <button type="button" class="btn btn-sm btn-info" onclick="imprimirModal()">
+                                <i class="mdi mdi-printer me-1"></i> Imprimir
+                            </button>
+                        </div>
+                    </div>
+                    
                     <p class="text-muted mb-2 font-13"><strong>DOCUMENTOS GERADOS</strong></p>
                     @if (!empty($veiculo->arquivo_doc))
                         <div class="row mb-2" style="text-align: left;">
@@ -146,7 +148,7 @@
                                                     }).then((result) => {
                                                         if (result.isConfirmed) {
                                                             document.getElementById('deleteForm')
-                                                                .submit(); // Envia o formulário se o usuário confirmar
+                                                        .submit(); // Envia o formulário se o usuário confirmar
                                                         }
                                                     });
                                                 });
@@ -199,7 +201,7 @@
                                                     }).then((result) => {
                                                         if (result.isConfirmed) {
                                                             document.getElementById('deleteProcForm')
-                                                                .submit(); // Envia o formulário se o usuário confirmar
+                                                        .submit(); // Envia o formulário se o usuário confirmar
                                                         }
                                                     });
                                                 });
@@ -252,7 +254,7 @@
                                                     }).then((result) => {
                                                         if (result.isConfirmed) {
                                                             document.getElementById('deleteAtpveForm')
-                                                                .submit(); // Envia o formulário se o usuário confirmar
+                                                        .submit(); // Envia o formulário se o usuário confirmar
                                                         }
                                                     });
                                                 });
@@ -316,7 +318,7 @@
                                                     }).then((result) => {
                                                         if (result.isConfirmed) {
                                                             document.getElementById('deleteProcAssinadoForm')
-                                                                .submit(); // Envia o formulário se o usuário confirmar
+                                                        .submit(); // Envia o formulário se o usuário confirmar
                                                         }
                                                     });
                                                 });
@@ -370,7 +372,7 @@
                                                     }).then((result) => {
                                                         if (result.isConfirmed) {
                                                             document.getElementById('deleteAtpveAssinadoForm')
-                                                                .submit(); // Envia o formulário se o usuário confirmar
+                                                        .submit(); // Envia o formulário se o usuário confirmar
                                                         }
                                                     });
                                                 });
@@ -392,8 +394,10 @@
                         </div>
                     </div>
                 </div> <!-- end card-body -->
+
             </div>
         </div>
+
         <div class="col-xl-8 col-lg-7">
             <div class="card">
                 <div class="card-body">
@@ -404,20 +408,20 @@
                         <h5 class="mb-4 text-uppercase"><i class="mdi mdi-file me-1"></i> Enviar documentos</h5>
                         <div class="row">
                             @if ($veiculo->arquivo_doc === '0')
-                                <div class="col-12">
+                                <div class="col-md-6">
                                     <div class="mb-3">
                                         <label for="firstname" class="form-label">CRLV</label>
                                         <input class="form-control" type="file" name="arquivo_doc">
                                     </div>
                                 </div>
                             @endif
-                            <div class="col-md-12">
+                            <div class="col-md-6">
                                 <div class="mb-3">
                                     <label for="firstname" class="form-label">Procuração assinada</label>
                                     <input class="form-control" type="file" name="arquivo_proc_assinado">
                                 </div>
                             </div>
-                            <div class="col-md-12">
+                            <div class="col-md-6">
                                 <div class="mb-3">
                                     <label for="firstname" class="form-label">ATPVe assinada</label>
                                     <input class="form-control" type="file" name="arquivo_atpve_assinado">
@@ -442,77 +446,107 @@
                     </form>
                 </div> <!-- end card body -->
             </div> <!-- end card -->
-        </div> <!-- end col -->
+        </div>
+
+
     </div>
 
-    {{-- ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////// --}}
-    {{-- ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////// --}}
-    {{-- ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////// --}}
 
-    <!-- Modal -->
-    <div class="modal fade" id="veiculoModal" tabindex="-1" aria-labelledby="veiculoModalLabel" aria-hidden="true">
-        <div class="modal-dialog modal-lg">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="veiculoModalLabel">Detalhes do Veículo</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Fechar"></button>
+
+<!-- Modal -->
+<div class="modal fade" id="veiculoModal" tabindex="-1" aria-labelledby="veiculoModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="veiculoModalLabel">Detalhes do Veículo</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Fechar"></button>
+            </div>
+            <div class="modal-body" id="modalContent">
+                
+                <!-- Imagem do Veículo -->
+                <div class="text-center mb-3">
+                    <img src="{{ url($veiculo->image) }}" alt="Imagem do Veículo" class="img-fluid rounded" style="max-width: 100%; max-height: 300px;">
                 </div>
-                <div class="modal-body" id="modalContent">
 
-                    <!-- Imagem do Veículo -->
-                    <div class="text-center mb-3">
-                        <img src="{{ url($veiculo->image) }}" alt="Imagem do Veículo" class="img-fluid rounded"
-                            style="max-width: 100%; max-height: 300px;">
-                    </div>
-
-                    <!-- Informações do Vendedor -->
-                    <h5 class="text-primary"><i class="mdi mdi-account-circle me-1"></i> Informações do Vendedor</h5>
-                    <div class="row">
-                        <div class="col-md-6"><strong>Nome:</strong> {{ $veiculo->nome }}</div>
-                        <div class="col-md-6"><strong>CPF:</strong> {{ $veiculo->cpf }}</div>
-                        <div class="col-md-12"><strong>Endereço:</strong> {{ $veiculo->endereco }}</div>
-                    </div>
-
-                    <hr>
-
-                    <!-- Informações do Veículo -->
-                    <h5 class="text-primary"><i class="mdi mdi-car me-1"></i> Informações do Veículo</h5>
-                    <div class="row">
-                        <div class="col-md-6"><strong>Marca:</strong> {{ $veiculo->marca }}</div>
-                        <div class="col-md-6"><strong>Placa:</strong> {{ $veiculo->placa }}</div>
-                        <div class="col-md-6"><strong>Chassi:</strong> {{ $veiculo->chassi }}</div>
-                        <div class="col-md-6"><strong>Cor:</strong> {{ $veiculo->cor }}</div>
-                        <div class="col-md-6"><strong>Ano:</strong> {{ $veiculo->ano }}</div>
-                        <div class="col-md-6"><strong>Renavam:</strong> {{ $veiculo->renavam }}</div>
-                        <div class="col-md-6"><strong>Cidade:</strong> {{ $veiculo->cidade }}</div>
-                        <div class="col-md-6"><strong>CRV:</strong> {{ $veiculo->crv }}</div>
-                    </div>
-
-                    <hr>
-
-                    <!-- Informações Complementares -->
-                    <h5 class="text-primary"><i class="mdi mdi-information me-1"></i> Informações Complementares</h5>
-                    <div class="row">
-                        <div class="col-md-6"><strong>Placa Anterior:</strong> {{ $veiculo->placaAnterior }}</div>
-                        <div class="col-md-6"><strong>Categoria:</strong> {{ $veiculo->categoria }}</div>
-                        <div class="col-md-6"><strong>Motor:</strong> {{ $veiculo->motor }}</div>
-                        <div class="col-md-6"><strong>Combustível:</strong> {{ $veiculo->combustivel }}</div>
-                    </div>
-
-                    <hr>
-
-                    <!-- Outras Informações -->
-                    <div class="row">
-                        <div class="col-md-12"><strong>Informações Adicionais:</strong> {{ $veiculo->infos }}</div>
-                    </div>
-
+                <!-- Informações do Vendedor -->
+                <h5 class="text-primary"><i class="mdi mdi-account-circle me-1"></i> Informações do Vendedor</h5>
+                <div class="row">
+                    <div class="col-md-6"><strong>Nome:</strong> {{ $veiculo->nome }}</div>
+                    <div class="col-md-6"><strong>CPF:</strong> {{ $veiculo->cpf }}</div>
+                    <div class="col-md-12"><strong>Endereço:</strong> {{ $veiculo->endereco }}</div>
                 </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fechar</button>
+                
+                <hr>
 
+                <!-- Informações do Veículo -->
+                <h5 class="text-primary"><i class="mdi mdi-car me-1"></i> Informações do Veículo</h5>
+                <div class="row">
+                    <div class="col-md-6"><strong>Marca:</strong> {{ $veiculo->marca }}</div>
+                    <div class="col-md-6"><strong>Placa:</strong> {{ $veiculo->placa }}</div>
+                    <div class="col-md-6"><strong>Chassi:</strong> {{ $veiculo->chassi }}</div>
+                    <div class="col-md-6"><strong>Cor:</strong> {{ $veiculo->cor }}</div>
+                    <div class="col-md-6"><strong>Ano:</strong> {{ $veiculo->ano }}</div>
+                    <div class="col-md-6"><strong>Renavam:</strong> {{ $veiculo->renavam }}</div>
+                    <div class="col-md-6"><strong>Cidade:</strong> {{ $veiculo->cidade }}</div>
+                    <div class="col-md-6"><strong>CRV:</strong> {{ $veiculo->crv }}</div>
                 </div>
+                
+                <hr>
+
+                <!-- Informações Complementares -->
+                <h5 class="text-primary"><i class="mdi mdi-information me-1"></i> Informações Complementares</h5>
+                <div class="row">
+                    <div class="col-md-6"><strong>Placa Anterior:</strong> {{ $veiculo->placaAnterior }}</div>
+                    <div class="col-md-6"><strong>Categoria:</strong> {{ $veiculo->categoria }}</div>
+                    <div class="col-md-6"><strong>Motor:</strong> {{ $veiculo->motor }}</div>
+                    <div class="col-md-6"><strong>Combustível:</strong> {{ $veiculo->combustivel }}</div>
+                </div>
+
+                <hr>
+
+                <!-- Outras Informações -->
+                <div class="row">
+                    <div class="col-md-12"><strong>Informações Adicionais:</strong> {{ $veiculo->infos }}</div>
+                </div>
+
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fechar</button>
+
             </div>
         </div>
     </div>
+</div>
+
+<!-- Script para imprimir apenas o conteúdo do modal -->
+<script>
+function imprimirModal() {
+    var conteudo = document.getElementById("modalContent").innerHTML;
+    var originalBody = document.body.innerHTML;
+
+    document.body.innerHTML = `
+        <html>
+        <head>
+            <title>Imprimir Detalhes do Veículo</title>
+            <style>
+                body { font-family: Arial, sans-serif; margin: 20px; }
+                h5 { color: #007bff; }
+                hr { border: 1px solid #ddd; }
+                img { max-width: 100%; max-height: 300px; display: block; margin: 0 auto 15px; }
+            </style>
+        </head>
+        <body>
+            ${conteudo}
+        </body>
+        </html>
+    `;
+
+    window.print();
+    document.body.innerHTML = originalBody;
+    location.reload(); // Atualiza a página para restaurar os eventos
+}
+</script>
+
+
 
 @endsection

@@ -1562,6 +1562,7 @@ class VeiculoController extends Controller
         if (! $veiculo = $this->model->find($id)) {
             return redirect()->route('veiculos.index');
         }
+        //dd($veiculo);
 
         return view('veiculos.show', compact('veiculo'));
     }
@@ -1605,7 +1606,7 @@ class VeiculoController extends Controller
             ! $request->hasFile('arquivo_atpve_assinado') &&
             ! $request->hasFile('arquivo_doc')
         ) {
-            return redirect()->back()->with('error', 'Nenhum arquivo foi enviado.');
+            return redirect()->back()->with('error', 'Nenhuma alteração realizada.');
         }
 
         // Atualizar o campo 'crv' se necessário
