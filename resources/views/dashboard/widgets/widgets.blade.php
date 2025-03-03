@@ -143,7 +143,7 @@
                                                         src="{{ url("$emp->image") }}" 
                                                         alt="Veículo" 
                                                         width="31"
-                                                        onerror="this.onerror=null;this.src='{{ url('images/veiculos/default.png') }}';">
+                                                        onerror="this.onerror=null;this.src='{{ url('images/veiculos/default.jpg') }}';">
 
                                                 </div>
                                                 <div class="flex-grow-1 ms-2">
