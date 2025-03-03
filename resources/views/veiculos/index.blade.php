@@ -134,7 +134,12 @@
                                         <tr>
                                             <td><a href="{{ route('veiculos.show', $doc->id) }}" title="Visualizar"
                                                     style="text-decoration: none;" class="">
-                                                    <i class="mdi mdi-eye fs-5"></i>
+                                                    {{-- <i class="mdi mdi-eye fs-5"></i> --}}
+                                                    <img class="rounded-circle" 
+                                                        src="{{ url("$doc->image") }}" 
+                                                        alt="Veículo" 
+                                                        width="31"
+                                                        onerror="this.onerror=null;this.src='{{ url('images/veiculos/default.jpg') }}';">
                                                 </a>
                                             </td>
                                             <td>{{ $doc->placa }}</td>
