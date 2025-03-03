@@ -115,7 +115,7 @@
                     </div>
                     @if ($veiculos->total() != 0)
                         <div class="table-responsive-sm">
-                            <table class="table table-hover table-centered mb-0">
+                            <table class="table table-hover table-striped table-centered mb-0">
                                 <thead class="table-dark">
                                     <tr>
                                         <th>Ver</th>
@@ -135,7 +135,7 @@
                                             <td><a href="{{ route('veiculos.show', $doc->id) }}" title="Visualizar"
                                                     style="text-decoration: none;" class="">
                                                     {{-- <i class="mdi mdi-eye fs-5"></i> --}}
-                                                    <img class="rounded-circle" 
+                                                    <img class="rounded-circle border" 
                                                         src="{{ url("$doc->image") }}" 
                                                         alt="Veículo" 
                                                         width="31"

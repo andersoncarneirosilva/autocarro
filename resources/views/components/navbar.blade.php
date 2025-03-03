@@ -56,8 +56,9 @@
                 <div class="app-search dropdown d-none d-lg-block">
                     <form action="{{ route('users.index') }}" method="GET">
                         <div class="input-group">
-                            <input type="text" name="search" placeholder="Pesquisar" class="form-control">
-                            <button type="submit" class="btn btn-primary">Pesquisar</button>
+                            <input type="text" name="search" placeholder="Buscar usuário" class="form-control">
+                            <span class="mdi mdi-magnify search-icon"></span>
+                            <button type="submit" class="btn btn-primary">Buscar</button>
                         </div>
                     </form>
                 </div>
@@ -78,6 +79,7 @@
                 <form action="{{ route('veiculos.arquivados') }}" method="GET">
                     <div class="input-group">
                         <input type="text" name="search" placeholder="Informe a placa..." class="form-control">
+                        <span class="mdi mdi-magnify search-icon"></span>
                         <button type="submit" class="btn btn-primary">Buscar</button>
                     </div>
                 </form>
