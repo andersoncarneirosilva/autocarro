@@ -139,7 +139,12 @@
                                         <td>
                                             <div class="d-flex align-items-center">
                                                 <div class="flex-shrink-0">
-                                                    <img class="rounded-circle" src="{{ url("$emp->image") }}" alt="" width="31">
+                                                    <img class="rounded-circle" 
+                                                        src="{{ url("$emp->image") }}" 
+                                                        alt="Veículo" 
+                                                        width="31"
+                                                        onerror="this.onerror=null;this.src='{{ url('images/veiculos/default.png') }}';">
+
                                                 </div>
                                                 <div class="flex-grow-1 ms-2">
                                                     {{ $emp->marca }}
