@@ -40,16 +40,8 @@
             </button>
             
             <!-- Verifica se estamos na página de usuários antes de mostrar o formulário -->
-            @if(request()->routeIs('procuracoes.index'))
-                <div class="app-search dropdown d-none d-lg-block">
-                    <form action="{{ route('procuracoes.index') }}" method="GET">
-                        <div class="input-group">
-                            <input type="text" name="search" placeholder="Pesquisar procuração" class="form-control">
-                            <button type="submit" class="btn btn-primary">Pesquisar</button>
-                        </div>
-                    </form>
-                </div>
-            @elseif(request()->routeIs('veiculos.index'))
+                
+            @if(request()->routeIs('veiculos.index'))
                 <div class="app-search dropdown d-none d-lg-block">
                     <form action="{{ route('veiculos.index') }}" method="GET">
                         <div class="input-group">
@@ -59,6 +51,7 @@
                         </div>
                     </form>
                 </div>
+
             @elseif(request()->routeIs('users.index'))
                 <div class="app-search dropdown d-none d-lg-block">
                     <form action="{{ route('users.index') }}" method="GET">
@@ -68,6 +61,7 @@
                         </div>
                     </form>
                 </div>
+
             @elseif(request()->routeIs('clientes.index'))
             <div class="app-search dropdown d-none d-lg-block">
                 <form action="{{ route('clientes.index') }}" method="GET">
@@ -78,12 +72,13 @@
                     </div>
                 </form>
             </div>
-            @elseif(request()->routeIs('documentos.index'))
+
+            @elseif(request()->routeIs('veiculos.arquivados'))
             <div class="app-search dropdown d-none d-lg-block">
-                <form action="{{ route('documentos.index') }}" method="GET">
+                <form action="{{ route('veiculos.arquivados') }}" method="GET">
                     <div class="input-group">
-                        <input type="text" name="search" placeholder="Pesquisar veículos..." class="form-control">
-                        <button type="submit" class="btn btn-primary">Pesquisar</button>
+                        <input type="text" name="search" placeholder="Informe a placa..." class="form-control">
+                        <button type="submit" class="btn btn-primary">Buscar</button>
                     </div>
                 </form>
             </div>

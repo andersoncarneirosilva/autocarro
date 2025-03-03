@@ -74,8 +74,8 @@
 
                         <div class="col-sm-4">
                             <div class="text-center mt-sm-0 mt-3 text-sm-end">
-                                <button type="button" class="btn btn-sm btn-danger">
-                                    <i class="mdi mdi-account-edit me-1"></i> Relatório
+                                <button type="button" class="btn btn-sm btn-danger" data-bs-toggle="modal" data-bs-target="#veiculoModal">
+                                    <i class="mdi mdi-file-outline me-1"></i> Detalhes
                                 </button>
                             </div>
                         </div> <!-- end col-->
@@ -443,5 +443,51 @@
 
 
     </div>
+
+
+
+<!-- Modal -->
+<div class="modal fade" id="veiculoModal" tabindex="-1" aria-labelledby="veiculoModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="veiculoModalLabel">Detalhes do Veículo</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Fechar"></button>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col-md-6"><strong>Nome:</strong> {{ $veiculo->nome }}</div>
+                    <div class="col-md-6"><strong>CPF:</strong> {{ $veiculo->cpf }}</div>
+                    <div class="col-md-12"><strong>Endereço:</strong> {{ $veiculo->endereco }}</div>
+                </div>
+                <hr>
+                <div class="row">
+                    <div class="col-md-6"><strong>Marca:</strong> {{ $veiculo->marca }}</div>
+                    <div class="col-md-6"><strong>Placa:</strong> {{ $veiculo->placa }}</div>
+                    <div class="col-md-6"><strong>Chassi:</strong> {{ $veiculo->chassi }}</div>
+                    <div class="col-md-6"><strong>Cor:</strong> {{ $veiculo->cor }}</div>
+                    <div class="col-md-6"><strong>Ano:</strong> {{ $veiculo->ano }}</div>
+                    <div class="col-md-6"><strong>Renavam:</strong> {{ $veiculo->renavam }}</div>
+                    <div class="col-md-6"><strong>Cidade:</strong> {{ $veiculo->cidade }}</div>
+                    <div class="col-md-6"><strong>CRV:</strong> {{ $veiculo->crv }}</div>
+                </div>
+                <hr>
+                <div class="row">
+                    <div class="col-md-6"><strong>Placa Anterior:</strong> {{ $veiculo->placaAnterior }}</div>
+                    <div class="col-md-6"><strong>Categoria:</strong> {{ $veiculo->categoria }}</div>
+                    <div class="col-md-6"><strong>Motor:</strong> {{ $veiculo->motor }}</div>
+                    <div class="col-md-6"><strong>Combustível:</strong> {{ $veiculo->combustivel }}</div>
+                </div>
+                <hr>
+                <div class="row">
+                    <div class="col-md-12"><strong>Informações Adicionais:</strong> {{ $veiculo->infos }}</div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fechar</button>
+            </div>
+        </div>
+    </div>
+</div>
 
 @endsection

@@ -134,7 +134,7 @@
                                         <tr>
                                             <td><a href="{{ route('veiculos.show', $doc->id) }}" title="Visualizar"
                                                     style="text-decoration: none;" class="">
-                                                    <i class="mdi mdi-eye"></i>
+                                                    <i class="mdi mdi-eye fs-5"></i>
                                                 </a>
                                             </td>
                                             <td>{{ $doc->placa }}</td>
