@@ -72,13 +72,13 @@
                             </div>
                         </div> <!-- end col-->
 
-                        <div class="col-sm-4">
+                        {{-- <div class="col-sm-4">
                             <div class="text-center mt-sm-0 mt-3 text-sm-end">
                                 <button type="button" class="btn btn-sm btn-danger" data-bs-toggle="modal" data-bs-target="#veiculoModal">
                                     <i class="mdi mdi-file-outline me-1"></i> Detalhes
                                 </button>
                             </div>
-                        </div> <!-- end col-->
+                        </div> <!-- end col--> --}}
                     </div> <!-- end row -->
 
                 </div> <!-- end card-body/ profile-user-box-->
@@ -90,16 +90,20 @@
         <div class="col-xl-4 col-lg-5">
             <div class="card">
                 <div class="card-body">
-                    {{-- @if ($veiculo->image)
-                <img src="/storage/{{ $veiculo->image }}" class="rounded-circle avatar-lg img-thumbnail" alt="user-image">
-                @else
-                    <img src="{{ url('assets/img/icon_user.png') }}" class="rounded-circle avatar-lg img-thumbnail" alt="user-image">
-                @endif --}}
-
-                    {{-- <h4 class="mb-0 mt-2">{{ $veiculo->marca }}</h4> --}}
-
+                    <div class="row mb-2">
+                        <div class="col-auto">
+                            <button type="button" class="btn btn-sm btn-primary" data-bs-toggle="modal" data-bs-target="#veiculoModal">
+                                <i class="mdi mdi-file-outline me-1"></i> Detalhes
+                            </button>
+                        </div>
+                        <div class="col-auto">
+                            <button type="button" class="btn btn-sm btn-info" onclick="imprimirModal()">
+                                <i class="mdi mdi-printer me-1"></i> Imprimir
+                            </button>
+                        </div>
+                    </div>
+                    
                     <p class="text-muted mb-2 font-13"><strong>DOCUMENTOS GERADOS</strong></p>
-
                     @if (!empty($veiculo->arquivo_doc))
                         <div class="row mb-2" style="text-align: left;">
                             <div class="col-12">
@@ -454,13 +458,25 @@
                 <h5 class="modal-title" id="veiculoModalLabel">Detalhes do Veículo</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Fechar"></button>
             </div>
-            <div class="modal-body">
+            <div class="modal-body" id="modalContent">
+                
+                <!-- Imagem do Veículo -->
+                <div class="text-center mb-3">
+                    <img src="{{ url($veiculo->image) }}" alt="Imagem do Veículo" class="img-fluid rounded" style="max-width: 100%; max-height: 300px;">
+                </div>
+
+                <!-- Informações do Vendedor -->
+                <h5 class="text-primary"><i class="mdi mdi-account-circle me-1"></i> Informações do Vendedor</h5>
                 <div class="row">
                     <div class="col-md-6"><strong>Nome:</strong> {{ $veiculo->nome }}</div>
                     <div class="col-md-6"><strong>CPF:</strong> {{ $veiculo->cpf }}</div>
                     <div class="col-md-12"><strong>Endereço:</strong> {{ $veiculo->endereco }}</div>
                 </div>
+                
                 <hr>
+
+                <!-- Informações do Veículo -->
+                <h5 class="text-primary"><i class="mdi mdi-car me-1"></i> Informações do Veículo</h5>
                 <div class="row">
                     <div class="col-md-6"><strong>Marca:</strong> {{ $veiculo->marca }}</div>
                     <div class="col-md-6"><strong>Placa:</strong> {{ $veiculo->placa }}</div>
@@ -471,23 +487,63 @@
                     <div class="col-md-6"><strong>Cidade:</strong> {{ $veiculo->cidade }}</div>
                     <div class="col-md-6"><strong>CRV:</strong> {{ $veiculo->crv }}</div>
                 </div>
+                
                 <hr>
+
+                <!-- Informações Complementares -->
+                <h5 class="text-primary"><i class="mdi mdi-information me-1"></i> Informações Complementares</h5>
                 <div class="row">
                     <div class="col-md-6"><strong>Placa Anterior:</strong> {{ $veiculo->placaAnterior }}</div>
                     <div class="col-md-6"><strong>Categoria:</strong> {{ $veiculo->categoria }}</div>
                     <div class="col-md-6"><strong>Motor:</strong> {{ $veiculo->motor }}</div>
                     <div class="col-md-6"><strong>Combustível:</strong> {{ $veiculo->combustivel }}</div>
                 </div>
+
                 <hr>
+
+                <!-- Outras Informações -->
                 <div class="row">
                     <div class="col-md-12"><strong>Informações Adicionais:</strong> {{ $veiculo->infos }}</div>
                 </div>
+
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fechar</button>
+
             </div>
         </div>
     </div>
 </div>
+
+<!-- Script para imprimir apenas o conteúdo do modal -->
+<script>
+function imprimirModal() {
+    var conteudo = document.getElementById("modalContent").innerHTML;
+    var originalBody = document.body.innerHTML;
+
+    document.body.innerHTML = `
+        <html>
+        <head>
+            <title>Imprimir Detalhes do Veículo</title>
+            <style>
+                body { font-family: Arial, sans-serif; margin: 20px; }
+                h5 { color: #007bff; }
+                hr { border: 1px solid #ddd; }
+                img { max-width: 100%; max-height: 300px; display: block; margin: 0 auto 15px; }
+            </style>
+        </head>
+        <body>
+            ${conteudo}
+        </body>
+        </html>
+    `;
+
+    window.print();
+    document.body.innerHTML = originalBody;
+    location.reload(); // Atualiza a página para restaurar os eventos
+}
+</script>
+
+
 
 @endsection
