@@ -35,36 +35,49 @@
     <div class="row">
         <div class="col-xl-4 col-lg-5">
             @php
-    // Supondo que a variável $veiculo->marca seja "HONDA/CB 300R"
-    $marcaCompleta = $veiculo->marca; // Exemplo: "HONDA/CB 300R"
-    $marcaArray = explode('/', $marcaCompleta); // Divide a string pela barra
-
-    // Verifica se a marca foi dividida corretamente
-    $marca = strtoupper($marcaArray[0]); // A marca é a primeira parte antes da barra
-    $tipoModelo = isset($marcaArray[1]) ? $marcaArray[1] : ''; // O tipo e modelo ficam após a barra
-
-    // Divide o tipo e modelo com base no espaço
-    $tipoModeloArray = explode(' ', $tipoModelo);
-    $tipo = isset($tipoModeloArray[0]) ? $tipoModeloArray[0] : ''; // Tipo (CB)
-    $modelo = isset($tipoModeloArray[1]) ? $tipoModeloArray[1] : ''; // Modelo (300)
-@endphp
-
-<div class="card text-center">
-    <div class="card-body" 
-         style="background-image: url('{{ url('images/veiculos/fundo_' . strtolower($marca) . '_' . strtolower($tipo) . '_' . strtolower($modelo) . '.jpg') }}'); background-size: cover; background-position: center; border-radius: 5px;">
-        <div class="row">
-            <div class="col-12 d-flex justify-content-center">
-                <div class="avatar-container mt-2">
-                    <img src="{{ url($veiculo->image) }}" class="rounded-circle avatar-lg img-thumbnail"
-                         alt="profile-image"
-                         onerror="this.onerror=null;this.src='{{ url('images/veiculos/default.jpg') }}';">
+            // Supondo que a variável $veiculo->marca seja "HONDA/CB 300R"
+            $marcaCompleta = $veiculo->marca ?? ''; // Exemplo: "HONDA/CB 300R"
+            $marcaArray = explode('/', $marcaCompleta); // Divide a string pela barra
+        
+            // Verifica se a marca foi dividida corretamente
+            $marca = isset($marcaArray[0]) ? strtoupper(trim($marcaArray[0])) : ''; // A marca é a primeira parte antes da barra
+            $tipoModelo = isset($marcaArray[1]) ? trim($marcaArray[1]) : ''; // O tipo e modelo ficam após a barra
+        
+            // Divide o tipo e modelo com base no espaço
+            $tipoModeloArray = explode(' ', $tipoModelo);
+            $tipoModelo = isset($tipoModeloArray[0]) ? strtoupper(trim($tipoModeloArray[0])) : ''; // Tipo (CB)
+            $modelo = isset($tipoModeloArray[1]) ? strtoupper(trim($tipoModeloArray[1])) : ''; // Modelo (300)
+        
+            // Monta o caminho da imagem do fundo
+            $fundoPath = 'images/veiculos/' . 
+                        strtolower($veiculo->tipo) .  
+                        '/background' . '/' . 
+                        strtolower($marca) . '/' .
+                        strtolower($marca) . '.jpg';
+            //echo($fundoPath);
+            $fundoUrl = url($fundoPath);
+        
+            // Verifica se a imagem de fundo existe
+            $fundoImageExistente = file_exists(public_path($fundoPath)) ? "background-image: url('$fundoUrl');" : "background-color: #333;"; // Fallback para fundo cinza escuro
+        @endphp
+        
+        <div class="card text-center">
+            <div class="card-body" 
+                 style="{{ $fundoImageExistente }} background-size: cover; background-position: center; border-radius: 5px;">
+                <div class="row">
+                    <div class="col-12 d-flex justify-content-center">
+                        <div class="avatar-container mt-2">
+                            <img src="{{ url($veiculo->image) }}" class="rounded-circle avatar-lg img-thumbnail"
+                                 alt="profile-image"
+                                 onerror="this.onerror=null;this.src='{{ url('images/veiculos/default.jpg') }}';">
+                        </div>
+                    </div>
+                    <h4 class="mb-0 mt-2 text-white">{{ $marca }}</h4>
+                    <p class="font-14 text-white">{{ $tipoModelo }} - {{ $modelo }}</p>
                 </div>
             </div>
-            <h4 class="mb-0 mt-2 text-white">{{ $veiculo->marca }}</h4>
-            <scpan class="mt-1 text-white mb-2">{{ $veiculo->placa }}</span>
         </div>
-    </div>
-</div>
+        
 
             <div class="card text-center">
                 <div class="card-body">
