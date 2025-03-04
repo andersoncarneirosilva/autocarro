@@ -171,19 +171,25 @@ observer.observe(document.body, { childList: true, subtree: true });
                     </div>
                     <script>
                         document.getElementById("markAsReadBtn").addEventListener("click", function () {
-                            fetch("{{ url('/notifications/mark-as-read') }}", {
+                            // Garante que a URL será HTTPS
+                            const url = window.location.protocol + "//" + window.location.hostname + "/notifications/mark-as-read";
+                    
+                            fetch(url, {
                                 method: "POST",
                                 headers: {
                                     "X-CSRF-TOKEN": "{{ csrf_token() }}",
                                     "Content-Type": "application/json"
                                 }
-                            }).then(response => response.json())
-                              .then(data => {
-                                  alert(data.message); // Exibe um alerta ou substitua por uma atualização dinâmica
-                                  location.reload(); // Atualiza a página para refletir as mudanças
-                              }).catch(error => console.error('Erro:', error));
+                            })
+                            .then(response => response.json())
+                            .then(data => {
+                                alert(data.message); // Exibe um alerta ou substitua por uma atualização dinâmica
+                                location.reload(); // Atualiza a página para refletir as mudanças
+                            })
+                            .catch(error => console.error('Erro:', error));
                         });
                     </script>
+                    
                     <div class="px-2" style="max-height: 300px;" data-simplebar>
                         <a href="javascript:void(0);" class="dropdown-item p-0 notify-item card unread-noti shadow-none mb-2 mt-2">
                             <div id="notifications-list"></div>
