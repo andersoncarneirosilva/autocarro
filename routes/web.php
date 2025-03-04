@@ -77,6 +77,7 @@ Route::post('/perfil/excluir-pasta', [PerfilController::class, 'deleteFolders'])
     Route::get('/pagamento-pendente', [PaymentController::class, 'paymentPending'])->name('pagamentos.pendente');
 
     Route::post('/notifications/mark-as-read', [NotificationController::class, 'markAsRead'])->middleware('auth');
+
     Route::get('/notifications', [NotificationController::class, 'getNotifications'])->middleware('auth');
 
     // USUARIOS

@@ -171,22 +171,21 @@ observer.observe(document.body, { childList: true, subtree: true });
                     </div>
                     <script>
                         document.getElementById("markAsReadBtn").addEventListener("click", function () {
-                            // Garante que a URL será HTTPS
-                            const url = window.location.protocol + "//" + window.location.hostname + "/notifications/mark-as-read";
-                    
-                            fetch(url, {
-                                method: "POST",
-                                headers: {
-                                    "X-CSRF-TOKEN": "{{ csrf_token() }}",
-                                    "Content-Type": "application/json"
-                                }
-                            })
-                            .then(response => response.json())
-                            .then(data => {
-                                location.reload(); // Atualiza a página para refletir as mudanças
-                            })
-                            .catch(error => console.error('Erro:', error));
-                        });
+    fetch(`${window.location.origin}/notifications/mark-as-read`, { // URL dinâmica
+        method: "POST",
+        headers: {
+            "X-CSRF-TOKEN": document.querySelector('meta[name="csrf-token"]').getAttribute('content'),
+            "Content-Type": "application/json"
+        }
+    })
+    .then(response => response.json())
+    .then(data => {
+        console.log('Resposta do servidor:', data);
+        location.reload();
+    })
+    .catch(error => console.error('Erro:', error));
+});
+
                     </script>
                     
                     <div class="px-2" style="max-height: 300px;" data-simplebar>

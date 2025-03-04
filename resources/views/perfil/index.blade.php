@@ -76,13 +76,18 @@
     $(document).ready(function () {
         let folders = @json($folders);
 
-        $('#jstree-1').jstree("destroy").empty(); // Remove qualquer árvore anterior
-        $('#jstree-1').jstree({
-            'core': {
-                'data': folders // Dados da árvore
-            },
-            "plugins": ["wholerow", "checkbox"], // Habilita a seleção
-        });
+        if (folders.length === 0) {
+            // Se não houver pastas, exibe a mensagem
+            $('#jstree-1').html('<p style="text-align: center; color: #999;">Nenhuma pasta encontrada.</p>');
+        } else {
+            $('#jstree-1').jstree("destroy").empty(); // Remove qualquer árvore anterior
+            $('#jstree-1').jstree({
+                'core': {
+                    'data': folders // Dados da árvore
+                },
+                "plugins": ["wholerow", "checkbox"], // Habilita a seleção
+            });
+        }
 
         // Evento para habilitar o botão de exclusão quando um item for selecionado
         $('#jstree-1').on("changed.jstree", function (e, data) {
@@ -171,6 +176,7 @@
         });
     });
 </script>
+
 
 
 
