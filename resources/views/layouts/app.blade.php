@@ -62,7 +62,7 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
 
-    <script src="{{ url('assets/js/notificacoes.js') }}"></script>
+    <script src="{{ url('assets/js/notificacoes.js') }}?v={{ time() }}"></script>
     <script src="https://sdk.mercadopago.com/js/v2"></script>
     <script>
         $(document).ready(function() {
