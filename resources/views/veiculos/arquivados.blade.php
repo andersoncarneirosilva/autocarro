@@ -72,6 +72,7 @@
                     <table class="table table-hover table-centered mb-0">
                         <thead class="table-dark">
                             <tr>
+                                <th>#</th>
                                 <th>Placa</th>
                                 <th>Veículo</th>
                                 <th>Ano/Modelo</th>
@@ -85,7 +86,16 @@
                         <tbody>
                             @foreach ($veiculos as $doc)
                                 <tr>
-
+                                    <td><a href="{{ route('veiculos.show', $doc->id) }}" title="Visualizar"
+                                        style="text-decoration: none;" class="">
+                                        {{-- <i class="mdi mdi-eye fs-5"></i> --}}
+                                        <img class="rounded-circle border" 
+                                            src="{{ url("$doc->image") }}" 
+                                            alt="Veículo" 
+                                            width="31"
+                                            onerror="this.onerror=null;this.src='{{ url('images/veiculos/default.jpg') }}';">
+                                    </a>
+                                </td>
                                     <td>{{ $doc->placa }}</td>
                                     <td>{{ $doc->marca }}</td>
                                     <td>{{ $doc->ano }}</td>
@@ -173,28 +183,30 @@
                     @endif
 
             </div>
-        </div>
-    </div><br>
-    @if ($veiculos->total() != 0)
-    <div class="row d-flex align-items-center justify-content-between">
-        <!-- Texto de exibição alinhado à esquerda -->
-        <div class="col-sm-12 col-md-5 d-flex align-items-center">
-            <div class="dataTables_info" id="basic-datatable_info" role="status" aria-live="polite">
-                Exibindo {{ $quantidadePaginaAtual }} de {{ $quantidadeTotal }} veículos arquivados
+            <br><br>
+        </div><br>
+        @if ($veiculos->total() != 0)
+        <div class="row d-flex align-items-center justify-content-between">
+            <!-- Texto de exibição alinhado à esquerda -->
+            <div class="col-sm-12 col-md-5 d-flex align-items-center">
+                <div class="dataTables_info" id="basic-datatable_info" role="status" aria-live="polite">
+                    Exibindo {{ $quantidadePaginaAtual }} de {{ $quantidadeTotal }} veículos arquivados
+                </div>
+            </div>
+        
+            <!-- Paginação alinhada ao final (direita) -->
+            <div class="col-sm-12 col-md-7 d-flex align-items-center justify-content-end">
+                <div class="dataTables_paginate paging_simple_numbers">
+                    {{ $veiculos->appends([
+                        'search' => request()->get('search', '')
+                    ])->links('components.pagination') }}
+                </div>
             </div>
         </div>
-    
-        <!-- Paginação alinhada ao final (direita) -->
-        <div class="col-sm-12 col-md-7 d-flex align-items-center justify-content-end">
-            <div class="dataTables_paginate paging_simple_numbers">
-                {{ $veiculos->appends([
-                    'search' => request()->get('search', '')
-                ])->links('components.pagination') }}
-            </div>
-        </div>
+        @endif
     </div>
-    @endif
-                                                
+</div>
+                                      
 
 
 <div id="standard-modal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="standard-modalLabel"

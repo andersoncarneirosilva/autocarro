@@ -50,6 +50,7 @@
                     <table class="table table-hover table-centered mb-0">
                         <thead class="table-dark">
                             <tr>
+                                <th>ID</th>
                                 <th>Nome</th>
                                 {{-- <th>E-mail</th> --}}
                                 <th>Telefone</th>
@@ -64,6 +65,7 @@
                         <tbody id="table-body">
                             @foreach ($users as $user)
                             <tr data-user-id="{{ $user->id }}">
+                                <td>{{ $user->id }}</td>
                                 <td class="table-user">
                                     @if($user->image)
                                         <img src="{{ url("storage/{$user->image}") }}" class="me-2 rounded-circle">

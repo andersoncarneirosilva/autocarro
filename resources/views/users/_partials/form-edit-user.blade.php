@@ -93,6 +93,13 @@
                             </div>
                         </div>
                     </div> <!-- end row -->
+                    <div class="row">
+                        <div class="col">
+                            <div class="mb-3">
+                                <label for="lastname" class="form-label">Crédito:</label>
+                                <input type="text" class="form-control"  name="credito" value="{{ $user->credito ?? old('credito') }}">
+                            </div>
+                    </div>
 
 
                     <h5 class="mb-3 text-uppercase bg-light p-2"><i class="mdi mdi-earth me-1"></i> Acesso</h5>
