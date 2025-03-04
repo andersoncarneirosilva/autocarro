@@ -27,6 +27,7 @@ use Illuminate\Support\Facades\Route;
 
 Route::middleware(['auth'])->group(function () {
 
+    
     Route::get('/assinatura-expirada', function () {
         return view('assinatura.expirada');
     })->name('assinatura.expirada');

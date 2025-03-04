@@ -57,6 +57,12 @@
 
     {{-- <script src="{{ url('assets/js/pagamento.js') }}?v={{ time() }}"></script> --}}
 
+<!-- jstree css -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jstree/3.2.1/themes/default/style.min.css" />
+
+                                               
+                                                    
+
 
     <!-- Plugin css -->
     <link rel="stylesheet" href="{{ url('assets/vendor/jquery-toast-plugin/jquery.toast.min.css') }}">
@@ -226,6 +232,8 @@
     <script src="https://cdn.jsdelivr.net/npm/fullcalendar@5.11.0/main.min.js"></script>
     <script src="{{ url('assets/js/calendar.js') }}"></script>
 
+    <!-- jstree js -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jstree/3.2.1/jstree.min.js"></script>
 </body>
 
 </html>

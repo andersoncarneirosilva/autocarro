@@ -50,6 +50,53 @@
         <div class="card">
             <div class="card-body">
                 <h5 class="mb-1">Plano: <span class="badge rounded-pill p-1 px-2 badge-success-lighten"> {{ auth()->user()->plano }}</span></h5>
+                <hr>
+                <h5 class="mb-1">Pastas</h5>
+                <div id="jstree-1"></div>
+
+                <script>
+                    $(document).ready(function () {
+                        let folders = @json($folders);
+                
+                        $('#jstree-1').jstree("destroy").empty(); // Remove qualquer árvore anterior
+                        $('#jstree-1').jstree({
+                            'core': {
+                                'data': folders // Dados da árvore
+                            },
+                            "types": {
+                                "default": {
+                                    "icon": "ri-folder-line text-warning" // Ícone para pastas
+                                },
+                                "file": {
+                                    "icon": "ri-file-line text-primary" // Ícone para arquivos
+                                }
+                            }
+                        });
+                
+                        // Evento para abrir o arquivo ao clicar
+                        $('#jstree-1').on("select_node.jstree", function (e, data) {
+                            let node = data.node;
+                
+                            // Verifica se o nó tem o atributo 'a_attr' com 'href', garantindo que é um arquivo
+                            if (node.a_attr && node.a_attr.href && node.a_attr.href !== '') {
+                                // Se for um arquivo, abre o link em uma nova aba
+                                window.open(node.a_attr.href, '_blank');
+                            } else {
+                                // Se for uma pasta, impede a navegação para não abrir uma nova aba
+                                e.preventDefault();
+                            }
+                        });
+                    });
+                </script>
+                
+                
+                
+                
+                
+                
+                
+                
+                
                 
             </div>
         </div>

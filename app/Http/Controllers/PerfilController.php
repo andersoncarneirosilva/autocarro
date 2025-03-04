@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\File;
+use Illuminate\Support\Facades\Storage;
 
 class PerfilController extends Controller
 {
@@ -49,10 +51,61 @@ class PerfilController extends Controller
         $limitInMB = 1; // Limite de 1 MB
         $percentUsed = ($usedSpaceInMB / $limitInMB) * 100; // Percentual usado
 
+
+
+        // Função para listar arquivos e pastas
+        $basePath = storage_path("app/public/documentos/usuario_{$userId}"); // Caminho do usuário
+
+
+        // Obtém as pastas e arquivos do usuário
+        $folders = $this->getFilesAndFolders($basePath, '', $userId);
+        //dd($folders);
         // Passar as informações para a view
-        return view('perfil.index', compact(['usedSpaceInMB', 'percentUsed', 'limitInMB', 'user']));
+        return view('perfil.index', compact(['usedSpaceInMB', 'percentUsed', 'limitInMB', 'user', 'folders']));
 
     }
+
+    private function getFilesAndFolders($path, $relativePath = '', $userId = null)
+{
+    $items = [];
+    if (!File::exists($path)) {
+        return $items;
+    }
+
+    // Processa as pastas
+    foreach (File::directories($path) as $folder) {
+        $folderName = basename($folder);
+        $items[] = [
+            'text' => $folderName,
+            'children' => $this->getFilesAndFolders($folder, $relativePath . '/' . $folderName, $userId), // Recursividade
+            'a_attr' => ['href' => ''] // Remove o link da pasta
+        ];
+    }
+
+    // Processa os arquivos
+    foreach (File::files($path) as $file) {
+        $fileName = basename($file);
+        // Aqui concatenamos o userId no caminho do arquivo
+        $fileUrl = Storage::url("documentos/usuario_{$userId}" . $relativePath . "/" . $fileName); // Gera URL pública
+
+        $items[] = [
+            'text' => $fileName,
+            'icon' => 'ri-file-line text-primary', // Ícone para arquivos
+            'a_attr' => ['href' => $fileUrl, 'target' => '_blank'] // Link para abrir o arquivo
+        ];
+    }
+
+    return $items;
+}
+
+    
+
+
+    
+
+
+
+
 
     public function edit($id)
     {
