@@ -65,7 +65,7 @@ class StorageWarningNotification extends Notification implements ShouldQueue
         ->line('URL para a página de detalhes: ' . url('/dashboard')) // Adiciona a URL ao e-mail
         ->line('Se você está tendo problemas ao clicar no botão, copie e cole a URL acima no seu navegador.')
         ->salutation('Atenciosamente, Proconline')
-        ->view('emails.storage_warning', ['percentUsed' => $percentUsed]); // Chamando uma view personalizada para o corpo do e-mail (caso queira usar HTML personalizado)
+        ->view('emails.send-email-alerts', ['percentUsed' => $percentUsed]); // Chamando uma view personalizada para o corpo do e-mail (caso queira usar HTML personalizado)
 }
 
 }
