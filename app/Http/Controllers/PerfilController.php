@@ -100,6 +100,51 @@ class PerfilController extends Controller
 
     
 
+public function deleteFile(Request $request)
+{
+    $fileUrl = $request->input('fileUrl');
+    $filePath = storage_path("app/public/{$fileUrl}");
+
+    if (File::exists($filePath)) {
+        File::delete($filePath);
+
+        // Redireciona com sucesso e passamos o redirecionamento correto
+        return response()->json([
+            'redirect' => route('perfil.index'),
+            'success' => 'Arquivo excluído com sucesso!'
+        ]);
+    }
+
+    return response()->json([
+        'redirect' => route('perfil.index'),
+        'error' => 'Erro ao excluir o arquivo.'
+    ]);
+}
+
+public function deleteFolder(Request $request)
+{
+    $folderName = $request->input('folderName');
+    $userId = auth()->id();
+    $folderPath = storage_path("app/public/documentos/usuario_{$userId}/{$folderName}");
+
+    if (File::exists($folderPath) && File::isDirectory($folderPath)) {
+        File::deleteDirectory($folderPath);
+
+        // Redireciona com sucesso e passamos o redirecionamento correto
+        return response()->json([
+            'redirect' => route('perfil.index'),
+            'success' => 'Pasta excluída com sucesso!'
+        ]);
+    }
+
+    return response()->json([
+        'redirect' => route('perfil.index'),
+        'error' => 'Erro ao excluir a pasta.'
+    ]);
+}
+
+
+
 
     
 

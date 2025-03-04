@@ -3,6 +3,21 @@
 @section('title', 'Perfil')
 
 @section('content')
+
+<script>
+    $(document).ready(function () {
+        // Exibe o toast de sucesso ou erro, se houver uma mensagem na sessão
+        @if(session('success'))
+            alert("Erro ao excluir o arquivo.");
+        @elseif(session('error'))
+            toastr.error("{{ session('error') }}");
+        @endif
+    });
+</script>
+
+
+    
+
 <div class="row">
     <div class="col-12">
         <div class="page-title-box">
@@ -54,40 +69,106 @@
                 <h5 class="mb-1">Pastas</h5>
                 <div id="jstree-1"></div>
 
-                <script>
-                    $(document).ready(function () {
-                        let folders = @json($folders);
-                
-                        $('#jstree-1').jstree("destroy").empty(); // Remove qualquer árvore anterior
-                        $('#jstree-1').jstree({
-                            'core': {
-                                'data': folders // Dados da árvore
-                            },
-                            "types": {
-                                "default": {
-                                    "icon": "ri-folder-line text-warning" // Ícone para pastas
-                                },
-                                "file": {
-                                    "icon": "ri-file-line text-primary" // Ícone para arquivos
+                <!-- Botão para excluir o item selecionado -->
+<button id="deleteButton" class="btn btn-danger mt-3" disabled>Excluir Selecionado</button>
+
+<script>
+    $(document).ready(function () {
+        // Verifica se há mensagens de sucesso ou erro na sessão
+        @if(session('success'))
+            toastr.success("{{ session('success') }}");
+        @elseif(session('error'))
+            toastr.error("{{ session('error') }}");
+        @endif
+
+        let folders = @json($folders);
+
+        $('#jstree-1').jstree("destroy").empty(); // Remove qualquer árvore anterior
+        $('#jstree-1').jstree({
+            'core': {
+                'data': folders // Dados da árvore
+            },
+            "plugins": ["wholerow", "checkbox"], // Habilita a seleção
+        });
+
+        // Evento para habilitar o botão de exclusão quando um item for selecionado
+        $('#jstree-1').on("changed.jstree", function (e, data) {
+            if (data.selected.length > 0) {
+                $('#deleteButton').prop('disabled', false); // Habilita o botão
+            } else {
+                $('#deleteButton').prop('disabled', true); // Desabilita o botão
+            }
+        });
+
+        // Evento para excluir o item selecionado
+        $('#deleteButton').on("click", function () {
+            var selectedNodeId = $('#jstree-1').jstree("get_selected")[0]; // Obtém o id do item selecionado
+            var selectedNode = $('#jstree-1').jstree("get_node", selectedNodeId); // Obtém o nó
+
+            if (selectedNode.a_attr && selectedNode.a_attr.href) {
+                // Se for um arquivo
+                var fileUrl = selectedNode.a_attr.href;
+                Swal.fire({
+                    title: 'Você tem certeza?',
+                    text: "Você deseja excluir este arquivo?",
+                    icon: 'warning',
+                    showCancelButton: true,
+                    confirmButtonText: 'Sim, excluir!',
+                    cancelButtonText: 'Cancelar'
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        // Envia uma solicitação para o backend para excluir o arquivo
+                        $.ajax({
+                            url: "/perfil/excluir", // Rota para exclusão do arquivo
+                            method: "POST",
+                            data: { fileUrl: fileUrl, _token: "{{ csrf_token() }}" },
+                            success: function (response) {
+                                if (response.redirect) {
+                                    window.location.href = response.redirect; // Redireciona após a exclusão
+                                } else {
+                                    alert("Erro ao excluir o arquivo.");
                                 }
                             }
                         });
-                
-                        // Evento para abrir o arquivo ao clicar
-                        $('#jstree-1').on("select_node.jstree", function (e, data) {
-                            let node = data.node;
-                
-                            // Verifica se o nó tem o atributo 'a_attr' com 'href', garantindo que é um arquivo
-                            if (node.a_attr && node.a_attr.href && node.a_attr.href !== '') {
-                                // Se for um arquivo, abre o link em uma nova aba
-                                window.open(node.a_attr.href, '_blank');
-                            } else {
-                                // Se for uma pasta, impede a navegação para não abrir uma nova aba
-                                e.preventDefault();
+                    }
+                });
+            } else {
+                // Se for uma pasta
+                var folderName = selectedNode.text;
+                Swal.fire({
+                    title: 'Você tem certeza?',
+                    text: "Você deseja excluir esta pasta?",
+                    icon: 'warning',
+                    showCancelButton: true,
+                    confirmButtonText: 'Sim, excluir!',
+                    cancelButtonText: 'Cancelar'
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        // Envia uma solicitação para o backend para excluir a pasta
+                        $.ajax({
+                            url: "/perfil/excluir-pasta", // Rota para exclusão da pasta
+                            method: "POST",
+                            data: { folderName: folderName, _token: "{{ csrf_token() }}" },
+                            success: function (response) {
+                                if (response.redirect) {
+                                    window.location.href = response.redirect; // Redireciona após a exclusão
+                                } else {
+                                    alert("Erro ao excluir a pasta.");
+                                }
                             }
                         });
-                    });
-                </script>
+                    }
+                });
+            }
+        });
+    });
+</script>
+
+
+
+
+
+
                 
                 
                 
