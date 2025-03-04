@@ -100,48 +100,64 @@ class PerfilController extends Controller
 
     
 
-public function deleteFile(Request $request)
+// Para excluir o arquivo
+public function deleteFiles(Request $request)
 {
-    $fileUrl = $request->input('fileUrl');
-    $filePath = storage_path("app/public/{$fileUrl}");
+    $fileUrls = $request->input('fileUrls'); // Recebe um array de URLs de arquivos
 
-    if (File::exists($filePath)) {
-        File::delete($filePath);
+    foreach ($fileUrls as $fileUrl) {
+        $filePath = storage_path("app/public/{$fileUrl}");
 
-        // Redireciona com sucesso e passamos o redirecionamento correto
-        return response()->json([
-            'redirect' => route('perfil.index'),
-            'success' => 'Arquivo excluído com sucesso!'
-        ]);
+        // Verifique se o arquivo realmente existe
+        if (File::exists($filePath)) {
+            File::delete($filePath); // Exclui o arquivo
+
+            // Definir mensagem de sucesso na sessão
+            session()->flash('success', 'Arquivo excluído com sucesso!');
+        } else {
+            session()->flash('error', 'Erro ao excluir o arquivo. Arquivo não encontrado.');
+        }
     }
 
     return response()->json([
-        'redirect' => route('perfil.index'),
-        'error' => 'Erro ao excluir o arquivo.'
+        'redirect' => route('perfil.index')
     ]);
 }
 
-public function deleteFolder(Request $request)
+public function deleteFolders(Request $request)
 {
-    $folderName = $request->input('folderName');
+    $folderNames = $request->input('folderNames'); // Recebe um array de nomes de pastas
     $userId = auth()->id();
-    $folderPath = storage_path("app/public/documentos/usuario_{$userId}/{$folderName}");
 
-    if (File::exists($folderPath) && File::isDirectory($folderPath)) {
-        File::deleteDirectory($folderPath);
+    foreach ($folderNames as $folderName) {
+        $folderPath = storage_path("app/public/documentos/usuario_{$userId}/{$folderName}");
 
-        // Redireciona com sucesso e passamos o redirecionamento correto
-        return response()->json([
-            'redirect' => route('perfil.index'),
-            'success' => 'Pasta excluída com sucesso!'
-        ]);
+        // Verifica se a pasta existe e se é realmente um diretório
+        if (File::exists($folderPath) && File::isDirectory($folderPath)) {
+            // Exclui arquivos dentro da pasta
+            $files = File::allFiles($folderPath); // Obtém todos os arquivos dentro da pasta
+            foreach ($files as $file) {
+                if (File::exists($file)) {
+                    File::delete($file); // Exclui cada arquivo dentro da pasta
+                }
+            }
+
+            // Agora exclui a pasta vazia
+            File::deleteDirectory($folderPath);
+            
+            // Definir mensagem de sucesso na sessão
+            session()->flash('success', 'Pastas e arquivos excluídos com sucesso!');
+        } else {
+            session()->flash('error', 'Erro ao excluir a pasta. Pasta não encontrada.');
+        }
     }
 
     return response()->json([
-        'redirect' => route('perfil.index'),
-        'error' => 'Erro ao excluir a pasta.'
+        'redirect' => route('perfil.index')
     ]);
 }
+
+
 
 
 

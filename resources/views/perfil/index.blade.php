@@ -8,7 +8,7 @@
     $(document).ready(function () {
         // Exibe o toast de sucesso ou erro, se houver uma mensagem na sessão
         @if(session('success'))
-            alert("Erro ao excluir o arquivo.");
+            toastr.success("{{ session('success') }}");
         @elseif(session('error'))
             toastr.error("{{ session('error') }}");
         @endif
@@ -74,13 +74,6 @@
 
 <script>
     $(document).ready(function () {
-        // Verifica se há mensagens de sucesso ou erro na sessão
-        @if(session('success'))
-            toastr.success("{{ session('success') }}");
-        @elseif(session('error'))
-            toastr.error("{{ session('error') }}");
-        @endif
-
         let folders = @json($folders);
 
         $('#jstree-1').jstree("destroy").empty(); // Remove qualquer árvore anterior
@@ -100,69 +93,85 @@
             }
         });
 
-        // Evento para excluir o item selecionado
+        // Evento para excluir os itens selecionados
         $('#deleteButton').on("click", function () {
-            var selectedNodeId = $('#jstree-1').jstree("get_selected")[0]; // Obtém o id do item selecionado
-            var selectedNode = $('#jstree-1').jstree("get_node", selectedNodeId); // Obtém o nó
+            var selectedNodeIds = $('#jstree-1').jstree("get_selected"); // Obtém os IDs dos itens selecionados
 
-            if (selectedNode.a_attr && selectedNode.a_attr.href) {
-                // Se for um arquivo
-                var fileUrl = selectedNode.a_attr.href;
-                Swal.fire({
-                    title: 'Você tem certeza?',
-                    text: "Você deseja excluir este arquivo?",
-                    icon: 'warning',
-                    showCancelButton: true,
-                    confirmButtonText: 'Sim, excluir!',
-                    cancelButtonText: 'Cancelar'
-                }).then((result) => {
-                    if (result.isConfirmed) {
-                        // Envia uma solicitação para o backend para excluir o arquivo
-                        $.ajax({
-                            url: "/perfil/excluir", // Rota para exclusão do arquivo
-                            method: "POST",
-                            data: { fileUrl: fileUrl, _token: "{{ csrf_token() }}" },
-                            success: function (response) {
-                                if (response.redirect) {
-                                    window.location.href = response.redirect; // Redireciona após a exclusão
-                                } else {
-                                    alert("Erro ao excluir o arquivo.");
-                                }
-                            }
-                        });
+            if (selectedNodeIds.length > 0) {
+                var filesToDelete = [];
+                var foldersToDelete = [];
+
+                // Se for um arquivo ou pasta
+                selectedNodeIds.forEach(function(nodeId) {
+                    var selectedNode = $('#jstree-1').jstree("get_node", nodeId); // Obtém o nó
+
+                    if (selectedNode.a_attr && selectedNode.a_attr.href) {
+                        // Se for um arquivo
+                        filesToDelete.push(selectedNode.a_attr.href);
+                    } else {
+                        // Se for uma pasta
+                        foldersToDelete.push(selectedNode.text);
                     }
                 });
-            } else {
-                // Se for uma pasta
-                var folderName = selectedNode.text;
-                Swal.fire({
-                    title: 'Você tem certeza?',
-                    text: "Você deseja excluir esta pasta?",
-                    icon: 'warning',
-                    showCancelButton: true,
-                    confirmButtonText: 'Sim, excluir!',
-                    cancelButtonText: 'Cancelar'
-                }).then((result) => {
-                    if (result.isConfirmed) {
-                        // Envia uma solicitação para o backend para excluir a pasta
-                        $.ajax({
-                            url: "/perfil/excluir-pasta", // Rota para exclusão da pasta
-                            method: "POST",
-                            data: { folderName: folderName, _token: "{{ csrf_token() }}" },
-                            success: function (response) {
-                                if (response.redirect) {
-                                    window.location.href = response.redirect; // Redireciona após a exclusão
-                                } else {
-                                    alert("Erro ao excluir a pasta.");
+
+                // Solicitação para excluir arquivos
+                if (filesToDelete.length > 0) {
+                    Swal.fire({
+                        title: 'Você tem certeza?',
+                        text: "Você deseja excluir esses arquivos?",
+                        icon: 'warning',
+                        showCancelButton: true,
+                        confirmButtonText: 'Sim, excluir!',
+                        cancelButtonText: 'Cancelar'
+                    }).then((result) => {
+                        if (result.isConfirmed) {
+                            $.ajax({
+                                url: "/perfil/excluir", // Rota para exclusão de arquivos
+                                method: "POST",
+                                data: { fileUrls: filesToDelete, _token: "{{ csrf_token() }}" },
+                                success: function (response) {
+                                    if (response.redirect) {
+                                        window.location.href = response.redirect;
+                                    } else {
+                                        alert("Erro ao excluir os arquivos.");
+                                    }
                                 }
-                            }
-                        });
-                    }
-                });
+                            });
+                        }
+                    });
+                }
+
+                // Solicitação para excluir pastas
+                if (foldersToDelete.length > 0) {
+                    Swal.fire({
+                        title: 'Você tem certeza?',
+                        text: "Você deseja excluir essas pastas?",
+                        icon: 'warning',
+                        showCancelButton: true,
+                        confirmButtonText: 'Sim, excluir!',
+                        cancelButtonText: 'Cancelar'
+                    }).then((result) => {
+                        if (result.isConfirmed) {
+                            $.ajax({
+                                url: "/perfil/excluir-pasta", // Rota para exclusão de pastas
+                                method: "POST",
+                                data: { folderNames: foldersToDelete, _token: "{{ csrf_token() }}" },
+                                success: function (response) {
+                                    if (response.redirect) {
+                                        window.location.href = response.redirect;
+                                    } else {
+                                        alert("Erro ao excluir as pastas.");
+                                    }
+                                }
+                            });
+                        }
+                    });
+                }
             }
         });
     });
 </script>
+
 
 
 

@@ -27,8 +27,8 @@ use Illuminate\Support\Facades\Route;
 
 Route::middleware(['auth'])->group(function () {
 
-    Route::post('/perfil/excluir', [PerfilController::class, 'deleteFile']);
-Route::post('/perfil/excluir-pasta', [PerfilController::class, 'deleteFolder']);
+    Route::post('/perfil/excluir', [PerfilController::class, 'deleteFiles']);
+Route::post('/perfil/excluir-pasta', [PerfilController::class, 'deleteFolders']);
 
 
     Route::get('/assinatura-expirada', function () {
