@@ -50,12 +50,22 @@ class StorageWarningNotification extends Notification implements ShouldQueue
      * Notificação por e-mail (opcional).
      */
     public function toMail($notifiable)
-    {
-        \Log::debug('ENTROU NA FUNCAO EMAIL'); // Verifique o conteúdo no log
-        return (new MailMessage)
-            ->subject('Aviso: Espaço em Disco Quase Cheio')
-            ->line("Seu armazenamento atingiu {$this->percentUsed}% da capacidade.")
-            ->action('Verificar Espaço', url('/dashboard'))
-            ->line('Considere liberar espaço para evitar problemas.');
-    }
+{
+    \Log::debug('ENTROU NA FUNCAO EMAIL'); // Verifique o conteúdo no log
+
+    $percentUsed = round($this->percentUsed); // Arredonda o valor de porcentagem para o número inteiro
+
+    return (new MailMessage)
+        ->subject('Aviso: Espaço em Disco Quase Cheio')
+        ->greeting('Olá!')
+        ->line("Seu armazenamento atingiu {$percentUsed}% da capacidade.")
+        ->line('Considere liberar espaço para evitar problemas.')
+        ->action('Verificar Espaço', url('/dashboard')) // Link para a página de detalhes
+        ->line('Para mais informações sobre o uso do seu espaço, acesse a página de detalhes abaixo:')
+        ->line('URL para a página de detalhes: ' . url('/dashboard')) // Adiciona a URL ao e-mail
+        ->line('Se você está tendo problemas ao clicar no botão, copie e cole a URL acima no seu navegador.')
+        ->salutation('Atenciosamente, Proconline')
+        ->view('emails.storage_warning', ['percentUsed' => $percentUsed]); // Chamando uma view personalizada para o corpo do e-mail (caso queira usar HTML personalizado)
+}
+
 }
