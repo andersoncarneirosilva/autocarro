@@ -72,8 +72,11 @@
                                  onerror="this.onerror=null;this.src='{{ url('images/veiculos/default.jpg') }}';">
                         </div>
                     </div>
-                    <h4 class="mb-0 mt-2 text-white">{{ $marca }}</h4>
-                    <p class="font-14 text-white">{{ $tipoModelo }} - {{ $modelo }}</p>
+                    <h4 class="mb-0 mt-2 text-white">
+                        {{ substr($veiculo->placa, 0, 3) . '-' . substr($veiculo->placa, 3) }}
+                    </h4>
+                    
+                    <p class="font-14 text-white">{{ $marca }} - {{ $tipoModelo }}</p>
                 </div>
             </div>
         </div>
@@ -92,7 +95,7 @@
                         <div class="col-md-6 text-start">
                             <p class="text-muted mb-2 font-13"><strong>Marca: </strong> <span>{{ $veiculo->marca }}</span>
                             </p>
-                            <p class="text-muted mb-2 font-13"><strong>Placa: </strong> <span>{{ $veiculo->placa }}</span>
+                            <p class="text-muted mb-2 font-13"><strong>Placa: </strong> <span>{{ substr($veiculo->placa, 0, 3) . '-' . substr($veiculo->placa, 3) }}</span>
                             </p>
                         </div>
 
@@ -492,7 +495,7 @@
                     <h5 class="text-primary"><i class="mdi mdi-car me-1"></i> Informações do Veículo</h5>
                     <div class="row">
                         <div class="col-md-6"><strong>Marca:</strong> {{ $veiculo->marca }}</div>
-                        <div class="col-md-6"><strong>Placa:</strong> {{ $veiculo->placa }}</div>
+                        <div class="col-md-6"><strong>Placa:</strong> {{ substr($veiculo->placa, 0, 3) . '-' . substr($veiculo->placa, 3) }}</div>
                         <div class="col-md-6"><strong>Chassi:</strong> {{ $veiculo->chassi }}</div>
                         <div class="col-md-6"><strong>Cor:</strong> {{ $veiculo->cor }}</div>
                         <div class="col-md-6"><strong>Ano:</strong> {{ $veiculo->ano }}</div>

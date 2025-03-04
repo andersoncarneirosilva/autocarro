@@ -151,32 +151,46 @@ observer.observe(document.body, { childList: true, subtree: true });
 
             {{-- Notificações --- HABILITAR notificaçoes.js --}}
             {{-- Notificações --- HABILITAR script logo acima nessa pagina --}}
-            {{-- <li class="dropdown notification-list">
+            <li class="dropdown notification-list">
                 <a class="nav-link dropdown-toggle arrow-none" data-bs-toggle="dropdown" href="#" role="button" aria-haspopup="false" aria-expanded="false">
                     <i class="ri-notification-3-line font-22"></i>
-                    <span class="noti-icon-badge"></span>
+                    <span class="noti-icon-badge" id="notification-badge" style="display: none;"></span> <!-- Inicialmente escondido -->
                 </a>
                 <div class="dropdown-menu dropdown-menu-end dropdown-menu-animated dropdown-lg py-0">
                     <div class="p-2 border-top-0 border-start-0 border-end-0 border-dashed border">
                         <div class="row align-items-center">
                             <div class="col">
-                                <h6 class="m-0 font-16 fw-semibold"> Notificações</h6>
+                                <h6 class="m-0 font-16 fw-semibold">Notificações</h6>
                             </div>
                             <div class="col-auto">
-                                <a href="javascript: void(0);" class="text-dark text-decoration-underline">
-                                    <small>Limpar</small>
+                                <a href="javascript:void(0);" class="text-dark text-decoration-underline" id="markAsReadBtn">
+                                    <small>Marcar como lido</small>
                                 </a>
                             </div>
                         </div>
                     </div>
-
+                    <script>
+                        document.getElementById("markAsReadBtn").addEventListener("click", function () {
+                            fetch("{{ url('/notifications/mark-as-read') }}", {
+                                method: "POST",
+                                headers: {
+                                    "X-CSRF-TOKEN": "{{ csrf_token() }}",
+                                    "Content-Type": "application/json"
+                                }
+                            }).then(response => response.json())
+                              .then(data => {
+                                  alert(data.message); // Exibe um alerta ou substitua por uma atualização dinâmica
+                                  location.reload(); // Atualiza a página para refletir as mudanças
+                              }).catch(error => console.error('Erro:', error));
+                        });
+                    </script>
                     <div class="px-2" style="max-height: 300px;" data-simplebar>
-                        <a href="javascript:void(0);" class="dropdown-item p-0 notify-item card unread-noti shadow-none mb-2">
+                        <a href="javascript:void(0);" class="dropdown-item p-0 notify-item card unread-noti shadow-none mb-2 mt-2">
                             <div id="notifications-list"></div>
                         </a>
                     </div>
                 </div>
-            </li> --}}
+            </li>
             <li class="d-none d-sm-inline-block">
                 <div class="nav-link" id="light-dark-mode" data-bs-toggle="tooltip" data-bs-placement="left"
                     title="Tema escuro">

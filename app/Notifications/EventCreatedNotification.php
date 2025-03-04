@@ -25,21 +25,14 @@ class EventCreatedNotification extends Notification
 
     public function toDatabase($notifiable)
     {
-
+        
+        \Log::debug('ENVIADO PARA A TABLE: '.$this->event); // Verifique o conteúdo no log
         return [
             'message' => $this->event['title'],
             'event_id' => $this->event['id'],
             'event_date' => $this->event['event_date'],
             'created_at' => $this->event['created_at'],
         ];
-        \Log::debug('ENVIADO PARA A TABLE: '.$this->event); // Verifique o conteúdo no log
     }
 
-    // Se desejar enviar a notificação por email, use este método:
-    // public function toMail($notifiable)
-    // {
-    //     return (new MailMessage)
-    //                 ->line('Novo evento criado: ' . $this->event['name'])
-    //                 ->action('Ver Evento', url('/events/'.$this->event['id']));
-    // }
 }

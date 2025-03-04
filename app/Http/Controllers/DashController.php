@@ -11,6 +11,7 @@ use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+use App\Jobs\SendNotificationStorageJob;
 
 class DashController extends Controller
 {
@@ -121,8 +122,21 @@ class DashController extends Controller
         // Calcular o tamanho usado na pasta
         $usedSpaceInBytes = getFolderSize($path);
         $usedSpaceInMB = $usedSpaceInBytes / (1024 * 1024); // Converter para MB
+        //dd($usedSpaceInMB);
         $limitInMB = $user->size_folder; // Limite de MB do usuario
+        //dd($limitInMB);
         $percentUsed = ($usedSpaceInMB / $limitInMB) * 100; // Percentual usado
+        //dd($percentUsed);
+        
+        // Verifica se já existe uma notificação nos últimos 24h
+        $lastNotification = $user->notifications()
+        ->where('type', 'App\Notifications\StorageWarningNotification') // Tipo específico
+        ->where('created_at', '>=', now()->subDay()) // Últimas 24h
+        ->exists();
+
+        if ($percentUsed >= 80 && !$lastNotification) {
+        dispatch(new SendNotificationStorageJob($user, $percentUsed));
+        }
 
         // Passar as informações para a view
         return view('dashboard.index', compact(['countDocs',
@@ -143,6 +157,7 @@ class DashController extends Controller
             'procCount',
             'atpveCount',
             'clientesCount',
-            'veiculosCount']));
+            'veiculosCount'
+        ]));
     }
 }

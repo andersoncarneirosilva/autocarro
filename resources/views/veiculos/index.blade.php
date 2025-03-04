@@ -335,7 +335,7 @@
                                 <div class="mb-3">
                                     <label>Endereço: <span style="color: red;">*</span></label>
                                     <div class="col-lg">
-                                        <input class="form-control" type="text" name="endereco" required>
+                                        <input class="form-control" type="text" id="endereco"  name="endereco" required>
                                     </div>
                                 </div>
                             </div>
@@ -425,6 +425,16 @@
                 </div>
             </div>
         </div>
+
+<!-- JavaScript para focar no campo quando o modal abrir -->
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        var meuModal = document.getElementById("procModal");
+        meuModal.addEventListener("shown.bs.modal", function () {
+            document.getElementById("endereco").focus();
+        });
+    });
+</script>
 
         <script>
             $(document).ready(function() {

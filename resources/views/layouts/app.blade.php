@@ -222,7 +222,7 @@
     <!-- Script do Select2 -->
     <script src="{{ url('assets/vendor/jquery-toast-plugin/jquery.toast.min.js') }}"></script>
     <!-- Toastr Demo js -->
-    <script src="{{ url('assets/vendor/fullcalendar/index.global.min.js') }}"></script>
+    {{-- <script src="{{ url('assets/vendor/fullcalendar/index.global.min.js') }}"></script> --}}
     <script src="https://cdn.jsdelivr.net/npm/fullcalendar@5.11.0/main.min.js"></script>
     <script src="{{ url('assets/js/calendar.js') }}"></script>
 
