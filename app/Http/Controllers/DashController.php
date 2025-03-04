@@ -136,6 +136,7 @@ class DashController extends Controller
 
         if ($percentUsed >= 80 && !$lastNotification) {
         dispatch(new SendNotificationStorageJob($user, $percentUsed));
+        \Log::debug('Notificação enviada para o usuário: ' . $user->email);
         }
 
         // Passar as informações para a view

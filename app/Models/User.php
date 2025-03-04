@@ -17,6 +17,12 @@ class User extends Authenticatable
      *
      * @var array<int, string>
      */
+    public function routeNotificationForMail($notification)
+{
+    return $this->email;  // O endereço de e-mail do usuário
+}
+
+
     protected $fillable = [
         'name',
         'email',

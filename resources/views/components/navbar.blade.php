@@ -183,7 +183,6 @@ observer.observe(document.body, { childList: true, subtree: true });
                             })
                             .then(response => response.json())
                             .then(data => {
-                                alert(data.message); // Exibe um alerta ou substitua por uma atualização dinâmica
                                 location.reload(); // Atualiza a página para refletir as mudanças
                             })
                             .catch(error => console.error('Erro:', error));

@@ -26,7 +26,7 @@ class StorageWarningNotification extends Notification implements ShouldQueue
      */
     public function via($notifiable)
     {
-        return ['database']; // Pode adicionar 'mail' se quiser enviar por e-mail também
+        return ['database', 'mail']; // Pode adicionar 'mail' se quiser enviar por e-mail também
     }
 
     /**
@@ -49,12 +49,13 @@ class StorageWarningNotification extends Notification implements ShouldQueue
     /**
      * Notificação por e-mail (opcional).
      */
-    // public function toMail($notifiable)
-    // {
-    //     return (new MailMessage)
-    //         ->subject('Aviso: Espaço em Disco Quase Cheio')
-    //         ->line("Seu armazenamento atingiu {$this->percentUsed}% da capacidade.")
-    //         ->action('Verificar Espaço', url('/dashboard'))
-    //         ->line('Considere liberar espaço para evitar problemas.');
-    // }
+    public function toMail($notifiable)
+    {
+        \Log::debug('ENTROU NA FUNCAO EMAIL'); // Verifique o conteúdo no log
+        return (new MailMessage)
+            ->subject('Aviso: Espaço em Disco Quase Cheio')
+            ->line("Seu armazenamento atingiu {$this->percentUsed}% da capacidade.")
+            ->action('Verificar Espaço', url('/dashboard'))
+            ->line('Considere liberar espaço para evitar problemas.');
+    }
 }
