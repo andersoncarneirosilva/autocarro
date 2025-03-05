@@ -1103,7 +1103,7 @@ class VeiculoController extends Controller
         }
 
         // Caminho para a pasta de procuracoes
-        $pastaProc = storage_path('app/public/'.$pastaUsuario.'procuracoes_manual/');
+        $pastaProc = storage_path('app/public/'.$pastaUsuario.'procuracoes/');
         if (! File::exists($pastaProc)) {
             File::makeDirectory($pastaProc, 0777, true); // Cria a pasta se não existir
         }
@@ -1111,7 +1111,7 @@ class VeiculoController extends Controller
         $numeroRandom = rand(1000, 9999);
 
         $caminhoProc = $pastaProc.strtoupper($veiculo->placa).'_'.$numeroRandom.'.pdf';
-        $urlProc = asset('storage/'.$pastaUsuario.'procuracoes_manual/'.strtoupper($veiculo->placa).'_'.$numeroRandom.'.pdf');
+        $urlProc = asset('storage/'.$pastaUsuario.'procuracoes/'.strtoupper($veiculo->placa).'_'.$numeroRandom.'.pdf');
 
         // Salvar o PDF
         $pdf->Output('F', $caminhoProc);

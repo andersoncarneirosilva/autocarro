@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\Log;
 
 class PerfilController extends Controller
 {
@@ -106,19 +107,53 @@ class PerfilController extends Controller
 // Para excluir o arquivo
 public function deleteFiles(Request $request)
 {
-    $fileUrls = $request->input('fileUrls'); // Recebe um array de URLs de arquivos
+    $fileUrls = $request->input('fileUrls'); // Recebe as URLs dos arquivos a serem excluídos
+    $userId = auth()->id(); // Obtém o ID do usuário autenticado
+
+    if (!is_array($fileUrls)) {
+        Log::error('Dados inválidos recebidos para exclusão de arquivos', ['request' => $request->all()]);
+        return response()->json(['error' => 'Dados inválidos'], 400);
+    }
 
     foreach ($fileUrls as $fileUrl) {
-        $filePath = storage_path("app/public/{$fileUrl}");
+        // Extraímos o nome do arquivo e o diretório da URL (sem manipulação da URL)
+        $pathInfo = parse_url($fileUrl, PHP_URL_PATH);  // Obtém o caminho da URL
 
-        // Verifique se o arquivo realmente existe
-        if (File::exists($filePath)) {
-            File::delete($filePath); // Exclui o arquivo
+        // Verifica se o caminho contém os elementos esperados (usuário, pasta, arquivo)
+        $pathParts = explode('/', trim($pathInfo, '/'));
+        
+        if (count($pathParts) < 4) {
+            Log::warning('Formato inválido de URL recebido', ['fileUrl' => $fileUrl]);
+            continue; // Ignora esta URL e passa para a próxima
+        }
 
-            // Definir mensagem de sucesso na sessão
-            session()->flash('success', 'Arquivo excluído com sucesso!');
-        } else {
-            session()->flash('error', 'Erro ao excluir o arquivo. Arquivo não encontrado.');
+        // A partir do caminho da URL, obtém o ID do usuário, pasta e nome do arquivo
+        $userIdFromUrl = $pathParts[2];  // ID do usuário da URL
+        $folderName = $pathParts[3];      // Nome da pasta
+        $fileName = $pathParts[4];        // Nome do arquivo
+
+        // Monta o caminho correto do arquivo
+        $filePath = storage_path("app/public/documentos/usuario_{$userId}/{$folderName}/{$fileName}");
+
+        // Loga o caminho do arquivo para depuração
+        Log::info('Tentando excluir o arquivo', ['filePath' => $filePath]);
+
+        try {
+            // Verifica se o arquivo realmente existe antes de excluir
+            if (File::exists($filePath)) {
+                File::delete($filePath); // Exclui o arquivo
+                session()->flash('success', 'Arquivo excluído com sucesso!');
+                Log::info('Arquivo excluído com sucesso', ['filePath' => $filePath]);
+            } else {
+                session()->flash('error', 'Erro ao excluir o arquivo. Arquivo não encontrado.');
+                \Log::warning('Arquivo não encontrado para exclusão', ['filePath' => $filePath]);
+            }
+        } catch (\Exception $e) {
+            session()->flash('error', 'Erro ao excluir o arquivo: ' . $e->getMessage());
+            Log::error('Erro ao excluir o arquivo', [
+                'filePath' => $filePath,
+                'exception' => $e->getMessage(),
+            ]);
         }
     }
 
@@ -126,6 +161,10 @@ public function deleteFiles(Request $request)
         'redirect' => route('perfil.index')
     ]);
 }
+
+
+
+
 
 public function deleteFolders(Request $request)
 {
