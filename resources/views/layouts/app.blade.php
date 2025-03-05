@@ -58,7 +58,7 @@
     {{-- <script src="{{ url('assets/js/pagamento.js') }}?v={{ time() }}"></script> --}}
 
 <!-- jstree css -->
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jstree/3.2.1/themes/default/style.min.css" />
+<link href="{{ url('assets/vendor/jstree/themes/default/style.min.css') }}" rel="stylesheet" type="text/css">
 
                                                
                                                     
@@ -233,7 +233,7 @@
     <script src="{{ url('assets/js/calendar.js') }}"></script>
 
     <!-- jstree js -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jstree/3.2.1/jstree.min.js"></script>
+    <script src="assets/vendor/jstree/jstree.min.js"></script>
 </body>
 
 </html>

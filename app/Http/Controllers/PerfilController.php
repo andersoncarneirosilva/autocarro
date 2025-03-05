@@ -32,7 +32,8 @@ class PerfilController extends Controller
             }
         }
         // dd($user);
-        $path = storage_path('app/public/documentos/usuario_'.auth()->id());
+        // Caminho para a pasta de documentos
+        $path = storage_path("app/public/documentos/usuario_{$userId}");
 
         // Função para calcular o tamanho total da pasta
         function getFolderSize($folder)
@@ -48,7 +49,9 @@ class PerfilController extends Controller
         // Calcular o tamanho usado na pasta
         $usedSpaceInBytes = getFolderSize($path);
         $usedSpaceInMB = $usedSpaceInBytes / (1024 * 1024); // Converter para MB
-        $limitInMB = 1; // Limite de 1 MB
+        //dd($usedSpaceInMB);
+        $limitInMB = $user->size_folder; // Limite de MB do usuario
+        //dd($limitInMB);
         $percentUsed = ($usedSpaceInMB / $limitInMB) * 100; // Percentual usado
 
 
