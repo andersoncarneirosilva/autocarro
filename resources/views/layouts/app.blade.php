@@ -233,7 +233,10 @@
     <script src="{{ url('assets/js/calendar.js') }}"></script>
 
     <!-- jstree js -->
-    <script src="assets/vendor/jstree/jstree.min.js"></script>
+    @if(request()->is('perfil'))
+        <script src="{{ asset('assets/vendor/jstree/jstree.min.js') }}"></script>
+    @endif
+
 </body>
 
 </html>
