@@ -15,7 +15,8 @@ return [
     |
     */
 
-    'default' => env('BROADCAST_DRIVER', 'null'),
+    'default' => env('BROADCAST_DRIVER', 'pusher'),
+    
 
     /*
     |--------------------------------------------------------------------------
@@ -37,8 +38,19 @@ return [
             'app_id' => env('PUSHER_APP_ID'),
             'options' => [
                 'cluster' => env('PUSHER_APP_CLUSTER'),
-                'encrypted' => true,
+                'useTLS' => false,  // Defina como 'false' para desenvolvimento local sem TLS
+                'host' => env('PUSHER_HOST', '127.0.0.1'),
+                'port' => env('WEBSOCKETS_PORT', 6001),  // Certifique-se de que a porta é 6001
+                'scheme' => 'http',
             ],
+        ],
+
+
+        // Se estiver usando WebSockets
+        'socket' => [
+            'driver' => 'websockets',
+            'host' => env('BROADCAST_HOST', '127.0.0.1'),
+            'port' => env('BROADCAST_PORT', 6001),
         ],
 
         'ably' => [

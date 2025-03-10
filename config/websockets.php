@@ -8,6 +8,7 @@ return [
      * Set a custom dashboard configuration
      */
     'dashboard' => [
+        'enable' => true,
         'port' => env('WEBSOCKETS_PORT', 6001),
     ],
 
@@ -28,8 +29,12 @@ return [
             'key' => env('PUSHER_APP_KEY', 'local'),
             'secret' => env('PUSHER_APP_SECRET', 'local'),
             'cluster' => env('PUSHER_APP_CLUSTER', 'mt1'),
+            'host' => env('PUSHER_HOST'),
+            'port' => env('PUSHER_PORT'),
+            'scheme' => env('PUSHER_SCHEME'),
+            'enable_dashboard' => true,  // Habilite para monitorar o painel
             'enable_client_messages' => env('WEBSOCKETS_ENABLE_CLIENT_MESSAGES', false),
-            'enable_statistics' => env('WEBSOCKETS_ENABLE_STATISTICS', true),
+            'enable_statistics' => env('WEBSOCKETS_ENABLE_STATISTICS', false),
             'use_tls' => false,
         ],
     ],
@@ -116,6 +121,8 @@ return [
          * certificate chain of issuers. The private key also may be contained
          * in a separate file specified by local_pk.
          */
+        'verify_peer' => false,
+        
         'local_cert' => env('LARAVEL_WEBSOCKETS_SSL_LOCAL_CERT', null),
 
         /*
@@ -129,7 +136,10 @@ return [
          */
         'passphrase' => env('LARAVEL_WEBSOCKETS_SSL_PASSPHRASE', null),
     ],
-
+    
+    'replication' => [
+            'mode' => 'single',
+        ],
     /*
      * Channel Manager
      * This class handles how channel persistence is handled.

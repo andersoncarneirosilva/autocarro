@@ -24,8 +24,17 @@ use App\Http\Controllers\TextoPoderesController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\VeiculoController;
 use Illuminate\Support\Facades\Route;
+use Livewire\Livewire;
+use App\Http\Livewire\Chat;
+
 
 Route::middleware(['auth'])->group(function () {
+    // Em routes/web.php ou routes/api.php
+Route::post('/messages', [MessageController::class, 'store']);
+
+
+    Route::get('/test', \App\Livewire\TestComponent::class);
+    Route::get('/chat', \App\Livewire\Chat::class)->name('chat');
 
     Route::post('/perfil/excluir', [PerfilController::class, 'deleteFiles']);
 Route::post('/perfil/excluir-pasta', [PerfilController::class, 'deleteFolders']);

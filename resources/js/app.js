@@ -1,29 +1,36 @@
+// app.js
 import './bootstrap';
 
-import Alpine from 'alpinejs';
+document.addEventListener('DOMContentLoaded', function () {
+    console.log("Iniciando escuta no canal 'chat'...");
 
-window.Alpine = Alpine;
+    // Escutando no WebSocket para Nova Mensagem
+    window.Echo.channel('chat')
+        .listen('NewMessage', (event) => {
+            console.log('Nova mensagem recebida via WebSocket:', event);
 
-Alpine.start();
+            const messageList = document.getElementById('message-list');
+            
+            // Criar a estrutura HTML para a nova mensagem
+            const newMessage = document.createElement('li');
+            const senderClass = event.sender_id === 'auth-user-id' ? 'user-message' : 'admin-message'; // Ajuste para seu ID de usuário
+            newMessage.classList.add(senderClass);
 
-// resources/js/app.js
+            newMessage.innerHTML = `
+                <div class="chat-avatar">
+                    <i>${event.created_at}</i>
+                </div>
+                <div class="conversation-text">
+                    <div class="ctext-wrap">
+                        <p>${event.message}</p>
+                    </div>
+                </div>
+            `;
 
-import Echo from 'laravel-echo';
-import Pusher from 'pusher-js';
+            // Adicionar a nova mensagem ao chat
+            messageList.appendChild(newMessage);
 
-window.Pusher = Pusher;
-
-window.Echo = new Echo({
-    broadcaster: 'pusher',
-    key: 'local', // O "local" pode ser mantido, mas é importante que seja o mesmo nome da chave em "config/websockets.php"
-    cluster: 'mt1', // Ajuste para o cluster se necessário, mas pode ser 'mt1' para local
-    wsHost: window.location.hostname, // Isso garante que o Echo tente se conectar ao host local
-    wsPort: 6002, // Certifique-se de que está apontando para a porta correta (6001)
-    disableStats: true, // Desabilita as estatísticas de Pusher
-    forceTLS: true // Não usar TLS para ambientes de desenvolvimento local
+            // Rola até a última mensagem
+            messageList.scrollTop = messageList.scrollHeight;
+        });
 });
-
-window.Echo.channel('events')
-    .listen('NewEventCreated', (event) => {
-        console.log(event.message); // Exibe a mensagem no console
-    });

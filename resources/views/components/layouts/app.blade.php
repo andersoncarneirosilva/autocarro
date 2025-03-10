@@ -1,6 +1,5 @@
 <!DOCTYPE html>
-<html lang="pt-BR">
-
+<html lang="en">
 <head>
     <meta charset="utf-8" />
     <title>@yield('title')</title>
@@ -149,24 +148,59 @@
             z-index: 1055 !important;
             /* Certifique-se de que o z-index é maior que o do modal */
         }
+        /* Estilo para mensagens do usuário (à esquerda) */
+.user-message {
+    display: flex;
+    justify-content: flex-end; /* Alinha à esquerda */
+    margin-bottom: 10px;
+}
+
+.user-message .conversation-text {
+    background-color: #f1f1f1; /* Cor de fundo para a mensagem do usuário */
+    border-radius: 10px;
+    padding: 10px;
+    max-width: 70%; /* Limita o tamanho da mensagem */
+    margin-left: 10px;
+}
+
+.user-message .chat-avatar {
+    order: 1;
+}
+
+/* Estilo para mensagens do administrador (à direita) */
+.admin-message {
+    display: flex;
+    justify-content: flex-start; /* Alinha à direita */
+    margin-bottom: 10px;
+}
+
+.admin-message .conversation-text {
+    background-color: #e0f7fa; /* Cor de fundo para a mensagem do administrador */
+    border-radius: 10px;
+    padding: 10px;
+    max-width: 70%;
+    margin-right: 10px;
+}
+
+.admin-message .chat-avatar {
+    order: 2;
+}
+.ctext-wrap {
+    display: inline-block;
+    max-width: 70%;
+}
+
+.ctext-wrap p {
+    margin: 0;
+}
     </style>
+    @livewireStyles
+
 </head>
 
-<body>
-   
-    <!-- Pre-loader -->
-    {{-- <div id="preloader">
-            <div id="status">
-              <div class="bouncing-loader">
-                <div>P</div>
-                <div>R</div>
-                <div>O</div>
-                <div>C</div>
-              </div>
-            </div>
-          </div> --}}
 
-    <!-- End Preloader-->
+<body>
+
     <!-- Begin page -->
     <div class="wrapper">
         <!-- ========== Topbar Start ========== -->
@@ -192,9 +226,11 @@
 
                     @include('sweetalert::alert')
                     @yield('content')
-                    {{-- </div>
-                            </div>
-                        </div> --}}
+                    
+                    @livewire('chat')
+
+    @vite(['resources/js/app.js'])
+    @livewireScripts 
                 </div>
             </div>
 
