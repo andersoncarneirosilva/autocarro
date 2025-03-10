@@ -89,4 +89,3 @@
     </script>
 @endpush
 </div> <!-- 🔹 Fecha o elemento raiz -->
-@vite(['resources/js/app.js'])
