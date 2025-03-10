@@ -1,6 +1,7 @@
 import { defineConfig } from 'vite';
 import laravel from 'laravel-vite-plugin';
 
+// Configure apenas em ambiente local
 export default defineConfig({
     plugins: [
         laravel({
@@ -11,4 +12,10 @@ export default defineConfig({
             refresh: true,
         }),
     ],
+    server: {
+        // Só ativa o servidor do Vite em ambiente de desenvolvimento
+        host: process.env.APP_ENV === 'local' ? 'localhost' : false, 
+        port: 5173,
+        strictPort: true,
+    },
 });
