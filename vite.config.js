@@ -12,10 +12,9 @@ export default defineConfig({
         }),
     ],
     server: {
-        host: '147.182.231.89',
-        port: 5173,
-        https: false,  // Certifique-se de usar HTTP se não tiver HTTPS configurado
-        strictPort: true,
-    }
-    
+        host: '0.0.0.0',  // Permite que o servidor seja acessado de fora do localhost
+        port: 5173,        // Porta padrão, altere se necessário
+        https: false,      // Desativa o HTTPS (se necessário, configure o HTTPS)
+        strictPort: true,  // Garante que a porta será 5173 e não outra
+    },
 });
