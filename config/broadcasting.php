@@ -38,10 +38,10 @@ return [
             'app_id' => env('PUSHER_APP_ID'),
             'options' => [
                 'cluster' => env('PUSHER_APP_CLUSTER'),
-                'useTLS' => false,  // Defina como 'false' para desenvolvimento local sem TLS
-                'host' => env('PUSHER_HOST', '127.0.0.1'),
-                'port' => env('WEBSOCKETS_PORT', 6001),  // Certifique-se de que a porta é 6001
-                'scheme' => 'http',
+                'useTLS' => true,
+                'host' => env('PUSHER_HOST'),
+                'port' => env('PUSHER_PORT'),
+                'scheme' => env('PUSHER_SCHEME'),
             ],
         ],
 
