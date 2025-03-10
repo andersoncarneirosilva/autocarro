@@ -60,7 +60,13 @@
 <link href="{{ url('assets/vendor/jstree/themes/default/style.min.css') }}" rel="stylesheet" type="text/css">
 
                                                
-                                                    
+@if (app()->environment('local'))
+@vite(['resources/css/app.css', 'resources/js/app.js'])
+@else
+<link rel="stylesheet" href="{{ asset('build/assets/app.css') }}">
+<script src="{{ asset('build/assets/app.js') }}" defer></script>
+@endif
+                        
 
 
     <!-- Plugin css -->
@@ -229,7 +235,7 @@
                     
                     @livewire('chat')
 
-    @vite(['resources/js/app.js'])
+    {{-- @vite(['resources/js/app.js']) --}}
     @livewireScripts 
                 </div>
             </div>
