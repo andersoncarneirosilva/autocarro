@@ -36,3 +36,10 @@ window.Echo = new Echo({
         },
     },
 });
+
+// Exemplo de como se conectar a um canal privado
+window.Echo.private('chat.' + userId)
+    .listen('NewMessage', (event) => {
+        console.log(event);
+    });
+
