@@ -29,7 +29,7 @@ window.Echo = new Echo({
     wsPort: 443,  // Pusher usa o porto 443 para HTTPS
     forceTLS: true,  // Garante que a conexão será via HTTPS
     disableStats: true,  // Desabilita estatísticas para melhorar performance
-    enabledTransports: ['wss' , 'ws'],  // Prioriza WebSocket seguro
+    enabledTransports: ['wss', 'ws'],  // Prioriza WebSocket seguro
     auth: {
         headers: {
             'X-CSRF-TOKEN': document.head.querySelector('meta[name="csrf-token"]').content,
@@ -43,3 +43,7 @@ window.Echo.private('chat.' + userId)
         console.log(event);
     });
 
+// Configuração de debug para inspecionar o socket_id
+window.Echo.connector.pusher.connection.bind('state_change', function(states) {
+    console.log('Estado do Pusher:', states);
+});

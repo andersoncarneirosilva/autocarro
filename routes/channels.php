@@ -20,3 +20,9 @@ Broadcast::channel('chat.{chatId}', function ($user, $chatId) {
     // Exemplo: se o usuário é participante do chat, ele pode ouvir o canal
     return $user->chats->contains($chatId);
 });
+
+Broadcast::channel('App.Models.User.{id}', function ($user, $id) {
+    // A autenticação deve ser baseada no ID do usuário e não permitir acesso sem uma verificação válida
+    return (int) $user->id === (int) $id;
+});
+
