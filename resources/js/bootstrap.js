@@ -29,7 +29,7 @@ window.Echo = new Echo({
     wsPort: 443,  // Pusher usa o porto 443 para HTTPS
     forceTLS: true,  // Garante que a conexão será via HTTPS
     disableStats: true,  // Desabilita estatísticas para melhorar performance
-    enabledTransports: ['wss'],  // Prioriza WebSocket seguro
+    enabledTransports: ['wss' , 'ws'],  // Prioriza WebSocket seguro
     auth: {
         headers: {
             'X-CSRF-TOKEN': document.head.querySelector('meta[name="csrf-token"]').content,
