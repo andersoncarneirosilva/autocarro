@@ -42,7 +42,7 @@ Route::middleware(['auth'])->group(function () {
         $message = Message::create([
             'user_id' => 1, // ID do usuário que enviou a mensagem (ajuste conforme necessário)
             'content' => 'Mensagem de teste Pusher'
-            'sender_id' => '1',
+            'sender_id' => '1'
         ]);
     
         event(new NewMessage($message));
