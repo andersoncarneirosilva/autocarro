@@ -36,14 +36,15 @@ return [
             'key' => env('PUSHER_APP_KEY'),
             'secret' => env('PUSHER_APP_SECRET'),
             'app_id' => env('PUSHER_APP_ID'),
+            'cluster' => env('PUSHER_APP_CLUSTER'),
+            'useTLS' => true,
             'options' => [
                 'cluster' => env('PUSHER_APP_CLUSTER'),
                 'useTLS' => true,
-                'host' => env('PUSHER_HOST'),
-                'port' => env('PUSHER_PORT'),
-                'scheme' => env('PUSHER_SCHEME'),
+                'encrypted' => true,
             ],
         ],
+
 
 
         // Se estiver usando WebSockets

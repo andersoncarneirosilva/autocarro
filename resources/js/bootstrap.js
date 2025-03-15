@@ -3,8 +3,6 @@ import Pusher from 'pusher-js';
 
 window.Pusher = Pusher;
 
-console.log("Inicializando Pusher e Echo...");
-
 window.Echo = new Echo({
     broadcaster: 'pusher',
     key: import.meta.env.VITE_PUSHER_APP_KEY,
@@ -13,6 +11,7 @@ window.Echo = new Echo({
     wsPort: 443,
     wssPort: 443,
     forceTLS: true,
+    encrypted: true,
     enabledTransports: ['wss'],
     disableStats: true,
     authEndpoint: '/broadcasting/auth',
@@ -23,26 +22,13 @@ window.Echo = new Echo({
     },
 });
 
-// Verifique a conexão Pusher
+console.log("Instância de Echo criada com sucesso!");
 window.Echo.connector.pusher.connection.bind('state_change', function(states) {
-    console.log("Estado da conexão Pusher:", states);
+    console.log("Estado da conexão Pusher:", states); // Verifique se está 'connected'
     if (states.current === 'connected') {
         console.log("Conexão Pusher estabelecida com sucesso!");
-        // Ao conectar, tentamos capturar o socketId
         const socketId = window.Echo.socketId();
-        console.log("Socket ID conectado:", socketId);
-        window.socketId = socketId; // Atualiza o socket ID global
+        console.log("Socket ID conectado:", socketId); // Aqui você obterá o socket ID
+        window.socketId = socketId; // Armazene o socket ID globalmente
     }
-});
-
-// Adicionar o socket_id às requisições Livewire apenas após a conexão
-document.addEventListener("livewire:request", (event) => {
-    setTimeout(() => {
-        if (window.socketId) {
-            event.detail.headers["X-Socket-ID"] = window.socketId;
-            console.log("Enviando Socket ID:", window.socketId);
-        } else {
-            console.warn("Socket ID ainda não está disponível!");
-        }
-    }, 500); // Aguarda a conexão antes de enviar requisição
 });
