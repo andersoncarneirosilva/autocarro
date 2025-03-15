@@ -28,14 +28,11 @@ window.Echo.connector.pusher.connection.bind('state_change', function(states) {
     console.log("Estado da conexão Pusher:", states);
     if (states.current === 'connected') {
         console.log("Conexão Pusher estabelecida com sucesso!");
+        // Ao conectar, tentamos capturar o socketId
+        const socketId = window.Echo.socketId();
+        console.log("Socket ID conectado:", socketId);
+        window.socketId = socketId; // Atualiza o socket ID global
     }
-});
-
-// Aguarde o Pusher se conectar antes de capturar o Socket ID
-window.Echo.connector.pusher.connection.bind('connected', function () {
-    console.log("Socket ID conectado:", window.Echo.socketId());
-    // Atualiza a variável para garantir que o socketId seja enviado
-    window.socketId = window.Echo.socketId();
 });
 
 // Adicionar o socket_id às requisições Livewire apenas após a conexão
@@ -47,5 +44,5 @@ document.addEventListener("livewire:request", (event) => {
         } else {
             console.warn("Socket ID ainda não está disponível!");
         }
-    }, 500); // Aguarda conexão antes de enviar requisição
+    }, 500); // Aguarda a conexão antes de enviar requisição
 });

@@ -35,7 +35,7 @@ return [
             'enable_dashboard' => true,  // Habilite para monitorar o painel
             'enable_client_messages' => env('WEBSOCKETS_ENABLE_CLIENT_MESSAGES', false),
             'enable_statistics' => env('WEBSOCKETS_ENABLE_STATISTICS', false),
-            'use_tls' => false,
+            'use_tls' => true,
         ],
     ],
 
