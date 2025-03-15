@@ -32,3 +32,15 @@ window.Echo.connector.pusher.connection.bind('state_change', function(states) {
         window.socketId = socketId; // Armazene o socket ID globalmente
     }
 });
+
+document.addEventListener("livewire:request", (event) => {
+    setTimeout(() => {
+        const socketId = window.Echo.socketId();
+        if (socketId) {
+            event.detail.headers["X-Socket-ID"] = socketId;
+            console.log("Enviando Socket ID:", socketId);
+        } else {
+            console.warn("Socket ID ainda não está disponível!");
+        }
+    }, 500); // Aguarda conexão antes de enviar requisição
+});

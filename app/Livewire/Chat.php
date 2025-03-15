@@ -7,7 +7,7 @@ use App\Models\Message;
 use App\Events\NewMessage;
 use Illuminate\Support\Collection;
 use Livewire\Attributes\On;
-
+use Pusher\PusherException;
 class Chat extends Component
 {
     public Collection $messages;
@@ -80,7 +80,10 @@ class Chat extends Component
     {
         // Ordenar as mensagens antes de renderizar
         $this->messages = $this->messages->sortBy('id');
-
+        $socketId = request()->header('X-Socket-ID');
+        if (!$socketId) {
+            throw new PusherException('Chap.php: Socket ID não recebido');
+        }
         return view('livewire.chat');
     }
 }
