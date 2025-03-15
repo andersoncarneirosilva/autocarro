@@ -30,16 +30,18 @@ class NewMessage implements ShouldBroadcastNow
     {
         $socketId = request()->header('X-Socket-ID');
         
-        Log::info('Socket ID recebido:', ['socket_id' => $socketId]); // Log para verificar o valor do socketId
-        
-        if (!$socketId) {
-            throw new PusherException('Socket ID não recebido');
+        Log::info('Verificando Socket ID recebido:', ['socket_id' => $socketId]);
+    
+        if (!$socketId || $socketId === 'undefined') {
+            // Melhor tratamento de erro
+            throw new PusherException('Socket ID não recebido corretamente');
         }
     
         Log::info('Transmitindo para o canal: chat', ['message' => $this->message->content]);
     
         return new Channel('chat');  // Nome do canal no frontend
     }
+    
     
 
     public function broadcastWith()
