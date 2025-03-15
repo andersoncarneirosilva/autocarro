@@ -7,39 +7,34 @@ Broadcast::routes(); // Isso cria as rotas necessárias para autenticação de c
 
 // Canal privado para o usuário (exemplo: "chat.{userId}")
 Broadcast::channel('chat.{userId}', function ($user, $userId) {
-    Log::info('Autenticando canal para o usuário:', [
+    Log::info('Autenticando canal:', [
         'user_id' => $user->id ?? 'não autenticado',
         'canal' => $userId,
-        'socket_id' => request()->socket_id ?? 'não definido'
+        'socket_id' => request()->header('X-Socket-ID') ?? 'não definido'
     ]);
 
-    // Certifique-se de que o usuário tem permissão para acessar o canal
-    $authenticated = (int) $user->id === (int) $userId;
-
-    if ($authenticated) {
-        Log::info('Usuário autenticado no canal', ['user_id' => $user->id]);
-    } else {
-        Log::error('Usuário não autorizado a acessar o canal', ['user_id' => $user->id]);
-    }
-
-    return $authenticated;
+    return (int) $user->id === (int) $userId;
 });
 
 
+
+// Rota para autenticar a conexão com o Pusher
 Route::post('/broadcasting/auth', function (Request $request) {
-    Log::info('Autenticação de WebSocket chamada.', [
-        'socket_id' => $request->socket_id,
+    Log::info('Recebendo autenticação WebSocket', [
         'user_id' => auth()->id(),
+        'socket_id' => $request->socket_id
     ]);
-    
-    if (auth()->check()) {
-        Log::info('Usuário autenticado:', ['user_id' => auth()->id()]);
-    } else {
+
+    // Verifica se o usuário está autenticado
+    if (!auth()->check()) {
         Log::error('Usuário não autenticado.');
+        return response()->json(['error' => 'Usuário não autenticado'], 403);
     }
 
+    // Retorna a resposta de sucesso para o Pusher
     return response()->json(['message' => 'Autenticado']);
 });
+
 
 
 Broadcast::channel('chat', function ($user) {
