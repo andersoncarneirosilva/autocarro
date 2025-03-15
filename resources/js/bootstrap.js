@@ -18,7 +18,7 @@
 import Echo from 'laravel-echo';
 import Pusher from 'pusher-js';
 
-// Definir o Pusher no escopo global
+// Definir Pusher no escopo global
 window.Pusher = Pusher;
 
 window.Echo = new Echo({
@@ -31,7 +31,7 @@ window.Echo = new Echo({
     forceTLS: true,
     enabledTransports: ['wss'], // Apenas WebSocket seguro
     disableStats: true,
-    authEndpoint: '/broadcasting/auth', // Confirme que este endpoint está ativo
+    authEndpoint: '/broadcasting/auth', // Endpoint de autenticação
     auth: {
         headers: {
             'X-CSRF-TOKEN': document.head.querySelector('meta[name="csrf-token"]').content,
@@ -39,23 +39,21 @@ window.Echo = new Echo({
     },
 });
 
-
-// Exemplo de como se conectar a um canal privado
-window.Echo.private('chat.' + userId, {
-    auth: {
-        headers: {
-            'X-CSRF-TOKEN': document.head.querySelector('meta[name="csrf-token"]').content,
-            'X-Socket-ID': window.Echo.socketId() // Envia o socket ID manualmente
-        }
+// Aguardar o carregamento da página antes de acessar userId
+document.addEventListener('DOMContentLoaded', function () {
+    if (typeof userId !== 'undefined' && userId !== null) {
+        console.log(`Iniciando escuta no canal privado chat.${userId}...`);
+        
+        window.Echo.private(`chat.${userId}`)
+            .listen('NewMessage', (event) => {
+                console.log("Nova mensagem recebida:", event);
+            });
+    } else {
+        console.warn("Usuário não autenticado ou userId não definido.");
     }
-})
-.listen('NewMessage', (event) => {
-    console.log(event);
 });
 
-
-// Configuração de debug para inspecionar o socket_id
+// Debug: Exibir o socket ID após conexão
 window.Echo.connector.pusher.connection.bind('connected', function() {
-    console.log("Socket ID:", window.Echo.socketId());
+    console.log("Socket ID conectado:", window.Echo.socketId());
 });
-
