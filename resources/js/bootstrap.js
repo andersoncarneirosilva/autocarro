@@ -41,12 +41,21 @@ window.Echo = new Echo({
 
 
 // Exemplo de como se conectar a um canal privado
-window.Echo.private('chat.' + userId)
-    .listen('NewMessage', (event) => {
-        console.log(event);
-    });
+window.Echo.private('chat.' + userId, {
+    auth: {
+        headers: {
+            'X-CSRF-TOKEN': document.head.querySelector('meta[name="csrf-token"]').content,
+            'X-Socket-ID': window.Echo.socketId() // Envia o socket ID manualmente
+        }
+    }
+})
+.listen('NewMessage', (event) => {
+    console.log(event);
+});
+
 
 // Configuração de debug para inspecionar o socket_id
-window.Echo.connector.pusher.connection.bind('state_change', function(states) {
-    console.log('Estado do Pusher:', states);
+window.Echo.connector.pusher.connection.bind('connected', function() {
+    console.log("Socket ID:", window.Echo.socketId());
 });
+
