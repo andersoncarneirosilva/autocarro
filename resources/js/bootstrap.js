@@ -25,6 +25,9 @@ window.Echo = new Echo({
 
 console.log("Instância de Echo criada com sucesso!");
 
+
+console.log("Instância de Echo criada com sucesso!");
+
 window.Echo.connector.pusher.connection.bind('state_change', function(states) {
     console.log("Estado da conexão Pusher:", states); // Verifique os estados
 
@@ -44,6 +47,7 @@ window.Echo.connector.pusher.connection.bind('state_change', function(states) {
     }
 });
 
+
 document.addEventListener("livewire:request", (event) => {
     const checkSocketIdInterval = setInterval(() => {
         const socketId = window.socketId;
@@ -56,3 +60,13 @@ document.addEventListener("livewire:request", (event) => {
         }
     }, 200); // Verifica a cada 200ms até o socketId estar disponível
 });
+
+
+
+Echo.channel('chat.' + userId)
+    .listen('NewMessage', (event) => {
+        console.log('Nova mensagem recebida:', event.message);
+    })
+    .error((error) => {
+        console.error('Erro de Pusher:', error);
+    });
