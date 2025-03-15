@@ -6,8 +6,15 @@ Broadcast::routes(); // Isso cria as rotas necessárias para autenticação de c
 
 // Canal privado para o usuário (exemplo: "chat.{userId}")
 Broadcast::channel('chat.{userId}', function ($user, $userId) {
-    return (int) $user->id === (int) $userId;  // Garante que o usuário só possa ouvir seu próprio canal
+    \Log::info('Tentativa de conexão:', [
+        'user_id' => $user->id ?? 'não autenticado',
+        'canal' => $userId,
+        'socket_id' => request()->socket_id ?? 'não definido'
+    ]);
+
+    return (int) $user->id === (int) $userId;
 });
+
 
 // Canal público para todos os usuários (exemplo: "events")
 Broadcast::channel('events', function ($user) {
