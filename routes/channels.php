@@ -25,6 +25,9 @@ Route::post('/broadcasting/auth', function (Request $request) {
     return response()->json(['message' => 'Autenticado']);
 });
 
+Broadcast::channel('chat', function ($user) {
+    return $user !== null;
+});
 
 // Canal público para todos os usuários (exemplo: "events")
 Broadcast::channel('events', function ($user) {
