@@ -71,7 +71,10 @@
         <script src="{{ asset('build/' . $jsFile) }}" defer></script>
     @endif
                         
-
+    <script>
+        var userId = @json(auth()->id());
+    </script>
+    
 
     <!-- Plugin css -->
     <link rel="stylesheet" href="{{ url('assets/vendor/jquery-toast-plugin/jquery.toast.min.css') }}">
