@@ -18,24 +18,27 @@
 import Echo from 'laravel-echo';
 import Pusher from 'pusher-js';
 
-// Configurar o Pusher no Laravel Echo
+// Definir o Pusher no escopo global
 window.Pusher = Pusher;
 
 window.Echo = new Echo({
     broadcaster: 'pusher',
-    key: import.meta.env.VITE_PUSHER_APP_KEY,  // Pega a chave do .env
-    cluster: import.meta.env.VITE_PUSHER_APP_CLUSTER, // Pega o cluster do .env
-    wsHost: window.location.hostname,  // Usa o hostname atual, útil para produção
-    wsPort: 443,  // Pusher usa o porto 443 para HTTPS
-    forceTLS: true,  // Garante que a conexão será via HTTPS
-    disableStats: true,  // Desabilita estatísticas para melhorar performance
-    enabledTransports: ['wss', 'ws'],  // Prioriza WebSocket seguro
+    key: import.meta.env.VITE_PUSHER_APP_KEY,
+    cluster: import.meta.env.VITE_PUSHER_APP_CLUSTER,
+    wsHost: import.meta.env.VITE_PUSHER_HOST || window.location.hostname,
+    wsPort: 443,
+    wssPort: 443,
+    forceTLS: true,
+    enabledTransports: ['wss'], // Apenas WebSocket seguro
+    disableStats: true,
+    authEndpoint: '/broadcasting/auth', // Confirme que este endpoint está ativo
     auth: {
         headers: {
             'X-CSRF-TOKEN': document.head.querySelector('meta[name="csrf-token"]').content,
         },
     },
 });
+
 
 // Exemplo de como se conectar a um canal privado
 window.Echo.private('chat.' + userId)
