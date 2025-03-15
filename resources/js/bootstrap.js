@@ -21,6 +21,11 @@ window.Echo = new Echo({
     },
 });
 
+// Log do estado da conexão WebSocket
+window.Echo.connector.pusher.connection.bind('state_change', function(states) {
+    console.log("Estado da conexão Pusher:", states);
+});
+
 // Aguarde o Pusher se conectar antes de capturar o Socket ID
 window.Echo.connector.pusher.connection.bind('connected', function () {
     console.log("Socket ID conectado:", window.Echo.socketId());
