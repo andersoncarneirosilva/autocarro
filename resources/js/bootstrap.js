@@ -5,13 +5,12 @@ window.Pusher = Pusher;
 
 window.Echo = new Echo({
     broadcaster: 'pusher',
-    key: import.meta.env.VITE_PUSHER_APP_KEY,
+    key: import.meta.env.VITE_PUSHER_APP_KEY, // Pega as variáveis do VITE
     cluster: import.meta.env.VITE_PUSHER_APP_CLUSTER,
-    wsHost: import.meta.env.VITE_PUSHER_HOST || window.location.hostname,
-    wsPort: 443,
+    wsHost: import.meta.env.VITE_PUSHER_HOST,
+    wsPort: import.meta.env.VITE_PUSHER_PORT,
     wssPort: 443,
     forceTLS: true,
-    encrypted: true,
     enabledTransports: ['wss'],
     disableStats: true,
     authEndpoint: '/broadcasting/auth',
@@ -21,6 +20,7 @@ window.Echo = new Echo({
         },
     },
 });
+
 
 console.log("Instância de Echo criada com sucesso!");
 window.Echo.connector.pusher.connection.bind('state_change', function(states) {
