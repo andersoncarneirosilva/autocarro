@@ -37,6 +37,7 @@ class Chat extends Component
 
     // Capturar o socket_id corretamente
     $socketId = request()->header('X-Socket-ID');
+    \Log::info('Socket ID recebido:', ['socket_id' => $socketId]); // Verifique o valor no log
 
     if (!$socketId || $socketId === 'undefined') {
         \Log::error('Socket ID não foi recebido corretamente');

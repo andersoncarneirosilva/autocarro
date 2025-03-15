@@ -35,14 +35,16 @@ window.Echo.connector.pusher.connection.bind('state_change', function(states) {
 
 // Alteração para garantir que o socketId seja enviado quando estiver disponível
 document.addEventListener("livewire:request", (event) => {
-    setTimeout(() => {
+    const checkSocketIdInterval = setInterval(() => {
         const socketId = window.Echo.socketId();
         if (socketId) {
             event.detail.headers["X-Socket-ID"] = socketId;
             console.log("Enviando Socket ID:", socketId);
+            clearInterval(checkSocketIdInterval); // Parar a verificação quando o socketId for encontrado
         } else {
             console.warn("Socket ID ainda não está disponível!");
         }
-    }, 500); // Aguarda conexão antes de enviar requisição
+    }, 100); // Verifica a cada 100ms até o socketId estar disponível
 });
+
 
