@@ -33,7 +33,7 @@ class NewMessage implements ShouldBroadcastNow
         Log::info('Verificando Socket ID recebido:', ['socket_id' => $socketId]);
     
         if (!$socketId || $socketId === 'undefined') {
-            // Melhor tratamento de erro
+            Log::error('Socket ID não foi recebido corretamente');
             throw new PusherException('Socket ID não recebido corretamente');
         }
     
@@ -41,6 +41,7 @@ class NewMessage implements ShouldBroadcastNow
     
         return new Channel('chat');  // Nome do canal no frontend
     }
+    
     
     
 
