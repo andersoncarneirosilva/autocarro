@@ -31,10 +31,6 @@ window.Echo = new Echo({
         },
     },
 });
-console.log("VITE_PUSHER_APP_KEY:", import.meta.env.VITE_PUSHER_APP_KEY);
-console.log("VITE_PUSHER_APP_CLUSTER:", import.meta.env.VITE_PUSHER_APP_CLUSTER);
-console.log("VITE_PUSHER_HOST:", import.meta.env.VITE_PUSHER_HOST);
-console.log("VITE_PUSHER_PORT:", import.meta.env.VITE_PUSHER_PORT);
 
 console.log("Instância de Echo criada com sucesso!");
 
@@ -57,7 +53,6 @@ window.Echo.connector.pusher.connection.bind('state_change', function(states) {
     }
 });
 
-
 document.addEventListener("livewire:request", (event) => {
     const checkSocketIdInterval = setInterval(() => {
         const socketId = window.socketId;
@@ -68,6 +63,5 @@ document.addEventListener("livewire:request", (event) => {
         } else {
             console.warn("Socket ID ainda não está disponível!");
         }
-    }, 100); // Verifica a cada 100ms até o socketId estar disponível
+    }, 200); // Verifica a cada 200ms até o socketId estar disponível
 });
-
