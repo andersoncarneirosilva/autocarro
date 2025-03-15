@@ -40,28 +40,27 @@ Route::middleware(['auth'])->group(function () {
 
     });
 
-    Route::get('/test-broadcast', function (Request $request) {
-        $message = Message::create([
-            'user_id' => 1, // ID do usuário que enviou a mensagem
-            'content' => 'Mensagem de teste Pusher',
-            'sender_id' => 1
-        ]);
     
-        // Obter o Socket ID do cabeçalho da requisição
-        $socketId = $request->header('X-Socket-ID');
-    
-        if (!$socketId) {
-            return response()->json(['error' => 'Socket ID não encontrado'], 400);
-        }
-    
-        // Definir o socket ID para evitar loops de broadcast
-        Broadcast::socket($socketId);
-    
-        // Disparar o evento
-        event(new NewMessage($message));
-    
-        return 'Broadcast enviado!';
-    });
+Route::get('/test-broadcast', function (Request $request) {
+    $socketId = $request->header('X-Socket-ID');
+
+    Log::info('Teste de Broadcast - Socket ID Recebido:', ['socket_id' => $socketId]);
+
+    if (!$socketId) {
+        Log::error('Socket ID não foi recebido!');
+        return response()->json(['error' => 'Socket ID não foi recebido!'], 400);
+    }
+
+    $message = Message::create([
+        'user_id' => 1,
+        'content' => 'Mensagem de teste Pusher',
+        'sender_id' => '1'
+    ]);
+
+    event(new NewMessage($message));
+
+    return response()->json(['message' => 'Broadcast enviado!', 'socket_id' => $socketId]);
+});
     
     // Em routes/web.php ou routes/api.php
 Route::post('/messages', [MessageController::class, 'store']);
