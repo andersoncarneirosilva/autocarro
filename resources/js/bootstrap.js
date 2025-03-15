@@ -23,15 +23,6 @@ window.Echo = new Echo({
     },
 });
 
-Echo.channel('chat.' + userId)
-    .listen('NewMessage', (event) => {
-        console.log('Nova mensagem recebida:', event.message);
-    })
-    .error((error) => {
-        console.error('Erro de Pusher:', error);
-    });
-
-    
 console.log("Instância de Echo criada com sucesso!");
 
 window.Echo.connector.pusher.connection.bind('state_change', function(states) {
