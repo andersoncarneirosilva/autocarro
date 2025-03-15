@@ -43,9 +43,8 @@ class Chat extends Component
         \Log::info('Socket ID válido:', ['socket_id' => $socketId]);
     }
 
-    broadcast(new NewMessage($message))
-        ->toOthers()
-        ->socket($socketId); // Garante que o socket ID seja enviado corretamente
+    broadcast(new NewMessage($message))->toOthers();
+
 
     $this->dispatch('messageSent', message: $message->toArray());
 

@@ -26,7 +26,7 @@ window.Echo.connector.pusher.connection.bind('connected', function () {
     console.log("Socket ID conectado:", window.Echo.socketId());
 });
 
-// Adicionar o socket_id às requisições Livewire apenas após conexão
+// Adicionar o socket_id às requisições Livewire apenas após a conexão
 document.addEventListener("livewire:request", (event) => {
     setTimeout(() => {
         if (window.Echo.socketId()) {
