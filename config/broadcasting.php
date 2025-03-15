@@ -43,6 +43,7 @@ return [
                 'host' => env('PUSHER_HOST'),
                 'port' => env('PUSHER_PORT'),
                 'scheme' => env('PUSHER_SCHEME'),
+                'log' => true,  // Habilite o log para depuração
             ],
         ],
 
