@@ -3,6 +3,8 @@ import Pusher from 'pusher-js';
 
 window.Pusher = Pusher;
 
+console.log("Inicializando Pusher e Echo...");
+
 window.Echo = new Echo({
     broadcaster: 'pusher',
     key: import.meta.env.VITE_PUSHER_APP_KEY,
@@ -21,9 +23,12 @@ window.Echo = new Echo({
     },
 });
 
-// Log para acompanhar o estado da conexão
+// Verifique a conexão Pusher
 window.Echo.connector.pusher.connection.bind('state_change', function(states) {
     console.log("Estado da conexão Pusher:", states);
+    if (states.current === 'connected') {
+        console.log("Conexão Pusher estabelecida com sucesso!");
+    }
 });
 
 // Aguarde o Pusher se conectar antes de capturar o Socket ID
