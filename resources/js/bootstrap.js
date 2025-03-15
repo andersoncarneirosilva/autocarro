@@ -1,24 +1,6 @@
-// import Echo from 'laravel-echo';
-// import Pusher from 'pusher-js';
-
-// window.Pusher = Pusher;
-
-// window.Echo = new Echo({
-//     broadcaster: 'pusher',
-//     key: import.meta.env.VITE_PUSHER_APP_KEY,  // Pega a chave do .env
-//     cluster: import.meta.env.VITE_PUSHER_APP_CLUSTER, // Pega o cluster do .env
-//     wsHost: window.location.hostname,
-//     wsPort: 6001,  // Porta do WebSocket do Laravel
-//     forceTLS: false,
-//     disableStats: true,
-//     enabledTransports: ['ws', 'wss'],
-// });
-
-
 import Echo from 'laravel-echo';
 import Pusher from 'pusher-js';
 
-// Definir o Pusher no escopo global
 window.Pusher = Pusher;
 
 window.Echo = new Echo({
@@ -39,17 +21,19 @@ window.Echo = new Echo({
     },
 });
 
-// Adicionar o socket_id às requisições Livewire
-document.addEventListener("livewire:request", (event) => {
-    if (window.Echo.socketId()) {
-        event.detail.headers["X-Socket-ID"] = window.Echo.socketId();
-        console.log("Enviando Socket ID:", window.Echo.socketId()); // Debug
-    } else {
-        console.warn("Socket ID não encontrado!");
-    }
-});
-
-// Debug para garantir que o socket ID está conectado
+// Aguarde o Pusher se conectar antes de capturar o Socket ID
 window.Echo.connector.pusher.connection.bind('connected', function () {
     console.log("Socket ID conectado:", window.Echo.socketId());
+});
+
+// Adicionar o socket_id às requisições Livewire apenas após conexão
+document.addEventListener("livewire:request", (event) => {
+    setTimeout(() => {
+        if (window.Echo.socketId()) {
+            event.detail.headers["X-Socket-ID"] = window.Echo.socketId();
+            console.log("Enviando Socket ID:", window.Echo.socketId());
+        } else {
+            console.warn("Socket ID ainda não está disponível!");
+        }
+    }, 500); // Aguarda conexão antes de enviar requisição
 });
