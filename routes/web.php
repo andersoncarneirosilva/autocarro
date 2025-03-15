@@ -41,7 +41,7 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/test-broadcast', function () {
         $message = Message::create([
             'user_id' => 1, // ID do usuário que enviou a mensagem (ajuste conforme necessário)
-            'content' => 'Mensagem de teste Pusher'
+            'content' => 'Mensagem de teste Pusher',
             'sender_id' => '1'
         ]);
     
