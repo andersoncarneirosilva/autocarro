@@ -19,21 +19,7 @@ Broadcast::channel('chat.{userId}', function ($user, $userId) {
 
 
 // Rota para autenticar a conexão com o Pusher
-Route::post('/broadcasting/auth', function (Request $request) {
-    Log::info('Recebendo autenticação WebSocket', [
-        'user_id' => auth()->id(),
-        'socket_id' => $request->socket_id
-    ]);
 
-    // Verifica se o usuário está autenticado
-    if (!auth()->check()) {
-        Log::error('Usuário não autenticado.');
-        return response()->json(['error' => 'Usuário não autenticado'], 403);
-    }
-
-    // Retorna a resposta de sucesso para o Pusher
-    return response()->json(['message' => 'Autenticado']);
-});
 
 
 

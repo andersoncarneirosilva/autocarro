@@ -31,7 +31,21 @@ use App\Http\Livewire\Chat;
 Route::middleware(['auth'])->group(function () {
     // Em routes/web.php ou routes/api.php
 Route::post('/messages', [MessageController::class, 'store']);
+Route::post('/broadcasting/auth', function (Request $request) {
+    Log::info('Recebendo autenticação WebSocket', [
+        'user_id' => auth()->id(),
+        'socket_id' => $request->socket_id
+    ]);
 
+    // Verifica se o usuário está autenticado
+    if (!auth()->check()) {
+        Log::error('Usuário não autenticado.');
+        return response()->json(['error' => 'Usuário não autenticado'], 403);
+    }
+
+    // Retorna a resposta de sucesso para o Pusher
+    return response()->json(['message' => 'Autenticado']);
+});
 
     Route::get('/test', \App\Livewire\TestComponent::class);
     Route::get('/chat', \App\Livewire\Chat::class)->name('chat');
