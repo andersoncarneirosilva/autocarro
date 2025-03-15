@@ -22,7 +22,7 @@ window.Echo = new Echo({
     wsPort: import.meta.env.VITE_PUSHER_PORT,
     wssPort: 443,
     forceTLS: true,
-    enabledTransports: ['wss'],
+    enabledTransports: ['ws', 'wss'],
     disableStats: true,
     authEndpoint: '/broadcasting/auth',
     auth: {
