@@ -3,6 +3,7 @@
 use App\Http\Controllers\PaymentController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
+use Illuminate\Support\Facades\Log;
 
 // Rota para criar preferência
 Route::post('/create-preference', [PaymentController::class, 'createPreference'])->middleware('auth:sanctum');
@@ -21,4 +22,11 @@ Route::post('/webhook-payment', [PaymentController::class, 'handleWebhook']);
 // Rota para retornar usuário autenticado (semelhante ao exemplo)
 Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
+});
+
+Route::post('/broadcasting/auth', function (\Illuminate\Http\Request $request) {
+    Log::info('Recebendo autenticação WebSocket', [
+        'user' => auth()->id(),
+        'socket_id' => $request->socket_id
+    ]);
 });
