@@ -35,7 +35,7 @@ class Chat extends Component
         'sender_id' => auth()->id(),
     ]);
 
-    // Capturar o socket_id diretamente da requisição
+    // Capturar o socket_id corretamente
     $socketId = request()->header('X-Socket-ID');
 
     if (!$socketId || $socketId === 'undefined') {
@@ -44,7 +44,6 @@ class Chat extends Component
         \Log::info('Socket ID válido:', ['socket_id' => $socketId]);
     }
 
-    // Enviar o evento de mensagem, excluindo o usuário que enviou
     broadcast(new NewMessage($message))->toOthers();
 
     $this->dispatch('messageSent', message: $message->toArray());
@@ -52,6 +51,7 @@ class Chat extends Component
     $this->newMessage = '';
     $this->messages = Message::orderBy('id', 'asc')->get();
 }
+
 
 
     #[On('messageSent')]
