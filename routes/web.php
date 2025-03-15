@@ -45,15 +45,17 @@ Route::middleware(['auth'])->group(function () {
             'sender_id' => 1
         ]);
     
-        // Obtemos o Socket ID do cabeçalho da requisição (caso venha de um frontend)
+        // Obter o Socket ID do cabeçalho da requisição
         $socketId = $request->header('X-Socket-ID');
     
         if (!$socketId) {
             return response()->json(['error' => 'Socket ID não encontrado'], 400);
         }
     
-        // Transmitir o evento especificando o socket_id
+        // Definir o socket ID para evitar loops de broadcast
         Broadcast::socket($socketId);
+    
+        // Disparar o evento
         event(new NewMessage($message));
     
         return 'Broadcast enviado!';
