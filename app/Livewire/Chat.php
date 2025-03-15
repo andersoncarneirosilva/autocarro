@@ -19,7 +19,7 @@ class Chat extends Component
         $this->messages = Message::orderBy('id', 'asc')->get();
     }
 
-    public function sendMessage()
+    public function sendMessage($socketId)
 {
     if (trim($this->newMessage) === '') {
         return;
@@ -34,23 +34,21 @@ class Chat extends Component
         'sender_id' => auth()->id(),
     ]);
 
-    // Capturar o socket_id corretamente
-    $socketId = request()->header('X-Socket-ID');
-
+    // Verificar e logar o socketId
     if (!$socketId || $socketId === 'undefined') {
-        \Log::error('Socket ID não foi recebido corretamente');
+        \Log::error('Socket ID não foi recebido');
     } else {
         \Log::info('Socket ID válido:', ['socket_id' => $socketId]);
     }
 
     broadcast(new NewMessage($message))->toOthers();
 
-
     $this->dispatch('messageSent', message: $message->toArray());
 
     $this->newMessage = '';
     $this->messages = Message::orderBy('id', 'asc')->get();
 }
+
 
 
 
