@@ -34,7 +34,7 @@ window.Echo = new Echo({
 
 console.log("Instância de Echo criada com sucesso!");
 
-pusher.Echo.connector.pusher.connection.bind('state_change', function(states) {
+window.Echo.connector.pusher.connection.bind('state_change', function(states) {
     console.log("Estado da conexão Pusher:", states); // Verifique os estados
 
     if (states.current === 'connected') {
