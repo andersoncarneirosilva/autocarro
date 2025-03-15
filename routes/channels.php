@@ -16,6 +16,15 @@ Broadcast::channel('chat.{userId}', function ($user, $userId) {
     return (int) $user->id === (int) $userId;
 });
 
+Route::post('/broadcasting/auth', function (Request $request) {
+    Log::info('Recebendo autenticação WebSocket', [
+        'user_id' => auth()->id(),
+        'socket_id' => $request->socket_id
+    ]);
+
+    return response()->json(['message' => 'Autenticado']);
+});
+
 
 // Canal público para todos os usuários (exemplo: "events")
 Broadcast::channel('events', function ($user) {

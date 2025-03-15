@@ -18,7 +18,7 @@
 import Echo from 'laravel-echo';
 import Pusher from 'pusher-js';
 
-// Definir Pusher no escopo global
+// Definir o Pusher no escopo global
 window.Pusher = Pusher;
 
 window.Echo = new Echo({
@@ -29,9 +29,9 @@ window.Echo = new Echo({
     wsPort: 443,
     wssPort: 443,
     forceTLS: true,
-    enabledTransports: ['wss'], // Apenas WebSocket seguro
+    enabledTransports: ['wss'],
     disableStats: true,
-    authEndpoint: '/broadcasting/auth', // Endpoint de autenticação
+    authEndpoint: '/broadcasting/auth',
     auth: {
         headers: {
             'X-CSRF-TOKEN': document.head.querySelector('meta[name="csrf-token"]').content,
@@ -39,21 +39,17 @@ window.Echo = new Echo({
     },
 });
 
-// Aguardar o carregamento da página antes de acessar userId
-document.addEventListener('DOMContentLoaded', function () {
-    if (typeof userId !== 'undefined' && userId !== null) {
-        console.log(`Iniciando escuta no canal privado chat.${userId}...`);
-        
-        window.Echo.private(`chat.${userId}`)
-            .listen('NewMessage', (event) => {
-                console.log("Nova mensagem recebida:", event);
-            });
+// Adicionar o socket_id às requisições Livewire
+document.addEventListener("livewire:request", (event) => {
+    if (window.Echo.socketId()) {
+        event.detail.headers["X-Socket-ID"] = window.Echo.socketId();
+        console.log("Enviando Socket ID:", window.Echo.socketId()); // Debug
     } else {
-        console.warn("Usuário não autenticado ou userId não definido.");
+        console.warn("Socket ID não encontrado!");
     }
 });
 
-// Debug: Exibir o socket ID após conexão
-window.Echo.connector.pusher.connection.bind('connected', function() {
+// Debug para garantir que o socket ID está conectado
+window.Echo.connector.pusher.connection.bind('connected', function () {
     console.log("Socket ID conectado:", window.Echo.socketId());
 });

@@ -25,29 +25,36 @@ class Chat extends Component
         return; // Evita mensagens vazias
     }
 
-    // Garantir que o usuário esteja autenticado
     if (!auth()->check()) {
-        return; // Se não estiver autenticado, não envia mensagem
+        return; // Garante que o usuário esteja autenticado
     }
 
-    // Criar a nova mensagem no banco, incluindo o sender_id
+    // Criar a nova mensagem no banco
     $message = Message::create([
         'content' => $this->newMessage,
-        'sender_id' => auth()->id(), // Associa o usuário autenticado à mensagem
+        'sender_id' => auth()->id(),
     ]);
 
-    // Disparar evento WebSocket para outros navegadores
-    broadcast(new NewMessage($message))->toOthers();
+    // Capturar o socket_id do frontend
+    $socketId = request()->header('X-Socket-ID');
 
-    // Disparar evento Livewire para atualizar a interface
+    if (!$socketId) {
+        \Log::error('Socket ID não encontrado na requisição');
+    } else {
+        \Log::info('Socket ID recebido:', ['socket_id' => $socketId]);
+    }
+
+    // Disparar evento WebSocket para outros navegadores
+    broadcast(new NewMessage($message))->toOthers()->socket($socketId); // 🚀 Envia o socket ID
+
+    // Disparar evento Livewire
     $this->dispatch('messageSent', message: $message->toArray());
 
-    // Limpar o campo de entrada
+    // Limpar input e atualizar mensagens
     $this->newMessage = '';
-
-    // Atualizar a lista de mensagens novamente com a nova mensagem
     $this->messages = Message::orderBy('id', 'asc')->get();
 }
+
 
 
 
