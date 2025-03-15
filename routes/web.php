@@ -27,7 +27,7 @@ use Illuminate\Support\Facades\Route;
 use Livewire\Livewire;
 use App\Http\Livewire\Chat;
 use App\Events\NewMessage;
-
+use App\Models\Message;
 Route::middleware(['auth'])->group(function () {
 
     Route::get('/test-pusher', function () {
