@@ -1,4 +1,5 @@
 import './bootstrap';
+Pusher.logToConsole = true;
 
 document.addEventListener('DOMContentLoaded', function () {
     console.log("Iniciando escuta no canal 'app.js'...");

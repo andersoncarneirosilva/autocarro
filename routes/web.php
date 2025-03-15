@@ -29,6 +29,24 @@ use App\Http\Livewire\Chat;
 
 
 Route::middleware(['auth'])->group(function () {
+
+    Route::get('/test-pusher', function () {
+        try {
+            Broadcast::routes();
+    
+            event(new \App\Events\NewMessage('Teste Pusher'));
+    
+            return response()->json(['status' => 'Enviado com sucesso']);
+        } catch (\Exception $e) {
+            Log::error('Erro no Pusher:', ['message' => $e->getMessage()]);
+            return response()->json(['error' => $e->getMessage()], 500);
+        }
+    });
+    Route::get('/test-broadcast', function () {
+        event(new \App\Events\NewMessage('Mensagem de teste Pusher'));
+        return 'Broadcast enviado!';
+    });
+    
     // Em routes/web.php ou routes/api.php
 Route::post('/messages', [MessageController::class, 'store']);
 Route::post('/broadcasting/auth', function (Request $request) {
