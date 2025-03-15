@@ -21,37 +21,38 @@ class Chat extends Component
     }
 
     public function sendMessage()
-    {
-        if (trim($this->newMessage) === '') {
-            return;
-        }
-
-        if (!auth()->check()) {
-            return;
-        }
-
-        $message = Message::create([
-            'content' => $this->newMessage,
-            'sender_id' => auth()->id(),
-        ]);
-
-        // Capturar o socket_id diretamente da requisição
-        $socketId = request()->header('X-Socket-ID');
-
-        if (!$socketId || $socketId === 'undefined') {
-            \Log::error('Socket ID não foi recebido corretamente');
-        } else {
-            \Log::info('Socket ID válido:', ['socket_id' => $socketId]);
-        }
-
-        // Enviar o evento de mensagem, excluindo o usuário que enviou
-        broadcast(new NewMessage($message))->toOthers();
-
-        $this->dispatch('messageSent', message: $message->toArray());
-
-        $this->newMessage = '';
-        $this->messages = Message::orderBy('id', 'asc')->get();
+{
+    if (trim($this->newMessage) === '') {
+        return;
     }
+
+    if (!auth()->check()) {
+        return;
+    }
+
+    $message = Message::create([
+        'content' => $this->newMessage,
+        'sender_id' => auth()->id(),
+    ]);
+
+    // Capturar o socket_id diretamente da requisição
+    $socketId = request()->header('X-Socket-ID');
+
+    if (!$socketId || $socketId === 'undefined') {
+        \Log::error('Socket ID não foi recebido corretamente');
+    } else {
+        \Log::info('Socket ID válido:', ['socket_id' => $socketId]);
+    }
+
+    // Enviar o evento de mensagem, excluindo o usuário que enviou
+    broadcast(new NewMessage($message))->toOthers();
+
+    $this->dispatch('messageSent', message: $message->toArray());
+
+    $this->newMessage = '';
+    $this->messages = Message::orderBy('id', 'asc')->get();
+}
+
 
     #[On('messageSent')]
     public function receiveMessage($message)
