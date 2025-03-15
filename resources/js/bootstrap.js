@@ -23,6 +23,7 @@ window.Echo = new Echo({
 
 console.log("Instância de Echo criada com sucesso!");
 
+// Definir o socketId globalmente após a conexão
 window.Echo.connector.pusher.connection.bind('state_change', function(states) {
     console.log("Estado da conexão Pusher:", states); // Verifique se está 'connected'
     if (states.current === 'connected') {
@@ -33,20 +34,13 @@ window.Echo.connector.pusher.connection.bind('state_change', function(states) {
     }
 });
 
-console.log("Socket ID antes de enviar:", window.Echo.socketId());
-
 // Alteração para garantir que o socketId seja enviado quando estiver disponível
 document.addEventListener("livewire:request", (event) => {
-    const checkSocketIdInterval = setInterval(() => {
-        const socketId = window.Echo.socketId();
-        if (socketId) {
-            event.detail.headers["X-Socket-ID"] = socketId;
-            console.log("Enviando Socket ID:", socketId);
-            clearInterval(checkSocketIdInterval); // Parar a verificação quando o socketId for encontrado
-        } else {
-            console.warn("Socket ID ainda não está disponível!");
-        }
-    }, 100); // Verifica a cada 100ms até o socketId estar disponível
+    const socketId = window.socketId;
+    if (socketId) {
+        event.detail.headers["X-Socket-ID"] = socketId;
+        console.log("Enviando Socket ID:", socketId);
+    } else {
+        console.warn("Socket ID ainda não está disponível!");
+    }
 });
-
-
