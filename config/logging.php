@@ -52,16 +52,15 @@ return [
 
     'channels' => [
         'stack' => [
-            'driver' => 'stack',
-            'channels' => ['single'],
-            'ignore_exceptions' => false,
-        ],
-
-        'single' => [
-            'driver' => 'single',
-            'path' => storage_path('logs/laravel.log'),
-            'level' => env('LOG_LEVEL', 'debug'),
-        ],
+        'driver' => 'stack',
+        'channels' => ['single', 'daily'],
+        'ignore_exceptions' => false,
+    ],
+    'single' => [
+        'driver' => 'single',
+        'path' => storage_path('logs/laravel.log'),
+        'level' => 'debug', // Asegure-se de que o nível de log está configurado como 'debug' ou mais permissivo
+    ],
 
         'daily' => [
             'driver' => 'daily',

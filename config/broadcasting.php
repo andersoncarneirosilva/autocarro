@@ -44,6 +44,7 @@ return [
                 'port' => env('PUSHER_PORT'),
                 'scheme' => env('PUSHER_SCHEME'),
                 'log' => true,  // Habilite o log para depuração
+                'log_level' => 'debug', // Habilite o log para diagnóstico
             ],
         ],
 
