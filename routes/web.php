@@ -38,13 +38,22 @@ Route::middleware(['auth'])->group(function () {
 
     });
 
-    Route::get('/test-broadcast', function () {
+    Route::get('/test-broadcast', function (Request $request) {
         $message = Message::create([
-            'user_id' => 1, // ID do usuário que enviou a mensagem (ajuste conforme necessário)
+            'user_id' => 1, // ID do usuário que enviou a mensagem
             'content' => 'Mensagem de teste Pusher',
-            'sender_id' => '1'
+            'sender_id' => 1
         ]);
     
+        // Obtemos o Socket ID do cabeçalho da requisição (caso venha de um frontend)
+        $socketId = $request->header('X-Socket-ID');
+    
+        if (!$socketId) {
+            return response()->json(['error' => 'Socket ID não encontrado'], 400);
+        }
+    
+        // Transmitir o evento especificando o socket_id
+        Broadcast::socket($socketId);
         event(new NewMessage($message));
     
         return 'Broadcast enviado!';
