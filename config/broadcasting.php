@@ -16,7 +16,6 @@ return [
     */
 
     'default' => env('BROADCAST_DRIVER', 'pusher'),
-    
 
     /*
     |--------------------------------------------------------------------------
@@ -47,15 +46,14 @@ return [
             ],
         ],
 
-
-
-
-        // Se estiver usando WebSockets
+        // Remova a configuração do WebSockets se não estiver usando o servidor de WebSockets do Laravel
+        /*
         'socket' => [
             'driver' => 'websockets',
             'host' => env('BROADCAST_HOST', '127.0.0.1'),
             'port' => env('BROADCAST_PORT', 6001),
         ],
+        */
 
         'ably' => [
             'driver' => 'ably',
