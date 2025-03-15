@@ -1,12 +1,13 @@
 <?php
 
 use Illuminate\Support\Facades\Broadcast;
+use Illuminate\Support\Facades\Log;
 
 Broadcast::routes(); // Isso cria as rotas necessárias para autenticação de canais
 
 // Canal privado para o usuário (exemplo: "chat.{userId}")
 Broadcast::channel('chat.{userId}', function ($user, $userId) {
-    \Log::info('Tentativa de conexão:', [
+    Log::info('Autenticando canal:', [
         'user_id' => $user->id ?? 'não autenticado',
         'canal' => $userId,
         'socket_id' => request()->socket_id ?? 'não definido'
