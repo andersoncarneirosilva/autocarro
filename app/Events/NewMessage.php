@@ -9,6 +9,7 @@ use Illuminate\Contracts\Broadcasting\ShouldBroadcast;
 use Illuminate\Foundation\Events\Dispatchable;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Contracts\Broadcasting\ShouldBroadcastNow;
+use Pusher\PusherException;
 
 use Log;
 
@@ -27,6 +28,10 @@ class NewMessage implements ShouldBroadcastNow
 
     public function broadcastOn()
     {
+        $socketId = request()->header('X-Socket-ID');
+    if (!$socketId) {
+        throw new PusherException('Socket ID não recebido');
+    }
         Log::info('Transmitindo para o canal: chat', ['message' => $this->message->content]);
         return new Channel('chat');  // Nome do canal no frontend
     }
