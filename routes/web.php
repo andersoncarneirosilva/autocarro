@@ -36,9 +36,8 @@ Route::middleware(['auth'])->group(function () {
     
             return response()->json(['status' => 'Enviado com sucesso']);
 
-        }
     });
-    
+
     Route::get('/test-broadcast', function () {
         $message = Message::create([
             'user_id' => 1, // ID do usuário que enviou a mensagem (ajuste conforme necessário)
