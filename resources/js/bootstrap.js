@@ -33,6 +33,8 @@ window.Echo.connector.pusher.connection.bind('state_change', function(states) {
     }
 });
 
+console.log("Socket ID antes de enviar:", window.Echo.socketId());
+
 // Alteração para garantir que o socketId seja enviado quando estiver disponível
 document.addEventListener("livewire:request", (event) => {
     const checkSocketIdInterval = setInterval(() => {
