@@ -58,8 +58,8 @@
 
 <!-- jstree css -->
 <link href="{{ url('assets/vendor/jstree/themes/default/style.min.css') }}" rel="stylesheet" type="text/css">
-{{-- @vite(['resources/css/app.css', 'resources/js/app.js'])      --}}
-@if (app()->environment('local'))
+@vite(['resources/css/app.css', 'resources/js/app.js'])     
+{{-- @if (app()->environment('local'))
         @vite(['resources/css/app.css', 'resources/js/app.js'])
     @else
         @php
@@ -69,7 +69,7 @@
         @endphp
         <link rel="stylesheet" href="{{ asset('build/' . $cssFile) }}">
         <script src="{{ asset('build/' . $jsFile) }}" defer></script>
-    @endif
+    @endif --}}
                         
     <script>
         var userId = @json(auth()->id());

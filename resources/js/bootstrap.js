@@ -1,3 +1,5 @@
+// DESENVOLVIMENTO
+
 // import Echo from 'laravel-echo';
 // import Pusher from 'pusher-js';
 
@@ -29,6 +31,9 @@
 //         console.log("Conexão Pusher estabelecida com sucesso!");
 //     }
 // });
+
+
+// PRODUCAO
 
 import Echo from 'laravel-echo';
 import Pusher from 'pusher-js';
