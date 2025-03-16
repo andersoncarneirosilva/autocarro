@@ -18,18 +18,16 @@
                 <!-- Lista de mensagens -->
                 <ul id="message-list">
                     @foreach($messages as $message)
-                        <li class="{{ $message['sender_id'] == auth()->id() ? 'user-message' : 'admin-message' }}">
-                            <div class="chat-avatar">
-                                <i>{{ \Carbon\Carbon::parse($message['created_at'])->format('H:i') }}</i>
+                        <li class="message {{ $message['sender_id'] == auth()->id() ? 'user-message' : 'admin-message' }}">
+                            <div class="message-content">
+                                <p>{{ $message['content'] }}</p>
                             </div>
-                            <div class="conversation-text">
-                                <div class="ctext-wrap">
-                                    <p>{{ $message['content'] }}</p>
-                                </div>
-                            </div>
+                            <span class="message-time">{{ \Carbon\Carbon::parse($message['updated_at'])->format('H:i') }}</span>
                         </li>
                     @endforeach
                 </ul>
+                
+               
                 
 
                 
@@ -72,20 +70,38 @@
     </div>
 
     @push('scripts')
-    <script>
-        // Ouça o evento de atualização de mensagens
-        Livewire.on('messageUpdated', () => {
-            // Aqui você pode aplicar qualquer lógica de formatação ou animações
-            // Por exemplo, garantindo que o CSS seja aplicado corretamente
-            console.log('Mensagem recebida ou enviada. Atualizando formatação.');
-            
-            // Aplicar CSS novamente ou realizar qualquer ação necessária
-            // Exemplo de algo que poderia ser feito após a mensagem ser atualizada:
-            document.querySelectorAll('.conversation-text p').forEach((element) => {
-                // Adiciona uma classe de animação ou formatação, se necessário
-                element.style.color = 'black'; // exemplo de formatação simples
-            });
-        });
-    </script>
+<script>
+Livewire.on('messageUpdated', (event) => {
+    console.log('Mensagem recebida ou enviada:', event);
+    updateMessages(event);
+});
+
+// Atualizar mensagens
+function updateMessages(event) {
+    console.log('Dados do evento recebidos:', event); // Verifique os dados aqui
+
+    const messageList = document.getElementById('message-list');
+    const newMessage = document.createElement('li');
+    const senderClass = event.sender_id === authUserId ? 'user-message' : 'admin-message'; 
+
+    newMessage.classList.add(senderClass);
+
+    newMessage.innerHTML = `
+    <div class="conversation-text">
+        <div class="message-content">
+            <p>${event.content}</p>
+        </div>
+        <span class="message-time">${event.updated_at}</span>
+    </div>
+`;
+
+
+    messageList.appendChild(newMessage);
+    messageList.scrollTop = messageList.scrollHeight;
+}
+
+
+</script>
 @endpush
+
 </div> <!-- 🔹 Fecha o elemento raiz -->

@@ -58,8 +58,8 @@
 
 <!-- jstree css -->
 <link href="{{ url('assets/vendor/jstree/themes/default/style.min.css') }}" rel="stylesheet" type="text/css">
-
-@if (app()->environment('local'))
+@vite(['resources/css/app.css', 'resources/js/app.js'])     
+{{-- @if (app()->environment('local'))
         @vite(['resources/css/app.css', 'resources/js/app.js'])
     @else
         @php
@@ -69,7 +69,7 @@
         @endphp
         <link rel="stylesheet" href="{{ asset('build/' . $cssFile) }}">
         <script src="{{ asset('build/' . $jsFile) }}" defer></script>
-    @endif
+    @endif --}}
                         
     <script>
         var userId = @json(auth()->id());
@@ -162,50 +162,68 @@
             /* Certifique-se de que o z-index é maior que o do modal */
         }
         /* Estilo para mensagens do usuário (à esquerda) */
-.user-message {
-    display: flex;
-    justify-content: flex-end; /* Alinha à esquerda */
-    margin-bottom: 10px;
+        #message-list {
+                        list-style: none;
+                        padding: 0;
+                        margin: 0;
+                        display: flex;
+                        flex-direction: column;
+                        gap: 8px;
+                    }
+                
+                    .message {
+                        display: flex;
+                        width: 100%;
+                        align-items: flex-end;
+                    }
+                
+                    .user-message {
+                        justify-content: flex-end;
+                    }
+                
+                    .admin-message {
+                        justify-content: flex-start;
+                    }
+                
+                    .message-content {
+                        max-width: 60%;
+                        padding: 10px 15px;
+                        border-radius: 10px;
+                        position: relative;
+                        font-size: 14px;
+                        line-height: 1.4;
+                    }
+                
+                    .user-message .message-content {
+                        background-color: #dcf8c6;
+                        color: #000;
+                        border-radius: 10px 10px 0 10px;
+                    }
+                
+                    .admin-message .message-content {
+                        background-color: #fff;
+                        color: #000;
+                        border-radius: 10px 10px 10px 0;
+                        border: 1px solid #ddd;
+                    }
+                
+                    .message-time {
+                        font-size: 12px;
+                        color: #777;
+                        margin-left: 8px;
+                        white-space: nowrap;
+                    }
+                    .ctext-wrap {
+    border-radius: 10px 10px 0 10px;
+    border: 1px solid #ddd;
+    color: #000;
+    padding: 10px 15px; /* O padding define o espaço interno da borda */
+    box-sizing: border-box; /* Garante que o padding e a borda sejam incluídos no cálculo da largura total */
+    word-wrap: break-word; /* Garante que o texto quebre corretamente */
+    display: inline-block; /* Permite que a largura da borda se ajuste ao conteúdo da mensagem */
 }
 
-.user-message .conversation-text {
-    background-color: #f1f1f1; /* Cor de fundo para a mensagem do usuário */
-    border-radius: 10px;
-    padding: 10px;
-    max-width: 70%; /* Limita o tamanho da mensagem */
-    margin-left: 10px;
-}
 
-.user-message .chat-avatar {
-    order: 1;
-}
-
-/* Estilo para mensagens do administrador (à direita) */
-.admin-message {
-    display: flex;
-    justify-content: flex-start; /* Alinha à direita */
-    margin-bottom: 10px;
-}
-
-.admin-message .conversation-text {
-    background-color: #e0f7fa; /* Cor de fundo para a mensagem do administrador */
-    border-radius: 10px;
-    padding: 10px;
-    max-width: 70%;
-    margin-right: 10px;
-}
-
-.admin-message .chat-avatar {
-    order: 2;
-}
-.ctext-wrap {
-    display: inline-block;
-    max-width: 70%;
-}
-
-.ctext-wrap p {
-    margin: 0;
-}
     </style>
     @livewireStyles
 

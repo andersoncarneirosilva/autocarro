@@ -30,11 +30,12 @@ use Illuminate\Http\Request;
 use App\Models\Message;
 use App\Events\NewMessage;
 use Illuminate\Support\Facades\Broadcast;
+
 Route::middleware(['auth'])->group(function () {
 
     
     // Em routes/web.php ou routes/api.php
-Route::post('/messages', [MessageController::class, 'store']);
+// Route::post('/messages', [MessageController::class, 'store']);
 
 Route::post('/broadcasting/auth', function (Request $request) {
     Log::info('Recebendo autenticação WebSocket', [
@@ -52,7 +53,6 @@ Route::post('/broadcasting/auth', function (Request $request) {
     return response()->json(['message' => 'Autenticado']);
 });
 
-    Route::get('/test', \App\Livewire\TestComponent::class);
     Route::get('/chat', \App\Livewire\Chat::class)->name('chat');
 
     Route::post('/perfil/excluir', [PerfilController::class, 'deleteFiles']);

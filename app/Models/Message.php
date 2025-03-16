@@ -11,7 +11,7 @@ class Message extends Model
     use HasFactory;
 
     // Inclua 'sender_id' no array $fillable
-    protected $fillable = ['content', 'sender_id'];
+    protected $fillable = ['id', 'content', 'sender_id'];
 
     // Relacionamento com o modelo User
     public function user()

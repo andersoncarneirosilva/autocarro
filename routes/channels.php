@@ -10,22 +10,21 @@ Broadcast::channel('chat.{userId}', function ($user, $userId) {
     Log::info('Autenticando canal:', [
         'user_id' => $user->id ?? 'não autenticado',
         'canal' => $userId,
-        'socket_id' => request()->header('X-Socket-ID') ?? 'não definido'
+        'socket_id' => request()->socket_id ?? 'não definido'
     ]);
 
     return (int) $user->id === (int) $userId;
 });
 
+Route::post('/broadcasting/auth', function (Request $request) {
+    Log::info('Recebendo autenticação WebSocket', [
+        'user_id' => auth()->id(),
+        'socket_id' => $request->socket_id
+    ]);
 
-
-// Rota para autenticar a conexão com o Pusher
-
-
-
-
-Broadcast::channel('chat', function ($user) {
-    return $user !== null;
+    return response()->json(['message' => 'Autenticado']);
 });
+
 
 // Canal público para todos os usuários (exemplo: "events")
 Broadcast::channel('events', function ($user) {
