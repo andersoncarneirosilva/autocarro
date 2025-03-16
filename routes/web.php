@@ -39,7 +39,7 @@ Route::post('/messages', [MessageController::class, 'store']);
 Route::post('/broadcasting/auth', function (Request $request) {
     Log::info('Recebendo autenticação WebSocket', [
         'user_id' => auth()->id(),
-        'socket_id' => $request->header('X-Socket-ID'),
+        'socket_id' => $request->socket_id
     ]);
 
     // Verifica se o usuário está autenticado
@@ -51,7 +51,6 @@ Route::post('/broadcasting/auth', function (Request $request) {
     // Retorna a resposta de sucesso para o Pusher
     return response()->json(['message' => 'Autenticado']);
 });
-
 
     Route::get('/test', \App\Livewire\TestComponent::class);
     Route::get('/chat', \App\Livewire\Chat::class)->name('chat');
