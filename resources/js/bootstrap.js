@@ -18,9 +18,24 @@ window.Echo = new Echo({
     auth: {
         headers: {
             'X-CSRF-TOKEN': document.head.querySelector('meta[name="csrf-token"]').content,
-            'X-Socket-ID': window.Echo.socketId(), // Garantir que o socket ID é enviado corretamente
         },
     },
+});
+
+window.Echo.connector.socket.on('connect', () => {
+    const socketId = window.Echo.socketId();
+    console.log("Socket ID:", socketId);
+
+    // Agora você pode enviar o socket ID para onde for necessário
+    fetch('/test-broadcast', {
+        method: 'GET',
+        headers: {
+            'X-Socket-ID': socketId, // Enviar o socket ID correto
+        },
+    })
+    .then(response => response.json())
+    .then(data => console.log("Resposta do servidor:", data))
+    .catch(error => console.error('Erro:', error));
 });
 
 // Confirmação de que a instância de Echo foi criada
