@@ -8,6 +8,7 @@ return [
     'dashboard' => [
         'enable' => true,
         'port' => env('WEBSOCKETS_PORT', 6001),
+        'host' => '0.0.0.0',
     ],
 
     // 'apps' => [
