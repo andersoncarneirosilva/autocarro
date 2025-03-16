@@ -60,17 +60,3 @@ document.addEventListener("livewire:request", (event) => {
     }, 200); // Verifica a cada 200ms até o socketId estar disponível
 });
 
-// Verificando se a instância de Echo foi criada corretamente e se o método channel está disponível
-if (window.Echo && typeof window.Echo.channel === 'function') {
-    console.log("Método 'channel' está disponível.");
-    // Subscribing to the channel after Echo is initialized
-    window.Echo.channel('chat.' + userId)
-        .listen('NewMessage', (event) => {
-            console.log('Nova mensagem recebida:', event.message);
-        })
-        .error((error) => {
-            console.error('Erro de Pusher:', error);
-        });
-} else {
-    console.error("Método 'channel' não está disponível na instância de Echo.");
-}
