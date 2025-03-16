@@ -46,7 +46,7 @@ window.Echo = new Echo({
     cluster: import.meta.env.VITE_PUSHER_APP_CLUSTER,
     wsHost: import.meta.env.VITE_PUSHER_HOST,
     wsPort: import.meta.env.VITE_PUSHER_PORT, // Usado para ambiente de desenvolvimento
-    wssPort: 443,  // Usar a porta 443 para produção (Pusher)
+    wssPort: import.meta.env.VITE_PUSHER_PORT,  // Usar a porta 443 para produção (Pusher)
     forceTLS: false,  // Forçar o uso de TLS em produção
     enabledTransports: ['wss'],  // Apenas habilitar WebSocket seguro (wss)
     disableStats: true,

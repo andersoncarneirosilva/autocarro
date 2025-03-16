@@ -1,7 +1,7 @@
 import './bootstrap';
 
 document.addEventListener('DOMContentLoaded', function () {
-    console.log("Iniciando escuta no canal 'chat'...");
+    console.log("Iniciando escuta no canal 'app.js'...");
 
     const messageList = document.getElementById('message-list');
 
