@@ -32,42 +32,14 @@ use App\Events\NewMessage;
 use Illuminate\Support\Facades\Broadcast;
 Route::middleware(['auth'])->group(function () {
 
-    Route::get('/test-pusher', function () {
-
-            event(new \App\Events\NewMessage('Teste Pusher'));
-    
-            return response()->json(['status' => 'Enviado com sucesso']);
-
-    });
-
-    
-Route::get('/test-broadcast', function (Request $request) {
-    $socketId = $request->header('X-Socket-ID');
-
-    Log::info('Teste de Broadcast - Socket ID Recebido:', ['socket_id' => $socketId]);
-
-    if (!$socketId) {
-        Log::error('Socket ID não foi recebido!');
-        return response()->json(['error' => 'Socket ID não foi recebido!'], 400);
-    }
-
-    $message = Message::create([
-        'user_id' => 1,
-        'content' => 'Mensagem de teste Pusher',
-        'sender_id' => '1'
-    ]);
-
-    event(new NewMessage($message));
-
-    return response()->json(['message' => 'Broadcast enviado!', 'socket_id' => $socketId]);
-});
     
     // Em routes/web.php ou routes/api.php
 Route::post('/messages', [MessageController::class, 'store']);
+
 Route::post('/broadcasting/auth', function (Request $request) {
     Log::info('Recebendo autenticação WebSocket', [
         'user_id' => auth()->id(),
-        'socket_id' => $request->socket_id
+        'socket_id' => $request->header('X-Socket-ID'),
     ]);
 
     // Verifica se o usuário está autenticado
@@ -79,6 +51,7 @@ Route::post('/broadcasting/auth', function (Request $request) {
     // Retorna a resposta de sucesso para o Pusher
     return response()->json(['message' => 'Autenticado']);
 });
+
 
     Route::get('/test', \App\Livewire\TestComponent::class);
     Route::get('/chat', \App\Livewire\Chat::class)->name('chat');

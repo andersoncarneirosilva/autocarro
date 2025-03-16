@@ -18,7 +18,7 @@ window.Echo = new Echo({
     auth: {
         headers: {
             'X-CSRF-TOKEN': document.head.querySelector('meta[name="csrf-token"]').content,
-            'X-Socket-ID': window.socketId,  // Incluindo o socketId aqui
+            'X-Socket-ID': window.Echo.socketId(), // Garantir que o socket ID é enviado corretamente
         },
     },
 });
