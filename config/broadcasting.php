@@ -48,7 +48,7 @@ return [
         
         'socket' => [
             'driver' => 'websockets',
-            'host' => env('BROADCAST_HOST', '127.0.0.1'),
+            'host' => env('BROADCAST_HOST'),
             'port' => env('BROADCAST_PORT', 6001),
         ],
         
