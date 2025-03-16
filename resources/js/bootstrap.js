@@ -22,22 +22,7 @@ window.Echo = new Echo({
         },
     },
 });
-// Verificando se o Echo e o socket estão disponíveis
-window.Echo.ready(() => {
-    const socketId = window.Echo.socketId();
-    console.log("Socket ID:", socketId);
 
-    // Agora você pode enviar o socket ID para onde for necessário
-    fetch('/test-broadcast', {
-        method: 'GET',
-        headers: {
-            'X-Socket-ID': socketId, // Enviar o socket ID correto
-        },
-    })
-    .then(response => response.json())
-    .then(data => console.log("Resposta do servidor:", data))
-    .catch(error => console.error('Erro:', error));
-});
 // Confirmação de que a instância de Echo foi criada
 console.log("Instância de Echo criada com sucesso!");
 
