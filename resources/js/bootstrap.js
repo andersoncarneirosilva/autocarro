@@ -18,11 +18,12 @@ window.Echo = new Echo({
     auth: {
         headers: {
             'X-CSRF-TOKEN': document.head.querySelector('meta[name="csrf-token"]').content,
+            'X-Socket-ID': window.socketId,  // Incluindo o socketId aqui
         },
     },
 });
-
-window.Echo.connector.socket.on('connect', () => {
+// Verificando se o Echo e o socket estão disponíveis
+window.Echo.ready(() => {
     const socketId = window.Echo.socketId();
     console.log("Socket ID:", socketId);
 
@@ -37,7 +38,6 @@ window.Echo.connector.socket.on('connect', () => {
     .then(data => console.log("Resposta do servidor:", data))
     .catch(error => console.error('Erro:', error));
 });
-
 // Confirmação de que a instância de Echo foi criada
 console.log("Instância de Echo criada com sucesso!");
 
