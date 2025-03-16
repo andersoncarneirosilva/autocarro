@@ -10,8 +10,10 @@ window.Echo = new Echo({
     wsHost: import.meta.env.VITE_PUSHER_HOST,
     wsPort: import.meta.env.VITE_PUSHER_PORT,
     wssPort: null,  // Não usar o protocolo wss em ambientes não SSL
-    forceTLS: false,  // Garantir que o TLS (HTTPS) não seja utilizado, caso esteja usando http
-    enabledTransports: ['ws'],  // Usar somente WebSocket não seguro (para desenvolvimento local)
+    //forceTLS: false,
+    forceTLS: true, // PARA PRODUCAO
+    // enabledTransports: ['ws'],  // Usar somente WebSocket não seguro (para desenvolvimento local)
+    enabledTransports: ['wss'],  //PARA PRODUCAO
     disableStats: true,
     authEndpoint: '/broadcasting/auth',
     auth: {
