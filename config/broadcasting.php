@@ -32,11 +32,11 @@ return [
             'app_id' => env('PUSHER_APP_ID'),
             'options' => [
                 'cluster' => env('PUSHER_APP_CLUSTER'),
-                'useTLS' => true,
                 'encrypted' => true,
-                'host' => env('PUSHER_HOST'),
-                'port' => env('PUSHER_PORT'),
-                'scheme' => env('PUSHER_SCHEME'),
+                'useTLS' => true,
+                'host' => env('PUSHER_HOST', 'ws.pusherapp.com'), // Verifique o host correto
+                'port' => env('PUSHER_PORT', 443), // Ou 6001 para WebSockets próprios
+                'scheme' => env('PUSHER_SCHEME', 'https'),
             ],
         ],
 
