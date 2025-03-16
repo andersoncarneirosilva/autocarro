@@ -45,12 +45,12 @@ window.Echo = new Echo({
     key: import.meta.env.VITE_PUSHER_APP_KEY,
     cluster: import.meta.env.VITE_PUSHER_APP_CLUSTER,
     wsHost: import.meta.env.VITE_PUSHER_HOST,
-    wsPort: import.meta.env.VITE_PUSHER_PORT,  // Usando a porta 6001 para WebSockets
-    wssPort: 6001,  // Usar a mesma porta 6001 para wss (WebSocket seguro)
+    wsPort: import.meta.env.VITE_PUSHER_PORT, // Usado para ambiente de desenvolvimento
+    wssPort: 443,  // Usar a porta 443 para produção (Pusher)
     forceTLS: true,  // Forçar o uso de TLS em produção
-    enabledTransports: ['ws', 'wss'],  // Habilitar ws (não seguro) e wss (seguro)
+    enabledTransports: ['wss'],  // Apenas habilitar WebSocket seguro (wss)
     disableStats: true,
-    authEndpoint: '/broadcasting/auth',
+    authEndpoint: '/broadcasting/auth',  // Endpoint para autenticação de broadcasting
     auth: {
         headers: {
             'X-CSRF-TOKEN': document.head.querySelector('meta[name="csrf-token"]').content,
