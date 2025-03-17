@@ -36,7 +36,7 @@ class NewMessage implements ShouldBroadcast
 
     public function broadcastWith()
 {
-    Log::info('Transmitindo conteúdo da mensagem broadcastWith', ['message' => $this->message]);
+    Log::info('Dentro do broadcastWith', ['message' => $this->message]);
 
     return [
         'id' => $this->message->id,
