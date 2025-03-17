@@ -19,9 +19,9 @@ document.addEventListener('DOMContentLoaded', function () {
                 const newMessage = document.createElement('li');
                 const senderClass = event.sender_id === window.authUserId ? 'user-message' : 'admin-message';
                 newMessage.classList.add(senderClass);
-// Formatar a hora com 'H:i'
-const createdAt = new Date(event.created_at);
-const formattedTime = createdAt.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+                // Formatar a hora com 'H:i'
+                const createdAt = new Date(event.created_at);
+                const formattedTime = createdAt.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
 
                 newMessage.innerHTML = `
                     <div class="conversation-text">

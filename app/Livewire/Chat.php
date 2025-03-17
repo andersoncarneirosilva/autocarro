@@ -14,6 +14,7 @@ class Chat extends Component
     public Collection $messages;
     public string $newMessage = '';
     protected $listeners = ['newMessage' => 'addMessage'];
+
     public function mount()
     {
         // Inicializa as mensagens, sempre ordenadas corretamente
@@ -21,80 +22,62 @@ class Chat extends Component
     }
 
     public function sendMessage()
-{
-    if (trim($this->newMessage) === '') {
-        return;
+    {
+        if (trim($this->newMessage) === '') {
+            return;
+        }
+
+        if (!auth()->check()) {
+            return;
+        }
+
+        // Criar a nova mensagem
+        $message = Message::create([
+            'content' => $this->newMessage,
+            'sender_id' => auth()->id(),
+        ]);
+        
+        // Adicionar a mensagem à coleção e atualizar o componente
+        $this->messages = $this->messages->push($message);
+        Log::info('Disparando evento NewMessage!', ['message' => $message]);
+
+        // Disparar evento WebSocket para outros navegadores
+        broadcast(new NewMessage($message))->toOthers();
+
+        // Atualizar a interface
+        $this->newMessage = '';
+        $this->messages = Message::orderBy('id', 'asc')->get(); // Recarrega as mensagens após envio
     }
 
-    if (!auth()->check()) {
-        return;
+    #[On('newMessage')]
+    public function receiveMessage($message)
+    {
+        Log::info('Mensagem recebida no Livewire:', ['message' => $message]);
+
+        // Verifique se o ID da mensagem é válido antes de buscar
+        if (!isset($message['id'])) {
+            Log::error('Mensagem recebida sem ID válido:', $message);
+            return;
+        }
+
+        $msg = Message::find($message['id']);
+
+        if ($msg && !$this->messages->contains('id', $msg->id)) {
+            $this->messages->push($msg);
+            $this->dispatch('messageUpdated', $msg); // Atualiza a interface com a nova mensagem
+        }
     }
 
-    // Criar a nova mensagem
-    $message = Message::create([
-        'content' => $this->newMessage,
-        'sender_id' => auth()->id(),
-    ]);
-    $this->messages->push($message); // Agora a mensagem aparece sem duplicar
-    Log::info('Disparando evento NewMessage!', ['message' => $message]);
+    public function addMessage($message)
+    {
+        Log::info('Adicionando mensagem:', ['message' => $message]);
 
-    // Disparar evento WebSocket para outros navegadores
-    broadcast(new NewMessage($message))->toOthers();
+        // Adicionar a nova mensagem à lista de mensagens do componente
+        $this->messages = $this->messages->push($message);
 
-    // Atualizar a interface
-    //$this->dispatch('newMessage', ['message' => $message]);
-
-    $this->newMessage = '';
-    $this->messages = Message::orderBy('id', 'asc')->get();
-}
-
-    
-
-
-
-
-#[On('newMessage')]
-public function receiveMessage($message)
-{
-    Log::info('Mensagem recebida no Livewire:', ['message' => $message]);
-
-    // Certifique-se de que a mensagem tem um ID válido
-    if (!isset($message['id'])) {
-        Log::error('Mensagem recebida sem ID válido:', $message);
-        return;
+        // Emitir evento para atualizar a interface
+        $this->dispatch('messageUpdated', $message);
     }
-
-    $msg = Message::find($message['id']);
-
-    if ($msg && !$this->messages->contains('id', $msg->id)) {
-        $this->messages->push($msg);
-        $this->dispatch('messageUpdated', $msg); // Atualiza a interface
-    }
-}
-
-
-
-
-
-    
-    
-    
-    
-    
-public function addMessage($message)
-{
-    Log::info('Adicionando mensagem:', ['message' => $message]);
-
-    // Adiciona a nova mensagem à lista
-    $this->messages[] = $message;
-
-    // Emitir evento para atualizar a interface
-    $this->dispatch('messageUpdated', $message); 
-}
-
-
-
-
 
     public function render()
     {
