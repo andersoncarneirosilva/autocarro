@@ -36,26 +36,18 @@
 // PRODUCAO
 
 import Echo from 'laravel-echo';
-import Pusher from 'pusher-js';
 
+import Pusher from 'pusher-js';
 window.Pusher = Pusher;
 
 window.Echo = new Echo({
     broadcaster: 'pusher',
-    key: import.meta.env.VITE_PUSHER_APP_KEY,
-    cluster: import.meta.env.VITE_PUSHER_APP_CLUSTER,
-    wsHost: import.meta.env.VITE_PUSHER_HOST,
-    wsPort: import.meta.env.VITE_PUSHER_PORT, // Usado para ambiente de desenvolvimento
-    wssPort: import.meta.env.VITE_PUSHER_PORT,  // Usar a porta 443 para produção (Pusher)
-    forceTLS: false,  // Forçar o uso de TLS em produção
-    enabledTransports: ['wss'],  // Apenas habilitar WebSocket seguro (wss)
-    disableStats: true,
-    authEndpoint: '/broadcasting/auth',  // Endpoint para autenticação de broadcasting
-    auth: {
-        headers: {
-            'X-CSRF-TOKEN': document.head.querySelector('meta[name="csrf-token"]').content,
-        },
-    },
+    key: import.meta.env.VITE_REVERB_APP_KEY,
+    wsHost: import.meta.env.VITE_REVERB_HOST,
+    wsPort: import.meta.env.VITE_REVERB_PORT,
+    wssPort: import.meta.env.VITE_REVERB_PORT,
+    forceTLS: (import.meta.env.VITE_REVERB_SCHEME ?? 'https') === 'https',
+    enabledTransports: ['ws', 'wss'],
 });
 
 console.log("Instância de Echo criada com sucesso!");
