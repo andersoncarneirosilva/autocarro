@@ -7,7 +7,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
     if (messageList) {
         window.Echo.channel('chat')
-            .listen('.NewMessage', (event) => {
+            .listen('NewMessage', (event) => {
                 try {
                     console.log('Nova mensagem recebida:', event); // Verifique os dados recebidos no console
 
