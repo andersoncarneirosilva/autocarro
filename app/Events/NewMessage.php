@@ -26,6 +26,7 @@ class NewMessage implements ShouldBroadcast
 
     public function broadcastAs()
     {
+        Log::info('broadcastAs:: ');
         return 'NewMessage'; // Nome correto do evento
     }
 
