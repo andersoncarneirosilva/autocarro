@@ -8,32 +8,36 @@ document.addEventListener('DOMContentLoaded', function () {
     if (messageList) {
         window.Echo.channel('chat')
             .listen('.NewMessage', (event) => {
-                
-                console.log('Nova mensagem recebida:', event); // Verifique os dados recebidos no console
+                try {
+                    console.log('Nova mensagem recebida:', event); // Verifique os dados recebidos no console
 
-                if (!event.id || !event.content || !event.sender_id || !event.created_at) {
-                    console.error('Dados de mensagem inválidos:', event);
-                    return;
+                    if (!event.id || !event.content || !event.sender_id || !event.created_at) {
+                        console.error('Dados de mensagem inválidos:', event);
+                        return;
+                    }
+
+                    const newMessage = document.createElement('li');
+                    const senderClass = event.sender_id === window.authUserId ? 'user-message' : 'admin-message';
+                    newMessage.classList.add(senderClass);
+                    // Formatar a hora com 'H:i'
+                    const createdAt = new Date(event.created_at);
+                    const formattedTime = createdAt.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+
+                    newMessage.innerHTML = `
+                        <div class="conversation-text">
+                            <div class="ctext-wrap">
+                                <p>${event.content}</p>
+                            </div>
+                            <span class="message-time">${formattedTime}</span>
+                        </div>
+                    `;
+
+                    messageList.appendChild(newMessage);
+                    messageList.scrollTop = messageList.scrollHeight;
+
+                } catch (error) {
+                    console.error('Erro ao processar a mensagem:', error);
                 }
-
-                const newMessage = document.createElement('li');
-                const senderClass = event.sender_id === window.authUserId ? 'user-message' : 'admin-message';
-                newMessage.classList.add(senderClass);
-                // Formatar a hora com 'H:i'
-                const createdAt = new Date(event.created_at);
-                const formattedTime = createdAt.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
-
-                newMessage.innerHTML = `
-                    <div class="conversation-text">
-        <div class="ctext-wrap">
-            <p>${event.content}</p>
-        </div>
-        <span class="message-time">${formattedTime}</span>
-    </div>
-                `;
-
-                messageList.appendChild(newMessage);
-                messageList.scrollTop = messageList.scrollHeight;
             });
     } else {
         console.warn("Elemento #message-list não encontrado.");
