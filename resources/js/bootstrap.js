@@ -44,7 +44,19 @@ window.Echo = new Echo({
     broadcaster: 'pusher',
     key: import.meta.env.VITE_PUSHER_APP_KEY,
     cluster: import.meta.env.VITE_PUSHER_APP_CLUSTER,
-    forceTLS: true
+    wsHost: import.meta.env.VITE_PUSHER_HOST,
+    wsPort: import.meta.env.VITE_PUSHER_PORT,
+    wssPort: 443,  // Não usar o protocolo wss em ambientes não SSL
+    forceTLS: true,  // Garantir que o TLS (HTTPS) não seja utilizado, caso esteja usando http
+    enabledTransports: ['wss'],  // Usar somente WebSocket não seguro (para desenvolvimento local)
+    forceTLS: true,
+    disableStats: true,
+    authEndpoint: '/broadcasting/auth',
+    auth: {
+         headers: {
+             'X-CSRF-TOKEN': document.head.querySelector('meta[name="csrf-token"]').content,
+         },
+     },
 });
 
 console.log("Instância de Echo criada com sucesso!");
