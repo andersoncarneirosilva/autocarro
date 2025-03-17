@@ -47,7 +47,6 @@ window.Echo = new Echo({
     wsHost: import.meta.env.VITE_PUSHER_HOST,
     wsPort: import.meta.env.VITE_PUSHER_PORT,
     wssPort: 443,  // Não usar o protocolo wss em ambientes não SSL
-    enabledTransports: ['https'],  // Usar somente WebSocket não seguro (para desenvolvimento local)
     forceTLS: true,
     disableStats: true,
     authEndpoint: '/broadcasting/auth',
