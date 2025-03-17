@@ -34,16 +34,13 @@ return [
                 'cluster' => env('PUSHER_APP_CLUSTER'),
                 'useTLS' => true,
                 'encrypted' => true,
-                'host' => env('PUSHER_HOST', '127.0.0.1'),
-                'port' => env('PUSHER_PORT', 6001),
-                'scheme' => env('PUSHER_SCHEME', 'http'),
             ],
         ],
 
-    'redis' => [
-        'driver' => 'redis',
-        'connection' => 'default',
-    ],
+        'redis' => [
+            'driver' => 'redis',
+            'connection' => 'default',
+        ],
 
         
         'socket' => [
