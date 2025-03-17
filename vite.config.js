@@ -1,23 +1,20 @@
-import { defineConfig, loadEnv } from 'vite';
+import { defineConfig } from 'vite';
 import laravel from 'laravel-vite-plugin';
 
-export default defineConfig(({ mode }) => {
-    // Carrega as variáveis do .env
-    const env = loadEnv(mode, process.cwd(), '');
+// Configure apenas em ambiente local
+export default defineConfig({
+    plugins: [
+        laravel({
+            input: [
+                'resources/css/app.css',
+                'resources/js/app.js',
+            ],
+            refresh: true,
+        }),
+    ],
+    define: {
+        'import.meta.env.VITE_PUSHER_APP_KEY': JSON.stringify('e8703bef27184bc00d2f'),
+'import.meta.env.VITE_PUSHER_APP_CLUSTER': JSON.stringify('mt1'),
 
-    return {
-        plugins: [
-            laravel({
-                input: [
-                    'resources/css/app.css',
-                    'resources/js/app.js',
-                ],
-                refresh: true,
-            }),
-        ],
-        define: {
-            'import.meta.env.VITE_PUSHER_APP_KEY': JSON.stringify(env.VITE_PUSHER_APP_KEY),
-            'import.meta.env.VITE_PUSHER_APP_CLUSTER': JSON.stringify(env.VITE_PUSHER_APP_CLUSTER),
-        },
-    };
+    },
 });
