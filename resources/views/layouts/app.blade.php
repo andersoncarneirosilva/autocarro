@@ -72,7 +72,7 @@
     $jsFile = $manifest['resources/js/app.js']['file'] ?? 'assets/app.js';  // Default case
 @endphp
 <link rel="stylesheet" href="{{ asset('build/' . $cssFile) }}?v={{ time() }}">
-<script src="{{ asset('build/' . $jsFile) }}?v={{ time() }}" defer></script>
+<script type="module" src="{{ asset('build/' . $jsFile) }}?v={{ time() }}" defer></script>
 @endif
                 
 <script>
