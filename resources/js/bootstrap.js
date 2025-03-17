@@ -45,12 +45,14 @@ window.Pusher.logToConsole = true; // Ativa os logs de Pusher no console
 window.Echo = new Echo({
     broadcaster: 'pusher',
     key: import.meta.env.VITE_PUSHER_APP_KEY,
-    cluster: import.meta.env.VITE_PUSHER_APP_CLUSTER ?? "mt1",
-    wsHost: import.meta.env.VITE_PUSHER_HOST ?? `ws-${import.meta.env.VITE_PUSHER_APP_CLUSTER}.pusher.com`,
-    wsPort: import.meta.env.VITE_PUSHER_PORT ?? 443,
-    wssPort: import.meta.env.VITE_PUSHER_PORT ?? 443,
-    forceTLS: import.meta.env.VITE_PUSHER_SCHEME === "https",
-    enabledTransports: ['ws', 'wss'],
+    cluster: import.meta.env.VITE_PUSHER_APP_CLUSTER,
+    forceTLS: true,
+    authEndpoint: '/broadcasting/auth',
+    auth: {
+         headers: {
+             'X-CSRF-TOKEN': document.head.querySelector('meta[name="csrf-token"]').content,
+         },
+     },
 });
 
 console.log("Instância de Echo criada com sucesso!");
