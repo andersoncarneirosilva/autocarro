@@ -7,11 +7,11 @@ document.addEventListener('DOMContentLoaded', function () {
 
     const messageList = document.getElementById('message-list');
 
-    if (messageList && window.authUserId && window.chatId) {
-        // Certifique-se de que o usuário não está inscrito em outro canal
-        window.Echo.leave('private-chat.' + window.chatId);  // Deixa o canal antes de se inscrever novamente
+    if (messageList && window.authUserId) {
+        // Verifica se Echo está definido antes de tentar sair do canal
 
-        // Inscreve no canal compartilhado da conversa
+
+        // Inscreve-se apenas no canal privado do usuário
         window.Echo.private('chat.' + window.chatId)
             .listen('NewMessage', (event) => {
                 try {
@@ -46,7 +46,8 @@ document.addEventListener('DOMContentLoaded', function () {
                     console.error('Erro ao processar a mensagem:', error);
                 }
             });
+
     } else {
-        console.warn("Elemento #message-list não encontrado ou authUserId/chatId não definidos.");
+        console.warn("Elemento #message-list não encontrado ou authUserId não definido.");
     }
 });
