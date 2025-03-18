@@ -1,21 +1,14 @@
 import './bootstrap';
-
 document.addEventListener('DOMContentLoaded', function () {
     console.log("Iniciando escuta no canal 'app.js'...");
     console.log("authUserId:", window.authUserId);
-    console.log("chatId:", window.chatId); // <-- Precisamos garantir que o chatId esteja definido
-
     const messageList = document.getElementById('message-list');
 
-    if (messageList && window.authUserId && window.chatId) {
-        // Certifique-se de que o usuário não está inscrito em outro canal
-        window.Echo.leave('private-chat.' + window.chatId);  // Deixa o canal antes de se inscrever novamente
-
-        // Inscreve no canal compartilhado da conversa
-        window.Echo.private('chat.' + window.chatId)
+    if (messageList) {
+        window.Echo.channel('chat')
             .listen('NewMessage', (event) => {
                 try {
-                    console.log('Nova mensagem recebida:', event);
+                    console.log('Nova mensagem recebida:', event); // Verifique os dados recebidos no console
 
                     if (!event.id || !event.content || !event.sender_id || !event.created_at) {
                         console.error('Dados de mensagem inválidos:', event);
@@ -25,7 +18,6 @@ document.addEventListener('DOMContentLoaded', function () {
                     const newMessage = document.createElement('li');
                     const senderClass = event.sender_id === window.authUserId ? 'user-message' : 'admin-message';
                     newMessage.classList.add(senderClass);
-
                     // Formatar a hora com 'H:i'
                     const createdAt = new Date(event.created_at);
                     const formattedTime = createdAt.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
@@ -47,6 +39,6 @@ document.addEventListener('DOMContentLoaded', function () {
                 }
             });
     } else {
-        console.warn("Elemento #message-list não encontrado ou authUserId/chatId não definidos.");
+        console.warn("Elemento #message-list não encontrado.");
     }
 });
