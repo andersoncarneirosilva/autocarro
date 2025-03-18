@@ -7,8 +7,10 @@ Broadcast::routes(); // Isso cria as rotas necessárias para autenticação de c
 
 // Canal privado para o usuário (exemplo: "chat.{userId}")
 Broadcast::channel('chat.{userId}', function ($user, $userId) {
+    // A autenticação deve ser baseada no ID do usuário autenticado
     return (int) $user->id === (int) $userId;
 });
+
 
 
 Route::post('/broadcasting/auth', function (Request $request) {
