@@ -37,7 +37,16 @@ Route::middleware(['auth'])->group(function () {
 
     // Em routes/web.php ou routes/api.php
 // Route::post('/messages', [MessageController::class, 'store']);
+Route::get('/test-event', function () {
+    $message = Message::create([
+        'content' => 'Mensagem de teste',
+        'sender_id' => 1,
+    ]);
 
+    broadcast(new NewMessage($message));  // Aqui estamos forçando a emissão do evento
+
+    return 'Evento disparado!';
+});
 // Route::post('/broadcasting/auth', function (Request $request) {
 //     Log::info('Recebendo autenticação WebSocket', [
 //         'user_id' => auth()->id(),
