@@ -14,7 +14,7 @@ class Chat extends Component
     public Collection $messages;
     public string $newMessage = '';
     protected $listeners = ['newMessage' => 'addMessage'];
-zz
+
     public function mount()
     {
         // Inicializa as mensagens, sempre ordenadas corretamente
