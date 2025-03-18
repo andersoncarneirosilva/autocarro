@@ -5,13 +5,23 @@ document.addEventListener('DOMContentLoaded', function () {
     console.log("authUserId:", window.authUserId);
 
     const messageList = document.getElementById('message-list');
-    
-    if (messageList && window.authUserId) {
-        // Certifique-se de que o usuário não está inscrito em outro canal
-        window.Echo.leave('chat.' + window.authUserId);  // Deixe o canal antes de se inscrever novamente
 
-        // Inscreve no canal privado
-        window.Echo.channel('chat.' + window.authUserId)
+    if (messageList && window.authUserId) {
+        // Verifica se Echo está definido antes de tentar sair do canal
+        if (window.Echo) {
+            const privateChannel = 'chat.' + window.authUserId;
+            
+            // Certifica-se de sair do canal privado antes de se inscrever novamente
+            if (window.Echo.channel(privateChannel)) {
+                console.log(`Saindo do canal ${privateChannel} antes de se inscrever novamente...`);
+                window.Echo.leave(privateChannel);
+            }
+        } else {
+            console.warn("window.Echo não está definido!");
+        }
+
+        // Inscreve-se apenas no canal privado do usuário
+        window.Echo.private('chat.' + window.authUserId)
             .listen('NewMessage', (event) => {
                 try {
                     console.log('Nova mensagem recebida:', event);
@@ -45,6 +55,7 @@ document.addEventListener('DOMContentLoaded', function () {
                     console.error('Erro ao processar a mensagem:', error);
                 }
             });
+
     } else {
         console.warn("Elemento #message-list não encontrado ou authUserId não definido.");
     }
