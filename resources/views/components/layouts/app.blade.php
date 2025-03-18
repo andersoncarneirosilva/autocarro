@@ -75,9 +75,9 @@
 <script type="module" src="{{ asset('build/' . $jsFile) }}" defer></script>
 @endif
                         
-    <script>
-        var userId = @json(auth()->id());
-    </script>
+<script>
+    window.authUserId = {{ auth()->id() }};
+</script>
     
 
     <!-- Plugin css -->

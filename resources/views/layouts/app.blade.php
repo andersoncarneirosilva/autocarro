@@ -63,21 +63,7 @@
 {{-- @vite(['resources/css/app.css', 'resources/js/app.js']) --}}
 
 {{-- PRODUCAO --}}
-@if (app()->environment('local'))
-@vite(['resources/css/app.css', 'resources/js/app.js'])
-@else
-@php
-    $manifest = json_decode(file_get_contents(public_path('build/manifest.json')), true);
-    $cssFile = $manifest['resources/css/app.css']['file'] ?? 'assets/app.css';  // Default case
-    $jsFile = $manifest['resources/js/app.js']['file'] ?? 'assets/app.js';  // Default case
-@endphp
-<link rel="stylesheet" href="{{ asset('build/' . $cssFile) }}?v={{ time() }}">
-<script type="module" src="{{ asset('build/' . $jsFile) }}?v={{ time() }}" defer></script>
-@endif
-                
-<script>
-var userId = @json(auth()->id());
-</script>                                        
+                                    
 
 
     <!-- Plugin css -->
