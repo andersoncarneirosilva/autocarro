@@ -2,16 +2,22 @@ import './bootstrap';
 
 document.addEventListener('DOMContentLoaded', function () {
     console.log("Iniciando escuta no canal 'app.js'...");
-    console.log("authUserId:", window.authUserId); // Verificando o authUserId
+    console.log("authUserId:", window.authUserId);
 
     const messageList = document.getElementById('message-list');
+    
+    if (messageList && window.authUserId) {
+        // Verifica se a inscrição já foi feita
+        if (window.Echo && window.Echo.channel('chat.' + window.authUserId)) {
+            console.log('Já inscrito no canal privado chat.' + window.authUserId);
+            return;  // Não inscrever novamente
+        }
 
-    if (messageList) {
-        // Usando o canal privado 'chat.{userId}'
+        // Inscreve no canal privado
         window.Echo.channel('chat.' + window.authUserId)
             .listen('NewMessage', (event) => {
                 try {
-                    console.log('Nova mensagem recebida:', event); // Verifique os dados recebidos no console
+                    console.log('Nova mensagem recebida:', event);
 
                     if (!event.id || !event.content || !event.sender_id || !event.created_at) {
                         console.error('Dados de mensagem inválidos:', event);
@@ -43,6 +49,6 @@ document.addEventListener('DOMContentLoaded', function () {
                 }
             });
     } else {
-        console.warn("Elemento #message-list não encontrado.");
+        console.warn("Elemento #message-list não encontrado ou authUserId não definido.");
     }
 });
