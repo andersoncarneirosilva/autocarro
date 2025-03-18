@@ -1,11 +1,12 @@
 import './bootstrap';
+
 document.addEventListener('DOMContentLoaded', function () {
     console.log("Iniciando escuta no canal 'app.js'...");
-    console.log("authUserId:", window.authUserId);
+
     const messageList = document.getElementById('message-list');
 
     if (messageList) {
-        window.Echo.channel('chat.' + window.authUserId)  // Usando o authUserId definido
+        window.Echo.channel('chat')
             .listen('NewMessage', (event) => {
                 try {
                     console.log('Nova mensagem recebida:', event); // Verifique os dados recebidos no console
@@ -22,7 +23,7 @@ document.addEventListener('DOMContentLoaded', function () {
                     const createdAt = new Date(event.created_at);
                     const formattedTime = createdAt.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
 
-                    newMessage.innerHTML = `
+                    newMessage.innerHTML =`
                         <div class="conversation-text">
                             <div class="ctext-wrap">
                                 <p>${event.content}</p>
