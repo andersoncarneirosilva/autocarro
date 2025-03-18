@@ -1,11 +1,14 @@
 import './bootstrap';
+
 document.addEventListener('DOMContentLoaded', function () {
     console.log("Iniciando escuta no canal 'app.js'...");
-    console.log("authUserId:", window.authUserId);
+    console.log("authUserId:", window.authUserId); // Verificando o authUserId
+
     const messageList = document.getElementById('message-list');
 
     if (messageList) {
-        window.Echo.channel('chat')
+        // Usando o canal privado 'chat.{userId}'
+        window.Echo.channel('chat.' + window.authUserId)
             .listen('NewMessage', (event) => {
                 try {
                     console.log('Nova mensagem recebida:', event); // Verifique os dados recebidos no console
@@ -18,6 +21,7 @@ document.addEventListener('DOMContentLoaded', function () {
                     const newMessage = document.createElement('li');
                     const senderClass = event.sender_id === window.authUserId ? 'user-message' : 'admin-message';
                     newMessage.classList.add(senderClass);
+
                     // Formatar a hora com 'H:i'
                     const createdAt = new Date(event.created_at);
                     const formattedTime = createdAt.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
