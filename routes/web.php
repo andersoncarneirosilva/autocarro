@@ -33,7 +33,8 @@ use Illuminate\Support\Facades\Broadcast;
 
 Route::middleware(['auth'])->group(function () {
 
-    
+    Broadcast::routes();
+
     // Em routes/web.php ou routes/api.php
 // Route::post('/messages', [MessageController::class, 'store']);
 
