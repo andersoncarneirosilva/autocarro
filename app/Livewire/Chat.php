@@ -14,7 +14,8 @@ class Chat extends Component
     public Collection $messages;
     public string $newMessage = '';
     protected $listeners = ['newMessage' => 'addMessage'];
-    public int|null $chatId = null;
+    public int|null $chatId = 5;
+
     public function mount($chatId = null)
 {
     $this->chatId = $chatId;
