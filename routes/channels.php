@@ -7,14 +7,9 @@ Broadcast::routes(); // Isso cria as rotas necessárias para autenticação de c
 
 // Canal privado para o usuário (exemplo: "chat.{userId}")
 Broadcast::channel('chat.{userId}', function ($user, $userId) {
-    Log::info('Autenticando canal:', [
-        'user_id' => $user->id ?? 'não autenticado',
-        'canal' => $userId,
-        'socket_id' => request()->socket_id ?? 'não definido'
-    ]);
-
     return (int) $user->id === (int) $userId;
 });
+
 
 Route::post('/broadcasting/auth', function (Request $request) {
     Log::info('Recebendo autenticação WebSocket', [
