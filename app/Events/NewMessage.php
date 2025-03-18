@@ -1,50 +1,48 @@
 <?php
 
 namespace App\Events;
-use Illuminate\Broadcasting\InteractsWithSockets;
 
 use App\Models\Message;
 use Illuminate\Broadcasting\Channel;
+use Illuminate\Broadcasting\InteractsWithSockets;
 use Illuminate\Contracts\Broadcasting\ShouldBroadcast;
 use Illuminate\Foundation\Events\Dispatchable;
 use Illuminate\Queue\SerializesModels;
 use Log;
+
 class NewMessage implements ShouldBroadcast
 {
     use Dispatchable, InteractsWithSockets, SerializesModels;
-
 
     public $message;
 
     public function __construct(Message $message)
     {
         $this->message = $message;
-        Log::info('Evento NewMessage disparado!', ['message' => $message->content]);
+        Log::info('✅ Evento NewMessage CONSTRUTOR chamado!', ['message' => $message->content]);
     }
 
     public function broadcastOn()
     {
-        Log::info('Transmitindo conteúdo da mensagem broadcastOn', ['message' => $this->message->content]);
-        return new Channel('chat');
+        Log::info('📡 Transmitindo no canal chat');
+        return new Channel('chat'); // Garantir que o canal é público
     }
 
     public function broadcastAs()
     {
-        Log::info('broadcastAs:: ');
-        return 'NewMessage'; // Nome correto do evento
+        Log::info('📢 Nome do evento: NewMessage');
+        return 'NewMessage';
     }
 
     public function broadcastWith()
-{
-    Log::info('Dentro do broadcastWith', ['message' => $this->message]);
+    {
+        Log::info('📤 Dados enviados no evento:', ['message' => $this->message]);
 
-    return [
-        'id' => $this->message->id,
-        'content' => $this->message->content,
-        'sender_id' => $this->message->sender_id,
-        'created_at' => $this->message->created_at->toDateTimeString(),
-    ];
-}
-
-
+        return [
+            'id' => $this->message->id,
+            'content' => $this->message->content,
+            'sender_id' => $this->message->sender_id,
+            'created_at' => $this->message->created_at->toISOString(),
+        ];
+    }
 }
