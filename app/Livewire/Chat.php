@@ -14,20 +14,12 @@ class Chat extends Component
     public Collection $messages;
     public string $newMessage = '';
     protected $listeners = ['newMessage' => 'addMessage'];
-    public int|null $chatId = 5;
-
-    public function mount($chatId = null)
-{
-    $this->chatId = $chatId;
-    Log::info('Canal chat: ', $this->chatId);
-    if ($this->chatId) {
-        $this->messages = Message::where('chat_id', $this->chatId)
-            ->orderBy('id', 'asc')
-            ->get();
-    } else {
-        $this->messages = collect(); // Evita erro caso chatId seja null
+zz
+    public function mount()
+    {
+        // Inicializa as mensagens, sempre ordenadas corretamente
+        $this->messages = Message::orderBy('id', 'asc')->get();
     }
-}
 
     public function sendMessage()
     {

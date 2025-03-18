@@ -1,6 +1,5 @@
 <div> <!-- 🔹 Agora temos apenas um único elemento raiz -->
-    @livewire('chat', ['chatId' => $chat->id])
-
+    
     <div class="row">
         <div class="col-12">
             <div class="page-title-box">
