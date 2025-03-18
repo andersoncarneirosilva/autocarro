@@ -1,24 +1,28 @@
 import './bootstrap';
 import './test';
+
 document.addEventListener('DOMContentLoaded', function () {
-    console.log("Iniciando escuta no canal 'app.js'...");
-    console.log("authUserId:", window.authUserId);
+    console.log("Iniciando escuta no canal 'chat.{userId}'...");
+
     const messageList = document.getElementById('message-list');
+    const userId = window.authUserId;  // Certifique-se de que `authUserId` está disponível
 
     if (messageList) {
-        window.Echo.channel('chat')
+        // Assinando o canal privado 'chat.{userId}'
+        window.Echo.private('chat.' + userId)
             .listen('NewMessage', (event) => {
                 try {
-                    console.log('Nova mensagem recebida:', event); // Verifique os dados recebidos no console
+                    console.log('Nova mensagem recebida:', event);
 
-                    if (!event.id || !event.content || !event.sender_id || !event.created_at) {
+                    if (!event.content) {
                         console.error('Dados de mensagem inválidos:', event);
                         return;
                     }
 
                     const newMessage = document.createElement('li');
-                    const senderClass = event.sender_id === window.authUserId ? 'user-message' : 'admin-message';
+                    const senderClass = event.sender_id === userId ? 'user-message' : 'admin-message';
                     newMessage.classList.add(senderClass);
+
                     // Formatar a hora com 'H:i'
                     const createdAt = new Date(event.created_at);
                     const formattedTime = createdAt.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
