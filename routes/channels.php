@@ -31,19 +31,19 @@ Route::post('/broadcasting/auth', function (Request $request) {
 
 
 // Canal público para todos os usuários (exemplo: "events")
-Broadcast::channel('events', function ($user) {
-    return true;  // Lógica de autorização (por exemplo, pode ser todos os usuários autenticados)
-});
+// Broadcast::channel('events', function ($user) {
+//     return true;  // Lógica de autorização (por exemplo, pode ser todos os usuários autenticados)
+// });
 
-// Exemplo de canal para um evento específico (exemplo: "chat.{chatId}")
-Broadcast::channel('chat.{chatId}', function ($user, $chatId) {
-    // Aqui você pode adicionar lógica para autorizar o usuário a participar do canal
-    // Exemplo: se o usuário é participante do chat, ele pode ouvir o canal
-    return $user->chats->contains($chatId);
-});
+// // Exemplo de canal para um evento específico (exemplo: "chat.{chatId}")
+// Broadcast::channel('chat.{chatId}', function ($user, $chatId) {
+//     // Aqui você pode adicionar lógica para autorizar o usuário a participar do canal
+//     // Exemplo: se o usuário é participante do chat, ele pode ouvir o canal
+//     return $user->chats->contains($chatId);
+// });
 
-Broadcast::channel('App.Models.User.{id}', function ($user, $id) {
-    // A autenticação deve ser baseada no ID do usuário e não permitir acesso sem uma verificação válida
-    return (int) $user->id === (int) $id;
-});
+// Broadcast::channel('App.Models.User.{id}', function ($user, $id) {
+//     // A autenticação deve ser baseada no ID do usuário e não permitir acesso sem uma verificação válida
+//     return (int) $user->id === (int) $id;
+// });
 
