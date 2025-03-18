@@ -77,6 +77,7 @@
                         
 <script>
     window.authUserId = {{ auth()->id() }};
+    window.chatId = {{ $chat->id ?? 'null' }}; // Garante que chatId não fique undefined
 </script>
     
 
