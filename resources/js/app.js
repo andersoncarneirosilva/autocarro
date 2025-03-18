@@ -5,7 +5,7 @@ document.addEventListener('DOMContentLoaded', function () {
     const messageList = document.getElementById('message-list');
 
     if (messageList) {
-        window.Echo.channel('chat')
+        window.Echo.channel('chat.' + window.authUserId)  // Usando o authUserId definido
             .listen('NewMessage', (event) => {
                 try {
                     console.log('Nova mensagem recebida:', event); // Verifique os dados recebidos no console
