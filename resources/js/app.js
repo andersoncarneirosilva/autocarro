@@ -1,5 +1,4 @@
 import './bootstrap';
-import './test';
 document.addEventListener('DOMContentLoaded', function () {
     console.log("Iniciando escuta no canal 'app.js'...");
     console.log("authUserId:", window.authUserId);

@@ -40,7 +40,6 @@ import Echo from 'laravel-echo';
 import Pusher from 'pusher-js';
 window.Pusher = Pusher;
 
-window.Pusher.logToConsole = true; // Ativa os logs de Pusher no console
 
 window.Echo = new Echo({
     broadcaster: 'pusher',
