@@ -19,7 +19,7 @@ class Chat extends Component
     public function mount($chatId = null)
 {
     $this->chatId = $chatId;
-
+    Log::info('Canal chat: ', $this->chatId);
     if ($this->chatId) {
         $this->messages = Message::where('chat_id', $this->chatId)
             ->orderBy('id', 'asc')
