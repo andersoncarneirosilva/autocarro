@@ -1,5 +1,3 @@
-import './bootstrap';
-
 document.addEventListener('DOMContentLoaded', function () {
     console.log("Iniciando escuta no canal 'app.js'...");
     console.log("authUserId:", window.authUserId);
@@ -7,11 +5,8 @@ document.addEventListener('DOMContentLoaded', function () {
     const messageList = document.getElementById('message-list');
     
     if (messageList && window.authUserId) {
-        // Verifica se a inscrição já foi feita
-        if (window.Echo && window.Echo.channel('chat.' + window.authUserId)) {
-            console.log('Já inscrito no canal privado chat.' + window.authUserId);
-            return;  // Não inscrever novamente
-        }
+        // Certifique-se de que o usuário não está inscrito em outro canal
+        window.Echo.leave('chat.' + window.authUserId);  // Deixe o canal antes de se inscrever novamente
 
         // Inscreve no canal privado
         window.Echo.channel('chat.' + window.authUserId)
