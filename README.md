@@ -76,11 +76,12 @@ php artisan key:generate
 
 Dar um reset no php
 ```sh
-php artisan cache:clear          # Limpa o cache da aplicação
-php artisan config:clear         # Limpa o cache de configuração
-php artisan route:clear          # Limpa o cache de rotas
-php artisan view:clear           # Limpa o cache das views
-php artisan event:clear          # Limpa o cache de eventos
+php artisan cache:clear
+php artisan config:cache
+php artisan config:clear
+php artisan route:clear
+php artisan view:clear
+php artisan event:clear
 ```
 
 Acessar o projeto
