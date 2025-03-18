@@ -55,12 +55,8 @@ window.Echo = new Echo({
      },
 });
 
-window.Echo.channel('chat') // O mesmo canal do evento
-    .listen('NewMessage', (e) => {
-        console.log('Nova mensagem recebida:', e.message);
-    });
     
-console.log("Instância de Echo criada com sucesso!");
+//console.log("Instância de Echo criada com sucesso!");
 
 window.Echo.connector.pusher.connection.bind('state_change', function(states) {
     console.log("Estado da conexão Pusher:", states);
