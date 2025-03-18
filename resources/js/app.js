@@ -7,16 +7,11 @@ document.addEventListener('DOMContentLoaded', function () {
     const messageList = document.getElementById('message-list');
 
     if (messageList && window.authUserId) {
+        // Verifica se Echo está definido antes de tentar sair do canal
         if (window.Echo) {
-            const privateChannel = 'private-chat.' + window.authUserId;
-
-            // Sai do canal público "chat" se ainda estiver inscrito
-            if (window.Echo.channel('chat')) {
-                console.log("Saindo do canal público 'chat'...");
-                window.Echo.leave('chat');
-            }
-
-            // Sai do canal privado antes de se inscrever novamente
+            const privateChannel = 'chat.' + window.authUserId;
+            
+            // Certifica-se de sair do canal privado antes de se inscrever novamente
             if (window.Echo.channel(privateChannel)) {
                 console.log(`Saindo do canal ${privateChannel} antes de se inscrever novamente...`);
                 window.Echo.leave(privateChannel);
@@ -25,8 +20,8 @@ document.addEventListener('DOMContentLoaded', function () {
             console.warn("window.Echo não está definido!");
         }
 
-        // Inscreve-se apenas no canal privado correto
-        window.Echo.private('private-chat.' + window.authUserId)
+        // Inscreve-se apenas no canal privado do usuário
+        window.Echo.private('chat.' + window.authUserId)
             .listen('NewMessage', (event) => {
                 try {
                     console.log('Nova mensagem recebida:', event);
