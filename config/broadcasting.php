@@ -36,12 +36,6 @@ return [
                 'encrypted' => true,
             ],
         ],
-
-        'redis' => [
-            'driver' => 'redis',
-            'connection' => 'default',
-        ],
-
         
         'socket' => [
             'driver' => 'websockets',
