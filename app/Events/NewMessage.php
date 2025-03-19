@@ -35,14 +35,14 @@ class NewMessage implements ShouldBroadcast
     }
 
     public function broadcastWith()
-    {
-        Log::info('📤 Dados enviados no evento:', ['message' => $this->message]);
+{
+    Log::info('📤 Dados enviados no evento:', ['message' => $this->message]);
 
-        return [
-            'id' => $this->message->id,
-            'content' => $this->message->content,
-            'sender_id' => $this->message->sender_id,
-            'created_at' => $this->message->created_at->toISOString(),
-        ];
-    }
+    return [
+        'content' => 'Teste forçado',
+        'sender_id' => 1,
+        'created_at' => now()->toISOString(),
+    ];
+}
+
 }
