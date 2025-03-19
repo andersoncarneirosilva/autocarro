@@ -64,7 +64,9 @@ class Chat extends Component
 
         if ($msg && !$this->messages->contains('id', $msg->id)) {
             $this->messages->push($msg);
+            Log::info('Disparando evento messageUpdated', ['message' => $msg]);
             $this->dispatch('messageUpdated', $msg); // Atualiza a interface com a nova mensagem
+            $this->dispatch('$refresh'); // Força a atualização do Livewire
         }
     }
 
