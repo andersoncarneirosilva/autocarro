@@ -42,7 +42,8 @@ class Chat extends Component
         Log::info('Disparando evento NewMessage!', ['message' => $message]);
 
         // Disparar evento WebSocket para outros navegadores
-        broadcast(new NewMessage($message))->toOthers();
+        broadcast(new NewMessage($message));
+
 
         // Atualizar a interface
         $this->newMessage = '';
