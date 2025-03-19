@@ -75,7 +75,7 @@
     // Definindo globalmente o authUserId para garantir que ele esteja acessível no JS
     window.authUserId = @json(auth()->id());
 
-    Livewire.on('.MessageUpdated', (event) => {
+    Livewire.on('messageUpdated', (event) => {
         console.log('Mensagem recebida ou enviada:', event);
         updateMessages(event);
     });
