@@ -72,37 +72,55 @@
 
     @push('scripts')
 <script>
-Livewire.on('messageUpdated', (event) => {
-    console.log('Mensagem recebida ou enviada:', event);
-    updateMessages(event);
-});
+    // Definindo globalmente o authUserId para garantir que ele esteja acessível no JS
+    window.authUserId = @json(auth()->id());
 
-// Atualizar mensagens
-function updateMessages(event) {
-    console.log('Dados do evento recebidos:', event); // Verifique os dados aqui
+    Livewire.on('messageUpdated', (event) => {
+        console.log('Mensagem recebida ou enviada:', event);
+        updateMessages(event);
+    });
 
-    const messageList = document.getElementById('message-list');
-    const newMessage = document.createElement('li');
-    const senderClass = event.sender_id === authUserId ? 'user-message' : 'admin-message'; 
+    // Atualizar mensagens
+    function updateMessages(event) {
+        console.log('Dados do evento recebidos:', event); // Verifique os dados aqui
 
-    newMessage.classList.add(senderClass);
+        const messageList = document.getElementById('message-list');
+        
+        if (!messageList) {
+            console.warn("Elemento #message-list não encontrado.");
+            return;
+        }
 
-    newMessage.innerHTML = `
-    <div class="conversation-text">
-        <div class="message-content">
-            <p>${event.content}</p>
+        // Criação de um novo elemento de mensagem
+        const newMessage = document.createElement('li');
+        
+        // Adicionando a classe conforme o sender_id
+        const senderClass = event.sender_id === window.authUserId ? 'user-message' : 'admin-message'; 
+        newMessage.classList.add(senderClass);
+
+        // Preenchendo o conteúdo da nova mensagem
+        newMessage.innerHTML = `
+        <div class="conversation-text">
+            <div class="message-content">
+                <p>${event.content}</p>
+            </div>
+            <span class="message-time">${formatDate(event.created_at)}</span>
         </div>
-        <span class="message-time">${event.updated_at}</span>
-    </div>
-`;
+        `;
 
+        // Adicionando a nova mensagem à lista
+        messageList.appendChild(newMessage);
+        messageList.scrollTop = messageList.scrollHeight;
+    }
 
-    messageList.appendChild(newMessage);
-    messageList.scrollTop = messageList.scrollHeight;
-}
-
-
+    // Função para formatar a data para 'H:i' (hora e minuto)
+    function formatDate(dateString) {
+        const createdAt = new Date(dateString);
+        const formattedTime = createdAt.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+        return formattedTime;
+    }
 </script>
 @endpush
+
 
 </div> <!-- 🔹 Fecha o elemento raiz -->

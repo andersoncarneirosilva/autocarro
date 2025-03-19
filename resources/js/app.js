@@ -8,7 +8,7 @@ document.addEventListener('DOMContentLoaded', function () {
     if (messageList) {
         window.Echo.channel('chat')
     .listen('.NewMessage', (event) => {
-        console.log('Nova mensagem recebida:', event.content); // Verifique o evento completo
+        console.log('Nova mensagem recebida:', event); // Verifique o evento completo
 
         if (event && event.content && event.sender_id && event.created_at) {
             const newMessage = document.createElement('li');
