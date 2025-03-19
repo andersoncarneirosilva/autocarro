@@ -8,6 +8,8 @@ document.addEventListener('DOMContentLoaded', function () {
     if (messageList) {
         window.Echo.channel('chat')
             .listen('NewMessage', (event) => {
+                console.log('Dados recebidos:', event.data);
+
                 console.log('Nova mensagem recebida:', event);
 
                 // Adapte o formato para se ajustar à estrutura que você recebe
