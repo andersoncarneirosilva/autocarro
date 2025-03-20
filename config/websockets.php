@@ -23,18 +23,20 @@ return [
 
     // PRODUCAO
     'apps' => [
-    [
-        'id' => env('PUSHER_APP_ID'),
-        'name' => env('PUSHER_APP_NAME'),
-        'key' => env('PUSHER_APP_KEY'),
-        'secret' => env('PUSHER_APP_SECRET'),
-        'path' => env('PUSHER_APP_PATH'),
-        'capacity' => null,
-        'host' => env('PUSHER_HOST', '0.0.0.0'), // Permite conexões externas
-        'port' => env('PUSHER_PORT', 6001),  // Usa 6001 para o WebSocket
-        'scheme' => env('PUSHER_SCHEME', 'http'),
+        [
+            'id' => env('PUSHER_APP_ID'),
+            'name' => env('PUSHER_APP_NAME'),
+            'key' => env('PUSHER_APP_KEY'),
+            'secret' => env('PUSHER_APP_SECRET'),
+            'path' => env('PUSHER_APP_PATH'),
+            'capacity' => null,
+            'host' => env('PUSHER_HOST', '0.0.0.0'), // Permite conexões externas
+            'port' => env('PUSHER_PORT', 6001),  // Usa 6001 para o WebSocket
+            'scheme' => env('PUSHER_SCHEME', 'http'),
+            'enable_client_messages' => true,
+            'enable_statistics' => true,
+        ],
     ],
-],
 
     /*
      * This class is responsible for finding the apps. The default provider
