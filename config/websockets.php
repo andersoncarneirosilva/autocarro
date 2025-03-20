@@ -34,7 +34,8 @@ return [
             'port' => env('PUSHER_PORT', 6001),  // Usa 6001 para o WebSocket
             'scheme' => env('PUSHER_SCHEME', 'http'),
             'enable_client_messages' => true,
-            'enable_statistics' => true,
+            'enable_statistics' => false,
+            'allowed_origins' => ['*'],
         ],
     ],
 
