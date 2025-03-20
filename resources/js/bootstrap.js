@@ -54,13 +54,3 @@ window.Echo = new Echo({
          },
      },
 });
-
-    
-//console.log("Instância de Echo criada com sucesso!");
-
-window.Echo.connector.pusher.connection.bind('state_change', function(states) {
-    console.log("Estado da conexão Pusher:", states);
-    if (states.current === 'connected') {
-        console.log("Conexão Pusher estabelecida com sucesso!");
-    }
-});
