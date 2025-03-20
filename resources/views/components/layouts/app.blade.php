@@ -53,7 +53,8 @@
     <!-- Incluindo o jQuery Toast -->
     <script src="{{ url('js/mask-cep.js') }}"></script>
     <script src="{{ url('js/mask-phone.js') }}"></script>
-
+    
+    <script src="https://js.pusher.com/8.3.0/pusher.min.js"></script>
     {{-- <script src="{{ url('assets/js/pagamento.js') }}?v={{ time() }}"></script> --}}
 
 <!-- jstree css -->
