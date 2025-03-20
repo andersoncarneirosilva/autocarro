@@ -54,3 +54,5 @@ window.Echo = new Echo({
          },
      },
 });
+
+console.log("Pusher Echo configurado e pronto para ouvir eventos.");
