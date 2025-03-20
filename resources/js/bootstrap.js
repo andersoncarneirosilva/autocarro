@@ -45,8 +45,6 @@ window.Echo = new Echo({
     key: import.meta.env.VITE_PUSHER_APP_KEY,
     cluster: import.meta.env.VITE_PUSHER_APP_CLUSTER,
     wsHost: import.meta.env.VITE_PUSHER_HOST || "ws.pusherapp.com",
-    wsPort: import.meta.env.VITE_PUSHER_PORT || 6001,
-    wssPort: import.meta.env.VITE_PUSHER_PORT || 6001,
     forceTLS: true,  // Se estiver usando HTTPS, mantenha como true
     enabledTransports: ['ws', 'wss'], // Garante o uso apenas de WebSockets
     disableStats: true,
