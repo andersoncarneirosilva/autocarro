@@ -22,33 +22,34 @@ class Chat extends Component
     }
 
     public function sendMessage()
-    {
-        if (trim($this->newMessage) === '') {
-            return;
-        }
-
-        if (!auth()->check()) {
-            return;
-        }
-
-        // Criar a nova mensagem
-        $message = Message::create([
-            'content' => $this->newMessage,
-            'sender_id' => auth()->id(),
-        ]);
-        
-        // Adicionar a mensagem à coleção e atualizar o componente
-        $this->messages = $this->messages->push($message);
-        Log::info('Disparando evento NewMessage!', ['message' => $message]);
-
-        // Disparar evento WebSocket para outros navegadores
-        broadcast(new NewMessage($message));
-
-
-        // Atualizar a interface
-        $this->newMessage = '';
-        $this->messages = Message::orderBy('id', 'asc')->get(); // Recarrega as mensagens após envio
+{
+    if (trim($this->newMessage) === '') {
+        return;
     }
+
+    if (!auth()->check()) {
+        return;
+    }
+
+    // Criar a nova mensagem
+    $message = Message::create([
+        'content' => $this->newMessage,
+        'sender_id' => auth()->id(),
+    ]);
+
+    // Adicionar log antes do evento
+    Log::info('📩 Mensagem criada!', ['message' => $message]);
+
+    // Disparar evento WebSocket para outros navegadores
+    Log::info('📡 Disparando evento NewMessage!');
+    broadcast(new NewMessage($message));
+    Log::info('✅ Evento NewMessage disparado!');
+
+    // Atualizar a interface
+    $this->newMessage = '';
+    $this->messages = Message::orderBy('id', 'asc')->get();
+}
+
 
     #[On('newMessage')]
     public function receiveMessage($message)
