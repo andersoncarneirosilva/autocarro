@@ -36,17 +36,20 @@
 // PRODUCAO
 import Echo from 'laravel-echo';
 import Pusher from 'pusher-js';
+
 window.Pusher = Pusher;
 
-window.Pusher.logToConsole = true; // Ativa os logs de Pusher no console
+window.Pusher.logToConsole = true; // Somente para testes, remova em produção!
 
 window.Echo = new Echo({
     broadcaster: 'pusher',
     key: import.meta.env.VITE_PUSHER_APP_KEY,
     cluster: import.meta.env.VITE_PUSHER_APP_CLUSTER,
-     wsPort: import.meta.env.VITE_PUSHER_PORT,
-     wssPort: null,  // Não usar o protocolo wss em ambientes não SSL
-    forceTLS: true,
+    wsHost: import.meta.env.VITE_PUSHER_HOST,  // Adicionado para garantir o host correto
+    wsPort: import.meta.env.VITE_PUSHER_PORT,
+    wssPort: null,
+    forceTLS: true,  // Ou false se o WebSocket não estiver configurado com SSL
+    enabledTransports: ['ws', 'wss'], // Garante o uso de WebSockets
     disableStats: true,
     authEndpoint: '/broadcasting/auth',
     auth: {
