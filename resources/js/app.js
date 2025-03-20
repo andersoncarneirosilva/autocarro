@@ -3,7 +3,7 @@ import './bootstrap';
 document.addEventListener('DOMContentLoaded', function () {
     
     const messageList = document.getElementById('message-list');
-    
+    console.log("Elemento #message-list encontrado:", messageList);
     if (messageList) {
         window.Echo.channel('chat')
         .listen('NewMessage', (event) => {
