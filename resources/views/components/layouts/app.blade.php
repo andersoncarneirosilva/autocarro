@@ -61,10 +61,10 @@
 <link href="{{ url('assets/vendor/jstree/themes/default/style.min.css') }}" rel="stylesheet" type="text/css">
 
 {{-- DESENVOLVIMENTO --}}
-@vite(['resources/css/app.css', 'resources/js/app.js'])
+{{-- @vite(['resources/css/app.css', 'resources/js/app.js']) --}}
 
 {{-- PRODUCAO --}}
-{{-- @if (app()->environment('local'))
+@if (app()->environment('local'))
 @vite(['resources/css/app.css', 'resources/js/app.js'])
 @else
 @php
@@ -74,7 +74,7 @@
 @endphp
 <link rel="stylesheet" href="{{ asset('build/' . $cssFile) }}">
 <script type="module" src="{{ asset('build/' . $jsFile) }}" defer></script>
-@endif --}}
+@endif
                         
 <script>
     window.authUserId = {{ auth()->id() }};
