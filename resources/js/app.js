@@ -7,7 +7,7 @@ document.addEventListener('DOMContentLoaded', function () {
     console.log("Elemento #message-list encontrado:", messageList);
 
     if (messageList) {
-        window.Echo.channel('chat')
+        window.Echo.private('chat')
             .listen('.NewMessage', (event) => {  // Adicione o ponto antes do nome do evento
                 console.log('Nova mensagem recebida:', event);
                 if (event && event.content && event.sender_id && event.created_at) {
