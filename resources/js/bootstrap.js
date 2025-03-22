@@ -11,7 +11,6 @@ window.Echo = new Echo({
     cluster: import.meta.env.VITE_PUSHER_APP_CLUSTER,
     wssPort: 443,  // Não usar o protocolo wss em ambientes não SSL
     forceTLS: true,  // Garantir que o TLS (HTTPS) não seja utilizado, caso esteja usando http
-    enabledTransports: ['ws', 'wss'],
 
 });
 
