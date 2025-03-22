@@ -13,6 +13,7 @@ window.Echo = new Echo({
     wsPort: import.meta.env.VITE_PUSHER_PORT,
     wssPort: 6001,  // Não usar o protocolo wss em ambientes não SSL
     forceTLS: true,  // Garantir que o TLS (HTTPS) não seja utilizado, caso esteja usando http
+    enabledTransports: ['ws', 'wss'],
 
 });
 
