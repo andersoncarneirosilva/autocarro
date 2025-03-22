@@ -31,8 +31,8 @@ return [
             'path' => env('PUSHER_APP_PATH'),
             'capacity' => null,
             'host' => env('PUSHER_HOST', '0.0.0.0'), // Permite conexões externas
-            'port' => env('PUSHER_PORT', 6001),  // Usa 6001 para o WebSocket
-            'scheme' => env('PUSHER_SCHEME', 'http'),
+            'port' => env('PUSHER_PORT', 443),  // Usa 6001 para o WebSocket
+            'scheme' => env('PUSHER_SCHEME', 'https'),
             'enable_client_messages' => true,
             'enable_statistics' => false,
             'allowed_origins' => ['*'],
