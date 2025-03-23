@@ -13,12 +13,6 @@ window.Echo = new Echo({
     forceTLS: true,
     encrypted: true, 
     enabledTransports: ['ws', 'wss', 'xhr_streaming', 'xhr_polling'], // <-- Adiciona suporte a polling
-    authEndpoint: '/broadcasting/auth',
-     auth: {
-          headers: {
-              'X-CSRF-TOKEN': document.head.querySelector('meta[name="csrf-token"]').content,
-          },
-      },
 
 });
 
