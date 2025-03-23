@@ -36,7 +36,7 @@ document.addEventListener('DOMContentLoaded', function () {
                     console.error('Mensagem inválida recebida:', event);
                 }
                 // Força a atualização do Livewire
-        //Livewire.emit('refresh');
+                Livewire.emit('refresh');
             });
     } else {
         console.warn("Elemento #message-list não encontrado.");

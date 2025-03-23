@@ -12,4 +12,4 @@ function Er(u){if(u===void 0)throw new ReferenceError("this hasn't been initiali
                             </div>
                             <span class="message-time">${l}</span>
                         </div>
-                    `,u.appendChild(o),u.scrollTop=u.scrollHeight}else console.error("Mensagem inválida recebida:",a)}):console.warn("Elemento #message-list não encontrado.")});
+                    `,u.appendChild(o),u.scrollTop=u.scrollHeight}else console.error("Mensagem inválida recebida:",a);Livewire.emit("refresh")}):console.warn("Elemento #message-list não encontrado.")});
