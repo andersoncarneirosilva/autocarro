@@ -25,7 +25,7 @@ class NewMessage implements ShouldBroadcast
     public function broadcastOn()
     {
         Log::info('📡 Transmitindo no canal chat');
-        return new Channel('private-chat'); // Garantir que o canal é público
+        return new Channel('chat'); // Garantir que o canal é público
     }
 
     public function broadcastAs()
