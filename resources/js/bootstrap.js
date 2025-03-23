@@ -11,6 +11,7 @@ window.Echo = new Echo({
     cluster: import.meta.env.VITE_PUSHER_APP_CLUSTER,
     wssPort: 443,  // Não usar o protocolo wss em ambientes não SSL
     forceTLS: true,
+    enabledTransports: ['ws', 'wss', 'xhr_streaming', 'xhr_polling'], // <-- Adiciona suporte a polling
     authEndpoint: '/broadcasting/auth',
      auth: {
           headers: {
