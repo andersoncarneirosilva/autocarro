@@ -34,9 +34,7 @@ return [
                 'cluster' => env('PUSHER_APP_CLUSTER'),
                 'useTLS' => true,
                 'encrypted' => true,
-                'host' => '0.0.0.0', // Se estiver usando WebSockets no Laravel
-                'port' => 6001, // Porta do WebSockets
-                'scheme' => 'http', // Se não estiver usando HTTPS interno
+                'scheme' => 'https', // Se não estiver usando HTTPS interno
             ],
         ],
 
