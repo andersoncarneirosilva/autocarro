@@ -9,7 +9,7 @@ window.Echo = new Echo({
     broadcaster: 'pusher',
     key: import.meta.env.VITE_PUSHER_APP_KEY,
     cluster: import.meta.env.VITE_PUSHER_APP_CLUSTER,
-    wssPort: 443,  // Não usar o protocolo wss em ambientes não SSL
+    wssPort: 6001,  // Não usar o protocolo wss em ambientes não SSL
     forceTLS: true,  // Garantir que o TLS (HTTPS) não seja utilizado, caso esteja usando http
 
 });

@@ -36,6 +36,7 @@ return [
                 'encrypted' => true,
                 'host' => env('PUSHER_HOST', 'ws.pusherapp.com'),
                 'port' => env('WEBSOCKETS_PORT', 6001),
+                'scheme' => 'https'
             ],
         ],
         
