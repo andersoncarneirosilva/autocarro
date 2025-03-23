@@ -21,6 +21,11 @@ Broadcast::channel('chat.{chatId}', function ($user, $chatId) {
     return $user->chats()->where('id', $chatId)->exists();
 });
 
+Broadcast::channel('private-chat', function ($user) {
+    // Verifique se o usuário tem permissão para acessar o canal privado
+    return $user !== null;  // ou qualquer outra lógica de permissão
+});
+
 
 // Route::post('/broadcasting/auth', function (Request $request) {
 //     Log::info('Recebendo autenticação WebSocket', [
