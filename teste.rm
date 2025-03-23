@@ -8,8 +8,6 @@ $message = Message::create([
 ]);
 
 event(new NewMessage($message));
-dd('Evento foi disparado');
-Log::info('Evento NewMessage sendo disparado');
 
 
 use Pusher\Pusher;
@@ -80,3 +78,32 @@ socket.onclose = function(event) {
 };
 
 curl -i proconline.com.br 6001
+
+
+curl -X POST "https://mt1.pusher.com/apps/e8703bef27184bc00d2f/events" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "name": "NewMessage",
+    "channel": "chat",
+    "data": {
+        "id": 1,
+        "content": "Teste enviado via API",
+        "sender_id": 123,
+        "created_at": "2025-03-23T17:00:00Z"
+    }
+  }' \
+  --user "myPusherAppKey:myPusherAppSecret"
+
+  curl --http1.1 -X POST "https://api-mt1.pusher.com/apps/e8703bef27184bc00d2f/events" \
+  -H "Content-Type: application/json" \
+  -H "Authorization: Basic <e8703bef27184bc00d2f:6a59dee0cf8c38ece71d>" \
+  -d '{
+    "name": "NewMessage",
+    "channel": "chat",
+    "data": {
+        "id": 1,
+        "content": "Teste enviado via API",
+        "sender_id": 123,
+        "created_at": "2025-03-23T17:00:00Z"
+    }
+  }'
