@@ -25,17 +25,11 @@ return [
     'apps' => [
         [
             'id' => env('PUSHER_APP_ID'),
-            'name' => env('PUSHER_APP_NAME'),
+            'name' => env('APP_NAME'),
             'key' => env('PUSHER_APP_KEY'),
             'secret' => env('PUSHER_APP_SECRET'),
-            'path' => env('PUSHER_APP_PATH'),
-            'capacity' => null,
-            'host' => env('PUSHER_HOST', 'ws.pusherapp.com'), // Permite conexões externas
-            'port' => env('PUSHER_PORT', 443),  // Usa 6001 para o WebSocket
-            'scheme' => env('PUSHER_SCHEME', 'https'),
             'enable_client_messages' => false,
             'enable_statistics' => true,
-            'allowed_origins' => ['*'],
         ],
     ],
 
