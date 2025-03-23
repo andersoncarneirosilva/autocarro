@@ -1,0 +1,82 @@
+use App\Models\Message;
+use App\Events\NewMessage;
+
+$message = Message::create([
+    'user_id' => 1, // Substitua pelo ID do usuário real
+    'sender_id' => 1, // Substitua pelo ID do usuário real
+    'content' => 'Mensagem de teste!',
+]);
+
+event(new NewMessage($message));
+dd('Evento foi disparado');
+Log::info('Evento NewMessage sendo disparado');
+
+
+use Pusher\Pusher;
+
+$pusher = new Pusher(
+    env('PUSHER_APP_KEY'),
+    env('PUSHER_APP_SECRET'),
+    env('PUSHER_APP_ID'),
+    [
+        'cluster' => env('PUSHER_APP_CLUSTER'),
+        'useTLS' => true
+    ]
+);
+Log::info('Evento sendo disparado');
+$pusher->trigger('chat', 'NewMessage', ['content' => 'Teste manual via Pusher', 'sender_id' => 1]);
+
+
+use Pusher\Pusher;
+
+$pusher = new Pusher(
+    env('PUSHER_APP_KEY'),
+    env('PUSHER_APP_SECRET'),
+    env('PUSHER_APP_ID'),
+    [
+        'cluster' => env('PUSHER_APP_CLUSTER'),
+        'useTLS' => true
+    ]
+);
+
+$pusher->trigger('chat', 'NewMessage', ['content' => 'Teste manual via Pusher']);
+
+
+const socket = new WebSocket('ws://ws.pusherapp.com:6001/app/e8703bef27184bc00d2f?protocol=7&client=js&version=8.4.0');
+
+socket.onopen = function(event) {
+    console.log('Conexão WebSocket aberta:', event);
+    socket.send('Olá, WebSocket!');
+};
+
+socket.onmessage = function(event) {
+    console.log('Mensagem recebida:', event.data);
+};
+
+socket.onerror = function(event) {
+    console.log('Erro no WebSocket:', event);
+};
+
+socket.onclose = function(event) {
+    console.log('Conexão WebSocket fechada:', event);
+};
+
+const socket = new WebSocket("wss://ws-mt1.pusher.com/app/e8703bef27184bc00d2f?protocol=7&client=js&version=8.4.0");
+
+socket.onopen = function(event) {
+    console.log("✅ Conectado ao WebSocket do Pusher:", event);
+};
+
+socket.onmessage = function(event) {
+    console.log("📩 Mensagem recebida:", event.data);
+};
+
+socket.onerror = function(event) {
+    console.log("❌ Erro na conexão:", event);
+};
+
+socket.onclose = function(event) {
+    console.log("🔌 Conexão fechada:", event);
+};
+
+curl -i proconline.com.br 6001
