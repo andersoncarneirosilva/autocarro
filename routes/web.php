@@ -47,6 +47,8 @@ Route::get('/test-event', function () {
 
     return 'Evento disparado!';
 });
+Route::post('/broadcasting/auth', 'BroadcastController@authenticate');
+
 Route::post('/broadcasting/auth', function (Request $request) {
     Log::info('Recebendo autenticação WebSocket', [
         'user_id' => auth()->id(),
