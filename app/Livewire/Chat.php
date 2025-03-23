@@ -73,15 +73,15 @@ class Chat extends Component
     }
 
     public function addMessage($message)
-    {
-        Log::info('Adicionando mensagem:', ['message' => $message]);
+{
+    Log::info('Adicionando mensagem:', ['message' => $message]);
 
-        // Adicionar a nova mensagem à lista de mensagens do componente
-        $this->messages = $this->messages->push($message);
+    // Adicionar a nova mensagem à lista de mensagens do componente
+    $this->messages->push($message);
 
-        // Emitir evento para atualizar a interface
-        $this->dispatch('messageUpdated', $message);
-    }
+    // Emitir evento para atualizar a interface
+    $this->dispatch('messageUpdated', $message);
+}
 
     public function render()
     {

@@ -10,6 +10,8 @@ document.addEventListener('DOMContentLoaded', function () {
         window.Echo.channel('chat')
             .listen('.NewMessage', (event) => {  // Adicione o ponto antes do nome do evento
                 console.log('Nova mensagem recebida:', event);
+                // Adiciona a nova mensagem à interface
+                Livewire.emit('newMessage', event);
                 if (event && event.content && event.sender_id && event.created_at) {
                     const newMessage = document.createElement('li');
                     const senderClass = event.sender_id === window.authUserId ? 'user-message' : 'admin-message';
@@ -33,6 +35,8 @@ document.addEventListener('DOMContentLoaded', function () {
                 } else {
                     console.error('Mensagem inválida recebida:', event);
                 }
+                // Força a atualização do Livewire
+        //Livewire.emit('refresh');
             });
     } else {
         console.warn("Elemento #message-list não encontrado.");
