@@ -25,7 +25,7 @@
 
 
 // PRODUCAO
-import Echo from 'laravel-echo';
+// import Echo from 'laravel-echo';
 import Pusher from 'pusher-js';
 window.Pusher = Pusher;
 
@@ -33,8 +33,8 @@ window.Pusher.logToConsole = true; // Ativa os logs de Pusher no console
 
 window.Echo = new Echo({
     broadcaster: 'pusher',
-    key: process.env.VITE_PUSHER_APP_KEY,
-    cluster: process.env.VITE_PUSHER_APP_CLUSTER,
+    key: import.meta.env.VITE_PUSHER_APP_KEY,
+    cluster: import.meta.env.VITE_PUSHER_APP_CLUSTER,
     wsHost: 'example.com', // Your domain
     encrypted: true,
     wssPort: 443, // Https port
