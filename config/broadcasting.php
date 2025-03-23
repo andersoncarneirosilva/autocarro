@@ -35,8 +35,8 @@ return [
                 'useTLS' => true,
                 'encrypted' => true,
                 'host' => env('PUSHER_HOST'),
-                'port' => env('WEBSOCKETS_PORT', 6001),
-                'scheme' => 'https'
+                'port' => env('WEBSOCKETS_PORT', 443),
+                'scheme' => 'https',
             ],
         ],
         
