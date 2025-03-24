@@ -4,7 +4,6 @@ document.addEventListener('DOMContentLoaded', function () {
     console.log("Iniciando escuta no canal 'chat'...");
 
     const messageList = document.getElementById('message-list');
-    console.log("Elemento #message-list encontrado:", messageList);
 
     if (messageList) {
         window.Echo.channel('chat')

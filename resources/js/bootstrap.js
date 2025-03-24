@@ -50,7 +50,7 @@ window.Echo.connector.pusher.connection.bind('state_change', function(states) {
 });
 
 window.Echo.channel('chat')
-    .listen('MessageSent', (event) => {
+    .listen('NewMessage', (event) => {
         console.log('Mensagem recebida:', event.message);
     });
 
