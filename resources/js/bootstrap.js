@@ -61,12 +61,11 @@ window.Echo = new Echo({
     broadcaster: 'pusher',
     key: import.meta.env.VITE_PUSHER_APP_KEY,
     cluster: import.meta.env.VITE_PUSHER_APP_CLUSTER ?? 'mt1',
-    wsHost: 'ws.pusherapp.com',
-    wsPort: 443,
+    wssHost: 'ws.pusherapp.com',
     wssPort: 443,
     forceTLS: true,
     disableStats: true,
-    enabledTransports: ['ws', 'wss'],
+    enabledTransports: ['wss'],
 });
 
 console.log("Instância de Echo criada com sucesso!");
