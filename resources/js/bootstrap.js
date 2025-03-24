@@ -60,9 +60,10 @@ window.Pusher.logToConsole = true;
 window.Echo = new Echo({
     broadcaster: 'pusher',
     key: import.meta.env.VITE_PUSHER_APP_KEY,
-    cluster: import.meta.env.VITE_PUSHER_APP_CLUSTER ?? 'mt1',
+    cluster: import.meta.env.VITE_PUSHER_APP_CLUSTER,
+    wssPort: 443,
     forceTLS: true,
-    disableStats: true,
+    encrypted: true,
     enabledTransports: ['wss'],
 });
 
