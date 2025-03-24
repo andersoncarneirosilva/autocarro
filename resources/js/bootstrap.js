@@ -32,12 +32,11 @@ import Pusher from 'pusher-js';
 
 window.Pusher = Pusher;
 window.Pusher.logToConsole = true; // Isso permite visualizar os logs do Pusher no console
-
 window.Echo = new Echo({
     broadcaster: 'pusher',
-    key: process.env.VITE_PUSHER_APP_KEY,
-    cluster: process.env.VITE_PUSHER_APP_CLUSTER,
-    encrypted: true
+    key: import.meta.env.VITE_PUSHER_APP_KEY,
+    cluster: import.meta.env.VITE_PUSHER_APP_CLUSTER,
+    forceTLS: true
 });
 
 window.Echo.connector.pusher.connection.bind('state_change', function(states) {
