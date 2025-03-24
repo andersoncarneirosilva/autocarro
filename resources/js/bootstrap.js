@@ -36,10 +36,7 @@ window.Echo = new Echo({
     broadcaster: 'pusher',
     key: import.meta.env.VITE_PUSHER_APP_KEY,
     cluster: import.meta.env.VITE_PUSHER_APP_CLUSTER,
-    wssPort: 443,  
-    forceTLS: true,
-    encrypted: true, 
-    enabledTransports: ['ws', 'wss', 'xhr_streaming', 'xhr_polling'], // Suporte ao polling
+    forceTLS: true
 });
 
 window.Echo.connector.pusher.connection.bind('state_change', function(states) {
