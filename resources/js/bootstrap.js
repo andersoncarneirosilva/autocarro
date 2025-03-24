@@ -61,7 +61,8 @@ window.Echo = new Echo({
     broadcaster: 'pusher',
     key: import.meta.env.VITE_PUSHER_APP_KEY,
     cluster: import.meta.env.VITE_PUSHER_APP_CLUSTER ?? 'mt1',
-    wssHost: 'ws.pusherapp.com',
+    wsHost: 'ws.pusherapp.com',  // Ajustado para wsHost
+    wsPort: 443,
     wssPort: 443,
     forceTLS: true,
     disableStats: true,
@@ -74,5 +75,7 @@ window.Echo.connector.pusher.connection.bind('state_change', function(states) {
     console.log("Estado da conexão Pusher:", states);
     if (states.current === 'connected') {
         console.log("Conexão Pusher estabelecida com sucesso!");
+    } else if (states.current === 'failed') {
+        console.error("Falha na conexão com Pusher:", states);
     }
 });
