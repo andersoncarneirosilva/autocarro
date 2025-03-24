@@ -32,6 +32,9 @@ document.addEventListener('DOMContentLoaded', function () {
                 } else {
                     console.error('Mensagem inválida recebida:', event);
                 }
+            })
+            .error((error) => {
+                console.error('Erro ao escutar o evento:', error);
             });
     } else {
         console.warn("Elemento #message-list não encontrado.");
