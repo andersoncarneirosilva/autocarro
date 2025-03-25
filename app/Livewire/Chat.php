@@ -36,13 +36,13 @@ class Chat extends Component
         'content' => $this->newMessage,
         'sender_id' => auth()->id(),
     ]);
-
+    $chatId = 1;
     // Adicionar log antes do evento
     Log::info('📩 Mensagem criada!', ['message' => $message]);
 
     // Disparar evento WebSocket para outros navegadores
     Log::info('📡 Disparando evento NewMessage!');
-    broadcast(new NewMessage($message));
+    broadcast(new NewMessage($message, $chatId));
     Log::info('✅ Evento NewMessage disparado!');
 
     // Atualizar a interface
