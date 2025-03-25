@@ -13,8 +13,7 @@ Broadcast::channel('chat', function () {
 
 
 
-Broadcast::channel('chat.{chatId}', function ($user, $chatId) {
-    // Aqui você pode verificar se o usuário faz parte do chat
-    $chat = Chat::find($chatId);
-    return $chat && $chat->users->contains($user);
+Broadcast::channel('private-chat.{chatId}', function ($user, $chatId) {
+    return $user->canAccessChat($chatId); // Exemplo de verificação personalizada
 });
+

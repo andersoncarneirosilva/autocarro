@@ -18,9 +18,8 @@ class BroadcastServiceProvider extends ServiceProvider
         require base_path('routes/channels.php');
     //     Broadcast::routes();
 
-    // Broadcast::channel('chat.{userId}', function ($user, $userId) {
-    //     logger('Autenticando usuário para canal privado: ' . $userId);
-    //     return (int) $user->id === (int) $userId;
-    // });
+    Broadcast::channel('chat.{chatId}', function ($user, $chatId) {
+        return (int) $user->id === (int) $chatId; // ou qualquer outra lógica de autorização
+    });
     }
 }
