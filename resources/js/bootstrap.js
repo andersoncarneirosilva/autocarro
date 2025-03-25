@@ -34,9 +34,12 @@ window.Pusher.logToConsole = true;  // Ativar para depuração, pode ser removid
 window.Echo = new Echo({
     broadcaster: 'pusher',
     key: import.meta.env.VITE_PUSHER_APP_KEY,
-    cluster: import.meta.env.VITE_PUSHER_APP_CLUSTER ?? 'mt1',
-    forceTLS: true,  // Forçar o uso de TLS (https)
-    enabledTransports: ['ws', 'wss'],  // Habilitar WebSocket com TLS (wss)
+    cluster: import.meta.env.VITE_PUSHER_APP_CLUSTER,
+    forceTLS: true,
+    wsHost: import.meta.env.VITE_PUSHER_HOST || 'ws.pusherapp.com',
+    wsPort: import.meta.env.VITE_PUSHER_PORT || 80,
+    wssPort: import.meta.env.VITE_PUSHER_PORT || 443,
+    enabledTransports: ['ws', 'wss'], // Only use WebSockets
 });
 
 console.log("Instância de Echo criada com sucesso!");
