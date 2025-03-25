@@ -49,7 +49,7 @@ document.addEventListener('DOMContentLoaded', function () {
     const messageList = document.getElementById('message-list');
 
     if (messageList) {
-        window.Echo.channel('chat.' + chatId)  // Conectar ao canal específico para o chat
+        window.Echo.private('private-chat.' + chatId)  // Conectar ao canal privado específico para o chat
             .listen('.NewMessage', (event) => {
                 console.log('Nova mensagem recebida:', event);
                 if (event && event.content && event.sender_id && event.created_at) {

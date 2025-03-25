@@ -14,7 +14,7 @@ Broadcast::channel('chat', function () {
 
 
 Broadcast::channel('chat.{chatId}', function ($user, $chatId) {
-    // Verifique se o usuário tem permissão para acessar este chat
-    // Supondo que você tenha um relacionamento entre o usuário e o chat, como User -> chats
-    return $user->chats->contains($chatId);
+    // Aqui você pode verificar se o usuário faz parte do chat
+    $chat = Chat::find($chatId);
+    return $chat && $chat->users->contains($user);
 });
