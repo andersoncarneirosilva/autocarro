@@ -85,8 +85,9 @@ class Chat extends Component
 
     public function render()
     {
-        return view('livewire.chat', [
-            'messages' => Message::orderBy('id', 'asc')->get(),
-        ]);
+        // Ordenar as mensagens antes de renderizar
+        $this->messages = $this->messages->sortBy('id');
+
+        return view('livewire.chat');
     }
 }

@@ -22,7 +22,9 @@ $pusher = new Pusher(
     ]
 );
 Log::info('Evento sendo disparado');
-$pusher->trigger('chat', 'NewMessage', ['content' => 'Teste manual via Pusher', 'sender_id' => 1]);
+$pusher->trigger('chat', '.NewMessage', ['content' => 'Teste manual via Pusher', 'sender_id' => 1]);
+
+wscat -c "wss://ws.pusherapp.com:443/app/e8703bef27184bc00d2f?protocol=7&client=js&version=8.4.0&flash=false"
 
 
 use Pusher\Pusher;
@@ -141,3 +143,6 @@ server {
     error_log  /var/log/nginx/error.log;
     access_log /var/log/nginx/access.log;
 }
+
+
+wscat -c "wss://proconline.com.br/ws/"
