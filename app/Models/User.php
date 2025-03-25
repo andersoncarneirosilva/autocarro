@@ -49,7 +49,11 @@ class User extends Authenticatable
         'password',
         'remember_token',
     ];
-
+    public function canAccessChat($chatId)
+    {
+        return $this->chats()->where('id', $chatId)->exists();
+    }
+    
     /**
      * The attributes that should be cast.
      *
