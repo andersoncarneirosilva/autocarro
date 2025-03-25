@@ -34,6 +34,7 @@ use Illuminate\Support\Facades\Broadcast;
 Route::middleware(['auth'])->group(function () {
 
     Broadcast::routes();
+    Broadcast::routes(['middleware' => ['auth:sanctum']]);
 
     // Em routes/web.php ou routes/api.php
 // Route::post('/messages', [MessageController::class, 'store']);

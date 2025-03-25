@@ -13,7 +13,8 @@ Broadcast::channel('chat', function () {
 
 
 
-Broadcast::channel('private-chat.{chatId}', function ($user, $chatId) {
-    return $user->canAccessChat($chatId); // Exemplo de verificação personalizada
+Broadcast::channel('chat.{chatId}', function ($user, $chatId) {
+    return true;
 });
+
 
