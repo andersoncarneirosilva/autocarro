@@ -24,9 +24,9 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
 });
 
-Route::post('/broadcasting/auth', function (\Illuminate\Http\Request $request) {
-    Log::info('Recebendo autenticação WebSocket', [
-        'user' => auth()->id(),
-        'socket_id' => $request->socket_id
-    ]);
-});
+// Route::post('/broadcasting/auth', function (\Illuminate\Http\Request $request) {
+//     Log::info('Recebendo autenticação WebSocket', [
+//         'user' => auth()->id(),
+//         'socket_id' => $request->socket_id
+//     ]);
+// });
