@@ -38,16 +38,22 @@ Route::middleware(['auth'])->group(function () {
     Route::post('/broadcasting/auth', function (Request $request) {
         Log::info('Recebendo autenticação WebSocket', [
             'user_id' => auth()->id(),
-            'socket_id' => $request->socket_id
+            'socket_id' => $request->socket_id,
+            'channel' => $request->channel_name
         ]);
     
+        // Verifica se o usuário está autenticado
         if (!auth()->check()) {
             Log::error('Usuário não autenticado.');
             return response()->json(['error' => 'Usuário não autenticado'], 403);
         }
     
-        // Responde corretamente para o Pusher
-        return Broadcast::auth($request);
+        // Garantir que o canal é privado e o nome está correto
+        if (strpos($request->channel_name, 'private-') === 0) {
+            return Broadcast::auth($request);  // Responde com a autorização para o canal privado
+        }
+    
+        return response()->json(['error' => 'Canal não autorizado'], 403);
     });
 
     Route::get('/chat', \App\Livewire\Chat::class)->name('chat');
