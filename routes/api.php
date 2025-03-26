@@ -23,7 +23,7 @@ Route::post('/webhook-payment', [PaymentController::class, 'handleWebhook']);
 Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
 });
-
+Broadcast::routes(['middleware' => ['auth:sanctum']]);
 Route::post('/broadcasting/auth', function (Request $request) {
     Log::info('Recebendo autenticação WebSocket', [
         'user_id' => auth()->id(),
