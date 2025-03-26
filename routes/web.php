@@ -33,42 +33,28 @@ use Illuminate\Support\Facades\Broadcast;
 
 Route::middleware(['auth'])->group(function () {
 
-    Broadcast::routes();
     Broadcast::routes(['middleware' => ['auth:sanctum']]);
 
-    // Em routes/web.php ou routes/api.php
-// Route::post('/messages', [MessageController::class, 'store']);
-Route::get('/test-event', function () {
-    $message = Message::create([
-        'content' => 'Mensagem de teste',
-        'sender_id' => 1,
-    ]);
+    Route::post('/broadcasting/auth', function (Request $request) {
+        Log::info('Recebendo autenticação WebSocket', [
+            'user_id' => auth()->id(),
+            'socket_id' => $request->socket_id
+        ]);
 
-    broadcast(new NewMessage($message));  // Aqui estamos forçando a emissão do evento
+        // Verifica se o usuário está autenticado
+        if (!auth()->check()) {
+            Log::error('Usuário não autenticado.');
+            return response()->json(['error' => 'Usuário não autenticado'], 403);
+        }
 
-    return 'Evento disparado!';
-});
-
-Route::post('/broadcasting/auth', function (Request $request) {
-    Log::info('Recebendo autenticação WebSocket', [
-        'user_id' => auth()->id(),
-        'socket_id' => $request->socket_id
-    ]);
-
-    // Verifica se o usuário está autenticado
-    if (!auth()->check()) {
-        Log::error('Usuário não autenticado.');
-        return response()->json(['error' => 'Usuário não autenticado'], 403);
-    }
-
-    // Retorna a resposta de sucesso para o Pusher
-    return response()->json(['message' => 'Autenticado']);
-});
+        // Retorna a resposta de sucesso para o Pusher
+        return response()->json(['message' => 'Autenticado']);
+    });
 
     Route::get('/chat', \App\Livewire\Chat::class)->name('chat');
 
     Route::post('/perfil/excluir', [PerfilController::class, 'deleteFiles']);
-Route::post('/perfil/excluir-pasta', [PerfilController::class, 'deleteFolders']);
+    Route::post('/perfil/excluir-pasta', [PerfilController::class, 'deleteFolders']);
 
 
     Route::get('/assinatura-expirada', function () {

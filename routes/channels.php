@@ -3,7 +3,8 @@
 use Illuminate\Support\Facades\Broadcast;
 use Illuminate\Support\Facades\Log;
 
-Broadcast::routes(); // Isso cria as rotas necessárias para autenticação de canais
+Broadcast::routes(['middleware' => ['auth:sanctum']]);
+
 
 
 Broadcast::channel('chat', function () {
@@ -13,8 +14,9 @@ Broadcast::channel('chat', function () {
 
 
 
-Broadcast::channel('chat.{chatId}', function ($user, $chatId) {
-    return true;
+Broadcast::channel('private-chat.{chatId}', function ($user, $chatId) {
+    return true; // Permitir acesso a todos os usuários para teste
 });
+
 
 

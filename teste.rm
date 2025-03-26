@@ -146,3 +146,10 @@ server {
 
 
 wscat -c "wss://proconline.com.br/ws/"
+
+
+curl -X POST https://proconline.com.br/broadcasting/auth \
+     -H "Authorization: Bearer SEU_TOKEN" \
+     -H "Content-Type: application/json"
+
+curl -X POST -H "Authorization: Bearer SEU_TOKEN" https://proconline.com.br/broadcasting/auth
