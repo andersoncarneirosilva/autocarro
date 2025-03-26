@@ -48,6 +48,8 @@ Route::middleware(['auth'])->group(function () {
             return response()->json(['error' => 'Usuário não autenticado'], 403);
         }
     
+        Log::info('Usuário autenticado', ['user_id' => auth()->id()]);
+    
         // Garantir que o canal é privado e o nome está correto
         if (strpos($request->channel_name, 'private-') === 0) {
             return Broadcast::auth($request);  // Responde com a autorização para o canal privado
@@ -55,6 +57,7 @@ Route::middleware(['auth'])->group(function () {
     
         return response()->json(['error' => 'Canal não autorizado'], 403);
     });
+    
 
     Route::get('/chat', \App\Livewire\Chat::class)->name('chat');
 
