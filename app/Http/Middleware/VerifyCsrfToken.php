@@ -14,5 +14,6 @@ class VerifyCsrfToken extends Middleware
     protected $except = [
         'api/create-preference',
         'api/payment-updated',
+        '/login', // Exclui a verificação CSRF para essa rota
     ];
 }
