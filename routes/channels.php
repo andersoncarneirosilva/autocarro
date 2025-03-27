@@ -3,7 +3,7 @@
 use Illuminate\Support\Facades\Broadcast;
 use Illuminate\Support\Facades\Log;
 
-Broadcast::routes();
+Broadcast::routes(['middleware' => ['auth:sanctum']]);
 
 
 
