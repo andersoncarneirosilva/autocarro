@@ -7,12 +7,13 @@ Broadcast::routes();
 
 
 
-// Broadcast::channel('chat.{chatId}', function ($user, $chatId) {
-//     Log::info("Autenticando usuário {$user->id} no chat {$chatId}");
+Broadcast::channel('chat.{chatId}', function ($user, $chatId) {
+    Log::info("Autenticando usuário {$user->id} no chat {$chatId}");
 
-//     $temAcesso = \App\Models\User::where('user_id', $user->id)->get();
+    $temAcesso = \App\Models\User::where('id', $user->id)
+                                     ->exists();
 
-//     Log::info("Usuário tem acesso? " . ($temAcesso ? 'Sim' : 'Não'));
+    Log::info("Usuário tem acesso? " . ($temAcesso ? 'Sim' : 'Não'));
 
-//     return $temAcesso;
-// });
+    return $temAcesso;
+});
