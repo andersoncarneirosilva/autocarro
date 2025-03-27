@@ -49,7 +49,7 @@ document.addEventListener('DOMContentLoaded', function () {
     const messageList = document.getElementById('message-list');
 
     if (messageList) {
-        window.Echo.private('chat.' + chatId) // Remova o "private-"
+        window.Echo.private(`chat.${chatId}`) // Remova o "private-"
 
             .listen('.NewMessage', (event) => {
                 console.log('Nova mensagem recebida:', event);

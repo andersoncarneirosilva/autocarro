@@ -1,13 +1,13 @@
 use App\Models\Message;
 use App\Events\NewMessage;
-
+$chatId = 1;
 $message = Message::create([
     'user_id' => 1, // Substitua pelo ID do usuário real
     'sender_id' => 1, // Substitua pelo ID do usuário real
     'content' => 'Mensagem de teste!',
 ]);
 
-event(new NewMessage($message));
+event(new NewMessage($message, $chatId));
 
 
 use Pusher\Pusher;
@@ -40,6 +40,17 @@ $pusher = new Pusher(
 );
 
 $pusher->trigger('chat', 'NewMessage', ['content' => 'Teste manual via Pusher']);
+
+use Pusher\Pusher;
+$pusher = new Pusher(
+    config('broadcasting.connections.pusher.key'),
+    config('broadcasting.connections.pusher.secret'),
+    config('broadcasting.connections.pusher.app_id'),
+    [
+        'cluster' => config('broadcasting.connections.pusher.options.cluster'),
+        'useTLS' => true
+    ]
+);
 
 
 const socket = new WebSocket('ws://ws.pusherapp.com:6001/app/e8703bef27184bc00d2f?protocol=7&client=js&version=8.4.0');
@@ -153,3 +164,29 @@ curl -X POST https://proconline.com.br/broadcasting/auth \
      -H "Content-Type: application/json"
 
 curl -X POST -H "Authorization: Bearer SEU_TOKEN" https://proconline.com.br/broadcasting/auth
+
+curl -X POST https://proconline.com.br/broadcasting/auth \
+  -H "X-CSRF-TOKEN: eyJpdiI6ImZrL1dYZ0hmN1BDdlpyUUM3MFY5QUE9PSIsInZhbHVlIjoiUzZqRzYyVHdGcHhMRjUrNDBRcTAvY1NyUndPTGVzWkZmZkwrTWFubUEwMkwzWUk3T1ZlbloyR1RyRHA5S2RwRHlhQjdWWjVaSC9tZXZhN1RVTjI1VGlaZVhhNklYWk5GLzFLSDdoUzdZaWNJQ1VXWkNDVkFuWnNHSUtTSHR3NmkiLCJtYWMiOiJjZmQwYWY0NWFkZDdkOWIyZmJlODRlZjhjMGE0N2M5ZGY4ZDcyZWJmYzUzMzM4NDIzMmYwNGRkYzE3MDQ4MzZjIiwidGFnIjoiIn0%3D" \
+  -H "Cookie: eyJpdiI6IjZ4TU9xdzlDOEVhLzcxVXJhWjlsL1E9PSIsInZhbHVlIjoiUDIrZndJemlMejYzTEtLQjl1d3hkUGhPREN0dm5OYm5oMlN1bUM5YVVMMEhXVzlPdU9NVDhFb3R1MlZXclRQNmFvQWpqa0FYTG93QUdROVArOE5JdHVWN3Nhd1VLQXQyRjJnQVBHdlpwbGs3OUtPcklRTlVRRStNaE01bUtiRlAiLCJtYWMiOiI2MTE4MzJkYTA1ZTE1YmY5ODhmMTNlODU4NTIzMDIxZTdmMjEyZWU4MjE4ZTMyZGE2YzNmYmI1ODY3OWVhMzJmIiwidGFnIjoiIn0%3D" \
+  -H "Content-Type: application/json" \
+  --data '{"socket_id":"1234.5678","channel_name":"private-chat.1"}'
+
+curl -X POST https://proconline.com.br/broadcasting/auth \
+  -H "Content-Type: application/json" \
+  -H "Authorization: Bearer e8703bef27184bc00d2f:f2a64a5bdb719a5af1d96c70cca0aaf023cf0e0a685560c5faa6e9317329df4d" \
+  --data '{"socket_id":"1234.5678","channel_name":"private-chat.1"}'
+
+curl -X POST https://proconline.com.br/login \
+  -H "Content-Type: application/json" \
+  --data '{
+    "email": "andersonqipoa@gmail.com",
+    "password": "12345678"
+  }'
+
+curl -X POST https://proconline.com.br/login \
+  -H "Content-Type: application/json" \
+  -H "X-CSRF-TOKEN: TdysEQMNOiYYnKIbMkGNX8EUslwHXswYBCBT01Go" \
+  --data '{
+    "email": "andersonqipoa@gmail.com",
+    "password": "12345678"
+  }'

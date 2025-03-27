@@ -23,18 +23,3 @@ Route::post('/webhook-payment', [PaymentController::class, 'handleWebhook']);
 Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
 });
-Broadcast::routes(['middleware' => ['auth:sanctum']]);
-Route::post('/broadcasting/auth', function (Request $request) {
-    Log::info('Recebendo autenticação WebSocket', [
-        'user_id' => auth()->id(),
-        'socket_id' => $request->socket_id
-    ]);
-
-    if (!auth()->check()) {
-        Log::error('Usuário não autenticado.');
-        return response()->json(['error' => 'Usuário não autenticado'], 403);
-    }
-
-    // Responde corretamente para o Pusher
-    return Broadcast::auth($request);
-});

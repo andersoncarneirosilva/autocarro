@@ -47,13 +47,13 @@
 //     }
 // }
 namespace App\Events;
-
 use App\Models\Message;
 use Illuminate\Broadcasting\Channel;
 use Illuminate\Broadcasting\InteractsWithSockets;
 use Illuminate\Contracts\Broadcasting\ShouldBroadcast;
 use Illuminate\Foundation\Events\Dispatchable;
 use Illuminate\Queue\SerializesModels;
+use Illuminate\Broadcasting\PrivateChannel;
 use Log;
 
 class NewMessage implements ShouldBroadcast
@@ -73,13 +73,13 @@ class NewMessage implements ShouldBroadcast
     public function broadcastOn()
 {
     Log::info('📡 Transmitindo no canal privado chat.' . $this->chatId);
-    return new Channel('private-chat.' . $this->chatId);  // Canal privado
+    return new PrivateChannel('chat.' . $this->chatId);  // Canal privado
 }
 
 
     public function broadcastAs()
     {
-        Log::info('📢 Nome do evento: NewMessage');
+        Log::info('📢 Funcao: broadcastAs');
         return 'NewMessage';
     }
 

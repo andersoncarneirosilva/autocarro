@@ -34,21 +34,35 @@ use Illuminate\Support\Facades\Broadcast;
 Route::middleware(['auth'])->group(function () {
 
     Broadcast::routes(['middleware' => ['auth:sanctum']]);
+    Broadcast::channel('chat.{chatId}', function ($user, $chatId) {
+        Log::info("Autenticando usuário {$user->id} no chat {$chatId}");
+    
+        $temAcesso = \App\Models\User::where('id', $user->id)
+                                         ->exists();
+    
+        Log::info("Usuário tem acesso? " . ($temAcesso ? 'Sim' : 'Não'));
+    
+        return $temAcesso;
+    });
+Route::post('/broadcasting/auth', function (Request $request) {
+    Log::info('Recebendo autenticação WebSocket', [
+        'user_id' => Auth::id(),
+        'socket_id' => $request->socket_id,
+        'headers' => $request->headers->all(),
+        'session' => session()->all()
+    ]);
 
-    // Route::post('/broadcasting/auth', function (Request $request) {
-    //     Log::info('Recebendo autenticação WebSocket', [
-    //         'user_id' => auth()->id(),
-    //         'socket_id' => $request->socket_id
-    //     ]);
-    
-    //     if (!auth()->check()) {
-    //         Log::error('Usuário não autenticado.');
-    //         return response()->json(['error' => 'Usuário não autenticado'], 403);
-    //     }
-    
-    //     // Responde corretamente para o Pusher
-    //     return Broadcast::auth($request);
-    // });
+    if (!Auth::check()) {
+        Log::error('Usuário não autenticado.');
+        return response()->json(['error' => 'Usuário não autenticado'], 403);
+    }else{
+        Log::info('Usuário autenticado.');
+    }
+
+    return Broadcast::auth($request);
+});
+
+
 
     Route::get('/chat', \App\Livewire\Chat::class)->name('chat');
 
