@@ -45,7 +45,7 @@
 import './bootstrap';
 
 document.addEventListener('DOMContentLoaded', function () {
-    const chatId = 1; // Exemplo, o ID do chat. Isso pode ser dinâmico, dependendo de como você gerencia os chats.
+    const chatId = 5; // Exemplo, o ID do chat. Isso pode ser dinâmico, dependendo de como você gerencia os chats.
     const messageList = document.getElementById('message-list');
 
     if (messageList) {
