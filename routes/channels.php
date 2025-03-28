@@ -7,7 +7,7 @@ Broadcast::routes(['middleware' => ['auth:sanctum']]);
 
 
 
-Broadcast::channel('chat.{chatId}', function ($user, $chatId) {
+Broadcast::channel('private-chat.{chatId}', function ($user, $chatId) {
     Log::info("🔐 Autenticando usuário {$user->id} no chat {$chatId}");
 
     // Verifica se o usuário está autenticado
