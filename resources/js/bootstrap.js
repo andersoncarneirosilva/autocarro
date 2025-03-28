@@ -48,7 +48,6 @@ window.Echo = new Echo({
     auth: {
     headers: {
         'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content,
-        'Authorization': `Bearer ${localStorage.getItem('token')}` //DUVIDA ?
     },
 },
 
