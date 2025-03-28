@@ -21,3 +21,7 @@ Broadcast::channel('chat.{chatId}', function ($user, $chatId) {
 
     return $temAcesso ? ['id' => $user->id, 'name' => $user->name] : false;
 });
+
+Route::post('/broadcasting/auth', function (Illuminate\Http\Request $request) {
+    return Broadcast::auth($request);
+})->middleware('auth');  // Verifique se o middleware 'auth' está permitindo o acesso
