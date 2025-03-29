@@ -113,13 +113,19 @@ return [
      * Define the optional SSL context for your WebSocket connections.
      * You can see all available options at: http://php.net/manual/en/context.ssl.php
      */
+    // 'ssl' => [
+    //     'local_cert' => null,
+    //     'local_pk' => null,
+    //     'passphrase' => null,
+    //     'verify_peer' => false,
+    // ],
     'ssl' => [
-        'local_cert' => null,
-        'local_pk' => null,
-        'passphrase' => null,
-        'verify_peer' => false,
+        'local_cert' => '/etc/letsencrypt/live/proconline.com.br/fullchain.pem',
+        'local_pk' => '/etc/letsencrypt/live/proconline.com.br/privkey.pem',
+        'passphrase' => null, // Caso o certificado exija uma senha, insira aqui
+        'verify_peer' => false, // Você pode definir como true se quiser verificar a autenticidade do peer
     ],
-    
+
     'replication' => [
             'mode' => 'single',
         ],
