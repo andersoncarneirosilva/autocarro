@@ -34,17 +34,22 @@ use Illuminate\Support\Facades\Broadcast;
 Route::middleware(['auth'])->group(function () {
 
     Broadcast::routes(['middleware' => ['auth:sanctum']]);
+Broadcast::channel('chat', function () {
+    \Log::info('Tentativa de inscrição no canal "chat"');
+    return true;  // Para permitir inscrição sem autenticação
+});
 
-    Broadcast::channel('chat.{chatId}', function ($user, $chatId) {
-        Log::info("Autenticando usuário {$user->id} no chat {$chatId}");
+    //DESENVOLVIMENTO
+    // Broadcast::channel('chat.{chatId}', function ($user, $chatId) {
+    //     Log::info("Autenticando usuário {$user->id} no chat {$chatId}");
     
-        // Verificar se o usuário tem acesso
-        $temAcesso = \App\Models\User::where('id', $user->id)->exists();
+    //     // Verificar se o usuário tem acesso
+    //     $temAcesso = \App\Models\User::where('id', $user->id)->exists();
     
-        Log::info("Usuário tem acesso? " . ($temAcesso ? 'Sim' : 'Não'));
+    //     Log::info("Usuário tem acesso? " . ($temAcesso ? 'Sim' : 'Não'));
     
-        return $temAcesso; // Retorna verdadeiro ou falso para autorizar o acesso ao canal
-    });
+    //     return $temAcesso; // Retorna verdadeiro ou falso para autorizar o acesso ao canal
+    // });
 
     Route::post('/broadcasting/auth', function (Request $request) {
         Log::info('Recebendo autenticação WebSocket', [
