@@ -58,16 +58,16 @@ Route::middleware(['auth'])->group(function () {
             'headers' => $request->headers->all(),
             'session' => session()->all()
         ]);
-
+    
         if (!Auth::check()) {
             Log::error('Usuário não autenticado.');
             return response()->json(['error' => 'Usuário não autenticado'], 403);
-        }else{
-            Log::info('Usuário autenticado.');
         }
-
+    
+        Log::info('Usuário autenticado.');
         return Broadcast::auth($request);
     });
+    
 
 
 
