@@ -34,10 +34,10 @@ use Illuminate\Support\Facades\Broadcast;
 Route::middleware(['auth'])->group(function () {
 
     Broadcast::routes(['middleware' => ['auth:sanctum']]);
-Broadcast::channel('chat', function () {
-    \Log::info('Tentativa de inscrição no canal "chat"');
-    return true;  // Para permitir inscrição sem autenticação
-});
+// Broadcast::channel('chat', function () {
+//     \Log::info('Tentativa de inscrição no canal "chat"');
+//     return true;  // Para permitir inscrição sem autenticação
+// });
 
     //DESENVOLVIMENTO
     // Broadcast::channel('chat.{chatId}', function ($user, $chatId) {
