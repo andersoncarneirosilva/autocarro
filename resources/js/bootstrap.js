@@ -32,11 +32,8 @@ window.Pusher.logToConsole = true;  // Desabilite isso em produção
 
 window.Echo = new Echo({
     broadcaster: 'pusher',
-    key: import.meta.env.VITE_PUSHER_APP_KEY,  // Ou use diretamente a chave do Pusher
-    cluster: import.meta.env.VITE_PUSHER_APP_CLUSTER ?? 'mt1',  // Use o cluster correto
-    wsHost: window.location.hostname,
-    wsPort: 443,
-    wssPort: 443,
+    key: import.meta.env.VITE_PUSHER_APP_KEY,
+    cluster: import.meta.env.VITE_PUSHER_APP_CLUSTER,
     forceTLS: true,
     encrypted: true,
     authEndpoint: '/broadcasting/auth',
@@ -46,6 +43,7 @@ window.Echo = new Echo({
         },
     },
 });
+
 
 
 

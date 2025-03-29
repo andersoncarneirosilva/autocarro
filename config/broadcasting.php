@@ -34,11 +34,9 @@ return [
                 'cluster' => env('PUSHER_APP_CLUSTER'),
                 'useTLS' => true,
                 'encrypted' => true,
-                'scheme' => env('PUSHER_SCHEME', 'https'),  // Certifique-se de que a URL de esquema está configurada corretamente
-                'host' => env('PUSHER_HOST'),  // URL do Pusher
-                'port' => env('PUSHER_PORT'),
             ],
         ],
+
 
 
         
