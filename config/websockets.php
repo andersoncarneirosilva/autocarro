@@ -7,36 +7,31 @@ return [
 
     'dashboard' => [
         'enable' => true,
-        'port' => env('WEBSOCKETS_PORT', 443),
+        'port' => env('WEBSOCKETS_PORT', 6001),
         'host' => '0.0.0.0',
     ],
 
-    'apps' => [
-    [
-        'id' => env('PUSHER_APP_ID'),
-        'name' => env('PUSHER_APP_NAME'),
-        'key' => env('PUSHER_APP_KEY'),
-        'secret' => env('PUSHER_APP_SECRET'),
-        'path' => env('PUSHER_APP_PATH'),
-        'capacity' => null,
-        'host' => env('PUSHER_HOST', '127.0.0.1'),
-        'port' => env('PUSHER_PORT', 443), // Aqui deve ser 443 para produção
-        'scheme' => env('PUSHER_SCHEME', 'https'), // Se estiver usando HTTPS
-    ],
-],
-
-
-    // PRODUCAO
     // 'apps' => [
     //     [
     //         'id' => env('PUSHER_APP_ID'),
-    //         'name' => env('APP_NAME'),
     //         'key' => env('PUSHER_APP_KEY'),
     //         'secret' => env('PUSHER_APP_SECRET'),
-    //         'enable_client_messages' => false,
+    //         'enable_client_messages' => true,
     //         'enable_statistics' => true,
     //     ],
     // ],
+
+    // PRODUCAO
+    'apps' => [
+        [
+            'id' => env('PUSHER_APP_ID'),
+            'name' => env('APP_NAME'),
+            'key' => env('PUSHER_APP_KEY'),
+            'secret' => env('PUSHER_APP_SECRET'),
+            'enable_client_messages' => false,
+            'enable_statistics' => true,
+        ],
+    ],
 
     /*
      * This class is responsible for finding the apps. The default provider
@@ -113,19 +108,13 @@ return [
      * Define the optional SSL context for your WebSocket connections.
      * You can see all available options at: http://php.net/manual/en/context.ssl.php
      */
-    // 'ssl' => [
-    //     'local_cert' => null,
-    //     'local_pk' => null,
-    //     'passphrase' => null,
-    //     'verify_peer' => false,
-    // ],
     'ssl' => [
-        'local_cert' => '/etc/letsencrypt/live/proconline.com.br/fullchain.pem',
-        'local_pk' => '/etc/letsencrypt/live/proconline.com.br/privkey.pem',
-        'passphrase' => null, // Caso o certificado exija uma senha, insira aqui
-        'verify_peer' => false, // Você pode definir como true se quiser verificar a autenticidade do peer
+        'local_cert' => null,
+        'local_pk' => null,
+        'passphrase' => null,
+        'verify_peer' => false,
     ],
-
+    
     'replication' => [
             'mode' => 'single',
         ],
