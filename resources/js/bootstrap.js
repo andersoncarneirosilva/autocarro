@@ -32,16 +32,20 @@ window.Pusher.logToConsole = true;  // Desabilite isso em produção
 
 window.Echo = new Echo({
     broadcaster: 'pusher',
-    key: process.env.MIX_PUSHER_APP_KEY,
-    cluster: process.env.MIX_PUSHER_APP_CLUSTER,
+    key: import.meta.env.VITE_PUSHER_APP_KEY,  // Ou use diretamente a chave do Pusher
+    cluster: import.meta.env.VITE_PUSHER_APP_CLUSTER ?? 'mt1',  // Use o cluster correto
+    wsHost: window.location.hostname,
+    wsPort: 443,
+    wssPort: 443,
+    forceTLS: true,
     encrypted: true,
+    authEndpoint: '/broadcasting/auth',
     auth: {
         headers: {
-            'Authorization': 'Bearer ' + window.localStorage.getItem('auth_token') // Caso utilize tokens
-        }
-    }
+            'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content,
+        },
+    },
 });
-
 
 
 
