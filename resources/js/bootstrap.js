@@ -28,7 +28,7 @@ import Echo from 'laravel-echo';
 import Pusher from 'pusher-js';
 
 window.Pusher = Pusher;
-window.Pusher.logToConsole = false;  // Desabilite isso em produção
+window.Pusher.logToConsole = true;  // Desabilite isso em produção
 
 window.Echo = new Echo({
     broadcaster: 'pusher',
