@@ -37,23 +37,25 @@ import Pusher from 'pusher-js';
 
 window.Pusher = Pusher;
 window.Pusher.logToConsole = true;
+
 window.Echo = new Echo({
     broadcaster: 'pusher',
-    key: import.meta.env.VITE_PUSHER_APP_KEY,
+    key: import.meta.env.VITE_PUSHER_APP_KEY,  // Variável de ambiente para a chave do Pusher
     cluster: import.meta.env.VITE_PUSHER_APP_CLUSTER ?? 'mt1',
-    wsHost: 'proconline.com.br',
-    wsPort: 6001,
-    wssPort: 6001,
-    forceTLS: true,
-    encrypted: true,
-    authEndpoint: '/broadcasting/auth',
+    wsHost: 'proconline.com.br',  // Servidor do WebSocket
+    wsPort: 443,  // Porta 443 para HTTPS
+    wssPort: 443, // Porta 443 para WebSocket seguro (wss)
+    forceTLS: true,  // Forçar uso de TLS
+    encrypted: true,  // Encriptação habilitada
+    authEndpoint: '/broadcasting/auth',  // Endpoint de autenticação
     auth: {
-    headers: {
-        'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content,
+        headers: {
+            'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content,
+        },
     },
-},
-
 });
+
+
 
 
 // PRODUCAO
