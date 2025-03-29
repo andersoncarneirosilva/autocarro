@@ -11,27 +11,32 @@ return [
         'host' => '0.0.0.0',
     ],
 
+    'apps' => [
+    [
+        'id' => env('PUSHER_APP_ID'),
+        'name' => env('PUSHER_APP_NAME'),
+        'key' => env('PUSHER_APP_KEY'),
+        'secret' => env('PUSHER_APP_SECRET'),
+        'path' => env('PUSHER_APP_PATH'),
+        'capacity' => null,
+        'host' => env('PUSHER_HOST', '127.0.0.1'),
+        'port' => env('PUSHER_PORT', 443), // Aqui deve ser 443 para produção
+        'scheme' => env('PUSHER_SCHEME', 'https'), // Se estiver usando HTTPS
+    ],
+],
+
+
+    // PRODUCAO
     // 'apps' => [
     //     [
     //         'id' => env('PUSHER_APP_ID'),
+    //         'name' => env('APP_NAME'),
     //         'key' => env('PUSHER_APP_KEY'),
     //         'secret' => env('PUSHER_APP_SECRET'),
-    //         'enable_client_messages' => true,
+    //         'enable_client_messages' => false,
     //         'enable_statistics' => true,
     //     ],
     // ],
-
-    // PRODUCAO
-    'apps' => [
-        [
-            'id' => env('PUSHER_APP_ID'),
-            'name' => env('APP_NAME'),
-            'key' => env('PUSHER_APP_KEY'),
-            'secret' => env('PUSHER_APP_SECRET'),
-            'enable_client_messages' => false,
-            'enable_statistics' => true,
-        ],
-    ],
 
     /*
      * This class is responsible for finding the apps. The default provider
