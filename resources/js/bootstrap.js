@@ -1,29 +1,4 @@
 // DESENVOLVIMENTO
-import Echo from 'laravel-echo';
-import Pusher from 'pusher-js';
-
-window.Pusher = Pusher;
-window.Pusher.logToConsole = true;
-window.Echo = new Echo({
-    broadcaster: 'pusher',
-    key: import.meta.env.VITE_PUSHER_APP_KEY,
-    cluster: import.meta.env.VITE_PUSHER_APP_CLUSTER ?? 'mt1',
-    wsHost: window.location.hostname,
-    wsPort: 6001,
-    wssPort: 6001,
-    forceTLS: false,
-    encrypted: false,
-    authEndpoint: '/broadcasting/auth',
-    auth: {
-    headers: {
-        'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content,
-    },
-},
-
-});
-
-
-// PRODUCAO
 // import Echo from 'laravel-echo';
 // import Pusher from 'pusher-js';
 
@@ -34,8 +9,8 @@ window.Echo = new Echo({
 //     key: import.meta.env.VITE_PUSHER_APP_KEY,
 //     cluster: import.meta.env.VITE_PUSHER_APP_CLUSTER ?? 'mt1',
 //     wsHost: window.location.hostname,
-//     wsPort: 443,
-//     wssPort: 443,
+//     wsPort: 6001,
+//     wssPort: 6001,
 //     forceTLS: false,
 //     encrypted: false,
 //     authEndpoint: '/broadcasting/auth',
@@ -46,6 +21,32 @@ window.Echo = new Echo({
 // },
 
 // });
+
+
+// PRODUCAO
+import Echo from 'laravel-echo';
+import Pusher from 'pusher-js';
+
+window.Pusher = Pusher;
+window.Pusher.logToConsole = false;  // Desabilite isso em produção
+
+window.Echo = new Echo({
+    broadcaster: 'pusher',
+    key: import.meta.env.VITE_PUSHER_APP_KEY,  // Ou use diretamente a chave do Pusher
+    cluster: import.meta.env.VITE_PUSHER_APP_CLUSTER ?? 'mt1',  // Use o cluster correto
+    wsHost: window.location.hostname,
+    wsPort: 443,
+    wssPort: 443,
+    forceTLS: true,
+    encrypted: true,
+    authEndpoint: '/broadcasting/auth',
+    auth: {
+        headers: {
+            'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content,
+        },
+    },
+});
+
 
 
 
