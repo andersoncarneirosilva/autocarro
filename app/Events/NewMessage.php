@@ -72,8 +72,8 @@ class NewMessage implements ShouldBroadcast
 
     public function broadcastOn()
 {
-    Log::info('📡 Transmitindo no canal privado chat.' . $this->chatId);
-    return new PrivateChannel('chat.' . $this->chatId);  // Canal privado
+    //Log::info('📡 Transmitindo no canal privado chat.' . $this->chatId);
+    return new Channel('chat');  // Canal privado
 }
 
 

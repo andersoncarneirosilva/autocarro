@@ -7,21 +7,17 @@ Broadcast::routes(['middleware' => ['auth:sanctum']]);
 
 
 
-Broadcast::channel('private-chat.{chatId}', function ($user, $chatId) {
-    Log::info("🔐 Autenticando usuário {$user->id} no chat {$chatId}");
+// Broadcast::channel('chat', function () {
+//     \Log::info('Tentativa de inscrição no canal "chat"');
+//     return true;  // Para permitir inscrição sem autenticação
+// });
 
-    // Verifica se o usuário está autenticado
-    if (!$user) {
-        Log::warning("🚫 Usuário não autenticado tentou acessar o chat {$chatId}");
-        return false;
-    }
 
-    $temAcesso = \App\Models\User::where('id', $user->id)->exists();
-    Log::info("✅ Usuário tem acesso ao chat {$chatId}? " . ($temAcesso ? 'Sim' : 'Não'));
 
-    return $temAcesso ? ['id' => $user->id, 'name' => $user->name] : false;
-});
+// Broadcast::channel('private-chat.{chatId}', function ($user, $chatId) {
+//     return true; // Permitir acesso a todos os usuários para teste
+// });
 
-Route::post('/broadcasting/auth', function (Illuminate\Http\Request $request) {
-    return Broadcast::auth($request);
-})->middleware('auth');  // Verifique se o middleware 'auth' está permitindo o acesso
+// Route::post('/broadcasting/auth', function (Illuminate\Http\Request $request) {
+//     return Broadcast::auth($request);
+// })->middleware('auth');  // Verifique se o middleware 'auth' está permitindo o acesso

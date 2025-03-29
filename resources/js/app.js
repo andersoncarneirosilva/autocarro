@@ -49,8 +49,7 @@ document.addEventListener('DOMContentLoaded', function () {
     const messageList = document.getElementById('message-list');
 
     if (messageList) {
-        window.Echo.private(`chat.${chatId}`) // Remova o "private-"
-
+        window.Echo.channel('chat') // Remova o "private-"
             .listen('.NewMessage', (event) => {
                 console.log('Nova mensagem recebida:', event);
                 if (event && event.content && event.sender_id && event.created_at) {

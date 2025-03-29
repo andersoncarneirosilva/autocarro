@@ -15,6 +15,6 @@ class VerifyCsrfToken extends Middleware
         'api/create-preference',
         'api/payment-updated',
         '/login', // Exclui a verificação CSRF para essa rota
-        '/broadcasting/auth',
+        // '/broadcasting/auth',
     ];
 }

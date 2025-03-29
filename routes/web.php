@@ -34,33 +34,35 @@ use Illuminate\Support\Facades\Broadcast;
 Route::middleware(['auth'])->group(function () {
 
     Broadcast::routes(['middleware' => ['auth:sanctum']]);
-    // Broadcast::channel('chat.{chatId}', function ($user, $chatId) {
-    //     Log::info("Autenticando usuário {$user->id} no chat {$chatId}");
-    
-    //     $temAcesso = \App\Models\User::where('id', $user->id)
-    //                                      ->exists();
-    
-    //     Log::info("Usuário tem acesso? " . ($temAcesso ? 'Sim' : 'Não'));
-    
-    //     return $temAcesso;
-    // });
-Route::post('/broadcasting/auth', function (Request $request) {
-    Log::info('Recebendo autenticação WebSocket', [
-        'user_id' => Auth::id(),
-        'socket_id' => $request->socket_id,
-        'headers' => $request->headers->all(),
-        'session' => session()->all()
-    ]);
 
-    if (!Auth::check()) {
-        Log::error('Usuário não autenticado.');
-        return response()->json(['error' => 'Usuário não autenticado'], 403);
-    }else{
-        Log::info('Usuário autenticado.');
-    }
+    Broadcast::channel('chat.{chatId}', function ($user, $chatId) {
+        Log::info("Autenticando usuário {$user->id} no chat {$chatId}");
+    
+        // Verificar se o usuário tem acesso
+        $temAcesso = \App\Models\User::where('id', $user->id)->exists();
+    
+        Log::info("Usuário tem acesso? " . ($temAcesso ? 'Sim' : 'Não'));
+    
+        return $temAcesso; // Retorna verdadeiro ou falso para autorizar o acesso ao canal
+    });
 
-    return Broadcast::auth($request);
-});
+    Route::post('/broadcasting/auth', function (Request $request) {
+        Log::info('Recebendo autenticação WebSocket', [
+            'user_id' => Auth::id(),
+            'socket_id' => $request->socket_id,
+            'headers' => $request->headers->all(),
+            'session' => session()->all()
+        ]);
+
+        if (!Auth::check()) {
+            Log::error('Usuário não autenticado.');
+            return response()->json(['error' => 'Usuário não autenticado'], 403);
+        }else{
+            Log::info('Usuário autenticado.');
+        }
+
+        return Broadcast::auth($request);
+    });
 
 
 
