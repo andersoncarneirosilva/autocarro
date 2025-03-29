@@ -50,7 +50,10 @@ Route::middleware(['auth'])->group(function () {
     
     //     return $temAcesso; // Retorna verdadeiro ou falso para autorizar o acesso ao canal
     // });
-
+    Broadcast::channel('chat', function ($user) {
+        \Log::info('Tentativa de inscrição no canal "chat"', ['user' => $user]);
+        return $user !== null;  // Permite inscrição apenas para usuários autenticados
+    });
     Route::post('/broadcasting/auth', function (Request $request) {
         Log::info('Recebendo autenticação WebSocket', [
             'user_id' => Auth::id(),
