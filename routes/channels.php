@@ -7,10 +7,10 @@ Broadcast::routes(['middleware' => ['auth:sanctum']]);
 
 
 
-// Broadcast::channel('chat', function () {
-//     \Log::info('Tentativa de inscrição no canal "chat"');
-//     return true;  // Para permitir inscrição sem autenticação
-// });
+Broadcast::channel('chat', function () {
+    \Log::info('Tentativa de inscrição no canal "chat"');
+    return true;  // Para permitir inscrição sem autenticação
+});
 
 
 
