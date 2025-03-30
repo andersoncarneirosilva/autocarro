@@ -115,9 +115,10 @@ return [
     //     'verify_peer' => false,
     // ],
     'ssl' => [
-    'local_cert' => '/etc/letsencrypt/live/proconline.com.br/fullchain.pem',
-    'local_pk' => '/etc/letsencrypt/live/proconline.com.br/privkey.pem',
-],
+        'local_cert' => '/etc/letsencrypt/live/proconline.com.br/fullchain.pem',
+        'local_pk' => '/etc/letsencrypt/live/proconline.com.br/privkey.pem',
+        'passphrase' => null,
+    ],
 
     'replication' => [
             'mode' => 'single',
