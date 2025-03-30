@@ -50,7 +50,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
     if (messageList) {
         // Assinando o canal 'chat' e ouvindo o evento 'NewMessage'
-        window.Echo.channel('chat')
+        window.Echo.channel('my-channel')
             .subscribed(() => {
                 console.log('Canal "chat" assinado com sucesso!');
             })

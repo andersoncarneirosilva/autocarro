@@ -185,8 +185,31 @@ curl -X POST https://proconline.com.br/login \
 
 curl -X POST https://proconline.com.br/login \
   -H "Content-Type: application/json" \
-  -H "X-CSRF-TOKEN: TdysEQMNOiYYnKIbMkGNX8EUslwHXswYBCBT01Go" \
+  -H "X-CSRF-TOKEN: TdysEQMNOiYYnKIbMkGNX8EUslwHXswYBCBT01Gl" \
   --data '{
     "email": "andersonqipoa@gmail.com",
     "password": "12345678"
   }'
+
+curl -X POST https://proconline.com.br/broadcasting/auth
+
+curl -X POST https://proconline.com.br/broadcasting/auth \
+  -b cookies.txt \
+  -H "X-CSRF-TOKEN: TdysEQMNOiYYnKIbMkGNX8EUslwHXswYBCBT01Gl"
+
+
+$message = \App\Models\Message::create([
+    'content' => 'Mensagem de Teste',
+    'sender_id' => 1,
+]);
+
+
+broadcast(new \App\Events\NewMessage($message, 5));
+
+curl -H 'Content-Type: application/json' -d '{"data":"{\"message\":\"hello world\"}","name":"my-event","channel":"my-channel"}' \
+"https://api-mt1.pusher.com/apps/1920745/events?"\
+"body_md5=2c99321eeba901356c4c7998da9be9e0&"\
+"auth_version=1.0&"\
+"auth_key=e8703bef27184bc00d2f&"\
+"auth_timestamp=1743346520&"\
+"auth_signature=fb62c8e2bf350f4bc56ea4ab2c6acda61608f45539b38193c5fcb745aa0c6d19&"

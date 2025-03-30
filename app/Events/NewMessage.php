@@ -73,7 +73,7 @@ class NewMessage implements ShouldBroadcast
     public function broadcastOn()
 {
     Log::info('📡 FUNCAO broadcastOn CHAMADA');
-    return new Channel('chat');  // Canal privado
+    return new Channel('my-channel');  // Canal privado
 }
 
 
