@@ -72,7 +72,7 @@ class NewMessage implements ShouldBroadcast
 
     public function broadcastOn()
 {
-    //Log::info('📡 Transmitindo no canal privado chat.' . $this->chatId);
+    Log::info('📡 FUNCAO broadcastOn CHAMADA');
     return new Channel('chat');  // Canal privado
 }
 
@@ -85,7 +85,7 @@ class NewMessage implements ShouldBroadcast
 
     public function broadcastWith()
     {
-        Log::info('📤 Dados enviados no evento:', ['message' => $this->message]);
+        Log::info('📤 FUNCAO broadcastWith CHAMADA:', ['message' => $this->message]);
 
         return [
             'id' => $this->message->id,
