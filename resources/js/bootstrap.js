@@ -39,9 +39,10 @@ window.Echo = new Echo({
     authEndpoint: '/broadcasting/auth',
     auth: {
         headers: {
-            'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content,
+            'X-CSRF-TOKEN': document.head.querySelector('meta[name="csrf-token"]')?.content || '',
         },
     },
+    
 });
 
 
