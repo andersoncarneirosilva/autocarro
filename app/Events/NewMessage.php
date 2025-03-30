@@ -80,7 +80,7 @@ class NewMessage implements ShouldBroadcast
     public function broadcastAs()
     {
         Log::info('📢 Funcao: broadcastAs');
-        return 'my-event';
+        return 'NewMessage';
     }
 
     public function broadcastWith()
