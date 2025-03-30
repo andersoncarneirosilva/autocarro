@@ -103,13 +103,13 @@ io.on('connection', (socket) => {
         try {
             const sentAt = new Date().toISOString();
 
-            const response = await axios.post('http://proconline.com.br/api/messages', {
+            const response = await axios.post('https://proconline.com.br/api/messages', {
                 content,
                 sender_id,
                 sent_at: sentAt
             });
             
-            const userResponse = await axios.get(`http://proconline.com.br/api/users/${sender_id}`);
+            const userResponse = await axios.get(`https://proconline.com.br/api/users/${sender_id}`);
             const user = userResponse.data;
 
             io.emit('chat message', {
