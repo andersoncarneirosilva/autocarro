@@ -132,6 +132,6 @@ io.on('connection', (socket) => {
 });
 
 // Iniciar o servidor na porta 6002
-server.listen(6002, '0.0.0.0', () => {
-    console.log('Servidor rodando na porta 6002');
+server.listen(6001, '0.0.0.0', () => {
+    console.log('Servidor rodando na porta 6001');
 });

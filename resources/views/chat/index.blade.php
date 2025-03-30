@@ -73,7 +73,7 @@
 
 <script src="https://cdn.socket.io/4.7.2/socket.io.min.js"></script>
 <script>
-    const socket = io('https://proconline.com.br:6002');
+    const socket = io('https://proconline.com.br:6001');
     const userId = @json(auth()->id()); // Corrigido para evitar erro com usuários não autenticados
 
     document.getElementById('chat-form').addEventListener('submit', function(event) {
