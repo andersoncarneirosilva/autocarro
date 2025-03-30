@@ -9,22 +9,6 @@ return [
     'connections' => [
 
         // DESENVOLVIMENTO
-        'pusher' => [
-            'driver' => 'pusher',
-            'key' => env('PUSHER_APP_KEY'),
-            'secret' => env('PUSHER_APP_SECRET'),
-            'app_id' => env('PUSHER_APP_ID'),
-            'options' => [
-                'cluster' => env('PUSHER_APP_CLUSTER'),
-                'useTLS' => false,
-                'encrypted' => false,
-                'scheme' => env('PUSHER_SCHEME', 'http'),
-                'host' => env('PUSHER_HOST', '127.0.0.1'),
-                'port' => env('PUSHER_PORT', 6001),
-            ],
-        ],
-
-        // PRODUÇÃO
         // 'pusher' => [
         //     'driver' => 'pusher',
         //     'key' => env('PUSHER_APP_KEY'),
@@ -32,10 +16,29 @@ return [
         //     'app_id' => env('PUSHER_APP_ID'),
         //     'options' => [
         //         'cluster' => env('PUSHER_APP_CLUSTER'),
-        //         'useTLS' => true,
-        //         'encrypted' => true,
+        //         'useTLS' => false,
+        //         'encrypted' => false,
+        //         'scheme' => env('PUSHER_SCHEME', 'http'),
+        //         'host' => env('PUSHER_HOST', '127.0.0.1'),
+        //         'port' => env('PUSHER_PORT', 6001),
         //     ],
         // ],
+
+        // PRODUÇÃO
+        'pusher' => [
+            'driver' => 'pusher',
+            'key' => env('PUSHER_APP_KEY'),
+            'secret' => env('PUSHER_APP_SECRET'),
+            'app_id' => env('PUSHER_APP_ID'),
+            'options' => [
+                'cluster' => env('PUSHER_APP_CLUSTER'),
+                'useTLS' => true,
+                'encrypted' => true,
+                'scheme' => env('PUSHER_SCHEME', 'https'),
+                'host' => env('PUSHER_HOST'),
+                'port' => env('PUSHER_PORT', 6001),
+            ],
+        ],
 
 
 
