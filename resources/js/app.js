@@ -49,7 +49,11 @@ document.addEventListener('DOMContentLoaded', function () {
     const messageList = document.getElementById('message-list');
 
     if (messageList) {
-        window.Echo.channel('chat') // Remova o "private-"
+        // Assinando o canal 'chat' e ouvindo o evento 'NewMessage'
+        window.Echo.channel('chat')
+            .subscribed(() => {
+                console.log('Canal "chat" assinado com sucesso!');
+            })
             .listen('.NewMessage', (event) => {
                 console.log('Nova mensagem recebida:', event);
                 if (event && event.content && event.sender_id && event.created_at) {
@@ -83,3 +87,4 @@ document.addEventListener('DOMContentLoaded', function () {
         console.warn("Elemento #message-list não encontrado.");
     }
 });
+
