@@ -61,7 +61,7 @@
             </li>
 
             <li class="side-nav-item">
-                <a href="{{ route('chat') }}" class="side-nav-link">
+                <a href="{{ route('chat.index') }}" class="side-nav-link">
                     <i class="uil-car-slash"></i>
                     <span> Chat </span>
                 </a>

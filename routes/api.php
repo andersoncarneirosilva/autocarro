@@ -1,10 +1,11 @@
 <?php
 
 use App\Http\Controllers\PaymentController;
+use App\Http\Controllers\MessageController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Log;
-
+use App\Models\User;
 // Rota para criar preferência
 Route::post('/create-preference', [PaymentController::class, 'createPreference'])->middleware('auth:sanctum');
 
@@ -23,3 +24,10 @@ Route::post('/webhook-payment', [PaymentController::class, 'handleWebhook']);
 Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
 });
+
+Route::get('/users/{id}', function ($id) {
+    return User::find($id);
+});
+
+Route::post('/messages', [MessageController::class, 'store']);
+Route::get('/messages', [MessageController::class, 'index']);

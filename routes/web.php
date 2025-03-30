@@ -23,6 +23,7 @@ use App\Http\Controllers\TextoInicioController;
 use App\Http\Controllers\TextoPoderesController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\VeiculoController;
+use App\Http\Controllers\ChatController;
 use Illuminate\Support\Facades\Route;
 use Livewire\Livewire;
 use App\Http\Livewire\Chat;
@@ -51,30 +52,30 @@ Route::middleware(['auth'])->group(function () {
     //     return $temAcesso; // Retorna verdadeiro ou falso para autorizar o acesso ao canal
     // });
     
-    Route::post('/broadcasting/auth', function (Request $request) {
-        Log::info('Recebendo autenticação WebSocket', [
-            'user_id' => Auth::id(),
-            'socket_id' => $request->socket_id,
-            'headers' => $request->headers->all(),
-            'session' => session()->all()
-        ]);
+    // Route::post('/broadcasting/auth', function (Request $request) {
+    //     Log::info('Recebendo autenticação WebSocket', [
+    //         'user_id' => Auth::id(),
+    //         'socket_id' => $request->socket_id,
+    //         'headers' => $request->headers->all(),
+    //         'session' => session()->all()
+    //     ]);
     
-        if (!Auth::check()) {
-            Log::error('Usuário não autenticado.');
-            return response()->json(['error' => 'Usuário não autenticado'], 403);
-        }
+    //     if (!Auth::check()) {
+    //         Log::error('Usuário não autenticado.');
+    //         return response()->json(['error' => 'Usuário não autenticado'], 403);
+    //     }
     
-        Log::info('Usuário autenticado.');
-        return Broadcast::auth($request);
-    });
+    //     Log::info('Usuário autenticado.');
+    //     return Broadcast::auth($request);
+    // });
     
-    Broadcast::channel('chat', function ($user) {
-        \Log::info('Tentativa de inscrição no canal "chat"', ['user' => $user]);
-        return $user !== null;  // Permite inscrição apenas para usuários autenticados
-    });
+    // Broadcast::channel('chat', function ($user) {
+    //     \Log::info('Tentativa de inscrição no canal "chat"', ['user' => $user]);
+    //     return $user !== null;  // Permite inscrição apenas para usuários autenticados
+    // });
 
-
-    Route::get('/chat', \App\Livewire\Chat::class)->name('chat');
+    Route::get('/chat', [ChatController::class, 'index'])->name('chat.index');
+    //Route::get('/chat', ChatController::class)->name('chat');
 
     Route::post('/perfil/excluir', [PerfilController::class, 'deleteFiles']);
     Route::post('/perfil/excluir-pasta', [PerfilController::class, 'deleteFolders']);

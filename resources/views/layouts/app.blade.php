@@ -33,8 +33,9 @@
 
     <!-- App css -->
 
-    <link rel="stylesheet" href="{{ url('assets/css/app-saas.css') }}?v={{ time() }}" type="text/css"
-        id="app-style">
+    <link rel="stylesheet" href="{{ url('assets/css/app-saas.css') }}?v={{ time() }}" type="text/css" id="app-style">
+
+    <link rel="stylesheet" href="{{ url('assets/css/chat.css') }}?v={{ time() }}" type="text/css">
 
     <script src="https://cdn.jsdelivr.net/npm/apexcharts@3.41.0"></script>
 
