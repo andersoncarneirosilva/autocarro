@@ -11,16 +11,6 @@ return [
         'host' => '0.0.0.0',
     ],
 
-    // 'apps' => [
-    //     [
-    //         'id' => env('PUSHER_APP_ID'),
-    //         'key' => env('PUSHER_APP_KEY'),
-    //         'secret' => env('PUSHER_APP_SECRET'),
-    //         'enable_client_messages' => true,
-    //         'enable_statistics' => true,
-    //     ],
-    // ],
-
     // PRODUCAO
     'apps' => [
         [
@@ -46,13 +36,13 @@ return [
      * This array contains the hosts of which you want to allow incoming requests.
      * Leave this empty if you want to accept requests from all hosts.
      */
-    // 'allowed_origins' => [
-    //     //
-    // ],
     'allowed_origins' => [
-        'https://proconline.com.br',
-        'https://www.proconline.com.br',
+        //
     ],
+    // 'allowed_origins' => [
+    //     'https://proconline.com.br',
+    //     'https://www.proconline.com.br',
+    // ],
 
     /*
      * The maximum request size in kilobytes that is allowed for an incoming WebSocket request.
@@ -112,17 +102,17 @@ return [
      * Define the optional SSL context for your WebSocket connections.
      * You can see all available options at: http://php.net/manual/en/context.ssl.php
      */
-    // 'ssl' => [
-    //     'local_cert' => null,
-    //     'local_pk' => null,
-    //     'passphrase' => null,
-    //     'verify_peer' => false,
-    // ],
     'ssl' => [
-        'local_cert' => '/etc/letsencrypt/live/proconline.com.br/fullchain.pem',
-        'local_pk' => '/etc/letsencrypt/live/proconline.com.br/privkey.pem',
+        'local_cert' => null,
+        'local_pk' => null,
         'passphrase' => null,
+        'verify_peer' => false,
     ],
+    // 'ssl' => [
+    //     'local_cert' => '/etc/letsencrypt/live/proconline.com.br/fullchain.pem',
+    //     'local_pk' => '/etc/letsencrypt/live/proconline.com.br/privkey.pem',
+    //     'passphrase' => null,
+    // ],
 
     'replication' => [
             'mode' => 'single',
