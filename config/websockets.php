@@ -46,8 +46,12 @@ return [
      * This array contains the hosts of which you want to allow incoming requests.
      * Leave this empty if you want to accept requests from all hosts.
      */
+    // 'allowed_origins' => [
+    //     //
+    // ],
     'allowed_origins' => [
-        //
+        'https://proconline.com.br',
+        'https://www.proconline.com.br',
     ],
 
     /*
@@ -130,5 +134,7 @@ return [
      * The only requirement is that the class should implement
      * `ChannelManager` interface provided by this package.
      */
-    'channel_manager' => \BeyondCode\LaravelWebSockets\WebSockets\Channels\ChannelManagers\ArrayChannelManager::class,
+    //'channel_manager' => \BeyondCode\LaravelWebSockets\WebSockets\Channels\ChannelManagers\ArrayChannelManager::class,
+    'channel_manager' => \BeyondCode\LaravelWebSockets\WebSockets\Channels\ChannelManagers\RedisChannelManager::class,
+
 ];
