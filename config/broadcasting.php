@@ -36,7 +36,11 @@ return [
                 'encrypted' => true,
                 'scheme' => env('PUSHER_SCHEME', 'https'),
                 'host' => env('PUSHER_HOST'),
-                'port' => env('PUSHER_PORT', 6001),
+                'port' => env('PUSHER_PORT', 443),
+                'curl_options' => [
+                    CURLOPT_SSL_VERIFYHOST => 2,
+                    CURLOPT_SSL_VERIFYPEER => 1,
+                ],
             ],
         ],
 
