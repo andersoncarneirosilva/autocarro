@@ -74,14 +74,16 @@ import axios from 'axios';
 
 const app = express();
 
-// Definindo os caminhos dos certificados SSL
+// Caminhos para os certificados SSL
 const options = {
-    key: fs.readFileSync('/etc/letsencrypt/live/proconline.com.br/privkey.pem'),
-    cert: fs.readFileSync('/etc/letsencrypt/live/proconline.com.br/fullchain.pem')
+    cert: fs.readFileSync('/etc/letsencrypt/live/proconline.com.br/fullchain.pem'),
+    key: fs.readFileSync('/etc/letsencrypt/live/proconline.com.br/privkey.pem')
 };
 
-// Criando o servidor HTTPS
+// Criar o servidor HTTPS
 const server = https.createServer(options, app);
+
+// Criar o servidor Socket.io
 const io = new Server(server, {
     cors: {
         origin: "*",
@@ -99,25 +101,21 @@ io.on('connection', (socket) => {
         const { content, sender_id } = data;
 
         try {
-            // Obter a hora atual no momento do envio
-            const sentAt = new Date().toISOString();  // Captura a hora atual em formato ISO 8601
+            const sentAt = new Date().toISOString();
 
-            // Salvar a mensagem no banco via API Laravel
-            const response = await axios.post('https://proconline.com.br/api/messages', {
+            const response = await axios.post('http://proconline.com.br/api/messages', {
                 content,
                 sender_id,
-                sent_at: sentAt // Envia a hora com a mensagem
+                sent_at: sentAt
             });
             
-            // Buscar os dados completos do usuário
-            const userResponse = await axios.get(`https://proconline.com.br/api/users/${sender_id}`);
+            const userResponse = await axios.get(`http://proconline.com.br/api/users/${sender_id}`);
             const user = userResponse.data;
 
-            // Emite a mensagem com os dados do usuário completos, incluindo a hora de envio
             io.emit('chat message', {
                 content: response.data.content,
                 sender_id: response.data.sender_id,
-                sent_at: response.data.sent_at,  // Enviando a hora de envio
+                sent_at: response.data.sent_at,
                 user: {
                     id: user.id,
                     name: user.name
@@ -133,7 +131,7 @@ io.on('connection', (socket) => {
     });
 });
 
-// Iniciando o servidor na porta 6002
+// Iniciar o servidor na porta 6002
 server.listen(6002, '0.0.0.0', () => {
     console.log('Servidor rodando na porta 6002');
 });
