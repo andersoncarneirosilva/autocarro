@@ -212,8 +212,15 @@
         li.classList.add('message', messageClass);
 
         // Formatar a hora da mensagem
-        let sentTime = new Date(msg.sent_at);
-        let formattedTime = sentTime.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+        // Cria um objeto Date para pegar a data e hora atuais
+        const now = new Date();
+
+        // Obtém a hora e o minuto
+        const hours = now.getHours();  // Hora (0-23)
+        const minutes = now.getMinutes();  // Minutos (0-59)
+
+        // Adiciona um zero à esquerda se a hora ou o minuto for menor que 10
+        const formattedTime = `${hours < 10 ? '0' : ''}${hours}:${minutes < 10 ? '0' : ''}${minutes}`;
 
         // Definir o conteúdo da mensagem
         li.innerHTML = `
