@@ -28,7 +28,7 @@
                             <a href="pages-profile.html" class="text-reset">{{ auth()->user()->name }}</a>
                         </h5>
                         <p id="user-online-status" class="mt-1 lh-1 mb-0 text-muted font-12">
-                            <small class="mdi mdi-circle text-warning"></small> Verificando...
+                            <small class="mdi mdi-circle text-success"></small> Online
                         </p>
                     </div>
                 </div>
