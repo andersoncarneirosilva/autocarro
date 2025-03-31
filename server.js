@@ -16,34 +16,44 @@
 // app.use(cors());
 // app.use(express.json());
 
+// let onlineUsers = {}; // Armazena usuários online
+
 // io.on('connection', (socket) => {
 //     console.log('Usuário conectado:', socket.id);
 
+//     // Evento para registrar usuários online
+//     socket.on('user connected', (user) => {
+//         if (user && user.id) {
+//             onlineUsers[user.id] = { id: user.id, name: user.name, socketId: socket.id };
+//             io.emit('update online users', Object.values(onlineUsers)); // Atualiza a lista para todos
+//         }
+//     });
+
+//     // Evento para mensagens do chat
 //     socket.on('chat message', async (data) => {
 //         const { content, sender_id } = data;
 
 //         try {
-//             // Obter a hora atual no momento do envio
-//             const sentAt = new Date().toISOString();  // Captura a hora atual em formato ISO 8601
+//             const sentAt = new Date().toISOString(); // Hora formatada
 
-//             // Salvar a mensagem no banco via API Laravel
-//             //const response = await axios.post('http://localhost:8990/api/messages', {
-//             const response = await axios.post('http://proconline.com.br/api/messages', {
+//             // Enviar mensagem para API Laravel
+//             const response = await axios.post('http://localhost:8990/api/messages', {
 //                 content,
 //                 sender_id,
-//                 sent_at: sentAt // Envia a hora com a mensagem
+//                 sent_at: sentAt,
 //             });
-            
-//             // Buscar os dados completos do usuário
-//             //const userResponse = await axios.get(`http://localhost:8990/api/users/${sender_id}`);
-//             const userResponse = await axios.get(`http://proconline.com.br/api/users/${sender_id}`);
+
+//             console.log('Mensagem salva:', response.data);
+
+//             // Buscar os dados do usuário
+//             const userResponse = await axios.get(`http://localhost:8990/api/users/${sender_id}`);
 //             const user = userResponse.data;
 
-//             // Emite a mensagem com os dados do usuário completos, incluindo a hora de envio
+//             // Emitir mensagem com dados completos
 //             io.emit('chat message', {
 //                 content: response.data.content,
 //                 sender_id: response.data.sender_id,
-//                 sent_at: response.data.sent_at,  // Enviando a hora de envio
+//                 sent_at: sentAt,
 //                 user: {
 //                     id: user.id,
 //                     name: user.name
@@ -51,10 +61,19 @@
 //             });
 //         } catch (error) {
 //             console.error('Erro ao salvar mensagem:', error.message);
+//             console.error('Detalhes do erro:', error.response ? error.response.data : error.message);
 //         }
 //     });
 
+//     // Evento para desconectar usuários
 //     socket.on('disconnect', () => {
+//         for (let userId in onlineUsers) {
+//             if (onlineUsers[userId].socketId === socket.id) {
+//                 delete onlineUsers[userId]; // Remove o usuário da lista
+//                 break;
+//             }
+//         }
+//         io.emit('update online users', Object.values(onlineUsers)); // Atualiza a lista
 //         console.log('Usuário desconectado:', socket.id);
 //     });
 // });
@@ -62,6 +81,7 @@
 // server.listen(6002, '0.0.0.0', () => {
 //     console.log('Servidor rodando na porta 6002');
 // });
+
 
 
 //PRODUCAO

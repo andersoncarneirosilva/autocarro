@@ -5,12 +5,14 @@
     display: flex;
     flex-direction: column;
     gap: 8px;
+    max-height: 400px; /* Mantém o chat dentro de um card */
+    overflow-y: auto; /* Permite rolagem vertical */
 }
 
 .message {
     display: flex;
     width: 100%;
-    align-items: flex-end;
+    align-items: flex-start;
 }
 
 .user-message {
@@ -24,37 +26,42 @@
 .message-content {
     max-width: 60%;
     padding: 10px 15px;
-    border-radius: 10px;
-    position: relative;
+    border-radius: 8px;
     font-size: 14px;
     line-height: 1.4;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    word-wrap: break-word;
 }
 
 .user-message .message-content {
     background-color: #dcf8c6;
     color: #000;
-    border-radius: 10px 10px 0 10px;
+    border-radius: 8px 8px 0 8px;
+    align-self: flex-end;
 }
 
 .admin-message .message-content {
     background-color: #fff;
     color: #000;
-    border-radius: 10px 10px 10px 0;
+    border-radius: 8px 8px 8px 0;
     border: 1px solid #ddd;
+    align-self: flex-start;
+}
+
+.message-header {
+    font-weight: bold;
+    font-size: 14px;
+    color: #333;
+}
+
+.message-text {
+    margin: 0;
 }
 
 .message-time {
     font-size: 12px;
     color: #777;
-    margin-left: 8px;
-    white-space: nowrap;
-}
-.ctext-wrap {
-border-radius: 10px 10px 0 10px;
-border: 1px solid #ddd;
-color: #000;
-padding: 10px 15px; /* O padding define o espaço interno da borda */
-box-sizing: border-box; /* Garante que o padding e a borda sejam incluídos no cálculo da largura total */
-word-wrap: break-word; /* Garante que o texto quebre corretamente */
-display: inline-block; /* Permite que a largura da borda se ajuste ao conteúdo da mensagem */
+    align-self: flex-end;
 }

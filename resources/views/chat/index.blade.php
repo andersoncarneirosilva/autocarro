@@ -17,10 +17,71 @@
     </div>
 </div>
 <br>
-<div class="col-xxl-6 col-xl-12 order-xl-2">
+<div class="col-xxl-6 col-xl-12">
+    <div class="card h-100 overflow-hidden mb-0">
+        <div class="card-header border-bottom">
+            <div class="d-flex align-items-center gap-2">
+                <div class="d-flex align-items-start me-auto">
+                    <img src="assets/images/users/avatar-5.jpg" class="me-2 rounded" height="36" alt="{{ auth()->user()->name }}">
+                    <div>
+                        <h5 class="mt-0 mb-0 font-15">
+                            <a href="pages-profile.html" class="text-reset">{{ auth()->user()->name }}</a>
+                        </h5>
+                        <p id="user-online-status" class="mt-1 lh-1 mb-0 text-muted font-12">
+                            <small class="mdi mdi-circle text-warning"></small> Verificando...
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        {{-- chat-conversation simplebar-scrollable-y --}}
+        <div class="card-body p-0 pt-3">
+            <ul id="message-list">
+                @foreach ($messages as $message)
+                    @php
+                        $isUserMessage = auth()->id() == $message->sender_id;
+                    @endphp
+                    <li class="message {{ $isUserMessage ? 'user-message' : 'admin-message' }}">
+                        <div class="message-content">
+                            <strong>{{ $message->user->name ?? 'Usuário desconhecido' }}:</strong>
+                            {{ $message->content }}
+                        </div>
+                        <span class="message-time">{{ \Carbon\Carbon::parse($message['updated_at'])->format('H:i') }}</span>
+                    </li>
+                @endforeach
+            </ul>          
+            
+        </div> <!-- end card-body -->
+
+        <div class="card-body bg-light mt-2">
+            <form wire:submit.prevent="sendMessage" class="" name="chat-form" id="chat-form">
+                <div class="row">
+                    <div class="col mb-2 mb-sm-0">
+                        <!-- O input agora usa wire:model para se conectar ao Livewire -->
+                        <input type="text" wire:model="newMessage" class="form-control border-0"
+                               placeholder="Digite uma mensagem...">
+                    </div>
+                    <div class="col-sm-auto">
+                        <div class="btn-group">
+                            <div class="d-grid">
+                                <!-- O botão de envio agora usa wire:click -->
+                                <button type="submit" class="btn btn-success chat-send">
+                                    <i class="uil uil-message"></i> Enviar
+                                </button>
+                            </div>
+                        </div>
+                    </div> <!-- end col -->
+                </div> <!-- end row-->
+            </form>
+        </div>
+    </div> <!-- end card -->
+</div>
+{{-- <div class="col-xxl-6 col-xl-12 order-xl-2">
     <div class="card">
         <div class="card-body px-0 pb-0">
             <!-- Lista de mensagens -->
+            
             <ul id="message-list">
                 @foreach ($messages as $message)
                     @php
@@ -69,11 +130,12 @@
         </div>
     </div> <!-- end card -->
 </div>
-</div>
+</div> --}}
 
 <script src="https://cdn.socket.io/4.7.2/socket.io.min.js"></script>
 <script>
     const socket = io('https://proconline.com.br:6001');
+    //const socket = io('http://localhost:6002');
     const userId = @json(auth()->id()); // Corrigido para evitar erro com usuários não autenticados
 
     document.getElementById('chat-form').addEventListener('submit', function(event) {
