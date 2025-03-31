@@ -37,14 +37,12 @@
 
 .user-message .message-content {
     background-color: #dcf8c6;
-    color: #000;
     border-radius: 8px 8px 0 8px;
     align-self: flex-end;
 }
 
 .admin-message .message-content {
     background-color: #fff;
-    color: #000;
     border-radius: 8px 8px 8px 0;
     border: 1px solid #ddd;
     align-self: flex-start;
