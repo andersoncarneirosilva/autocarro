@@ -25,7 +25,7 @@
 //     socket.on('user connected', (user) => {
 //         if (user && user.id) {
 //             onlineUsers[user.id] = { id: user.id, name: user.name, socketId: socket.id };
-//             io.emit('update online users', Object.values(onlineUsers)); // Atualiza a lista para todos
+//             io.emit('update online users', Object.values(onlineUsers)); // Atualiza a lista de usuários online para todos os clientes
 //         }
 //     });
 
@@ -49,7 +49,7 @@
 //             const userResponse = await axios.get(`http://localhost:8990/api/users/${sender_id}`);
 //             const user = userResponse.data;
 
-//             // Emitir mensagem com dados completos
+//             // Emitir a mensagem com dados completos para todos os clientes
 //             io.emit('chat message', {
 //                 content: response.data.content,
 //                 sender_id: response.data.sender_id,
@@ -67,13 +67,17 @@
 
 //     // Evento para desconectar usuários
 //     socket.on('disconnect', () => {
+//         // Remover o usuário desconectado da lista de usuários online
 //         for (let userId in onlineUsers) {
 //             if (onlineUsers[userId].socketId === socket.id) {
 //                 delete onlineUsers[userId]; // Remove o usuário da lista
 //                 break;
 //             }
 //         }
-//         io.emit('update online users', Object.values(onlineUsers)); // Atualiza a lista
+
+//         // Emitir a lista de usuários online atualizada para todos os clientes
+//         io.emit('update online users', Object.values(onlineUsers));
+
 //         console.log('Usuário desconectado:', socket.id);
 //     });
 // });
@@ -81,6 +85,7 @@
 // server.listen(6002, '0.0.0.0', () => {
 //     console.log('Servidor rodando na porta 6002');
 // });
+
 
 
 
