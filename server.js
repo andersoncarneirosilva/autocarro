@@ -145,10 +145,11 @@ const server = https.createServer(options, app);
 // Criar o servidor Socket.io
 const io = new Server(server, {
     cors: {
-        origin: "*",
+        origin: "https://proconline.com.br",  // Permite requisições do frontend
         methods: ["GET", "POST"]
     }
 });
+
 
 app.use(cors());
 app.use(express.json());
