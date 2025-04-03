@@ -125,10 +125,13 @@
 
 //PRODUCAO
 import express from 'express';
-import http from 'http';
+import https from 'https';
+import fs from 'fs';
 import { Server } from 'socket.io';
 import cors from 'cors';
 import axios from 'axios';
+
+const app = express();
 
 // Caminhos para os certificados SSL
 const options = {
@@ -136,11 +139,10 @@ const options = {
     key: fs.readFileSync('/etc/letsencrypt/live/proconline.com.br/privkey.pem')
 };
 
-// // Criar o servidor HTTPS
+// Criar o servidor HTTPS
 const server = https.createServer(options, app);
 
-const app = express();
-//const server = http.createServer(app);
+// Criar o servidor Socket.io
 const io = new Server(server, {
     cors: {
         origin: "*",
