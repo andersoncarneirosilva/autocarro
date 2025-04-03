@@ -124,118 +124,6 @@
 
 
 //PRODUCAO
-// import express from 'express';
-// import https from 'https';
-// import fs from 'fs';
-// import { Server } from 'socket.io';
-// import cors from 'cors';
-// import axios from 'axios';
-
-// const app = express();
-
-// // 🔐 Configuração do HTTPS com Let's Encrypt
-// const options = {
-//     key: fs.readFileSync('/etc/letsencrypt/live/proconline.com.br/privkey.pem'),
-//     cert: fs.readFileSync('/etc/letsencrypt/live/proconline.com.br/fullchain.pem')
-// };
-
-// const server = https.createServer(options, app);
-// const io = new Server(server, {
-//     cors: {
-//         origin: "https://proconline.com.br",  // ✅ Apenas conexões do frontend em produção
-//         methods: ["GET", "POST"]
-//     }
-// });
-
-// app.use(cors({
-//     origin: "https://proconline.com.br"  // ✅ Permite apenas este domínio
-// }));
-// app.use(express.json());
-
-// let onlineUsers = {}; // 🔄 Armazena usuários online e offline
-
-// io.on('connection', (socket) => {
-//     console.log('Usuário conectado:', socket.id);
-
-//     // 🔵 Registrar usuários online
-//     socket.on('user connected', (user) => {
-//         if (user && user.id) {
-//             onlineUsers[user.id] = {
-//                 id: user.id,
-//                 name: user.name,
-//                 socketId: socket.id,
-//                 status: 'online'
-//             };
-
-//             // Atualizar a lista de usuários online
-//             io.emit('update online users', Object.values(onlineUsers));
-//         }
-//     });
-
-//     // 💬 Receber mensagens do chat
-//     socket.on('chat message', async (data) => {
-//         const { content, sender_id } = data;
-
-//         try {
-//             const sentAt = new Date().toISOString();
-//             const user = onlineUsers[sender_id];
-
-//             if (!user) {
-//                 console.error('Usuário não encontrado:', sender_id);
-//                 return;
-//             }
-
-//             // 🔄 Salvar mensagem no Laravel (API em produção)
-//             const response = await axios.post('https://proconline.com.br/api/messages', {
-//                 content,
-//                 sender_id,
-//                 sent_at: sentAt,
-//             });
-
-//             console.log('Mensagem salva:', response.data);
-
-//             // 📨 Enviar mensagem para todos os usuários
-//             io.emit('chat message', {
-//                 content: response.data.content,
-//                 sender_id: response.data.sender_id,
-//                 sent_at: sentAt,
-//                 user: {
-//                     id: user.id,
-//                     name: user.name
-//                 }
-//             });
-//         } catch (error) {
-//             console.error('Erro ao salvar mensagem:', error.message);
-//         }
-//     });
-
-//     // 🔴 Desconectar usuário
-//     socket.on('disconnect', () => {
-//         let disconnectedUserId = null;
-
-//         for (let userId in onlineUsers) {
-//             if (onlineUsers[userId].socketId === socket.id) {
-//                 onlineUsers[userId].status = 'offline'; 
-//                 onlineUsers[userId].socketId = null;
-//                 disconnectedUserId = userId;
-//                 break;
-//             }
-//         }
-
-//         if (disconnectedUserId) {
-//             // Atualizar a lista de usuários online
-//             io.emit('update online users', Object.values(onlineUsers));
-//         }
-
-//         console.log('Usuário desconectado:', socket.id);
-//     });
-// });
-
-// // 🚀 Iniciar servidor na porta 6001
-// server.listen(6001, '0.0.0.0', () => {
-//     console.log('Servidor rodando em produção na porta 6001');
-// });
-
 import express from 'express';
 import https from 'https';
 import fs from 'fs';
@@ -245,48 +133,83 @@ import axios from 'axios';
 
 const app = express();
 
-// Caminhos para os certificados SSL
+// 🔐 Configuração do HTTPS com Let's Encrypt
 const options = {
-    cert: fs.readFileSync('/etc/letsencrypt/live/proconline.com.br/fullchain.pem'),
-    key: fs.readFileSync('/etc/letsencrypt/live/proconline.com.br/privkey.pem')
+    key: fs.readFileSync('/etc/letsencrypt/live/proconline.com.br/privkey.pem'),
+    cert: fs.readFileSync('/etc/letsencrypt/live/proconline.com.br/fullchain.pem')
 };
 
-// Criar o servidor HTTPS
 const server = https.createServer(options, app);
-
-// Criar o servidor Socket.io
 const io = new Server(server, {
     cors: {
-        origin: "*",
-        methods: ["GET", "POST"]
+        origin: "*",  // 🚀 Permite qualquer origem (troque por um domínio específico se necessário)
+        methods: ["GET", "POST"],
+        credentials: true  // 🔥 Necessário para permitir cookies e autenticação no WebSocket
     }
 });
 
-app.use(cors());
+// 🔧 Configuração adicional para permitir CORS corretamente
+app.use((req, res, next) => {
+    res.header("Access-Control-Allow-Origin", "*");  // 🔥 Permite requisições de qualquer domínio
+    res.header("Access-Control-Allow-Methods", "GET, POST");
+    res.header("Access-Control-Allow-Headers", "Content-Type, Authorization");
+    res.header("Access-Control-Allow-Credentials", "true");
+    next();
+});
+
+
+app.use(cors({
+    origin: "https://proconline.com.br"  // ✅ Permite apenas este domínio
+}));
 app.use(express.json());
+
+let onlineUsers = {}; // 🔄 Armazena usuários online e offline
 
 io.on('connection', (socket) => {
     console.log('Usuário conectado:', socket.id);
 
+    // 🔵 Registrar usuários online
+    socket.on('user connected', (user) => {
+        if (user && user.id) {
+            onlineUsers[user.id] = {
+                id: user.id,
+                name: user.name,
+                socketId: socket.id,
+                status: 'online'
+            };
+
+            // Atualizar a lista de usuários online
+            io.emit('update online users', Object.values(onlineUsers));
+        }
+    });
+
+    // 💬 Receber mensagens do chat
     socket.on('chat message', async (data) => {
         const { content, sender_id } = data;
 
         try {
             const sentAt = new Date().toISOString();
+            const user = onlineUsers[sender_id];
 
+            if (!user) {
+                console.error('Usuário não encontrado:', sender_id);
+                return;
+            }
+
+            // 🔄 Salvar mensagem no Laravel (API em produção)
             const response = await axios.post('https://proconline.com.br/api/messages', {
                 content,
                 sender_id,
-                sent_at: sentAt
+                sent_at: sentAt,
             });
-            
-            const userResponse = await axios.get(`https://proconline.com.br/api/users/${sender_id}`);
-            const user = userResponse.data;
 
+            console.log('Mensagem salva:', response.data);
+
+            // 📨 Enviar mensagem para todos os usuários
             io.emit('chat message', {
                 content: response.data.content,
                 sender_id: response.data.sender_id,
-                sent_at: response.data.sent_at,
+                sent_at: sentAt,
                 user: {
                     id: user.id,
                     name: user.name
@@ -297,12 +220,100 @@ io.on('connection', (socket) => {
         }
     });
 
+    // 🔴 Desconectar usuário
     socket.on('disconnect', () => {
+        let disconnectedUserId = null;
+
+        for (let userId in onlineUsers) {
+            if (onlineUsers[userId].socketId === socket.id) {
+                onlineUsers[userId].status = 'offline'; 
+                onlineUsers[userId].socketId = null;
+                disconnectedUserId = userId;
+                break;
+            }
+        }
+
+        if (disconnectedUserId) {
+            // Atualizar a lista de usuários online
+            io.emit('update online users', Object.values(onlineUsers));
+        }
+
         console.log('Usuário desconectado:', socket.id);
     });
 });
 
-// Iniciar o servidor na porta 6002
+// 🚀 Iniciar servidor na porta 6001
 server.listen(6001, '0.0.0.0', () => {
-    console.log('Servidor rodando na porta 6001');
+    console.log('Servidor rodando em produção na porta 6001');
 });
+
+// import express from 'express';
+// import https from 'https';
+// import fs from 'fs';
+// import { Server } from 'socket.io';
+// import cors from 'cors';
+// import axios from 'axios';
+
+// const app = express();
+
+// // Caminhos para os certificados SSL
+// const options = {
+//     cert: fs.readFileSync('/etc/letsencrypt/live/proconline.com.br/fullchain.pem'),
+//     key: fs.readFileSync('/etc/letsencrypt/live/proconline.com.br/privkey.pem')
+// };
+
+// // Criar o servidor HTTPS
+// const server = https.createServer(options, app);
+
+// // Criar o servidor Socket.io
+// const io = new Server(server, {
+//     cors: {
+//         origin: "*",
+//         methods: ["GET", "POST"]
+//     }
+// });
+
+// app.use(cors());
+// app.use(express.json());
+
+// io.on('connection', (socket) => {
+//     console.log('Usuário conectado:', socket.id);
+
+//     socket.on('chat message', async (data) => {
+//         const { content, sender_id } = data;
+
+//         try {
+//             const sentAt = new Date().toISOString();
+
+//             const response = await axios.post('https://proconline.com.br/api/messages', {
+//                 content,
+//                 sender_id,
+//                 sent_at: sentAt
+//             });
+            
+//             const userResponse = await axios.get(`https://proconline.com.br/api/users/${sender_id}`);
+//             const user = userResponse.data;
+
+//             io.emit('chat message', {
+//                 content: response.data.content,
+//                 sender_id: response.data.sender_id,
+//                 sent_at: response.data.sent_at,
+//                 user: {
+//                     id: user.id,
+//                     name: user.name
+//                 }
+//             });
+//         } catch (error) {
+//             console.error('Erro ao salvar mensagem:', error.message);
+//         }
+//     });
+
+//     socket.on('disconnect', () => {
+//         console.log('Usuário desconectado:', socket.id);
+//     });
+// });
+
+// // Iniciar o servidor na porta 6002
+// server.listen(6001, '0.0.0.0', () => {
+//     console.log('Servidor rodando na porta 6001');
+// });
