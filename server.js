@@ -236,7 +236,7 @@ io.on('connection', (socket) => {
 });
 
 server.listen(6001, '0.0.0.0', () => {
-    console.log('Servidor rodando na porta 6002');
+    console.log('Servidor rodando na porta 6001');
 });
 // import express from 'express';
 // import https from 'https';

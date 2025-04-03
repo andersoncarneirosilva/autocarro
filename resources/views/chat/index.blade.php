@@ -209,11 +209,15 @@
             li.classList.add('message', messageClass);
 
             // Verifica se existe um horário definido na mensagem
-            let formattedTime = "??:??";
-            if (msg.sent_at) {
-                const messageTime = new Date(msg.sent_at);
-                formattedTime = `${messageTime.getHours().toString().padStart(2, '0')}:${messageTime.getMinutes().toString().padStart(2, '0')}`;
-            }
+            // Cria um objeto Date para pegar a data e hora atuais
+            const now = new Date();
+
+            // Obtém a hora e o minuto
+            const hours = now.getHours();  // Hora (0-23)
+            const minutes = now.getMinutes();  // Minutos (0-59)
+
+            // Adiciona um zero à esquerda se a hora ou o minuto for menor que 10
+            const formattedTime = `${hours < 10 ? '0' : ''}${hours}:${minutes < 10 ? '0' : ''}${minutes}`;
 
             li.innerHTML = `
                 <div class="message-content">
