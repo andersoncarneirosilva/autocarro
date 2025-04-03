@@ -175,7 +175,7 @@
 
 <script>
     document.addEventListener("DOMContentLoaded", function () {
-        const socket = io('https://proconline.com.br:6001');
+        const socket = io('http://proconline.com.br:6001');
         //const socket = io('http://localhost:6002');
         const userId = @json(auth()->id()); 
 
