@@ -130,8 +130,17 @@ import { Server } from 'socket.io';
 import cors from 'cors';
 import axios from 'axios';
 
+// Caminhos para os certificados SSL
+const options = {
+    cert: fs.readFileSync('/etc/letsencrypt/live/proconline.com.br/fullchain.pem'),
+    key: fs.readFileSync('/etc/letsencrypt/live/proconline.com.br/privkey.pem')
+};
+
+// // Criar o servidor HTTPS
+const server = https.createServer(options, app);
+
 const app = express();
-const server = http.createServer(app);
+//const server = http.createServer(app);
 const io = new Server(server, {
     cors: {
         origin: "*",
