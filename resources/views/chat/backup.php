@@ -26,7 +26,7 @@
                     <ul class="nav nav-tabs nav-bordered nav-justified" role="tablist">
                         <li class="nav-item" role="presentation">
                             <a href="#allUsers" data-bs-toggle="tab" aria-expanded="false" class="nav-link active py-2" aria-selected="true" role="tab">
-                                Colaboradores
+                                Amigos
                             </a>
                         </li>
                     </ul> <!-- end nav-->
@@ -50,7 +50,7 @@
                             <div class="col">
                                 <div class="card-body chat-user-list pt-0 simplebar-scrollable-y" data-simplebar="init"><div class="simplebar-wrapper" style="margin: 0px -24px -24px;"><div class="simplebar-height-auto-observer-wrapper"><div class="simplebar-height-auto-observer"></div></div><div class="simplebar-mask"><div class="simplebar-offset" style="right: 0px; bottom: 0px;"><div class="simplebar-content-wrapper" tabindex="0" role="region" aria-label="scrollable content" style="height: 100%; overflow: hidden scroll;"><div class="simplebar-content" style="padding: 0px 24px 24px;">
                                     <div class="online-users">
-                                        {{-- <h4>Usuários Online</h4> --}}
+                                        <h4>Usuários Online</h4>
                                         <div id="online-users">
                                             <!-- Aqui os usuários online serão listados dinamicamente -->
                                         </div>
@@ -151,9 +151,8 @@
                     <div class="row">
                         <div class="col mb-2 mb-sm-0">
                             <!-- O input agora usa wire:model para se conectar ao Livewire -->
-                            <input type="text" wire:model="newMessage" id="message-input" class="form-control border-0"
-       placeholder="Digite uma mensagem...">
-
+                            <input type="text" wire:model="newMessage" class="form-control border-0"
+                                   placeholder="Digite uma mensagem...">
                         </div>
                         <div class="col-sm-auto">
                             <div class="btn-group">
@@ -174,132 +173,101 @@
 </div>
 
 <script>
-    document.addEventListener("DOMContentLoaded", function () {
-        const socket = io('http://localhost:6002');
-        const userId = @json(auth()->id()); 
+    //const socket = io('https://proconline.com.br:6001');
+    const socket = io('http://localhost:6002');
+    const userId = @json(auth()->id()); // Corrigido para evitar erro com usuários não autenticados
 
-        // Notifica o servidor que o usuário está online
-        socket.emit('user connected', { id: userId, name: "{{ auth()->user()->name }}" });
+    // Notifica o servidor que o usuário está online
+    socket.emit('user connected', { id: userId, name: "{{ auth()->user()->name }}" });
 
-        // Obtém os elementos do chat
-        const chatForm = document.getElementById('chat-form');
-        const messageInput = document.getElementById('message-input'); // ID atualizado
+    document.getElementById('chat-form').addEventListener('submit', function(event) {
+        event.preventDefault();
+        let messageInput = document.querySelector('[wire\\:model="newMessage"]');
+        let message = messageInput.value;
 
-        if (chatForm && messageInput) {
-            chatForm.addEventListener('submit', function(event) {
-                event.preventDefault();
-
-                let message = messageInput.value.trim();
-                if (message !== '') {
-                    socket.emit('chat message', { content: message, sender_id: userId });
-                    messageInput.value = '';
-                }
-            });
-        } else {
-            console.error("Elemento 'chat-form' ou 'message-input' não encontrado.");
-        }
-
-        socket.on('chat message', function(msg) {
-            let messageList = document.getElementById('message-list');
-            if (!messageList) return;
-
-            let li = document.createElement('li');
-            let messageClass = (msg.user && msg.user.id === userId) ? 'user-message' : 'admin-message';
-            li.classList.add('message', messageClass);
-
-            // Verifica se existe um horário definido na mensagem
-            let formattedTime = "??:??";
-            if (msg.sent_at) {
-                const messageTime = new Date(msg.sent_at);
-                formattedTime = `${messageTime.getHours().toString().padStart(2, '0')}:${messageTime.getMinutes().toString().padStart(2, '0')}`;
-            }
-
-            li.innerHTML = `
-                <div class="message-content">
-                    <div class="message-header">
-                        <strong>${msg.user ? msg.user.name : 'Usuário desconhecido'}</strong>
-                    </div>
-                    <p class="message-text">${msg.content}</p>
-                    <span class="message-time">${formattedTime}</span>
-                </div>
-            `;
-
-            messageList.appendChild(li);
-            messageList.scrollTop = messageList.scrollHeight; 
-        });
-
-        socket.on('update online users', function(users) {
-            let onlineUsersContainer = document.getElementById('online-users');
-            if (!onlineUsersContainer) return;
-            onlineUsersContainer.innerHTML = '';
-
-            users.forEach(user => {
-                let userElement = document.createElement('div');
-                userElement.classList.add('online-user');
-                userElement.setAttribute('data-user-id', user.id);
-
-                let statusClass = user.status === 'offline' ? 'text-danger' : 'text-success';
-                let statusText = user.status === 'offline' ? 'Offline' : 'Online';
-
-                userElement.innerHTML = `
-                    <div class="d-flex align-items-start mt-1 p-2">
-                        <img src="assets/images/users/avatar-2.jpg" class="me-2 rounded-circle" height="48" alt="${user.name}">
-                        <div class="w-100 overflow-hidden">
-                            <h5 class="mt-0 mb-0 font-14">${user.name}</h5>
-                            <p class="mt-1 lh-1 mb-0 text-muted font-12">
-                                <small class="mdi mdi-circle ${statusClass} user-status"></small> ${statusText}
-                            </p>
-                        </div>
-                    </div>
-                `;
-
-                userElement.addEventListener('click', function() {
-                    openPrivateChat(user.id);
-                });
-
-                onlineUsersContainer.appendChild(userElement);
-            });
-        });
-
-        socket.on('user disconnected', function(user) {
-            let userElement = document.querySelector(`[data-user-id="${user.id}"]`);
-            if (userElement) {
-                let statusElement = userElement.querySelector('.user-status');
-                statusElement.classList.remove('text-success'); 
-                statusElement.classList.add('text-danger'); 
-                statusElement.textContent = ' Offline';
-            }
-        });
-
-        function openPrivateChat(recipientId) {
-            fetch('/chat', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                    'Accept': 'application/json',
-                    'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
-                },
-                body: JSON.stringify({ recipient_id: recipientId })
-            })
-            .then(response => {
-                if (!response.ok) {
-                    throw new Error('Erro na requisição');
-                }
-                return response.json();
-            })
-            .then(data => {
-                if (data.id) {
-                    window.location.href = `/chat/${data.id}`;
-                } else {
-                    console.error('Erro ao criar ou recuperar o chat:', data);
-                }
-            })
-            .catch(error => console.error('Erro ao abrir chat privado:', error));
+        if (message.trim() !== '') {
+            // Enviar a mensagem com a hora atual
+            socket.emit('chat message', { content: message, sender_id: userId });
+            messageInput.value = '';
         }
     });
+
+    socket.on('chat message', function(msg) {
+        let messageList = document.getElementById('message-list');
+        let li = document.createElement('li');
+
+        // Definir a classe para diferenciar mensagens do usuário e do admin
+        let messageClass = (msg.user && msg.user.id === userId) ? 'user-message' : 'admin-message';
+        li.classList.add('message', messageClass);
+
+        // Formatar a hora da mensagem
+        // Cria um objeto Date para pegar a data e hora atuais
+        const now = new Date();
+
+        // Obtém a hora e o minuto
+        const hours = now.getHours();  // Hora (0-23)
+        const minutes = now.getMinutes();  // Minutos (0-59)
+
+        // Adiciona um zero à esquerda se a hora ou o minuto for menor que 10
+        const formattedTime = `${hours < 10 ? '0' : ''}${hours}:${minutes < 10 ? '0' : ''}${minutes}`;
+
+        // Definir o conteúdo da mensagem
+        li.innerHTML = `
+            <div class="message-content">
+                <div class="message-header">
+                    <strong>${msg.user ? msg.user.name : 'Usuário desconhecido'}</strong>
+                </div>
+                <p class="message-text">${msg.content}</p>
+                <span class="message-time">${formattedTime}</span>
+            </div>
+        `;
+
+        messageList.appendChild(li);
+        messageList.scrollTop = messageList.scrollHeight; // Scroll automático para a última mensagem
+    });
+
+        // Atualizar a lista de usuários online, excluindo o próprio usuário
+        socket.on('update online users', function(users) {
+    let onlineUsersContainer = document.getElementById('online-users');
+    onlineUsersContainer.innerHTML = '';
+
+    users.forEach(user => { // Agora inclui usuários online e offline
+        let userElement = document.createElement('div');
+        userElement.classList.add('online-user');
+        userElement.setAttribute('data-user-id', user.id); // Atributo para identificar o usuário
+
+        let statusClass = user.status === 'offline' ? 'text-danger' : 'text-success';
+        let statusText = user.status === 'offline' ? 'Offline' : 'Online';
+
+        userElement.innerHTML = `
+            <div class="d-flex align-items-start mt-1 p-2">
+                <img src="assets/images/users/avatar-2.jpg" class="me-2 rounded-circle" height="48" alt="${user.name}">
+                <div class="w-100 overflow-hidden">
+                    <h5 class="mt-0 mb-0 font-14">${user.name}</h5>
+                    <p class="mt-1 lh-1 mb-0 text-muted font-12">
+                        <small class="mdi mdi-circle ${statusClass} user-status"></small> ${statusText}
+                    </p>
+                </div>
+            </div>
+        `;
+        onlineUsersContainer.appendChild(userElement);
+    });
+});
+
+// Quando um usuário desconectar, exibir como offline
+socket.on('user disconnected', function(user) {
+    let userElement = document.querySelector(`[data-user-id="${user.id}"]`);
+    
+    if (userElement) {
+        let statusElement = userElement.querySelector('.user-status');
+        statusElement.classList.remove('text-success'); // Remove o verde
+        statusElement.classList.add('text-danger'); // Adiciona vermelho
+        statusElement.textContent = ' Offline';
+    }
+});
+
+
 </script>
-
-
 
 
 @endsection

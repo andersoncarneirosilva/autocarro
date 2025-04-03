@@ -16,7 +16,7 @@
     <meta name="csrf-token" content="{{ csrf_token() }}">
 
     <link rel="shortcut icon" href="{{ url('images/favicon.ico') }}">
-    <script src="{{ url('assets/js/notificacoes.js') }}?v={{ time() }}"></script>
+    {{-- <script src="{{ url('assets/js/notificacoes.js') }}?v={{ time() }}"></script> --}}
     <!-- Daterangepicker css -->
     <link href="{{ url('assets/vendor/select2/css/select2.min.css') }}" rel="stylesheet" type="text/css" />
     <link rel="stylesheet" href="{{ url('assets/vendor/daterangepicker/daterangepicker.css') }}">
@@ -45,6 +45,8 @@
         type="text/css" />
     {{-- <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" /> --}}
 
+    <script src="https://cdn.socket.io/4.7.2/socket.io.min.js"></script>
+    
     <script src="https://kit.fontawesome.com/6c4df5f46b.js" crossorigin="anonymous"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/vanilla-masker/1.1.0/vanilla-masker.min.js"></script>
