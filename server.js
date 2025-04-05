@@ -39,6 +39,7 @@ import https from 'https';
 import { Server } from 'socket.io';
 import cors from 'cors';
 import axios from 'axios';
+import * as fs from 'fs'; // <- CORRETO com ESM
 
 const app = express();
 
