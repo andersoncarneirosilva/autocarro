@@ -36,7 +36,18 @@ Route::middleware(['auth'])->group(function () {
 
     Broadcast::routes(['middleware' => ['auth:sanctum']]);
 
+
+    Route::post('/chat', [ChatController::class, 'createOrGetChat'])->middleware('auth:sanctum');
+    Route::post('/chat/get-chat', [ChatController::class, 'createOrGetChat']);
+    
+
+    Route::get('/chat/{user}/messages', [ChatController::class, 'getMessages']);
+    Route::get('/chat/messages/{chatId}', [ChatController::class, 'getMessages']);
+
     Route::get('/chat', [ChatController::class, 'index'])->name('chat.index');
+    
+    Route::get('/chat/{recipientId}', [ChatController::class, 'getChat']);
+
 
     Route::post('/perfil/excluir', [PerfilController::class, 'deleteFiles']);
     Route::post('/perfil/excluir-pasta', [PerfilController::class, 'deleteFolders']);

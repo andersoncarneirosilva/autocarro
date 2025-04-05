@@ -53,7 +53,11 @@ class User extends Authenticatable
     {
         return $this->chats()->where('id', $chatId)->exists();
     }
-    
+    public function chats()
+{
+    return $this->belongsToMany(Chat::class, 'chat_user');
+}
+
     /**
      * The attributes that should be cast.
      *

@@ -3,6 +3,7 @@
 use App\Http\Controllers\PaymentController;
 use App\Http\Controllers\MessageController;
 use Illuminate\Http\Request;
+use App\Http\Controllers\ChatController;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Log;
 use App\Models\User;
@@ -29,5 +30,9 @@ Route::get('/users/{id}', function ($id) {
     return User::find($id);
 });
 
-Route::post('/messages', [MessageController::class, 'store']);
-Route::get('/messages', [MessageController::class, 'index']);
+Route::get('/chat/last-message', [ChatController::class, 'lastMessage']);
+Route::post('/chat/get-chat', [ChatController::class, 'getChat'])->middleware('auth');
+
+Route::post('/chat/send-message', [ChatController::class, 'sendMessage'])->name('chat.sendMessage');
+
+
