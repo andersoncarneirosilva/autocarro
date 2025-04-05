@@ -145,7 +145,8 @@ document.addEventListener("DOMContentLoaded", function () {
     const messageList = document.getElementById('message-list');
     const chatForm = document.getElementById('chat-form');
     const messageInput = document.getElementById('message-input');
-    const socket = io('http://localhost:6002');
+    //const socket = io('http://localhost:6002');
+    const socket = io('https://proconline.com.br:6001');
     const userId = JSON.parse("@json(auth()->id())");
     let chatId = null;
 
