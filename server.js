@@ -44,8 +44,9 @@ const app = express();
 const server = http.createServer(app);
 const io = new Server(server, {
     cors: {
-        origin: "*",
-        methods: ["GET", "POST"]
+        origin: "https://proconline.com.br",
+        methods: ["GET", "POST"],
+        credentials: true
     }
 });
 
