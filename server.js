@@ -200,7 +200,7 @@ app.post('/message', (req, res) => {
 });
 
 server.listen(6001, '0.0.0.0', () => {
-    console.log('Servidor rodando na porta 6002');
+    console.log('Servidor rodando na porta 6001');
 });
 
 //DESENVOLVIMENTO NOVO
