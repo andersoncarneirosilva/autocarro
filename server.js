@@ -35,19 +35,27 @@
 
 //PRUDUCAO NOVA
 import express from 'express';
-import http from 'http';
+import https from 'https';
 import { Server } from 'socket.io';
 import cors from 'cors';
 import axios from 'axios';
 
 const app = express();
-const server = http.createServer(app);
+
+// // Caminhos para os certificados SSL
+const options = {
+    cert: fs.readFileSync('/etc/letsencrypt/live/proconline.com.br/fullchain.pem'),
+    key: fs.readFileSync('/etc/letsencrypt/live/proconline.com.br/privkey.pem')
+};
+
+const server = https.createServer(options, app);
+
 const io = new Server(server, {
-    cors: {
-        origin: "https://proconline.com.br",
-        methods: ["GET", "POST"],
-        credentials: true
-    }
+  cors: {
+    origin: "https://proconline.com.br",
+    methods: ["GET", "POST"],
+    credentials: true
+  }
 });
 
 app.use(cors());
