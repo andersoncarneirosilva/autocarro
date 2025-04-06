@@ -44,48 +44,49 @@ io.on('connection', (socket) => {
             };
 
             // Enviar a lista de usuários online para TODOS os usuários, excluindo eles mesmos
-            Object.values(onlineUsers).forEach(async (u) => {
-                if (u.socketId) {
-                    const usersWithLastMessages = await Promise.all(
-                        Object.values(onlineUsers)
-                            .filter(usr => usr.id !== u.id)
-                            .map(async (usr) => {
-                                try {
-                                    const response = await axios.get(`https://proconline.com.br/api/chat/last-message`, {
-                                        params: {
-                                            user_id: u.id,
-                                            recipient_id: usr.id
-                                        },
-                                        headers: {
-                                            Authorization: `Bearer ${u.token}`
-                                        }
-                                    });
-            
-                                    // Retorna o usuário com os dados da última mensagem e quantidade de mensagens não lidas
-                                    return {
-                                        ...usr,
-                                        content: response.data.message || 'Sem mensagens ainda',
-                                        timestamp: response.data.timestamp || null,
-                                        sender_name: response.data.sender_name || 'Desconhecido',
-                                        unread_count: response.data.unread_count || 0
-                                    };
-                                } catch (err) {
-                                    console.error(`Erro ao buscar última mensagem de ${usr.name}:`, err.message);
-                                    return {
-                                        ...usr,
-                                        content: 'Sem mensagens ainda',
-                                        timestamp: null,
-                                        sender_name: 'Desconhecido',
-                                        unread_count: 0
-                                    };
-                                }
-                            })
-                    );
-            
-                    // Emite a lista de usuários atualizada para o socket do usuário
-                    io.to(u.socketId).emit('update online users', usersWithLastMessages);
-                }
-            });
+Object.values(onlineUsers).forEach(async (u) => {
+    if (u.socketId) {
+        const usersWithLastMessages = await Promise.all(
+            Object.values(onlineUsers)
+                .filter(usr => usr.id !== u.id)
+                .map(async (usr) => {
+                    try {
+                        const response = await axios.get(`https://proconline.com.br/api/chat/last-message`, {
+                            params: {
+                                user_id: u.id,
+                                recipient_id: usr.id
+                            },
+                            headers: {
+                                Authorization: `Bearer ${u.token}`
+                            }
+                        });
+
+                        // Retorna o usuário com os dados da última mensagem e quantidade de mensagens não lidas
+                        return {
+                            ...usr,
+                            content: response.data.message || 'Sem mensagens ainda',
+                            timestamp: response.data.timestamp || null,
+                            sender_name: response.data.sender_name || 'Desconhecido',
+                            unread_count: response.data.unread_count || 0
+                        };
+                    } catch (err) {
+                        console.error(`Erro ao buscar última mensagem de ${usr.name}:`, err.message);
+                        return {
+                            ...usr,
+                            content: 'Sem mensagens ainda',
+                            timestamp: null,
+                            sender_name: 'Desconhecido',
+                            unread_count: 0
+                        };
+                    }
+                })
+        );
+
+        // Emite a lista de usuários atualizada para o socket do usuário
+        io.to(u.socketId).emit('update online users', usersWithLastMessages);
+    }
+});
+
             
         }
     });
@@ -173,7 +174,7 @@ app.post('/message', (req, res) => {
 });
 
 server.listen(6001, '0.0.0.0', () => {
-    console.log('Servidor rodando na porta 6001');
+    console.log('Servidor rodando na porta 6002');
 });
 
 //DESENVOLVIMENTO NOVO
