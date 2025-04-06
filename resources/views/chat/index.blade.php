@@ -145,11 +145,15 @@ document.addEventListener("DOMContentLoaded", function () {
     const messageList = document.getElementById('message-list');
     const chatForm = document.getElementById('chat-form');
     const messageInput = document.getElementById('message-input');
-    //const socket = io('http://localhost:6002');
+
     const socket = io('https://proconline.com.br', {
         path: '/socket.io',
         transports: ['websocket', 'polling']
     });
+    // const socket = io('http://localhost:6002', {
+    //     path: '/socket.io',
+    //     transports: ['websocket', 'polling']
+    // });
 
     const userId = JSON.parse("@json(auth()->id())");
     let chatId = null;
@@ -161,107 +165,255 @@ document.addEventListener("DOMContentLoaded", function () {
         name: "{{ auth()->user()->name }}",
         token: "{{ auth()->user()->api_token }}"
     });
-
-
     socket.on('update online users', function(users) {
-        console.log("Usuários online recebidos:", users);
-        
-        let onlineUsersContainer = document.getElementById('online-users');
-        if (!onlineUsersContainer) return;
-        onlineUsersContainer.innerHTML = '';
+    console.log("Usuários online recebidos:", users);
+    
+    let onlineUsersContainer = document.getElementById('online-users');
+    if (!onlineUsersContainer) return;
+    onlineUsersContainer.innerHTML = '';
 
-        users.forEach(user => {
-    let userElement = document.createElement('div');
-    userElement.classList.add('online-user');
-    userElement.setAttribute('data-user-id', user.id);
-    userElement.setAttribute('data-user-name', user.name);
-    userElement.setAttribute('data-user-avatar', user.avatar || 'assets/images/users/avatar-1.jpg');
+    users.forEach(user => {
+        let userElement = document.createElement('div');
+        userElement.classList.add('online-user');
+        userElement.setAttribute('data-user-id', user.id);
+        userElement.setAttribute('data-user-name', user.name);
+        userElement.setAttribute('data-user-avatar', user.avatar || 'assets/images/users/avatar-1.jpg');
 
-    let statusClass = user.status === 'offline' ? 'text-danger' : 'text-success';
-    let statusText = user.status === 'offline' ? 'Offline' : 'Online';
+        let statusClass = user.status === 'offline' ? 'text-danger' : 'text-success';
+        let statusText = user.status === 'offline' ? 'Offline' : 'Online';
+        console.log(user);
 
-    // Elemento do card do usuário com placeholder
-    userElement.innerHTML = `
+        // Elemento do card do usuário com placeholder
+        userElement.innerHTML = `
         <div class="d-flex align-items-start mt-1 p-2">
             <img src="${user.avatar || 'assets/images/users/avatar-1.jpg'}" class="me-2 rounded-circle" height="48" alt="${user.name}">
             <div class="w-100 overflow-hidden">
-                <h5 class="mt-0 mb-0 font-14">${user.name}</h5>
+                <h5 class="mt-0 mb-0 font-14">
+                    <span class="float-end text-muted font-12">${new Date(user.timestamp).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}</span>
+                    ${user.name}
+                </h5>
                 <p class="last-message mt-1 lh-1 mb-0 text-muted font-12 text-truncate" style="max-width: 200px;">
-                    Carregando...
+                    <span class="w-25 float-end text-end">
+                        <span class="badge badge-danger-lighten" style="display: ${user.unread_count > 0 ? 'inline-block' : 'none'}">
+                            ${user.unread_count || ''}
+                        </span>
+                    </span>
+                    <span class="message-text">${user.lastMessageContent || 'Carregando...'}</span>
                 </p>
             </div>
         </div>`;
 
-    // Adiciona no container principal
-    onlineUsersContainer.appendChild(userElement);
+        // Adiciona no container principal
+        onlineUsersContainer.appendChild(userElement);
 
-    // Buscar a última mensagem via endpoint
-    fetch(`/chat/last-message?user_id=${userId}&recipient_id=${user.id}`)
-        .then(response => response.json())
-        .then(data => {
-            const paragraph = userElement.querySelector('.last-message');
-            if (paragraph) {
-                paragraph.textContent = user.content ?? 'Sem mensagens ainda';
+        // Buscar a última mensagem via endpoint
+        fetch(`/chat/last-message?user_id=${userId}&recipient_id=${user.id}`)
+            .then(response => response.json())
+            .then(data => {
+                const messageText = userElement.querySelector('.message-text');
+                const badge = userElement.querySelector('.badge');
+                
+                if (messageText) {
+                    messageText.textContent = user.content ?? 'Sem mensagens ainda';
+                }
 
-            }
-        })
-        .catch(err => {
-            console.error(`Erro ao buscar última mensagem de ${user.name}:`, err);
-        });
-
-
-    // Evento de clique para abrir o chat
-    userElement.addEventListener('click', function () {
-        let selectedUserId = userElement.getAttribute('data-user-id');
-        let selectedUserName = userElement.getAttribute('data-user-name');
-        let selectedUserAvatar = userElement.getAttribute('data-user-avatar');
-
-        console.log(`Selecionado usuário: ID ${selectedUserId}, Nome ${selectedUserName}`);
-        chatUserName.innerText = selectedUserName;
-        chatUserAvatar.setAttribute('src', selectedUserAvatar);
-        chatArea.style.display = 'block';
-
-        console.log("Solicitando criação/verificação de chat...");
-        fetch(`/chat/get-chat`, {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-                'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content'),
-            },
-            body: JSON.stringify({ recipient_id: selectedUserId }),
-        })
-        .then(response => response.json())
-        .then(chat => {
-            if (!chat.id) throw new Error("Chat ID não encontrado");
-            chatId = chat.id;
-            console.log(`Chat encontrado/criado: ID ${chatId}`);
-            return fetch(`/chat/messages/${chatId}`);
-        })
-        .then(response => response.json())
-        .then(messages => {
-            console.log("Mensagens carregadas:", messages);
-            messageList.innerHTML = '';
-            messages.forEach(msg => {
-                let li = document.createElement('li');
-                let messageClass = msg.sender_id === userId ? 'user-message' : 'admin-message';
-                li.classList.add('message', messageClass);
-                li.innerHTML = `
-                    <div class="message-content">
-                        <div class="message-header">
-                            <strong>${msg.sender_name}</strong>
-                        </div>
-                        <p class="message-text">${msg.content}</p>
-                        <span class="message-time">${msg.timestamp}</span>
-                    </div>`;
-                messageList.appendChild(li);
+                if (badge) {
+                    badge.innerText = user.unread_count || '';
+                    badge.style.display = user.unread_count > 0 ? 'inline-block' : 'none';
+                }
+            })
+            .catch(err => {
+                console.error(`Erro ao buscar última mensagem de ${user.name}:`, err);
             });
-            messageList.scrollTop = messageList.scrollHeight;
-        })
-        .catch(error => console.error('Erro ao carregar mensagens:', error));
+
+        // Evento de clique para abrir o chat
+        userElement.addEventListener('click', function () {
+            let selectedUserId = userElement.getAttribute('data-user-id');
+            let selectedUserName = userElement.getAttribute('data-user-name');
+            let selectedUserAvatar = userElement.getAttribute('data-user-avatar');
+
+            console.log(`Selecionado usuário: ID ${selectedUserId}, Nome ${selectedUserName}`);
+            chatUserName.innerText = selectedUserName;
+            chatUserAvatar.setAttribute('src', selectedUserAvatar);
+            chatArea.style.display = 'block';
+
+            console.log("Solicitando criação/verificação de chat...");
+            fetch(`/chat/get-chat`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content'),
+                },
+                body: JSON.stringify({ recipient_id: selectedUserId }),
+            })
+            .then(response => response.json())
+            .then(chat => {
+                if (!chat.id) throw new Error("Chat ID não encontrado");
+                chatId = chat.id;
+                console.log(`Chat encontrado/criado: ID ${chatId}`);
+                return fetch(`/chat/messages/${chatId}`);
+            })
+            .then(response => response.json())
+            .then(messages => {
+                console.log("Mensagens carregadas:", messages);
+                messageList.innerHTML = '';
+                messages.forEach(msg => {
+                    let li = document.createElement('li');
+                    let messageClass = msg.sender_id === userId ? 'user-message' : 'admin-message';
+                    li.classList.add('message', messageClass);
+                    li.innerHTML = `
+                        <div class="message-content">
+                            <div class="message-header">
+                                <strong>${msg.sender_name}</strong>
+                            </div>
+                            <p class="message-text">${msg.content}</p>
+                            <span class="message-time">${msg.timestamp}</span>
+                        </div>`;
+                    messageList.appendChild(li);
+                });
+                messageList.scrollTop = messageList.scrollHeight;
+
+                // Marcar como lidas
+                fetch(`/chat/mark-as-read`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content'),
+                    },
+                    body: JSON.stringify({ chat_id: chatId }),
+                })
+                .then(() => {
+                    const badge = userElement.querySelector('.badge');
+                    if (badge) {
+                        badge.innerText = '';
+                        badge.style.display = 'none';
+                    }
+                })
+                .catch(err => console.error('Erro ao marcar mensagens como lidas:', err));
+            })
+            .catch(error => console.error('Erro ao carregar mensagens:', error));
+        });
     });
 });
 
-    });
+
+
+//     socket.on('update online users', function(users) {
+//         console.log("Usuários online recebidos:", users);
+        
+//         let onlineUsersContainer = document.getElementById('online-users');
+//         if (!onlineUsersContainer) return;
+//         onlineUsersContainer.innerHTML = '';
+
+//         users.forEach(user => {
+//     let userElement = document.createElement('div');
+//     userElement.classList.add('online-user');
+//     userElement.setAttribute('data-user-id', user.id);
+//     userElement.setAttribute('data-user-name', user.name);
+//     userElement.setAttribute('data-user-avatar', user.avatar || 'assets/images/users/avatar-1.jpg');
+
+//     let statusClass = user.status === 'offline' ? 'text-danger' : 'text-success';
+//     let statusText = user.status === 'offline' ? 'Offline' : 'Online';
+//     console.log(user);
+
+//     // Elemento do card do usuário com placeholder
+//     userElement.innerHTML = `
+//     <div class="d-flex align-items-start mt-1 p-2">
+//         <img src="${user.avatar || 'assets/images/users/avatar-1.jpg'}" class="me-2 rounded-circle" height="48" alt="${user.name}">
+//         <div class="w-100 overflow-hidden">
+//             <h5 class="mt-0 mb-0 font-14">
+//                 <span class="float-end text-muted font-12">${new Date(user.timestamp).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}</span>
+//                 ${user.name}
+//             </h5>
+//             <p class="last-message mt-1 lh-1 mb-0 text-muted font-12 text-truncate" style="max-width: 200px;">
+//                 <span class="w-25 float-end text-end">
+//                     <span class="badge badge-danger-lighten" style="display: ${user.unread_count > 0 ? 'inline-block' : 'none'}">
+//     ${user.unread_count || ''}
+// </span>
+
+//                 </span>
+//                 ${user.lastMessageContent || 'Carregando...'}
+//             </p>
+//         </div>
+//     </div>`;
+
+
+//     // Adiciona no container principal
+//     onlineUsersContainer.appendChild(userElement);
+
+//     // Buscar a última mensagem via endpoint
+//     fetch(`/chat/last-message?user_id=${userId}&recipient_id=${user.id}`)
+//         .then(response => response.json())
+//         .then(data => {
+//             const paragraph = userElement.querySelector('.last-message');
+//             const badge = userElement.querySelector('.badge');
+//             if (paragraph) {
+//                 paragraph.textContent = user.content ?? 'Sem mensagens ainda';
+
+//             }
+//             if (badge) {
+//             // Atualiza o valor da badge caso precise
+//             badge.innerText = user.unread_count;
+//             badge.style.display = user.unread_count > 0 ? 'inline-block' : 'none';
+//         }
+//         })
+//         .catch(err => {
+//             console.error(`Erro ao buscar última mensagem de ${user.name}:`, err);
+//         });
+
+
+//     // Evento de clique para abrir o chat
+//     userElement.addEventListener('click', function () {
+//         let selectedUserId = userElement.getAttribute('data-user-id');
+//         let selectedUserName = userElement.getAttribute('data-user-name');
+//         let selectedUserAvatar = userElement.getAttribute('data-user-avatar');
+
+//         console.log(`Selecionado usuário: ID ${selectedUserId}, Nome ${selectedUserName}`);
+//         chatUserName.innerText = selectedUserName;
+//         chatUserAvatar.setAttribute('src', selectedUserAvatar);
+//         chatArea.style.display = 'block';
+
+//         console.log("Solicitando criação/verificação de chat...");
+//         fetch(`/chat/get-chat`, {
+//             method: 'POST',
+//             headers: {
+//                 'Content-Type': 'application/json',
+//                 'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content'),
+//             },
+//             body: JSON.stringify({ recipient_id: selectedUserId }),
+//         })
+//         .then(response => response.json())
+//         .then(chat => {
+//             if (!chat.id) throw new Error("Chat ID não encontrado");
+//             chatId = chat.id;
+//             console.log(`Chat encontrado/criado: ID ${chatId}`);
+//             return fetch(`/chat/messages/${chatId}`);
+//         })
+//         .then(response => response.json())
+//         .then(messages => {
+//             console.log("Mensagens carregadas:", messages);
+//             messageList.innerHTML = '';
+//             messages.forEach(msg => {
+//                 let li = document.createElement('li');
+//                 let messageClass = msg.sender_id === userId ? 'user-message' : 'admin-message';
+//                 li.classList.add('message', messageClass);
+//                 li.innerHTML = `
+//                     <div class="message-content">
+//                         <div class="message-header">
+//                             <strong>${msg.sender_name}</strong>
+//                         </div>
+//                         <p class="message-text">${msg.content}</p>
+//                         <span class="message-time">${msg.timestamp}</span>
+//                     </div>`;
+//                 messageList.appendChild(li);
+//             });
+//             messageList.scrollTop = messageList.scrollHeight;
+//         })
+//         .catch(error => console.error('Erro ao carregar mensagens:', error));
+//     });
+// });
+
+//     });
 
     chatForm.addEventListener('submit', function(event) {
     event.preventDefault();

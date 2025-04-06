@@ -7,6 +7,8 @@ use App\Models\Message;
 use App\Models\Chat;
 use App\Events\NewChatMessage;
 use Illuminate\Support\Facades\Http;
+use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\DB;
 
 class ChatController extends Controller
 {
@@ -28,10 +30,14 @@ public function createOrGetChat(Request $request)
                 ->whereHas('users', fn($q) => $q->where('users.id', $recipientId))
                 ->first();
 
-    if (!$chat) {
-        $chat = Chat::create();
-        $chat->users()->attach([$userId, $recipientId]);
-    }
+                if (!$chat) {
+                    $chat = Chat::create();
+                    $chat->users()->attach([
+                        $userId => ['last_read_at' => now()],
+                        $recipientId => ['last_read_at' => now()],
+                    ]);
+                }
+                
 
     return response()->json(['id' => $chat->id]);
 }
@@ -95,24 +101,44 @@ public function getOnlineUsers()
 {
     $currentUserId = auth()->id();
 
-    $users = User::where('id', '!=', $currentUserId)
+    $users = \App\Models\User::where('id', '!=', $currentUserId)
         ->with(['chats' => function($query) use ($currentUserId) {
             $query->whereHas('users', function($q) use ($currentUserId) {
                 $q->where('users.id', $currentUserId);
-            })->with(['messages' => function($q) {
+            })
+            ->with(['messages' => function($q) {
                 $q->latest()->limit(1);
             }]);
         }])
         ->get();
 
-    $usersFormatted = $users->map(function ($user) {
+    $usersFormatted = $users->map(function ($user) use ($currentUserId) {
         $chatWithMessage = $user->chats->first(fn($chat) => $chat->messages->isNotEmpty());
         $lastMessage = optional($chatWithMessage?->messages->first());
+
+        // Verifica se há um chat entre os dois usuários
+        $chat = $chatWithMessage;
+        $unreadCount = 0;
+
+        if ($chat) {
+            // Pega a data de leitura do usuário atual
+            $pivot = $chat->users->find($currentUserId)?->pivot;
+            $lastReadAt = optional($pivot)->last_read_at;
+
+            // Conta mensagens do outro usuário, após o last_read_at
+            $unreadCount = $chat->messages()
+                ->where('sender_id', $user->id)
+                ->when($lastReadAt, function ($query) use ($lastReadAt) {
+                    $query->where('created_at', '>', $lastReadAt);
+                })
+                ->count();
+        }
 
         return [
             'id' => $user->id,
             'name' => $user->name,
             'avatar' => $user->avatar,
+            'unread_count' => $unreadCount,
             'last_message' => $lastMessage ? [
                 'content' => $lastMessage->content,
                 'created_at' => $lastMessage->created_at->format('H:i')
@@ -122,6 +148,9 @@ public function getOnlineUsers()
 
     return response()->json($usersFormatted);
 }
+
+
+
 
 
 
@@ -141,24 +170,48 @@ public function lastMessage(Request $request)
         $query->where('chat_user.user_id', $recipientId);
     })->first();
     
-
     if (!$chat) {
-        return response()->json(['message' => null]);
+        return response()->json([
+            'message' => null,
+            'timestamp' => null,
+            'sender_name' => null,
+            'unread_count' => 0
+        ]);
     }
 
     $message = $chat->messages()->with('sender')->latest()->first();
 
-
     if (!$message) {
-        return response()->json(['message' => null]);
+        return response()->json([
+            'message' => null,
+            'timestamp' => null,
+            'sender_name' => null,
+            'unread_count' => 0
+        ]);
     }
+
+    // Contar as mensagens não lidas para o usuário
+    $unreadCount = $chat->messages()
+        ->where('sender_id', $recipientId)
+        ->where('created_at', '>', function ($query) use ($chat, $userId) {
+            $query->select('last_read_at')
+                  ->from('chat_user')
+                  ->where('chat_id', $chat->id)
+                  ->where('user_id', $userId);
+        })
+        ->count();
+
+    // Log para verificar a quantidade de mensagens não lidas
+    Log::info('Contagem de mensagens não lidas para o usuário ' . $userId . ': ' . $unreadCount);
 
     return response()->json([
         'message' => $message->content,
         'timestamp' => $message->created_at->format('Y-m-d H:i:s'),
-        'sender_name' => $message->sender->name ?? 'Desconhecido'
+        'sender_name' => $message->sender->name ?? 'Desconhecido',
+        'unread_count' => $unreadCount
     ]);
 }
+
 public function getChat(Request $request)
 {
     $userId = auth()->id();
@@ -172,12 +225,29 @@ public function getChat(Request $request)
                 ->whereHas('users', fn($q) => $q->where('users.id', $recipientId))
                 ->first();
 
-    if (!$chat) {
-        $chat = Chat::create();
-        $chat->users()->attach([$userId, $recipientId]);
-    }
+                if (!$chat) {
+                    $chat = Chat::create();
+                    $chat->users()->attach([
+                        $userId => ['last_read_at' => now()],
+                        $recipientId => ['last_read_at' => now()],
+                    ]);
+                }
+                
 
     return response()->json(['id' => $chat->id]);
+}
+
+public function markAsRead(Request $request)
+{
+    $chatId = $request->chat_id;
+    $userId = auth()->id();
+
+    DB::table('chat_user')
+        ->where('chat_id', $chatId)
+        ->where('user_id', $userId)
+        ->update(['last_read_at' => now()]);
+
+    return response()->json(['status' => 'ok']);
 }
 
 

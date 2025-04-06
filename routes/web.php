@@ -36,6 +36,8 @@ Route::middleware(['auth'])->group(function () {
 
     Broadcast::routes(['middleware' => ['auth:sanctum']]);
 
+// routes/web.php
+Route::post('/chat/mark-as-read', [ChatController::class, 'markAsRead']);
 
     Route::post('/chat', [ChatController::class, 'createOrGetChat'])->middleware('auth:sanctum');
     Route::post('/chat/get-chat', [ChatController::class, 'createOrGetChat']);

@@ -9,16 +9,18 @@ class Chat extends Model
 {
     use HasFactory;
 
-    // Remove os campos antigos
+    // Campos que podem ser preenchidos em massa (adicione conforme necessário)
     protected $fillable = [];
 
-    // Chat tem muitos usuários via tabela pivô
+    // Relacionamento com usuários (tabela pivô com timestamps e campo extra)
     public function users()
     {
-        return $this->belongsToMany(User::class, 'chat_user');
+        return $this->belongsToMany(User::class, 'chat_user')
+                    ->withPivot('last_read_at')  // habilita o acesso ao campo
+                    ->withTimestamps();          // habilita created_at e updated_at
     }
 
-    // Chat tem muitas mensagens
+    // Relacionamento com mensagens
     public function messages()
     {
         return $this->hasMany(Message::class);
