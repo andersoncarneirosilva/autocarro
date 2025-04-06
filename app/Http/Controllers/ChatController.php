@@ -137,7 +137,7 @@ public function getOnlineUsers()
         return [
             'id' => $user->id,
             'name' => $user->name,
-            'avatar' => $user->avatar,
+            'image' => $user->image,
             'unread_count' => $unreadCount,
             'last_message' => $lastMessage ? [
                 'content' => $lastMessage->content,

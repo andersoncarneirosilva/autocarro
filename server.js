@@ -38,6 +38,7 @@ io.on('connection', (socket) => {
             onlineUsers[user.id] = {
                 id: user.id,
                 name: user.name,
+                image: user.image,
                 socketId: socket.id,
                 status: 'online',
                 token: user.token
@@ -208,6 +209,7 @@ server.listen(6001, '0.0.0.0', () => {
 //             onlineUsers[user.id] = {
 //                 id: user.id,
 //                 name: user.name,
+//                 image: user.image,
 //                 socketId: socket.id,
 //                 status: 'online',
 //                 token: user.token
