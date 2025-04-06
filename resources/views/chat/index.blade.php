@@ -20,7 +20,7 @@
 <div class="row">
     <!-- start chat users-->
     <div class="col-xxl-3">
-        <div class="offcanvas-xxl offcanvas-start h-100 file-offcanvas" tabindex="-1" id="emailSidebaroffcanvas" aria-labelledby="emailSidebaroffcanvasLabel">
+        <div class="offcanvas-start h-100 file-offcanvas" tabindex="-1" id="emailSidebaroffcanvas" aria-labelledby="emailSidebaroffcanvasLabel">
             <div class="card h-100 mb-0">
                 <div class="card-body p-0">
                     <ul class="nav nav-tabs nav-bordered nav-justified" role="tablist">
@@ -54,24 +54,7 @@
                                         <div id="online-users">
                                             <!-- Aqui os usuários online serão listados dinamicamente -->
                                         </div>
-                                    </div>
-                                    {{-- <a href="javascript:void(0);" class="text-body">
-                                        <div class="d-flex align-items-start mt-1 p-2">
-                                            <img src="assets/images/users/avatar-2.jpg" class="me-2 rounded-circle" height="48" alt="Brandon Smith">
-                                            <div class="w-100 overflow-hidden">
-                                                <h5 class="mt-0 mb-0 font-14">
-                                                    <span class="float-end text-muted font-12">4:30am</span>
-                                                    Brandon Smith
-                                                </h5>
-                                                <p class="mt-1 mb-0 text-muted font-14">
-                                                    <span class="w-25 float-end text-end"><span class="badge badge-danger-lighten">3</span></span>
-                                                    <span class="w-75">How are you today?</span>
-                                                </p>
-                                            </div>
-                                        </div>
-                                    </a> --}}
-
-                                    
+                                    </div>                                    
                                 </div></div></div></div><div class="simplebar-placeholder" style="width: 272px; height: 834px;"></div></div><div class="simplebar-track simplebar-horizontal" style="visibility: hidden;"><div class="simplebar-scrollbar" style="width: 0px; display: none;"></div></div><div class="simplebar-track simplebar-vertical" style="visibility: visible;"><div class="simplebar-scrollbar" style="height: 443px; transform: translate3d(0px, 0px, 0px); display: block;"></div></div></div> <!-- end simplebar-->
                             </div> <!-- End col -->
                         </div> <!-- end users -->
