@@ -16685,6 +16685,9 @@ html[data-theme=dark] .text-secondary {
   text-align: right;
   width: 70% !important;
 }
+
+
+
 .conversation-list .odd .ctext-wrap {
   background-color: var(--ct-light);
 }
