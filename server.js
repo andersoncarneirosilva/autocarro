@@ -1,4 +1,5 @@
 //PRUDUCAO NOVA
+
 import express from 'express';
 import https from 'https';
 import { Server } from 'socket.io';
@@ -38,7 +39,7 @@ async function buildUserListFor(userId) {
             .filter(u => u.id !== userId)
             .map(async (usr) => {
                 try {
-                    const response = await axios.get(`https://proconline.com.br/api/chat/last-message`, {
+                    const response = await axios.get(`http://localhost:8990/api/chat/last-message`, {
                         params: {
                             user_id: userId,
                             recipient_id: usr.id
@@ -112,7 +113,7 @@ io.on('connection', (socket) => {
             }
 
             // Enviar mensagem para API Laravel
-            const response = await axios.post('https://proconline.com.br/api/chat/send-message', {
+            const response = await axios.post('http://localhost:8990/api/chat/send-message', {
                 chat_id: data.chat_id,
                 message: content,
                 sender_id: data.sender_id, // <-- adicionado aqui
@@ -187,7 +188,7 @@ app.post('/message', (req, res) => {
     res.status(200).send('OK');
 });
 
-server.listen(6001, '0.0.0.0', () => {
+server.listen(6002, '0.0.0.0', () => {
     console.log('Servidor rodando na porta 6002');
 });
 
