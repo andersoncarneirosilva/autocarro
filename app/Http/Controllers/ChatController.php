@@ -55,6 +55,7 @@ public function getMessages($chatId)
                 'id' => $msg->id,
                 'chat_id' => $msg->chat_id,
                 'content' => $msg->content,
+                'image' => $msg->sender->image ?? null,
                 'sender_id' => $msg->sender_id,
                 'sender_name' => $msg->sender->name ?? 'Desconhecido',
                 'timestamp' => $msg->created_at->format('H:i'),
@@ -88,9 +89,11 @@ public function sendMessage(Request $request)
             'content' => $message->content,
             'sender_id' => $message->sender_id,
             'created_at' => $message->created_at,
+            
             'sender' => [
                 'id' => $message->sender->id,
                 'name' => $message->sender->name,
+                'image' => $message->sender->image,
             ]
         ]
     ], 201);

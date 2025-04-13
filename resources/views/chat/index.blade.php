@@ -31,19 +31,6 @@
                         </li>
                     </ul> <!-- end nav-->
                     <div class="tab-content">
-                        <div class="tab-pane show active card-body pb-0" id="newpost">
-
-                            <!-- start search box -->
-                            {{-- <div class="app-search">
-                                <form>
-                                    <div class="mb-2 w-100 position-relative">
-                                        <input type="search" class="form-control" placeholder="People, groups &amp; messages...">
-                                        <span class="mdi mdi-magnify search-icon"></span>
-                                    </div>
-                                </form>
-                            </div> --}}
-                            <!-- end search box -->
-                        </div>
 
                         <!-- users -->
                         <div class="row">
@@ -63,69 +50,48 @@
             </div> <!-- end card-->
         </div>
     </div>
-    <!-- end chat users-->
-
-    <!-- chat area -->
-    <div class="col-xxl-6 col-xl-12" id="chat-area" style="display: none;">
-        <div class="card h-100 overflow-hidden mb-0">
-            <div class="card-header border-bottom">
-                <div class="d-flex align-items-center gap-2">
-                    <a href="javascript:void(0);" class="btn btn-light px-1 d-xxl-none d-inline-flex" data-bs-toggle="offcanvas" data-bs-target="#emailSidebaroffcanvas" aria-controls="emailSidebaroffcanvas">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-menu font-18">
-                            <line x1="4" x2="20" y1="12" y2="12"></line>
-                            <line x1="4" x2="20" y1="6" y2="6"></line>
-                            <line x1="4" x2="20" y1="18" y2="18"></line>
-                        </svg>
-                    </a>
-    
-                    <div class="d-flex align-items-start me-auto">
-                        <img id="chat-user-avatar" src="storage/{{ auth()->user()->image }}" class="me-2 rounded" height="36" alt="">
-                        <div>
-                            <h5 class="mt-0 mb-0 font-15">
-                                <a href="javascript:void(0);" class="text-reset" id="chat-user-name"></a>
-                            </h5>
-                            <p class="mt-1 lh-1 mb-0 text-muted font-12">
-                                <small class="mdi mdi-circle text-success"></small> Online
-                            </p>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-
-            <div class="card-body p-0 pt-3">
-                <ul class="conversation-list px-3 chat-conversation simplebar-scrollable-y" data-simplebar="init"><div class="simplebar-wrapper" style="margin: 0px -24px;"><div class="simplebar-height-auto-observer-wrapper"><div class="simplebar-height-auto-observer"></div></div><div class="simplebar-mask"><div class="simplebar-offset" style="right: 0px; bottom: 0px;"><div class="simplebar-content-wrapper" tabindex="0" role="region" aria-label="scrollable content" style="height: 100%; overflow: hidden scroll;"><div class="simplebar-content" style="padding: 0px 24px;">
-                    <ul id="message-list"></ul>
-                </div></div></div></div><div class="simplebar-placeholder" style="width: 549px; height: 932px;"></div></div><div class="simplebar-track simplebar-horizontal" style="visibility: hidden;"><div class="simplebar-scrollbar" style="width: 0px; display: none;"></div></div><div class="simplebar-track simplebar-vertical" style="visibility: visible;"><div class="simplebar-scrollbar" style="height: 283px; transform: translate3d(0px, 0px, 0px); display: block;"></div></div></ul>
-            </div>
-
-
-    
-            <div class="card-body bg-light mt-2">
-                <form id="chat-form">
-                    <div class="row">
-                        <div class="col mb-2 mb-sm-0">
-                            <input type="text" id="message-input" class="form-control border-0" placeholder="Digite uma mensagem...">
-                        </div>
-                        <div class="col-sm-auto">
-                            <div class="btn-group">
-                                <div class="d-grid">
-                                    <button type="submit" class="btn btn-success chat-send">
-                                        <i class="uil uil-message"></i> Enviar
-                                    </button>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </form>
-            </div>
-        </div>
-    </div>
-    
+    <!-- end chat users-->    
     
     
 </div>
-
+<div class="modal fade" id="chatModal" tabindex="-1" aria-labelledby="chatModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-lg">
+      <div class="modal-content" style="max-height: 90vh;">
+        <div class="modal-header">
+          <h5 class="modal-title" id="chatModalLabel">Chat</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Fechar"></button>
+        </div>
+        
+        <div class="modal-body p-0" style="overflow: hidden;">
+          <div id="chat-scroll-area" data-simplebar style="max-height: 60vh; padding: 1rem;">
+            <ul id="message-list" class="conversation-list chat-conversation list-unstyled mb-0">
+              <!-- mensagens vão aqui -->
+            </ul>
+          </div>
+        </div>
+  
+        <div class="modal-footer" style="display: block;">
+          <form id="chat-form">
+            <div class="row gx-2">
+              <div class="col mb-2 mb-sm-0">
+                <input type="text" id="message-input" class="form-control border-0" placeholder="Digite uma mensagem...">
+              </div>
+              <div class="col-sm-auto">
+                <div class="d-grid">
+                  <button type="submit" class="btn btn-success chat-send">
+                    <i class="uil uil-message"></i> Enviar
+                  </button>
+                </div>
+              </div>
+            </div>
+          </form>
+        </div>
+  
+      </div>
+    </div>
+  </div>
+  
+  
 <script>
 document.addEventListener("DOMContentLoaded", function () {
     const chatArea = document.getElementById('chat-area');
@@ -155,31 +121,54 @@ document.addEventListener("DOMContentLoaded", function () {
         image: "storage/{{ auth()->user()->image }}", 
         token: "{{ auth()->user()->api_token }}"
     });
-    socket.on('update online users', function(users) {
-    console.log("Usuários online recebidos:", users);
 
+    socket.on('update online users', function(users) {
     const onlineUsersContainer = document.getElementById('online-users');
+    //onlineUsersContainer.innerHTML = ''; // Limpa a lista
     if (!onlineUsersContainer) return;
 
     users.forEach(user => {
+        //console.log(user.image);
         const existing = onlineUsersContainer.querySelector(`.online-user[data-user-id="${user.id}"]`);
-        console.log(user);
+        
         if (existing) {
-            // Atualiza apenas o contador se mudou
+            // Atualiza contador de mensagens não lidas
             const badge = existing.querySelector('.badge');
-            const currentCount = parseInt(badge?.innerText) || 0;
-            const newCount = user.unread_count || 0;
+            const newCount = parseInt(user.unread_count) || 0;
 
-            if (badge && currentCount !== newCount) {
+            if (badge) {
                 badge.innerText = newCount > 0 ? newCount : '';
                 badge.style.display = newCount > 0 ? 'inline-block' : 'none';
             }
 
-            // Evita qualquer alteração em lastMessage ou timestamp
-            return; // Pula a recriação do elemento
+            // Atualiza status se mudou
+            // Atualiza status se mudou
+            const statusEl = existing.querySelector('span.float-end.text-muted.font-12');
+            if (statusEl) {
+                let statusText = user.status || '';
+                let statusIcon = '';
+
+                if (user.status === 'Online') {
+                    statusIcon = '<i class="mdi mdi-circle text-success me-1"></i>';
+                } else if (user.status === 'Offline') {
+                    statusIcon = '<i class="mdi mdi-circle text-danger me-1"></i>';
+                }
+
+                statusEl.innerHTML = `${statusIcon}${statusText}`;
+            }
+
+
+            // Atualiza texto da última mensagem
+            const messageTextEl = existing.querySelector('.message-text');
+            const newMessage = user.lastMessageContent ?? user.content ?? 'Sem mensagens ainda';
+            if (messageTextEl && messageTextEl.innerText !== newMessage) {
+                messageTextEl.innerText = newMessage;
+            }
+
+            return;
         }
 
-        // Criação do novo usuário se ainda não existe
+        // Criação do novo usuário
         const userElement = document.createElement('div');
         userElement.classList.add('online-user');
         userElement.setAttribute('data-user-id', user.id);
@@ -188,17 +177,26 @@ document.addEventListener("DOMContentLoaded", function () {
 
         const lastTime = user.timestamp
             ? new Date(user.timestamp).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
-            : '--:--';
+            : '';
 
-        const lastMessage = user.lastMessageContent || 'Carregando...';
+        const lastMessage = user.lastMessageContent ?? user.content ?? 'Sem mensagens ainda';
 
         userElement.innerHTML = `
-        <a href="javascript:void(0);" class="text-body">
+        <div class="user-item" data-user-id="${user.id}" data-user-name="${user.name}" data-bs-toggle="modal" data-bs-target="#chatModal" style="cursor: pointer;">
             <div class="d-flex align-items-start mt-1 p-2">
                 <img src="${user.image || 'assets/images/users/avatar-1.jpg'}" class="me-2 rounded-circle" height="48" alt="${user.name}">
                 <div class="w-100 overflow-hidden">
                     <h5 class="mt-0 mb-0 font-14">
-                        <span class="float-end text-muted font-12">${lastTime}</span>
+                        <span class="float-end text-muted font-12">
+    ${user.status === 'Online' ? 
+        `<i class="mdi mdi-circle text-success me-1"></i>` : 
+        user.status === 'Offline' ?
+        `<i class="mdi mdi-circle text-danger me-1"></i>` :
+        ''}
+    ${user.status || ''}
+</span>
+
+
                         ${user.name}
                     </h5>
                     <p class="last-message mt-1 lh-1 mb-0 text-muted font-12 text-truncate" style="max-width: 200px;">
@@ -211,7 +209,7 @@ document.addEventListener("DOMContentLoaded", function () {
                     </p>
                 </div>
             </div>
-            </a>`;
+        </div>`;
 
         onlineUsersContainer.appendChild(userElement);
 
@@ -219,111 +217,112 @@ document.addEventListener("DOMContentLoaded", function () {
         fetch(`/chat/last-message?user_id=${userId}&recipient_id=${user.id}`)
             .then(response => response.json())
             .then(data => {
-                const messageText = userElement.querySelector('.message-text');
-                const badge = userElement.querySelector('.badge');
-                
-                if (messageText) {
-                    messageText.textContent = user.content ?? 'Sem mensagens ainda';
-                }
+    const messageText = userElement.querySelector('.message-text');
+    const badge = userElement.querySelector('.badge');
 
-                if (badge) {
-                    badge.innerText = user.unread_count || '';
-                    badge.style.display = user.unread_count > 0 ? 'inline-block' : 'none';
-                }
-            })
+    if (messageText && data && data.message) {
+        messageText.textContent = data.message;
+    }
+
+    if (badge) {
+        badge.innerText = data.unread_count || '';
+        badge.style.display = data.unread_count > 0 ? 'inline-block' : 'none';
+    }
+})
+
             .catch(err => {
                 console.error(`Erro ao buscar última mensagem de ${user.name}:`, err);
             });
 
-        // Evento de clique para abrir o chat
-        userElement.addEventListener('click', function () {
-            let selectedUserId = userElement.getAttribute('data-user-id');
-            let selectedUserName = userElement.getAttribute('data-user-name');
-            let selectedUserAvatar = userElement.getAttribute('data-user-avatar');
+        // Referência ao modal Bootstrap
+const chatModalElement = document.getElementById('chatModal');
+const chatModal = new bootstrap.Modal(chatModalElement);
+const chatModalTitle = document.getElementById('chatModalLabel');
+const chatModalAvatar = document.getElementById('chatModalAvatar'); // Se tiver um <img> no header da modal
 
-            console.log(`Selecionado usuário: ID ${selectedUserId}, Nome ${selectedUserName}`);
-            chatUserName.innerText = selectedUserName;
-            chatUserAvatar.setAttribute('src', selectedUserAvatar);
-            chatArea.style.display = 'block';
+// Evento de clique para abrir o chat na modal
+userElement.addEventListener('click', function () {
+    let selectedUserId = userElement.getAttribute('data-user-id');
+    let selectedUserName = userElement.getAttribute('data-user-name');
+    let selectedUserAvatar = userElement.getAttribute('data-user-avatar');
 
-            console.log("Solicitando criação/verificação de chat...");
-            fetch(`/chat/get-chat`, {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                    'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content'),
-                },
-                body: JSON.stringify({ recipient_id: selectedUserId }),
-            })
-            .then(response => response.json())
-            .then(chat => {
-                if (!chat.id) throw new Error("Chat ID não encontrado");
-                chatId = chat.id;
-                console.log(`Chat encontrado/criado: ID ${chatId}`);
-                return fetch(`/chat/messages/${chatId}`);
-            })
-            .then(response => response.json())
-            .then(messages => {
-                console.log("Mensagens carregadas:", messages);
-                messageList.innerHTML = '';
-                messages.forEach(msg => {
-    let li = document.createElement('li');
+    console.log(`Selecionado usuário: ID ${selectedUserId}, Nome ${selectedUserName}`);
 
-    // Define se a mensagem é do usuário logado
-    let isMine = msg.sender_id === userId;
-    let liClass = `clearfix ${isMine ? 'odd' : ''}`;
-    let dropdownClass = isMine ? '' : 'dropdown-menu-end';
+    // Atualiza header da modal
+    chatModalTitle.innerText = `Chat com ${selectedUserName}`;
+    if (chatModalAvatar) {
+        chatModalAvatar.setAttribute('src', selectedUserAvatar);
+    }
 
-    li.className = liClass;
+    // Abre a modal
+    chatModal.show();
 
-    li.innerHTML = `
-        <div class="chat-avatar">
-            <img src="${msg.avatar || 'assets/images/users/avatar-5.jpg'}" class="rounded" alt="${msg.sender_name}">
-            <i>${msg.timestamp}</i>
-        </div>
-        <div class="conversation-text">
-            <div class="ctext-wrap">
-                <i>${msg.sender_name}</i>
-                <p>${msg.content}</p>
-            </div>
-        </div>
-        <div class="conversation-actions dropdown">
-            <button class="btn btn-sm btn-link" data-bs-toggle="dropdown" aria-expanded="false">
-                <i class="uil uil-ellipsis-v"></i>
-            </button>
-            <div class="dropdown-menu ${dropdownClass}">
-                <a class="dropdown-item" href="#">Copy Message</a>
-                <a class="dropdown-item" href="#">Edit</a>
-                <a class="dropdown-item" href="#">Delete</a>
-            </div>
-        </div>
-    `;
+    // Requisição para criar/obter chat e mensagens
+    fetch(`/chat/get-chat`, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+            'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content'),
+        },
+        body: JSON.stringify({ recipient_id: selectedUserId }),
+    })
+    .then(response => response.json())
+    .then(chat => {
+        if (!chat.id) throw new Error("Chat ID não encontrado");
+        chatId = chat.id;
+        console.log(`Chat encontrado/criado: ID ${chatId}`);
+        return fetch(`/chat/messages/${chatId}`);
+    })
+    .then(response => response.json())
+    .then(messages => {
+        console.log("Mensagens carregadas:", messages);
+        messageList.innerHTML = '';
+        messages.forEach(msg => {
+            console.log(msg);
+            let li = document.createElement('li');
+            let isMine = msg.sender_id === userId;
+            let liClass = `clearfix ${isMine ? 'odd' : ''}`;
+            let dropdownClass = isMine ? '' : 'dropdown-menu-end';
 
-    messageList.appendChild(li);
+            li.className = liClass;
+            li.innerHTML = `
+                <div class="chat-avatar">
+                    <img src="storage/${msg.image || 'assets/images/users/avatar-6.jpg'}" class="rounded" alt="${msg.sender_name}">
+                    <i>${msg.timestamp}</i>
+                </div>
+                <div class="conversation-text">
+                    <div class="ctext-wrap">
+                        <i>${msg.sender_name}</i>
+                        <p>${msg.content}</p>
+                    </div>
+                </div
+            `;
+            messageList.appendChild(li);
+        });
+
+        messageList.scrollTop = messageList.scrollHeight;
+
+        // Marcar como lidas
+        fetch(`/chat/mark-as-read`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content'),
+            },
+            body: JSON.stringify({ chat_id: chatId }),
+        })
+        .then(() => {
+            const badge = userElement.querySelector('.badge');
+            if (badge) {
+                badge.innerText = '';
+                badge.style.display = 'none';
+            }
+        })
+        .catch(err => console.error('Erro ao marcar mensagens como lidas:', err));
+    })
+    .catch(error => console.error('Erro ao carregar mensagens:', error));
 });
 
-                messageList.scrollTop = messageList.scrollHeight;
-
-                // Marcar como lidas
-                fetch(`/chat/mark-as-read`, {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                        'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content'),
-                    },
-                    body: JSON.stringify({ chat_id: chatId }),
-                })
-                .then(() => {
-                    const badge = userElement.querySelector('.badge');
-                    if (badge) {
-                        badge.innerText = '';
-                        badge.style.display = 'none';
-                    }
-                })
-                .catch(err => console.error('Erro ao marcar mensagens como lidas:', err));
-            })
-            .catch(error => console.error('Erro ao carregar mensagens:', error));
-        });
     });
 });
 
@@ -356,7 +355,7 @@ socket.on('chat message', (data) => {
 
     const isMine = data.sender_id === userId;
     const senderName = data.user?.name ?? data.sender?.name ?? 'Usuário desconhecido';
-    const avatarUrl = data.user?.avatar || data.sender?.avatar || 'assets/images/users/avatar-5.jpg';
+    const avatarUrl = data.user?.image || data.sender?.image || 'assets/images/users/avatar-5.jpg';
     const timestamp = new Date(data.sent_at).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
     const dropdownClass = isMine ? '' : 'dropdown-menu-end';
 
@@ -365,7 +364,7 @@ socket.on('chat message', (data) => {
 
     li.innerHTML = `
         <div class="chat-avatar">
-            <img src="${avatarUrl}" class="rounded" alt="${senderName}">
+            <img src="storage/${avatarUrl}" class="rounded" alt="${senderName}">
             <i>${timestamp}</i>
         </div>
         <div class="conversation-text">

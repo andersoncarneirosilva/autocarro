@@ -29,6 +29,49 @@ app.use(express.json());
 
 let onlineUsers = {}; // Armazena usuários online e offline
 
+async function buildUserListFor(userId) {
+    const currentUser = onlineUsers[userId];
+    if (!currentUser) return [];
+
+    const users = await Promise.all(
+        Object.values(onlineUsers)
+            .filter(u => u.id !== userId)
+            .map(async (usr) => {
+                try {
+                    const response = await axios.get(`https://proconline.com.br/api/chat/last-message`, {
+                        params: {
+                            user_id: userId,
+                            recipient_id: usr.id
+                        },
+                        headers: {
+                            Authorization: `Bearer ${currentUser.token}`
+                        }
+                    });
+
+                    return {
+                        ...usr,
+                        content: response.data.message || 'Sem mensagens ainda',
+                        timestamp: response.data.timestamp || null,
+                        sender_name: response.data.sender_name || 'Desconhecido',
+                        unread_count: response.data.unread_count || 0
+                    };
+                } catch (err) {
+                    console.error(`Erro ao buscar última mensagem de ${usr.name}:`, err.message);
+                    return {
+                        ...usr,
+                        content: 'Sem mensagens ainda',
+                        timestamp: null,
+                        sender_name: 'Desconhecido',
+                        unread_count: 0
+                    };
+                }
+            })
+    );
+
+    return users;
+}
+
+
 io.on('connection', (socket) => {
     console.log('Usuário conectado:', socket.id);
 
@@ -40,54 +83,17 @@ io.on('connection', (socket) => {
                 name: user.name,
                 image: user.image,
                 socketId: socket.id,
-                status: 'online',
+                status: 'Online',
                 token: user.token
             };
 
             // Enviar a lista de usuários online para TODOS os usuários, excluindo eles mesmos
-Object.values(onlineUsers).forEach(async (u) => {
-    if (u.socketId) {
-        const usersWithLastMessages = await Promise.all(
-            Object.values(onlineUsers)
-                .filter(usr => usr.id !== u.id)
-                .map(async (usr) => {
-                    try {
-                        const response = await axios.get(`https://proconline.com.br/api/chat/last-message`, {
-                            params: {
-                                user_id: u.id,
-                                recipient_id: usr.id
-                            },
-                            headers: {
-                                Authorization: `Bearer ${u.token}`
-                            }
-                        });
-
-                        // Retorna o usuário com os dados da última mensagem e quantidade de mensagens não lidas
-                        return {
-                            ...usr,
-                            content: response.data.message || 'Sem mensagens ainda',
-                            timestamp: response.data.timestamp || null,
-                            sender_name: response.data.sender_name || 'Desconhecido',
-                            unread_count: response.data.unread_count || 0
-                        };
-                    } catch (err) {
-                        console.error(`Erro ao buscar última mensagem de ${usr.name}:`, err.message);
-                        return {
-                            ...usr,
-                            content: 'Sem mensagens ainda',
-                            timestamp: null,
-                            sender_name: 'Desconhecido',
-                            unread_count: 0
-                        };
-                    }
-                })
-        );
-
-        // Emite a lista de usuários atualizada para o socket do usuário
-        io.to(u.socketId).emit('update online users', usersWithLastMessages);
-    }
-});
-
+            Object.values(onlineUsers).forEach(async (u) => {
+                if (u.socketId) {
+                    const usersWithLastMessages = await buildUserListFor(u.id);
+                    io.to(u.socketId).emit('update online users', usersWithLastMessages);
+                }
+            });
             
         }
     });
@@ -127,6 +133,13 @@ Object.values(onlineUsers).forEach(async (u) => {
                 sent_at: response.data.message.created_at,
                 user: response.data.message.sender
             });
+
+            Object.values(onlineUsers).forEach(async (u) => {
+                if (u.socketId) {
+                    const usersWithLastMessages = await buildUserListFor(u.id);
+                    io.to(u.socketId).emit('update online users', usersWithLastMessages);
+                }
+            });
             
 
         } catch (error) {
@@ -141,7 +154,7 @@ Object.values(onlineUsers).forEach(async (u) => {
 
         for (let userId in onlineUsers) {
             if (onlineUsers[userId].socketId === socket.id) {
-                onlineUsers[userId].status = 'offline'; // Atualiza status para offline
+                onlineUsers[userId].status = 'Offline'; // Atualiza status para offline
                 onlineUsers[userId].socketId = null; // Remove socketId
                 disconnectedUserId = userId;
                 break;
@@ -150,13 +163,13 @@ Object.values(onlineUsers).forEach(async (u) => {
 
         if (disconnectedUserId) {
             // Enviar a lista de usuários online para TODOS os usuários, excluindo eles mesmos
-            Object.values(onlineUsers).forEach(u => {
+            Object.values(onlineUsers).forEach(async (u) => {
                 if (u.socketId) {
-                    io.to(u.socketId).emit('update online users', 
-                        Object.values(onlineUsers).filter(usr => usr.id !== u.id)
-                    );
+                    const usersWithLastMessages = await buildUserListFor(u.id);
+                    io.to(u.socketId).emit('update online users', usersWithLastMessages);
                 }
             });
+            
         }
 
         console.log('Usuário desconectado:', socket.id);
@@ -200,6 +213,49 @@ server.listen(6001, '0.0.0.0', () => {
 
 // let onlineUsers = {}; // Armazena usuários online e offline
 
+// async function buildUserListFor(userId) {
+//     const currentUser = onlineUsers[userId];
+//     if (!currentUser) return [];
+
+//     const users = await Promise.all(
+//         Object.values(onlineUsers)
+//             .filter(u => u.id !== userId)
+//             .map(async (usr) => {
+//                 try {
+//                     const response = await axios.get(`http://localhost:8990/api/chat/last-message`, {
+//                         params: {
+//                             user_id: userId,
+//                             recipient_id: usr.id
+//                         },
+//                         headers: {
+//                             Authorization: `Bearer ${currentUser.token}`
+//                         }
+//                     });
+
+//                     return {
+//                         ...usr,
+//                         content: response.data.message || 'Sem mensagens ainda',
+//                         timestamp: response.data.timestamp || null,
+//                         sender_name: response.data.sender_name || 'Desconhecido',
+//                         unread_count: response.data.unread_count || 0
+//                     };
+//                 } catch (err) {
+//                     console.error(`Erro ao buscar última mensagem de ${usr.name}:`, err.message);
+//                     return {
+//                         ...usr,
+//                         content: 'Sem mensagens ainda',
+//                         timestamp: null,
+//                         sender_name: 'Desconhecido',
+//                         unread_count: 0
+//                     };
+//                 }
+//             })
+//     );
+
+//     return users;
+// }
+
+
 // io.on('connection', (socket) => {
 //     console.log('Usuário conectado:', socket.id);
 
@@ -211,54 +267,17 @@ server.listen(6001, '0.0.0.0', () => {
 //                 name: user.name,
 //                 image: user.image,
 //                 socketId: socket.id,
-//                 status: 'online',
+//                 status: 'Online',
 //                 token: user.token
 //             };
 
 //             // Enviar a lista de usuários online para TODOS os usuários, excluindo eles mesmos
-// Object.values(onlineUsers).forEach(async (u) => {
-//     if (u.socketId) {
-//         const usersWithLastMessages = await Promise.all(
-//             Object.values(onlineUsers)
-//                 .filter(usr => usr.id !== u.id)
-//                 .map(async (usr) => {
-//                     try {
-//                         const response = await axios.get(`http://localhost:8990/api/chat/last-message`, {
-//                             params: {
-//                                 user_id: u.id,
-//                                 recipient_id: usr.id
-//                             },
-//                             headers: {
-//                                 Authorization: `Bearer ${u.token}`
-//                             }
-//                         });
-
-//                         // Retorna o usuário com os dados da última mensagem e quantidade de mensagens não lidas
-//                         return {
-//                             ...usr,
-//                             content: response.data.message || 'Sem mensagens ainda',
-//                             timestamp: response.data.timestamp || null,
-//                             sender_name: response.data.sender_name || 'Desconhecido',
-//                             unread_count: response.data.unread_count || 0
-//                         };
-//                     } catch (err) {
-//                         console.error(`Erro ao buscar última mensagem de ${usr.name}:`, err.message);
-//                         return {
-//                             ...usr,
-//                             content: 'Sem mensagens ainda',
-//                             timestamp: null,
-//                             sender_name: 'Desconhecido',
-//                             unread_count: 0
-//                         };
-//                     }
-//                 })
-//         );
-
-//         // Emite a lista de usuários atualizada para o socket do usuário
-//         io.to(u.socketId).emit('update online users', usersWithLastMessages);
-//     }
-// });
-
+//             Object.values(onlineUsers).forEach(async (u) => {
+//                 if (u.socketId) {
+//                     const usersWithLastMessages = await buildUserListFor(u.id);
+//                     io.to(u.socketId).emit('update online users', usersWithLastMessages);
+//                 }
+//             });
             
 //         }
 //     });
@@ -298,6 +317,13 @@ server.listen(6001, '0.0.0.0', () => {
 //                 sent_at: response.data.message.created_at,
 //                 user: response.data.message.sender
 //             });
+
+//             Object.values(onlineUsers).forEach(async (u) => {
+//                 if (u.socketId) {
+//                     const usersWithLastMessages = await buildUserListFor(u.id);
+//                     io.to(u.socketId).emit('update online users', usersWithLastMessages);
+//                 }
+//             });
             
 
 //         } catch (error) {
@@ -312,7 +338,7 @@ server.listen(6001, '0.0.0.0', () => {
 
 //         for (let userId in onlineUsers) {
 //             if (onlineUsers[userId].socketId === socket.id) {
-//                 onlineUsers[userId].status = 'offline'; // Atualiza status para offline
+//                 onlineUsers[userId].status = 'Offline'; // Atualiza status para offline
 //                 onlineUsers[userId].socketId = null; // Remove socketId
 //                 disconnectedUserId = userId;
 //                 break;
@@ -321,13 +347,13 @@ server.listen(6001, '0.0.0.0', () => {
 
 //         if (disconnectedUserId) {
 //             // Enviar a lista de usuários online para TODOS os usuários, excluindo eles mesmos
-//             Object.values(onlineUsers).forEach(u => {
+//             Object.values(onlineUsers).forEach(async (u) => {
 //                 if (u.socketId) {
-//                     io.to(u.socketId).emit('update online users', 
-//                         Object.values(onlineUsers).filter(usr => usr.id !== u.id)
-//                     );
+//                     const usersWithLastMessages = await buildUserListFor(u.id);
+//                     io.to(u.socketId).emit('update online users', usersWithLastMessages);
 //                 }
 //             });
+            
 //         }
 
 //         console.log('Usuário desconectado:', socket.id);
