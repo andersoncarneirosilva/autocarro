@@ -7,7 +7,7 @@
 <div class="row justify-content-center">
     <div class="col-xxl-10">
         <div class="text-center">
-            <h3 class="mb-2">Nossos planos</h3>
+            <h3 class="mb-2">Plano mensal</h3>
             <p class="text-muted w-50 m-auto">
                 O plano ideal que se encaixa perfeitamente no seu negócio.
             </p>

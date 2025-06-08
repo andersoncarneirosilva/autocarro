@@ -323,18 +323,18 @@
                 <div class="row">
                     <div class="col-md-4">
                         <div class="card card-pricing">
-                            <div class="card-body text-center">
+                            {{-- <div class="card-body text-center">
                                 <p class="card-pricing-plan-name fw-bold text-uppercase">Básico</p>
                                 <i class="card-pricing-icon ri-user-line text-primary"></i>
-                                <h2 class="card-pricing-price">R$150 <span>/ mês</span></h2>
+                                <h2 class="card-pricing-price">R$50 <span>/ mês</span></h2>
                                 <ul class="card-pricing-features">
-                                    <li>100 documentos</li>
-                                    <li>512 MB de armazenamento</li>
-                                    <li>1 usuário</li>
-                                    <li>Suporte 24/7</li>
+                                    <li>Gerar procuração</li>
+                                    <li>Gerar solicitação ATPVe</li>
+                                    <li>1 GB de armazenamento</li>
+                                    <li>Suporte dedicado</li>
                                 </ul>
                                 <button class="btn btn-primary mt-4 mb-2 rounded-pill">Escolher plano</button>
-                            </div>
+                            </div> --}}
                         </div>
                     </div>
                 
@@ -343,21 +343,21 @@
                             <div class="card-body text-center">
                                 <p class="card-pricing-plan-name fw-bold text-uppercase">Intermediário</p>
                                 <i class="card-pricing-icon ri-briefcase-line text-success"></i>
-                                <h2 class="card-pricing-price">R$250 <span>/ mês</span></h2>
-                                <ul class="card-pricing-features">
-                                    <li>200 documentos</li>
-                                    <li>2 GB de armazenamento</li>
-                                    <li>1 usuário</li>
-                                    <li>Suporte dedicado</li>
-                                </ul>
-                                <button class="btn btn-success mt-4 mb-2 rounded-pill">Escolher plano</button>
+                                <h2 class="card-pricing-price">R$50 <span>/ mês</span></h2>
+                        <ul class="card-pricing-features">
+                            <li>Gerar procuração</li>
+                            <li>Gerar solicitação ATPVe</li>
+                            <li>1 GB de armazenamento</li>
+                            <li>Suporte dedicado</li>
+                        </ul>
+                        <a href="{{ route('register') }}" class="btn btn-success mt-4 mb-2 rounded-pill">Escolher plano</a>
                             </div>
                         </div>
                     </div>
                 
                     <div class="col-md-4">
                         <div class="card card-pricing">
-                            <div class="card-body text-center">
+                            {{-- <div class="card-body text-center">
                                 <p class="card-pricing-plan-name fw-bold text-uppercase">Avançado</p>
                                 <i class="card-pricing-icon ri-shield-star-line text-danger"></i>
                                 <h2 class="card-pricing-price">R$400 <span>/ mês</span></h2>
@@ -368,7 +368,7 @@
                                     <li>Suporte dedicado</li>
                                 </ul>
                                 <button class="btn btn-danger mt-4 mb-2 rounded-pill">Escolher plano</button>
-                            </div>
+                            </div> --}}
                         </div>
                     </div>
                 </div>
@@ -473,7 +473,7 @@
 
             <div class="row align-items-center mt-3">
                 <div class="col-md-4">
-                    <p class="text-muted"><span class="fw-bold">Suporte 24/7:</span><br> <span class="d-block mt-1">51 994867806</span></p>
+                    <p class="text-muted"><span class="fw-bold">Suporte 24/7:</span><br> <span class="d-block mt-1">51 99904.7299</span></p>
                     <p class="text-muted mt-4"><span class="fw-bold">Email:</span><br> <span class="d-block mt-1">suporte@proconline.com.br</span></p>
                     <p class="text-muted mt-4"><span class="fw-bold">Atendimento:</span><br> <span class="d-block mt-1">Seg. a Sex. - 9:00AM as 6:00PM</span></p>
                 </div>
