@@ -350,7 +350,7 @@
                             <li>1 GB de armazenamento</li>
                             <li>Suporte dedicado</li>
                         </ul>
-                        <a href="{{ route('register') }}" class="btn btn-success mt-4 mb-2 rounded-pill">Escolher plano</a>
+                        <a href="https://api.whatsapp.com/send/?phone=51999047299&text&type=phone_number&app_absent=0" target="_blank" class="btn btn-success mt-4 mb-2 rounded-pill">Solicitar Plano</a>
                             </div>
                         </div>
                     </div>
