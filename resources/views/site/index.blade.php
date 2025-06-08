@@ -68,8 +68,8 @@
                             Tudo que você precisa para centralizar e otimizar seus processos está aqui!
                         </p>
                         
-                        <a href="{{ route('register') }}" 
-                        class="btn btn-lg font-16 btn-success">Teste grátis <i class="mdht ms-1"></i></a>
+                        <a a href="https://api.whatsapp.com/send/?phone=51999047299&text&type=phone_number&app_absent=0" target="_blank" 
+                        class="btn btn-lg font-16 btn-success">Solicitar teste <i class="mdht ms-1"></i></a>
                         {{-- <a href="" target="_blank" class="btn btn-lg font-16 btn-info">Check Demos</a> --}}
                     </div>
                 </div>
@@ -305,14 +305,14 @@
     <!-- END FEATURES 2 -->
 
     <!-- START PRICING -->
-    <section class="py-5 bg-light-lighten border-top border-bottom border-light">
+    {{-- <section class="py-5 bg-light-lighten border-top border-bottom border-light">
         <div class="container">
             <div class="row">
                 <div class="col-lg-12">
                     <div class="text-center">
                         <h1 class="mt-0"><i class="mdi mdi-tag-multiple"></i></h1>
                         <h3>Escolha do <span class="text-primary">Plano</span></h3>
-                        <p class="text-muted mt-2">Você tem a opção de utilizar o sistema sem limites ou por créditos.
+                        <p class="text-muted mt-2">Você tem a opção de utilizar o sistema sem limites.
                             <br>Escolha a melhor forma para usar no seu negócio.
                         </p>
                     </div>
@@ -323,7 +323,7 @@
                 <div class="row">
                     <div class="col-md-4">
                         <div class="card card-pricing">
-                            {{-- <div class="card-body text-center">
+                            <div class="card-body text-center">
                                 <p class="card-pricing-plan-name fw-bold text-uppercase">Básico</p>
                                 <i class="card-pricing-icon ri-user-line text-primary"></i>
                                 <h2 class="card-pricing-price">R$50 <span>/ mês</span></h2>
@@ -334,14 +334,14 @@
                                     <li>Suporte dedicado</li>
                                 </ul>
                                 <button class="btn btn-primary mt-4 mb-2 rounded-pill">Escolher plano</button>
-                            </div> --}}
+                            </div>
                         </div>
                     </div>
                 
                     <div class="col-md-4">
                         <div class="card card-pricing">
                             <div class="card-body text-center">
-                                <p class="card-pricing-plan-name fw-bold text-uppercase">Intermediário</p>
+                                <p class="card-pricing-plan-name fw-bold text-uppercase">Plano único</p>
                                 <i class="card-pricing-icon ri-briefcase-line text-success"></i>
                                 <h2 class="card-pricing-price">R$50 <span>/ mês</span></h2>
                         <ul class="card-pricing-features">
@@ -357,7 +357,7 @@
                 
                     <div class="col-md-4">
                         <div class="card card-pricing">
-                            {{-- <div class="card-body text-center">
+                            <div class="card-body text-center">
                                 <p class="card-pricing-plan-name fw-bold text-uppercase">Avançado</p>
                                 <i class="card-pricing-icon ri-shield-star-line text-danger"></i>
                                 <h2 class="card-pricing-price">R$400 <span>/ mês</span></h2>
@@ -368,19 +368,15 @@
                                     <li>Suporte dedicado</li>
                                 </ul>
                                 <button class="btn btn-danger mt-4 mb-2 rounded-pill">Escolher plano</button>
-                            </div> --}}
+                            </div>
                         </div>
                     </div>
                 </div>
-                
-                    <!-- end Pricing_card -->
                 </div>
-                <!-- end col -->
-
             </div>
 
         </div>
-    </section>
+    </section> --}}
     <!-- END PRICING -->
 
     <!-- START FAQ -->
@@ -435,7 +431,7 @@
                     <div>
                         <div class="faq-question-q-box">Q.</div>
                         <h4 class="faq-question text-body">Como faço para testar o ProcOnline?</h4>
-                        <p class="faq-answer mb-4 pb-1 text-muted">Para testar, basta entrar em contato  <a href="https://api.whatsapp.com/send/?phone=51999047299&text&type=phone_number&app_absent=0" target="_blank"">clicando aqui</a> e solicitar um teste gratuíto via WhatsApp.</p>
+                        <p class="faq-answer mb-4 pb-1 text-muted">Para testar, basta entrar em contato  <a href="https://api.whatsapp.com/send/?phone=51999047299&text&type=phone_number&app_absent=0" target="_blank">clicando aqui</a> e solicitar um teste gratuíto via WhatsApp.</p>
                     </div>
 
                     <!-- Question/Answer -->
