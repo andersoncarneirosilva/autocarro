@@ -60,12 +60,12 @@
                 </a>
             </li>
 
-            <li class="side-nav-item">
+            {{-- <li class="side-nav-item">
                 <a href="{{ route('chat.index') }}" class="side-nav-link">
                     <i class="uil-comments-alt"></i>
                     <span> Chat </span>
                 </a>
-            </li>
+            </li> --}}
 
             {{-- <li class="side-nav-item">
                 <a data-bs-toggle="collapse" href="#sidebarCar" aria-expanded="false" aria-controls="sidebarLayouts" class="side-nav-link">
