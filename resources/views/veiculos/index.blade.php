@@ -67,7 +67,7 @@
                 </ul>
                 <div class="ratio ratio-16x9 mb-3">
                     <video controls>
-                        <source src="https://proconline.com.br/cadastrar-veiculo.mp4" type="video/mp4">
+                        <source src="https://proconline.com.br/images/videos/cadastrar-veiculo.mp4" type="video/mp4">
                         Seu navegador não suporta a tag de vídeo.
                     </video>
                 </div>
