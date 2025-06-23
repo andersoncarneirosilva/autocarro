@@ -597,7 +597,7 @@
                 <div class="col-lg-12">
                     <div class="mt-5">
                         <p class="text-light text-opacity-50 mt-4 text-center mb-0">©
-                            <script>document.write(new Date().getFullYear())</script> ProcOnline - proconline.com.br
+                            <script>document.write(new Date().getFullYear())</script> ProcOnline - Desenvolvidor por <a href="https://pixdesign.com.br">Pix Design</a>
                         </p>
                     </div>
                 </div>
