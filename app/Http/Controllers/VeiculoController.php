@@ -38,6 +38,8 @@ class VeiculoController extends Controller
 
         $userId = Auth::id();
         $user = User::find($userId);
+        
+
         $outorgados = Outorgado::where('user_id', $userId)->get();
 
         $clientes = Cliente::where('user_id', $userId)->get();
@@ -518,11 +520,11 @@ class VeiculoController extends Controller
 
         $pdf = $parser->parseFile($arquivo);
 
-        // dd($pdf);
+         
 
         foreach ($pdf->getPages() as $numeroPagina => $pagina) {
             $textoPagina = $pagina->getText();
-
+            //dd($textoPagina);
             $linhas = explode("\n", $textoPagina);
             if ($linhas[3] != 'SECRETARIA NACIONAL DE TRÂNSITO - SENATRAN') {
                 alert()->error('Selecione um documento 2024.');
@@ -531,6 +533,7 @@ class VeiculoController extends Controller
             }
 
             // Extrair dados do veículo
+            
             $marca = $this->model->extrairMarca($textoPagina);
             $placa = $this->model->extrairPlaca($textoPagina);
             $chassi = $this->model->extrairChassi($textoPagina);

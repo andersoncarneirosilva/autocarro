@@ -33,11 +33,10 @@
     <!-- Sidebar -left -->
     <div class="h-100" id="leftside-menu-container" data-simplebar>
 
-        <!--- Sidemenu -->
         <ul class="side-nav">
 
             <li class="side-nav-title">Menu</li>
-
+            @can('access-admin')
             <li class="side-nav-item">
                 <a href="{{ route('dashboard.index') }}" class="side-nav-link">
                     <i class="uil-apps"></i>
@@ -55,56 +54,11 @@
             <li class="side-nav-item">
                 <a href="{{ route('veiculos.arquivados') }}/" class="side-nav-link">
                     <i class="uil-car-slash"></i>
-                    {{-- <span class="badge bg-danger text-white float-end">Novo</span> --}}
+                    
                     <span> Arquivados </span>
                 </a>
             </li>
 
-            {{-- <li class="side-nav-item">
-                <a href="{{ route('chat.index') }}" class="side-nav-link">
-                    <i class="uil-comments-alt"></i>
-                    <span> Chat </span>
-                </a>
-            </li> --}}
-
-            {{-- <li class="side-nav-item">
-                <a data-bs-toggle="collapse" href="#sidebarCar" aria-expanded="false" aria-controls="sidebarLayouts" class="side-nav-link">
-                    <i class="uil-cog"></i>
-                    <span> Veículos </span>
-                    <span class="menu-arrow"></span>
-                </a>
-                <div class="collapse" id="sidebarCar">
-                    <ul class="side-nav-second-level">
-                        <li>
-                            <a href="{{ route('veiculos.index') }}">Listagem</a>
-                        </li>
-                        <li>
-                            <a href="{{ route('veiculos.arquivados') }}">Arquivados</a>
-                        </li>
-                    </ul>
-                </div>
-            </li> --}}
-            {{-- @can('access-admin')
-            <li class="side-nav-item">
-                <a href="{{ route('documentos.index') }}" class="side-nav-link">
-                    <i class="uil-car"></i>
-                    <span> Veículos </span>
-                </a>
-            </li>
-            
-            <li class="side-nav-item">
-                <a href="{{ route('estoque.index') }}" class="side-nav-link">
-                    <i class="uil-car"></i>
-                    <span> Estoque </span>
-                </a>
-            </li>
-            
-            <li class="side-nav-item">
-                <a href="{{ route('ordensdeservicos.index') }}" class="side-nav-link">
-                    <i class="uil-clipboard-notes"></i>
-                    <span> Ordens de Serviços </span>
-                </a>
-            </li> --}}
 
             <li class="side-nav-item">
                 <a href="{{ route('clientes.index') }}" class="side-nav-link">
@@ -113,43 +67,14 @@
                 </a>
             </li>
             
-            {{-- <li class="side-nav-item">
-                <a href="{{ route('calendar.index') }}" class="side-nav-link">
-                    <i class="uil-calender"></i>
-                    <span> Calendário </span>
-                </a>
-            </li> --}}
-
-            {{-- @endcan --}}
-            {{-- <li class="side-nav-item">
-                <a href="{{ route('relatorios.index') }}" class="side-nav-link">
-                    <i class="uil-file-info-alt"></i>
-                    <span> Relatórios </span>
-                </a>
-            </li> --}}
-
+            
             <li class="side-nav-item">
                 <a href="{{ route('ajuda.index') }}" class="side-nav-link">
                     <i class="mdi mdi-help-circle-outline"></i>
                     <span> Ajuda </span>
                 </a>
             </li>
-            {{-- @can('access-admin')
-            <li class="side-nav-item">
-                <a data-bs-toggle="collapse" href="#sideCad" aria-expanded="false" aria-controls="sidebarLayouts" class="side-nav-link">
-                    <i class="uil-folder-medical"></i>
-                    <span> Cadastros </span>
-                    <span class="menu-arrow"></span>
-                </a>
-                <div class="collapse" id="sideCad">
-                    <ul class="side-nav-second-level">
-                        <li>
-                            <a href="{{ route('servicos.index') }}">Serviços</a>
-                        </li>
-                    </ul>
-                </div>
-            </li>
-            @endcan --}}
+
             <li class="side-nav-item">
                 <a data-bs-toggle="collapse" href="#configuracao" aria-expanded="false" aria-controls="sidebarLayouts" class="side-nav-link">
                     <i class="uil-cog"></i>
@@ -172,21 +97,18 @@
                     </ul>
                 </div>
             </li>
-
-            {{-- <div class="help-box text-white text-center">
-                <a href="javascript: void(0);" class="float-end close-btn text-white">
-                    <i class="mdi mdi-close"></i>
+            @endcan
+@can('access-produto')
+            <li class="side-nav-item">
+                <a href="{{ route('produtos.index') }}" class="side-nav-link">
+                    <i class="mdi mdi-help-circle-outline"></i>
+                    <span> Produtos </span>
                 </a>
-                <img src="assets/images/svg/help-icon.svg" height="90" alt="Helper Icon Image">
-                <h5 class="mt-3">Unlimited Access</h5>
-                <p class="mb-3">Upgrade to plan to get access to unlimited reports</p>
-                <a href="javascript: void(0);" class="btn btn-secondary btn-sm">Upgrade</a>
-            </div> --}}
+            </li>
+            @endcan
 
 
         </ul>
-        <!--- End Sidemenu -->
 
-        {{-- <div class="clearfix"></div> --}}
     </div>
 </div>

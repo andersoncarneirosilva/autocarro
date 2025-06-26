@@ -24,6 +24,7 @@ use App\Http\Controllers\TextoPoderesController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\VeiculoController;
 use App\Http\Controllers\ChatController;
+use App\Http\Controllers\ItemController;
 use Illuminate\Support\Facades\Route;
 use Livewire\Livewire;
 use App\Http\Livewire\Chat;
@@ -85,6 +86,9 @@ Route::post('/chat/mark-as-read', [ChatController::class, 'markAsRead']);
     Route::get('/pagamento', [PaymentController::class, 'paginaPagamento'])->name('pagamento.index');
 
     Route::get('/assinatura', [AssinaturaController::class, 'index'])->name('assinatura.index');
+
+    Route::get('/produtos', [ItemController::class, 'index'])->name('produtos.index');
+    Route::post('/produtos', [ItemController::class, 'store'])->name('produtos.store');
 
     Route::get('/planos', [PaymentController::class, 'index'])->name('planos.index');
     // Route::get('/pedidos/create', [PedidoController::class, 'create'])->name('pedidos.create');
