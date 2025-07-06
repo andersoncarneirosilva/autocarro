@@ -10,12 +10,16 @@ use App\Models\Outorgado;
 use App\Models\User;
 use App\Models\Veiculo;
 use Carbon\Carbon;
+use Maatwebsite\Excel\Facades\Excel;
+
 use FPDF;
+use Illuminate\Support\Str;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Storage;
 use Mail;
+
 use Smalot\PdfParser\Parser;
 
 class VeiculoController extends Controller
@@ -44,13 +48,7 @@ class VeiculoController extends Controller
 
         $clientes = Cliente::where('user_id', $userId)->get();
 
-        $assinatura = $user->assinaturas()->latest()->first();
-
-        if ($user->plano == 'Padrão' || $user->plano == 'Pro') {
-            if (! $assinatura || now()->gt($assinatura->data_fim) || $assinatura->status == 'pending') {
-                return redirect()->route('assinatura.expirada')->with('error', 'Sua assinatura expirou.');
-            }
-        }
+        
 
         $veiculos = $this->model->getSearch($request->search, $userId);
         $quantidadePaginaAtual = $veiculos->count();
@@ -63,28 +61,11 @@ class VeiculoController extends Controller
         $modeloOut = Outorgado::exists();
         $path = storage_path('app/public/documentos/usuario_'.auth()->id());
 
-        // Função para calcular o tamanho total da pasta
-        function getFolderSize($folder)
-        {
-            $size = 0;
-            foreach (glob(rtrim($folder, '/').'/*', GLOB_NOSORT) as $file) {
-                $size += is_file($file) ? filesize($file) : getFolderSize($file);
-            }
+        
 
-            return $size;
-        }
-
-        // Calcular o tamanho usado na pasta
-        $usedSpaceInBytes = getFolderSize($path);
-        $usedSpaceInMB = $usedSpaceInBytes / (1024 * 1024); // Converter para MB
-        $limitInMB = 1; // Limite de 1 MB
-        $percentUsed = ($usedSpaceInMB / $limitInMB) * 100; // Percentual usado
 
         return view('veiculos.index', compact(['clientes',
-            'usedSpaceInMB',
-            'percentUsed',
             'outorgados',
-            'limitInMB',
             'veiculos',
             'modeloProc',
             'modeloOut',
@@ -318,10 +299,7 @@ class VeiculoController extends Controller
         }
 
         // Calcula o espaço total usado na pasta do usuário
-        $espacoUsado = 0;
-        foreach (Storage::disk('public')->allFiles('app/public/'.$pastaUsuario) as $file) {
-            $espacoUsado += Storage::disk('public')->size($file);
-        }
+
 
         // Caminho para a pasta de procuracoes
         $pastaProc = storage_path('app/public/'.$pastaUsuario.'procuracoes_manual/');
@@ -341,14 +319,7 @@ class VeiculoController extends Controller
         // $tamanhoNovoArquivo = filesize($caminhoProc); // Calcula o tamanho do arquivo gerado em bytes
         $sizeProc = filesize($caminhoProc);
         // Verifica se há espaço suficiente
-        if (($espacoUsado + $sizeProc) > $limiteBytes) {
-            // Apaga o arquivo gerado se não houver espaço suficiente
-            unlink($caminhoProc);
 
-            alert()->error('Espaço insuficiente. Você atingiu o limite de armazenamento!');
-
-            return redirect()->route('veiculos.index');
-        }
 
         $input = $request['marca'];
         // Divide a string pelos espaços e barras
@@ -439,19 +410,18 @@ class VeiculoController extends Controller
     // ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     // ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     // ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    
 
     public function store(Request $request)
     {
 
-        // dd($request);
+         //dd($request);
 
         $userId = Auth::id(); // Obtém o ID do usuário autenticado
         // Localiza o usuário logado
         $user = User::find($userId);
 
         $configProc = ModeloProcuracoes::where('user_id', $userId)->first();
-
-        // dd($configProc->outorgados);
 
         $dataAtual = Carbon::now();
 
@@ -461,7 +431,7 @@ class VeiculoController extends Controller
         if (empty($configProc->outorgados)) {
             alert()->error('Erro!', 'Por favor, cadastre ao menos um Outorgado antes de prosseguir.')
                 ->persistent(true)
-                ->autoClose(5000) // Fecha automaticamente após 5 segundos
+                ->autoClose(5000)
                 ->timerProgressBar();
 
             return redirect()->route('veiculos.index');
@@ -475,7 +445,7 @@ class VeiculoController extends Controller
                 'arquivo_doc.required' => 'O arquivo é obrigatório.',
                 'arquivo_doc.max' => 'O arquivo não pode ultrapassar 10MB.',
             ]);
-            // dd($validated);
+            
         } catch (\Illuminate\Validation\ValidationException $e) {
             alert()->error('Selecione o documento em pdf!');
 
@@ -484,35 +454,13 @@ class VeiculoController extends Controller
 
         $arquivo = $request->file('arquivo_doc');
 
-        // Define o limite de espaço por usuário (em MB)
-        $limiteMb = $user->size_folder; // Limite de 100 MB
-        $limiteBytes = $limiteMb * 1024 * 1024; // Converte para bytes
 
         // Caminho para a pasta do usuário
         $pastaUsuario = "documentos/usuario_{$userId}/";
 
-        // Garante que a pasta do usuário exista
-        if (! Storage::disk('public')->exists($pastaUsuario)) {
-            Storage::disk('public')->makeDirectory($pastaUsuario, 0777, true);
-        }
-
-        // Calcula o espaço total usado na pasta
-        $espacoUsado = 0;
-        foreach (Storage::disk('public')->allFiles($pastaUsuario) as $file) {
-            $espacoUsado += Storage::disk('public')->size($file);
-        }
-        // dd($espacoUsado);
         // Tamanho do novo arquivo
         $size_doc = $arquivo->getSize(); // Em bytes
         // dd($tamanhoNovoArquivo);
-        // Verifica se há espaço suficiente
-        if (($espacoUsado + $size_doc) > $limiteBytes) {
-            alert()->error('Espaço insuficiente. Você atingiu o limite de armazenamento!');
-
-            return redirect()->route('veiculos.index');
-
-            return back()->withErrors(['message' => 'Espaço insuficiente. Você atingiu o limite de armazenamento.']);
-        }
 
         $nomeOriginal = $arquivo->getClientOriginalName();
 
@@ -736,6 +684,8 @@ class VeiculoController extends Controller
             mkdir(storage_path('app/public/'.$pastaUsuario.'/procuracoes'), 0777, true); // Cria a pasta se ela não existir
         }
 
+        
+
         // Salvar o PDF
         $pdf->Output('F', $caminhoProc);
 
@@ -757,6 +707,11 @@ class VeiculoController extends Controller
             'placaAnterior' => $placaAnterior,
             'categoria' => $categoria,
             'motor' => $motor,
+            'cambio' => $request->cambio,
+            'portas' => $request->portas,
+            'kilometragem' => $request->kilometragem,
+            'valor' => $request->valor,
+            'valor_oferta' => $request->valor_oferta,
             'combustivel' => $combustivel,
             'infos' => $infos,
             'tipo' => $tipo,
@@ -764,10 +719,19 @@ class VeiculoController extends Controller
             'size_doc' => $size_doc,
             'arquivo_proc' => $urlProc,
             'size_proc' => $sizeProc,
-            'image' => $nomeImagem,
             'status' => 'Ativo',
             'user_id' => $userId,
         ];
+
+        if ($request->hasFile('images')) {
+        foreach ($request->file('images') as $index => $image) {
+            $extension = $image->getClientOriginalExtension();
+            $filename = $request->modelo . '_' . Str::random(10) . '.' . $extension;
+            $path = $image->storeAs("veiculos/{$request->marca}/fotos", $filename);
+            $paths[] = $path;
+        }
+        $data['images'] = json_encode($paths); // salva como JSON no banco
+    }
 
         if ($user->plano == 'Premium') {
             // Mail::to($user->email)->send(new SendEmailProc($data, $caminhoProc));
@@ -948,37 +912,8 @@ class VeiculoController extends Controller
 
         $veiculo = Veiculo::findOrFail($id); // Retorna erro 404 se não encontrar
 
-        // dd($veiculo);
 
-        // Define o limite de espaço por usuário (em MB)
-        $limiteMb = $user->size_folder; // Limite de 100 MB
-        $limiteBytes = $limiteMb * 1024 * 1024; // Converte para bytes
 
-        // Caminho para a pasta do usuário
-        $pastaUsuario = "documentos/usuario_{$userId}/";
-
-        // Garante que a pasta do usuário exista
-        if (! Storage::disk('public')->exists($pastaUsuario)) {
-            Storage::disk('public')->makeDirectory($pastaUsuario, 0777, true);
-        }
-
-        // Calcula o espaço total usado na pasta
-        $espacoUsado = 0;
-        foreach (Storage::disk('public')->allFiles($pastaUsuario) as $file) {
-            $espacoUsado += Storage::disk('public')->size($file);
-        }
-        // dd($espacoUsado);
-        // Tamanho do novo arquivo
-        $size_doc = $veiculo->size_doc; // Em bytes
-        // dd($tamanhoNovoArquivo);
-        // Verifica se há espaço suficiente
-        if (($espacoUsado + $size_doc) > $limiteBytes) {
-            alert()->error('Espaço insuficiente. Você atingiu o limite de armazenamento!');
-
-            return redirect()->route('veiculos.index');
-
-            return back()->withErrors(['message' => 'Espaço insuficiente. Você atingiu o limite de armazenamento.']);
-        }
 
         // teste
         $pdf = new FPDF;
@@ -1122,15 +1057,7 @@ class VeiculoController extends Controller
         // Agora que o arquivo foi gerado, podemos calcular o tamanho
         // $tamanhoNovoArquivo = filesize($caminhoProc); // Calcula o tamanho do arquivo gerado em bytes
         $sizeProc = filesize($caminhoProc);
-        // Verifica se há espaço suficiente
-        if (($espacoUsado + $sizeProc) > $limiteBytes) {
-            // Apaga o arquivo gerado se não houver espaço suficiente
-            unlink($caminhoProc);
 
-            alert()->error('Espaço insuficiente. Você atingiu o limite de armazenamento!');
-
-            return redirect()->route('veiculos.index');
-        }
 
         // DATA STORE PROC
         $data = [
@@ -1519,15 +1446,7 @@ class VeiculoController extends Controller
         $tamanhoNovoArquivo = Storage::disk('public')->size($filePath); // Em bytes
         $sizeAtpve = $tamanhoNovoArquivo;
 
-        // Verifica se há espaço suficiente
-        if (($espacoUsado + $tamanhoNovoArquivo) > $limiteBytes) {
-            // Remove o arquivo PDF temporário caso o limite seja excedido
-            unlink($filePath);
-            // teste
-            alert()->error('Espaço insuficiente. Você atingiu o limite de armazenamento!');
 
-            return redirect()->route('veiculos.index')->withErrors(['message' => 'Espaço insuficiente. Você atingiu o limite de armazenamento.']);
-        }
 
         // Retornar o link do PDF para download/visualização
         $fileUrl = asset('storage/'.$pastaAtpves.'atpve_'.$estoque->placa.'_'.$numeroRandom.'.pdf');
@@ -1562,12 +1481,16 @@ class VeiculoController extends Controller
     public function show($id)
     {
         // dd($id);
+        $userId = Auth::id();
+        $user = User::find($userId);
         if (! $veiculo = $this->model->find($id)) {
             return redirect()->route('veiculos.index');
         }
+        $clientes = Cliente::where('user_id', $userId)->get();
+        $outorgados = Outorgado::where('user_id', $userId)->get();
         //dd($veiculo);
 
-        return view('veiculos.show', compact('veiculo'));
+        return view('veiculos.show', compact('veiculo', 'outorgados', 'clientes'));
     }
 
     public function edit($id)

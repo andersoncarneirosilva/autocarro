@@ -66,6 +66,13 @@
                     <span> Clientes </span>
                 </a>
             </li>
+
+            <li class="side-nav-item">
+                <a href="{{ route('fornecedores.index') }}" class="side-nav-link">
+                    <i class="uil-users-alt"></i>
+                    <span> Fornecedores </span>
+                </a>
+            </li>
             
             
             <li class="side-nav-item">
@@ -98,14 +105,13 @@
                 </div>
             </li>
             @endcan
-@can('access-produto')
+            
             <li class="side-nav-item">
-                <a href="{{ route('produtos.index') }}" class="side-nav-link">
+                <a href="{{ route('anuncios.index') }}" class="side-nav-link">
                     <i class="mdi mdi-help-circle-outline"></i>
-                    <span> Produtos </span>
+                    <span> Anuncios </span>
                 </a>
             </li>
-            @endcan
 
 
         </ul>

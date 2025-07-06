@@ -18,33 +18,5 @@ class DashModel extends Model
         return $users;
     } */
 
-    public function getCountDocs()
-    {
-        $counts = [];
-        $userId = Auth::id(); // Obtém o ID do usuário logado
-
-        for ($month = 1; $month <= 12; $month++) {
-            $countMonth = DB::table('veiculos')
-                ->whereMonth('created_at', $month)
-                ->where('user_id', $userId) // Filtra pelo ID do usuário
-                ->count();
-            $counts[] = $countMonth;
-        }
-
-        return $counts;
-    }
-
-    public function getCountProcs()
-    {
-        $countAd = DB::table('procuracaos')->count();
-
-        return $countAd;
-    }
-
-    public function getCountOrdens()
-    {
-        $countOrder = DB::table('ordems')->count();
-
-        return $countOrder;
-    }
+    
 }

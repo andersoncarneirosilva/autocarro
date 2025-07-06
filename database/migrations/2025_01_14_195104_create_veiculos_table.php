@@ -31,16 +31,35 @@ return new class extends Migration
             $table->string('infos');
             $table->string('tipo');
 
-            $table->string('arquivo_doc');
+            $table->string('cambio');
+            $table->string('portas');
+            $table->string('valor');
+            $table->string('valor_oferta')->nullable();
+            $table->string('kilometragem')->nullable();
+            $table->text('observacoes')->nullable();
+            $table->json('opcionais')->nullable();
 
-            $table->string('endereco');
-            $table->string('arquivo_proc');
+            $table->json('images')->nullable();
+            $table->string('status')->nullable();
+
+            
+            $table->string('endereco')->nullable();
+            
+            $table->string('arquivo_doc')->nullable();
+            $table->string('arquivo_proc')->nullable();
             $table->string('arquivo_proc_assinado')->nullable();
             $table->string('arquivo_atpve')->nullable();
             $table->string('arquivo_atpve_assinado')->nullable();
 
             $table->string('size_proc_pdf')->nullable();
             $table->string('size_atpve_pdf')->nullable();
+
+            $table->unsignedBigInteger('size_doc')->nullable();
+            $table->unsignedBigInteger('size_proc')->nullable();
+            $table->unsignedBigInteger('size_atpve')->nullable();
+
+            
+
 
             $table->foreignId('user_id')->constrained()->onDelete('cascade'); // Chave estrangeira para o usuário
 

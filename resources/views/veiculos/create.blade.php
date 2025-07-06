@@ -1,8 +1,8 @@
 <form action="{{ route('veiculos.store') }}" method="POST" enctype="multipart/form-data" id="formDoc">
     @csrf
-    @include('veiculos._partials.form-cad-proc')
+    @include('veiculos._partials.form-cad-veiculo')
 </form>
-<script>
+{{-- <script>
     document.addEventListener("DOMContentLoaded", function() {
         const form = document.getElementById("formDoc"); // Seleciona o formulário corretamente
         const submitButton = document.getElementById("submitButton"); // Botão original
@@ -47,4 +47,4 @@
             }, 500); // Pequeno delay para o usuário perceber o spinner
         });
     });
-    </script>
+    </script> --}}

@@ -37,25 +37,6 @@
         </div>
         <!--end card-->
 
-        <div class="card tilebox-one">
-            <div class="card-body">
-                <i class="mdi mdi-harddisk float-end"></i>
-                <h6 class="text-uppercase mt-0">Espaço em disco</h6>
-                <p class="text-muted font-12 mb-0">
-                    {{ number_format($usedSpaceInMB, 0) }} MB usados ({{ number_format($percentUsed, 0) }}%) de
-                    {{ $limitInMB }} MB
-                </p>
-                <div class="progress mb-3">
-                    <div class="progress-bar {{ $percentUsed >= 80 ? 'bg-danger' : '' }}" role="progressbar"
-                        style="width: {{ $percentUsed }}%" aria-valuenow="{{ $percentUsed }}" aria-valuemin="0"
-                        aria-valuemax="100">
-                        {{ number_format($percentUsed, 0) }}%
-                    </div>
-                </div>
-
-
-            </div>
-        </div>
 
     </div> <!-- end col -->
 
@@ -65,7 +46,7 @@
                 <h4 class="header-title mb-3">Veículos cadastrados</h4>
 
                 <div dir="ltr">
-                    <script>
+                    {{-- <script>
                         document.addEventListener('DOMContentLoaded', function() {
                             var countDocs = @json($countDocs); // Agora isso será um array com contagens por mês
 
@@ -99,7 +80,7 @@
                             var chart = new ApexCharts(document.querySelector("#chart"), options);
                             chart.render();
                         });
-                    </script>
+                    </script> --}}
 
                     <div id="chart" class="apex-charts" style="width: 100%; height: 200px; margin: auto;"></div>
                 </div>
@@ -121,7 +102,7 @@
                 <h4 class="header-title">Últimos veículos</h4>
             </div>
             <div class="card-body pt-0">
-                @if ($emprestimos->count() != 0)
+                {{-- @if ($emprestimos->count() != 0) --}}
                     <div class="table-responsive">
                         <table class="table table-centered table-hover table-nowrap mb-0">
                             <thead>
@@ -134,43 +115,11 @@
                                 </tr>
                             </thead>
                             <tbody>
-                                @foreach ($emprestimos as $emp)
-                                    <tr>
-                                        <td>
-                                            <div class="d-flex align-items-center">
-                                                <div class="flex-shrink-0">
-                                                    <img class="rounded-circle" 
-                                                        src="{{ url("$emp->image") }}" 
-                                                        alt="Veículo" 
-                                                        width="31"
-                                                        onerror="this.onerror=null;this.src='{{ url('images/veiculos/default.jpg') }}';">
-
-                                                </div>
-                                                <div class="flex-grow-1 ms-2">
-                                                    {{ $emp->marca }}
-                                                </div>
-                                            </div>
-                                        </td>
-                                        <td>{{ $emp->placa }}</td>
-                                        <td>{{ $emp->ano }}</td>
-                                        <td>{{ $emp->cor }}</td>
-                                        <td>
-                                            @if ($emp->crv === '***')
-                                                <span class="badge badge-outline-danger">FÍSICO</span>
-                                            @else
-                                                <span class="badge badge-outline-success">DIGITAL</span>
-                                            @endif
-                                        </td>
-                                    </tr> <!-- end tr -->
-                                @endforeach
+                                
                             </tbody>
                         </table>
                     </div>
-                @else
-                    <div class="alert alert-danger bg-transparent text-danger" role="alert">
-                        NENHUM RESULTADO ENCONTRADO!
-                    </div>
-                @endif
+                
             </div>
         </div>
     </div> <!-- end col -->
@@ -190,7 +139,7 @@
                         <div class="flex-grow-1 ms-2">
                             <h5 class="my-0 fw-semibold">Veículos</h5>
                         </div>
-                        <h5 class="my-0">{{ $veiculosCount }}</h5>
+                        <h5 class="my-0"></h5>
                     </div>
                 </div>
 
@@ -202,7 +151,7 @@
                         <div class="flex-grow-1 ms-2">
                             <h5 class="my-0 fw-semibold">CRLV</h5>
                         </div>
-                        <h5 class="my-0">{{ $crlvCount }}</h5>
+                        <h5 class="my-0"></h5>
                     </div>
                 </div>
 
@@ -214,7 +163,7 @@
                         <div class="flex-grow-1 ms-2">
                             <h5 class="my-0 fw-semibold">Procurações assinadas</h5>
                         </div>
-                        <h5 class="my-0">{{ $procCount }}</h5>
+                        <h5 class="my-0"></h5>
                     </div>
                 </div>
 
@@ -226,7 +175,7 @@
                         <div class="flex-grow-1 ms-2">
                             <h5 class="my-0 fw-semibold">ATPVe assinada</h5>
                         </div>
-                        <h5 class="my-0">{{ $atpveCount }}</h5>
+                        <h5 class="my-0"></h5>
                     </div>
                 </div>
 
@@ -238,7 +187,7 @@
                         <div class="flex-grow-1 ms-2">
                             <h5 class="my-0 fw-semibold">Clientes</h5>
                         </div>
-                        <h5 class="my-0">{{ $clientesCount }}</h5>
+                        <h5 class="my-0"></h5>
                     </div>
                 </div>
             </div>

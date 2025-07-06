@@ -44,9 +44,17 @@ class Veiculo extends Model
         'arquivo_atpve_assinado',
         'size_proc_pdf',
         'size_atpve_pdf',
-        'image',
+        'images',
         'status',
         'user_id',
+
+        'kilometragem',
+        'portas',
+        'cambio',
+        'valor',
+        'valor_oferta',
+        'observacoes',
+        'opcionais',
 
     ];
 

@@ -1,615 +1,406 @@
-
 <!DOCTYPE html>
 <html lang="en">
 
 <head>
-    <meta charset="utf-8" />
-    <title>ProcOnline</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta content="A fully featured admin theme which can be used to build CRM, CMS, etc." name="description" />
-    <meta content="Coderthemes" name="author" />
+  <meta charset="utf-8">
+  <meta content="width=device-width, initial-scale=1.0" name="viewport">
+  <title>Autocar</title>
+  <meta name="description" content="">
+  <meta name="keywords" content="">
 
-    <!-- App favicon -->
-    <link rel="shortcut icon" href="assets/images/favicon.ico">
+  <!-- Favicons -->
+  <link href="{{ url('img/favicon.png') }}" rel="icon">
+  <link href="{{ url('img/apple-touch-icon.png') }}" rel="apple-touch-icon">
+<script src="https://kit.fontawesome.com/6c4df5f46b.js" crossorigin="anonymous"></script>
+  <!-- Fonts -->
+  <link href="https://fonts.googleapis.com" rel="preconnect">
+  <link href="https://fonts.gstatic.com" rel="preconnect" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Open+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;1,300;1,400;1,500;1,600;1,700;1,800&family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&family=Raleway:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap" rel="stylesheet">
 
-    <!-- Theme Config Js -->
-    <script src="assets/js/hyper-config.js"></script>
+  <!-- Vendor CSS Files -->
+  <link href="{{ url('site/vendor/bootstrap/css/bootstrap.min.css') }}" rel="stylesheet">
+  <link href="{{ url('site/vendor/bootstrap-icons/bootstrap-icons.css') }}" rel="stylesheet">
+  <link href="{{ url('site/vendor/aos/aos.css') }}" rel="stylesheet">
+  <link href="{{ url('site/vendor/glightbox/css/glightbox.min.css') }}" rel="stylesheet">
+  <link href="{{ url('site/vendor/swiper/swiper-bundle.min.css') }}" rel="stylesheet">
 
-    <!-- App css -->
-    <link href="assets/css/app-saas.min.css" rel="stylesheet" type="text/css" id="app-style" />
-    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-    <!-- Icons css -->
-    <link href="assets/css/icons.min.css" rel="stylesheet" type="text/css" />
+  <!-- Main CSS File -->
+  <link href="{{ url('site/css/main.css') }}" rel="stylesheet">
+
 </head>
 
-<body>
+<body class="index-page">
 
-    <!-- NAVBAR START -->
-    <nav class="navbar navbar-expand-lg py-lg-3 navbar-dark">
-        <div class="container">
+  <header id="header" class="header d-flex align-items-center sticky-top">
+    <div class="container-fluid container-xl position-relative d-flex align-items-center">
 
-            <!-- logo -->
-            <a href="index.html" class="navbar-brand me-lg-5">
-                <img src="assets/images/logo.png" alt="logo" class="logo-dark" height="22" />
-            </a>
+      <a href="index.html" class="logo d-flex align-items-center me-auto">
+        <!-- Uncomment the line below if you also wish to use an image logo -->
+        <!-- <img src="img/logo.png" alt=""> -->
+        <h1 class="sitename">Autocar</h1>
+      </a>
 
-            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavDropdown" aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
-                <i class="mdi mdi-menu"></i>
-            </button>
-
-            <!-- menus -->
-            <div class="collapse navbar-collapse" id="navbarNavDropdown">
-                <!-- right menu -->
-                <ul class="navbar-nav ms-auto align-items-center">
-                    <li class="nav-item me-0">
-                        <a href="{{ route('login') }}" class="nav-link d-lg-none">Area do cliente</a>
-                        <a href="{{ route('login') }}" class="btn btn-sm btn-light rounded-pill d-none d-lg-inline-flex">
-                            <i class="mdi mdi-account me-2"></i> Area do cliente
-                        </a>
-                    </li>
+      <nav id="navmenu" class="navmenu">
+        <ul>
+          <li><a href="index.html" class="active">Home<br></a></li>
+          <li><a href="about.html">Ofertas</a></li>
+          <li><a href="about.html">Novos</a></li>
+          <li><a href="courses.html">Semi-novos</a></li>
+          <li><a href="trainers.html">Usados</a></li>
+          <li class="dropdown"><a href="#"><span>Especiais</span> <i class="bi bi-chevron-down toggle-dropdown"></i></a>
+            <ul>
+              <li><a href="#">Clássicos</a></li>
+              <li><a href="#">Esportivos</a></li>
+              <li><a href="#">Modificados</a></li>
+              {{-- <li><a href="#">Dropdown 1</a></li>
+              <li class="dropdown"><a href="#"><span>Deep Dropdown</span> <i class="bi bi-chevron-down toggle-dropdown"></i></a>
+                <ul>
+                  <li><a href="#">Deep Dropdown 1</a></li>
+                  <li><a href="#">Deep Dropdown 2</a></li>
+                  <li><a href="#">Deep Dropdown 3</a></li>
+                  <li><a href="#">Deep Dropdown 4</a></li>
+                  <li><a href="#">Deep Dropdown 5</a></li>
                 </ul>
+              </li> --}}
+              
+            </ul>
+          </li>
+          <li><a href="contact.html">Contato</a></li>
+        </ul>
+        <i class="mobile-nav-toggle d-xl-none bi bi-list"></i>
+      </nav>
 
-            </div>
+      <a class="btn-getstarted" href="{{ route('login') }}">ACESSAR</a>
+
+    </div>
+  </header>
+
+  <main class="main">
+
+    <!-- Hero Section -->
+    <section id="hero" class="hero section dark-background">
+
+      <img src="site/img/background-autocar.jpg" alt="" data-aos="fade-in">
+
+      <div class="container">
+    <h2 data-aos="fade-up" data-aos-delay="100">Encontre o carro ideal,<br>dirija seu futuro</h2>
+    <p data-aos="fade-up" data-aos-delay="200">Somos especialistas em veículos seminovos e zero km com qualidade, <br>confiança e os melhores preços do mercado.</p>
+    <div class="d-flex mt-4" data-aos="fade-up" data-aos-delay="300">
+        <a href="/estoque" class="btn-get-started">Ver Estoque</a>
+    </div>
+</div>
+
+
+    </section><!-- /Hero Section -->
+
+
+    <section id="why-us" class="section why-us">
+  <div class="container">
+    <div class="row gy-4">
+
+      <div class="col-lg-4" data-aos="fade-up" data-aos-delay="100">
+        <div class="why-box">
+          <h3>Por que comprar conosco?</h3>
+          <p>
+            Oferecemos uma ampla variedade de veículos — carros, motos e utilitários — com procedência, garantia e preços justos. Aqui você encontra qualidade, confiança e um atendimento diferenciado do início ao fim da sua compra.
+          </p>
+          <div class="text-center">
+            <a href="#estoque" class="more-btn"><span>Saiba mais</span> <i class="bi bi-chevron-right"></i></a>
+          </div>
         </div>
-    </nav>
-    <!-- NAVBAR END -->
+      </div><!-- End Why Box -->
 
-    <!-- START HERO -->
-    <section class="hero-section">
-        <div class="container">
-            <div class="row align-items-center">
-                <div class="col-md-5">
-                    <div class="mt-md-4">
-                        <h2 class="text-white fw-normal mb-4 mt-3 lh-base">Gestão Simplificada e Controle Total em um só lugar.</h2>
+      <div class="col-lg-8 d-flex align-items-stretch">
+        <div class="row gy-4" data-aos="fade-up" data-aos-delay="200">
 
-                        <p class="mb-4 font-16 text-white-50">Nosso sistema de procurações foi desenvolvido para 
-                            oferecer uma solução completa e intuitiva. Com recursos modernos, interface amigável e 
-                            ferramentas práticas, você pode criar, gerenciar e organizar procurações de maneira ágil e segura. 
-                            Tudo que você precisa para centralizar e otimizar seus processos está aqui!
-                        </p>
-                        
-                        <a a href="https://api.whatsapp.com/send/?phone=51999047299&text&type=phone_number&app_absent=0" target="_blank" 
-                        class="btn btn-lg font-16 btn-success">Solicitar teste <i class="mdht ms-1"></i></a>
-                        {{-- <a href="" target="_blank" class="btn btn-lg font-16 btn-info">Check Demos</a> --}}
-                    </div>
-                </div>
-                <div class="col-md-5 offset-md-2">
-                    <div class="text-md-end mt-3 mt-md-0">
-                        <img src="assets/images/svg/startup.svg" alt="" class="img-fluid" />
-                    </div>
-                </div>
+          <div class="col-xl-4">
+            <div class="icon-box d-flex flex-column justify-content-center align-items-center">
+              <i class="bi bi-clipboard-data"></i>
+              <h4>Veículos revisados</h4>
+              <p>Todos os veículos passam por vistoria e revisão completa antes de irem para o nosso estoque.</p>
             </div>
+          </div><!-- End Icon Box -->
+
+          <div class="col-xl-4" data-aos="fade-up" data-aos-delay="300">
+            <div class="icon-box d-flex flex-column justify-content-center align-items-center">
+              <i class="bi bi-gem"></i>
+              <h4>Garantia e procedência</h4>
+              <p>Trabalhamos apenas com veículos com documentação em dia e histórico transparente.</p>
+            </div>
+          </div><!-- End Icon Box -->
+
+          <div class="col-xl-4" data-aos="fade-up" data-aos-delay="400">
+            <div class="icon-box d-flex flex-column justify-content-center align-items-center">
+              <i class="bi bi-inboxes"></i>
+              <h4>Financiamento facilitado</h4>
+              <p>Parceria com os principais bancos para oferecer as melhores condições de pagamento.</p>
+            </div>
+          </div><!-- End Icon Box -->
+
         </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+
+    <!-- Features Section -->
+    <section id="features" class="features section">
+
+      <div class="container">
+
+        <div class="row gy-4">
+
+          <div class="col-lg-3 col-md-4" data-aos="fade-up" data-aos-delay="100">
+  <div class="features-item" style="display: flex; justify-content: center;">
+    <img src="site/img/marcas/audi.webp" alt="">
+  </div>
+</div>
+
+
+          <div class="col-lg-3 col-md-4" data-aos="fade-up" data-aos-delay="200">
+            <div class="features-item" style="display: flex; justify-content: center;">
+              <img src="site/img/marcas/bmw.webp" alt="">
+            </div>
+          </div><!-- End Feature Item -->
+
+          <div class="col-lg-3 col-md-4" data-aos="fade-up" data-aos-delay="300">
+            <div class="features-item" style="display: flex; justify-content: center;">
+              <img src="site/img/marcas/chevrolet.webp" alt="">
+            </div>
+          </div><!-- End Feature Item -->
+
+          <div class="col-lg-3 col-md-4" data-aos="fade-up" data-aos-delay="400">
+            <div class="features-item" style="display: flex; justify-content: center;">
+              <img src="site/img/marcas/fiat.webp" alt="">
+            </div>
+          </div><!-- End Feature Item -->
+
+          <div class="col-lg-3 col-md-4" data-aos="fade-up" data-aos-delay="500">
+            <div class="features-item" style="display: flex; justify-content: center;">
+              <img src="site/img/marcas/ford.webp" alt="">
+            </div>
+          </div><!-- End Feature Item -->
+
+          <div class="col-lg-3 col-md-4" data-aos="fade-up" data-aos-delay="600">
+            <div class="features-item" style="display: flex; justify-content: center;">
+              <img src="site/img/marcas/honda.webp" alt="">
+            </div>
+          </div><!-- End Feature Item -->
+
+          <div class="col-lg-3 col-md-4" data-aos="fade-up" data-aos-delay="700">
+            <div class="features-item" style="display: flex; justify-content: center;">
+              <img src="site/img/marcas/hyundai.webp" alt="">
+            </div>
+          </div><!-- End Feature Item -->
+
+          <div class="col-lg-3 col-md-4" data-aos="fade-up" data-aos-delay="800">
+            <div class="features-item" style="display: flex; justify-content: center;">
+              <img src="site/img/marcas/nissan.webp" alt="">
+            </div>
+          </div><!-- End Feature Item -->
+
+          <div class="col-lg-3 col-md-4" data-aos="fade-up" data-aos-delay="900">
+            <div class="features-item" style="display: flex; justify-content: center;">
+              <img src="site/img/marcas/peugeot.webp" alt="">
+            </div>
+          </div><!-- End Feature Item -->
+
+          <div class="col-lg-3 col-md-4" data-aos="fade-up" data-aos-delay="1000">
+            <div class="features-item" style="display: flex; justify-content: center;">
+              <img src="site/img/marcas/renault.webp" alt="">
+            </div>
+          </div><!-- End Feature Item -->
+
+          <div class="col-lg-3 col-md-4" data-aos="fade-up" data-aos-delay="1100">
+            <div class="features-item" style="display: flex; justify-content: center;">
+              <img src="site/img/marcas/toyota.webp" alt="">
+            </div>
+          </div><!-- End Feature Item -->
+
+          <div class="col-lg-3 col-md-4" data-aos="fade-up" data-aos-delay="1200">
+            <div class="features-item" style="display: flex; justify-content: center;">
+              <img src="site/img/marcas/volkswagem.webp" alt="">
+            </div>
+          </div><!-- End Feature Item -->
+
+        </div>
+
+      </div>
+
+    </section><!-- /Features Section -->
+
+    <!-- Courses Section -->
+    <section id="courses" class="courses section">
+
+      <!-- Section Title -->
+      <div class="container section-title" data-aos="fade-up">
+        <h2>OFERTAS</h2>
+        <p>Mais vendidos</p>
+      </div><!-- End Section Title -->
+
+      <div class="container">
+
+        <div class="row">
+
+          @foreach ($veiculos as $veiculo)
+          <div class="col-lg-4 col-md-6 d-flex align-items-stretch" data-aos="zoom-in" data-aos-delay="100">
+  <div class="course-item">
+    @php
+      $imagens = json_decode($veiculo->images, true) ?? [];
+    @endphp
+
+    @if (count($imagens) > 1)
+      <div id="carousel{{ $veiculo->id }}" class="carousel slide" >
+        
+        <!-- Indicadores -->
+        <div class="carousel-indicators">
+          @foreach ($imagens as $index => $img)
+            <button type="button" data-bs-target="#carousel{{ $veiculo->id }}" data-bs-slide-to="{{ $index }}"
+              class="{{ $index === 0 ? 'active' : '' }}" aria-current="{{ $index === 0 ? 'true' : 'false' }}"
+              aria-label="Slide {{ $index + 1 }}"></button>
+          @endforeach
+        </div>
+
+        <!-- Slides -->
+        <div class="carousel-inner">
+          @foreach ($imagens as $index => $img)
+            <div class="carousel-item {{ $index === 0 ? 'active' : '' }}">
+              <img src="{{ asset('storage/' . $img) }}" class="d-block w-100 img-fluid" alt="Imagem do veículo {{ $index + 1 }}">
+            </div>
+          @endforeach
+        </div>
+
+        <!-- Controles -->
+        <button class="carousel-control-prev" type="button" data-bs-target="#carousel{{ $veiculo->id }}" data-bs-slide="prev">
+          <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+          <span class="visually-hidden">Anterior</span>
+        </button>
+        <button class="carousel-control-next" type="button" data-bs-target="#carousel{{ $veiculo->id }}" data-bs-slide="next">
+          <span class="carousel-control-next-icon" aria-hidden="true"></span>
+          <span class="visually-hidden">Próxima</span>
+        </button>
+      </div>
+    @else
+      <img src="{{ count($imagens) ? asset('storage/' . $imagens[0]) : url('assets/img/default-car.png') }}" class="img-fluid" alt="Imagem do veículo">
+    @endif
+
+    <div class="course-content">
+      <div class="d-flex justify-content-between align-items-center mb-3">
+        <p class="category">{{ explode(' ', $veiculo->marca)[0] }}</p>
+        <p class="price">R${{ $veiculo->valor }}</p>
+      </div>
+      <h3>{{ $veiculo->marca }}</h3>
+      <p class="description">{{ $veiculo->kilometragem }}km | ANO: {{ $veiculo->ano }} | {{ $veiculo->cambio }}</p>
+      <div class="trainer d-flex align-items-center justify-content-between">
+        <p class="pchama mb-0 badge border border-success text-success bg-transparent">+ DETALHES</p>
+        <div class="text-end">
+          <p class="text-muted mb-0" style="text-decoration: line-through; font-size: 14px;">R$ {{ $veiculo->valor }}</p>
+          <div class="ptext fw-bold" style="font-size: 20px;">R$ {{ $veiculo->valor_oferta }}</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+          @endforeach
+
+        </div>
+
+      </div>
+
     </section>
-    <!-- END HERO -->
 
-    <!-- START SERVICES -->
-    <section class="py-5">
-        <div class="container">
-            <div class="row py-4">
-                <div class="col-lg-12">
-                    <div class="text-center">
-                        <h1 class="mt-0"><i class="mdi mdi-infinity"></i></h1>
-                        <h3>Confira as características, benefícios</span> e vantagens</h3>
-                        <p class="text-muted mt-2">Sistema de fácil utilização sem a 
-                            necessidade de instalações.
-                        </p>
-                    </div>
-                </div>
-            </div>
+  </main>
 
-            <div class="row">
-                <div class="col-lg-4 col-md-6">
-                    <div class="text-center p-2 p-sm-3">
-                        <div class="avatar-sm m-auto">
-                            <span class="avatar-title bg-primary-lighten rounded-circle">
-                                <i class="uil uil-desktop text-primary font-24"></i>
-                            </span>
-                        </div>
-                        <h4 class="mt-3">Layout responsivo</h4>
-                        <p class="text-muted mt-2 mb-0">Um layout responsivo garante que seu site se adapte perfeitamente a qualquer 
-                            dispositivo, proporcionando uma experiência otimizada para todos os usuários.
-                        </p>
-                    </div>
-                </div>
+  <footer id="footer" class="footer position-relative light-background">
 
-                <div class="col-lg-4 col-md-6">
-                    <div class="text-center p-2 p-sm-3">
-                        <div class="avatar-sm m-auto">
-                            <span class="avatar-title bg-primary-lighten rounded-circle">
-                                <i class="uil uil-vector-square text-primary font-24"></i>
-                            </span>
-                        </div>
-                        <h4 class="mt-3">Agilidade</h4>
-                        <p class="text-muted mt-2 mb-0">Agilidade na geração de documentos economiza tempo e 
-                            aumenta a produtividade, garantindo entregas rápidas e eficientes.
-                        </p>
-                    </div>
-                </div>
-
-                <div class="col-lg-4 col-md-6">
-                    <div class="text-center p-2 p-sm-3">
-                        <div class="avatar-sm m-auto">
-                            <span class="avatar-title bg-primary-lighten rounded-circle">
-                                <i class="uil uil-file-times-alt text-primary font-24"></i>
-                            </span>
-                        </div>
-                        <h4 class="mt-3">Evite erros</h4>
-                        <p class="text-muted mt-2 mb-0">Evite erros na geração de procurações com processos automatizados e maior precisão.
-                        </p>
-                    </div>
-                </div>
-
-                <div class="col-lg-4 col-md-6">
-                    <div class="text-center p-2 p-sm-3">
-                        <div class="avatar-sm m-auto">
-                            <span class="avatar-title bg-primary-lighten rounded-circle">
-                                <i class="uil uil-users-alt text-primary font-24"></i>
-                            </span>
-                        </div>
-                        <h4 class="mt-3">Cadastros</h4>
-                        <p class="text-muted mt-2 mb-0">Cadastros simples de clientes e veículos, facilitando o gerencimento
-                            de procurações.
-                        </p>
-                    </div>
-                </div>
-
-                <div class="col-lg-4 col-md-6">
-                    <div class="text-center p-2 p-sm-3">
-                        <div class="avatar-sm m-auto">
-                            <span class="avatar-title bg-primary-lighten rounded-circle">
-                                <i class="uil uil-file-plus-alt text-primary font-24"></i>
-                            </span>
-                        </div>
-                        <h4 class="mt-3">Procuração avulsa</h4>
-                        <p class="text-muted mt-2 mb-0">Gere uma procuração avulsa caso o cliente não tenha o documento em pdf.
-                        </p>
-                    </div>
-                </div>
-
-                <div class="col-lg-4 col-md-6">
-                    <div class="text-center p-2 p-sm-3">
-                        <div class="avatar-sm m-auto">
-                            <span class="avatar-title bg-primary-lighten rounded-circle">
-                                <i class="uil uil-file-copy-alt text-primary font-24"></i>
-                            </span>
-                        </div>
-                        <h4 class="mt-3">Arquivos em pdf</h4>
-                        <p class="text-muted mt-2 mb-0">O sistema gera arquivos e relatórios em pdf para facilitar
-                             o manuseio e impressão.
-                        </p>
-                    </div>
-                </div>
-            </div>
-
+    <div class="container footer-top">
+      <div class="row gy-4">
+        <div class="col-lg-4 col-md-6 footer-about">
+          <a href="index.html" class="logo d-flex align-items-center">
+            <span class="sitename">Mentor</span>
+          </a>
+          <div class="footer-contact pt-3">
+            <p>A108 Adam Street</p>
+            <p>New York, NY 535022</p>
+            <p class="mt-3"><strong>Phone:</strong> <span>+1 5589 55488 55</span></p>
+            <p><strong>Email:</strong> <span>info@example.com</span></p>
+          </div>
+          <div class="social-links d-flex mt-4">
+            <a href=""><i class="bi bi-twitter-x"></i></a>
+            <a href=""><i class="bi bi-facebook"></i></a>
+            <a href=""><i class="bi bi-instagram"></i></a>
+            <a href=""><i class="bi bi-linkedin"></i></a>
+          </div>
         </div>
-    </section>
-    <!-- END SERVICES -->
 
-    <!-- START FEATURES 1 -->
-    {{-- <section class="py-5 bg-light-lighten border-top border-bottom border-light">
-        <div class="container">
-            <div class="row">
-                <div class="col-lg-12">
-                    <div class="text-center">
-                        <h3>Flexible <span class="text-primary">Layouts</span></h3>
-                        <p class="text-muted mt-2">There are three different layout options available to cater need for
-                            any <br /> modern web
-                            application.</p>
-                    </div>
-                </div>
-            </div>
-
-            <div class="row mt-1">
-                <div class="col-lg-4 col-md-6">
-                    <div class="demo-box text-center mt-3">
-                        <img src="assets/images/layouts/layout-1.png" alt="demo-img" class="img-fluid shadow-sm rounded">
-                        <h5 class="mt-3 f-17">Vertical Layout</h5>
-                    </div>
-                </div>
-
-                <div class="col-lg-4 col-md-6">
-                    <div class="demo-box text-center mt-3">
-                        <img src="assets/images/layouts/layout-2.png" alt="demo-img" class="img-fluid shadow-sm rounded">
-                        <h5 class="mt-3 f-17">Horizontal Layout</h5>
-                    </div>
-                </div>
-
-                <div class="col-lg-4 col-md-6">
-                    <div class="demo-box text-center mt-3">
-                        <img src="assets/images/layouts/layout-3.png" alt="demo-img" class="img-fluid shadow-sm rounded">
-                        <h5 class="mt-3 f-17">Detached Layout</h5>
-                    </div>
-                </div>
-
-                <div class="col-lg-4 col-md-6">
-                    <div class="demo-box text-center mt-3">
-                        <img src="assets/images/layouts/layout-5.png" alt="demo-img" class="img-fluid shadow-sm rounded">
-                        <h5 class="mt-3 f-17">Light Sidenav Layout</h5>
-                    </div>
-                </div>
-
-                <div class="col-lg-4 col-md-6">
-                    <div class="demo-box text-center mt-3">
-                        <img src="assets/images/layouts/layout-6.png" alt="demo-img" class="img-fluid shadow-sm rounded">
-                        <h5 class="mt-3 f-17">Boxed Layout</h5>
-                    </div>
-                </div>
-
-                <div class="col-lg-4 col-md-6">
-                    <div class="demo-box text-center mt-3">
-                        <img src="assets/images/layouts/layout-4.png" alt="demo-img" class="img-fluid shadow-sm rounded">
-                        <h5 class="mt-3 f-17">Semi Dark Layout</h5>
-                    </div>
-                </div>
-            </div>
+        <div class="col-lg-2 col-md-3 footer-links">
+          <h4>Useful Links</h4>
+          <ul>
+            <li><a href="#">Home</a></li>
+            <li><a href="#">About us</a></li>
+            <li><a href="#">Services</a></li>
+            <li><a href="#">Terms of service</a></li>
+            <li><a href="#">Privacy policy</a></li>
+          </ul>
         </div>
-    </section> --}}
-    <!-- END FEATURES 1 -->
 
-    <!-- START FEATURES 2 -->
-    {{-- <section class="py-5">
-        <div class="container">
-            <div class="row">
-                <div class="col-lg-12">
-                    <div class="text-center">
-                        <h1 class="mt-0"><i class="mdi mdi-heart-multiple-outline"></i></h1>
-                        <h3>Features you'll <span class="text-danger">love</span></h3>
-                        <p class="text-muted mt-2">Hyper comes with next generation ui design and have multiple benefits
-                        </p>
-                    </div>
-                </div>
-            </div>
-            <div class="row mt-2 py-5 align-items-center">
-                <div class="col-lg-5 col-md-6">
-                    <img src="assets/images/svg/features-1.svg" class="img-fluid" alt="">
-                </div>
-                <div class="col-lg-6 offset-md-1 col-md-5">
-                    <h3 class="fw-normal">Inbuilt applications and pages</h3>
-                    <p class="text-muted mt-3">Hyper comes with a variety of ready-to-use applications and pages that help to speed up the development</p>
-
-                    <div class="mt-4">
-                        <p class="text-muted"><i class="mdi mdi-circle-medium text-primary"></i> Projects & Tasks</p>
-                        <p class="text-muted"><i class="mdi mdi-circle-medium text-primary"></i> Ecommerce Application Pages</p>
-                        <p class="text-muted"><i class="mdi mdi-circle-medium text-primary"></i> Profile, pricing, invoice</p>
-                        <p class="text-muted"><i class="mdi mdi-circle-medium text-primary"></i> Login, signup, forget password</p>
-                    </div>
-
-                    <a href="" class="btn btn-primary rounded-pill mt-3">Read More <i class="mdi mdi-arrow-right ms-1"></i></a>
-
-                </div>
-            </div>
-
-            <div class="row pb-3 pt-5 align-items-center">
-                <div class="col-lg-6 col-md-5">
-                    <h3 class="fw-normal">Simply beautiful design</h3>
-                    <p class="text-muted mt-3">The simplest and fastest way to build dashboard or admin panel. Hyper is built using the latest tech and tools and provide an easy way to customize anything, including an overall color schemes, layout, etc.</p>
-
-                    <div class="mt-4">
-                        <p class="text-muted"><i class="mdi mdi-circle-medium text-success"></i> Built with latest Bootstrap</p>
-                        <p class="text-muted"><i class="mdi mdi-circle-medium text-success"></i> Extensive use of SCSS variables</p>
-                        <p class="text-muted"><i class="mdi mdi-circle-medium text-success"></i> Well documented and structured code</p>
-                        <p class="text-muted"><i class="mdi mdi-circle-medium text-success"></i> Detailed Documentation</p>
-                    </div>
-
-                    <a href="" class="btn btn-success rounded-pill mt-3">Read More <i class="mdi mdi-arrow-right ms-1"></i></a>
-
-                </div>
-                <div class="col-lg-5 col-md-6 offset-md-1">
-                    <img src="assets/images/svg/features-2.svg" class="img-fluid" alt="">
-                </div>
-            </div>
-
+        <div class="col-lg-2 col-md-3 footer-links">
+          <h4>Our Services</h4>
+          <ul>
+            <li><a href="#">Web Design</a></li>
+            <li><a href="#">Web Development</a></li>
+            <li><a href="#">Product Management</a></li>
+            <li><a href="#">Marketing</a></li>
+            <li><a href="#">Graphic Design</a></li>
+          </ul>
         </div>
-    </section> --}}
-    <!-- END FEATURES 2 -->
 
-    <!-- START PRICING -->
-    {{-- <section class="py-5 bg-light-lighten border-top border-bottom border-light">
-        <div class="container">
-            <div class="row">
-                <div class="col-lg-12">
-                    <div class="text-center">
-                        <h1 class="mt-0"><i class="mdi mdi-tag-multiple"></i></h1>
-                        <h3>Escolha do <span class="text-primary">Plano</span></h3>
-                        <p class="text-muted mt-2">Você tem a opção de utilizar o sistema sem limites.
-                            <br>Escolha a melhor forma para usar no seu negócio.
-                        </p>
-                    </div>
-                </div>
-            </div>
-
-            <div class="row mt-5 pt-3">
-                <div class="row">
-                    <div class="col-md-4">
-                        <div class="card card-pricing">
-                            <div class="card-body text-center">
-                                <p class="card-pricing-plan-name fw-bold text-uppercase">Básico</p>
-                                <i class="card-pricing-icon ri-user-line text-primary"></i>
-                                <h2 class="card-pricing-price">R$50 <span>/ mês</span></h2>
-                                <ul class="card-pricing-features">
-                                    <li>Gerar procuração</li>
-                                    <li>Gerar solicitação ATPVe</li>
-                                    <li>1 GB de armazenamento</li>
-                                    <li>Suporte dedicado</li>
-                                </ul>
-                                <button class="btn btn-primary mt-4 mb-2 rounded-pill">Escolher plano</button>
-                            </div>
-                        </div>
-                    </div>
-                
-                    <div class="col-md-4">
-                        <div class="card card-pricing">
-                            <div class="card-body text-center">
-                                <p class="card-pricing-plan-name fw-bold text-uppercase">Plano único</p>
-                                <i class="card-pricing-icon ri-briefcase-line text-success"></i>
-                                <h2 class="card-pricing-price">R$50 <span>/ mês</span></h2>
-                        <ul class="card-pricing-features">
-                            <li>Gerar procuração</li>
-                            <li>Gerar solicitação ATPVe</li>
-                            <li>1 GB de armazenamento</li>
-                            <li>Suporte dedicado</li>
-                        </ul>
-                        <a href="https://api.whatsapp.com/send/?phone=51999047299&text&type=phone_number&app_absent=0" target="_blank" class="btn btn-success mt-4 mb-2 rounded-pill">Solicitar Plano</a>
-                            </div>
-                        </div>
-                    </div>
-                
-                    <div class="col-md-4">
-                        <div class="card card-pricing">
-                            <div class="card-body text-center">
-                                <p class="card-pricing-plan-name fw-bold text-uppercase">Avançado</p>
-                                <i class="card-pricing-icon ri-shield-star-line text-danger"></i>
-                                <h2 class="card-pricing-price">R$400 <span>/ mês</span></h2>
-                                <ul class="card-pricing-features">
-                                    <li>Documentos ilimitados</li>
-                                    <li>5 GB de armazenamento</li>
-                                    <li>1 usuário</li>
-                                    <li>Suporte dedicado</li>
-                                </ul>
-                                <button class="btn btn-danger mt-4 mb-2 rounded-pill">Escolher plano</button>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                </div>
-            </div>
-
+        <div class="col-lg-4 col-md-12 footer-newsletter">
+          <h4>Our Newsletter</h4>
+          <p>Subscribe to our newsletter and receive the latest news about our products and services!</p>
+          <form action="forms/newsletter.php" method="post" class="php-email-form">
+            <div class="newsletter-form"><input type="email" name="email"><input type="submit" value="Subscribe"></div>
+            <div class="loading">Loading</div>
+            <div class="error-message"></div>
+            <div class="sent-message">Your subscription request has been sent. Thank you!</div>
+          </form>
         </div>
-    </section> --}}
-    <!-- END PRICING -->
 
-    <!-- START FAQ -->
-    <section class="py-5">
-        <div class="container">
-            <div class="row">
-                <div class="col-lg-12">
-                    <div class="text-center">
-                        <h1 class="mt-0"><i class="mdi mdi-frequently-asked-questions"></i></h1>
-                        <h3>Perguntas <span class="text-primary">frequentes</span></h3>
-                        <p class="text-muted mt-2">Aqui estão alguns dos tipos básicos de perguntas para nossos clientes.
-                            <br>Para mais informações entre em contato conosco.
-                        </p>
-
-                        <button type="button" class="btn btn-success btn-sm mt-2">
-                            <i class="mdi mdi-whatsapp me-1"></i>
-                            <a href="https://api.whatsapp.com/send/?phone=51999047299&text&type=phone_number&app_absent=0" 
-                                style="text-decoration: none; color: white;" 
-                                target="_blank">(51)99904.7299
-                            </a>
-                        </button>
-                        
-                        <button type="button" class="btn btn-info btn-sm mt-2 ms-1"><i class="mdi mdi-email me-1"></i> Enviar email</button>
-                    </div>
-                </div>
-            </div>
-
-            <div class="row mt-5">
-                <div class="col-lg-5 offset-lg-1">
-                    <!-- Question/Answer -->
-                    <div>
-                        <div class="faq-question-q-box">Q.</div>
-                        <h4 class="faq-question text-body">Posso testar o sistema sem pagar?</h4>
-                        <p class="faq-answer mb-4 pb-1 text-muted">Sim, o período de testes é 100% gratuíto, 
-                            Você tem um limite de 10 procurações para gerar, não precisando cadastrar
-                            qualquer forma de pagamento antecipado.
-                        </p>
-                    </div>
-
-                    <!-- Question/Answer -->
-                    <div>
-                        <div class="faq-question-q-box">Q.</div>
-                        <h4 class="faq-question text-body">Como obtenho ajuda para o sistema?</h4>
-                        <p class="faq-answer mb-4 pb-1 text-muted">Pode entrar em contato diretamente com nossa equipe através do WhatsApp para obter uma resposta rápida.</p>
-                    </div>
-
-                </div>
-                <!--/col-lg-5 -->
-
-                <div class="col-lg-5">
-                    <!-- Question/Answer -->
-                    <div>
-                        <div class="faq-question-q-box">Q.</div>
-                        <h4 class="faq-question text-body">Como faço para testar o ProcOnline?</h4>
-                        <p class="faq-answer mb-4 pb-1 text-muted">Para testar, basta entrar em contato  <a href="https://api.whatsapp.com/send/?phone=51999047299&text&type=phone_number&app_absent=0" target="_blank">clicando aqui</a> e solicitar um teste gratuíto via WhatsApp.</p>
-                    </div>
-
-                    <!-- Question/Answer -->
-                    <div>
-                        <div class="faq-question-q-box">Q.</div>
-                        <h4 class="faq-question text-body">O sistema gera procurações automaticamente?</h4>
-                        <p class="faq-answer mb-4 pb-1 text-muted">Sim, após cadastrar o veículo do cliente, 
-                            <br>é gerado uma procuração preenchida automaticamente, evitando erros na digitação. 
-                        </p>
-                    </div>
-
-                </div>
-                <!--/col-lg-5-->
-            </div>
-            <!-- end row -->
-
-        </div> <!-- end container-->
-    </section>
-    <!-- END FAQ -->
-
-
-    <!-- START CONTACT -->
-    <section class="py-5 bg-light-lighten border-top border-bottom border-light">
-        <div class="container">
-            <div class="row">
-                <div class="col-lg-12">
-                    <div class="text-center">
-                        <h3>Entre em <span class="text-primary">Contato</span></h3>
-                        <p class="text-muted mt-2">Por favor preencha o seguinte formulário e entraremos em contato com você em breve.
-                            <br>Para mais informações entre em contato conosco.
-                        </p>
-                    </div>
-                </div>
-            </div>
-
-            <div class="row align-items-center mt-3">
-                <div class="col-md-4">
-                    <p class="text-muted"><span class="fw-bold">Suporte 24/7:</span><br> <span class="d-block mt-1">51 99904.7299</span></p>
-                    <p class="text-muted mt-4"><span class="fw-bold">Email:</span><br> <span class="d-block mt-1">suporte@proconline.com.br</span></p>
-                    <p class="text-muted mt-4"><span class="fw-bold">Atendimento:</span><br> <span class="d-block mt-1">Seg. a Sex. - 9:00AM as 6:00PM</span></p>
-                </div>
-
-                <div class="col-md-7">
-                    @if(session('alert'))
-    <script>
-        Swal.fire({
-            icon: '{{ session("alert.type") }}',
-            title: '{{ session("alert.message") }}',
-            html: '<p>Entraremos em contato assim que possível.</p>',  // Subtítulo adicional
-            timer: {{ session("alert.autoClose") }},
-            showConfirmButton: true,  // Habilita o botão "OK"
-            confirmButtonText: 'OK',  // Texto do botão "OK"
-            timerProgressBar: true
-        });
-    </script>
-@endif
-
-                
-
-
-<form action="{{ route('contato.enviar') }}" method="POST">
-    @csrf
-    <div class="row mt-4">
-        <div class="col-lg-6">
-            <div class="mb-2">
-                <label for="fullname" class="form-label">Nome</label>
-                <input class="form-control form-control-light py-2" type="text" id="fullname" name="nome" placeholder="Seu nome...">
-            </div>
-        </div>
-        <div class="col-lg-6">
-            <div class="mb-2">
-                <label for="emailaddress" class="form-label">Email</label>
-                <input class="form-control form-control-light py-2" type="email" id="emailaddress" name="email" placeholder="Seu melhor email..." required>
-            </div>
-        </div>
+      </div>
     </div>
 
-    <div class="row mt-1">
-        <div class="col-lg-12">
-            <div class="mb-2">
-                <label for="comments" class="form-label">Mensagem</label>
-                <textarea id="comments" rows="4" class="form-control form-control-light" name="mensagem" placeholder="Deixe sua mensagem aqui..."></textarea>
-            </div>
-        </div>
+    <div class="container copyright text-center mt-4">
+      <p>© <span>Copyright</span> <strong class="px-1 sitename">Mentor</strong> <span>All Rights Reserved</span></p>
+      <div class="credits">
+        <!-- All the links in the footer should remain intact. -->
+        <!-- You can delete the links only if you've purchased the pro version. -->
+        <!-- Licensing information: https://bootstrapmade.com/license/ -->
+        <!-- Purchase the pro version with working PHP/AJAX contact form: [buy-url] -->
+        Designed by <a href="https://bootstrapmade.com/">BootstrapMade</a> Distributed by <a href=“https://themewagon.com>ThemeWagon
+      </div>
     </div>
 
-    <div class="row mt-2">
-        <div class="col-12 text-end">
-            <button type="submit" class="btn btn-primary">Enviar <i class="mdi mdi-telegram ms-1"></i></button>
-        </div>
-    </div>
-</form>
+  </footer>
 
-                    
-                </div>
-            </div>
-        </div>
-    </section>
-    <!-- END CONTACT -->
+  <!-- Scroll Top -->
+  <a href="#" id="scroll-top" class="scroll-top d-flex align-items-center justify-content-center"><i class="bi bi-arrow-up-short"></i></a>
 
-    <!-- START FOOTER -->
-    <footer class="bg-dark py-5">
-        <div class="container">
-            <div class="row">
-                <div class="col-lg-12">
-                    <img src="assets/images/logo.png" alt="logo" class="logo-dark" height="22" />
-                    <p class="text-light text-opacity-50 mt-4">Gestão Simplificada e Controle Total em um só lugar.
-                    </p>
+  <!-- Preloader -->
+  <div id="preloader"></div>
 
-                    <ul class="social-list list-inline mt-3">
-                        <li class="list-inline-item text-center">
-                            <a href="javascript: void(0);" class="social-list-item border-primary text-primary"><i class="mdi mdi-facebook"></i></a>
-                        </li>
-                        <li class="list-inline-item text-center">
-                            <a href="javascript: void(0);" class="social-list-item border-danger text-danger"><i class="mdi mdi-google"></i></a>
-                        </li>
-                        <li class="list-inline-item text-center">
-                            <a href="javascript: void(0);" class="social-list-item border-info text-info"><i class="mdi mdi-twitter"></i></a>
-                        </li>
-                        <li class="list-inline-item text-center">
-                            <a href="javascript: void(0);" class="social-list-item border-secondary text-secondary"><i class="mdi mdi-github"></i></a>
-                        </li>
-                    </ul>
+  <!-- Vendor JS Files -->
+  <script src="{{ url('site/vendor/bootstrap/js/bootstrap.bundle.min.js') }}"></script>
+  <script src="{{ url('site/vendor/php-email-form/validate.js') }}"></script>
+  <script src="{{ url('site/vendor/aos/aos.js') }}"></script>
+  <script src="{{ url('site/vendor/glightbox/js/glightbox.min.js') }}"></script>
+  <script src="{{ url('site/vendor/purecounter/purecounter_vanilla.js') }}"></script>
+  <script src="{{ url('site/vendor/swiper/swiper-bundle.min.js') }}"></script>
 
-                </div>
-
-                {{-- <div class="col-lg-2 col-md-4 mt-3 mt-lg-0">
-                    <h5 class="text-light">Company</h5>
-
-                    <ul class="list-unstyled ps-0 mb-0 mt-3">
-                        <li class="mt-2"><a href="javascript: void(0);" class="text-light text-opacity-50">About Us</a></li>
-                        <li class="mt-2"><a href="javascript: void(0);" class="text-light text-opacity-50">Documentation</a></li>
-                        <li class="mt-2"><a href="javascript: void(0);" class="text-light text-opacity-50">Blog</a></li>
-                        <li class="mt-2"><a href="javascript: void(0);" class="text-light text-opacity-50">Affiliate Program</a></li>
-                    </ul>
-
-                </div>
-
-                <div class="col-lg-2 col-md-4 mt-3 mt-lg-0">
-                    <h5 class="text-light">Apps</h5>
-
-                    <ul class="list-unstyled ps-0 mb-0 mt-3">
-                        <li class="mt-2"><a href="javascript: void(0);" class="text-light text-opacity-50">Ecommerce Pages</a></li>
-                        <li class="mt-2"><a href="javascript: void(0);" class="text-light text-opacity-50">Email</a></li>
-                        <li class="mt-2"><a href="javascript: void(0);" class="text-light text-opacity-50">Social Feed</a></li>
-                        <li class="mt-2"><a href="javascript: void(0);" class="text-light text-opacity-50">Projects</a></li>
-                        <li class="mt-2"><a href="javascript: void(0);" class="text-light text-opacity-50">Tasks Management</a></li>
-                    </ul>
-                </div>
-
-                <div class="col-lg-2 col-md-4 mt-3 mt-lg-0">
-                    <h5 class="text-light">Discover</h5>
-
-                    <ul class="list-unstyled ps-0 mb-0 mt-3">
-                        <li class="mt-2"><a href="javascript: void(0);" class="text-light text-opacity-50">Help Center</a></li>
-                        <li class="mt-2"><a href="javascript: void(0);" class="text-light text-opacity-50">Our Products</a></li>
-                        <li class="mt-2"><a href="javascript: void(0);" class="text-light text-opacity-50">Privacy</a></li>
-                    </ul>
-                </div>
-            </div> --}}
-
-            <div class="row">
-                <div class="col-lg-12">
-                    <div class="mt-5">
-                        <p class="text-light text-opacity-50 mt-4 text-center mb-0">©
-                            <script>document.write(new Date().getFullYear())</script> ProcOnline - Desenvolvidor por <a href="https://pixdesign.com.br">Pix Design</a>
-                        </p>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </footer>
-    <!-- END FOOTER -->
-    <!-- Vendor js -->
-    <script src="assets/js/vendor.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/sweetalert/2.1.0/sweetalert.min.js"></script>
-    <!-- App js -->
-    <script src="assets/js/app.min.js"></script>
+  <!-- Main JS File -->
+  <script src="{{ url('site/js/main.js') }}"></script>
 
 </body>
 

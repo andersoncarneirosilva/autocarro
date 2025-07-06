@@ -198,6 +198,7 @@ return [
         RealRashid\SweetAlert\SweetAlertServiceProvider::class,
         Barryvdh\DomPDF\ServiceProvider::class,
         //BeyondCode\LaravelWebSockets\WebSocketsServiceProvider::class,
+        
 
     ],
 

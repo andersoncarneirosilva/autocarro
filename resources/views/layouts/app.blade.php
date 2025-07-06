@@ -64,7 +64,102 @@
 <link href="{{ url('assets/vendor/jstree/themes/default/style.min.css') }}" rel="stylesheet" type="text/css">
 {{-- DESENVOLVIMENTO --}}
 {{-- @vite(['resources/css/app.css', 'resources/js/app.js']) --}}
+<style>
+    .avatar-stack {
+    display: flex;
+    position: relative;
+}
 
+.avatar-stack .avatar-img {
+    width: 40px;
+    height: 40px;
+    object-fit: cover;
+    border-radius: 50%;
+    border: 2px solid #fff;
+    box-shadow: 0 0 0 1px #ccc;
+    margin-left: -16px;
+    z-index: 1;
+    transition: all 0.2s ease-in-out;
+}
+
+.avatar-stack .avatar-img:first-child {
+    margin-left: 0;
+    z-index: 3;
+}
+.avatar-stack .avatar-img:nth-child(2) {
+    z-index: 2;
+}
+.avatar-stack .avatar-img:nth-child(3) {
+    z-index: 1;
+}
+
+
+
+
+.upload-container {
+  background-color: rgb(239, 239, 239);
+  border-radius: 6px;
+  padding: 10px;
+}
+
+.border-container {
+  border: 5px dashed rgba(198, 198, 198, 0.65);
+/*   border-radius: 4px; */
+  padding: 20px;
+}
+
+.border-container p {
+  color: #130f40;
+  font-weight: 600;
+  font-size: 1.1em;
+  letter-spacing: -1px;
+  margin-top: 30px;
+  margin-bottom: 0;
+  opacity: 0.65;
+}
+
+#file-browser {
+  text-decoration: none;
+  color: rgb(22,42,255);
+  border-bottom: 3px dotted rgba(22, 22, 255, 0.85);
+}
+
+#file-browser:hover {
+  color: rgb(0, 0, 255);
+  border-bottom: 3px dotted rgba(0, 0, 255, 0.85);
+}
+
+.icons {
+  color: #95afc0;
+  opacity: 0.55;
+}
+#previewContainer img {
+    width: 100px;
+    height: 100px;
+    object-fit: cover;
+    border-radius: 6px;
+    border: 1px solid #ccc;
+  }
+
+  .btn-remove-image {
+  position: absolute;
+  top: -6px;
+  right: -6px;
+  background-color: #dc3545;
+  color: white;
+  border: none;
+  border-radius: 50%;
+  font-weight: bold;
+  width: 20px;
+  height: 20px;
+  cursor: pointer;
+  font-size: 14px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
+}
+</style>
 {{-- PRODUCAO --}}
                                     
 

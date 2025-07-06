@@ -25,6 +25,10 @@ use App\Http\Controllers\UserController;
 use App\Http\Controllers\VeiculoController;
 use App\Http\Controllers\ChatController;
 use App\Http\Controllers\ItemController;
+use App\Http\Controllers\AnuncioController;
+use App\Http\Controllers\SiteController;
+use App\Http\Controllers\FornecedorController;
+
 use Illuminate\Support\Facades\Route;
 use Livewire\Livewire;
 use App\Http\Livewire\Chat;
@@ -107,7 +111,6 @@ Route::post('/chat/mark-as-read', [ChatController::class, 'markAsRead']);
     Route::post('/notifications/mark-as-read', [NotificationController::class, 'markAsRead'])->middleware('auth');
 
     Route::get('/notifications', [NotificationController::class, 'getNotifications'])->middleware('auth');
-
     // USUARIOS
     /* Route::delete('/users', [UserController::class, 'deleteAll'])->name('users.delete'); */
     Route::delete('/users/{id}', [UserController::class, 'destroy'])->name('users.destroy');
@@ -117,6 +120,22 @@ Route::post('/chat/mark-as-read', [ChatController::class, 'markAsRead']);
     Route::get('/users/create', [UserController::class, 'create'])->name('users.create');
     Route::post('/users', [UserController::class, 'store'])->name('users.store');
     Route::get('/users/{id}', [UserController::class, 'show'])->name('users.show');
+
+
+    Route::post('/upload/temp', [AnuncioController::class, 'temp'])->name('upload.temp');
+
+
+    Route::put('/anuncios/desarquivar/{id}', [AnuncioController::class, 'desarquivar'])->name('anuncios.desarquivar');
+    Route::put('/anuncios/arquivar/{id}', [AnuncioController::class, 'arquivar'])->name('anuncios.arquivar');
+
+    Route::delete('/anuncios/{id}', [AnuncioController::class, 'destroy'])->name('anuncios.destroy');
+    Route::put('/anuncios/{id}', [AnuncioController::class, 'update'])->name('anuncios.update');
+    Route::get('/anuncios/{id}/edit', [AnuncioController::class, 'edit'])->name('anuncios.edit');
+    Route::get('/anuncios', [AnuncioController::class, 'index'])->name('anuncios.index');
+    Route::get('/anuncios/create', [AnuncioController::class, 'create'])->name('anuncios.create');
+    Route::post('/anuncios', [AnuncioController::class, 'store'])->name('anuncios.store');
+    Route::get('/anuncios/{id}', [AnuncioController::class, 'show'])->name('anuncios.show');
+
 
     // DASHBOARD
     Route::get('/dashboard', [DashController::class, 'index'])->name('dashboard.index');
@@ -236,6 +255,11 @@ Route::post('/chat/mark-as-read', [ChatController::class, 'markAsRead']);
 
     // Route::post('/estoque', [EstoqueController::class, 'store'])->name('estoque.store');
     // Route::get('/estoque', [EstoqueController::class, 'index'])->name('estoque.index');
+Route::get('/consulta-cnpj/{cnpj}', [FornecedorController::class, 'consultarCnpj']);
+
+    Route::get('/fornecedores/create', [FornecedorController::class, 'create'])->name('fornecedores.create');
+Route::post('/fornecedores', [FornecedorController::class, 'store'])->name('fornecedores.store');
+Route::get('/fornecedores', [FornecedorController::class, 'index'])->name('fornecedores.index');
 
     Route::delete('/veiculos/enviar_email/{id}', [VeiculoController::class, 'enviarEmail'])->name('veiculos.enviar_email');
 
@@ -280,7 +304,10 @@ Route::post('/reset-password', [PasswordResetController::class, 'reset'])->name(
 
 Route::post('/enviar-contato', [ContatoController::class, 'enviarEmail'])->name('contato.enviar');
 
-Route::get('/', function () {
-    return view('site.index');
-});
+Route::get('/', [SiteController::class, 'index'])->name('site.index');
+
+// Route::get('/', function () {
+//     return view('site.index');
+// });
+
 require __DIR__.'/auth.php';

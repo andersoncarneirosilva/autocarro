@@ -28,7 +28,7 @@
                     <div class="card">
 
                         <!-- Logo -->
-                        <div class="card-header py-4 text-center bg-primary">
+                        <div class="card-header py-4 text-center bg-vinho">
                             <a href="{{ url('/') }}">
                                 <span><img src="{{ url('assets/images/logo.png') }}?v={{ time() }}" alt="logo" height="22"></span>
                             </a>

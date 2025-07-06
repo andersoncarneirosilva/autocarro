@@ -85,20 +85,13 @@
             <div class="row">
                 <div class="col-sm-12">
                     <div class="card-header d-flex justify-content-between align-items-center">
-                        <h4 class="header-title">Veículos cadastrados</h4>
+                        <h4 class="header-title">Veículos disponíveis</h4>
                         <div class="dropdown">
-                            @php
-                                $isPremium = auth()->user()->plano == 'Premium';
-                                $isBasicOrIntermediate = in_array(auth()->user()->plano, ['Padrão', 'Pro', 'Teste']);
-
-                                $isButtonDisabled = !$isPremium && (auth()->user()->credito < 1 || $percentUsed > 100);
-                            @endphp
 
 
                             <div class="dropdown btn-group">
                                 <button class="btn btn-primary btn-sm dropdown-toggle" type="button"
-                                    data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false"
-                                    @if ($isButtonDisabled) disabled @endif>
+                                    data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                     Cadastrar
                                 </button>
                                 <div class="dropdown-menu dropdown-menu-animated dropdown-menu-end">
@@ -122,9 +115,10 @@
                                         <th>Placa</th>
                                         <th>Veículo</th>
                                         <th>Ano/Modelo</th>
+                                        <th>KM</th>
+                                        <th>Valor</th>
+                                        <th>Oferta</th>
                                         <th>DOC</th>
-                                        <th>Proc. Assinada</th>
-                                        <th>ATPVe Assinada</th>
                                         <th>Ações</th>
                                     </tr>
                                 </thead>
@@ -132,19 +126,25 @@
                                 <tbody>
                                     @foreach ($veiculos as $doc)
                                         <tr>
-                                            <td><a href="{{ route('veiculos.show', $doc->id) }}" title="Visualizar"
-                                                    style="text-decoration: none;" class="">
-                                                    {{-- <i class="mdi mdi-eye fs-5"></i> --}}
-                                                    <img class="rounded-circle border" 
-                                                        src="{{ url("$doc->image") }}" 
-                                                        alt="Veículo" 
-                                                        width="31"
-                                                        onerror="this.onerror=null;this.src='{{ url('images/veiculos/default.jpg') }}';">
-                                                </a>
+                                            <td class="d-flex align-items-center">
+                                                <div class="avatar-stack">
+                                                    @if($doc->images)
+                                                        @foreach(json_decode($doc->images) as $key => $image)
+                                                            @if($key < 3) <!-- Limite de 3 avatares -->
+                                                               <img src="{{ url("storage/{$image}") }}" class="rounded-circle avatar-img" />
+                                                            @endif
+                                                        @endforeach
+                                                    @else
+                                                        <img src="{{ url('assets/img/icon_user.png') }}" class="rounded-circle avatar-img" />
+                                                    @endif
+                                                </div>
                                             </td>
                                             <td>{{ $doc->placa }}</td>
                                             <td>{{ $doc->marca }}</td>
                                             <td>{{ $doc->ano }}</td>
+                                            <td>{{ $doc->kilometragem }}</td>
+                                            <td>{{ $doc->valor }}</td>
+                                            <td>{{ $doc->valor_oferta }}</td>
                                             <td>
                                                 @if ($doc->crv === '***')
                                                     <span class="badge badge-outline-danger">FÍSICO</span>
@@ -153,26 +153,11 @@
                                                     <span class="badge badge-outline-success">DIGITAL</span>
                                                 @endif
                                             </td>
-                                            <td>
-                                                @if (!empty($doc->arquivo_proc_assinado))
-                                                    <a href="{{ $doc->arquivo_proc_assinado }}" target="_blank">PROC</a>
-                                                @else
-                                                    <!-- Mostre uma mensagem ou deixe em branco -->
-                                                    <span>Não consta</span>
-                                                @endif
-                                            </td>
-                                            <td>
-                                                @if (!empty($doc->arquivo_atpve_assinado))
-                                                    <a href="{{ $doc->arquivo_atpve_assinado }}" target="_blank">ATPVe</a>
-                                                @else
-                                                    <!-- Mostre uma mensagem ou deixe em branco -->
-                                                    <span>Não consta</span>
-                                                @endif
-                                            </td>
+                                            
 
                                             <td class="table-action">
                                                 <div class="dropdown btn-group">
-                                                    <button class="btn btn-info btn-sm dropdown-toggle" type="button"
+                                                    <button class="btn btn-primary btn-sm dropdown-toggle" type="button"
                                                         data-bs-toggle="dropdown" aria-haspopup="true"
                                                         aria-expanded="false">
                                                         Ações
@@ -182,7 +167,7 @@
                                                         <a href="{{ route('veiculos.show', $doc->id) }}"
                                                             class="dropdown-item">Ver/Editar</a>
 
-                                                        <a href="{{ $doc->arquivo_proc }}" class="dropdown-item"
+                                                        {{-- <a href="{{ $doc->arquivo_proc }}" class="dropdown-item"
                                                             target="_blank">
                                                             Baixar Procuração
                                                         </a>
@@ -201,7 +186,7 @@
                                                             class="dropdown-item {{ $doc->crv === '***' ? 'disabled' : '' }}"
                                                             onclick="{{ $doc->crv === '***' ? 'return false;' : "openAddressModal(event, $doc->id)" }}">
                                                             Gerar Solicitação ATPVe
-                                                        </a>
+                                                        </a> --}}
 
                                                         <!-- Formulário Oculto para Arquivar -->
                                                         <form action="{{ route('veiculos.arquivar', $doc->id) }}"
@@ -268,8 +253,6 @@
                 </div>
 
                 <br><br>
-
-
 
             </div><br>
             @if ($veiculos->total() != 0)
@@ -490,7 +473,7 @@
 
                 // Atualiza a ação do formulário para incluir o ID do documento na rota
                 const form = document.getElementById('addressForm');
-                form.action = `{{ secure_url('veiculos/store-atpve') }}/${docId}`; //secure_url
+                form.action = `{{ app()->isLocal() ? url('veiculos/store-atpve') : secure_url('veiculos/store-atpve') }}/${docId}`;
 
                 // Envia o formulário
                 form.submit();

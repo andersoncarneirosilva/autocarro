@@ -42,25 +42,7 @@
 
 @include('dashboard.widgets.widgets')
 @include('dashboard.widgets.content')
-{{-- @can('access-despachante')
 
-@endcan --}}
-
-{{-- <div class="mt-5">
-  <h4><span class="badge rounded-pill p-1 px-2 badge-secondary-lighten">PLANO FREE</span></h4>
-  <h6 class="text-uppercase mt-3">Espaço</h6>
-  <div class="progress mb-3">
-      <div class="progress-bar" 
-           role="progressbar" 
-           style="width: {{ $percentUsed }}%" 
-           aria-valuenow="{{ $percentUsed }}" 
-           aria-valuemin="0" 
-           aria-valuemax="100">{{ number_format($percentUsed, 2) }}%</div>
-  </div>
-  <p class="text-muted font-12 mb-0">
-      {{ number_format($usedSpaceInMB, 2) }} MB ({{ number_format($percentUsed, 2) }}%) of {{ $limitInMB }} MB used
-  </p>
-</div> --}}
 <script>
 
 function openInfoModal(event) {
