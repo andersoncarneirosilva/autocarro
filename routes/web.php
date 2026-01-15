@@ -28,6 +28,7 @@ use App\Http\Controllers\ItemController;
 use App\Http\Controllers\AnuncioController;
 use App\Http\Controllers\SiteController;
 use App\Http\Controllers\DocumentoController;
+use App\Http\Controllers\PixController;
 
 use Illuminate\Support\Facades\Route;
 use Livewire\Livewire;
@@ -359,7 +360,7 @@ Route::get('/veiculos-semi-novos/pesquisa', [SiteController::class, 'searchVeicu
 Route::get('/veiculos-usados', [SiteController::class, 'indexVeiculosUsados'])->name('veiculos.usados');
 Route::get('/veiculos-usados/pesquisa', [SiteController::class, 'searchVeiculosUsados'])->name('veiculos.usados.search');
 
-Route::get('/', [SiteController::class, 'index'])->name('site.index');
+Route::get('/', [PixController::class, 'index'])->name('site.index');
 
 // Route::get('/', function () {
 //     return view('site.index');
