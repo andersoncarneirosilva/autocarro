@@ -102,6 +102,7 @@
                 <li class="nav-item"><a class="nav-link scroll-link" href="#processos">Processos</a></li>
                 <li class="nav-item"><a class="nav-link scroll-link" href="#servicos">Serviços</a></li>
                 <li class="nav-item"><a class="nav-link scroll-link" href="#contact">Contato</a></li>
+                <li class="nav-item"><a class="nav-link scroll-link" href="{{ route('login') }}">Area restita</a></li>
               </ul>
               
             </div>
