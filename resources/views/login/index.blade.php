@@ -18,6 +18,16 @@
 
     <!-- Icons css -->
     <link href="{{ url('assets/css/icons.css') }}" rel="stylesheet" type="text/css" />
+    <style>
+        .sitename {
+  font-weight: 700;
+  font-size: 30px;
+  margin: 0;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  color: #730000;
+}
+    </style>
 </head>
 
 <body class="authentication-bg position-relative">
@@ -28,17 +38,18 @@
                     <div class="card">
 
                         <!-- Logo -->
-                        <div class="card-header py-4 text-center bg-vinho">
+                        {{-- <div class="card-header py-4 text-center bg-vinho">
                             <a href="{{ url('/') }}">
-                                <span><img src="{{ url('assets/images/logo.png') }}?v={{ time() }}" alt="logo" height="22"></span>
+                                
                             </a>
-                        </div>
+                        </div> --}}
 
                         <div class="card-body p-4">
 
                             <div class="text-center w-75 m-auto">
-                                <h4 class="text-dark-50 text-center pb-0 fw-bold">Acesso</h4>
-                                <p class="text-muted mb-4">Painel de administração</p>
+                                <h1 class="sitename">Autocar</h1>
+                                <h4 class="text-dark-50 text-center pb-0 fw-bold"></h4>
+                                <p class="text-muted mb-4">Painel administrativo</p>
                             </div>
 
                             <x-auth-session-status class="mb-4" :status="session('status')" />

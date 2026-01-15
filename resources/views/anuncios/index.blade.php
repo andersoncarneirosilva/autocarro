@@ -4,15 +4,30 @@
 
 @section('content')
 
-@if (session('success'))
-<script>
-    toastr.success("{{ session('success') }}");
-</script>
-@endif
+@include('anuncios._partials.cadastro-rapido')
 
-@if (session('error'))
+{{-- Toasts de sessão --}}
+@if (session('success') || session('error'))
 <script>
-    toastr.error("{{ session('error') }}");
+document.addEventListener('DOMContentLoaded', function () {
+    const Toast = Swal.mixin({
+        toast: true,
+        position: 'top-end',
+        showConfirmButton: false,
+        timer: 4000,
+        timerProgressBar: true,
+        background: '#fff',
+        color: '#313a46',
+    });
+
+    @if (session('success'))
+        Toast.fire({ icon: 'success', title: '{{ session('success') }}' });
+    @endif
+
+    @if (session('error'))
+        Toast.fire({ icon: 'error', title: '{{ session('error') }}' });
+    @endif
+});
 </script>
 @endif
 
@@ -37,61 +52,98 @@
             <div class="col-sm-12">
                 <div class="card-header d-flex justify-content-between align-items-center">
                     <h4 class="header-title">Anúncios cadastrados</h4>
-                    <div class="dropdown">
-                        @can('access-admin') 
-                    <a href="{{ route('anuncios.create')}}" class="btn btn-primary btn-sm">Cadastrar</a>
-                    @endcan
-                        {{-- <button class="btn btn-secondary btn-sm" id="deleteAllSelectedRecord" disabled><i
-                                class="fa-solid fa-trash"></i></button> --}}
-                    </div>
+                    <div class="dropdown btn-group">
+                                <button class="btn btn-primary btn-sm dropdown-toggle" type="button"
+                                    data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                    Cadastrar
+                                </button>
+                                <div class="dropdown-menu dropdown-menu-animated dropdown-menu-end">
+                                    <a href="#" data-bs-toggle="modal" data-bs-target="#cadastro-rapido"
+                                        class="dropdown-item">
+                                        Cadastro rápido
+                                    </a>
+                                    <a href="{{ route('veiculos.create-proc-manual') }}" class="dropdown-item">
+                                        Cadastro manual
+                                    </a>
+                                </div>
+                            </div>
                 </div>
+                
                 @if ($veiculos->total() != 0)
                 <div class="table-responsive-sm">
-                    <table class="table table-hover table-centered mb-0">
+                    <table class="table table-hover table-centered mb-0 table-rounded">
                         <thead class="table-dark">
                             <tr>
-                                <th>Foto</th>
-                                <th>Marca</th>
-                                <th>Modelo</th>
+                                <th>Placa</th>
+                                <th>Marca/Modelo</th>
                                 <th>Ano/Modelo</th>
+                                <th>Cor</th>
                                 <th>KM</th>
                                 <th>Câmbio</th>
                                 <th>Portas</th>
-                                <th>Cadastrado em</th>
                                 <th>Ações</th>
                             </tr>
                         </thead>
                         <tbody id="table-body">
                             @foreach ($veiculos as $veiculo)
-                            <tr data-user-id="{{ $veiculo->id }}">
-                                
-                                {{-- <td>{{ $veiculo->id }}</td> --}}
-                                <td class="d-flex align-items-center">
-                                <div class="avatar-stack">
-                                    @if($veiculo->images)
-                                        @foreach(json_decode($veiculo->images) as $key => $image)
-                                            @if($key < 3) <!-- Limite de 3 avatares -->
-                                                <img src="{{ url("storage/{$image}") }}" class="rounded-circle avatar-img" />
-                                            @endif
-                                        @endforeach
+                            <tr>
+                               <td class="d-flex align-items-center">
+                                @php
+                                    // Decodifica o JSON de imagens e pega a primeira
+                                    $imagens = json_decode($veiculo->images);
+                                    $primeiraImagem = !empty($imagens) ? $imagens[0] : null;
+                                    
+                                    // Pega a primeira letra da placa para o avatar reserva
+                                    $inicialPlaca = substr($veiculo->placa, 0, 1);
+                                @endphp
+
+                                <div class="me-3">
+                                    @if($primeiraImagem)
+                                    <a href="{{ route('anuncios.show', $veiculo->id) }}" class="dropdown-item">
+                                        <img src="{{ asset('storage/' . $primeiraImagem) }}" 
+                                            alt="Veículo" 
+                                            class="rounded-circle" 
+                                            style="width: 40px; height: 40px; object-fit: cover; border: 1px solid #dee2e6;">
+                                    </a>
                                     @else
-                                        <img src="{{ url('assets/img/icon_user.png') }}" class="rounded-circle avatar-img" />
+                                    <a href="{{ route('anuncios.show', $veiculo->id) }}" class="dropdown-item">
+                                        <div class="rounded-circle d-flex align-items-center justify-content-center bg-primary text-white" 
+                                            style="width: 40px; height: 40px; font-weight: bold; font-size: 1.2rem; text-transform: uppercase;">
+                                            {{ $inicialPlaca }}
+                                        </div>
+                                    </a>
                                     @endif
                                 </div>
-                            </td>
-                                <td>{{ $veiculo->marca }}</td>
-                                <td>{{ $veiculo->modelo }}</td>
-                                <td>{{ $veiculo->ano }}</td>
-                                <td>{{ $veiculo->kilometragem }}</td>
-                                <td>{{ $veiculo->cambio }}</td>
-                                <td>{{ $veiculo->portas }}</td>
-                                <td>{{ \Carbon\Carbon::parse($veiculo->created_at)->format('d/m/Y') }}</td>
+
+                                <div>
+                                    <span class="fw-bold d-block">{{ $veiculo->placa }}</span>
+                                    <small class="text-muted">{{ $veiculo->tipo }}</small>
+                                </div>
+                            </td>  
+                            <td>{{ $veiculo->marca_real }}/{{ $veiculo->modelo_real }}</td>
+                            <td>{{ $veiculo->ano }}</td>
+                            <td>{{ $veiculo->cor }}</td>
+                            <td>{{ $veiculo->kilometragem ?? 'Não consta' }}</td>
+                            <td>{{ $veiculo->cambio ?? 'Não consta' }}</td>
+                            <td>
+    @if($veiculo->status_anuncio == 'Publicado')
+        <span class="badge bg-success"><i class="bi bi-check-circle me-1"></i> Publicado</span>
+    @elseif($veiculo->status_anuncio == 'Aguardando' || $veiculo->status_anuncio == 'Espera')
+        <span class="badge bg-warning text-dark"><i class="bi bi-clock me-1"></i> Em Espera</span>
+    @elseif($veiculo->status_anuncio == 'Vendido')
+        <span class="badge bg-info text-white"><i class="bi bi-cart-check me-1"></i> Vendido</span>
+    @elseif($veiculo->status_anuncio == 'Inativo')
+        <span class="badge bg-danger"><i class="bi bi-x-octagon me-1"></i> Inativo</span>
+    @else
+        <span class="badge bg-secondary">{{ $veiculo->status_anuncio ?? 'Não consta' }}</span>
+    @endif
+</td>
 
 
-                                <td class="table-action">
+                                <td class="table-action position-relative">
                                                 <div class="dropdown btn-group">
                                                     <button class="btn btn-info btn-sm dropdown-toggle" type="button"
-                                                        data-bs-toggle="dropdown" aria-haspopup="true"
+                                                        data-bs-toggle="dropdown" aria-haspopup="true" data-bs-boundary="viewport"
                                                         aria-expanded="false">
                                                         Ações
                                                     </button>

@@ -25,47 +25,8 @@ class PerfilController extends Controller
         $userId = Auth::id();
         $user = User::find($userId);
 
-        $assinatura = $user->assinaturas()->latest()->first();
-
-        if ($user->plano == 'Padrão' || $user->plano == 'Pro') {
-            if (! $assinatura || now()->gt($assinatura->data_fim) || $assinatura->status == 'pending') {
-                return redirect()->route('assinatura.expirada')->with('error', 'Sua assinatura expirou.');
-            }
-        }
-        // dd($user);
-        // Caminho para a pasta de documentos
-        $path = storage_path("app/public/documentos/usuario_{$userId}");
-
-        // Função para calcular o tamanho total da pasta
-        function getFolderSize($folder)
-        {
-            $size = 0;
-            foreach (glob(rtrim($folder, '/').'/*', GLOB_NOSORT) as $file) {
-                $size += is_file($file) ? filesize($file) : getFolderSize($file);
-            }
-
-            return $size;
-        }
-
-        // Calcular o tamanho usado na pasta
-        $usedSpaceInBytes = getFolderSize($path);
-        $usedSpaceInMB = $usedSpaceInBytes / (1024 * 1024); // Converter para MB
-        //dd($usedSpaceInMB);
-        $limitInMB = $user->size_folder; // Limite de MB do usuario
-        //dd($limitInMB);
-        $percentUsed = ($usedSpaceInMB / $limitInMB) * 100; // Percentual usado
-
-
-
-        // Função para listar arquivos e pastas
-        $basePath = storage_path("app/public/documentos/usuario_{$userId}"); // Caminho do usuário
-
-
-        // Obtém as pastas e arquivos do usuário
-        $folders = $this->getFilesAndFolders($basePath, '', $userId);
-        //dd($folders);
-        // Passar as informações para a view
-        return view('perfil.index', compact(['usedSpaceInMB', 'percentUsed', 'limitInMB', 'user', 'folders']));
+        
+        return view('perfil.index', compact(['user']));
 
     }
 

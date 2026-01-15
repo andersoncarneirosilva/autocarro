@@ -1,15 +1,3 @@
-/**
-* Template Name: Mentor
-* Template URL: https://bootstrapmade.com/mentor-free-education-bootstrap-theme/
-* Updated: Aug 07 2024 with Bootstrap v5.3.3
-* Author: BootstrapMade.com
-* License: https://bootstrapmade.com/license/
-*/
-
-/*--------------------------------------------------------------
-# Font & Color Variables
-# Help: https://bootstrapmade.com/color-system/
---------------------------------------------------------------*/
 /* Fonts */
 :root {
   --default-font: "Open Sans",  system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", "Liberation Sans", sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
@@ -40,6 +28,20 @@ color: #730000;
   --nav-dropdown-hover-color: #730000; /* Similar to --nav-hover-color, this color is applied to dropdown navigation links when they are hovered over. */
 }
 
+.btn-accent {
+    background-color: var(--accent-color);
+    color: #fff;
+    letter-spacing: 1px;
+    font-size: 0.9rem;
+    text-transform: uppercase;
+    border: 0;
+}
+
+.btn-accent:hover,
+.btn-accent:focus {
+    background-color: #5c0000; /* tom mais escuro */
+    color: #fff;
+}
 /* Color Presets - These classes override global colors when applied to any section or element, providing reuse of the sam color scheme. */
 
 .light-background {
@@ -53,6 +55,10 @@ color: #730000;
   --heading-color: #ffffff;
   --surface-color: #252525;
   --contrast-color: #ffffff;
+}
+
+.text-red {
+  color: var(--accent-color);
 }
 
 /* Smooth scroll */

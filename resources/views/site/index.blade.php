@@ -1,97 +1,23 @@
-<!DOCTYPE html>
-<html lang="en">
+@extends('site.layout.app')
 
-<head>
-  <meta charset="utf-8">
-  <meta content="width=device-width, initial-scale=1.0" name="viewport">
-  <title>Autocar</title>
-  <meta name="description" content="">
-  <meta name="keywords" content="">
+@section('title', 'Veículos')
 
-  <!-- Favicons -->
-  <link href="{{ url('img/favicon.png') }}" rel="icon">
-  <link href="{{ url('img/apple-touch-icon.png') }}" rel="apple-touch-icon">
-<script src="https://kit.fontawesome.com/6c4df5f46b.js" crossorigin="anonymous"></script>
-  <!-- Fonts -->
-  <link href="https://fonts.googleapis.com" rel="preconnect">
-  <link href="https://fonts.gstatic.com" rel="preconnect" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Open+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;1,300;1,400;1,500;1,600;1,700;1,800&family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&family=Raleway:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap" rel="stylesheet">
+@section('content')
 
-  <!-- Vendor CSS Files -->
-  <link href="{{ url('site/vendor/bootstrap/css/bootstrap.min.css') }}" rel="stylesheet">
-  <link href="{{ url('site/vendor/bootstrap-icons/bootstrap-icons.css') }}" rel="stylesheet">
-  <link href="{{ url('site/vendor/aos/aos.css') }}" rel="stylesheet">
-  <link href="{{ url('site/vendor/glightbox/css/glightbox.min.css') }}" rel="stylesheet">
-  <link href="{{ url('site/vendor/swiper/swiper-bundle.min.css') }}" rel="stylesheet">
-
-  <!-- Main CSS File -->
-  <link href="{{ url('site/css/main.css') }}" rel="stylesheet">
-
-</head>
-
-<body class="index-page">
-
-  <header id="header" class="header d-flex align-items-center sticky-top">
-    <div class="container-fluid container-xl position-relative d-flex align-items-center">
-
-      <a href="index.html" class="logo d-flex align-items-center me-auto">
-        <!-- Uncomment the line below if you also wish to use an image logo -->
-        <!-- <img src="img/logo.png" alt=""> -->
-        <h1 class="sitename">Autocar</h1>
-      </a>
-
-      <nav id="navmenu" class="navmenu">
-        <ul>
-          <li><a href="index.html" class="active">Home<br></a></li>
-          <li><a href="about.html">Ofertas</a></li>
-          <li><a href="about.html">Novos</a></li>
-          <li><a href="courses.html">Semi-novos</a></li>
-          <li><a href="trainers.html">Usados</a></li>
-          <li class="dropdown"><a href="#"><span>Especiais</span> <i class="bi bi-chevron-down toggle-dropdown"></i></a>
-            <ul>
-              <li><a href="#">Clássicos</a></li>
-              <li><a href="#">Esportivos</a></li>
-              <li><a href="#">Modificados</a></li>
-              {{-- <li><a href="#">Dropdown 1</a></li>
-              <li class="dropdown"><a href="#"><span>Deep Dropdown</span> <i class="bi bi-chevron-down toggle-dropdown"></i></a>
-                <ul>
-                  <li><a href="#">Deep Dropdown 1</a></li>
-                  <li><a href="#">Deep Dropdown 2</a></li>
-                  <li><a href="#">Deep Dropdown 3</a></li>
-                  <li><a href="#">Deep Dropdown 4</a></li>
-                  <li><a href="#">Deep Dropdown 5</a></li>
-                </ul>
-              </li> --}}
-              
-            </ul>
-          </li>
-          <li><a href="contact.html">Contato</a></li>
-        </ul>
-        <i class="mobile-nav-toggle d-xl-none bi bi-list"></i>
-      </nav>
-
-      <a class="btn-getstarted" href="{{ route('login') }}">ACESSAR</a>
-
-    </div>
-  </header>
-
-  <main class="main">
-
-    <!-- Hero Section -->
     <section id="hero" class="hero section dark-background">
 
       <img src="site/img/background-autocar.jpg" alt="" data-aos="fade-in">
 
       <div class="container">
-    <h2 data-aos="fade-up" data-aos-delay="100">Encontre o carro ideal,<br>dirija seu futuro</h2>
-    <p data-aos="fade-up" data-aos-delay="200">Somos especialistas em veículos seminovos e zero km com qualidade, <br>confiança e os melhores preços do mercado.</p>
-    <div class="d-flex mt-4" data-aos="fade-up" data-aos-delay="300">
-        <a href="/estoque" class="btn-get-started">Ver Estoque</a>
+        <h2 data-aos="fade-up" data-aos-delay="100">Encontre o carro ideal,<br>dirija seu futuro</h2>
+        <p data-aos="fade-up" data-aos-delay="200">Somos especialistas em veículos seminovos e zero km com qualidade, <br>confiança e os melhores preços do mercado.</p>
+        <div class="d-flex mt-4" data-aos="fade-up" data-aos-delay="300">
+            <a href="/estoque" class="btn-get-started">Ver Estoque</a>
+        </div>
     </div>
-</div>
 
 
-    </section><!-- /Hero Section -->
+    </section>
 
 
     <section id="why-us" class="section why-us">
@@ -231,80 +157,122 @@
 
     </section><!-- /Features Section -->
 
-    <!-- Courses Section -->
+    <style>
+      /* CARD */
+.course-item {
+    background: #fff;
+    border-radius: 6px;
+    overflow: hidden;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+}
+
+/* CONTAINER FIXO DA IMAGEM */
+.course-image {
+    position: relative;
+    width: 100%;
+    height: 230px; /* 🔥 ALTURA ÚNICA PARA TODOS */
+    overflow: hidden;
+}
+
+/* CAROUSEL OCUPA TUDO */
+.course-image .carousel,
+.course-image .carousel-inner,
+.course-image .carousel-item {
+    height: 100%;
+}
+
+/* IMAGEM */
+.course-image img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover; /* 🔥 ESSENCIAL */
+}
+
+/* CONTEÚDO DO CARD */
+.course-content {
+    padding: 15px;
+    display: flex;
+    flex-direction: column;
+    flex-grow: 1;
+}
+
+    </style>
     <section id="courses" class="courses section">
 
-      <!-- Section Title -->
       <div class="container section-title" data-aos="fade-up">
         <h2>OFERTAS</h2>
         <p>Mais vendidos</p>
-      </div><!-- End Section Title -->
+      </div>
 
       <div class="container">
 
         <div class="row">
 
           @foreach ($veiculos as $veiculo)
-          <div class="col-lg-4 col-md-6 d-flex align-items-stretch" data-aos="zoom-in" data-aos-delay="100">
-  <div class="course-item">
-    @php
-      $imagens = json_decode($veiculo->images, true) ?? [];
-    @endphp
+<div class="col-lg-4 col-md-6 mb-4 d-flex" data-aos="zoom-in" data-aos-delay="100">
+    <div class="course-item w-100">
 
-    @if (count($imagens) > 1)
-      <div id="carousel{{ $veiculo->id }}" class="carousel slide" >
-        
-        <!-- Indicadores -->
-        <div class="carousel-indicators">
-          @foreach ($imagens as $index => $img)
-            <button type="button" data-bs-target="#carousel{{ $veiculo->id }}" data-bs-slide-to="{{ $index }}"
-              class="{{ $index === 0 ? 'active' : '' }}" aria-current="{{ $index === 0 ? 'true' : 'false' }}"
-              aria-label="Slide {{ $index + 1 }}"></button>
-          @endforeach
-        </div>
+        @php
+            $imagens = json_decode($veiculo->images, true) ?? [];
+        @endphp
 
-        <!-- Slides -->
-        <div class="carousel-inner">
-          @foreach ($imagens as $index => $img)
-            <div class="carousel-item {{ $index === 0 ? 'active' : '' }}">
-              <img src="{{ asset('storage/' . $img) }}" class="d-block w-100 img-fluid" alt="Imagem do veículo {{ $index + 1 }}">
-            </div>
-          @endforeach
-        </div>
-
-        <!-- Controles -->
-        <button class="carousel-control-prev" type="button" data-bs-target="#carousel{{ $veiculo->id }}" data-bs-slide="prev">
-          <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-          <span class="visually-hidden">Anterior</span>
-        </button>
-        <button class="carousel-control-next" type="button" data-bs-target="#carousel{{ $veiculo->id }}" data-bs-slide="next">
-          <span class="carousel-control-next-icon" aria-hidden="true"></span>
-          <span class="visually-hidden">Próxima</span>
-        </button>
-      </div>
-    @else
-      <img src="{{ count($imagens) ? asset('storage/' . $imagens[0]) : url('assets/img/default-car.png') }}" class="img-fluid" alt="Imagem do veículo">
-    @endif
-
-    <div class="course-content">
-      <div class="d-flex justify-content-between align-items-center mb-3">
-        <p class="category">{{ explode(' ', $veiculo->marca)[0] }}</p>
-        <p class="price">R${{ $veiculo->valor }}</p>
-      </div>
-      <h3>{{ $veiculo->marca }}</h3>
-      <p class="description">{{ $veiculo->kilometragem }}km | ANO: {{ $veiculo->ano }} | {{ $veiculo->cambio }}</p>
-      <div class="trainer d-flex align-items-center justify-content-between">
-        <p class="pchama mb-0 badge border border-success text-success bg-transparent">+ DETALHES</p>
-        <div class="text-end">
-          <p class="text-muted mb-0" style="text-decoration: line-through; font-size: 14px;">R$ {{ $veiculo->valor }}</p>
-          <div class="ptext fw-bold" style="font-size: 20px;">R$ {{ $veiculo->valor_oferta }}</div>
-        </div>
-      </div>
-    </div>
-  </div>
+        {{-- IMAGEM --}}
+        <div class="course-image">
+    <img
+        src="{{ count($imagens)
+            ? asset('storage/' . $imagens[0])
+            : asset('assets/img/default-car.png') }}"
+        alt="Imagem do veículo"
+    >
 </div>
 
-          @endforeach
+
+        {{-- CONTEÚDO --}}
+        <div class="course-content">
+
+            <div class="d-flex justify-content-between mb-2">
+                <span class="badge bg-light text-dark">{{ $veiculo->marca_exibicao }}</span>
+                <span class="badge bg-success">{{ $veiculo->estado }}</span>
+            </div>
+
+            <h5 class="mb-1">{{ $veiculo->modelo_exibicao }}</h5>
+
+            <p class="text-muted mb-3" style="font-size: 14px;">
+                {{ $veiculo->kilometragem }} km • {{ $veiculo->ano }} • {{ $veiculo->cambio }}
+            </p>
+
+            <div class="mt-auto d-flex justify-content-between align-items-center">
+
+                <a href="{{ route('veiculo.show', $veiculo->id) }}"
+                   class="btn btn-outline-success btn-sm">
+                    + DETALHES
+                </a>
+
+                <div class="text-end">
+                    @if($veiculo->valor_oferta && $veiculo->valor_oferta < $veiculo->valor)
+                        <small class="text-muted text-decoration-line-through">
+                            R$ {{ number_format($veiculo->valor, 2, ',', '.') }}
+                        </small>
+                        <div class="fw-bold fs-5">
+                            R$ {{ number_format($veiculo->valor_oferta, 2, ',', '.') }}
+                        </div>
+                    @else
+                        <div class="fw-bold fs-5">
+                            R$ {{ number_format($veiculo->valor, 2, ',', '.') }}
+                        </div>
+                    @endif
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+</div>
+@endforeach
+
 
         </div>
 
@@ -312,96 +280,4 @@
 
     </section>
 
-  </main>
-
-  <footer id="footer" class="footer position-relative light-background">
-
-    <div class="container footer-top">
-      <div class="row gy-4">
-        <div class="col-lg-4 col-md-6 footer-about">
-          <a href="index.html" class="logo d-flex align-items-center">
-            <span class="sitename">Mentor</span>
-          </a>
-          <div class="footer-contact pt-3">
-            <p>A108 Adam Street</p>
-            <p>New York, NY 535022</p>
-            <p class="mt-3"><strong>Phone:</strong> <span>+1 5589 55488 55</span></p>
-            <p><strong>Email:</strong> <span>info@example.com</span></p>
-          </div>
-          <div class="social-links d-flex mt-4">
-            <a href=""><i class="bi bi-twitter-x"></i></a>
-            <a href=""><i class="bi bi-facebook"></i></a>
-            <a href=""><i class="bi bi-instagram"></i></a>
-            <a href=""><i class="bi bi-linkedin"></i></a>
-          </div>
-        </div>
-
-        <div class="col-lg-2 col-md-3 footer-links">
-          <h4>Useful Links</h4>
-          <ul>
-            <li><a href="#">Home</a></li>
-            <li><a href="#">About us</a></li>
-            <li><a href="#">Services</a></li>
-            <li><a href="#">Terms of service</a></li>
-            <li><a href="#">Privacy policy</a></li>
-          </ul>
-        </div>
-
-        <div class="col-lg-2 col-md-3 footer-links">
-          <h4>Our Services</h4>
-          <ul>
-            <li><a href="#">Web Design</a></li>
-            <li><a href="#">Web Development</a></li>
-            <li><a href="#">Product Management</a></li>
-            <li><a href="#">Marketing</a></li>
-            <li><a href="#">Graphic Design</a></li>
-          </ul>
-        </div>
-
-        <div class="col-lg-4 col-md-12 footer-newsletter">
-          <h4>Our Newsletter</h4>
-          <p>Subscribe to our newsletter and receive the latest news about our products and services!</p>
-          <form action="forms/newsletter.php" method="post" class="php-email-form">
-            <div class="newsletter-form"><input type="email" name="email"><input type="submit" value="Subscribe"></div>
-            <div class="loading">Loading</div>
-            <div class="error-message"></div>
-            <div class="sent-message">Your subscription request has been sent. Thank you!</div>
-          </form>
-        </div>
-
-      </div>
-    </div>
-
-    <div class="container copyright text-center mt-4">
-      <p>© <span>Copyright</span> <strong class="px-1 sitename">Mentor</strong> <span>All Rights Reserved</span></p>
-      <div class="credits">
-        <!-- All the links in the footer should remain intact. -->
-        <!-- You can delete the links only if you've purchased the pro version. -->
-        <!-- Licensing information: https://bootstrapmade.com/license/ -->
-        <!-- Purchase the pro version with working PHP/AJAX contact form: [buy-url] -->
-        Designed by <a href="https://bootstrapmade.com/">BootstrapMade</a> Distributed by <a href=“https://themewagon.com>ThemeWagon
-      </div>
-    </div>
-
-  </footer>
-
-  <!-- Scroll Top -->
-  <a href="#" id="scroll-top" class="scroll-top d-flex align-items-center justify-content-center"><i class="bi bi-arrow-up-short"></i></a>
-
-  <!-- Preloader -->
-  <div id="preloader"></div>
-
-  <!-- Vendor JS Files -->
-  <script src="{{ url('site/vendor/bootstrap/js/bootstrap.bundle.min.js') }}"></script>
-  <script src="{{ url('site/vendor/php-email-form/validate.js') }}"></script>
-  <script src="{{ url('site/vendor/aos/aos.js') }}"></script>
-  <script src="{{ url('site/vendor/glightbox/js/glightbox.min.js') }}"></script>
-  <script src="{{ url('site/vendor/purecounter/purecounter_vanilla.js') }}"></script>
-  <script src="{{ url('site/vendor/swiper/swiper-bundle.min.js') }}"></script>
-
-  <!-- Main JS File -->
-  <script src="{{ url('site/js/main.js') }}"></script>
-
-</body>
-
-</html>
+    @endsection

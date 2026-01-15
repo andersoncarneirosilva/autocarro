@@ -378,7 +378,7 @@ class VeiculoController extends Controller
 
             'arquivo_proc_assinado' => 0,
             'size_atpve_pdf' => 0,
-            'status' => 'Ativo',
+            'status' => 'Disponível',
             'user_id' => $userId,
         ];
 
@@ -401,6 +401,160 @@ class VeiculoController extends Controller
 
     }
 
+    public function cadastroRapido(Request $request)
+    {
+
+         //dd($request);
+
+        $userId = Auth::id(); // Obtém o ID do usuário autenticado
+        // Localiza o usuário logado
+        $user = User::find($userId);
+
+
+        $arquivo = $request->file('arquivo_doc');
+
+
+        // Caminho para a pasta do usuário
+        $pastaUsuario = "documentos/usuario_{$userId}/";
+
+        // Tamanho do novo arquivo
+        $size_doc = $arquivo->getSize(); // Em bytes
+        // dd($tamanhoNovoArquivo);
+
+        $nomeOriginal = $arquivo->getClientOriginalName();
+
+        $parser = new Parser;
+
+        $pdf = $parser->parseFile($arquivo);
+
+        foreach ($pdf->getPages() as $numeroPagina => $pagina) {
+            $textoPagina = $pagina->getText();
+            //dd($textoPagina);
+            $linhas = explode("\n", $textoPagina);
+            if ($linhas[3] != 'SECRETARIA NACIONAL DE TRÂNSITO - SENATRAN') {
+                alert()->error('Selecione um documento 2024.');
+
+                return redirect()->route('veiculos.index');
+            }
+
+            // Extrair dados do veículo
+            
+            $marca = $this->model->extrairMarca($textoPagina);
+            $placa = $this->model->extrairPlaca($textoPagina);
+            $chassi = $this->model->extrairChassi($textoPagina);
+            $cor = $this->model->extrairCor($textoPagina);
+            $anoModelo = $this->model->extrairAnoModelo($textoPagina);
+            $renavam = $this->model->extrairRevanam($textoPagina);
+            $nome = $this->model->extrairNome($textoPagina);
+            $cpf = $this->model->extrairCpf($textoPagina);
+            $cidade = $this->model->extrairCidade($textoPagina);
+            $crv = $this->model->extrairCrv($textoPagina);
+            $placaAnterior = $this->model->extrairPlacaAnterior($textoPagina);
+            $categoria = $this->model->extrairCategoria($textoPagina);
+            $motor = $this->model->extrairMotor($textoPagina);
+            $combustivel = $this->model->extrairCombustivel($textoPagina);
+            $infos = $this->model->extrairInfos($textoPagina);
+
+            $cor = $this->model->extrairCor($textoPagina);
+            $tipo = $this->model->extrairEspecie($textoPagina);
+
+            // dd($marca);
+
+            // Verifica se o veículo é importado
+            if (strpos($marca, 'I/') === 0) {
+                $marcaVeiculo = $this->model->extrairMarcaImportado($textoPagina);
+                $modeloVeiculo = $this->model->extrairModeloImportado($textoPagina);
+                // dd("Importado: " . $marcaVeiculo) . " Modelo: " . $modeloVeiculo;
+            } else {
+                $marcaVeiculo = $this->model->extrairMarcaVeiculo($textoPagina);
+                $modeloVeiculo = $this->model->extrairModeloVeiculo($textoPagina);
+                // dd("Não Importado: " . $marcaVeiculo . " Modelo: " . $modeloVeiculo);
+            }
+
+            $nomeImagem = 'images/veiculos/'.strtolower($tipo)."/$modeloVeiculo/".
+                strtolower(str_replace(['/', ' '], '_', $marcaVeiculo)).'_'.
+                strtolower(str_replace(['/', ' '], '_', $modeloVeiculo)).'_'.
+                strtolower(str_replace(' ', '_', $cor)).'.jpg';
+             //dd($nomeImagem);
+            // Caminho real do arquivo no servidor
+            $caminhoImagem = public_path($nomeImagem);
+
+        }
+
+        
+
+        // Verificar se o veículo já existe com a placa fornecida
+        $veiculoExistente = Veiculo::where('placa', $placa)
+            ->where('user_id', $userId)
+            ->first();
+
+        if ($veiculoExistente) {
+            alert()->warning('Atenção!', 'Veículo já cadastrado.')
+                ->persistent(true)
+                ->autoClose(3000) // Fecha automaticamente após 5 segundos
+                ->timerProgressBar();
+
+            return redirect()->route('veiculos.index');
+        }
+
+        // Garante que a pasta "crlv" existe
+        $pastaDestino = storage_path('app/public/'.$pastaUsuario.'crlv/');
+        // dd($pastaDestino);
+        $numeroRandom = rand(1000, 9999);
+
+        $urlDoc = asset('storage/'.$pastaUsuario.'crlv/'.$placa.'_'.$numeroRandom.'.pdf'); // Adiciona a extensão .pdf
+        // dd($urlDoc);
+
+        if (! file_exists($pastaDestino)) {
+            mkdir($pastaDestino, 0777, true); // Cria a pasta com permissões recursivas
+        }
+
+        // Define o caminho completo do arquivo com a extensão .pdf
+        $caminhoDoc = $pastaDestino.$placa.'_'.$numeroRandom.'.pdf';
+
+        // Move o arquivo para a pasta com o nome correto
+        $arquivo->move($pastaDestino, $placa.'_'.$numeroRandom.'.pdf');
+
+        // Verifica se o arquivo foi salvo
+        if (! file_exists($caminhoDoc)) {
+            return response()->json(['error' => 'Erro ao salvar o arquivo.'], 500);
+        }
+
+        $nomeFormatado = $this->forcarAcentosMaiusculos($nome);
+
+        // DATA CASDASTRO RAPIDO
+        $data = [
+            'nome' => strtoupper($nomeFormatado),
+            'cpf' => $cpf,
+            'cidade' => $cidade,
+            'marca' => strtoupper($marca),
+            'placa' => strtoupper($placa),
+            'chassi' => strtoupper($chassi),
+            'cor' => strtoupper($cor),
+            'ano' => $anoModelo,
+            'renavam' => $renavam,
+            'crv' => $crv,
+            'placaAnterior' => $placaAnterior,
+            'categoria' => $categoria,
+            'motor' => $motor,
+            'arquivo_doc' => $urlDoc,
+            'size_doc' => $size_doc,
+            'user_id' => $userId,
+        ];
+
+        // CADASTRO RAPIDO
+        if ($this->model->create($data)) {
+
+            if ($user && ($user->plano == 'Padrão' || $user->plano == 'Pro' || $user->plano == 'Teste')) {
+                $user->decrement('credito', 5);
+            }
+
+            return back()->with('success', 'Veículo cadastrado com sucesso!');
+
+            return redirect()->route('veiculos.index');
+        }
+    }
+
     // ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     // ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     // ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -416,6 +570,16 @@ class VeiculoController extends Controller
     {
 
          //dd($request);
+         // Mapeamento de status para classes CSS
+        $statusClasses = [
+            'Disponível' => 'badge badge-outline-success',
+            'Aguardando manutenção' => 'badge badge-outline-warning',
+            'Em manutenção' => 'badge badge-outline-primary',
+            'Vendido' => 'badge badge-outline-danger',
+        ];
+
+        $status = $request->input('status');
+        $classStatus = $statusClasses[$status] ?? 'badge badge-outline-secondary';
 
         $userId = Auth::id(); // Obtém o ID do usuário autenticado
         // Localiza o usuário logado
@@ -692,6 +856,15 @@ class VeiculoController extends Controller
         // Obter o tamanho do arquivo PDF em bytes
         $sizeProc = filesize($caminhoProc);
         // DATA STORE
+
+        // Remove o ponto da milhar e substitui a vírgula decimal por ponto
+        $valorLimpo = str_replace(['.', ','], ['', '.'], $request->valor);
+        $valorOfertaLimpo = str_replace(['.', ','], ['', '.'], $request->valor_oferta);
+
+        // Se o valor vier vazio, define como 0 ou null para evitar erro
+        $valorFinal = is_numeric($valorLimpo) ? $valorLimpo : 0;
+        $valorOfertaFinal = is_numeric($valorOfertaLimpo) ? $valorOfertaLimpo : 0;
+
         $data = [
             'nome' => strtoupper($nomeFormatado),
             'endereco' => strtoupper($enderecoFormatado),  // Endereço em maiúsculas
@@ -710,8 +883,8 @@ class VeiculoController extends Controller
             'cambio' => $request->cambio,
             'portas' => $request->portas,
             'kilometragem' => $request->kilometragem,
-            'valor' => $request->valor,
-            'valor_oferta' => $request->valor_oferta,
+            'valor' => $valorFinal,
+            'valor_oferta' => $valorOfertaFinal,
             'combustivel' => $combustivel,
             'infos' => $infos,
             'tipo' => $tipo,
@@ -719,7 +892,8 @@ class VeiculoController extends Controller
             'size_doc' => $size_doc,
             'arquivo_proc' => $urlProc,
             'size_proc' => $sizeProc,
-            'status' => 'Ativo',
+            'status' => $request->status,
+            'class_status' => $classStatus,
             'user_id' => $userId,
         ];
 
@@ -879,9 +1053,9 @@ class VeiculoController extends Controller
 
     public function storeProc(Request $request, $id)
     {
-        // dd($request);
+        //dd($request);
 
-        if (empty($request->endereco)) {
+        if (empty($request->cliente)) {
             alert()->error('O campo endereço é obrigatório')
                 ->persistent(true)
                 ->autoClose(5000) // Fecha automaticamente após 5 segundos
@@ -1096,6 +1270,178 @@ class VeiculoController extends Controller
             return back()->withErrors('success', 'Erro ao encontrar o veículo.');
         }
     }
+
+    //ATUALIZAR CRLV
+    public function updateCrlv(Request $request, $id)
+{
+    $veiculo = Veiculo::findOrFail($id);
+    $userId = Auth::id();
+    $user = User::find($userId);
+    $configProc = ModeloProcuracoes::where('user_id', $userId)->first();
+    $dataAtual = Carbon::now();
+    $dataPorExtenso = $dataAtual->translatedFormat('d \d\e F \d\e Y');
+
+    // Validação de Outorgados
+    if (empty($configProc->outorgados)) {
+        alert()->error('Erro!', 'Por favor, cadastre ao menos um Outorgado antes de prosseguir.');
+        return redirect()->route('veiculos.index');
+    }
+
+    // Validação do Arquivo
+    try {
+        $request->validate([
+            'arquivo_doc' => 'required|mimes:pdf|max:10240',
+        ]);
+    } catch (\Exception $e) {
+        alert()->error('Selecione um documento PDF válido!');
+        return back();
+    }
+
+    $arquivo = $request->file('arquivo_doc');
+    $parser = new Parser();
+    $pdfParsed = $parser->parseFile($arquivo);
+    $textoPagina = $pdfParsed->getPages()[0]->getText();
+
+    // Verificação simplificada de segurança (conforme seu store)
+    $linhas = explode("\n", $textoPagina);
+    if (!isset($linhas[3]) || $linhas[3] != 'SECRETARIA NACIONAL DE TRÂNSITO - SENATRAN') {
+        alert()->error('Selecione um documento 2024 válido.');
+        return back();
+    }
+
+    $size_doc = $arquivo->getSize();
+
+    // Extração de Dados (Reutilizando sua lógica do model)
+    $marca = $this->model->extrairMarca($textoPagina);
+    $placa = $this->model->extrairPlaca($textoPagina);
+    $chassi = $this->model->extrairChassi($textoPagina);
+    $cor = $this->model->extrairCor($textoPagina);
+    $anoModelo = $this->model->extrairAnoModelo($textoPagina);
+    $renavam = $this->model->extrairRevanam($textoPagina);
+    $nome = $this->model->extrairNome($textoPagina);
+    $cpf = $this->model->extrairCpf($textoPagina);
+    $cidade = $this->model->extrairCidade($textoPagina);
+    $crv = $this->model->extrairCrv($textoPagina);
+    $placaAnterior = $this->model->extrairPlacaAnterior($textoPagina);
+    $categoria = $this->model->extrairCategoria($textoPagina);
+    $motor = $this->model->extrairMotor($textoPagina);
+    $combustivel = $this->model->extrairCombustivel($textoPagina);
+    $infos = $this->model->extrairInfos($textoPagina);
+    $tipo = $this->model->extrairEspecie($textoPagina);
+
+    // Formatação de nomes/endereço
+    $nomeFormatado = $this->forcarAcentosMaiusculos($nome);
+    $enderecoFormatado = $this->forcarAcentosMaiusculos($request->endereco ?? $veiculo->endereco);
+
+    // --- SALVAMENTO DO NOVO CRLV ---
+    $pastaUsuario = "documentos/usuario_{$userId}/";
+    $pastaDestinoCrlv = storage_path('app/public/'.$pastaUsuario.'crlv/');
+    if (!file_exists($pastaDestinoCrlv)) mkdir($pastaDestinoCrlv, 0777, true);
+
+    $numeroRandom = rand(1000, 9999);
+    $nomeArquivoCrlv = $placa.'_upd_'.$numeroRandom.'.pdf';
+    $arquivo->move($pastaDestinoCrlv, $nomeArquivoCrlv);
+    $urlDoc = asset('storage/'.$pastaUsuario.'crlv/'.$nomeArquivoCrlv);
+
+    // --- GERAÇÃO DA NOVA PROCURAÇÃO (Lógica FPDF idêntica ao store) ---
+    $pdf = new FPDF();
+    $pdf->SetMargins(10, 10, 10);
+    $pdf->AddPage();
+    $pdf->SetFont('Arial', 'B', 14);
+    $pdf->Cell(0, 10, utf8_decode('PROCURAÇÃO'), 0, 1, 'C');
+    $pdf->Ln(8);
+    
+    $pdf->SetFont('Arial', 'B', 12);
+    $pdf->Cell(0, 0, 'OUTORGANTE: '.strtoupper(iconv('UTF-8', 'ISO-8859-1', $nomeFormatado)), 0, 0, 'L');
+    $pdf->Ln(5);
+    $pdf->Cell(10, 0, "CPF: $cpf", 0, 0, 'L');
+    $pdf->Ln(5);
+    $pdf->Cell(0, 0, utf8_decode('ENDEREÇO: '.strtoupper($enderecoFormatado)), 0, 0, 'L');
+    $pdf->Ln(5);
+    $pdf->SetFont('Arial', '', 11);
+    $pdf->Cell(0, 0, str_repeat('_', 60), 0, 0, 'L');
+    $pdf->Ln(8);
+
+    $outorgadosSelecionados = json_decode($configProc->outorgados, true);
+    $outorgados = Outorgado::whereIn('id', $outorgadosSelecionados)->get();
+
+    foreach ($outorgados as $outorgado) {
+        $pdf->SetFont('Arial', 'B', 12);
+        $pdf->Cell(0, 0, utf8_decode("OUTORGADO: {$outorgado->nome_outorgado}"), 0, 0, 'L');
+        $pdf->Ln(5);
+        $pdf->Cell(0, 0, utf8_decode("CPF: {$outorgado->cpf_outorgado}"), 0, 0, 'L');
+        $pdf->Ln(5);
+        $pdf->Cell(0, 0, utf8_decode("ENDEREÇO: {$outorgado->end_outorgado}"), 0, 0, 'L');
+        $pdf->Ln(10);
+    }
+
+    $pdf->SetFont('Arial', '', 11);
+    $pdf->Cell(0, 0, str_repeat('_', 60), 0, 0, 'L');
+    $pdf->Ln(8);
+
+    $largura_disponivel = $pdf->GetPageWidth() - 20;
+    $pdf->MultiCell($largura_disponivel, 5, utf8_decode(str_replace("\n", ' ', $configProc->texto_inicial)), 0, 'J');
+
+    $pdf->Ln(8);
+    $pdf->SetFont('Arial', 'B', 12);
+    $pdf->Cell(120, 2, 'MARCA: '.strtoupper($marca), 0, 0, 'L');
+    $pdf->Cell(0, 2, 'PLACA: '.strtoupper($placa), 0, 1, 'L');
+    $pdf->Ln(5);
+    $pdf->Cell(120, 2, 'CHASSI: '.strtoupper($chassi), 0, 0, 'L');
+    $pdf->Cell(0, 2, 'COR: '.strtoupper($cor), 0, 1, 'L');
+    $pdf->Ln(5);
+    $pdf->Cell(120, 2, 'ANO/MODELO: '.strtoupper($anoModelo), 0, 0, 'L');
+    $pdf->Cell(0, 2, 'RENAVAM: '.strtoupper($renavam), 0, 1, 'L');
+
+    $pdf->Ln(8);
+    $pdf->SetFont('Arial', '', 11);
+    $pdf->MultiCell($largura_disponivel, 5, utf8_decode(str_replace("\n", ' ', $configProc->texto_final)), 0, 'J');
+    $pdf->Cell(0, 10, utf8_decode("$configProc->cidade, $dataPorExtenso"), 0, 1, 'R');
+    $pdf->Ln(5);
+    $pdf->Cell(0, 10, '_________________________________________________', 0, 1, 'C');
+    $pdf->SetFont('Arial', 'B', 12);
+    $pdf->Cell(0, 5, utf8_decode($nome), 0, 1, 'C');
+
+    $pastaProc = storage_path('app/public/'.$pastaUsuario.'procuracoes/');
+    if (!file_exists($pastaProc)) mkdir($pastaProc, 0777, true);
+    
+    $nomeArquivoProc = strtoupper($placa).'_upd_'.$numeroRandom.'.pdf';
+    $caminhoProc = $pastaProc . $nomeArquivoProc;
+    $pdf->Output('F', $caminhoProc);
+    $urlProc = asset('storage/'.$pastaUsuario.'procuracoes/'.$nomeArquivoProc);
+
+    // --- ATUALIZAÇÃO DOS DADOS ---
+    $veiculo->update([
+        'nome' => strtoupper($nomeFormatado),
+        'endereco' => strtoupper($enderecoFormatado),
+        'cpf' => $cpf,
+        'cidade' => $cidade,
+        'marca' => strtoupper($marca),
+        'placa' => strtoupper($placa),
+        'chassi' => strtoupper($chassi),
+        'cor' => strtoupper($cor),
+        'ano' => $anoModelo,
+        'renavam' => $renavam,
+        'crv' => $crv,
+        'placaAnterior' => $placaAnterior,
+        'categoria' => $categoria,
+        'motor' => $motor,
+        'combustivel' => $combustivel,
+        'infos' => $infos,
+        'tipo' => $tipo,
+        'arquivo_doc' => $urlDoc,
+        'size_doc' => $size_doc,
+        'arquivo_proc' => $urlProc,
+        'size_proc' => filesize($caminhoProc),
+        // Mantém os dados manuais anteriores se não enviados na request
+        'cambio' => $request->cambio ?? $veiculo->cambio,
+        'portas' => $request->portas ?? $veiculo->portas,
+        'kilometragem' => $request->kilometragem ?? $veiculo->kilometragem,
+    ]);
+
+    alert()->success('Sucesso!', 'Documento atualizado e nova procuração gerada.');
+    return redirect()->route('veiculos.index');
+}
 
     // ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     // ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -1466,7 +1812,7 @@ class VeiculoController extends Controller
         $record = $this->model->findOrFail($id);
         $record->update($data);
 
-        return back()->with('success', 'ATPVe gerada com sucesso.');
+        return back()->with('success', 'Solicitação ATPVe gerada com sucesso.');
 
         return redirect()->route('veiculos.index');
     }
@@ -1713,4 +2059,51 @@ class VeiculoController extends Controller
 
         return back()->with('success', 'ATPVe excluída com sucesso.');
     }
+
+    public function adicionarFotos(Request $request, $id)
+{
+    $veiculo = Veiculo::findOrFail($id);
+
+    $request->validate([
+        'fotos.*' => 'image|mimes:jpeg,png,jpg,gif,webp|max:2048'
+    ]);
+
+    $novasFotos = [];
+
+    if ($request->hasFile('fotos')) {
+        foreach ($request->file('fotos') as $foto) {
+            $path = $foto->store('veiculos/fotos', 'public');
+            $novasFotos[] = $path;
+        }
+    }
+
+    // Junta as novas imagens com as antigas
+    $imagensAtuais = json_decode($veiculo->images ?? '[]', true);
+    $veiculo->images = json_encode(array_merge($imagensAtuais, $novasFotos));
+    $veiculo->save();
+
+    return redirect()->back()->with('success', 'Fotos adicionadas com sucesso!');
+}
+public function removerFoto(Request $request, $id)
+{
+    $veiculo = Veiculo::findOrFail($id);
+    $fotoRemover = $request->input('foto');
+
+    $imagens = json_decode($veiculo->images ?? '[]', true);
+
+    // Remove a imagem da lista
+    $imagens = array_filter($imagens, fn($img) => $img !== $fotoRemover);
+
+    // Apaga o arquivo físico (opcional)
+    if (Storage::disk('public')->exists($fotoRemover)) {
+        Storage::disk('public')->delete($fotoRemover);
+    }
+
+    // Atualiza o campo no banco
+    $veiculo->images = json_encode(array_values($imagens));
+    $veiculo->save();
+
+    return redirect()->back()->with('success', 'Foto removida com sucesso.');
+}
+
 }

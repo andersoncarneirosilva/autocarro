@@ -159,10 +159,50 @@
   justify-content: center;
   padding: 0;
 }
+
 </style>
 {{-- PRODUCAO --}}
                                     
+<style>
+                    /* Container da tabela para garantir que o arredondamento apareça */
+                .table-rounded {
+                    border-collapse: separate !important;
+                    border-spacing: 0;
+                    border: 1px solid #dee2e6; /* Borda externa opcional */
+                    border-radius: 15px; /* Ajuste o raio conforme desejar */
+                    overflow: hidden;
+                }
 
+                /* Arredonda o canto superior esquerdo (primeiro TH da primeira TR) */
+                .table-rounded thead tr:first-child th:first-child {
+                    border-top-left-radius: 15px;
+                }
+
+                /* Arredonda o canto superior direito (último TH da primeira TR) */
+                .table-rounded thead tr:first-child th:last-child {
+                    border-top-right-radius: 15px;
+                }
+
+                /* Remove a borda inferior da última linha para não ficar "quadrado" por dentro */
+                .table-rounded tbody tr:last-child td:first-child {
+                    border-bottom-left-radius: 15px;
+                }
+                .table-rounded tbody tr:last-child td:last-child {
+                    border-bottom-right-radius: 15px;
+                }
+               .table-responsive,
+.table-responsive-sm {
+    overflow: visible !important;
+}
+
+.dropdown-menu {
+    z-index: 1055;
+}
+
+
+
+
+                </style>
 
     <!-- Plugin css -->
     <link rel="stylesheet" href="{{ url('assets/vendor/jquery-toast-plugin/jquery.toast.min.css') }}">

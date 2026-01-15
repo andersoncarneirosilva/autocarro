@@ -20,7 +20,6 @@ class UserSeeder extends Seeder
             'perfil' => 'Despachante',
             'plano' => 'Mensal',
             'password' => bcrypt('12345678'),
-            'classe' => 'badge badge-outline-success',
             'status' => 'Ativo',
             'credito' => '10',
         ]);

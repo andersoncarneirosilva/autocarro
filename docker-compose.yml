@@ -12,8 +12,6 @@ services:
             - redis
         networks:
             - laravel
-        ports:
-            - "6001:6001"  # Adicione esta linha para expor a porta 6001
 
     # nginx 0805bc8b129335e7306fbdcb19
     nginx:

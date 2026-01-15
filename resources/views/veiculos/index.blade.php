@@ -4,6 +4,8 @@
 
 @section('content')
 
+@include('veiculos._partials.cadastro-rapido')
+
     @if (session('success'))
         <script>
             toastr.success("{{ session('success') }}");
@@ -20,11 +22,11 @@
         document.addEventListener('DOMContentLoaded', function() {
             const selectElement = document.getElementById('idCliente');
             const choices = new Choices(selectElement, {
-                searchEnabled: true, // Ativa a busca
-                itemSelectText: '', // Remove o texto de seleção padrão
-                removeItemButton: true, // Permite remover itens da seleção
-                noResultsText: 'Nenhuma opção encontrada', // Texto ao não encontrar resultados na busca
-                noChoicesText: 'Nenhum cliente cadastrado', // Texto quando não há opções
+                searchEnabled: true,
+                itemSelectText: '',
+                removeItemButton: true,
+                noResultsText: 'Nenhuma opção encontrada',
+                noChoicesText: 'Nenhum cliente cadastrado',
             });
         });
     </script>
@@ -52,11 +54,11 @@
 </div>
 
 
-<div id="dicas" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="standard-modalLabel" aria-hidden="true">
+<div id="dicas" class="modal fade" tabindex="-1" role="dialog"  aria-hidden="true">
     <div class="modal-dialog modal-lg">
         <div class="modal-content">
             <div class="modal-header">
-                <h4 class="modal-title" id="standard-modalLabel">Dica</h4>
+                <h4 class="modal-title">Dica</h4>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-hidden="true"></button>
             </div>
             <div class="modal-body">
@@ -95,9 +97,9 @@
                                     Cadastrar
                                 </button>
                                 <div class="dropdown-menu dropdown-menu-animated dropdown-menu-end">
-                                    <a href="#" data-bs-toggle="modal" data-bs-target="#standard-modal"
+                                    <a href="#" data-bs-toggle="modal" data-bs-target="#cadastro-rapido"
                                         class="dropdown-item">
-                                        Cadastro automático
+                                        Cadastro rápido
                                     </a>
                                     <a href="{{ route('veiculos.create-proc-manual') }}" class="dropdown-item">
                                         Cadastro manual
@@ -116,9 +118,9 @@
                                         <th>Veículo</th>
                                         <th>Ano/Modelo</th>
                                         <th>KM</th>
+                                        <th>DOC</th>
                                         <th>Valor</th>
                                         <th>Oferta</th>
-                                        <th>DOC</th>
                                         <th>Ações</th>
                                     </tr>
                                 </thead>
@@ -130,7 +132,7 @@
                                                 <div class="avatar-stack">
                                                     @if($doc->images)
                                                         @foreach(json_decode($doc->images) as $key => $image)
-                                                            @if($key < 3) <!-- Limite de 3 avatares -->
+                                                            @if($key < 1) <!-- Limite de 3 avatares -->
                                                                <img src="{{ url("storage/{$image}") }}" class="rounded-circle avatar-img" />
                                                             @endif
                                                         @endforeach
@@ -143,8 +145,6 @@
                                             <td>{{ $doc->marca }}</td>
                                             <td>{{ $doc->ano }}</td>
                                             <td>{{ $doc->kilometragem }}</td>
-                                            <td>{{ $doc->valor }}</td>
-                                            <td>{{ $doc->valor_oferta }}</td>
                                             <td>
                                                 @if ($doc->crv === '***')
                                                     <span class="badge badge-outline-danger">FÍSICO</span>
@@ -153,6 +153,15 @@
                                                     <span class="badge badge-outline-success">DIGITAL</span>
                                                 @endif
                                             </td>
+                                            <td>R${{ $doc->valor }}</td>
+                                            <td>
+                                                @if(!empty($doc->valor_oferta))
+                                                    R$ {{ $doc->valor_oferta }}
+                                                @else
+                                                    Sem oferta
+                                                @endif
+                                            </td>
+
                                             
 
                                             <td class="table-action">
@@ -288,51 +297,8 @@
 
 
 
-        <div id="standard-modal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="standard-modalLabel"
-            aria-hidden="true">
-            <div class="modal-dialog modal-lg">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h4 class="modal-title" id="standard-modalLabel">Novo veículo</h4>
-                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-hidden="true"></button>
-                    </div>
-                    <div class="modal-body">
-                        @include('veiculos.create')
-                    </div>
-                </div><!-- /.modal-content -->
-            </div><!-- /.modal-dialog -->
-        </div><!-- /.modal -->
+        
 
-        <div class="modal fade" id="procModal" tabindex="-1" role="dialog" aria-hidden="true">
-            <div class="modal-dialog" role="document">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h5 class="modal-title">Gerar procuração</h5>
-                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-hidden="true"></button>
-                    </div>
-                    <div class="modal-body">
-                        <form id="procForm" method="POST">
-                            @csrf <!-- Necessário para o Laravel validar a requisição -->
-                            <div class="form-group">
-                                <div class="mb-3">
-                                    <label>Endereço: <span style="color: red;">*</span></label>
-                                    <div class="col-lg">
-                                        <input class="form-control" type="text" id="endereco"  name="endereco" required>
-                                    </div>
-                                </div>
-                            </div>
-                            <br>
-
-                            <input type="hidden" id="docId" name="docId">
-                        </form>
-                    </div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-light" data-bs-dismiss="modal">Fechar</button>
-                        <button type="button" class="btn btn-primary" onclick="submitProc()">Gerar</button>
-                    </div>
-                </div>
-            </div>
-        </div>
 
 
         <div class="modal fade" id="addressModal" tabindex="-1" role="dialog" aria-labelledby="addressModalLabel"

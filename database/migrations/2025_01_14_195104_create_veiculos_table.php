@@ -14,6 +14,7 @@ return new class extends Migration
         Schema::create('veiculos', function (Blueprint $table) {
             $table->id();
 
+            // OBRIGATORIAS
             $table->string('marca');
             $table->string('placa');
             $table->string('chassi');
@@ -31,13 +32,18 @@ return new class extends Migration
             $table->string('infos');
             $table->string('tipo');
 
-            $table->string('cambio');
-            $table->string('portas');
-            $table->string('valor');
-            $table->string('valor_oferta')->nullable();
+            //  OPCIONAIS
+            $table->string('cambio')->nullable();
+            $table->string('portas')->nullable();
+            $table->decimal('valor', 15, 2)->nullable();
+            $table->decimal('valor_oferta', 15, 2)->nullable();
+            
             $table->string('kilometragem')->nullable();
             $table->text('observacoes')->nullable();
+            $table->json('adicionais')->nullable();
             $table->json('opcionais')->nullable();
+            $table->json('modificacoes')->nullable();
+            $table->json('descricao')->nullable();
 
             $table->json('images')->nullable();
             $table->string('status')->nullable();
@@ -58,18 +64,12 @@ return new class extends Migration
             $table->unsignedBigInteger('size_proc')->nullable();
             $table->unsignedBigInteger('size_atpve')->nullable();
 
-            
-
-
-            $table->foreignId('user_id')->constrained()->onDelete('cascade'); // Chave estrangeira para o usuário
+            $table->foreignId('user_id')->constrained()->onDelete('cascade');
 
             $table->timestamps();
         });
     }
 
-    /**
-     * Reverse the migrations.
-     */
     public function down(): void
     {
         Schema::dropIfExists('veiculos');

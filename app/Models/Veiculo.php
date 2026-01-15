@@ -45,6 +45,7 @@ class Veiculo extends Model
         'size_proc_pdf',
         'size_atpve_pdf',
         'images',
+        'class_status',
         'status',
         'user_id',
 
@@ -67,7 +68,7 @@ class Veiculo extends Model
     public function getSearch(?string $search, $userId)
     {
         return $this->where('user_id', $userId) // Filtro pelo usuário logado
-            ->where('status', 'Ativo') // Filtra apenas os ativos
+            //->where('status', 'Ativo') // Filtra apenas os ativos
             ->when($search, function ($query) use ($search) {
                 // Se houver pesquisa, filtra por placa, renavam ou marca
                 $query->where(function ($q) use ($search) {
@@ -108,6 +109,7 @@ class Veiculo extends Model
         return $docs;
     }
 
+    
     public function validaDoc($textoPagina)
     {
 

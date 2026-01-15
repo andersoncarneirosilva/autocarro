@@ -43,19 +43,44 @@
                     <span> Dashboard </span>
                 </a>
             </li>
+
+            {{-- <li class="side-nav-item">
+                <a href="{{ route('anuncios.index') }}" class="side-nav-link">
+                    <i class="mdi mdi-help-circle-outline"></i>
+                    <span> Anuncios </span>
+                </a>
+            </li> --}}
+
+            {{-- <li class="side-nav-item">
+                <a data-bs-toggle="collapse" href="#configuracao" aria-expanded="false" aria-controls="sidebarLayouts" class="side-nav-link">
+                    <i class="uil-car"></i>
+                    <span> Anuncios </span>
+                    <span class="menu-arrow"></span>
+                </a>
+                <div class="collapse" id="configuracao">
+                    <ul class="side-nav-second-level">
+                        <li>
+                            <a href="{{ route('anuncios.index') }}">Ativos</a>
+                        </li>
+                        <li>
+                            <a href="{{ route('anuncios.arquivados') }}">Arquivados</a>
+                        </li>
+                    </ul>
+                </div>
+            </li> --}}
             
             <li class="side-nav-item">
-                <a href="{{ route('veiculos.index') }}/" class="side-nav-link">
+                <a href="{{ route('anuncios.index') }}/" class="side-nav-link">
                     <i class="uil-car"></i>
-                    <span> Veículos </span>
+                    <span> Anúncios ativos </span>
                 </a>
             </li>
 
             <li class="side-nav-item">
-                <a href="{{ route('veiculos.arquivados') }}/" class="side-nav-link">
+                <a href="{{ route('anuncios.arquivados') }}/" class="side-nav-link">
                     <i class="uil-car-slash"></i>
                     
-                    <span> Arquivados </span>
+                    <span> Anúncios Arquivados </span>
                 </a>
             </li>
 
@@ -64,21 +89,6 @@
                 <a href="{{ route('clientes.index') }}" class="side-nav-link">
                     <i class="uil-users-alt"></i>
                     <span> Clientes </span>
-                </a>
-            </li>
-
-            <li class="side-nav-item">
-                <a href="{{ route('fornecedores.index') }}" class="side-nav-link">
-                    <i class="uil-users-alt"></i>
-                    <span> Fornecedores </span>
-                </a>
-            </li>
-            
-            
-            <li class="side-nav-item">
-                <a href="{{ route('ajuda.index') }}" class="side-nav-link">
-                    <i class="mdi mdi-help-circle-outline"></i>
-                    <span> Ajuda </span>
                 </a>
             </li>
 
@@ -106,15 +116,6 @@
             </li>
             @endcan
             
-            <li class="side-nav-item">
-                <a href="{{ route('anuncios.index') }}" class="side-nav-link">
-                    <i class="mdi mdi-help-circle-outline"></i>
-                    <span> Anuncios </span>
-                </a>
-            </li>
-
-
         </ul>
-
     </div>
 </div>

@@ -27,7 +27,7 @@ use App\Http\Controllers\ChatController;
 use App\Http\Controllers\ItemController;
 use App\Http\Controllers\AnuncioController;
 use App\Http\Controllers\SiteController;
-use App\Http\Controllers\FornecedorController;
+use App\Http\Controllers\DocumentoController;
 
 use Illuminate\Support\Facades\Route;
 use Livewire\Livewire;
@@ -41,6 +41,7 @@ Route::middleware(['auth'])->group(function () {
 
     Broadcast::routes(['middleware' => ['auth:sanctum']]);
 
+    
 // routes/web.php
 Route::post('/chat/mark-as-read', [ChatController::class, 'markAsRead']);
 
@@ -124,17 +125,52 @@ Route::post('/chat/mark-as-read', [ChatController::class, 'markAsRead']);
 
     Route::post('/upload/temp', [AnuncioController::class, 'temp'])->name('upload.temp');
 
+    // Rotas para Documentação
+Route::prefix('documentos')->group(function () {
+    // Rota para gerar a Procuração
+    Route::post('/gerar-procuracao/{veiculo_id}', [DocumentoController::class, 'gerarProcuracao'])
+        ->name('documentos.gerar.procuracao');
 
-    Route::put('/anuncios/desarquivar/{id}', [AnuncioController::class, 'desarquivar'])->name('anuncios.desarquivar');
-    Route::put('/anuncios/arquivar/{id}', [AnuncioController::class, 'arquivar'])->name('anuncios.arquivar');
+    // Rota para gerar o ATPVe
+    Route::get('/gerar-atpve/{veiculo_id}', [DocumentoController::class, 'gerarAtpve'])
+        ->name('documentos.gerar.atpve');
+        
+    // Rota para upload (caso precise salvar manualmente os assinados)
+    Route::post('/upload/{veiculo_id}', [DocumentoController::class, 'store'])
+        ->name('documentos.upload');
+});
 
-    Route::delete('/anuncios/{id}', [AnuncioController::class, 'destroy'])->name('anuncios.destroy');
-    Route::put('/anuncios/{id}', [AnuncioController::class, 'update'])->name('anuncios.update');
-    Route::get('/anuncios/{id}/edit', [AnuncioController::class, 'edit'])->name('anuncios.edit');
-    Route::get('/anuncios', [AnuncioController::class, 'index'])->name('anuncios.index');
-    Route::get('/anuncios/create', [AnuncioController::class, 'create'])->name('anuncios.create');
-    Route::post('/anuncios', [AnuncioController::class, 'store'])->name('anuncios.store');
-    Route::get('/anuncios/{id}', [AnuncioController::class, 'show'])->name('anuncios.show');
+
+// --- 1. ROTAS GLOBAIS E DE LISTAGEM (Sempre no topo para evitar conflito com {id}) ---
+Route::get('/anuncios', [AnuncioController::class, 'index'])->name('anuncios.index');
+Route::get('/anuncios/arquivados', [AnuncioController::class, 'indexArquivados'])->name('anuncios.arquivados');
+Route::get('/anuncios/create', [AnuncioController::class, 'create'])->name('anuncios.create');
+Route::post('/anuncios', [AnuncioController::class, 'store'])->name('anuncios.store');
+
+// --- 2. ROTAS COM AÇÕES ESPECÍFICAS ---
+Route::put('/anuncios/desarquivar/{id}', [AnuncioController::class, 'desarquivar'])->name('anuncios.desarquivar');
+Route::put('/anuncios/arquivar/{id}', [AnuncioController::class, 'arquivar'])->name('anuncios.arquivar');
+
+// 2. AGORA coloque a sua rota (específica por ter o sufixo /update-info-basica)
+// Adicione esta linha junto com as outras rotas de anúncios
+Route::patch('/anuncios/{id}/remover-publicacao', [AnuncioController::class, 'removerPublicacao'])->name('anuncios.remover');
+Route::patch('/anuncios/{id}/publicar', [AnuncioController::class, 'publicar'])->name('anuncios.publicar');
+Route::put('/anuncios/{id}/upload-fotos', [AnuncioController::class, 'uploadFotos'])->name('anuncios.uploadFotos');
+Route::delete('/anuncios/{id}/foto/{index}', [AnuncioController::class, 'deleteFoto'])->name('anuncios.deleteFoto');
+Route::put('/anuncios/{id}/update-descricao', [AnuncioController::class, 'updateDescricao'])->name('anuncios.updateDescricao');
+Route::put('/anuncios/{id}/update-adicionais', [AnuncioController::class, 'updateAdicionais'])->name('anuncios.updateAdicionais');
+Route::put('/anuncios/{id}/update-modificacoes', [AnuncioController::class, 'updateModificacoes'])->name('anuncios.updateModificacoes');
+Route::put('/anuncios/{id}/update-opcionais', [AnuncioController::class, 'updateOpcionais'])->name('anuncios.updateOpcionais');
+Route::put('/anuncios/{id}/update-precos', [AnuncioController::class, 'updatePrecos'])->name('anuncios.updatePrecos');
+Route::put('/anuncios/{id}/update-info-basica', [AnuncioController::class, 'updateInfoBasica'])->name('anuncios.updateInfoBasica');
+
+// 3. Por último as rotas genéricas que podem "confundir" o Laravel
+
+Route::delete('/anuncios/{id}', [AnuncioController::class, 'destroy'])->name('anuncios.destroy');
+Route::put('/anuncios/{id}', [AnuncioController::class, 'update'])->name('anuncios.update');
+Route::get('/anuncios/{id}/edit', [AnuncioController::class, 'edit'])->name('anuncios.edit');
+Route::get('/anuncios/{id}', [AnuncioController::class, 'show'])->name('anuncios.show');
+
 
 
     // DASHBOARD
@@ -255,13 +291,14 @@ Route::post('/chat/mark-as-read', [ChatController::class, 'markAsRead']);
 
     // Route::post('/estoque', [EstoqueController::class, 'store'])->name('estoque.store');
     // Route::get('/estoque', [EstoqueController::class, 'index'])->name('estoque.index');
-Route::get('/consulta-cnpj/{cnpj}', [FornecedorController::class, 'consultarCnpj']);
+    Route::post('/veiculos/cadastro-rapido', [AnuncioController::class, 'cadastroRapido'])->name('veiculos.cadastro-rapido');
 
-    Route::get('/fornecedores/create', [FornecedorController::class, 'create'])->name('fornecedores.create');
-Route::post('/fornecedores', [FornecedorController::class, 'store'])->name('fornecedores.store');
-Route::get('/fornecedores', [FornecedorController::class, 'index'])->name('fornecedores.index');
+
 
     Route::delete('/veiculos/enviar_email/{id}', [VeiculoController::class, 'enviarEmail'])->name('veiculos.enviar_email');
+
+    Route::post('/veiculos/{veiculo}/fotos', [\App\Http\Controllers\VeiculoController::class, 'adicionarFotos'])->name('veiculos.adicionarFotos');
+Route::delete('/veiculos/{veiculo}/foto', [\App\Http\Controllers\VeiculoController::class, 'removerFoto'])->name('veiculos.removerFoto');
 
     Route::delete('/veiculos/excluir_atpve_assinado/{id}', [VeiculoController::class, 'destroyAtpveAssinado'])->name('veiculos.excluir_atpve_assinado');
     Route::delete('/veiculos/excluir_proc_assinado/{id}', [VeiculoController::class, 'destroyProcAssinado'])->name('veiculos.excluir_proc_assinado');
@@ -269,6 +306,10 @@ Route::get('/fornecedores', [FornecedorController::class, 'index'])->name('forne
     Route::delete('/veiculos/excluir_proc/{id}', [VeiculoController::class, 'destroyProc'])->name('veiculos.excluir_proc');
     Route::delete('/veiculos/excluir_doc/{id}', [VeiculoController::class, 'destroyDoc'])->name('veiculos.excluir_doc');
 
+    // ATUALIZAR CRLV
+    Route::put('/veiculos/store-crlv/{id}', [VeiculoController::class, 'updateCrlv'])->name('veiculos.update-crlv');
+
+    
     Route::post('/veiculos/store-proc/{id}', [VeiculoController::class, 'storeProc'])->name('veiculos.store-proc');
     Route::post('/veiculos/store-atpve/{id}', [VeiculoController::class, 'storeAtpve'])->name('veiculos.store-atpve');
     // Route::get('/veiculos/create-atpve', [VeiculoController::class, 'createAtpve'])->name('veiculos.create-atpve');
@@ -303,6 +344,20 @@ Route::get('/reset-password/{token}', [PasswordResetController::class, 'showRese
 Route::post('/reset-password', [PasswordResetController::class, 'reset'])->name('password.update');
 
 Route::post('/enviar-contato', [ContatoController::class, 'enviarEmail'])->name('contato.enviar');
+
+
+Route::get('/veiculo/{id}', [SiteController::class, 'show'])->name('veiculo.show');
+// Listagem e Busca de Novos
+Route::get('/veiculos-novos', [SiteController::class, 'indexVeiculosNovos'])->name('veiculos.novos');
+Route::get('/veiculos-novos/pesquisa', [SiteController::class, 'searchVeiculosNovos'])->name('veiculos.novos.search');
+
+// Listagem e Busca de Semi-novos
+Route::get('/veiculos-semi-novos', [SiteController::class, 'indexVeiculosSemiNovos'])->name('veiculos.semi-novos');
+Route::get('/veiculos-semi-novos/pesquisa', [SiteController::class, 'searchVeiculosSemiNovos'])->name('veiculos.semi-novos.search');
+
+// Veículos Usados
+Route::get('/veiculos-usados', [SiteController::class, 'indexVeiculosUsados'])->name('veiculos.usados');
+Route::get('/veiculos-usados/pesquisa', [SiteController::class, 'searchVeiculosUsados'])->name('veiculos.usados.search');
 
 Route::get('/', [SiteController::class, 'index'])->name('site.index');
 
