@@ -66,7 +66,7 @@
           
           
           <!-- Start Logo-->
-          <a class="navbar-brand w-auto" href="index.html">
+          <a class="navbar-brand w-auto" href="{{ route('site.index') }}">
             
             <img class="logo dark img-fluid" src="{{ url('assets/pixdesign/images/logo.png') }}" width="50px"> 
             
@@ -80,7 +80,7 @@
             
             <div class="offcanvas-header">
               <div class="offcanvas-header-logo">
-                <a class="logo-link" id="fbs__net-navbarsLabel" href="index.html">
+                <a class="logo-link" id="fbs__net-navbarsLabel" href="{{ route('site.index') }}">
                   
                   
                   <img class="logo dark img-fluid" src="{{ url('assets/pixdesign/images/logo.png') }}" width="50px"> 
