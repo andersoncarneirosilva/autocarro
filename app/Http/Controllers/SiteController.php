@@ -210,4 +210,9 @@ public function show($slug)
     return view('site.detalhes', compact('veiculo'));
 }
 
+public function contato()
+{
+    return view('site.contato'); // ou 'site.contato' se estiver dentro de uma pasta chamada site
+}
+
 }

@@ -290,6 +290,89 @@
             /* Certifique-se de que o z-index é maior que o do modal */
         }
     </style>
+
+<style>
+    /* 1. CONTAINER E TABELA */
+    .table-responsive.rounded-4 {
+        overflow: hidden; 
+        border: 1px solid #eef2f7;
+        background-color: #fff;
+    }
+
+    /* Arredondamento específico do cabeçalho */
+    #userTable thead tr:first-child th:first-child { border-top-left-radius: 0.8rem; }
+    #userTable thead tr:first-child th:last-child { border-top-right-radius: 0.8rem; }
+
+    #userTable thead th {
+        background-color: #313a46;
+        color: #ffffff;
+        padding-top: 15px !important;
+        padding-bottom: 15px !important;
+        letter-spacing: 0.5px;
+        text-transform: uppercase;
+        font-size: 0.75rem;
+        border: none;
+    }
+
+    .user-row { transition: all 0.2s ease; }
+    .user-row:hover { background-color: #f8f9fa; }
+
+    /* 2. BOTÕES DE AÇÃO (SOFT STYLE) */
+    .btn-action {
+        width: 32px;
+        height: 32px;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        border: none;
+        border-radius: 8px;
+        transition: all 0.2s ease-in-out;
+        font-size: 16px;
+    }
+
+    .btn-action.edit {
+        background-color: rgba(114, 124, 245, 0.15); /* Azul/Roxo suave */
+        color: #727cf5;
+    }
+    .btn-action.edit:hover {
+        background-color: #727cf5;
+        color: #fff;
+        transform: translateY(-2px);
+    }
+
+    .btn-action.delete {
+        background-color: rgba(250, 92, 124, 0.15); /* Vermelho suave */
+        color: #fa5c7c;
+    }
+    .btn-action.delete:hover {
+        background-color: #fa5c7c;
+        color: #fff;
+        transform: translateY(-2px);
+    }
+
+    /* 3. BADGES MODERNAS */
+    .bg-success-lighten {
+        background-color: rgba(10, 207, 151, 0.15);
+        color: #0acf97;
+    }
+    .bg-secondary-lighten {
+        background-color: rgba(108, 117, 125, 0.15);
+        color: #6c757d;
+    }
+    .bg-info-lighten {
+        background-color: rgba(57, 175, 209, 0.15);
+        color: #39afd1;
+    }
+
+    /* 4. BUSCA E OUTROS */
+    .search-box .form-control:focus {
+        background-color: #fff !important;
+        box-shadow: 0 0 0 2px rgba(114, 124, 245, 0.1);
+    }
+    
+    .btn-action i { line-height: 1; }
+</style>
+
 </head>
 
 <body>

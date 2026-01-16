@@ -6,88 +6,6 @@
 
 @include('users._partials.cadastrar-usuario')
 
-<style>
-    /* 1. CONTAINER E TABELA */
-    .table-responsive.rounded-4 {
-        overflow: hidden; 
-        border: 1px solid #eef2f7;
-        background-color: #fff;
-    }
-
-    /* Arredondamento específico do cabeçalho */
-    #userTable thead tr:first-child th:first-child { border-top-left-radius: 0.8rem; }
-    #userTable thead tr:first-child th:last-child { border-top-right-radius: 0.8rem; }
-
-    #userTable thead th {
-        background-color: #313a46;
-        color: #ffffff;
-        padding-top: 15px !important;
-        padding-bottom: 15px !important;
-        letter-spacing: 0.5px;
-        text-transform: uppercase;
-        font-size: 0.75rem;
-        border: none;
-    }
-
-    .user-row { transition: all 0.2s ease; }
-    .user-row:hover { background-color: #f8f9fa; }
-
-    /* 2. BOTÕES DE AÇÃO (SOFT STYLE) */
-    .btn-action {
-        width: 32px;
-        height: 32px;
-        display: inline-flex;
-        align-items: center;
-        justify-content: center;
-        border: none;
-        border-radius: 8px;
-        transition: all 0.2s ease-in-out;
-        font-size: 16px;
-    }
-
-    .btn-action.edit {
-        background-color: rgba(114, 124, 245, 0.15); /* Azul/Roxo suave */
-        color: #727cf5;
-    }
-    .btn-action.edit:hover {
-        background-color: #727cf5;
-        color: #fff;
-        transform: translateY(-2px);
-    }
-
-    .btn-action.delete {
-        background-color: rgba(250, 92, 124, 0.15); /* Vermelho suave */
-        color: #fa5c7c;
-    }
-    .btn-action.delete:hover {
-        background-color: #fa5c7c;
-        color: #fff;
-        transform: translateY(-2px);
-    }
-
-    /* 3. BADGES MODERNAS */
-    .bg-success-lighten {
-        background-color: rgba(10, 207, 151, 0.15);
-        color: #0acf97;
-    }
-    .bg-secondary-lighten {
-        background-color: rgba(108, 117, 125, 0.15);
-        color: #6c757d;
-    }
-    .bg-info-lighten {
-        background-color: rgba(57, 175, 209, 0.15);
-        color: #39afd1;
-    }
-
-    /* 4. BUSCA E OUTROS */
-    .search-box .form-control:focus {
-        background-color: #fff !important;
-        box-shadow: 0 0 0 2px rgba(114, 124, 245, 0.1);
-    }
-    
-    .btn-action i { line-height: 1; }
-</style>
-
 {{-- Script do Toast permanece igual --}}
 @if (session('success') || session('error'))
 <script>
@@ -146,7 +64,7 @@ document.addEventListener('DOMContentLoaded', function () {
                     </div>
 
                     @can('access-admin') 
-                        <button type="button" class="btn btn-primary btn-sm rounded-pill shadow-sm px-3" 
+                        <button type="button" class="btn btn-red btn-sm rounded-pill shadow-sm px-3" 
                                 data-bs-toggle="modal" data-bs-target="#modalCadastrarUsuario">
                             <i class="uil uil-plus me-1"></i> Novo Usuário
                         </button>
@@ -163,6 +81,7 @@ document.addEventListener('DOMContentLoaded', function () {
                         <th class="py-3 text-white fw-semibold border-0">Telefone</th>
                         <th class="py-3 text-white fw-semibold border-0">Acesso</th>
                         <th class="py-3 text-white fw-semibold border-0">Status</th>
+                        <th class="py-3 text-white fw-semibold border-0">Último acesso</th>
                         <th class="py-3 text-center text-white fw-semibold border-0">Ações</th>
                     </tr>
                 </thead>
@@ -177,7 +96,7 @@ document.addEventListener('DOMContentLoaded', function () {
              style="width: 38px; height: 38px; object-fit: cover;">
     @else
         <div class="rounded-circle me-3 d-flex align-items-center justify-content-center shadow-sm border text-white fw-bold" 
-             style="width: 38px; height: 38px; background-color: #727cf5; font-size: 16px;">
+             style="width: 38px; height: 38px; background-color: #5b0000; font-size: 16px;">
             {{ strtoupper(substr($user->name, 0, 1)) }}
         </div>
     @endif
@@ -188,7 +107,17 @@ document.addEventListener('DOMContentLoaded', function () {
     </div>
 </div>
                         </td>
-                        <td class="text-muted user-phone">{{ $user->telefone }}</td>
+                        <td>
+                            <?php 
+                        $fone = $user->telefone;
+                        // Formatar o telefone
+                        $fone_formatado = preg_replace('/(\d{2})(\d{5})(\d{4})/', '($1) $2.$3', $fone);
+                        // Gerar o link com o número sem formatação
+                        $link_whatsapp = "https://wa.me/+55" . preg_replace('/\D/', '', $fone); 
+                        ?>
+                        <a href="<?= $link_whatsapp ?>" target="_blank" style="color: #0b8638;">
+                                        <i class="uil uil-whatsapp"></i> <?= $fone_formatado ?>
+                                    </a></td>
                         <td>
                             <span class="badge {{ $user->nivel_acesso == 'Administrador' ? 'badge-outline-danger text-danger' : 'badge-outline-info text-info' }} rounded-pill px-2">
                                 {{ ucfirst($user->nivel_acesso) }}
@@ -202,6 +131,16 @@ document.addEventListener('DOMContentLoaded', function () {
                                 <i class="mdi mdi-circle me-1 small"></i>{{ $user->status }}
                             </span>
                         </td>
+                        <td>
+    @if($user->last_login_at)
+        <span class="text-nowrap">
+            <i class="mdi mdi-clock-outline me-1 text-muted"></i> 
+            {{ $user->last_login_at->format('d/m/Y H:i') }}
+        </span>
+    @else
+        Nunca acessou
+    @endif
+</td>
                         <td class="text-center">
     <div class="d-flex justify-content-center gap-2">
         <button type="button" 
@@ -251,18 +190,27 @@ document.addEventListener('DOMContentLoaded', function() {
     const tableRows = document.querySelectorAll('.user-row');
     const noResultsRow = document.getElementById('no-results-found');
 
+    if (!searchInput) return; // Segurança caso o input não exista na página
+
     searchInput.addEventListener('input', function() {
         const searchTerm = this.value.toLowerCase().trim();
         let visibleCount = 0;
 
         tableRows.forEach(row => {
-            // Pegamos o texto das colunas que queremos filtrar
-            const name = row.querySelector('.user-name').textContent.toLowerCase();
-            const email = row.querySelector('.user-email').textContent.toLowerCase();
-            const phone = row.querySelector('.user-phone').textContent.toLowerCase();
+            // Selecionamos os elementos com segurança usando opcional chaining ou check
+            const nameEl = row.querySelector('.user-name');
+            const emailEl = row.querySelector('.user-email');
+            const phoneEl = row.querySelector('.user-phone');
+
+            // Extraímos o texto apenas se o elemento existir, senão usamos string vazia
+            const name = nameEl ? nameEl.textContent.toLowerCase() : '';
+            const email = emailEl ? emailEl.textContent.toLowerCase() : '';
+            const phone = phoneEl ? phoneEl.textContent.toLowerCase() : '';
 
             // Lógica de filtro
-            if (name.includes(searchTerm) || email.includes(searchTerm) || phone.includes(searchTerm)) {
+            if (name.includes(searchTerm) || 
+                email.includes(searchTerm) || 
+                phone.includes(searchTerm)) {
                 row.style.display = '';
                 visibleCount++;
             } else {
@@ -270,11 +218,9 @@ document.addEventListener('DOMContentLoaded', function() {
             }
         });
 
-        // Controle da mensagem de erro
-        if (visibleCount === 0) {
-            noResultsRow.style.display = '';
-        } else {
-            noResultsRow.style.display = 'none';
+        // Mostra ou esconde a linha de "Nenhum usuário encontrado"
+        if (noResultsRow) {
+            noResultsRow.style.display = (visibleCount === 0 && searchTerm !== "") ? '' : 'none';
         }
     });
 });

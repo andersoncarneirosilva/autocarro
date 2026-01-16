@@ -361,6 +361,7 @@ Route::get('/veiculos-usados', [SiteController::class, 'indexVeiculosUsados'])->
 Route::get('/veiculos-usados/pesquisa', [SiteController::class, 'searchVeiculosUsados'])->name('veiculos.usados.search');
 
 Route::get('/sistema', [SiteController::class, 'index'])->name('site.index');
+Route::get('/sistema/contato', [SiteController::class, 'contato'])->name('site.contato');
 Route::get('/', [PixController::class, 'index'])->name('site.index');
 
 // Route::get('/', function () {

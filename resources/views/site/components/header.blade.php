@@ -49,7 +49,12 @@
               
             </ul>
           </li>
-          <li><a href="contact.html">Contato</a></li>
+          {{-- <li>
+              <a href="{{ route('site.contato') }}" 
+                class="{{ request()->routeIs('site.contato') ? 'active' : '' }}">
+                Contato
+              </a>
+          </li> --}}
         </ul>
         <i class="mobile-nav-toggle d-xl-none bi bi-list"></i>
       </nav>

@@ -3383,6 +3383,23 @@ textarea.form-control-lg {
   --ct-btn-disabled-border-color: #727cf5;
 }
 
+.btn-red {
+  --ct-btn-color: #fff;
+  --ct-btn-bg: #5b0000;
+  --ct-btn-border-color: #5b0000;
+  --ct-btn-hover-color: #fff;
+  --ct-btn-hover-bg: #4a0000; /* Tom um pouco mais escuro */
+  --ct-btn-hover-border-color: #450000;
+  --ct-btn-focus-shadow-rgb: 91, 0, 0; /* Baseado no RGB de #5b0000 */
+  --ct-btn-active-color: #fff;
+  --ct-btn-active-bg: #450000;
+  --ct-btn-active-border-color: #3d0000;
+  --ct-btn-active-shadow: inset 0 3px 5px rgba(0, 0, 0, 0.125);
+  --ct-btn-disabled-color: #fff;
+  --ct-btn-disabled-bg: #5b0000;
+  --ct-btn-disabled-border-color: #5b0000;
+}
+
 .btn-secondary {
   --ct-btn-color: #fff;
   --ct-btn-bg: #6c757d;
@@ -9375,6 +9392,12 @@ textarea.form-control-lg {
 .bg-primary {
   --ct-bg-opacity: 1;
   background-color: rgba(var(--ct-primary-rgb), var(--ct-bg-opacity)) !important;
+}
+
+.bg-red {
+  --ct-bg-opacity: 1;
+  /* 91, 0, 0 é o equivalente RGB de #5b0000 */
+  background-color: rgba(91, 0, 0, var(--ct-bg-opacity)) !important;
 }
 
 .bg-secondary {

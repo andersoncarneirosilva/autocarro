@@ -23,7 +23,7 @@
 <div class="modal fade" id="modalCadastrarUsuario" tabindex="-1" aria-hidden="true">
     <div class="modal-dialog modal-lg modal-dialog-centered">
         <div class="modal-content border-0 shadow-lg">
-            <div class="modal-header bg-primary text-white">
+            <div class="modal-header bg-red text-white">
                 <h5 class="modal-title"><i class="fas fa-user-plus me-2"></i> Novo Usuário</h5>
                 <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
@@ -71,7 +71,7 @@
                             <label class="form-label fw-bold">Senha</label>
                             <div class="input-group">
                                 <span class="input-group-text bg-light"><i class="fas fa-lock"></i></span>
-                                <input type="password" name="password" class="form-control @error('password') is-invalid @enderror" placeholder="Mínimo 6 caracteres" required>
+                                <input type="password" name="password" class="form-control @error('password') is-invalid @enderror" placeholder="Mínimo 8 caracteres" required>
                             </div>
                         </div>
 
@@ -93,7 +93,7 @@
                 
                 <div class="modal-footer bg-light">
                     <button type="button" class="btn btn-label-secondary" data-bs-dismiss="modal">Cancelar</button>
-                    <button type="submit" class="btn btn-primary px-4 shadow-sm">
+                    <button type="submit" class="btn btn-red px-4 shadow-sm">
                         <i class="fas fa-save me-1"></i> Cadastrar
                     </button>
                 </div>
