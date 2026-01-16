@@ -114,7 +114,7 @@
                     <div class="col-lg-12">
                         <nav class="navbar navbar-expand-lg">
                             <a class="navbar-brand" href="index.html">
-                                <img src="{{ url('layout/images/logo.svg') }}" alt="Logo">
+                                <img src="{{ url('layout/images/logo_b_car.png') }}" style="width: 180px">
                             </a>
                             <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
                                 <span class="toggler-icon"></span>
@@ -143,7 +143,7 @@
                                         <a class="page-scroll" href="#blog">Contato</a>
                                     </li>
                                     <li class="nav-item">
-                                        <a class="page-scroll bg-dark text-white" href="{{ route('login') }}">Acessar</a>
+                                        <a class="page-scroll" href="{{ route('login') }}">Login</a>
                                     </li>
                                 </ul>
                             </div> <!-- navbar collapse -->
@@ -159,23 +159,28 @@
             <img class="shape shape-3" src="{{ url('layout/images/shape-3.svg') }}" alt="shape">
             
             <div class="container">
-        <div class="row justify-content-center">
-            <div class="col-lg-10">
-                <div class="hero_text_center">
-                    <h2 class="wow fadeInUp" data-wow-delay="0.2s">Evite erros e aumente a produtividade</h2>
-                    <p class="wow fadeInUp" data-wow-delay="0.4s">
-                        Integre todas as informações de desempenho dos seus veículos e melhore a produtividade da sua frota em um só lugar.
-                    </p>
-                </div>
-            </div>
-            <div class="col-lg-12">
-                <div class="hero_image_main wow fadeInUp" data-wow-delay="0.6s">
-                    <img src="{{ url('layout/images/background_alcecar.png') }}" alt="Dashboard">
-                </div>
-            </div>
-        </div>
-    </div>
-        </div>
+                <div class="row align-items-center">
+                    <div class="col-lg-6">
+                        <div class="header_hero_content mt-45">
+                            <h2 class="header_title wow fadeInLeftBig" data-wow-duration="1.3s" data-wow-delay="0.2s">Evite erros e aumente a produtividade</h2>
+                            <p class="wow fadeInLeftBig" data-wow-duration="1.3s" data-wow-delay="0.6s">Integre todas as informações de desempenho dos seus veículos e melhore a produtividade da sua frota em um só lugar.</p>
+                            <ul>
+                                <li><a class="main-btn wow fadeInUp" data-wow-duration="1.3s" data-wow-delay="1s" href="#">Discover More</a></li>
+                                <li><a class="main-btn main-btn-2 wow fadeInUp" data-wow-duration="1.3s" data-wow-delay="1.4s" href="#">Download App</a></li>
+                            </ul>
+                        </div> <!-- header hero content -->
+                    </div>
+                </div> <!-- row -->
+            </div> <!-- container -->
+            <div class="header_image d-flex align-items-end">
+                <div class="image wow fadeInRightBig" data-wow-duration="1.3s" data-wow-delay="1.8s">
+                    <img src="{{ url('layout/images/header_app.png') }}" alt="header App">
+                    <img src="{{ url('layout/images/dots.svg') }}" alt="dots" class="dots">
+                </div> <!-- image -->
+            </div> <!-- header image -->
+        </div> <!-- header hero -->
+
+       
     </section>
 
     <!--====== HEADER PART ENDS ======-->
@@ -348,7 +353,11 @@
                 </ul>
             </div>
             <div class="pricing_btn">
-                <a href="#" class="main-btn main-btn-2">Adquirir Sistema</a>
+                <a href="https://wa.me/555199047299?text=Olá!%20Gostaria%20de%20solicitar%20um%20teste%20do%20sistema." 
+   target="_blank" 
+   class="main-btn main-btn-2">
+   Solicitar teste
+</a>
             </div>
         </div>
     </div>
@@ -372,7 +381,11 @@
                 </ul>
             </div>
             <div class="pricing_btn">
-                <a href="#" class="main-btn">Adquirir Completo</a>
+               <a href="https://wa.me/555199047299?text=Olá!%20Gostaria%20de%20solicitar%20um%20teste%20do%20sistema." 
+   target="_blank" 
+   class="main-btn main-btn-2">
+   Solicitar teste
+</a>
             </div>
         </div>
     </div>
@@ -394,7 +407,8 @@
         margin-top: 10px;
     }
 </style>
-      </div> </section>
+      </div> 
+    </section>
 
 <style>
     /* Pequeno ajuste para a duração do preço não ficar colada */
