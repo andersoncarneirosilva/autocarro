@@ -4,16 +4,32 @@
 <head>
     <meta charset="utf-8">
     
-    <title>Advanced - App Landing Page Template</title>
-    
+    <title>Alcecar | Gestão de Veículos e Automação de Procurações</title>
+    <meta name="description" content="Automatize a geração de procurações, ATPVe e gerencie sua frota de veículos com facilidade. O sistema completo para despachantes e gestores de frota.">
+    <meta name="keywords" content="gestão de frotas, automação de procurações, gerador de procuração, atpve, gerenciamento de veículos, sistema para despachantes">
+    <meta name="author" content="Alcecar">
+    <meta name="robots" content="index, follow">
+
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://alcecar.com.br/">
+    <meta property="og:title" content="Gestão de Veículos e Automação de Procurações">
+    <meta property="og:description" content="Otimize sua produtividade com nosso sistema de gestão automotiva. Geração de documentos em poucos cliques.">
+    <meta property="og:image" content="{{ url('layout/images/background_alcecar.png') }}">
+
+    <meta property="twitter:card" content="summary_large_image"> 
+    <meta property="twitter:url" content="https://seusite.com.br/">
+    <meta property="twitter:title" content="Gestão de Veículos e Automação de Procurações">
+    <meta property="twitter:description" content="Otimize sua produtividade com nosso sistema de gestão automotiva.">
+    <meta property="twitter:image" content="{{ url('layout/images/background_alcecar.png') }}">
+
     <meta name="description" content="">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="shortcut icon" href="{{ url('layout/images/favicon.png') }}" type="image/png">
-<link rel="stylesheet" href="{{ url('layout/css/animate.css') }}">
-<link rel="stylesheet" href="{{ url('layout/css/LineIcons.2.0.css') }}">
-<link rel="stylesheet" href="{{ url('layout/css/bootstrap.4.5.2.min.css') }}">
-<link rel="stylesheet" href="{{ url('layout/css/default.css') }}">
-<link rel="stylesheet" href="{{ url('layout/css/style.css') }}">
+    <link rel="stylesheet" href="{{ url('layout/css/animate.css') }}">
+    <link rel="stylesheet" href="{{ url('layout/css/LineIcons.2.0.css') }}">
+    <link rel="stylesheet" href="{{ url('layout/css/bootstrap.4.5.2.min.css') }}">
+    <link rel="stylesheet" href="{{ url('layout/css/default.css') }}">
+    <link rel="stylesheet" href="{{ url('layout/css/style.css') }}">
     
 </head>
 
@@ -37,9 +53,60 @@
     </div>
 
     <!--====== PRELOADER PART ENDS ======-->
-    
-    <!--====== HEADER PART START ======-->
+    <style>
+   /* Estilo para dar respiro aos textos sem mudar o HTML */
+.hero_text_center {
+    text-align: center;
+    position: relative;
+    z-index: 5;
+    /* Adiciona padding horizontal para o texto não colar nas laterais */
+    padding: 0 15px; 
+    /* Cria o distanciamento vertical em relação à imagem abaixo */
+    margin-top: 180px; 
+}
 
+.hero_text_center h2 {
+    font-size: 45px;
+    color: #fff;
+    font-weight: 700;
+    margin-bottom: 25px;
+    line-height: 1.2;
+}
+
+.hero_text_center p {
+    color: rgba(255,255,255,0.9);
+    font-size: 20px;
+    line-height: 1.6;
+    /* Limita a largura máxima do texto para ele não ficar esticado e "colado" */
+    max-width: 850px; 
+    margin: 0 auto; /* Centraliza o bloco de texto horizontalmente */
+}
+
+/* Garante que a imagem tenha um limite visual e não suba no texto */
+.hero_image_main {
+    margin-top: 20px;
+    text-align: center;
+}
+
+.hero_image_main img {
+    max-width: 100%;
+    height: auto;
+    filter: drop-shadow(0px 20px 40px rgba(0,0,0,0.3));
+}
+
+/* Ajuste para telas de celular */
+@media (max-width: 767px) {
+    .main_hero_custom, .header_hero {
+        padding-top: 120px;
+    }
+    .hero_text_center h2 {
+        font-size: 28px;
+    }
+    .hero_text_center p {
+        font-size: 16px;
+    }
+}
+</style>
     <section class="header_area">
         <div class="header_navbar">
             <div class="container">
@@ -86,47 +153,28 @@
             </div> <!-- container -->
         </div> <!-- header navbar -->
 
-        <style>
-          /* No seu arquivo de estilo (style.css) */
-.header_image .image img {
-    width: 100%;       /* Ocupa a largura total do container */
-    max-width: 1800px; /* Define um limite para não distorcer demais */
-    height: auto;      /* Mantém a proporção */
-    display: block;
-}
-
-.header_image {
-    width: 60%;        /* Aumenta a largura do container da imagem */
-    position: absolute;
-    right: 0;
-    bottom: 0;
-}
-        </style>
         <div id="home" class="header_hero d-lg-flex align-items-center">
             <img class="shape shape-1" src="{{ url('layout/images/shape-1.svg') }}" alt="shape">
             <img class="shape shape-2" src="{{ url('layout/images/shape-2.svg') }}" alt="shape">
             <img class="shape shape-3" src="{{ url('layout/images/shape-3.svg') }}" alt="shape">
             
             <div class="container">
-                <div class="row align-items-center">
-                    <div class="col-lg-6">
-                        <div class="header_hero_content mt-45">
-                            <h2 class="header_title wow fadeInLeftBig" data-wow-duration="1.3s" data-wow-delay="0.2s">Evite erros e aumente a produtividade</h2>
-                            <p class="wow fadeInLeftBig" data-wow-duration="1.3s" data-wow-delay="0.6s">Integre todas as informações de desempenho<br> dos seus veículos e melhore a produtividade<br> da sua frota em um só lugar.</p>
-                            <ul>
-                                <li><a class="main-btn wow fadeInUp" data-wow-duration="1.3s" data-wow-delay="1s" href="#">Discover More</a></li>
-                                <li><a class="main-btn main-btn-2 wow fadeInUp" data-wow-duration="1.3s" data-wow-delay="1.4s" href="#">Download App</a></li>
-                            </ul>
-                        </div>
-                    </div>
+        <div class="row justify-content-center">
+            <div class="col-lg-10">
+                <div class="hero_text_center">
+                    <h2 class="wow fadeInUp" data-wow-delay="0.2s">Evite erros e aumente a produtividade</h2>
+                    <p class="wow fadeInUp" data-wow-delay="0.4s">
+                        Integre todas as informações de desempenho dos seus veículos e melhore a produtividade da sua frota em um só lugar.
+                    </p>
                 </div>
             </div>
-            <div class="header_image d-flex align-items-end">
-                <div class="image wow fadeInRightBig" data-wow-duration="1.3s" data-wow-delay="1.8s">
-                    <img src="{{ url('layout/images/background_alcecar.png') }}" style="width: 1370px">
-                    
+            <div class="col-lg-12">
+                <div class="hero_image_main wow fadeInUp" data-wow-delay="0.6s">
+                    <img src="{{ url('layout/images/background_alcecar.png') }}" alt="Dashboard">
                 </div>
             </div>
+        </div>
+    </div>
         </div>
     </section>
 
