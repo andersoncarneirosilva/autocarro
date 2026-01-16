@@ -5,6 +5,9 @@ namespace App\Http\Controllers;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Str;
+use Illuminate\Support\Facades\Hash;
+use Illuminate\Validation\ValidationException;
 
 class UserController extends Controller
 {
@@ -16,18 +19,18 @@ class UserController extends Controller
     }
 
     public function index(Request $request)
-    {
+{
+    $search = $request->query('search');
 
-        $search = $request->search;
+    $users = User::when($search, function ($query, $search) {
+        return $query->where('name', 'LIKE', "%{$search}%")
+                     ->orWhere('email', 'LIKE', "%{$search}%")
+                     ->orWhere('telefone', 'LIKE', "%{$search}%");
+    })
+    ->paginate(10);
 
-        $users = $this->model->getUsers(search: $request->search ?? '');
-
-        $title = 'Excluir!';
-        $text = 'Deseja excluir esse usuário?';
-        confirmDelete($title, $text);
-
-        return view('users.index', compact('users'));
-    }
+    return view('users.index', compact('users'));
+}
 
     public function show($id)
     {
@@ -42,99 +45,80 @@ class UserController extends Controller
         return view('users.show', compact('user'));
     }
 
-    // metodo para direcionar a pagina para o cadastro
-    public function create()
-    {
-        return view('users.create');
-    }
 
     // metodo para cadastrar o usuario no banco
     public function store(Request $request)
-    {
+{
+    try {
+        // 1. Validação
+        $validatedData = $request->validate([
+            'name'         => 'required|string|max:255',
+            'email'        => 'required|email|unique:users,email',
+            'telefone'     => 'required|string',
+            'nivel_acesso' => 'required|string',
+            'password'     => 'required|string|min:8|confirmed',
+            'image'        => 'nullable|image|max:2048',
+            // Removido o status da validação pois vamos forçar o valor abaixo
+        ]);
+
         $data = $request->all();
-        // dd($data);
-        try {
-            $validated = $request->validate([
-                'name' => 'required|string|max:255',
-                'email' => 'required|email|unique:users,email',
-                'telefone' => 'required|string|max:15',
-                'perfil' => 'required|string|max:255',
-                'password' => 'required|string|min:6|confirmed',
-                'classe' => 'required|string|max:255',
-                'status' => 'required|string|max:255',
-                'credito' => 'required|string|max:255',
-            ]);
-            // dd($validated);
-            // dd($validated); // 🔴 ADICIONE ESTA LINHA PARA TESTAR SE A VALIDAÇÃO ESTÁ FUNCIONANDO
-        } catch (\Illuminate\Validation\ValidationException $e) {
-            $mensagemErro = implode("\n", $e->validator->errors()->all());
-            alert()->error('Todos os campos são obrigatórios!', $mensagemErro);
+        $data['password'] = Hash::make($request->password);
+        
+        // FORÇANDO O STATUS COMO ATIVO
+        $data['status'] = 'Ativo';
 
-            return redirect()->route('users.create')->withErrors($e->validator)->withInput();
-        }
-
-        $data['password'] = bcrypt($request->password);
-
-        // Verifica se o email já existe no sistema
-        $existingUser = User::where('email', $request->email)->first();
-
-        if ($existingUser) {
-            /* return response()->json(['error' => 'Email já cadastrado no sistema.']); */
-            alert()->error('Email já cadastrado no sistema!');
-
-            return redirect()->route('users.create');
-        }
-
-        if ($request->image) {
+        // 2. Upload da Imagem
+        if ($request->hasFile('image')) {
+            $nameSlug = Str::slug($request->name);
             $extension = $request->image->getClientOriginalExtension();
-            $data['image'] = $request->image->storeAs("usuarios/{$request->name}/foto", $request->name.".{$extension}");
+            $fileName = $nameSlug . "_" . time() . "." . $extension;
+            $data['image'] = $request->image->storeAs("usuarios/{$nameSlug}", $fileName, 'public');
         }
 
-        if ($this->model->create($data)) {
+        // 3. Criação
+        User::create($data);
 
-            return redirect()->route('users.index')->with('success', 'Usuário cadastrado com sucesso!');
-        }
+        return redirect()->route('users.index')->with('success', 'Usuário cadastrado com sucesso!');
+
+    } catch (ValidationException $e) {
+        $firstError = $e->validator->errors()->first();
+        
+        return redirect()->back()
+            ->with('error', $firstError)
+            ->withErrors($e->validator)
+            ->withInput();
+            
+    } catch (\Exception $e) {
+        return redirect()->back()
+            ->with('error', 'Erro ao cadastrar: ' . $e->getMessage())
+            ->withInput();
     }
+}
 
-    public function edit($id)
-    {
-
-        if (! $user = $this->model->find($id)) {
-            return redirect()->route('users.index');
-        }
-
-        return view('users.edit', compact('user'));
-    }
 
     public function update(Request $request, $id)
-    {
+{
+    $user = User::findOrFail($id);
 
-        if ($request->password) {
-            $data['password'] = bcrypt($request->password);
-            $data['password_confirm'] = bcrypt($request->password);
-        } else {
-            $data = $request->except('password', 'password_confirm');
-        }
+    $request->validate([
+        'name'     => 'required|string|max:255',
+        'email'    => 'required|email|unique:users,email,' . $id, // Ignora o próprio usuário
+        'telefone' => 'required',
+        'password' => 'nullable|string|min:6|confirmed', // Senha não é mais obrigatória
+    ]);
 
-        if (! $user = $this->model->find($id)) {
-            return redirect()->route('users.index');
-        }
+    $data = $request->only(['name', 'email', 'telefone', 'nivel_acesso', 'status']);
 
-        if ($request->image) {
-            $extension = $request->image->getClientOriginalExtension();
-            $data['image'] = $request->image->storeAs("usuarios/{$request->name}/foto", $request->name.".{$extension}");
-        }
-
-        if ($request->password != $request->password_confirm) {
-            alert()->error('Senhas não coincidem!');
-
-            return redirect()->route('users.edit', $id);
-        }
-
-        $user->update($data);
-
-        return redirect()->route('users.index')->with('success', 'Usuário editado com sucesso!');
+    if ($request->filled('password')) {
+        $data['password'] = Hash::make($request->password);
     }
+
+    // Lógica da imagem...
+    
+    $user->update($data);
+
+    return redirect()->route('users.index')->with('success', 'Usuário atualizado!');
+}
 
     public function destroy($id)
     {

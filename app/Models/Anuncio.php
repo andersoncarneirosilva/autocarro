@@ -66,6 +66,13 @@ class Anuncio extends Model
     'modificacoes' => 'array',
 ];
 
+protected static function boot()
+{
+    parent::boot();
+    static::creating(function ($veiculo) {
+        $veiculo->slug = \Str::slug($veiculo->marca_real . '-' . $veiculo->modelo_real . '-' . \Str::random(5));
+    });
+}
 
      public function user()
     {

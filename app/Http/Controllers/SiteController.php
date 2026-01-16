@@ -164,49 +164,41 @@ private function processarBusca(Request $request, $estado = 'Novo')
     return view($view, compact('veiculos'));
 }
 
-public function show($id)
+public function show($slug)
 {
-    // Busca o veículo ou retorna 404 se não existir
-    $veiculo = Anuncio::findOrFail($id);
+    // 1. Busca pelo slug em vez do ID
+    $veiculo = Anuncio::where('slug', $slug)->firstOrFail();
 
-    // Decodifica as imagens (caso estejam em JSON)
+    // 2. Decodifica as imagens (JSON para Array)
     $veiculo->images = json_decode($veiculo->images, true) ?? [];
 
-    // Ajusta marca e modelo para exibição
+    // 3. Lógica de tratamento de Marca e Modelo
     $texto = $veiculo->marca;
+    $marca = '';
+    $modelo = '';
 
     if (str_starts_with($texto, 'I/')) {
-        // Remove apenas o "I/"
         $texto = substr($texto, 2);
-
-        if (str_contains($texto, '/')) {
-            [$marca, $modelo] = explode('/', $texto, 2);
-        } else {
-            $partes = explode(' ', $texto, 2);
-            $marca  = $partes[0] ?? '';
-            $modelo = $partes[1] ?? '';
-        }
-    } else {
-        if (str_contains($texto, '/')) {
-            [$marca, $modelo] = explode('/', $texto, 2);
-        } else {
-            $partes = explode(' ', $texto, 2);
-            $marca  = $partes[0] ?? '';
-            $modelo = $partes[1] ?? '';
-        }
     }
 
-    // Campos apenas para exibição
+    if (str_contains($texto, '/')) {
+        [$marca, $modelo] = explode('/', $texto, 2);
+    } else {
+        $partes = explode(' ', $texto, 2);
+        $marca  = $partes[0] ?? '';
+        $modelo = $partes[1] ?? '';
+    }
+
     $veiculo->marca_exibicao  = trim($marca);
     $veiculo->modelo_exibicao = trim($modelo);
 
-    // 🎨 Background conforme a marca
+    // 4. Mapa de Background conforme a marca
     $mapaBackground = [
-        'FORD'   => 'assets/brands/ford.jpg',
-        'FIAT'   => 'assets/brands/fiat.jpg',
-        'HONDA'  => 'assets/brands/honda.jpg',
-        'YAMAHA'=> 'assets/brands/yamaha.jpg',
-        'RENAULT'=> 'assets/brands/renault.jpg',
+        'FORD'    => 'assets/brands/ford.jpg',
+        'FIAT'    => 'assets/brands/fiat.jpg',
+        'HONDA'   => 'assets/brands/honda.jpg',
+        'YAMAHA'  => 'assets/brands/yamaha.jpg',
+        'RENAULT' => 'assets/brands/renault.jpg',
     ];
 
     $marcaUpper = strtoupper($veiculo->marca_exibicao);
@@ -214,7 +206,6 @@ public function show($id)
     $veiculo->background_image = asset(
         $mapaBackground[$marcaUpper] ?? 'assets/brands/default.jpg'
     );
-
 
     return view('site.detalhes', compact('veiculo'));
 }

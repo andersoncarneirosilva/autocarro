@@ -28,14 +28,31 @@
     </div>
 
     <nav class="breadcrumbs" style="position: relative; z-index: 2;">
-        <div class="container">
-            <ol>
-                <li><a href="{{ route('site.index') }}">Página Inicial</a></li>
-                <li><a href="#">Estoque</a></li>
-                <li class="current">{{ $veiculo->modelo_exibicao }}</li>
-            </ol>
-        </div>
-    </nav>
+    <div class="container">
+        <ol>
+            <li><a href="{{ route('site.index') }}">Página Inicial</a></li>
+            
+            @php
+                // Normaliza o estado para evitar erros de digitação (ex: "novo" vira "Novos")
+                $estado = mb_strtolower($veiculo->estado);
+                
+                if (str_contains($estado, 'novo') && !str_contains($estado, 'semi')) {
+                    $rota = route('veiculos.novos');
+                    $label = 'Novos';
+                } elseif (str_contains($estado, 'semi')) {
+                    $rota = route('veiculos.semi-novos');
+                    $label = 'Semi-novos';
+                } else {
+                    $rota = route('veiculos.usados');
+                    $label = 'Usados';
+                }
+            @endphp
+
+            <li><a href="{{ $rota }}">{{ $label }}</a></li>
+            <li class="current">{{ $veiculo->modelo_exibicao }}</li>
+        </ol>
+    </div>
+</nav>
 </div>
 
 {{-- {{ $veiculo->background_image }} --}}
@@ -259,9 +276,18 @@
             </div>
             <div class="col-md-3 col-6">
                 <div class="d-flex align-items-center">
-                    <i class="bi bi-door-closed fs-3 text-red me-3"></i>
-                    <div><small class="text-muted d-block">Nº Portas</small><span class="fw-bold">{{ $veiculo->portas }} Portas</span></div>
-                </div>
+    <i class="bi bi-door-closed fs-3 text-red me-3"></i>
+    <div>
+        <small class="text-muted d-block">Nº Portas</small>
+        <span class="fw-bold">
+            @if(strtoupper($veiculo->tipo) == 'MOTOCICLETA' || empty($veiculo->portas))
+                <span class="fw-bold text-capitalize">Não aplicável</span>
+            @else
+                {{ $veiculo->portas }} Portas
+            @endif
+        </span>
+    </div>
+</div>
             </div>
             <div class="col-md-3 col-6">
                 <div class="d-flex align-items-center">

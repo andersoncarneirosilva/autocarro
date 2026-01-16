@@ -15,18 +15,9 @@
                                 <label class="form-label">E-mail</label>
                                 <input type="email" class="form-control" name="email">
                             </div>
-                        </div> <!-- end col -->
-                        <div class="col-md-4">
-                            <div class="mb-3">
-                                <label class="form-label">Espaço em MB</label>
-                                <select class="form-select" name="size_folder">
-                                    <option value="100" selected>100Mb</option>
-                                    <option value="1000">1Gb</option>
-                                    <option value="5000">5Gb</option>
-                                  </select>
-                            </div>
-                        </div> <!-- end col -->
-                    </div> <!-- end row -->
+                        </div> 
+                        
+                    </div> 
 
                     <div class="row">
                         <div class="col-md-3">
@@ -45,28 +36,7 @@
                                   </select>
                             </div>
                         </div>
-                        <div class="col-md-3">
-                            <div class="mb-3">
-                                <label for="useremail" class="form-label">Perfil</label>
-                                <select class="form-select" name="perfil">
-                                    <option value="">Selecione o perfil</option>
-                                    <option value="Despachante">Despachante</option>
-                                    <option value="Lojista">Lojista</option>
-                                  </select>
-                            </div>
-                        </div>
-                        <div class="col-md-3">
-                            <div class="mb-3">
-                                <label for="useremail" class="form-label">Plano</label>
-                                <select class="form-select" name="plano">
-                                    <option value="">Selecione o plano</option>
-                                    <option value="Padrão">Padrão</option>
-                                    <option value="Pro">Pro</option>
-                                    <option value="Premium">Premium</option>
-                                  </select>
-                            </div>
-                        </div>
-                    </div> <!-- end row -->
+                    </div>
 
 
                     <h5 class="mb-3 text-uppercase bg-light p-2"><i class="mdi mdi-earth me-1"></i> Acesso</h5>
@@ -88,12 +58,6 @@
                                 </div>
                             </div>
                         </div>
-
-                        <input type="hidden" name="classe" value="badge badge-outline-success" class="form-control"/>
-                        <input type="hidden" name="status" value="Ativo" class="form-control"/>
-                        <input type="hidden" name="credito" value="100" class="form-control"/>
-
-
                     </div> <!-- end row -->
 
 
@@ -119,8 +83,8 @@
                         <button type="submit" class="btn btn-success btn-sm">Cadastrar</button>
                         </div>
                     </div>
-            </div> <!-- end card body -->
-        </div> <!-- end card -->
+            </div>
+        </div>
     </div>
     
 </div>

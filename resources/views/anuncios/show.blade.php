@@ -102,6 +102,13 @@ document.addEventListener('DOMContentLoaded', function () {
             <i class="mdi mdi-check-decagram me-1"></i> Anúncio Publicado
         </span>
 
+        <a href="{{ url('sistema/veiculo/' . $veiculo->slug) }}" 
+   target="_blank" 
+   class="btn btn-primary btn-sm rounded-pill px-3" 
+   title="Visualizar Anúncio">
+    <i class="mdi mdi-eye-outline me-1"></i> Ver anúncio
+</a>
+
         <form action="{{ route('anuncios.remover', $veiculo->id) }}" method="POST" class="d-inline form-remover">
             @csrf
             @method('PATCH')
@@ -176,57 +183,40 @@ document.addEventListener('DOMContentLoaded', function () {
                     
                     <div class="tab-pane show active" id="info-geral">
                         <div class="row">
-                            <div class="col-md-8">
-                                <div class="d-flex justify-content-between align-items-center mb-3">
-                                    <h4 class="header-title mb-3 text-primary"><i class="mdi mdi-card-account-details-outline me-1"></i> Informações do Proprietário</h4>
-                                    
-                                </div>
+                            <div class="col-md-8 px-md-3">
                                 
-            <div class="row mb-3">
-                <div class="col-md-4">
-                    <p class="mb-1 text-muted">Nome do Proprietário</p>
-                    <h5 class="mt-0">{{ $veiculo->nome }}</h5>
-                </div>  
-                <div class="col-md-4">
-                    <p class="mb-1 text-muted">Cidade/UF</p>
-                    <h5 class="mt-0">{{ $veiculo->cidade }}</h5>
-                </div>  
-                 <div class="col-md-4">
-                    <p class="mb-1 text-muted">CPF</p>
-                    <h5 class="mt-0">{{ $veiculo->cpf }}</h5>
-                </div>
-            </div>  
-            <hr>
-            <h4 class="header-title mb-3 text-primary"><i class="mdi mdi-card-account-details-outline me-1"></i> Informações do veículo</h4>
-            <div class="row mb-3">
-                <div class="col-md-4"> 
-                    <p class="mb-1 text-muted">Placa / Anterior</p>
-                    <h5 class="mt-0">{{ $veiculo->placa }} <small class="text-muted">({{ $veiculo->placaAnterior }})</small></h5>
-                    <p class="mb-1 text-muted">Cor</p>
-                    <h5 class="mt-0">{{ $veiculo->cor }}</h5>
-                    <p class="mb-1 text-muted">Motor</p>
-                    <h5 class="mt-0">{{ $veiculo->motor }}</h5>
-                    {{-- <p class="mb-1 text-muted">Chassi</p>
-                    <h5 class="mt-0">{{ $veiculo->chassi }}</h5> --}}
-                </div>
-                <div class="col-md-4"> 
-                    <p class="mb-1 text-muted">Marca/Modelo</p>
-                    <h5 class="mt-0">{{ $veiculo->marca }}</h5>
-                    <p class="mb-1 text-muted">Combustível</p>
-                    <h5 class="mt-0">{{ $veiculo->combustivel }}</h5>
-                    <p class="mb-1 text-muted">Renavam</p>
-                    <h5 class="mt-0">{{ $veiculo->renavam }}</h5>
-                </div>
-                <div class="col-md-4">
-                    <p class="mb-1 text-muted">Ano</p>
-                    <h5 class="mt-0">{{ $veiculo->ano }}</h5>
-                    <p class="mb-1 text-muted">Tipo / Categoria</p>
-                    <h5 class="mt-0">{{ $veiculo->tipo }} / {{ $veiculo->categoria }}</h5>
-                    <p class="mb-1 text-muted">Número do CRV</p>
-                    <h5 class="mt-0">{{ $veiculo->crv }}</h5>
-                </div>
-            </div>
-            <hr>
+                                <h4 class="header-title mb-3 text-primary"><i class="mdi mdi-card-account-details-outline me-1"></i> Informações do veículo</h4>
+                                <div class="row">
+                                    <div class="col-md-4"> 
+                                        <p class="mb-1 text-muted">Placa / Anterior</p>
+                                        <h5 class="mt-0">{{ $veiculo->placa }} <small class="text-muted">({{ $veiculo->placaAnterior }})</small></h5>
+                                        <p class="mb-1 text-muted">Cor</p>
+                                        <h5 class="mt-0">{{ $veiculo->cor }}</h5>
+                                        <p class="mb-1 text-muted">Motor</p>
+                                        <h5 class="mt-0">{{ $veiculo->motor }}</h5>
+                                        {{-- <p class="mb-1 text-muted">Chassi</p>
+                                        <h5 class="mt-0">{{ $veiculo->chassi }}</h5> --}}
+                                    </div>
+                                    <div class="col-md-4"> 
+                                        <p class="mb-1 text-muted">Marca/Modelo</p>
+                                        <h5 class="mt-0">{{ $veiculo->marca }}</h5>
+                                        <p class="mb-1 text-muted">Combustível</p>
+                                        <h5 class="mt-0">{{ $veiculo->combustivel }}</h5>
+                                        <p class="mb-1 text-muted">Renavam</p>
+                                        <h5 class="mt-0">{{ $veiculo->renavam }}</h5>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <p class="mb-1 text-muted">Ano</p>
+                                        <h5 class="mt-0">{{ $veiculo->ano }}</h5>
+                                        <p class="mb-1 text-muted">Tipo / Categoria</p>
+                                        <h5 class="mt-0">{{ $veiculo->tipo }} / {{ $veiculo->categoria }}</h5>
+                                        <p class="mb-1 text-muted">Número do CRV</p>
+                                        <h5 class="mt-0">{{ $veiculo->crv }}</h5>
+                                    </div>
+                                </div>
+                                <hr>
+
+                                
                                 <div class="d-flex justify-content-between align-items-center mb-3">
                 <h4 class="header-title text-primary mb-0">
                     <i class="mdi mdi-car-info me-1"></i> Informações básicas
@@ -235,7 +225,7 @@ document.addEventListener('DOMContentLoaded', function () {
                     <i class="mdi mdi-sync me-1"></i> Atualizar Dados
                 </button>
             </div>
-            <div class="row mb-3">
+            <div class="row">
                 <div class="col-md-4">
                     <p class="mb-1 text-muted">Câmbio</p>
                     <h5 class="mt-0">{{ $veiculo->cambio ?? 'N/A' }}</h5>
@@ -251,13 +241,13 @@ document.addEventListener('DOMContentLoaded', function () {
                         @if(strtoupper($veiculo->tipo) == 'MOTOCICLETA')
                             <small>(Não aplicável)</small> 
                             @else
-                            <h5 class="mt-0">{{ $veiculo->portas }}</h5>
+                            <h5 class="mt-0">{{ $veiculo->portas }} portas</h5>
                             @endif
                 </div>
                 
             </div>
 
-            <div class="row mb-3">
+            <div class="row">
                 <div class="col-md-4">
                     <p class="mb-1 text-muted">Estado</p>
                     <h5 class="mt-0">{{ $veiculo->estado ?? 'Não informado' }}</h5>
@@ -272,6 +262,26 @@ document.addEventListener('DOMContentLoaded', function () {
                 </div>
                 
             </div>
+            <hr>
+            <div class="d-flex justify-content-between align-items-center mb-3">
+                                    <h4 class="header-title mb-3 text-primary"><i class="mdi mdi-card-account-details-outline me-1"></i> Informações do Proprietário</h4>
+                                    
+                                </div>
+                                
+                                <div class="row mb-3">
+                                    <div class="col-md-4">
+                                        <p class="mb-1 text-muted">Nome do Proprietário</p>
+                                        <h5 class="mt-0">{{ $veiculo->nome }}</h5>
+                                    </div>  
+                                    <div class="col-md-4">
+                                        <p class="mb-1 text-muted">Cidade/UF</p>
+                                        <h5 class="mt-0">{{ $veiculo->cidade }}</h5>
+                                    </div>  
+                                    <div class="col-md-4">
+                                        <p class="mb-1 text-muted">CPF</p>
+                                        <h5 class="mt-0">{{ $veiculo->cpf }}</h5>
+                                    </div>
+                                </div>  
                             </div>
 
                             <div class="col-md-4 border-start">
@@ -387,7 +397,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
                     <div class="tab-pane" id="fotos-desc">
     <div class="row">
-        <div class="col-md-12">
+        <div class="col-md-12 px-md-3">
             <div class="d-flex justify-content-between align-items-center mb-3">
                 <h4 class="header-title text-primary mb-0 text-uppercase" style="letter-spacing: 1px;">
                     Descrição do Anúncio
@@ -406,51 +416,91 @@ document.addEventListener('DOMContentLoaded', function () {
 
                     <div class="tab-pane" id="opcionais-tab">
                         <div class="row">
-                            <div class="col-md-4 mb-4">
+                            <div class="col-md-4 px-md-3">
                                 <div class="d-flex justify-content-between align-items-center mb-2">
                                     <h5 class="text-primary"><i class="mdi mdi-plus-box-outline me-1"></i> Adicionais</h5>
-                                    <button class="btn btn-xs btn-light" data-bs-toggle="modal" data-bs-target="#modalAdicionais"><i class="mdi mdi-pencil"></i></button>
+                                    @php
+                                        $listaAdicionais = is_array($veiculo->adicionais) ? $veiculo->adicionais : json_decode($veiculo->adicionais, true);
+                                    @endphp
+
+                                    @if(is_array($listaAdicionais) && count($listaAdicionais) > 0)
+                                        {{-- Caso já existam itens cadastrados --}}
+                                        <button class="btn btn-xs btn-outline-primary rounded-pill px-3" data-bs-toggle="modal" data-bs-target="#modalAdicionais">
+                                            <i class="mdi mdi-pencil me-1"></i> Atualizar adicionais
+                                        </button>
+                                    @else
+                                        {{-- Caso esteja vazio [], null ou string vazia --}}
+                                        <button class="btn btn-xs btn-primary rounded-pill px-3 shadow-sm" data-bs-toggle="modal" data-bs-target="#modalAdicionais">
+                                            <i class="mdi mdi-plus me-1"></i> Adicionar adicionais
+                                        </button>
+                                    @endif
                                 </div>
                                 <div class="d-flex flex-wrap gap-2 p-2 border rounded min-height-100 bg-light-lighten">
-    @php $adicionais = json_decode($veiculo->adicionais) ?? []; @endphp
+                                    @php $adicionais = json_decode($veiculo->adicionais) ?? []; @endphp
 
-    @forelse($adicionais as $ad)
-        <span class="badge badge-outline-secondary px-2 py-1 fw-normal" style="font-size: 13px;">
-            {{ $ad }}
-        </span>
-    @empty
-        <span class="text-muted small p-1">Nenhum adicional selecionado.</span>
-    @endforelse
-</div>
+                                    @forelse($adicionais as $ad)
+                                        <span class="badge badge-outline-secondary px-2 py-1 fw-normal" style="font-size: 13px;">
+                                            {{ $ad }}
+                                        </span>
+                                    @empty
+                                        <span class="text-muted small p-1">Nenhum adicional selecionado.</span>
+                                    @endforelse
+                                </div>
                             </div>
                             <div class="col-md-4 mb-4">
-    <div class="d-flex justify-content-between align-items-center mb-2">
-        <h5 class="text-primary mb-0"><i class="mdi mdi-check-all me-1"></i> Opcionais</h5>
-        <button class="btn btn-xs btn-outline-primary rounded-pill" data-bs-toggle="modal" data-bs-target="#modalOpcionais">
-            <i class="mdi mdi-pencil"></i>
-        </button>
-    </div>
-    <div class="d-flex flex-wrap gap-2 p-2 border rounded min-height-100 bg-light-lighten">
-        @forelse(json_decode($veiculo->opcionais) ?? [] as $opt)
-            <span class="badge badge-outline-secondary px-2 py-1 fw-normal" style="font-size: 13px;">
-                {{ $opt }}
-            </span>
-        @empty
-            <span class="text-muted small p-1">Nenhum opcional selecionado.</span>
-        @endforelse
-    </div>
-</div>
+                                <div class="d-flex justify-content-between align-items-center mb-2">
+                                    <h5 class="text-primary mb-0"><i class="mdi mdi-check-all me-1"></i> Opcionais</h5>
+                                    
+                                @php
+                                    $listaOpcionais = is_array($veiculo->opcionais) ? $veiculo->opcionais : json_decode($veiculo->opcionais, true);
+                                @endphp
+
+                                    @if(is_array($listaOpcionais) && count($listaOpcionais) > 0)
+                                        {{-- Se o array tem itens, o botão é de ATUALIZAR --}}
+                                        <button class="btn btn-xs btn-outline-primary rounded-pill px-3" data-bs-toggle="modal" data-bs-target="#modalOpcionais">
+                                            <i class="mdi mdi-pencil me-1"></i> Atualizar opcionais
+                                        </button>
+                                    @else
+                                        {{-- Se for vazio [], null ou string vazia, o botão é de ADICIONAR --}}
+                                        <button class="btn btn-xs btn-primary rounded-pill px-3 shadow-sm" data-bs-toggle="modal" data-bs-target="#modalOpcionais">
+                                            <i class="mdi mdi-plus me-1"></i> Adicionar opcionais
+                                        </button>
+                                    @endif
+
+                                </div>
+                                <div class="d-flex flex-wrap gap-2 p-2 border rounded min-height-100 bg-light-lighten">
+                                    @forelse(json_decode($veiculo->opcionais) ?? [] as $opt)
+                                        <span class="badge badge-outline-secondary px-2 py-1 fw-normal" style="font-size: 13px;">
+                                            {{ $opt }}
+                                        </span>
+                                    @empty
+                                        <span class="text-muted small p-1">Nenhum opcional selecionado.</span>
+                                    @endforelse
+                                </div>
+                            </div>
 
 <div class="col-md-4 mb-4">
     <div class="d-flex justify-content-between align-items-center mb-2">
         <h5 class="text-primary mb-0"><i class="mdi mdi-auto-fix me-1"></i> Modificações</h5>
-        <button class="btn btn-xs btn-outline-primary rounded-pill" data-bs-toggle="modal" data-bs-target="#modalModificacoes">
-            <i class="mdi mdi-pencil"></i>
-        </button>
+        @php
+            $listaModificacoes = is_array($veiculo->modificacoes) ? $veiculo->modificacoes : json_decode($veiculo->modificacoes, true);
+        @endphp
+
+        @if(is_array($listaModificacoes) && count($listaModificacoes) > 0)
+            {{-- Se já existem modificações registradas --}}
+            <button class="btn btn-xs btn-outline-primary rounded-pill px-3" data-bs-toggle="modal" data-bs-target="#modalModificacoes">
+                <i class="mdi mdi-pencil me-1"></i> Atualizar modificações
+            </button>
+        @else
+            {{-- Se estiver vazio [], null ou string vazia --}}
+            <button class="btn btn-xs btn-primary rounded-pill px-3 shadow-sm" data-bs-toggle="modal" data-bs-target="#modalModificacoes">
+                <i class="mdi mdi-plus me-1"></i> Adicionar modificações
+            </button>
+        @endif
     </div>
     <div class="d-flex flex-wrap gap-2 p-2 border rounded min-height-100 bg-light-lighten">
         @forelse(json_decode($veiculo->modificacoes) ?? [] as $mod)
-            <span class="badge bg-info-lighten text-info border border-info px-2 py-1 fw-normal" style="font-size: 13px;">
+            <span class="badge badge-outline-secondary px-2 py-1 fw-normal" style="font-size: 13px;">
                 {{ $mod }}
             </span>
         @empty
@@ -463,7 +513,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
                     <div class="tab-pane" id="proprietario">
     <div class="row">
-        <div class="col-md-12">
+        <div class="col-md-12 px-md-3">
             <div class="d-flex justify-content-between align-items-center mb-3">
                 <h5 class="text-primary mb-0"><i class="mdi mdi-file me-1"></i> Documentos</h5>
                 

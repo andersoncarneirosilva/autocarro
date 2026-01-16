@@ -589,7 +589,6 @@ public function publicar($id)
         // Verificamos se algum dos campos essenciais está vazio
         $camposObrigatorios = [
             'kilometragem' => 'Kilometragem',
-            'portas'       => 'Número de portas',
             'cambio'       => 'Tipo de câmbio',
             'valor'        => 'Valor do veículo'
         ];

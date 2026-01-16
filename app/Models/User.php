@@ -28,16 +28,9 @@ class User extends Authenticatable
         'email',
         'telefone',
         'nivel_acesso',
-        'perfil',
-        'plano',
         'password',
         'image',
-        'classe',
         'status',
-        'credito',
-        'size_folder',
-        'external_reference',
-        'payment_status',
     ];
 
     /**
@@ -49,14 +42,6 @@ class User extends Authenticatable
         'password',
         'remember_token',
     ];
-    public function canAccessChat($chatId)
-    {
-        return $this->chats()->where('id', $chatId)->exists();
-    }
-    public function chats()
-{
-    return $this->belongsToMany(Chat::class, 'chat_user');
-}
 
     /**
      * The attributes that should be cast.
@@ -65,6 +50,8 @@ class User extends Authenticatable
      */
     protected $casts = [
         'email_verified_at' => 'datetime',
+        'last_login_at' => 'datetime',
+        'password_changed_at' => 'datetime',
     ];
 
     public function assinaturas()

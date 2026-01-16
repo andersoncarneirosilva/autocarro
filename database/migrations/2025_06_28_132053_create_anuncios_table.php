@@ -57,6 +57,7 @@ return new class extends Migration
             $table->string('arquivo_doc')->nullable();
             $table->unsignedBigInteger('size_doc')->nullable();
 
+            $table->string('slug')->unique();
             $table->foreignId('user_id')->constrained()->onDelete('cascade');
 
             $table->timestamps();

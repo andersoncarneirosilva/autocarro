@@ -347,19 +347,20 @@ Route::post('/reset-password', [PasswordResetController::class, 'reset'])->name(
 Route::post('/enviar-contato', [ContatoController::class, 'enviarEmail'])->name('contato.enviar');
 
 
-Route::get('/veiculo/{id}', [SiteController::class, 'show'])->name('veiculo.show');
+Route::get('/sistema/veiculo/{slug}', [SiteController::class, 'show'])->name('veiculo.show');
 // Listagem e Busca de Novos
-Route::get('/veiculos-novos', [SiteController::class, 'indexVeiculosNovos'])->name('veiculos.novos');
+Route::get('/sistema/veiculos-novos', [SiteController::class, 'indexVeiculosNovos'])->name('veiculos.novos');
 Route::get('/veiculos-novos/pesquisa', [SiteController::class, 'searchVeiculosNovos'])->name('veiculos.novos.search');
 
 // Listagem e Busca de Semi-novos
-Route::get('/veiculos-semi-novos', [SiteController::class, 'indexVeiculosSemiNovos'])->name('veiculos.semi-novos');
-Route::get('/veiculos-semi-novos/pesquisa', [SiteController::class, 'searchVeiculosSemiNovos'])->name('veiculos.semi-novos.search');
+Route::get('/sistema/veiculos-semi-novos', [SiteController::class, 'indexVeiculosSemiNovos'])->name('veiculos.semi-novos');
+Route::get('/sistema/veiculos-semi-novos/pesquisa', [SiteController::class, 'searchVeiculosSemiNovos'])->name('veiculos.semi-novos.search');
 
 // Veículos Usados
 Route::get('/veiculos-usados', [SiteController::class, 'indexVeiculosUsados'])->name('veiculos.usados');
 Route::get('/veiculos-usados/pesquisa', [SiteController::class, 'searchVeiculosUsados'])->name('veiculos.usados.search');
 
+Route::get('/sistema', [SiteController::class, 'index'])->name('site.index');
 Route::get('/', [PixController::class, 'index'])->name('site.index');
 
 // Route::get('/', function () {

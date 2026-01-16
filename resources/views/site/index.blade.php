@@ -245,7 +245,7 @@
 
             <div class="mt-auto d-flex justify-content-between align-items-center">
 
-                <a href="{{ route('veiculo.show', $veiculo->id) }}"
+                <a href="{{ url('sistema/veiculo/' . $veiculo->slug) }}"
                    class="btn btn-outline-success btn-sm">
                     + DETALHES
                 </a>
