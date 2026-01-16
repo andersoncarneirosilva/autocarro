@@ -9,7 +9,7 @@
           <li>
                     <a href="{{ route('site.index') }}"
                        class="{{ request()->routeIs('site.index') ? 'active' : '' }}">
-                        Home
+                        Página Inical
                     </a>
                 </li>
           {{-- <li><a href="about.html">Ofertas</a></li> --}}

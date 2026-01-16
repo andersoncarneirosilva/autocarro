@@ -18,14 +18,14 @@
   <link href="https://fonts.googleapis.com/css2?family=Open+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;1,300;1,400;1,500;1,600;1,700;1,800&family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&family=Raleway:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap" rel="stylesheet">
 
   <!-- Vendor CSS Files -->
-  <link href="{{ url('site/vendor/bootstrap/css/bootstrap.min.css') }}" rel="stylesheet">
-  <link href="{{ url('site/vendor/bootstrap-icons/bootstrap-icons.css') }}" rel="stylesheet">
-  <link href="{{ url('site/vendor/aos/aos.css') }}" rel="stylesheet">
-  <link href="{{ url('site/vendor/glightbox/css/glightbox.min.css') }}" rel="stylesheet">
-  <link href="{{ url('site/vendor/swiper/swiper-bundle.min.css') }}" rel="stylesheet">
+  <link href="{{ url('assets/site_alcecar/vendor/bootstrap/css/bootstrap.min.css') }}" rel="stylesheet">
+  <link href="{{ url('assets/site_alcecar/vendor/bootstrap-icons/bootstrap-icons.css') }}" rel="stylesheet">
+  <link href="{{ url('assets/site_alcecar/vendor/aos/aos.css') }}" rel="stylesheet">
+  <link href="{{ url('assets/site_alcecar/vendor/glightbox/css/glightbox.min.css') }}" rel="stylesheet">
+  <link href="{{ url('assets/site_alcecar/vendor/swiper/swiper-bundle.min.css') }}" rel="stylesheet">
 
   <!-- Main CSS File -->
-  <link href="{{ url('site/css/main.css') }}" rel="stylesheet">
+  <link href="{{ url('assets/site_alcecar/css/main.css') }}" rel="stylesheet">
 
   <style></style>
 </head>
@@ -52,15 +52,15 @@
   <div id="preloader"></div>
 
   <!-- Vendor JS Files -->
-  <script src="{{ url('site/vendor/bootstrap/js/bootstrap.bundle.min.js') }}"></script>
-  <script src="{{ url('site/vendor/php-email-form/validate.js') }}"></script>
-  <script src="{{ url('site/vendor/aos/aos.js') }}"></script>
-  <script src="{{ url('site/vendor/glightbox/js/glightbox.min.js') }}"></script>
-  <script src="{{ url('site/vendor/purecounter/purecounter_vanilla.js') }}"></script>
-  <script src="{{ url('site/vendor/swiper/swiper-bundle.min.js') }}"></script>
+  <script src="{{ url('assets/site_alcecar/vendor/bootstrap/js/bootstrap.bundle.min.js') }}"></script>
+  <script src="{{ url('assets/site_alcecar/vendor/php-email-form/validate.js') }}"></script>
+  <script src="{{ url('assets/site_alcecar/vendor/aos/aos.js') }}"></script>
+  <script src="{{ url('assets/site_alcecar/vendor/glightbox/js/glightbox.min.js') }}"></script>
+  <script src="{{ url('assets/site_alcecar/vendor/purecounter/purecounter_vanilla.js') }}"></script>
+  <script src="{{ url('assets/site_alcecar/vendor/swiper/swiper-bundle.min.js') }}"></script>
 
   <!-- Main JS File -->
-  <script src="{{ url('site/js/main.js') }}"></script>
+  <script src="{{ url('assets/site_alcecar/js/main.js') }}"></script>
 
 </body>
 
