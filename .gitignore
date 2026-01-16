@@ -6,7 +6,6 @@
 .env
 .env.backup
 .phpunit.result.cache
-# Docker
 docker-compose.yml
 docker-compose.override.yml
 /.docker
@@ -17,8 +16,7 @@ npm-debug.log
 yarn-error.log
 /.idea
 /.vscode
-/.docker
-
+docker/nginx/laravel.conf
 #IGNORAR ARQUIVOS
 #git update-index --assume-unchanged .docker-compose.yml
 #git update-index --assume-unchanged config/tenancy.php
@@ -29,3 +27,4 @@ yarn-error.log
 #REVERTER IGNORADOS
 #git update-index --no-assume-unchanged .docker-compose.yml
 #git update-index --no-assume-unchanged config/tenancy.php
+docker/nginx/laravel.conf
