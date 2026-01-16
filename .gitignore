@@ -20,7 +20,7 @@ docker/nginx/laravel.conf
 .docker/nginx/laravel.conf
 docker/nginx/*.conf
 PRODUCAO-laravel.conf
-
+LOCAL-laravel.conf
 #IGNORAR ARQUIVOS
 #git update-index --assume-unchanged .docker-compose.yml
 #git update-index --assume-unchanged config/tenancy.php
