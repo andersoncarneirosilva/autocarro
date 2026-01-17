@@ -15,6 +15,7 @@ use Illuminate\Support\Facades\Storage;
 use Smalot\PdfParser\Parser;
 use FPDF;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Validator;
 
 class AnuncioController extends Controller
 {
@@ -402,28 +403,35 @@ public function cadastroRapido(Request $request)
 public function updatePrecos(Request $request, $id)
 {
     $veiculo = $this->model->findOrFail($id);
-    $data = $request->all();
 
-    // Função interna para limpar a formatação de moeda
+    // Limpeza dos dados
     $limparMoeda = function($valor) {
-        if (empty($valor)) return 0;
-        // Remove o ponto de milhar e troca a vírgula decimal por ponto
         return (float) str_replace(['.', ','], ['', '.'], $valor);
     };
 
-    // Aplicar a limpeza nos campos financeiros
-    $data['valor'] = $limparMoeda($request->valor);
-    $data['valor_oferta'] = $limparMoeda($request->valor_oferta);
-    $data['valor_parcela'] = $limparMoeda($request->valor_parcela);
-    
-    // Tratar o checkbox (se não marcado, o request não envia a chave)
-    $data['exibir_parcelamento'] = $request->has('exibir_parcelamento') ? 1 : 0;
-    
-    // Forçar status ativo como você pediu anteriormente
-    $data['status'] = 'Ativo';
+    $input = $request->all();
+    $input['valor'] = $limparMoeda($request->valor);
+    $input['valor_oferta'] = $limparMoeda($request->valor_oferta);
+    $input['valor_parcela'] = $limparMoeda($request->valor_parcela);
+    $input['exibir_parcelamento'] = $request->has('exibir_parcelamento') ? 1 : 0;
 
-    if ($veiculo->update($data)) {
-        return redirect()->back()->with('success', 'Preços e condições atualizados!');
+    // Validação
+    $validator = \Validator::make($input, [
+        'valor' => 'required|numeric|min:0.01',
+        'valor_oferta' => 'required|numeric|lte:valor',
+    ], [
+        'valor_oferta.lte' => 'O valor de oferta não pode ser maior que o valor de venda.',
+    ]);
+
+    if ($validator->fails()) {
+        // O back() com withErrors garante que o modal receba as mensagens
+        return redirect()->back()
+            ->withErrors($validator)
+            ->withInput();
+    }
+
+    if ($veiculo->update($input)) {
+        return redirect()->back()->with('success', 'Preços atualizados!');
     }
 }
 
