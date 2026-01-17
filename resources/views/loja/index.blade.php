@@ -146,7 +146,7 @@
             </div>
 
             <div class="col-12 col-lg-5 d-none d-lg-block text-end">
-                <img src="{{ url('assets/images/give_gifts_04.svg') }}" 
+                <img src="{{ url('layout/images/fundo_topo_alcecar.png') }}" 
                      alt="Veículo" 
                      class="img-hero" 
                      width="525" 
