@@ -6,28 +6,25 @@
 
 <style>
     .home-index-bg {
-        /* O SVG cria o arco vinho */
         background-image: url("data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' width='5700' height='400' ><circle fill='%235b0000' cx='2325' cy='-6098' r='6457'/></svg>");
-        
         background-position: center top;
         background-repeat: no-repeat;
         background-size: 330% auto;
-        padding-top: 100px; /* Aumentado para dar respiro ao header */
+        padding-top: 100px;
         padding-bottom: 120px;
-        min-height: 450px;
+        min-height: 500px;
         display: flex;
         align-items: center;
         transition: all 0.3s ease;
     }
 
+    /* Alinhamento à esquerda no desktop */
     .home-index-bg h1 {
-        font-size: 2.2rem;
+        font-size: 2.5rem;
         line-height: 1.2;
-        max-width: 800px;
-        margin-left: auto;
-        margin-right: auto;
-        text-align: center;
+        text-align: left; /* Alinhado à esquerda */
         color: #ffffff;
+        margin-bottom: 30px;
     }
 
     .search-box {
@@ -39,7 +36,7 @@
         box-shadow: 0 4px 15px rgba(0,0,0,0.1);
         width: 100%;
         max-width: 650px;
-        margin: 30px auto 0 auto;
+        margin: 0; /* Remove o auto para não centralizar */
     }
 
     .search-box-keyword {
@@ -71,57 +68,46 @@
         font-weight: bold;
         padding: 12px 40px !important;
         color: #fff !important;
-        text-decoration: none;
     }
 
-    /* --- AJUSTES PARA CELULAR (MOBILE) --- */
-    @media (max-width: 768px) {
+    /* Ajuste da imagem para não estourar */
+    .img-hero {
+        max-width: 100%;
+        height: auto;
+    }
+
+    /* --- AJUSTES PARA CELULAR --- */
+    @media (max-width: 991px) {
         .home-index-bg {
-            /* No mobile, aumentamos o tamanho do SVG para o arco não sumir */
-            background-size: 1400% auto;
-            padding-bottom: 80px;
-            padding-top: 20px;
-            min-height: 500px;
-            background-position: center -20px; /* Sobe um pouco o arco */
+            background-size: 1200% auto;
+            text-align: center;
+            padding-top: 80px;
         }
 
         .home-index-bg h1 {
-            font-size: 1.5rem; /* Fonte menor para não quebrar feio */
-            padding: 0 15px;
+            text-align: center;
+            font-size: 1.8rem;
         }
 
         .search-box {
-            flex-direction: column; /* Empilha input e botão */
+            margin: 0 auto;
+            flex-direction: column;
             border-radius: 20px;
             padding: 20px;
-            margin-top: 20px;
-            width: 90%;
         }
 
         .search-box-keyword {
-            padding-left: 0;
+            padding: 0;
             width: 100%;
-            text-align: center;
             margin-bottom: 15px;
         }
 
         .search-box input {
             text-align: center;
-            font-size: 15px;
         }
 
-        .search-box-btn {
+        .search-box-btn, .btn-primary {
             width: 100%;
-        }
-
-        .btn-primary {
-            width: 100%; /* Botão largo no mobile */
-            padding: 10px !important;
-        }
-        
-        #resultsList {
-            width: 90% !important;
-            left: 5% !important;
         }
     }
 </style>
@@ -130,11 +116,9 @@
 
 <div class="home-index-bg">
     <div class="container-xl">
-        <div class="row justify-content-center">
-            <div class="col-12 col-lg-10 text-center">
-                
-                <h1 class="h2 font-weight-bold text-white mb-20">
-                    Encontre o seu próximo carro agora, <br> 
+        <div class="row align-items-center"> <div class="col-12 col-lg-7">
+                <h1 class="font-weight-bold">
+                    Encontre o seu próximo carro agora, <br class="d-none d-lg-block"> 
                     explore nosso estoque com as melhores ofertas.
                 </h1>
                 
@@ -159,8 +143,16 @@
                         </div>
                     </div>
                 </form>
-
             </div>
+
+            <div class="col-12 col-lg-5 d-none d-lg-block text-end">
+                <img src="{{ url('assets/images/give_gifts_04.svg') }}" 
+                     alt="Veículo" 
+                     class="img-hero" 
+                     width="525" 
+                     height="308">
+            </div>
+
         </div>
     </div>
 </div>
