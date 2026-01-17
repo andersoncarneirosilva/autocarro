@@ -26,7 +26,6 @@ use App\Http\Controllers\VeiculoController;
 use App\Http\Controllers\ChatController;
 use App\Http\Controllers\ItemController;
 use App\Http\Controllers\AnuncioController;
-use App\Http\Controllers\SiteController;
 use App\Http\Controllers\DocumentoController;
 use App\Http\Controllers\PixController;
 use App\Http\Controllers\LojaController;
@@ -349,18 +348,18 @@ Route::post('/reset-password', [PasswordResetController::class, 'reset'])->name(
 Route::post('/enviar-contato', [ContatoController::class, 'enviarEmail'])->name('contato.enviar');
 
 
-Route::get('/sistema/veiculo/{slug}', [SiteController::class, 'show'])->name('veiculo.show');
+Route::get('/veiculo/{slug}', [LojaController::class, 'show'])->name('veiculo.show');
 // Listagem e Busca de Novos
-Route::get('/sistema/veiculos-novos', [SiteController::class, 'indexVeiculosNovos'])->name('veiculos.novos');
-Route::get('/veiculos-novos/pesquisa', [SiteController::class, 'searchVeiculosNovos'])->name('veiculos.novos.search');
+Route::get('/veiculos-novos', [LojaController::class, 'indexVeiculosNovos'])->name('veiculos.novos');
+Route::get('/veiculos-novos/pesquisa', [LojaController::class, 'searchVeiculosNovos'])->name('veiculos.novos.search');
 
 // Listagem e Busca de Semi-novos
-Route::get('/sistema/veiculos-semi-novos', [SiteController::class, 'indexVeiculosSemiNovos'])->name('veiculos.semi-novos');
-Route::get('/sistema/veiculos-semi-novos/pesquisa', [SiteController::class, 'searchVeiculosSemiNovos'])->name('veiculos.semi-novos.search');
+Route::get('/veiculos-semi-novos', [LojaController::class, 'indexVeiculosSemiNovos'])->name('veiculos.semi-novos');
+Route::get('/veiculos-semi-novos/pesquisa', [LojaController::class, 'searchVeiculosSemiNovos'])->name('veiculos.semi-novos.search');
 
 // Veículos Usados
-Route::get('/veiculos-usados', [SiteController::class, 'indexVeiculosUsados'])->name('veiculos.usados');
-Route::get('/veiculos-usados/pesquisa', [SiteController::class, 'searchVeiculosUsados'])->name('veiculos.usados.search');
+Route::get('/veiculos-usados', [LojaController::class, 'indexVeiculosUsados'])->name('veiculos.usados');
+Route::get('/veiculos-usados/pesquisa', [LojaController::class, 'searchVeiculosUsados'])->name('veiculos.usados.search');
 
 Route::get('/contato', [LojaController::class, 'contato'])->name('loja.contato');
 

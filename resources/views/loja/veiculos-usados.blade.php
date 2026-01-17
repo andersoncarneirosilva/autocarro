@@ -1,4 +1,4 @@
-@extends('site.layout.app')
+@extends('loja.layout.app')
 
 @section('title', 'Veículos')
 
