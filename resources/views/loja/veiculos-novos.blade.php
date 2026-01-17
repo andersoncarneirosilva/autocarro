@@ -6,8 +6,8 @@
 
 
     <!-- Courses Section -->
-    <section id="courses" class="courses section">
-    <div class="container section-title mt-4">
+    <section id="courses" class="courses section mt-5">
+    <div class="container section-title mt-5">
         <h2>OFERTAS</h2>
         <p>Veículos novos</p>
     </div>

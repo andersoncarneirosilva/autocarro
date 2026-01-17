@@ -168,13 +168,9 @@ private function processarBusca(Request $request, $estado = 'Novo')
 
 public function show($slug)
 {
-    // 1. Busca pelo slug em vez do ID
     $veiculo = Anuncio::where('slug', $slug)->firstOrFail();
-
-    // 2. Decodifica as imagens (JSON para Array)
     $veiculo->images = json_decode($veiculo->images, true) ?? [];
 
-    // 3. Lógica de tratamento de Marca e Modelo
     $texto = $veiculo->marca;
     $marca = '';
     $modelo = '';
@@ -191,24 +187,32 @@ public function show($slug)
         $modelo = $partes[1] ?? '';
     }
 
-    $veiculo->marca_exibicao  = trim($marca);
-    $veiculo->modelo_exibicao = trim($modelo);
-
-    // 4. Mapa de Background conforme a marca
-    $mapaBackground = [
-        'FORD'    => 'layout/images/brands/ford.jpg',
-        'FIAT'    => 'layout/images/brands/fiat.jpg',
-        'HONDA'   => 'layout/images/brands/honda.jpg',
-        'YAMAHA'  => 'layout/images/brands/yamaha.jpg',
-        'RENAULT' => 'layout/images/brands/renault.jpg',
-        'CHEVROLET' => 'layout/images/brands/chevrolet.jpg',
-        'GM' => 'layout/images/brands/chevrolet.jpg',
+    // --- NOVA LÓGICA DE TRADUÇÃO DE MARCAS ---
+    $traducoes = [
+        'VW' => 'VOLKSWAGEN',
+        'GM' => 'CHEVROLET',
     ];
 
-    $marcaUpper = strtoupper($veiculo->marca_exibicao);
+    $marcaLimpa = strtoupper(trim($marca));
+    
+    // Se a marca estiver no dicionário, substitui. Se não, mantém a original.
+    $veiculo->marca_exibicao = $traducoes[$marcaLimpa] ?? $marcaLimpa;
+    $veiculo->modelo_exibicao = trim($modelo);
 
+    // --- MAPA DE BACKGROUND ---
+    $mapaBackground = [
+        'FORD'       => 'layout/images/brands/ford.jpg',
+        'FIAT'       => 'layout/images/brands/fiat.jpg',
+        'HONDA'      => 'layout/images/brands/honda.jpg',
+        'YAMAHA'     => 'layout/images/brands/yamaha.jpg',
+        'RENAULT'    => 'layout/images/brands/renault.jpg',
+        'VOLKSWAGEN' => 'layout/images/brands/volkswagen.jpg',
+        'CHEVROLET'  => 'layout/images/brands/chevrolet.jpg',
+    ];
+
+    // Agora usamos a marca já traduzida para buscar o background
     $veiculo->background_image = asset(
-        $mapaBackground[$marcaUpper] ?? 'layout/images/brands/default.jpg'
+        $mapaBackground[$veiculo->marca_exibicao] ?? 'layout/images/brands/default.jpg'
     );
 
     return view('loja.detalhes', compact('veiculo'));

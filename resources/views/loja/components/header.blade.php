@@ -1,7 +1,7 @@
 <style>
 /* --- ESTADO INICIAL (VERMELHO) --- */
 #header {
-    background-color: #5B0000;
+    background-color: transparent;
     transition: all 0.4s ease;
     padding: 15px 0;
     display: flex;
@@ -106,13 +106,26 @@
     #header .navmenu { order: 3; }
     #header .logo { order: 1; }
 }
+/* 1. Quando NÃO for as páginas permitidas, o fundo deve ser branco desde o início */
+#header.header-dark-text {
+    background-color: #ffffff !important;
+    box-shadow: 0px 2px 15px rgba(0, 0, 0, 0.1);
+}
 
-/* Estado Scrolled no Mobile */
-#header.header-scrolled .mobile-nav-toggle {
+/* 2. Garante que o texto seja escuro nessas páginas */
+#header.header-dark-text .navmenu ul li a, 
+#header.header-dark-text .mobile-nav-toggle {
     color: #333333 !important;
 }
-</style>
-<header id="header" class="header d-flex align-items-center sticky-top">
+
+/* 3. Ajusta o botão para a versão escura */
+#header.header-dark-text .btn-getstarted {
+    background: #5B0000 !important;
+    color: #ffffff !important;
+}
+</style> 
+{{-- header d-flex align-items-center fixed-top --}}
+<header id="header" class="header d-flex align-items-center fixed-top {{ !in_array(Route::currentRouteName(), ['loja.index', 'veiculo.show']) ? 'header-dark-text' : '' }}">
     <div class="container-fluid container-xl position-relative d-flex align-items-center justify-content-between">
       <a href="{{ route('loja.index') }}" class="logo d-flex align-items-center me-auto">
         <h1 class="sitename"><img src="{{ url('layout/images/logo_carro.png') }}" alt=""></h1>

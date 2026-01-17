@@ -17,7 +17,7 @@
     </div>
 
     <div class="heading" style="position: relative; z-index: 2; padding-top: 80px;">
-        <div class="container position-relative">
+        <div class="container position-relative mt-5">
             <div class="row justify-content-center text-center">
                 <div class="col-lg-8 text-white">
                     <h1 class="fw-bold">{{ $veiculo->marca_exibicao }}</h1>
