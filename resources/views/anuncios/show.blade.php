@@ -102,7 +102,7 @@ document.addEventListener('DOMContentLoaded', function () {
             <i class="mdi mdi-check-decagram me-1"></i> Anúncio Publicado
         </span>
 
-        <a href="{{ url('sistema/veiculo/' . $veiculo->slug) }}" 
+        <a href="{{ url('veiculo/' . $veiculo->slug) }}" 
    target="_blank" 
    class="btn btn-primary btn-sm rounded-pill px-3" 
    title="Visualizar Anúncio">

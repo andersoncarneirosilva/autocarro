@@ -196,17 +196,19 @@ public function show($slug)
 
     // 4. Mapa de Background conforme a marca
     $mapaBackground = [
-        'FORD'    => 'assets/brands/ford.jpg',
-        'FIAT'    => 'assets/brands/fiat.jpg',
-        'HONDA'   => 'assets/brands/honda.jpg',
-        'YAMAHA'  => 'assets/brands/yamaha.jpg',
-        'RENAULT' => 'assets/brands/renault.jpg',
+        'FORD'    => 'layout/images/brands/ford.jpg',
+        'FIAT'    => 'layout/images/brands/fiat.jpg',
+        'HONDA'   => 'layout/images/brands/honda.jpg',
+        'YAMAHA'  => 'layout/images/brands/yamaha.jpg',
+        'RENAULT' => 'layout/images/brands/renault.jpg',
+        'CHEVROLET' => 'layout/images/brands/chevrolet.jpg',
+        'GM' => 'layout/images/brands/chevrolet.jpg',
     ];
 
     $marcaUpper = strtoupper($veiculo->marca_exibicao);
 
     $veiculo->background_image = asset(
-        $mapaBackground[$marcaUpper] ?? 'assets/brands/default.jpg'
+        $mapaBackground[$marcaUpper] ?? 'layout/images/brands/default.jpg'
     );
 
     return view('loja.detalhes', compact('veiculo'));
