@@ -7,12 +7,7 @@
             <span class="sitename">Alcecar</span>
           </a>
           
-          {{-- <div class="social-links d-flex mt-4">
-            <a href=""><i class="bi bi-twitter-x"></i></a>
-            <a href=""><i class="bi bi-facebook"></i></a>
-            <a href=""><i class="bi bi-instagram"></i></a>
-            <a href=""><i class="bi bi-linkedin"></i></a>
-          </div> --}}
+          <p>Na Alcecar, você não procura sozinho. Conectamos você ao veículo certo com uma curadoria inteligente e acompanhamento especializado do início ao fim, garantindo uma escolha segura e sem complicações.</p>
         </div>
 
         <div class="col-lg-2 col-md-3 footer-links">
