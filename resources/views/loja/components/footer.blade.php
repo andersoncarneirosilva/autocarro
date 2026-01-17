@@ -6,36 +6,31 @@
           <a href="index.html" class="logo d-flex align-items-center">
             <span class="sitename">Alcecar</span>
           </a>
-          {{-- <div class="footer-contact pt-3">
-            <p>A108 Adam Street</p>
-            <p>New York, NY 535022</p>
-            <p class="mt-3"><strong>Phone:</strong> <span>+1 5589 55488 55</span></p>
-            <p><strong>Email:</strong> <span>info@example.com</span></p>
-          </div> --}}
-          <div class="social-links d-flex mt-4">
+          
+          {{-- <div class="social-links d-flex mt-4">
             <a href=""><i class="bi bi-twitter-x"></i></a>
             <a href=""><i class="bi bi-facebook"></i></a>
             <a href=""><i class="bi bi-instagram"></i></a>
             <a href=""><i class="bi bi-linkedin"></i></a>
-          </div>
+          </div> --}}
         </div>
 
         <div class="col-lg-2 col-md-3 footer-links">
     <h4>Links Úteis</h4>
     <ul>
-        <li><a href="/">Início</a></li>
-        <li><a href="#">Sobre Nós</a></li>
-        <li><a href="/estoque">Nosso Estoque</a></li>
-        <li><a href="#">Termos de Uso</a></li>
-        <li><a href="#">Política de Privacidade</a></li>
+        <li><a href="/">Comprar Carros</a></li>
+        <li><a href="#">Comprar Motos</a></li>
+        <li><a href="#">Veículos Novos</a></li>
+        <li><a href="#">Veículos Semi-novos</a></li>
+        <li><a href="#">Veículos Usados</a></li>
     </ul>
 </div>
 
 <div class="col-lg-2 col-md-3 footer-links">
-    <h4>Nossos Serviços</h4>
+    <h4>Lojista</h4>
     <ul>
-        <li><a href="#">Compra e Venda</a></li>
-        <li><a href="#">Financiamento</a></li>
+        <li><a href="#">Área do lojista</a></li>
+        <li><a href="#">Gerenciar anúncios</a></li>
         <li><a href="#">Consignação</a></li>
         <li><a href="#">Avaliação de Veículo</a></li>
         <li><a href="#">Troca com Troco</a></li>
