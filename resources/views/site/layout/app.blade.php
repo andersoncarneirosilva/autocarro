@@ -14,13 +14,13 @@
     <meta property="og:url" content="https://alcecar.com.br/">
     <meta property="og:title" content="Gestão de Veículos e Automação de Procurações">
     <meta property="og:description" content="Otimize sua produtividade com nosso sistema de gestão automotiva. Geração de documentos em poucos cliques.">
-    <meta property="og:image" content="{{ url('layout/images/background_alcecar.png') }}">
+    <meta property="og:image" content="{{ url('layout/images/logo_carro.png') }}">
 
     <meta property="twitter:card" content="summary_large_image"> 
-    <meta property="twitter:url" content="https://seusite.com.br/">
+    <meta property="twitter:url" content="https://alcecar.com.br/">
     <meta property="twitter:title" content="Gestão de Veículos e Automação de Procurações">
     <meta property="twitter:description" content="Otimize sua produtividade com nosso sistema de gestão automotiva.">
-    <meta property="twitter:image" content="{{ url('layout/images/background_alcecar.png') }}">
+    <meta property="twitter:image" content="{{ url('layout/images/logo_carro.png') }}">
 
     <meta name="description" content="">
     <meta name="viewport" content="width=device-width, initial-scale=1">

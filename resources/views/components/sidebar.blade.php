@@ -70,7 +70,7 @@
             </li> --}}
             
             <li class="side-nav-item">
-                <a href="{{ route('anuncios.index') }}/" class="side-nav-link">
+                <a href="{{ route('anuncios.index') }}" class="side-nav-link">
                     <i class="uil-car"></i>
                     <span> Anúncios ativos </span>
                 </a>

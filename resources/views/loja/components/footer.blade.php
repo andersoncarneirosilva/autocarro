@@ -13,22 +13,17 @@
         <div class="col-lg-2 col-md-3 footer-links">
     <h4>Links Úteis</h4>
     <ul>
-        <li><a href="/">Comprar Carros</a></li>
-        <li><a href="#">Comprar Motos</a></li>
-        <li><a href="#">Veículos Novos</a></li>
-        <li><a href="#">Veículos Semi-novos</a></li>
-        <li><a href="#">Veículos Usados</a></li>
+        <li><a href="{{ route('veiculos.novos')}}">Veículos Novos</a></li>
+        <li><a href="{{ route('veiculos.semi-novos')}}">Veículos Semi-novos</a></li>
+        <li><a href="{{ route('veiculos.usados')}}">Veículos Usados</a></li>
     </ul>
 </div>
 
 <div class="col-lg-2 col-md-3 footer-links">
     <h4>Lojista</h4>
     <ul>
-        <li><a href="#">Área do lojista</a></li>
-        <li><a href="#">Gerenciar anúncios</a></li>
-        <li><a href="#">Consignação</a></li>
-        <li><a href="#">Avaliação de Veículo</a></li>
-        <li><a href="#">Troca com Troco</a></li>
+        <li><a href="{{ route('login')}}">Área do lojista</a></li>
+        <li><a href="{{ route('anuncios.index') }}">Gerenciar anúncios</a></li>
     </ul>
 </div>
 

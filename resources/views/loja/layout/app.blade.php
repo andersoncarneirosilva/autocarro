@@ -4,9 +4,25 @@
 <head>
   <meta charset="utf-8">
   <meta content="width=device-width, initial-scale=1.0" name="viewport">
-  <title>Autocar</title>
-  <meta name="description" content="">
-  <meta name="keywords" content="">
+  <title>Alcecar | Sua loja de Veículo</title>
+  
+  <meta name="description" content="Compre online com praticidade e segurança. Uma loja virtual completa com produtos selecionados, ofertas exclusivas e entrega rápida.">
+  <meta name="keywords" content="loja virtual, ecommerce, compras online, produtos online, ofertas, loja online">
+  <meta name="author" content="Alcecar">
+  <meta name="robots" content="index, follow">
+
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://alcecar.com.br/">
+  <meta property="og:title" content="Loja Virtual | Compre Online com Facilidade">
+  <meta property="og:description" content="Descubra uma nova forma de comprar online. Produtos de qualidade, navegação simples e pagamento seguro em um só lugar.">
+  <meta property="og:image" content="{{ url('layout/images/logo_carro.png') }}">
+
+  <meta property="twitter:card" content="summary_large_image"> 
+  <meta property="twitter:url" content="https://alcecar.com.br/">
+  <meta property="twitter:title" content="Loja Virtual | Sua Melhor Experiência de Compra Online">
+  <meta property="twitter:description" content="Tudo o que você procura em uma loja online moderna, segura e feita para facilitar seu dia a dia.">
+  <meta property="twitter:image" content="{{ url('layout/images/logo_carro.png') }}">
+
 
   <!-- Favicons -->
   <link href="{{ url('img/favicon.png') }}" rel="icon">
