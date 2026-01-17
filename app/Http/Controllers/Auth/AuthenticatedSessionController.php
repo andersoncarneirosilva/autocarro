@@ -23,23 +23,42 @@ class AuthenticatedSessionController extends Controller
     /**
      * Handle an incoming authentication request.
      */
-    public function store(LoginRequest $request): RedirectResponse
-    {
-        // Tentar autenticar o usuário com o guard 'web' ou o guard do tenant
-        if (Auth::guard('web')->attempt($request->only('email', 'password'))) {
-            // Regenerar a sessão para segurança
-            $request->session()->regenerate();
+    // public function store(LoginRequest $request): RedirectResponse
+    // {
+    //     if (Auth::guard('web')->attempt($request->only('email', 'password'))) {
+    //         $request->session()->regenerate();
 
-            // Redirecionar para a página inicial após o login bem-sucedido
-            return redirect()->intended(RouteServiceProvider::HOME);
+    //         return redirect()->intended(RouteServiceProvider::HOME);
+    //     }
+
+    //     return back()->withErrors([
+    //         'email' => 'As credenciais fornecidas são incorretas.',
+    //     ]);
+    // }
+    public function store(LoginRequest $request): RedirectResponse
+{
+    // 1. Tenta autenticar
+    if (Auth::guard('web')->attempt($request->only('email', 'password'))) {
+        
+        $request->session()->regenerate();
+
+        // 2. Obtém o usuário logado
+        $user = Auth::user();
+
+        // 3. Verifica o nível de acesso
+        // Importante: Verifique se no banco está exatamente "Usuário" (com acento)
+        if ($user->nivel_acesso === 'Usuário') {
+            return redirect()->route('anuncios.index');
         }
 
-        // Se a autenticação falhar, redirecionar com erros
-        return back()->withErrors([
-            'email' => 'As credenciais fornecidas são incorretas.',
-        ]);
+        // 4. Se não for 'Usuário', vai para o dashboard padrão
+        return redirect()->intended(RouteServiceProvider::HOME);
     }
 
+    return back()->withErrors([
+        'email' => 'As credenciais fornecidas são incorretas.',
+    ]);
+}
     /**
      * Destroy an authenticated session.
      */

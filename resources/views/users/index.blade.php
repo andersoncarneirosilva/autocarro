@@ -44,6 +44,39 @@ document.addEventListener('DOMContentLoaded', function () {
         </div>
     </div>
 </div>
+
+<style>
+/* Container que envolve a tabela */
+.table-responsive-custom {
+    max-height: 500px; /* Defina a altura máxima que desejar */
+    overflow-y: auto;  /* Scroll vertical */
+    overflow-x: auto;  /* Scroll horizontal para mobile */
+    border: 1px solid #dee2e6;
+    border-radius: 8px;
+}
+
+/* Deixa o cabeçalho da tabela fixo no topo enquanto você rola */
+.table-responsive-custom thead th {
+    position: sticky;
+    top: 0;
+    z-index: 10;
+    background-color: #343a40 !important; /* Cor de fundo do cabeçalho */
+}
+
+/* Estilização da barra de rolagem para ficar mais elegante */
+.table-responsive-custom::-webkit-scrollbar {
+    width: 6px;
+    height: 6px;
+}
+.table-responsive-custom::-webkit-scrollbar-thumb {
+    background: #ccc;
+    border-radius: 10px;
+}
+.table-responsive-custom::-webkit-scrollbar-track {
+    background: #f1f1f1;
+}
+</style>
+
 <div class="card border-0 shadow-sm rounded-3">
     <div class="card-body p-4"> <div class="row align-items-center mb-4">
             <div class="col-md-4">
@@ -73,8 +106,8 @@ document.addEventListener('DOMContentLoaded', function () {
             </div>
         </div>
 
-        <div class="table-responsive rounded-4 border shadow-sm">
-            <table class="table table-centered table-nowrap table-hover mb-0" id="userTable">
+        <div class="table-custom-container">
+            <table class="table table-custom table-nowrap table-hover mb-0" id="userTable">
                 <thead>
                     <tr class="bg-dark">
                         <th class="py-3 text-white fw-semibold border-0">Usuário</th>

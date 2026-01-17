@@ -33,11 +33,6 @@ class AuthServiceProvider extends ServiceProvider
             return $user->nivel_acesso == 'Usuário';
         });
 
-        Gate::define('access-produto', function (User $user) {
-            // dd($user);
-            return $user->nivel_acesso == 'Produto';
-        });
-
         Gate::define('access-lojista', function (User $user) {
             // dd($user);
             return $user->perfil == 'Lojista';

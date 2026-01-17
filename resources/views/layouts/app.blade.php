@@ -299,21 +299,7 @@
         background-color: #fff;
     }
 
-    /* Arredondamento específico do cabeçalho */
-    #userTable thead tr:first-child th:first-child { border-top-left-radius: 0.8rem; }
-    #userTable thead tr:first-child th:last-child { border-top-right-radius: 0.8rem; }
-
-    #userTable thead th {
-        background-color: #313a46;
-        color: #ffffff;
-        padding-top: 15px !important;
-        padding-bottom: 15px !important;
-        letter-spacing: 0.5px;
-        text-transform: uppercase;
-        font-size: 0.75rem;
-        border: none;
-    }
-
+   
     .user-row { transition: all 0.2s ease; }
     .user-row:hover { background-color: #f8f9fa; }
 
@@ -372,7 +358,73 @@
     
     .btn-action i { line-height: 1; }
 </style>
+<style>
+    /* Container que controla a rolagem e o arredondamento externo */
+.table-custom-container {
+    max-height: 550px;
+    overflow-y: auto;
+    overflow-x: auto;
+    border: 1px solid #dee2e6;
+    border-radius: 0.8rem !important;
+    background-color: #ffffff;
+    box-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.075);
+}
 
+/* Estilização da Tabela */
+.table-custom {
+    width: 100%;
+    margin-bottom: 0 !important;
+    border-collapse: separate;
+    border-spacing: 0;
+}
+
+/* Cabeçalho Fixo e Estilizado */
+.table-custom thead th {
+    position: sticky;
+    top: 0;
+    z-index: 10;
+    background-color: #313a46 !important;
+    color: #ffffff !important;
+    padding: 15px !important;
+    letter-spacing: 0.5px;
+    text-transform: uppercase;
+    font-size: 0.75rem;
+    font-weight: 600;
+    border: none;
+    white-space: nowrap;
+}
+
+/* Arredondamento dos cantos superiores do cabeçalho */
+.table-custom thead tr:first-child th:first-child { 
+    border-top-left-radius: 0.8rem; 
+}
+.table-custom thead tr:first-child th:last-child { 
+    border-top-right-radius: 0.8rem; 
+}
+
+/* Estilo das linhas e células */
+.table-custom tbody td {
+    padding: 12px 15px !important;
+    vertical-align: middle;
+    color: #6c757d;
+    border-bottom: 1px solid #f1f3fa;
+}
+
+/* Efeito Hover nas linhas */
+.table-custom tbody tr:hover {
+    background-color: #f8f9fa;
+}
+
+/* Barra de rolagem elegante (opcional) */
+.table-custom-container::-webkit-scrollbar {
+    width: 6px;
+    height: 6px;
+}
+.table-custom-container::-webkit-scrollbar-thumb {
+    background: #d1d3e2;
+    border-radius: 10px;
+}
+</style>
 </head>
 
 <body>

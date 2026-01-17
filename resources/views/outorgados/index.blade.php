@@ -32,80 +32,111 @@
     </div>
 </div>
 
-<div class="card">
-    <div class="card-body">
-        <div class="row">
-            <div class="col-sm-12">
-                <div class="card-header d-flex justify-content-between align-items-center">
-                    <h4 class="header-title">Outorgados cadastrados</h4>
-                    <div class="dropdown">
-                        <button type="button" class="btn btn-primary btn-sm" data-bs-toggle="modal"
-                            data-bs-target="#modalCadastroOut">Cadastrar</button> 
-                    </div>
-                </div>
-                @if ($outs->total() != 0)
-                <div class="table-responsive-sm">
-                    <table class="table table-hover table-centered mb-0">
-                        <thead class="table-dark">
-                            <tr>
-                                <th>Nome</th>
-                                <th>CPF</th>
-                                <th>Email</th>
-                                
-                                <th>Ações</th>
-                            </tr>
-                        </thead>
 
-                        <tbody>
-                            @foreach ($outs as $out)
-                                <tr>
-                                    <td>{{ $out->nome_outorgado }}</td>
-                                    <td>{{ $out->cpf_outorgado }}</td>
-                                    @php
-                                        $email = $out->email_outorgado;
-                                        $emailParts = explode('@', $email);
-                                        $emailMasked = substr($emailParts[0], 0, 2) . str_repeat('*', strlen($emailParts[0]) - 2) . '@' . $emailParts[1];
-                                    @endphp
 
-                                    <td>{{ $emailMasked }}</td>
-                                    <td class="table-action">
-
-                                        <a href="#" class="action-icon" data-id="{{ $out->id }}" onclick="openEditModalOutorgado(event)">
-                                            <i class="mdi mdi-clipboard-edit-outline" title="Editar"></i>
-                                        </a>
-                                        <a href="{{ route('outorgados.destroy', $out->id) }}"
-                                            class="action-icon mdi mdi-delete" data-confirm-delete="true"></a>
-
-                                    </td>
-                                </tr>
-                            @endforeach
-                        </tbody>
-                    </table>
-                </div>
-                    @elseif($outs->total() == 0)
-                        <div class="alert alert-danger bg-transparent text-danger" role="alert">
-                            NENHUM RESULTADO ENCONTRADO!
-                        </div>
-                    @endif
+<div class="card border-0 shadow-sm rounded-3">
+    <div class="card-body p-4">
+        <div class="row align-items-center mb-4">
+            <div class="col-md-4">
+                <h4 class="header-title mb-1 text-dark fw-bold">Outorgados Cadastrados</h4>
+                <p class="text-muted font-13 mb-0">Gerencie as informações dos outorgados do sistema.</p>
             </div>
-            @if ($errors->any())
-                <script>
-                    Swal.fire({
-                        icon: 'error',
-                        title: 'Erro no cadastro!',
-                        html: '{!! implode("<br>", $errors->all()) !!}',
-                    });
-                </script>
-            @endif
+            
+            <div class="col-md-8">
+                <div class="d-flex flex-wrap align-items-center justify-content-sm-end gap-3">
+                    <div class="search-box">
+                        <div class="input-group input-group-sm">
+                            <span class="input-group-text bg-light border-0">
+                                <i class="uil uil-search text-muted"></i>
+                            </span>
+                            <input type="text" id="searchInput" class="form-control bg-light border-0 ps-0" 
+                                   placeholder="Filtrar por nome, CPF ou email...">
+                        </div>
+                    </div>
 
+                    {{-- Ajustei o data-bs-target para o modal de Outorgados --}}
+                    <button type="button" class="btn btn-red btn-sm rounded-pill shadow-sm px-3" 
+                            data-bs-toggle="modal" data-bs-target="#modalCadastroOut">
+                        <i class="uil uil-plus me-1"></i> Novo Outorgado
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        @if ($outs->total() != 0)
+        <div class="table-custom-container">
+            <table class="table table-custom table-nowrap table-hover mb-0" id="outorgadosTable">
+                <thead>
+                    <tr class="bg-dark">
+                        <th class="py-3 text-white fw-semibold border-0">Nome</th>
+                        <th class="py-3 text-white fw-semibold border-0">CPF</th>
+                        <th class="py-3 text-white fw-semibold border-0">Email</th>
+                        <th class="py-3 text-center text-white fw-semibold border-0">Ações</th>
+                    </tr>
+                </thead>
+                <tbody id="table-body">
+                    @foreach ($outs as $out)
+                    <tr class="align-middle user-row">
+                        <td>
+                            <div class="d-flex align-items-center">
+                                <div class="rounded-circle me-3 d-flex align-items-center justify-content-center shadow-sm border text-white fw-bold" 
+                                     style="width: 38px; height: 38px; background-color: #730000; font-size: 16px;">
+                                    {{ strtoupper(substr($out->nome_outorgado, 0, 1)) }}
+                                </div>
+                                <span class="fw-semibold text-dark">{{ $out->nome_outorgado }}</span>
+                            </div>
+                        </td>
+                        <td class="text-muted">{{ $out->cpf_outorgado }}</td>
+                        <td>
+                            @php
+                                $email = $out->email_outorgado;
+                                $emailParts = explode('@', $email);
+                                $emailMasked = (count($emailParts) == 2) 
+                                    ? substr($emailParts[0], 0, 2) . '****' . '@' . $emailParts[1] 
+                                    : $email;
+                            @endphp
+                            <span class="text-muted">{{ $emailMasked }}</span>
+                        </td>
+                        <td class="text-center">
+                            <div class="d-flex justify-content-center gap-2">
+                                <button type="button" class="btn-action edit" data-id="{{ $out->id }}" onclick="openEditModalOutorgado(event)">
+                                    <i class="uil uil-pen"></i>
+                                </button>
+                                
+                                <a href="{{ route('outorgados.destroy', $out->id) }}" class="btn-action delete" data-confirm-delete="true">
+                                    <i class="mdi mdi-delete"></i>
+                                </a>
+                            </div>
+                        </td>
+                    </tr>
+                    @endforeach
+                </tbody>
+            </table>
+        </div>
+        @else
+            <div class="alert alert-danger bg-transparent text-danger mt-3" role="alert">
+                <i class="uil uil-exclamation-octagon me-2"></i> NENHUM RESULTADO ENCONTRADO!
+            </div>
+        @endif
+    </div>
+
+    <div class="card-footer bg-transparent border-0">
+        <div class="row">
+            {{ $outs->appends(['search' => request()->get('search', '')])->links('components.pagination') }}
         </div>
     </div>
-    <div class="row">
-        {{ $outs->appends([
-            'search' => request()->get('search', '')
-        ])->links('components.pagination') }}
-    </div>
 </div>
+
+@if ($errors->any())
+    <script>
+        Swal.fire({
+            icon: 'error',
+            title: 'Erro no cadastro!',
+            html: '{!! implode("<br>", $errors->all()) !!}',
+            confirmButtonColor: '#730000'
+        });
+    </script>
+@endif
 
 
 

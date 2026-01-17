@@ -3,20 +3,20 @@
     <!-- Brand Logo Light -->
     <a href="#" class="logo logo-light">
         <span class="logo-lg">
-            <img src="{{ asset('assets/images/logo.png') }}?v={{ time() }}" alt="logo">
+            <img src="{{ asset('layout/images/logo_b_car.png') }}?v={{ time() }}" alt="logo">
         </span>
         <span class="logo-sm">
-            <img src="{{ url('assets/images/logo-sm.png') }}" alt="small logo">
+            <img src="{{ url('layout/images/logo_carro.png') }}" alt="small logo">
         </span>
     </a>
 
     <!-- Brand Logo Dark -->
     <a href="#" class="logo logo-dark">
         <span class="logo-lg">
-            <img src="{{ asset('assets/images/logo-dark.png') }}?v={{ time() }}" alt="dark logo">
+            <img src="{{ asset('layout/images/logo_b_car.png') }}?v={{ time() }}" alt="dark logo">
         </span>
         <span class="logo-sm">
-            <img src="{{ url('assets/images/logo-dark-sm.png') }}?v={{ time() }}" alt="small logo">
+            <img src="{{ url('layout/images/logo_carro.png') }}?v={{ time() }}" alt="small logo">
         </span>
     </a>
 
@@ -43,7 +43,7 @@
                     <span> Dashboard </span>
                 </a>
             </li>
-
+@endcan
             {{-- <li class="side-nav-item">
                 <a href="{{ route('anuncios.index') }}" class="side-nav-link">
                     <i class="mdi mdi-help-circle-outline"></i>
@@ -114,7 +114,7 @@
                     </ul>
                 </div>
             </li>
-            @endcan
+            
             
         </ul>
     </div>

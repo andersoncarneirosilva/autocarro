@@ -45,6 +45,9 @@ document.addEventListener('DOMContentLoaded', function () {
     </div>
 </div>
 
+
+
+
 <div class="card">
     <div class="card-body">
         <div class="row">
@@ -70,8 +73,8 @@ document.addEventListener('DOMContentLoaded', function () {
                 </div>
                 
                 @if ($veiculos->total() != 0)
-                <div class="table-responsive-sm">
-                    <table class="table table-hover table-centered mb-0 table-rounded">
+                <div class="table-custom-container">
+                    <table class="table table-custom table-nowrap table-hover mb-0">
                         <thead class="table-dark">
                             <tr>
                                 <th>Placa</th>
@@ -176,42 +179,6 @@ document.addEventListener('DOMContentLoaded', function () {
                                                             @csrf
                                                             @method('DELETE')
                                                         </form>
-
-                                                        <script>
-                                                            function confirmArchive(id) {
-                                                                Swal.fire({
-                                                                    title: "Arquivar Veículo",
-                                                                    text: "Tem certeza que deseja arquivar este veículo?",
-                                                                    icon: "warning",
-                                                                    showCancelButton: true,
-                                                                    confirmButtonText: "Sim, arquivar!",
-                                                                    cancelButtonText: "Cancelar"
-                                                                }).then((result) => {
-                                                                    if (result.isConfirmed) {
-                                                                        document.getElementById('form-arquivar-' + id).submit();
-                                                                    }
-                                                                });
-                                                            }
-                                                        </script>
-                                                        <script>
-                                                        function confirmDelete(id) {
-                                                            Swal.fire({
-                                                                title: "Excluir Veículo",
-                                                                text: "Essa ação não pode ser desfeita. Deseja continuar?",
-                                                                icon: "warning",
-                                                                showCancelButton: true,
-                                                                confirmButtonText: "Sim, excluir!",
-                                                                cancelButtonText: "Cancelar"
-                                                            }).then((result) => {
-                                                                if (result.isConfirmed) {
-                                                                    document.getElementById('form-delete-' + id).submit();
-                                                                }
-                                                            });
-                                                        }
-                                                        </script>
-
-
-
                                                     </div>
                                                 </div>
                                             </td>
@@ -228,9 +195,39 @@ document.addEventListener('DOMContentLoaded', function () {
             </div>
         </div>
     </div>
-    <br>
-    
 </div>
 
+<script>
+    function confirmArchive(id) {
+        Swal.fire({
+            title: "Arquivar Veículo",
+            text: "Tem certeza que deseja arquivar este veículo?",
+            icon: "warning",
+            showCancelButton: true,
+            confirmButtonText: "Sim, arquivar!",
+            cancelButtonText: "Cancelar"
+        }).then((result) => {
+            if (result.isConfirmed) {
+                document.getElementById('form-arquivar-' + id).submit();
+            }
+        });
+    }
+</script>
+<script>
+function confirmDelete(id) {
+    Swal.fire({
+        title: "Excluir Veículo",
+        text: "Essa ação não pode ser desfeita. Deseja continuar?",
+        icon: "warning",
+        showCancelButton: true,
+        confirmButtonText: "Sim, excluir!",
+        cancelButtonText: "Cancelar"
+    }).then((result) => {
+        if (result.isConfirmed) {
+            document.getElementById('form-delete-' + id).submit();
+        }
+    });
+}
+</script>
 
 @endsection
