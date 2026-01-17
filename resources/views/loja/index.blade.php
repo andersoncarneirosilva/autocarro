@@ -245,92 +245,6 @@ $(document).ready(function() {
 </section>
 
 
-    <!-- Features Section -->
-    <section id="features" class="features section">
-
-      <div class="container">
-
-        <div class="row gy-4">
-
-          <div class="col-lg-3 col-md-4" data-aos="fade-up" data-aos-delay="100">
-  <div class="features-item" style="display: flex; justify-content: center;">
-    <img src="site/img/marcas/audi.webp" alt="">
-  </div>
-</div>
-
-
-          <div class="col-lg-3 col-md-4" data-aos="fade-up" data-aos-delay="200">
-            <div class="features-item" style="display: flex; justify-content: center;">
-              <img src="site/img/marcas/bmw.webp" alt="">
-            </div>
-          </div><!-- End Feature Item -->
-
-          <div class="col-lg-3 col-md-4" data-aos="fade-up" data-aos-delay="300">
-            <div class="features-item" style="display: flex; justify-content: center;">
-              <img src="site/img/marcas/chevrolet.webp" alt="">
-            </div>
-          </div><!-- End Feature Item -->
-
-          <div class="col-lg-3 col-md-4" data-aos="fade-up" data-aos-delay="400">
-            <div class="features-item" style="display: flex; justify-content: center;">
-              <img src="site/img/marcas/fiat.webp" alt="">
-            </div>
-          </div><!-- End Feature Item -->
-
-          <div class="col-lg-3 col-md-4" data-aos="fade-up" data-aos-delay="500">
-            <div class="features-item" style="display: flex; justify-content: center;">
-              <img src="site/img/marcas/ford.webp" alt="">
-            </div>
-          </div><!-- End Feature Item -->
-
-          <div class="col-lg-3 col-md-4" data-aos="fade-up" data-aos-delay="600">
-            <div class="features-item" style="display: flex; justify-content: center;">
-              <img src="site/img/marcas/honda.webp" alt="">
-            </div>
-          </div><!-- End Feature Item -->
-
-          <div class="col-lg-3 col-md-4" data-aos="fade-up" data-aos-delay="700">
-            <div class="features-item" style="display: flex; justify-content: center;">
-              <img src="site/img/marcas/hyundai.webp" alt="">
-            </div>
-          </div><!-- End Feature Item -->
-
-          <div class="col-lg-3 col-md-4" data-aos="fade-up" data-aos-delay="800">
-            <div class="features-item" style="display: flex; justify-content: center;">
-              <img src="site/img/marcas/nissan.webp" alt="">
-            </div>
-          </div><!-- End Feature Item -->
-
-          <div class="col-lg-3 col-md-4" data-aos="fade-up" data-aos-delay="900">
-            <div class="features-item" style="display: flex; justify-content: center;">
-              <img src="site/img/marcas/peugeot.webp" alt="">
-            </div>
-          </div><!-- End Feature Item -->
-
-          <div class="col-lg-3 col-md-4" data-aos="fade-up" data-aos-delay="1000">
-            <div class="features-item" style="display: flex; justify-content: center;">
-              <img src="site/img/marcas/renault.webp" alt="">
-            </div>
-          </div><!-- End Feature Item -->
-
-          <div class="col-lg-3 col-md-4" data-aos="fade-up" data-aos-delay="1100">
-            <div class="features-item" style="display: flex; justify-content: center;">
-              <img src="site/img/marcas/toyota.webp" alt="">
-            </div>
-          </div><!-- End Feature Item -->
-
-          <div class="col-lg-3 col-md-4" data-aos="fade-up" data-aos-delay="1200">
-            <div class="features-item" style="display: flex; justify-content: center;">
-              <img src="site/img/marcas/volkswagem.webp" alt="">
-            </div>
-          </div><!-- End Feature Item -->
-
-        </div>
-
-      </div>
-
-    </section><!-- /Features Section -->
-
     <style>
       /* CARD */
 .course-item {
@@ -454,4 +368,88 @@ $(document).ready(function() {
 
     </section>
 
+    <section id="features" class="features section">
+
+      <div class="container">
+
+        <div class="row gy-4">
+
+          <div class="col-lg-3 col-md-4" data-aos="fade-up" data-aos-delay="100">
+  <div class="features-item" style="display: flex; justify-content: center;">
+    <img src="{{ url('layout/logos_marcas/logo-audi.webp') }}" alt="">
+  </div>
+</div>
+
+
+          <div class="col-lg-3 col-md-4" data-aos="fade-up" data-aos-delay="200">
+            <div class="features-item" style="display: flex; justify-content: center;">
+              <img src="{{ url('layout/logos_marcas/logo-bmw.webp') }}" alt="">
+            </div>
+          </div>
+
+          <div class="col-lg-3 col-md-4" data-aos="fade-up" data-aos-delay="300">
+            <div class="features-item" style="display: flex; justify-content: center;">
+              <img src="{{ url('layout/logos_marcas/logo-chevrolet.webp') }}" alt="">
+            </div>
+          </div>
+
+          <div class="col-lg-3 col-md-4" data-aos="fade-up" data-aos-delay="400">
+            <div class="features-item" style="display: flex; justify-content: center;">
+              <img src="{{ url('layout/logos_marcas/logo-fiat.webp') }}" alt="">
+            </div>
+          </div>
+
+          <div class="col-lg-3 col-md-4" data-aos="fade-up" data-aos-delay="500">
+            <div class="features-item" style="display: flex; justify-content: center;">
+              <img src="{{ url('layout/logos_marcas/logo-ford.webp') }}" alt="">
+            </div>
+          </div>
+
+          <div class="col-lg-3 col-md-4" data-aos="fade-up" data-aos-delay="600">
+            <div class="features-item" style="display: flex; justify-content: center;">
+              <img src="{{ url('layout/logos_marcas/logo-honda.webp') }}" alt="">
+            </div>
+          </div>
+
+          <div class="col-lg-3 col-md-4" data-aos="fade-up" data-aos-delay="700">
+            <div class="features-item" style="display: flex; justify-content: center;">
+              <img src="{{ url('layout/logos_marcas/logo-hyundai.webp') }}" alt="">
+            </div>
+          </div>
+
+          <div class="col-lg-3 col-md-4" data-aos="fade-up" data-aos-delay="800">
+            <div class="features-item" style="display: flex; justify-content: center;">
+              <img src="{{ url('layout/logos_marcas/logo-nissan.webp') }}" alt="">
+            </div>
+          </div>
+
+          <div class="col-lg-3 col-md-4" data-aos="fade-up" data-aos-delay="900">
+            <div class="features-item" style="display: flex; justify-content: center;">
+              <img src="{{ url('layout/logos_marcas/logo-peugeot.webp') }}" alt="">
+            </div>
+          </div>
+
+          <div class="col-lg-3 col-md-4" data-aos="fade-up" data-aos-delay="1000">
+            <div class="features-item" style="display: flex; justify-content: center;">
+              <img src="{{ url('layout/logos_marcas/logo-renault.webp') }}" alt="">
+            </div>
+          </div>
+
+          <div class="col-lg-3 col-md-4" data-aos="fade-up" data-aos-delay="1100">
+            <div class="features-item" style="display: flex; justify-content: center;">
+              <img src="{{ url('layout/logos_marcas/logo-toyota.webp') }}" alt="">
+            </div>
+          </div>
+
+          <div class="col-lg-3 col-md-4" data-aos="fade-up" data-aos-delay="1200">
+            <div class="features-item" style="display: flex; justify-content: center;">
+              <img src="{{ url('layout/logos_marcas/logo-volkswagen.webp') }}" alt="">
+            </div>
+          </div>
+
+        </div>
+
+      </div>
+
+    </section>
     @endsection
