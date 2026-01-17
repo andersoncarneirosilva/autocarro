@@ -212,7 +212,7 @@
     <section id="courses" class="courses section">
     <div class="container section-title mt-4">
         <h2>OFERTAS</h2>
-        <p>Mais vendidos</p>
+        <p>Veículos novos</p>
     </div>
 
     <div class="container">
