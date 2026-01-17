@@ -214,10 +214,9 @@ public function show($slug)
 
 public function contato()
 {
-    return view('loja.contato'); // ou 'loja.contato' se estiver dentro de uma pasta chamada site
+    return view('loja.contato');
 }
 
-// No seu Controller (Ex: AnuncioController.php)
 public function buscarSugestoes(Request $request)
 {
     $termo = $request->get('termo');

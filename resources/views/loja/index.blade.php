@@ -333,7 +333,7 @@ $(document).ready(function() {
 
             <div class="mt-auto d-flex justify-content-between align-items-center">
 
-                <a href="{{ url('sistema/veiculo/' . $veiculo->slug) }}"
+                <a href="{{ url('veiculo/' . $veiculo->slug) }}"
                    class="btn btn-outline-success btn-sm">
                     + DETALHES
                 </a>

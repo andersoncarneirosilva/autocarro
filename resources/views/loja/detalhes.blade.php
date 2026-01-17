@@ -1,4 +1,4 @@
-@extends('site.layout.app')
+@extends('loja.layout.app')
 
 @section('title', 'Veículos')
 
@@ -30,7 +30,7 @@
     <nav class="breadcrumbs" style="position: relative; z-index: 2;">
     <div class="container">
         <ol>
-            <li><a href="{{ route('site.index') }}">Página Inicial</a></li>
+            <li><a href="{{ route('loja.index') }}">Página Inicial</a></li>
             
             @php
                 // Normaliza o estado para evitar erros de digitação (ex: "novo" vira "Novos")

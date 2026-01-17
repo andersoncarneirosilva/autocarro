@@ -324,7 +324,7 @@
                                 <p class="description small text-muted">{{ $veiculo->kilometragem }}km | ANO: {{ $veiculo->ano }}</p>
                                 
                                 <div class="trainer d-flex align-items-center justify-content-between mt-3">
-                                    <a href="{{ url('sistema/veiculo/' . $veiculo->slug) }}">
+                                    <a href="{{ url('veiculo/' . $veiculo->slug) }}">
                                         <p class="pchama mb-0 badge border border-success text-success bg-transparent">+ DETALHES</p>
                                     </a>
                                     <div class="text-end">
