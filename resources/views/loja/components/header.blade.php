@@ -1,13 +1,13 @@
 <header id="header" class="header d-flex align-items-center sticky-top">
     <div class="container-fluid container-xl position-relative d-flex align-items-center">
 
-      <a href="{{ route('site.index') }}" class="logo d-flex align-items-center me-auto">
+      <a href="{{ route('loja.index') }}" class="logo d-flex align-items-center me-auto">
         <h1 class="sitename">Autocar</h1>
       </a>
       <nav id="navmenu" class="navmenu">
         <ul>
           <li>
-                    <a href="{{ route('site.index') }}"
+                    <a href="{{ route('loja.index') }}"
                        class="{{ request()->routeIs('site.index') ? 'active' : '' }}">
                         Home
                     </a>

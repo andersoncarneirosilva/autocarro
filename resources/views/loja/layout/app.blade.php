@@ -34,7 +34,7 @@
 
   
 
-      @include('site.components.header')
+      @include('loja.components.header')
 
 
   <main class="main">
@@ -43,7 +43,7 @@
 
   </main>
 
-  @include('site.components.footer')
+  @include('loja.components.footer')
 
   <!-- Scroll Top -->
   <a href="#" id="scroll-top" class="scroll-top d-flex align-items-center justify-content-center"><i class="bi bi-arrow-up-short"></i></a>

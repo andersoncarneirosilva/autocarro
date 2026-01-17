@@ -7,7 +7,7 @@ use App\Http\Controllers\ClientesController;
 use App\Http\Controllers\ConfiguracoesController;
 use App\Http\Controllers\ContatoController;
 use App\Http\Controllers\DashController;
-use App\Http\Controllers\DocumentosController;
+// use App\Http\Controllers\DocumentosController;
 use App\Http\Controllers\EstoqueController;
 use App\Http\Controllers\ModeloProcuracoesController;
 use App\Http\Controllers\NotificationController;
@@ -29,6 +29,8 @@ use App\Http\Controllers\AnuncioController;
 use App\Http\Controllers\SiteController;
 use App\Http\Controllers\DocumentoController;
 use App\Http\Controllers\PixController;
+use App\Http\Controllers\LojaController;
+
 
 use Illuminate\Support\Facades\Route;
 use Livewire\Livewire;
@@ -183,11 +185,11 @@ Route::get('/anuncios/{id}', [AnuncioController::class, 'show'])->name('anuncios
     Route::get('/perfil', [PerfilController::class, 'index'])->name('perfil.index');
 
     // DOCUMENTOS
-    Route::post('documentos/gerarProc/{id}/{doc}', [DocumentosController::class, 'gerarProc'])->name('documentos.gerarProc');
-    Route::get('/documentos/{id}', [DocumentosController::class, 'show'])->name('documentos.show');
-    Route::delete('/documentos/{id}', [DocumentosController::class, 'destroy'])->name('documentos.destroy');
-    Route::get('/documentos', [DocumentosController::class, 'index'])->name('documentos.index');
-    Route::post('/documentos', [DocumentosController::class, 'store'])->name('documentos.store');
+    // Route::post('documentos/gerarProc/{id}/{doc}', [DocumentosController::class, 'gerarProc'])->name('documentos.gerarProc');
+    // Route::get('/documentos/{id}', [DocumentosController::class, 'show'])->name('documentos.show');
+    // Route::delete('/documentos/{id}', [DocumentosController::class, 'destroy'])->name('documentos.destroy');
+    // Route::get('/documentos', [DocumentosController::class, 'index'])->name('documentos.index');
+    // Route::post('/documentos', [DocumentosController::class, 'store'])->name('documentos.store');
 
     Route::put('/calendar/update/{id}', [CalendarController::class, 'update']);
     Route::put('/calendar/move/{id}', [CalendarController::class, 'update']);
@@ -360,13 +362,9 @@ Route::get('/sistema/veiculos-semi-novos/pesquisa', [SiteController::class, 'sea
 Route::get('/veiculos-usados', [SiteController::class, 'indexVeiculosUsados'])->name('veiculos.usados');
 Route::get('/veiculos-usados/pesquisa', [SiteController::class, 'searchVeiculosUsados'])->name('veiculos.usados.search');
 
-Route::get('/sistema', [SiteController::class, 'index'])->name('site.index');
-Route::get('/sistema/contato', [SiteController::class, 'contato'])->name('site.contato');
+Route::get('/contato', [LojaController::class, 'contato'])->name('loja.contato');
 
-Route::get('/', [SiteController::class, 'index'])->name('site.index');
+Route::get('/', [LojaController::class, 'index'])->name('loja.index');
 
-// Route::get('/', function () {
-//     return view('site.index');
-// });
 
 require __DIR__.'/auth.php';

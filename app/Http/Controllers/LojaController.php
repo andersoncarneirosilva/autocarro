@@ -6,7 +6,7 @@ use App\Models\Anuncio;
 use Illuminate\Http\Request;
 use Parsedown;
 
-class SiteController extends Controller
+class LojaController extends Controller
 {
     protected $model;
 
@@ -17,6 +17,7 @@ class SiteController extends Controller
 
     public function index(Request $request)
 {
+    //dd($request);
     // Inicia a query filtrando apenas anúncios publicados
     $query = Anuncio::query()->where('status_anuncio', 'Publicado'); 
 
@@ -58,7 +59,7 @@ class SiteController extends Controller
         return $veiculo;
     });
 
-    return view('site.index', compact('veiculos'));
+    return view('loja.index', compact('veiculos'));
 }
 
 
@@ -154,12 +155,12 @@ private function processarBusca(Request $request, $estado = 'Novo')
 
     // Define qual view retornar baseado no estado
     $viewMap = [
-        'Novo'      => 'site.veiculos-novos',
-        'Semi-novo' => 'site.veiculos-semi-novos',
-        'Usado'     => 'site.veiculos-usados',
+        'Novo'      => 'loja.veiculos-novos',
+        'Semi-novo' => 'loja.veiculos-semi-novos',
+        'Usado'     => 'loja.veiculos-usados',
     ];
 
-    $view = $viewMap[$estado] ?? 'site.veiculos-novos';
+    $view = $viewMap[$estado] ?? 'loja.veiculos-novos';
     
     return view($view, compact('veiculos'));
 }
@@ -207,12 +208,12 @@ public function show($slug)
         $mapaBackground[$marcaUpper] ?? 'assets/brands/default.jpg'
     );
 
-    return view('site.detalhes', compact('veiculo'));
+    return view('loja.detalhes', compact('veiculo'));
 }
 
 public function contato()
 {
-    return view('site.contato'); // ou 'site.contato' se estiver dentro de uma pasta chamada site
+    return view('loja.contato'); // ou 'loja.contato' se estiver dentro de uma pasta chamada site
 }
 
 }

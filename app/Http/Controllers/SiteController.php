@@ -13,7 +13,7 @@ class SiteController extends Controller
 {
     
 
-    return view('site.index');
+    return view('loja.index');
 }
 
 
