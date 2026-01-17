@@ -1,5 +1,5 @@
 <style>
-/* --- ESTADO INICIAL (VERMELHO) --- */
+/* --- 1. CONFIGURAÇÕES BASE --- */
 #header {
     background-color: transparent;
     transition: all 0.4s ease;
@@ -7,6 +7,7 @@
     display: flex;
     align-items: center;
     z-index: 997;
+    height: 80px;
 }
 
 #header .container-fluid {
@@ -21,11 +22,12 @@
     transition: all 0.4s ease;
 }
 
-/* Links Desktop - Apenas para telas grandes */
-@media (min-width: 1200px) {
-    #header .navmenu ul li a {
-        color: #ffffff !important;
-    }
+/* --- 2. ESTADO TRANSPARENTE (Home e Detalhes) --- */
+/* Links brancos para fundo transparente com imagem atrás */
+#header .navmenu ul li a {
+    color: #ffffff !important;
+    font-weight: 500;
+    transition: 0.3s;
 }
 
 #header .mobile-nav-toggle {
@@ -40,13 +42,32 @@
     transition: 0.3s;
     font-weight: 600;
     text-decoration: none;
+    border: 2px solid transparent;
 }
 
-/* --- ESTADO APÓS SCROLL (BRANCO) --- */
+/* --- 3. ESTADO FIXO COLORIDO (Páginas como /veiculos-novos) --- */
+/* Aplicado via Blade quando não é index ou show */
+#header.header-dark-text {
+    background-color: #5B0000 !important;
+    box-shadow: 0px 2px 15px rgba(0, 0, 0, 0.1);
+}
+
+#header.header-dark-text .navmenu ul li a,
+#header.header-dark-text .mobile-nav-toggle {
+    color: #ffffff !important;
+}
+
+#header.header-dark-text .btn-getstarted {
+    background: #ffffff !important;
+    color: #5B0000 !important;
+}
+
+/* --- 4. ESTADO APÓS SCROLL (Sempre Branco) --- */
 #header.header-scrolled {
-    background-color: #ffffff;
+    background-color: #ffffff !important;
     box-shadow: 0px 2px 15px rgba(0, 0, 0, 0.1);
     padding: 10px 0;
+    height: 70px;
 }
 
 #header.header-scrolled .navmenu ul li a, 
@@ -55,75 +76,47 @@
 }
 
 #header.header-scrolled .btn-getstarted {
-    background: #5B0000;
-    color: #ffffff;
+    background: #5B0000 !important;
+    color: #ffffff !important;
 }
 
-/* --- DROPDOWN (SUBMENU DESKTOP) --- */
+/* --- 5. DROPDOWN (SUBMENU DESKTOP) - CORREÇÃO --- */
+/* Garante fundo branco e texto escuro INDEPENDENTE da página */
 #header .navmenu .dropdown ul {
-    background-color: #ffffff;
-    box-shadow: 0px 0px 30px rgba(127, 137, 161, 0.25);
+    background-color: #ffffff !important;
+    box-shadow: 0px 0px 30px rgba(0, 0, 0, 0.15);
+    border-radius: 4px;
 }
 
 #header .navmenu .dropdown ul li a {
-    color: #333333 !important;
+    color: #333333 !important; /* Texto sempre escuro no dropdown */
+    padding: 10px 20px;
+    font-size: 14px;
 }
 
-/* --- AJUSTES ESPECÍFICOS PARA MOBILE --- */
+#header .navmenu .dropdown ul li a:hover {
+    color: #5B0000 !important;
+    background-color: #f8f9fa;
+}
+
+/* --- 6. MOBILE NAV --- */
 @media (max-width: 1199px) {
-    /* Força o ícone do menu a ser branco no topo vermelho */
-    .mobile-nav-toggle {
-        color: #ffffff !important;
+    #header .navmenu ul {
+        background-color: #ffffff !important; /* Fundo do menu lateral */
     }
 
-    /* Ajuste do Painel Lateral que abre */
-    .navmenu ul {
-        background-color: #ffffff !important;
+    #header .navmenu ul li a {
+        color: #333333 !important; /* Texto sempre escuro no mobile aberto */
     }
 
-    /* Links do Menu Mobile (Força cor escura para ler no fundo branco) */
-    .navmenu ul li a, 
-    .navmenu .dropdown > a,
-    .navmenu .dropdown > a span,
-    .navmenu .dropdown > a i {
-        color: #333333 !important;
-    }
-
-    /* Itens ativos ou hover no mobile */
-    .navmenu ul li a:hover, 
-    .navmenu ul li a.active,
-    .navmenu .dropdown:hover > a {
-        color: #5B0000 !important;
-    }
-
-    /* Botão e Hambúrguer lado a lado */
     #header .btn-getstarted {
         order: 2;
         margin-right: 15px;
         padding: 6px 15px;
         font-size: 13px;
     }
-    #header .navmenu { order: 3; }
-    #header .logo { order: 1; }
 }
-/* 1. Quando NÃO for as páginas permitidas, o fundo deve ser branco desde o início */
-#header.header-dark-text {
-    background-color: #5B0000 !important;
-    box-shadow: 0px 2px 15px rgba(0, 0, 0, 0.1);
-}
-
-/* 2. Garante que o texto seja escuro nessas páginas */
-#header.header-dark-text .navmenu ul li a, 
-#header.header-dark-text .mobile-nav-toggle {
-    color: #ffffff !important;
-}
-
-/* 3. Ajusta o botão para a versão escura */
-#header.header-dark-text .btn-getstarted {
-    background: #5B0000 !important;
-    color: #ffffff !important;
-}
-</style> 
+</style>
 {{-- header d-flex align-items-center fixed-top --}}
 <header id="header" class="header d-flex align-items-center fixed-top {{ !in_array(Route::currentRouteName(), ['loja.index', 'veiculo.show']) ? 'header-dark-text' : '' }}">
     <div class="container-fluid container-xl position-relative d-flex align-items-center justify-content-between">
