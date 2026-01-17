@@ -5,7 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Anuncio;
 use Illuminate\Http\Request;
 use Parsedown;
-
+use Illuminate\Support\Facades\DB;
 class LojaController extends Controller
 {
     protected $model;
@@ -94,6 +94,7 @@ public function searchVeiculosUsados(Request $request)
 {
     return $this->processarBusca($request, 'Usado');
 }
+
 /**
  * Lógica centralizada de busca e listagem
  */
@@ -214,6 +215,51 @@ public function show($slug)
 public function contato()
 {
     return view('loja.contato'); // ou 'loja.contato' se estiver dentro de uma pasta chamada site
+}
+
+// No seu Controller (Ex: AnuncioController.php)
+public function buscarSugestoes(Request $request)
+{
+    $termo = $request->get('termo');
+
+    if (empty($termo)) {
+        return response()->json([]);
+    }
+
+    // Buscamos apenas os dados necessários para a sugestão
+    $sugestoes = \App\Models\Anuncio::query()
+        ->where('status', 'Ativo')
+        ->where('status_anuncio', 'Publicado')
+        ->where(function($q) use ($termo) {
+            $q->where('marca_real', 'LIKE', "%{$termo}%")
+              ->orWhere('modelo_real', 'LIKE', "%{$termo}%");
+        })
+        ->select('marca_real', 'modelo_real')
+        ->distinct()
+        ->limit(10)
+        ->get();
+
+    // RETORNA JSON (Essencial para o AJAX funcionar)
+    return response()->json($sugestoes);
+}
+public function searchGeral(Request $request)
+{
+    $termo = $request->get('termo');
+
+    $veiculos = \App\Models\Anuncio::query()
+        ->where('status', 'Ativo')
+        ->where('status_anuncio', 'Publicado')
+        ->when($termo, function($query) use ($termo) {
+            $query->where(function($q) use ($termo) {
+                $q->where('marca_real', 'LIKE', "%{$termo}%")
+                  ->orWhere('modelo_real', 'LIKE', "%{$termo}%");
+            });
+        })
+        ->orderBy('created_at', 'desc')
+        ->paginate(12);
+
+    // Retorna para a view de resultados (ou você pode reutilizar a de novos/usados)
+    return view('loja.busca-resultados', compact('veiculos', 'termo'));
 }
 
 }

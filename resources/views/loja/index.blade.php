@@ -4,21 +4,195 @@
 
 @section('content')
 
-    <section id="hero" class="hero section dark-background">
+<style>
+    .home-index-bg {
+        /* O SVG cria o arco vinho */
+        background-image: url("data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' width='5700' height='400' ><circle fill='%235b0000' cx='2325' cy='-6098' r='6457'/></svg>");
+        
+        background-position: center top;
+        background-repeat: no-repeat;
+        background-size: 330% auto;
+        padding-top: 80px;
+        padding-bottom: 120px;
+        min-height: 450px;
+        display: flex;
+        align-items: center; /* Centraliza verticalmente o conteúdo no arco */
+    }
 
-      <img src="site/img/background-autocar.jpg" alt="" data-aos="fade-in">
+    /* Centraliza o texto e define largura máxima */
+    .home-index-bg h1 {
+        font-size: 2.2rem;
+        line-height: 1.2;
+        max-width: 800px;
+        margin-left: auto;
+        margin-right: auto;
+        text-align: center;
+    }
 
-      <div class="container">
-        <h2 data-aos="fade-up" data-aos-delay="100">Encontre o carro ideal,<br>dirija seu futuro</h2>
-        <p data-aos="fade-up" data-aos-delay="200">Somos especialistas em veículos seminovos e zero km com qualidade, <br>confiança e os melhores preços do mercado.</p>
-        <div class="d-flex mt-4" data-aos="fade-up" data-aos-delay="300">
-            <a href="/estoque" class="btn-get-started">Ver Estoque</a>
+    .search-box {
+        background: #fff;
+        padding: 10px 15px;
+        border-radius: 50px;
+        display: flex;
+        align-items: center;
+        box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+        width: 100%;
+        max-width: 650px;
+        margin: 30px auto 0 auto; /* Centraliza a barra horizontalmente */
+        text-align: left; /* Mantém o texto dentro do input alinhado à esquerda */
+    }
+
+    .search-box-keyword {
+        flex: 1;
+        padding-left: 20px;
+    }
+
+    .search-box-label {
+        font-size: 14px;
+        font-weight: bold;
+        color: #730000;
+        margin-bottom: -5px;
+    }
+
+    .search-box input {
+        border: none !important;
+        padding: 0;
+        height: auto;
+        box-shadow: none !important;
+        font-size: 16px;
+        width: 100%;
+    }
+
+    .btn-primary {
+        background-color: #730000 !important;
+        border-color: #730000 !important;
+        border-radius: 30px !important;
+        font-weight: bold;
+        padding: 12px 40px !important;
+        color: #fff !important;
+        text-decoration: none;
+    }
+
+    #resultsList {
+    max-height: 300px;
+    overflow-y: auto;
+    border: 1px solid #ddd;
+    background: #fff;
+    margin-top: 2px;
+}
+
+.suggest-item {
+    cursor: pointer;
+    padding: 10px 15px;
+    font-size: 14px;
+}
+
+.suggest-item:hover {
+    background-color: #f8f9fa;
+    color: #007bff;
+}
+</style>
+<div class="home-index-bg">
+    <div class="container-xl">
+        <div class="row justify-content-center">
+            <div class="col-12 col-lg-10 text-center">
+                
+                <h1 class="h2 font-weight-bold text-white mb-20">
+                    Encontre o seu próximo carro agora, <br> 
+                    explore nosso estoque com as melhores ofertas.
+                </h1>
+                
+                <form action="{{ route('veiculos.search.geral') }}" method="GET" id="formBuscaGeral">
+                    <div class="search-box" style="position: relative;">
+                        <div class="search-box-keyword">
+                            <div class="search-box-label">O que você busca?</div>
+                            <div class="form-group mt-1">
+                                <input autocomplete="off" type="text" class="form-control" 
+                                       placeholder="Digite a marca ou modelo do veículo" 
+                                       id="txtMarcaCar" name="termo">
+                                
+                                <div id="resultsList" class="list-group shadow" 
+                                     style="position: absolute; width: 100%; z-index: 1000; display: none;">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="search-box-btn">
+                            <button type="submit" class="btn btn-primary" id="btnBuscar">
+                                <span class="btn-text">BUSCAR</span>
+                            </button>
+                        </div>
+                    </div>
+                </form>
+
+            </div>
         </div>
     </div>
+</div>
 
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script>
+$(document).ready(function() {
+    let timeout = null;
 
-    </section>
+    $('#txtMarcaCar').on('keyup', function() {
+        clearTimeout(timeout);
+        let busca = $(this).val();
+        let $resultsList = $('#resultsList');
 
+        if (busca.length < 2) {
+            $resultsList.hide().empty();
+            return;
+        }
+
+        timeout = setTimeout(function() {
+            $.ajax({
+                url: '/sugestoes',
+                method: 'GET',
+                data: { termo: busca },
+                success: function(data) {
+                    $resultsList.empty();
+
+                    if (data.length > 0) {
+                        data.forEach(function(item) {
+                            // Exibe marca e modelo para facilitar a escolha
+                            let textoExibicao = item.marca_real + ' ' + item.modelo_real;
+                            // O valor enviado para a busca será o modelo_real
+                            let valorBusca = item.modelo_real;
+
+                            $resultsList.append(`
+                                <a href="#" class="list-group-item list-group-item-action suggest-item" data-value="${valorBusca}">
+                                    ${textoExibicao}
+                                </a>
+                            `);
+                        });
+                        $resultsList.show();
+                    } else {
+                        $resultsList.hide();
+                    }
+                }
+            });
+        }, 300);
+    });
+
+    // Ao clicar em uma sugestão: preenche e já envia a busca
+    $(document).on('click', '.suggest-item', function(e) {
+        e.preventDefault();
+        let valor = $(this).data('value');
+        $('#txtMarcaCar').val(valor);
+        $('#resultsList').hide();
+        
+        // Envia o formulário automaticamente ao selecionar
+        $('#formBuscaGeral').submit();
+    });
+
+    // Fecha a lista se clicar fora do campo de busca
+    $(document).on('click', function(e) {
+        if (!$(e.target).closest('.search-box').length) {
+            $('#resultsList').hide();
+        }
+    });
+});
+</script>
 
     <section id="why-us" class="section why-us">
   <div class="container">

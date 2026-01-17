@@ -4,7 +4,7 @@
       <div class="row gy-4">
         <div class="col-lg-4 col-md-6 footer-about">
           <a href="index.html" class="logo d-flex align-items-center">
-            <span class="sitename">Mentor</span>
+            <span class="sitename">Alcecar</span>
           </a>
           {{-- <div class="footer-contact pt-3">
             <p>A108 Adam Street</p>
@@ -59,8 +59,8 @@
       </div>
     </div>
 
-    <div class="container copyright text-center mt-4">
-      <p>© <strong class="px-1 sitename">Mentor</strong> <span>Todos os direitos reservados</span></p>
+    <div class="container copyright text-center">
+      {{-- <p>© <strong class="px-1 sitename">alcecar</strong> <span>Todos os direitos reservados</span></p> --}}
       <div class="credits">
         Desenvolvido por <a href="https://pixdesign.com.br/">PixDesign</a>
       </div>

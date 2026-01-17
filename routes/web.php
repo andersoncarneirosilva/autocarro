@@ -347,9 +347,15 @@ Route::post('/reset-password', [PasswordResetController::class, 'reset'])->name(
 
 Route::post('/enviar-contato', [ContatoController::class, 'enviarEmail'])->name('contato.enviar');
 
-
+Route::get('/buscar-modelos', [LojaController::class, 'buscarModelos'])->name('buscar.modelos');
 Route::get('/veiculo/{slug}', [LojaController::class, 'show'])->name('veiculo.show');
 // Listagem e Busca de Novos
+// Rota para pesquisa geral (Todos os estados: novo, usado, semi-novo)
+// Rota para a PÁGINA de resultados (o que abre quando clica em BUSCAR)
+Route::get('/pesquisa-veiculos', [LojaController::class, 'searchGeral'])->name('veiculos.search.geral');
+
+// Rota para o AJAX (o que popula a lista enquanto digita)
+Route::get('/sugestoes', [LojaController::class, 'buscarSugestoes'])->name('veiculos.sugestoes');
 Route::get('/veiculos-novos', [LojaController::class, 'indexVeiculosNovos'])->name('veiculos.novos');
 Route::get('/veiculos-novos/pesquisa', [LojaController::class, 'searchVeiculosNovos'])->name('veiculos.novos.search');
 
