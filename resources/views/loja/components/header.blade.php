@@ -108,14 +108,14 @@
 }
 /* 1. Quando NÃO for as páginas permitidas, o fundo deve ser branco desde o início */
 #header.header-dark-text {
-    background-color: #ffffff !important;
+    background-color: #5B0000 !important;
     box-shadow: 0px 2px 15px rgba(0, 0, 0, 0.1);
 }
 
 /* 2. Garante que o texto seja escuro nessas páginas */
 #header.header-dark-text .navmenu ul li a, 
 #header.header-dark-text .mobile-nav-toggle {
-    color: #333333 !important;
+    color: #ffffff !important;
 }
 
 /* 3. Ajusta o botão para a versão escura */
