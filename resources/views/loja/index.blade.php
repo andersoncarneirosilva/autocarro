@@ -12,14 +12,14 @@
         background-position: center top;
         background-repeat: no-repeat;
         background-size: 330% auto;
-        padding-top: 80px;
+        padding-top: 100px; /* Aumentado para dar respiro ao header */
         padding-bottom: 120px;
         min-height: 450px;
         display: flex;
-        align-items: center; /* Centraliza verticalmente o conteúdo no arco */
+        align-items: center;
+        transition: all 0.3s ease;
     }
 
-    /* Centraliza o texto e define largura máxima */
     .home-index-bg h1 {
         font-size: 2.2rem;
         line-height: 1.2;
@@ -27,6 +27,7 @@
         margin-left: auto;
         margin-right: auto;
         text-align: center;
+        color: #ffffff;
     }
 
     .search-box {
@@ -38,8 +39,7 @@
         box-shadow: 0 4px 15px rgba(0,0,0,0.1);
         width: 100%;
         max-width: 650px;
-        margin: 30px auto 0 auto; /* Centraliza a barra horizontalmente */
-        text-align: left; /* Mantém o texto dentro do input alinhado à esquerda */
+        margin: 30px auto 0 auto;
     }
 
     .search-box-keyword {
@@ -61,6 +61,7 @@
         box-shadow: none !important;
         font-size: 16px;
         width: 100%;
+        background: transparent;
     }
 
     .btn-primary {
@@ -73,25 +74,60 @@
         text-decoration: none;
     }
 
-    #resultsList {
-    max-height: 300px;
-    overflow-y: auto;
-    border: 1px solid #ddd;
-    background: #fff;
-    margin-top: 2px;
-}
+    /* --- AJUSTES PARA CELULAR (MOBILE) --- */
+    @media (max-width: 768px) {
+        .home-index-bg {
+            /* No mobile, aumentamos o tamanho do SVG para o arco não sumir */
+            background-size: 1400% auto;
+            padding-bottom: 80px;
+            padding-top: 20px;
+            min-height: 500px;
+            background-position: center -20px; /* Sobe um pouco o arco */
+        }
 
-.suggest-item {
-    cursor: pointer;
-    padding: 10px 15px;
-    font-size: 14px;
-}
+        .home-index-bg h1 {
+            font-size: 1.5rem; /* Fonte menor para não quebrar feio */
+            padding: 0 15px;
+        }
 
-.suggest-item:hover {
-    background-color: #f8f9fa;
-    color: #007bff;
-}
+        .search-box {
+            flex-direction: column; /* Empilha input e botão */
+            border-radius: 20px;
+            padding: 20px;
+            margin-top: 20px;
+            width: 90%;
+        }
+
+        .search-box-keyword {
+            padding-left: 0;
+            width: 100%;
+            text-align: center;
+            margin-bottom: 15px;
+        }
+
+        .search-box input {
+            text-align: center;
+            font-size: 15px;
+        }
+
+        .search-box-btn {
+            width: 100%;
+        }
+
+        .btn-primary {
+            width: 100%; /* Botão largo no mobile */
+            padding: 10px !important;
+        }
+        
+        #resultsList {
+            width: 90% !important;
+            left: 5% !important;
+        }
+    }
 </style>
+
+
+
 <div class="home-index-bg">
     <div class="container-xl">
         <div class="row justify-content-center">
