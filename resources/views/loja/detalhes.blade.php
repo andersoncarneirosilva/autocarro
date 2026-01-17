@@ -192,7 +192,7 @@
 
             <footer class="mt-4 mt-lg-5">
                 <div class="d-grid gap-2">
-                    <a href="https://wa.me/5554997007847?text=Olá, tenho interesse no {{ $veiculo->marca }} {{ $veiculo->ano }}"
+                    <a href="https://wa.me/555199999999?text=Olá, tenho interesse no {{ $veiculo->marca }} {{ $veiculo->ano }}"
                     target="_blank"
                     class="btn btn-accent btn-lg py-3 fw-semibold shadow-none rounded-1 d-flex align-items-center justify-content-center">
 

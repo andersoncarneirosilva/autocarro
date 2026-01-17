@@ -223,6 +223,11 @@ public function contato()
     return view('loja.contato');
 }
 
+public function site()
+{
+    return view('site.index');
+}
+
 public function buscarSugestoes(Request $request)
 {
     $termo = $request->get('termo');

@@ -131,16 +131,16 @@
                                         <a class="page-scroll" href="#features">Feature</a>
                                     </li> --}}
                                     <li class="nav-item">
-                                        <a class="page-scroll" href="#about">Sobre</a>
+                                        <a class="page-scroll" href="#sobre">Sobre</a>
                                     </li>
-                                    {{-- <li class="nav-item">
-                                        <a class="page-scroll" href="#screenshot">Planos</a>
-                                    </li> --}}
                                     <li class="nav-item">
-                                        <a class="page-scroll" href="#pricing">Planos</a>
+                                        <a class="page-scroll" href="#loja">Loja virtual</a>
+                                    </li>
+                                    <li class="nav-item">
+                                        <a class="page-scroll" href="#planos">Planos</a>
                                     </li>                                    
                                     <li class="nav-item">
-                                        <a class="page-scroll" href="#blog">Contato</a>
+                                        <a class="page-scroll" href="#contato">Contato</a>
                                     </li>
                                     <li class="nav-item">
                                         <a class="page-scroll" href="{{ route('login') }}">Login</a>
@@ -165,8 +165,18 @@
                             <h2 class="header_title wow fadeInLeftBig" data-wow-duration="1.3s" data-wow-delay="0.2s">Evite erros e aumente a produtividade</h2>
                             <p class="wow fadeInLeftBig" data-wow-duration="1.3s" data-wow-delay="0.6s">Integre todas as informações de desempenho dos seus veículos e melhore a produtividade da sua frota em um só lugar.</p>
                             <ul>
-                                <li><a class="main-btn wow fadeInUp" data-wow-duration="1.3s" data-wow-delay="1s" href="#">Discover More</a></li>
-                                <li><a class="main-btn main-btn-2 wow fadeInUp" data-wow-duration="1.3s" data-wow-delay="1.4s" href="#">Download App</a></li>
+                                <li><a class="main-btn wow fadeInUp" data-wow-duration="1.3s" data-wow-delay="1s" href="{{ route('login') }}">Teste agora</a></li>
+                                <li>
+    <a class="main-btn main-btn-2 wow fadeInUp"
+       data-wow-duration="1.3s"
+       data-wow-delay="1.4s"
+       href="https://wa.me/5551999047299"
+       target="_blank"
+       rel="noopener">
+        Chame no WhatsApp
+    </a>
+</li>
+
                             </ul>
                         </div> <!-- header hero content -->
                     </div>
@@ -187,7 +197,7 @@
     
     <!--====== FEATURES PART START ======-->
 
-    <section id="about" class="features_area pt-35 pb-80">
+    <section id="sobre" class="features_area pt-35 pb-80">
     <div class="container">
         <div class="row justify-content-center">
             <div class="col-lg-3 col-md-6 col-sm-8">
@@ -266,33 +276,45 @@
       </div> 
       </section>
 
-{{-- 
-    <section id="about" class="about_area pt-30 pb-80">
-        <div class="container">
-            <div class="row align-items-center">
-                <div class="col-lg-6 col-md-9">
-                    <div class="about_image mt-50 wow fadeInRightBig" data-wow-duration="1.3s" data-wow-delay="0.5s">
-                        <img class="image" src="{{ url('layout/images/background_alcecar.png') }}">
-                        <img class="dots" src="{{ url('layout/images/dots.svg') }}" alt="dots">
-                    </div>
-                </div>
-                <div class="col-lg-6">
-                    <div class="about_content mt-45 wow fadeInLeftBig" data-wow-duration="1.3s" data-wow-delay="0.5s">
-                        <div class="section_title">
-                            <h4 class="title">Discover New Experience!</h4>
-                            <p>Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sediam nonumy eirmod tempor invidunt ut labore et dolore malquyam erat, sed diam voluptua. At vero eos et accusam et justo doloes et ea rebum. Stet clita kasd gubergren, nod sea takmaa santus est Lorem ipsum dolor sit amet. Lorem ipsum dolor sitdse ametr consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore.</p>
-                        </div>
-                        <a class="main-btn" href="#">Discover</a>
-                        
-                    </div>
+
+    <section id="loja" class="about_area pt-30 pb-80">
+    <div class="container">
+        <div class="row align-items-center">
+            <div class="col-lg-6 col-md-9">
+                <div class="about_image mt-50 wow fadeInRightBig" data-wow-duration="1.3s" data-wow-delay="0.5s">
+                    <img class="image" src="{{ url('layout/images/header_app_2.png') }}">
+                    <img class="dots" src="{{ url('layout/images/dots.svg') }}" alt="dots">
                 </div>
             </div>
-        </div> 
-    </section> --}}
 
-    <!--====== ABOUT PART ENDS ======-->
+            <div class="col-lg-6">
+                <div class="about_content mt-45 wow fadeInLeftBig" data-wow-duration="1.3s" data-wow-delay="0.5s">
+                    <div class="section_title">
+                        <h4 class="title">Tenha sua Loja Virtual e Venda Mais</h4>
+
+                        <p>
+                            Com o <strong>Alcecar</strong>, você pode criar sua
+                            <strong>loja virtual</strong> e dar mais visibilidade aos seus produtos
+                            e serviços. O sistema foi desenvolvido para aumentar sua
+                            <strong>exposição online</strong> e facilitar a conexão com novos clientes.
+                        </p>
+
+                        <p>
+                            Além disso, você conta com ferramentas para
+                            <strong>gestão de anúncios</strong>, controle de campanhas,
+                            acompanhamento de resultados e otimização do desempenho,
+                            tudo em um único lugar, de forma simples e eficiente.
+                        </p>
+                    </div>
+
+                    <a class="main-btn" href="#contato">Saiba Mais</a>
+                </div>
+            </div>
+        </div>
+    </div> 
+</section>
+
     
-    <!--====== APP FEATURES PART START ======-->
 
     <section id="app_features">
 
@@ -324,7 +346,7 @@
 </section>
     
     <!--====== PRICNG PART START ======-->
-<section id="pricing" class="pricing_area mt-80 pt-75 pb-80">
+<section id="planos" class="pricing_area mt-80 pt-75 pb-80">
     <div class="container">
         <div class="row justify-content-center">
             <div class="col-lg-6">
@@ -423,57 +445,73 @@
     <!--====== PRICNG PART ENDS ======-->
     
     <!--====== DOWNLOAD APP PART START ======-->
-{{-- 
-    <section id="download" class="download_app_area pt-80 mb-80">
-        <div class="container">
-            <div class="download_app">
-                <div class="download_shape">
-                    <img src="{{ url('layout/images/shape-5.svg') }}" alt="shape">
-                </div>
-                <div class="download_shape_2">
-                    <img src="{{ url('layout/images/shape-6.png') }}" alt="shape">
-                </div>
-                <div class="download_app_content">
-                    <h3 class="download_title">Download The App</h3>
-                    <p>Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sediam nonumy eirmod.</p>
-                    <ul>
-                        <li>
-                            <a class="d-flex align-items-center" href="#">
-                                <span class="icon">
-                                    <i class="lni lni-play-store"></i>
-                                </span>
-                                <span class="content media-body">
-                                    <h6 class="title">Play Store</h6>
-                                    <p>Download Now</p>
-                                </span>
-                            </a>
-                        </li>
-                        <li>
-                            <a class="d-flex align-items-center" href="#">
-                                <span class="icon">
-                                    <i class="lni lni-apple"></i>
-                                </span>
-                                <span class="content">
-                                    <h6 class="title">App Store</h6>
-                                    <p>Download Now</p>
-                                </span>
-                            </a>
-                        </li>
-                    </ul>
-                </div>  <!-- download app content -->
-            </div> <!-- download app -->
-        </div> <!-- container -->
-        <div class="download_app_image d-none d-lg-flex align-items-end">
-            <div class="image wow fadeInRightBig" data-wow-duration="1.3s" data-wow-delay="0.5s">
-                <img src="{{ url('assets/images/download.png') }}" alt="download">
-            </div> <!-- image -->
-        </div> <!-- download app image -->
-    </section> --}}
 
-    <!--====== DOWNLOAD APP PART ENDS ======-->
+    <section id="download" class="download_app_area pt-80 mb-80">
+    <div class="container">
+        <div class="download_app">
+            <div class="download_shape">
+                <img src="{{ url('layout/images/shape-5.svg') }}" alt="shape">
+            </div>
+            <div class="download_shape_2">
+                <img src="{{ url('layout/images/shape-6.png') }}" alt="shape">
+            </div>
+
+            <div class="download_app_content">
+                <h3 class="download_title">Documentos em PDF</h3>
+
+<p>
+    O <strong>sistema</strong> permite criar, personalizar e gerar
+    <strong>procurações em PDF</strong> de forma rápida e segura.
+    O sistema automatiza o preenchimento dos dados, reduz erros manuais
+    e garante documentos padronizados, prontos para impressão ou envio digital.
+</p>
+
+
+                <!-- BOTÕES LADO A LADO -->
+                <ul class="d-flex gap-3 flex-wrap">
+                    <li>
+                        <a class="d-flex align-items-center" href="{{ route('login') }}">
+                            <span class="icon">
+                                <i class="lni lni-rocket"></i>
+                            </span>
+                            <span class="content media-body">
+                                <h6 class="title">Testar Agora</h6>
+                                <p>Acesso rápido ao sistema</p>
+                            </span>
+                        </a>
+                    </li>
+
+                    <li>
+                        <a class="d-flex align-items-center"
+                        href="https://wa.me/5551999047299"
+                        target="_blank"
+                        rel="noopener">
+                            <span class="icon">
+                                <i class="lni lni-whatsapp"></i>
+                            </span>
+                            <span class="content">
+                                <h6 class="title">Solicitar Demonstração</h6>
+                                <p>Fale conosco pelo WhatsApp</p>
+                            </span>
+                        </a>
+                    </li>
+
+                </ul>
+                <!-- /BOTÕES -->
+            </div>
+        </div>
+    </div>
+
+    <div class="download_app_image d-none d-lg-flex align-items-end">
+        <div class="image wow fadeInRightBig" data-wow-duration="1.3s" data-wow-delay="0.5s">
+            <img src="{{ url('layout/images/header_app_3.png') }}" alt="Proconline">
+        </div>
+    </div>
+</section>
+
+
     
-    <!--====== BLOG PART START ======-->
-<section id="blog" class="blog_area pt-80 pb-80">
+<section id="contato" class="blog_area pt-80 pb-80">
     <div class="container">
         <div class="row justify-content-center">
             <div class="col-lg-6">
