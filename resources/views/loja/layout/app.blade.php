@@ -1,10 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
-
-<head>
-  <meta charset="utf-8">
-  <meta content="width=device-width, initial-scale=1.0" name="viewport">
-  <title>Alcecar | Sua loja de Veículo</title>
+  <head>
+    <title>Alcecar | Sua loja de Veículo</title>
   
   <meta name="description" content="Compre online com praticidade e segurança. Uma loja virtual completa com produtos selecionados, ofertas exclusivas e entrega rápida.">
   <meta name="keywords" content="loja virtual, ecommerce, compras online, produtos online, ofertas, loja online">
@@ -21,42 +18,206 @@
   <meta property="twitter:url" content="https://alcecar.com.br/">
   <meta property="twitter:title" content="Loja Virtual | Sua Melhor Experiência de Compra Online">
   <meta property="twitter:description" content="Tudo o que você procura em uma loja online moderna, segura e feita para facilitar seu dia a dia.">
-  <meta property="twitter:image" content="{{ url('layout/images/logo_carro.png') }}">
-
-
-  <!-- Favicons -->
-  <link href="{{ url('img/favicon.png') }}" rel="icon">
-  <link href="{{ url('img/apple-touch-icon.png') }}" rel="apple-touch-icon">
-<script src="https://kit.fontawesome.com/6c4df5f46b.js" crossorigin="anonymous"></script>
+    
   <!-- Fonts -->
   <link href="https://fonts.googleapis.com" rel="preconnect">
   <link href="https://fonts.gstatic.com" rel="preconnect" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Open+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;1,300;1,400;1,500;1,600;1,700;1,800&family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&family=Raleway:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&family=Raleway:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&family=Inter:wght@100;200;300;400;500;600;700;800;900&display=swap" rel="stylesheet">
 
   <!-- Vendor CSS Files -->
-  <link href="{{ url('assets/site_alcecar/vendor/bootstrap/css/bootstrap.min.css') }}" rel="stylesheet">
-  <link href="{{ url('assets/site_alcecar/vendor/bootstrap-icons/bootstrap-icons.css') }}" rel="stylesheet">
-  <link href="{{ url('assets/site_alcecar/vendor/aos/aos.css') }}" rel="stylesheet">
-  <link href="{{ url('assets/site_alcecar/vendor/glightbox/css/glightbox.min.css') }}" rel="stylesheet">
-  <link href="{{ url('assets/site_alcecar/vendor/swiper/swiper-bundle.min.css') }}" rel="stylesheet">
+  <link href="{{ url('carbook/vendor/bootstrap/css/bootstrap.min.css') }}" rel="stylesheet">
+  <link href="{{ url('carbook/vendor/bootstrap-icons/bootstrap-icons.css') }}" rel="stylesheet">
+  <link href="{{ url('carbook/vendor/aos/aos.css') }}" rel="stylesheet">
+  <link href="{{ url('carbook/vendor/glightbox/css/glightbox.min.css') }}" rel="stylesheet">
+  <link href="{{ url('carbook/vendor/swiper/swiper-bundle.min.css') }}" rel="stylesheet">
 
   <!-- Main CSS File -->
-  <link href="{{ url('assets/site_alcecar/css/main.css') }}" rel="stylesheet">
+  <link href="{{ url('carbook/css/main.css') }}" rel="stylesheet">
 
-  <style></style>
+<style>
+  /* 1. CONTAINER E FLEXIBILIDADE */
+  .search-container-custom {
+    background: #fff;
+    border-radius: 10px !important;
+    padding: 10px 15px !important;
+    box-shadow: 0 10px 35px rgba(0,0,0,0.2);
+    width: 100%;
+    max-width: 1100px;
+  }
+
+  .search-flex-container {
+    display: flex !important;
+    flex-direction: row !important;
+    align-items: center;
+    gap: 10px;
+  }
+
+  .custom-field {
+    flex: 2;
+    position: relative;
+    min-width: 200px;
+  }
+  .custom-field:first-child { flex: 3; }
+
+  .select-trigger {
+    width: 100%;
+    height: 55px;
+    background-color: #f6f6f6 !important;
+    border: none !important;
+    border-radius: 12px !important;
+    padding: 0 15px !important;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    font-size: 15px;
+    color: #333;
+    transition: 0.2s;
+  }
+
+  /* 2. CAIXA DE RESULTADOS E SETAS (Efeito solicitado) */
+  .custom-result-box-wrapper {
+    width: 100%;
+    border: none !important;
+    border-radius: 15px !important;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.15) !important;
+    margin-top: 10px !important;
+    background: #fff !important;
+    z-index: 1000;
+    overflow: hidden; /* Corta o conteúdo para as setas funcionarem */
+    padding: 0 !important;
+  }
+
+  .custom-result-box {
+    max-height: 250px !important; 
+    overflow-y: hidden !important; /* ESCONDE O SCROLLBAR */
+    padding: 8px !important;
+    margin: 0;
+    list-style: none;
+  }
+
+  /* Estilo das Setas de Navegação */
+  .scroll-arrow {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background: #fff;
+    height: 25px;
+    cursor: pointer;
+    font-size: 12px;
+    transition: 0.2s;
+    user-select: none;
+  }
+  .scroll-arrow:hover { background: #f8f8f8; color: #ff4a17; }
+  .scroll-arrow.up { border-bottom: 1px solid #eee; }
+  .scroll-arrow.down { border-top: 1px solid #eee; }
+
+  .dropdown-item {
+    border-radius: 8px !important;
+    padding: 10px 15px !important;
+    font-size: 14px !important;
+    font-weight: 500;
+    width: 100%;
+    text-align: left;
+    border: none;
+    background: none;
+  }
+  .dropdown-item:hover { background-color: #f0f0f0 !important; color: #ff4a17 !important; }
+
+  .btn-search-purple {
+    background-color: #ff4a17 !important;
+    color: #fff !important;
+    border: none !important;
+    border-radius: 15px !important;
+    height: 55px;
+    padding: 0 30px;
+    font-weight: 600;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    white-space: nowrap;
+  }
+
+  /* Mobile */
+  @media (max-width: 991px) {
+    .search-flex-container { flex-direction: column !important; }
+    .custom-field, .btn-search-purple { width: 100%; }
+  }
+
+
+</style>
+
+
+<style>
+
+
+/* 3. Estilo do Card (Branco com Sombra) */
+.category-card {
+  background: #ffffff;
+  border-radius: 20px;
+  padding: 35px 15px;
+  text-align: center;
+  box-shadow: 0 2px 10px rgba(0,0,0,0.1); /* Sombra suave para destacar do fundo */
+  transition: all 0.3s ease;
+  height: 100%;
+  border: 1px solid transparent;
+  cursor: pointer;
+}
+
+.category-card:hover {
+  transform: translateY(-10px);
+  border-color: #ff4a17;
+}
+
+/* 4. Ícones e Títulos */
+.category-card .icon-box {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 80px;  /* Ajuste conforme seu design */
+  height: 80px; /* Ajuste conforme seu design */
+  margin: 0 auto 15px;
+  overflow: hidden;
+}
+
+.category-card .icon-box img {
+  width: 100%;
+  height: auto;
+  max-width: 60px; /* Controla o tamanho real da imagem do carro */
+  object-fit: contain;
+  transition: transform 0.3s ease;
+}
+
+/* Efeito de zoom ao passar o mouse no card */
+.category-card:hover .icon-box img {
+  transform: scale(1.1);
+}
+
+/* Ajustes para Celular */
+@media (max-width: 991px) {
+  .categories-overlap {
+    margin-top: -80px;
+  }
+  .category-card {
+    padding: 20px 10px;
+  }
+  .category-card .icon-box {
+    font-size: 30px;
+  }
+}
+
+
+</style>
+
 </head>
 
 <body class="index-page">
 
-  
-
-      @include('loja.components.header')
-
+  @include('loja.components.header')
 
   <main class="main">
 
-    @yield('content')
-
+   @yield('content')
+   
   </main>
 
   @include('loja.components.footer')
@@ -68,15 +229,17 @@
   <div id="preloader"></div>
 
   <!-- Vendor JS Files -->
-  <script src="{{ url('assets/site_alcecar/vendor/bootstrap/js/bootstrap.bundle.min.js') }}"></script>
-  <script src="{{ url('assets/site_alcecar/vendor/php-email-form/validate.js') }}"></script>
-  <script src="{{ url('assets/site_alcecar/vendor/aos/aos.js') }}"></script>
-  <script src="{{ url('assets/site_alcecar/vendor/glightbox/js/glightbox.min.js') }}"></script>
-  <script src="{{ url('assets/site_alcecar/vendor/purecounter/purecounter_vanilla.js') }}"></script>
-  <script src="{{ url('assets/site_alcecar/vendor/swiper/swiper-bundle.min.js') }}"></script>
+   
+<script src="{{ url('carbook/vendor/bootstrap/js/bootstrap.bundle.min.js') }}"></script>
+<script src="{{ url('carbook/vendor/php-email-form/validate.js') }}"></script>
+<script src="{{ url('carbook/vendor/aos/aos.js') }}"></script>
+<script src="{{ url('carbook/vendor/glightbox/js/glightbox.min.js') }}"></script>
+<script src="{{ url('carbook/vendor/purecounter/purecounter_vanilla.js') }}"></script>
+<script src="{{ url('carbook/vendor/swiper/swiper-bundle.min.js') }}"></script>
+<script src="{{ url('carbook/vendor/imagesloaded/imagesloaded.pkgd.min.js') }}"></script>
+<script src="{{ url('carbook/vendor/isotope-layout/isotope.pkgd.min.js') }}"></script>
 
-  <!-- Main JS File -->
-  <script src="{{ url('assets/site_alcecar/js/main.js') }}"></script>
+<script src="{{ url('carbook/js/main.js') }}"></script>
 
 </body>
 

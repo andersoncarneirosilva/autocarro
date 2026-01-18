@@ -4,267 +4,263 @@
 
 @section('content')
 
-<style>
-    .home-index-bg {
-        background-image: url("data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' width='5700' height='400' ><circle fill='%235b0000' cx='2325' cy='-6098' r='6457'/></svg>");
-        background-position: center top;
-        background-repeat: no-repeat;
-        background-size: 330% auto;
-        padding-top: 100px;
-        padding-bottom: 120px;
-        min-height: 500px;
-        display: flex;
-        align-items: center;
-        transition: all 0.3s ease;
-    }
 
-    /* Alinhamento à esquerda no desktop */
-    .home-index-bg h1 {
-        font-size: 2.5rem;
-        line-height: 1.2;
-        text-align: left; /* Alinhado à esquerda */
-        color: #ffffff;
-        margin-bottom: 30px;
-    }
+ <section id="hero" class="hero section dark-background">
+  <img src="{{ url('carbook/img/hero_bg_alcecar.jpg') }}" alt="" data-aos="fade-in">
 
-    .search-box {
-        background: #fff;
-        padding: 10px 15px;
-        border-radius: 50px;
-        display: flex;
-        align-items: center;
-        box-shadow: 0 4px 15px rgba(0,0,0,0.1);
-        width: 100%;
-        max-width: 650px;
-        margin: 0; /* Remove o auto para não centralizar */
-    }
+  <div class="container d-flex flex-column align-items-center">
+    <h2 data-aos="fade-up" data-aos-delay="100">Encontre o seu veículo</h2>
+    <p data-aos="fade-up" data-aos-delay="200">Utilize a busca para encontrar o seu veículo</p>
+    
+    <div class="search-bar-wrapper mt-4" data-aos="fade-up" data-aos-delay="300">
+      <div class="search-container-custom">
+        <form action="#" method="GET" class="search-flex-container">
 
-    .search-box-keyword {
-        flex: 1;
-        padding-left: 20px;
-    }
-
-    .search-box-label {
-        font-size: 14px;
-        font-weight: bold;
-        color: #730000;
-        margin-bottom: -5px;
-    }
-
-    .search-box input {
-        border: none !important;
-        padding: 0;
-        height: auto;
-        box-shadow: none !important;
-        font-size: 16px;
-        width: 100%;
-        background: transparent;
-    }
-
-    .btn-primary {
-        background-color: #730000 !important;
-        border-color: #730000 !important;
-        border-radius: 30px !important;
-        font-weight: bold;
-        padding: 12px 40px !important;
-        color: #fff !important;
-    }
-
-    /* Ajuste da imagem para não estourar */
-    .img-hero {
-        max-width: 100%;
-        height: auto;
-    }
-
-    /* --- AJUSTES PARA CELULAR --- */
-    @media (max-width: 991px) {
-        .home-index-bg {
-            background-size: 1200% auto;
-            text-align: center;
-            padding-top: 80px;
-        }
-
-        .home-index-bg h1 {
-            text-align: center;
-            font-size: 1.8rem;
-        }
-
-        .search-box {
-            margin: 0 auto;
-            flex-direction: column;
-            border-radius: 20px;
-            padding: 20px;
-        }
-
-        .search-box-keyword {
-            padding: 0;
-            width: 100%;
-            margin-bottom: 15px;
-        }
-
-        .search-box input {
-            text-align: center;
-        }
-
-        .search-box-btn, .btn-primary {
-            width: 100%;
-        }
-    }
-</style>
-
-
-
-<div class="home-index-bg">
-    <div class="container-xl">
-        <div class="row align-items-center"> <div class="col-12 col-lg-7">
-                <h1 class="font-weight-bold">
-                    Encontre o seu próximo carro agora, <br class="d-none d-lg-block"> 
-                    explore nosso estoque com as melhores ofertas.
-                </h1>
-                
-                <form action="{{ route('veiculos.search.geral') }}" method="GET" id="formBuscaGeral">
-                    <div class="search-box" style="position: relative;">
-                        <div class="search-box-keyword">
-                            <div class="search-box-label">O que você busca?</div>
-                            <div class="form-group mt-1">
-                                <input autocomplete="off" type="text" class="form-control" 
-                                       placeholder="Digite a marca ou modelo do veículo" 
-                                       id="txtMarcaCar" name="termo">
-                                
-                                <div id="resultsList" class="list-group shadow" 
-                                     style="position: absolute; width: 100%; z-index: 1000; display: none;">
-                                </div>
-                            </div>
-                        </div>
-                        <div class="search-box-btn">
-                            <button type="submit" class="btn btn-primary" id="btnBuscar">
-                                <span class="btn-text">BUSCAR</span>
-                            </button>
-                        </div>
-                    </div>
-                </form>
+          <div class="dropdown custom-field">
+            <input type="hidden" name="marca" id="input-marca">
+            <button class="select-trigger" type="button" data-bs-toggle="dropdown">
+              <span>Marca</span>
+              <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="opacity-50"><path d="m6 9 6 6 6-6"></path></svg>
+            </button>
+            <div class="dropdown-menu custom-result-box-wrapper">
+              <div class="scroll-arrow up">▲</div>
+              <ul class="custom-result-box">
+                <li><button class="dropdown-item" type="button" data-value="chevrolet">Chevrolet</button></li>
+                <li><button class="dropdown-item" type="button" data-value="fiat">Fiat</button></li>
+                <li><button class="dropdown-item" type="button" data-value="ford">Ford</button></li>
+                <li><button class="dropdown-item" type="button" data-value="honda">Honda</button></li>
+                <li><button class="dropdown-item" type="button" data-value="hyundai">Hyundai</button></li>
+                <li><button class="dropdown-item" type="button" data-value="hyundai">Citroën</button></li>
+                <li><button class="dropdown-item" type="button" data-value="jeep">Jeep</button></li>
+                <li><button class="dropdown-item" type="button" data-value="nissan">Nissan</button></li>
+                <li><button class="dropdown-item" type="button" data-value="renault">Renault</button></li>
+                <li><button class="dropdown-item" type="button" data-value="toyota">Toyota</button></li>
+                <li><button class="dropdown-item" type="button" data-value="pegeout">Pegeout</button></li>
+                <li><button class="dropdown-item" type="button" data-value="vw">Volkswagen</button></li>
+                <li><button class="dropdown-item" type="button" data-value="caoa-chery">Caoa Chery</button></li>
+                <li><button class="dropdown-item" type="button" data-value="byd">BYD</button></li>
+              </ul>
+              <div class="scroll-arrow down">▼</div>
             </div>
+          </div>
 
-            <div class="col-12 col-lg-5 d-none d-lg-block text-end">
-                <img src="{{ url('layout/images/fundo_topo_alcecar.png') }}" 
-                     alt="Veículo" 
-                     class="img-hero" 
-                     width="525" 
-                     height="308">
+          <div class="dropdown custom-field">
+            <input type="hidden" name="modelo" id="input-modelo"> 
+            <button class="select-trigger" type="button" data-bs-toggle="dropdown">
+              <span class="text-muted">Modelo</span>
+              <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="opacity-50"><path d="m6 9 6 6 6-6"></path></svg>
+            </button>
+            <div class="dropdown-menu custom-result-box-wrapper">
+              <div class="scroll-arrow up">▲</div>
+              <ul class="custom-result-box">
+                <li><span class="dropdown-item-text text-muted small">Selecione uma marca primeiro</span></li>
+              </ul>
+              <div class="scroll-arrow down">▼</div>
             </div>
+          </div>
 
-        </div>
+          <div class="dropdown custom-field">
+            <input type="hidden" name="ano" id="input-ano">
+            <button class="select-trigger" type="button" data-bs-toggle="dropdown">
+              <span>Ano</span>
+              <svg ...></svg>
+            </button>
+            <div class="dropdown-menu custom-result-box-wrapper">
+              <div class="scroll-arrow up">▲</div>
+              <ul class="custom-result-box">
+                <li><button class="dropdown-item" type="button" data-value="2025">2025</button></li>
+                <li><button class="dropdown-item" type="button" data-value="2024">2024</button></li>
+              </ul>
+              <div class="scroll-arrow down">▼</div>
+            </div>
+          </div>
+
+          <div class="dropdown custom-field">
+            <input type="hidden" name="preco" id="input-preco">
+            <button class="select-trigger" type="button" data-bs-toggle="dropdown">
+              <span>Preço</span>
+              <svg ...></svg>
+            </button>
+            <div class="dropdown-menu custom-result-box-wrapper">
+              <div class="scroll-arrow up">▲</div>
+              <ul class="custom-result-box">
+                <li><button class="dropdown-item" type="button" data-value="50000">Até R$ 50.000</button></li>
+                <li><button class="dropdown-item" type="button" data-value="100000">Até R$ 100.000</button></li>
+              </ul>
+              <div class="scroll-arrow down">▼</div>
+            </div>
+          </div>
+
+          <button type="submit" class="btn-search-purple">
+            <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"></circle><path d="m21 21-4.3-4.3"></path></svg>
+            <span>Buscar</span>
+          </button>
+
+        </form>
+      </div>
     </div>
-</div>
+  </div>
+</section>
 
-<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+
 <script>
-$(document).ready(function() {
-    let timeout = null;
+document.addEventListener('DOMContentLoaded', function() {
+  const dadosVeiculos = {
+    "chevrolet": ["Onix", "Onix Plus", "Tracker", "S10", "Spin", "Equinox"],
+    "fiat": ["Strada", "Mobi", "Argo", "Cronos", "Pulse", "Fastback", "Toro"],
+    "vw": ["Gol", "Polo", "Virtus", "Nivus", "T-Cross", "Taos", "Saveiro"],
+    "toyota": ["Corolla", "Corolla Cross", "Hilux", "SW4", "Yaris"],
+    "hyundai": ["HB20", "HB20S", "Creta", "Tucson"],
+    "jeep": ["Renegade", "Compass", "Commander", "Wrangler"],
+    "renault": ["Kwid", "Sandero", "Logan", "Duster", "Oroch", "Kardian"],
+    "honda": ["Civic", "City", "City Hatch", "HR-V", "ZR-V"],
+    "nissan": ["Kicks", "Versa", "Sentra", "Frontier"],
+    "ford": ["Ranger", "Maverick", "Territory", "Mustang"],
+    "caoa-chery": ["Tiggo 5X", "Tiggo 7", "Tiggo 8", "Arrizo 6"],
+    "byd": ["Dolphin", "Seal", "Song Plus", "Yuan Plus"]
+  };
 
-    $('#txtMarcaCar').on('keyup', function() {
-        clearTimeout(timeout);
-        let busca = $(this).val();
-        let $resultsList = $('#resultsList');
+  const dropdowns = document.querySelectorAll('.dropdown.custom-field');
+  const inputMarca = document.querySelector('#input-marca');
+  const inputModelo = document.querySelector('#input-modelo');
+  const spanModelo = inputModelo.closest('.dropdown').querySelector('.select-trigger span');
+  const listaModelosUl = inputModelo.closest('.dropdown').querySelector('.custom-result-box');
 
-        if (busca.length < 2) {
-            $resultsList.hide().empty();
-            return;
-        }
+  // --- Lógica de Seleção dos Dropdowns ---
+  dropdowns.forEach(dropdown => {
+    const displaySpan = dropdown.querySelector('.select-trigger span');
+    const hiddenInput = dropdown.querySelector('input[type="hidden"]');
 
-        timeout = setTimeout(function() {
-            $.ajax({
-                url: '/sugestoes',
-                method: 'GET',
-                data: { termo: busca },
-                success: function(data) {
-                    $resultsList.empty();
+    dropdown.addEventListener('click', function(e) {
+      const item = e.target.closest('.dropdown-item');
+      if (!item) return;
 
-                    if (data.length > 0) {
-                        data.forEach(function(item) {
-                            // Exibe marca e modelo para facilitar a escolha
-                            let textoExibicao = item.marca_real + ' ' + item.modelo_real;
-                            // O valor enviado para a busca será o modelo_real
-                            let valorBusca = item.modelo_real;
+      e.preventDefault();
+      const selectedText = item.innerText.trim();
+      const selectedValue = item.getAttribute('data-value');
 
-                            $resultsList.append(`
-                                <a href="#" class="list-group-item list-group-item-action suggest-item" data-value="${valorBusca}">
-                                    ${textoExibicao}
-                                </a>
-                            `);
-                        });
-                        $resultsList.show();
-                    } else {
-                        $resultsList.hide();
-                    }
-                }
-            });
-        }, 300);
+      displaySpan.innerText = selectedText;
+      displaySpan.style.color = "#000";
+      if (hiddenInput) hiddenInput.value = selectedValue;
+
+      if (hiddenInput && hiddenInput.id === 'input-marca') {
+        atualizarModelos(selectedValue);
+      }
     });
+  });
 
-    // Ao clicar em uma sugestão: preenche e já envia a busca
-    $(document).on('click', '.suggest-item', function(e) {
-        e.preventDefault();
-        let valor = $(this).data('value');
-        $('#txtMarcaCar').val(valor);
-        $('#resultsList').hide();
-        
-        // Envia o formulário automaticamente ao selecionar
-        $('#formBuscaGeral').submit();
-    });
+  function atualizarModelos(marcaSelecionada) {
+    listaModelosUl.innerHTML = '';
+    const modelos = dadosVeiculos[marcaSelecionada];
 
-    // Fecha a lista se clicar fora do campo de busca
-    $(document).on('click', function(e) {
-        if (!$(e.target).closest('.search-box').length) {
-            $('#resultsList').hide();
-        }
-    });
+    if (modelos && modelos.length > 0) {
+      const primeiroModelo = modelos[0];
+      spanModelo.innerText = primeiroModelo;
+      spanModelo.style.color = '#000';
+      inputModelo.value = primeiroModelo.toLowerCase();
+
+      modelos.forEach(modelo => {
+        const li = document.createElement('li');
+        const btn = document.createElement('button');
+        btn.className = 'dropdown-item';
+        btn.type = 'button';
+        btn.setAttribute('data-value', modelo.toLowerCase());
+        btn.innerText = modelo;
+        li.appendChild(btn);
+        listaModelosUl.appendChild(li);
+      });
+    } else {
+      spanModelo.innerText = 'Modelo';
+      spanModelo.style.color = '#999';
+      inputModelo.value = '';
+      listaModelosUl.innerHTML = '<li><span class="dropdown-item-text text-muted small">Nenhum modelo encontrado</span></li>';
+    }
+  }
+
+  // --- Lógica de Auto Scroll nas Setas ---
+  const scrollSpeed = 5; 
+  let scrollInterval;
+
+  function startScrolling(element, direction) {
+    stopScrolling();
+    scrollInterval = setInterval(() => {
+      element.scrollTop += direction * scrollSpeed;
+    }, 16); // ~60fps para suavidade
+  }
+
+  function stopScrolling() {
+    clearInterval(scrollInterval);
+  }
+
+  // Eventos de Mouse nas setas
+  document.addEventListener('mouseover', function(e) {
+    const seta = e.target.closest('.scroll-arrow');
+    if (seta) {
+      const container = seta.closest('.custom-result-box-wrapper').querySelector('.custom-result-box');
+      const direction = seta.classList.contains('up') ? -1 : 1;
+      startScrolling(container, direction);
+    }
+  });
+
+  document.addEventListener('mouseout', function(e) {
+    if (e.target.closest('.scroll-arrow')) {
+      stopScrolling();
+    }
+  });
 });
 </script>
-
-    <section id="why-us" class="section why-us">
+<section id="categories-overlap" class="categories-overlap">
   <div class="container">
-    <div class="row gy-4">
+    <div class="text-center mb-5" data-aos="fade-up">
+      <h2 style="font-weight: 700; color: #333;">Encontre por Categoria</h2>
+      <p style="color: #777;">Escolha o tipo de veículo que mais combina com você</p>
+    </div>
 
-      <div class="col-lg-4" data-aos="fade-up" data-aos-delay="100">
-        <div class="why-box">
-          <h3>Por que comprar conosco?</h3>
-          <p>
-            Oferecemos uma ampla variedade de veículos — carros, motos e utilitários — com procedência, garantia e preços justos. Aqui você encontra qualidade, confiança e um atendimento diferenciado do início ao fim da sua compra.
-          </p>
-          <div class="text-center">
-            <a href="#estoque" class="more-btn"><span>Saiba mais</span> <i class="bi bi-chevron-right"></i></a>
+    <div class="row g-4 row-cols-2 row-cols-lg-5 justify-content-center">
+      
+      <div class="col">
+        <div class="category-card" data-aos="fade-up" data-aos-delay="100">
+          <div class="icon-box">
+            <img src="{{ url('carbook/img/categorias/hatch.png') }}" alt="Hatch" class="img-fluid">
           </div>
+          <h4>HATCH</h4>
         </div>
-      </div><!-- End Why Box -->
+      </div>
 
-      <div class="col-lg-8 d-flex align-items-stretch">
-        <div class="row gy-4" data-aos="fade-up" data-aos-delay="200">
+      <div class="col">
+        <div class="category-card" data-aos="fade-up" data-aos-delay="200">
+          <div class="icon-box">
+            <img src="{{ url('carbook/img/categorias/sedan.png') }}" alt="Sedan" class="img-fluid">
+          </div>
+          <h4>SEDAN</h4>
+        </div>
+      </div>
 
-          <div class="col-xl-4">
-            <div class="icon-box d-flex flex-column justify-content-center align-items-center">
-              <i class="bi bi-clipboard-data"></i>
-              <h4>Veículos revisados</h4>
-              <p>Todos os veículos passam por vistoria e revisão completa antes de irem para o nosso estoque.</p>
-            </div>
-          </div><!-- End Icon Box -->
+      <div class="col">
+        <div class="category-card" data-aos="fade-up" data-aos-delay="300">
+          <div class="icon-box">
+            <img src="{{ url('carbook/img/categorias/suv.png') }}" alt="SUV" class="img-fluid">
+          </div>
+          <h4>SUV</h4>
+        </div>
+      </div>
 
-          <div class="col-xl-4" data-aos="fade-up" data-aos-delay="300">
-            <div class="icon-box d-flex flex-column justify-content-center align-items-center">
-              <i class="bi bi-gem"></i>
-              <h4>Garantia e procedência</h4>
-              <p>Trabalhamos apenas com veículos com documentação em dia e histórico transparente.</p>
-            </div>
-          </div><!-- End Icon Box -->
+      <div class="col">
+        <div class="category-card" data-aos="fade-up" data-aos-delay="400">
+          <div class="icon-box">
+            <img src="{{ url('carbook/img/categorias/pickup.png') }}" alt="Pick-up" class="img-fluid">
+          </div>
+          <h4>PICK-UP</h4>
+        </div>
+      </div>
 
-          <div class="col-xl-4" data-aos="fade-up" data-aos-delay="400">
-            <div class="icon-box d-flex flex-column justify-content-center align-items-center">
-              <i class="bi bi-inboxes"></i>
-              <h4>Financiamento facilitado</h4>
-              <p>Parceria com os principais bancos para oferecer as melhores condições de pagamento.</p>
-            </div>
-          </div><!-- End Icon Box -->
-
+      <div class="col">
+        <div class="category-card" data-aos="fade-up" data-aos-delay="500">
+          <div class="icon-box">
+            <img src="{{ url('carbook/img/categorias/utilitario.png') }}" alt="Utilitário" class="img-fluid">
+          </div>
+          <h4>UTILITÁRIO</h4>
         </div>
       </div>
 
@@ -272,129 +268,105 @@ $(document).ready(function() {
   </div>
 </section>
 
+    <section id="services" class="services section">
 
-    <style>
-      /* CARD */
-.course-item {
-    background: #fff;
-    border-radius: 6px;
-    overflow: hidden;
-    height: 100%;
-    display: flex;
-    flex-direction: column;
-}
+  <div class="container section-title aos-init aos-animate" data-aos="fade-up">
+    <h2>OFERTAS</h2>
+    <p>Confira nossos veículos em destaque<br></p>
+  </div>
 
-/* CONTAINER FIXO DA IMAGEM */
-.course-image {
-    position: relative;
-    width: 100%;
-    height: 230px; /* 🔥 ALTURA ÚNICA PARA TODOS */
-    overflow: hidden;
-}
+  <div class="container aos-init aos-animate" data-aos="fade-up" data-aos-delay="100">
+    <div class="row gy-5">
 
-/* CAROUSEL OCUPA TUDO */
-.course-image .carousel,
-.course-image .carousel-inner,
-.course-image .carousel-item {
-    height: 100%;
-}
-
-/* IMAGEM */
-.course-image img {
-    width: 100%;
-    height: 100%;
-    object-fit: cover; /* 🔥 ESSENCIAL */
-}
-
-/* CONTEÚDO DO CARD */
-.course-content {
-    padding: 15px;
-    display: flex;
-    flex-direction: column;
-    flex-grow: 1;
-}
-
-    </style>
-    <section id="courses" class="courses section">
-
-      <div class="container section-title" data-aos="fade-up">
-        <h2>OFERTAS</h2>
-        <p>Mais vendidos</p>
-      </div>
-
-      <div class="container">
-
-        <div class="row">
-
-          @foreach ($veiculos as $veiculo)
-<div class="col-lg-4 col-md-6 mb-4 d-flex" data-aos="zoom-in" data-aos-delay="100">
-    <div class="course-item w-100">
-
+      @foreach ($veiculos as $veiculo)
         @php
             $imagens = json_decode($veiculo->images, true) ?? [];
+            $imgUrl = count($imagens) ? asset('storage/' . $imagens[0]) : asset('assets/img/default-car.png');
         @endphp
 
-        {{-- IMAGEM --}}
-        <div class="course-image">
-    <img
-        src="{{ count($imagens)
-            ? asset('storage/' . $imagens[0])
-            : asset('assets/img/default-car.png') }}"
-        alt="Imagem do veículo"
-    >
-</div>
-
-
-        {{-- CONTEÚDO --}}
-        <div class="course-content">
-
-            <div class="d-flex justify-content-between mb-2">
-                <span class="badge bg-light text-dark">{{ $veiculo->marca_exibicao }}</span>
-                <span class="badge bg-success">{{ $veiculo->estado }}</span>
+        <div class="col-xl-4 col-md-6 aos-init aos-animate" data-aos="zoom-in" data-aos-delay="200">
+          <div class="service-item">
+            
+            {{-- Foto do Veículo --}}
+            <div class="img">
+              <img src="{{ $imgUrl }}" class="img-fluid" alt="{{ $veiculo->modelo_exibicao }}" style="width: 100%; height: 250px; object-fit: cover;">
             </div>
 
-            <h5 class="mb-1">{{ $veiculo->modelo_exibicao }}</h5>
+            <div class="details position-relative p-4">
+    
+    {{-- Topo: Marca e Badge de Estado --}}
+    <div class="d-flex justify-content-between align-items-center mb-2">
+        <span class="text-uppercase fw-bold text-muted" style="font-size: 12px; letter-spacing: 1px;">
+            {{ $veiculo->marca_exibicao }}
+        </span>
+        <span class="badge {{ $veiculo->estado == 'Novo' ? 'bg-primary' : 'bg-dark' }} rounded-pill px-3" style="font-size: 10px;">
+            {{ strtoupper($veiculo->estado) }}
+        </span>
+    </div>
 
-            <p class="text-muted mb-3" style="font-size: 14px;">
-                {{ $veiculo->kilometragem }} km • {{ $veiculo->ano }} • {{ $veiculo->cambio }}
-            </p>
+    {{-- Título --}}
+    <a href="{{ url('veiculo/' . $veiculo->slug) }}" class="stretched-link text-decoration-none">
+        <h3 class="mb-3" style="color: #212529; font-weight: 700; font-size: 1.25rem; transition: 0.3s;">
+            {{ $veiculo->modelo_exibicao }}
+        </h3>
+    </a>
 
-            <div class="mt-auto d-flex justify-content-between align-items-center">
-
-                <a href="{{ url('veiculo/' . $veiculo->slug) }}"
-                   class="btn btn-outline-success btn-sm">
-                    + DETALHES
-                </a>
-
-                <div class="text-end">
-                    @if($veiculo->valor_oferta && $veiculo->valor_oferta < $veiculo->valor)
-                        <small class="text-muted text-decoration-line-through">
-                            R$ {{ number_format($veiculo->valor, 2, ',', '.') }}
-                        </small>
-                        <div class="fw-bold fs-5">
-                            R$ {{ number_format($veiculo->valor_oferta, 2, ',', '.') }}
-                        </div>
-                    @else
-                        <div class="fw-bold fs-5">
-                            R$ {{ number_format($veiculo->valor, 2, ',', '.') }}
-                        </div>
-                    @endif
-                </div>
-
-            </div>
-
+    {{-- Informações Técnicas com Ícones (Grid) --}}
+    <div class="row g-0 border-top border-bottom py-2 mb-3 text-muted" style="font-size: 13px;">
+        <div class="col-4 border-end text-center">
+            <i class="bi bi-speedometer2 d-block mb-1"></i>
+            {{ number_format($veiculo->kilometragem, 0, ',', '.') }} km
         </div>
+        <div class="col-4 border-end text-center">
+            <i class="bi bi-calendar3 d-block mb-1"></i>
+            {{ $veiculo->ano }}
+        </div>
+        <div class="col-4 text-center">
+            <i class="bi bi-gear-wide-connected d-block mb-1"></i>
+            {{ $veiculo->cambio }}
+        </div>
+    </div>
+
+    {{-- Área de Preço --}}
+    <div class="d-flex justify-content-between align-items-end mt-3">
+    
+    {{-- Lado Esquerdo: Preços --}}
+    <div class="price-box d-flex flex-column justify-content-end align-items-start">
+        @if($veiculo->valor_oferta && $veiculo->valor_oferta < $veiculo->valor)
+            <span class="text-muted text-decoration-line-through mb-0" style="font-size: 0.8rem;">
+                R$ {{ number_format($veiculo->valor, 2, ',', '.') }}
+            </span>
+            <div class="fw-bold text-success" style="font-size: 1.5rem; line-height: 1;">
+                <span style="font-size: 0.9rem;">R$</span> {{ number_format($veiculo->valor_oferta, 2, ',', '.') }}
+            </div>
+        @else
+            <div class="fw-bold text-dark" style="font-size: 1.5rem; line-height: 1;">
+                <span style="font-size: 0.9rem;">R$</span> {{ number_format($veiculo->valor, 2, ',', '.') }}
+            </div>
+        @endif
+    </div>
+
+    {{-- Lado Direito: Botão de Detalhes --}}
+    <div class="action-button" style="position: relative; z-index: 2;">
+        {{-- O z-index garante que o clique no botão funcione de forma independente do stretched-link --}}
+        <a href="{{ url('veiculo/' . $veiculo->slug) }}" 
+           class="btn btn-outline-get-started d-flex align-items-center gap-2" 
+           style="border-radius: 50px; padding: 8px 18px; font-size: 12px; font-weight: 700; transition: 0.3s; border-width: 2px;">
+            DETALHES
+            <i class="bi bi-arrow-right-short" style="font-size: 1.2rem; line-height: 0;"></i>
+        </a>
+    </div>
+
+</div>
+</div>
+          </div>
+        </div>@endforeach
 
     </div>
-</div>
-@endforeach
+  </div>
 
-
-        </div>
-
-      </div>
-
-    </section>
+</section>
+    
 
     <section id="features" class="features section">
 
@@ -480,4 +452,126 @@ $(document).ready(function() {
       </div>
 
     </section>
+
+    
+    <style>
+:root {
+    --accent-color-why: #ff4a17; /* Laranja Alcecar */
+    --accent-light-why: rgba(255, 74, 23, 0.1);
+}
+
+.section-title-why {
+    color: #48315a; /* Roxo escuro do print */
+    font-weight: 700;
+    font-size: 2.5rem;
+}
+
+/* Imagem limpa e grande */
+.image-container-clean {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.image-container-clean img {
+    width: 100%; /* Força a imagem a ocupar toda a largura da coluna */
+    max-width: 500px; /* Limite para não estourar em telas ultra-wide */
+    height: auto;
+    object-fit: contain;
+    /* Removido sombras pesadas e fundos */
+}
+
+/* Estilo dos Cards */
+.feature-card-why {
+    background: #fff;
+    padding: 25px;
+    border-radius: 15px;
+    height: 100%;
+    border: 1px solid #f0f0f0;
+    transition: all 0.3s ease;
+}
+
+.feature-card-why:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 20px rgba(0,0,0,0.05);
+}
+
+.icon-box-why {
+    width: 50px;
+    height: 50px;
+    background-color: var(--accent-light-why);
+    color: var(--accent-color-why);
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 24px;
+    margin-bottom: 15px;
+}
+
+.feature-card-why h3 {
+    font-size: 1.1rem;
+    font-weight: 700;
+    margin-bottom: 10px;
+    color: #1a1a1a;
+}
+
+.feature-card-why p {
+    font-size: 0.9rem;
+    color: #6c757d;
+    line-height: 1.5;
+    margin-bottom: 0;
+}
+</style>
+
+<section class="why-choose-section py-5 bg-white">
+    <div class="container">
+        <h2 class="text-center mb-5 section-title-why">Porque escolher a Alcecar?</h2>
+
+        <div class="row align-items-center g-4">
+            <div class="col-lg-5">
+                <div class="image-container-clean">
+                    <img src="{{ url('carbook/img/header_app.png') }}" alt="NetCarros App" class="img-fluid">
+                </div>
+            </div>
+
+            <div class="col-lg-7">
+                <div class="row g-4">
+    <div class="col-md-6">
+        <div class="feature-card-why">
+            <div class="icon-box-why"><i class="bi bi-lightning-charge"></i></div>
+            <h3>Cadastro Rápido</h3>
+            <p>Anuncie em segundos. Nossa interface intuitiva permite cadastrar veículos com poucos cliques, otimizando o seu tempo de venda.</p>
+        </div>
+    </div>
+
+    <div class="col-md-6">
+        <div class="feature-card-why">
+            <div class="icon-box-why"><i class="bi bi-kanban"></i></div>
+            <h3>Gestão de Veículos</h3>
+            <p>Tenha controle total do seu estoque. Monitore status, fotos e informações técnicas de forma organizada e centralizada.</p>
+        </div>
+    </div>
+
+    <div class="col-md-6">
+        <div class="feature-card-why">
+            <div class="icon-box-why"><i class="bi bi-folder-check"></i></div>
+            <h3>Documentação Organizada</h3>
+            <p>Armazene e acesse documentos de transferência e vistorias digitalmente, eliminando a papelada e o risco de perdas.</p>
+        </div>
+    </div>
+
+    <div class="col-md-6">
+        <div class="feature-card-why">
+            <div class="icon-box-why"><i class="bi bi-file-earmark-text"></i></div>
+            <h3>Procurações Automáticas</h3>
+            <p>Gere procurações e contratos personalizados instantaneamente com os dados do sistema, prontos para impressão ou assinatura.</p>
+        </div>
+    </div>
+</div>
+            </div>
+        </div>
+    </div>
+</section>
     @endsection

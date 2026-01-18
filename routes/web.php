@@ -369,7 +369,7 @@ Route::get('/veiculos-usados/pesquisa', [LojaController::class, 'searchVeiculosU
 
 Route::get('/contato', [LojaController::class, 'contato'])->name('loja.contato');
 
-Route::get('/', [LojaController::class, 'site'])->name('site.index');
+Route::get('/', [LojaController::class, 'index'])->name('loja.index');
 
 
 require __DIR__.'/auth.php';

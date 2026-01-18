@@ -116,40 +116,44 @@
         font-size: 13px;
     }
 }
-</style>
-{{-- header d-flex align-items-center fixed-top --}}
-<header id="header" class="header d-flex align-items-center fixed-top {{ !in_array(Route::currentRouteName(), ['loja.index', 'veiculo.show']) ? 'header-dark-text' : '' }}">
+</style><header id="header" class="header d-flex align-items-center fixed-top {{ !in_array(Route::currentRouteName(), ['loja.index', 'veiculo.show']) ? 'header-dark-text' : '' }}">
     <div class="container-fluid container-xl position-relative d-flex align-items-center justify-content-between">
+
       <a href="{{ route('loja.index') }}" class="logo d-flex align-items-center me-auto">
-        <h1 class="sitename"><img src="{{ url('layout/images/logo_carro.png') }}" alt=""></h1>
+        {{-- Usando a sua logo do antigo menu --}}
+        <img src="{{ url('layout/images/logo_carro.png') }}" alt="Logo">
+        {{-- Caso queira exibir o nome ao lado da logo, use a sitename abaixo --}}
+        {{-- <h1 class="sitename">Carbook</h1> --}}
       </a>
+
       <nav id="navmenu" class="navmenu">
         <ul>
           <li>
-                    <a href="{{ route('loja.index') }}"
-                       class="{{ request()->routeIs('site.index') ? 'active' : '' }}">
-                        Home
-                    </a>
-                </li>
-          <li>
-                    <a href="{{ route('veiculos.novos') }}"
-                       class="{{ request()->routeIs('veiculos.novos') ? 'active' : '' }}">
-                        Novos
-                    </a>
-                </li>
-          <li>
-                    <a href="{{ route('veiculos.semi-novos') }}"
-                       class="{{ request()->routeIs('veiculos.semi-novos') ? 'active' : '' }}">
-                        Semi-novos
-                    </a>
-                </li>
-          <li>
-            <a href="{{ route('veiculos.usados') }}"
-               class="{{ request()->routeIs('veiculos.usados') ? 'active' : '' }}">
-                Usados
+            <a href="{{ route('loja.index') }}" class="{{ request()->routeIs('loja.index') ? 'active' : '' }}">
+              Home
             </a>
-        </li>
-          <li class="dropdown"><a href="#"><span>Especiais</span> <i class="bi bi-chevron-down toggle-dropdown"></i></a>
+          </li>
+          
+          <li>
+            <a href="{{ route('veiculos.novos') }}" class="{{ request()->routeIs('veiculos.novos') ? 'active' : '' }}">
+              Novos
+            </a>
+          </li>
+
+          <li>
+            <a href="{{ route('veiculos.semi-novos') }}" class="{{ request()->routeIs('veiculos.semi-novos') ? 'active' : '' }}">
+              Semi-novos
+            </a>
+          </li>
+
+          <li>
+            <a href="{{ route('veiculos.usados') }}" class="{{ request()->routeIs('veiculos.usados') ? 'active' : '' }}">
+              Usados
+            </a>
+          </li>
+
+          <li class="dropdown">
+            <a href="#"><span>Especiais</span> <i class="bi bi-chevron-down toggle-dropdown"></i></a>
             <ul>
               <li><a href="#">Clássicos</a></li>
               <li><a href="#">Esportivos</a></li>
@@ -160,10 +164,11 @@
         <i class="mobile-nav-toggle d-xl-none bi bi-list"></i>
       </nav>
 
-      <a class="btn-getstarted" href="{{ route('login') }}">ACESSAR</a>
+      {{-- Ajustado para o estilo cta-btn do novo template mas com sua rota de login --}}
+      <a class="cta-btn" href="{{ route('login') }}">ACESSAR</a>
 
     </div>
-  </header>
+</header>
 
   <script>
 document.addEventListener('scroll', () => {
