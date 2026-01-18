@@ -113,7 +113,7 @@
                 <div class="row">
                     <div class="col-lg-12">
                         <nav class="navbar navbar-expand-lg">
-                            <a class="navbar-brand" href="index.html">
+                            <a class="navbar-brand" href="{{ route('site.index') }}">
                                 <img src="{{ url('layout/images/logo_b_car.png') }}" style="width: 180px">
                             </a>
                             <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
@@ -162,7 +162,7 @@
                 <div class="row align-items-center">
                     <div class="col-lg-6">
                         <div class="header_hero_content mt-45">
-                            <h2 class="header_title wow fadeInLeftBig" data-wow-duration="1.3s" data-wow-delay="0.2s">Evite erros e aumente a produtividade</h2>
+                            <h2 class="header_title wow fadeInLeftBig" data-wow-duration="1.3s" data-wow-delay="0.2s">Loja virtual e Gestão de veículos</h2>
                             <p class="wow fadeInLeftBig" data-wow-duration="1.3s" data-wow-delay="0.6s">Integre todas as informações de desempenho dos seus veículos e melhore a produtividade da sua frota em um só lugar.</p>
                             <ul>
                                 <li><a class="main-btn wow fadeInUp" data-wow-duration="1.3s" data-wow-delay="1s" href="{{ route('login') }}">Teste agora</a></li>
@@ -352,69 +352,63 @@
             <div class="col-lg-6">
                 <div class="section_title text-center pb-25">
                     <h4 class="title">Planos e Preços</h4>
-                    <p>Escolha o plano ideal para a sua frota ou despachante e comece a automatizar seus processos hoje mesmo.</p>
-                </div> </div>
+                    <p>Escolha a licença ideal para o seu negócio. Gestão simplificada para lojistas e frotistas.</p>
+                </div>
+            </div>
         </div> 
+        
         <div class="row justify-content-center">
-    <div class="col-lg-5 col-md-8 col-sm-10">
-        <div class="single_pricing text-center pricing_color_1 mt-30 wow fadeInUp" data-wow-duration="1.3s" data-wow-delay="0.2s">
-            <div class="pricing_top_bar">
-                <h5 class="pricing_title">Licença Standard</h5>
-                <i class="lni lni-coffee-cup"></i>
-                <span class="price">R$ 300</span>
+            <div class="col-lg-5 col-md-8 col-sm-10">
+                <div class="single_pricing text-center pricing_active pricing_color_1 mt-30 wow fadeInUp" data-wow-duration="1.3s" data-wow-delay="0.2s">
+                    <div class="pricing_top_bar">
+                        <h5 class="pricing_title">Plano Standard</h5>
+                        <i class="lni lni-cog"></i> <span class="price">R$ 500</span>
+                    </div>
+                    <div class="pricing_list">
+                        <ul>
+                            <li>Sem limite de usuários</li>
+                            <li>Gestão de Veículos</li>
+                            <li>Emissão de Procurações</li>
+                            <li style="text-decoration: line-through; color: #aaa;">Website e Loja Virtual</li>
+                            <li><strong>Domínio incluso</strong></li>
+                            <li><strong>Email personalizado</strong></li>
+                            <li>Suporte Técnico</li>
+                        </ul>
+                    </div>
+                    <div class="pricing_btn">
+                        <a href="https://wa.me/555199047299?text=Olá!%20Gostaria%20de%20testar%20o%20Plano%20Standard%20(Gestão)." target="_blank" class="main-btn main-btn-2">Solicitar teste</a>
+                    </div>
+                </div>
             </div>
-            <div class="pricing_list">
-                <ul>
-                    <li>Até 50 veículos</li>
-                    <li>Sem limite de usuários</li>
-                    <li>Emissão de Procurações</li>
-                    <li>Emissão de Solicitação ATPVe</li>
-                    <li>Gestão de Veículos</li>
-                    <li>Website e Loja Virtual</li>
-                    <li>Suporte Técnico 24/7</li>
-                </ul>
-            </div>
-            <div class="pricing_btn">
-                <a href="https://wa.me/555199047299?text=Olá!%20Gostaria%20de%20solicitar%20um%20teste%20do%20sistema." 
-   target="_blank" 
-   class="main-btn main-btn-2">
-   Solicitar teste
-</a>
-            </div>
-        </div>
-    </div>
 
-    <div class="col-lg-5 col-md-8 col-sm-10">
-        <div class="single_pricing text-center pricing_active pricing_color_2 mt-30 wow fadeInUp" data-wow-duration="1.3s" data-wow-delay="0.5s">
-            <div class="pricing_top_bar">
-                <h5 class="pricing_title">Licença Full</h5>
-                <i class="lni lni-crown"></i>
-                <span class="price">R$ 500</span>
-            </div>
-            <div class="pricing_list">
-                <ul>
-                  <li>Sem limite de veículos </li>
-                    <li>Sem limite de usuários</li>
-                    <li>Emissão de Procurações</li>
-                    <li>Emissão de Solicitação ATPVe</li>
-                    <li>Gestão de Veículos</li>
-                    <li>Website e Loja Virtual</li>
-                    <li>Suporte Técnico 24/7</li>
-                </ul>
-            </div>
-            <div class="pricing_btn">
-               <a href="https://wa.me/555199047299?text=Olá!%20Gostaria%20de%20solicitar%20um%20teste%20do%20sistema." 
-   target="_blank" 
-   class="main-btn main-btn-2">
-   Solicitar teste
-</a>
+            <div class="col-lg-5 col-md-8 col-sm-10">
+                <div class="single_pricing text-center pricing_active pricing_color_2 mt-30 wow fadeInUp" data-wow-duration="1.3s" data-wow-delay="0.5s">
+                    <div class="pricing_top_bar">
+                        <h5 class="pricing_title">Plano Full</h5>
+                        <i class="lni lni-crown"></i>
+                        <span class="price">R$ 1500</span>
+                    </div>
+                    <div class="pricing_list">
+                        <ul>
+                            <li>Sem limite de usuários</li>
+                            <li>Gestão de Veículos</li>
+                            <li>Emissão de Procurações</li>
+                            <li><strong>Website e Loja Virtual Inclusos</strong></li>
+                            <li><strong>Domínio incluso</strong></li>
+                            <li><strong>Email personalizado</strong></li>
+                            <li>Suporte Técnico VIP 24/7</li>
+                        </ul>
+                    </div>
+                    <div class="pricing_btn">
+                        <a href="https://wa.me/555199047299?text=Olá!%20Gostaria%20de%20testar%20o%20Plano%20Full%20(Sistema%20+%20Loja)." target="_blank" class="main-btn main-btn-2">Solicitar teste</a>
+                    </div>
+                </div>
             </div>
         </div>
-    </div>
-</div>
+    </div> 
+</section>
 
 <style>
-    /* Ajuste para centralizar melhor os dois planos na tela */
     @media (min-width: 992px) {
         .col-lg-5 {
             flex: 0 0 40%;
@@ -422,15 +416,18 @@
         }
     }
     
-    /* Remove o estilo de 'por mês' já que é venda de licença */
     .pricing_top_bar .price {
         font-size: 40px;
         display: block;
         margin-top: 10px;
+        font-weight: 700;
+    }
+
+    /* Estilo para destacar o item de Loja Virtual no plano Full */
+    .pricing_active .pricing_list ul li strong {
+        color: #ff9f43; /* Ou a cor de destaque do seu tema */
     }
 </style>
-      </div> 
-    </section>
 
 <style>
     /* Pequeno ajuste para a duração do preço não ficar colada */
