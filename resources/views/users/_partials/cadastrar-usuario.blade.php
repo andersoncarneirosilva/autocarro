@@ -61,8 +61,8 @@
                             <div class="input-group">
                                 <span class="input-group-text bg-light"><i class="fas fa-shield-alt"></i></span>
                                 <select name="nivel_acesso" class="form-select @error('nivel_acesso') is-invalid @enderror">
-                                    <option value="user" {{ old('nivel_acesso') == 'user' ? 'selected' : '' }}>Usuário Comum</option>
-                                    <option value="admin" {{ old('nivel_acesso') == 'admin' ? 'selected' : '' }}>Administrador</option>
+                                    <option value="Usuário" {{ old('nivel_acesso') == 'user' ? 'selected' : '' }}>Usuário Comum</option>
+                                    <option value="Administraddor" {{ old('nivel_acesso') == 'admin' ? 'selected' : '' }}>Administrador</option>
                                 </select>
                             </div>
                         </div>
