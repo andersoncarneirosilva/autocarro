@@ -28,6 +28,7 @@
     visibility: hidden;
     width: 0px;
     transition: all 0.3s ease-in-out 0s;
+    
   }
 </style>
 <header 

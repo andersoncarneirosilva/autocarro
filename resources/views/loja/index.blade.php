@@ -7,8 +7,9 @@
 
  <section id="hero" class="hero section dark-background">
   <img src="{{ url('carbook/img/hero_bg_alcecar.jpg') }}" alt="" data-aos="fade-in">
-
   <div class="container d-flex flex-column align-items-center">
+    
+    {{-- <img src="{{ url('carbook/img/logo_alcecar.png') }}" alt="Alcecar" class="logo-hero" data-aos="zoom-in"> --}}
     <h2 data-aos="fade-up" data-aos-delay="100">Encontre o seu veículo</h2>
     <p data-aos="fade-up" data-aos-delay="200">Utilize a busca para encontrar o seu veículo</p>
     

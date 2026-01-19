@@ -23,59 +23,75 @@
 }
 
 
-/* Miniaturas */
-.img-thumbnail-nav {
-    width: 100px;
-    aspect-ratio: 4 / 3;
-    object-fit: cover;
-    cursor: pointer;
-    border-radius: 10px;
-    border: 2px solid transparent;
-    transition: transform 0.2s ease, opacity 0.2s ease;
-    opacity: 0.7;
-    flex-shrink: 0;
+/* Remove o contador antigo */
+.photo-counter { display: none; }
 
-    /* 🔥 garante que o scale seja centrado */
-    transform-origin: center;
-}
-
-
-.img-thumbnail-nav.active,
-.img-thumbnail-nav:hover {
-    border-color: var(--nc-accent);
-    opacity: 1;
-    transform: scale(1.05);
-}
-
-/* Container das miniaturas */
-.thumb-container {
+/* Wrapper das miniaturas */
+.thumbs-navigation-wrapper {
     display: flex;
     align-items: center;
-    justify-content: flex-start;
-    min-height: 80px;
+    gap: 10px;
+    margin-top: 15px;
+    padding: 0 40px; /* Espaço para as setas */
+}
+
+.thumbs-container {
+    display: flex;
     gap: 8px;
-    padding: 6px 10px;
+    overflow-x: auto;
+    scroll-behavior: smooth;
+    white-space: nowrap;
+    -ms-overflow-style: none; /* IE/Edge */
+    scrollbar-width: none; /* Firefox */
 }
 
-
-
-
-.thumb-container::-webkit-scrollbar {
-    display: none;
+.thumbs-container::-webkit-scrollbar {
+    display: none; /* Chrome/Safari */
 }
 
-/* Contador de fotos */
-.photo-counter {
+.thumb-item {
+    flex: 0 0 100px; /* Largura da miniatura */
+    height: 70px;
+    cursor: pointer;
+    border-radius: 8px;
+    overflow: hidden;
+    border: 2px solid transparent;
+    transition: 0.3s;
+    opacity: 0.6;
+}
+
+.thumb-item img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.thumb-item.active, .thumb-item:hover {
+    border-color: #ff4a17; /* Cor destaque do alcecar */
+    opacity: 1;
+}
+
+/* Setas de navegação das Thumbs */
+.thumb-arrow {
     position: absolute;
-    bottom: 15px;
-    right: 15px;
-    background: rgba(0,0,0,0.6);
-    color: white;
-    padding: 2px 12px;
-    border-radius: 20px;
-    font-size: 12px;
-    z-index: 10;
+    top: 50%;
+    transform: translateY(-50%);
+    background: #fff;
+    border: 1px solid #ddd;
+    border-radius: 50%;
+    width: 32px;
+    height: 32px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    z-index: 5;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
 }
+
+.thumb-arrow.prev { left: 0; }
+.thumb-arrow.next { right: 0; }
+.thumb-arrow:hover { background: #f8f8f8; color: #ff4a17; }
 
 
 
@@ -256,60 +272,56 @@
     <div class="row g-4">
         <div class="col-lg-7">
             @php
-    $maxThumbs = 7; // quantidade de miniaturas visíveis
     $totalImages = count($veiculo->images);
+    $maxThumbs = 7;
 @endphp
 
-            <div class="position-relative carousel-main-container mb-3">
-                <div id="carouselDetalhes" class="carousel slide" data-bs-ride="carousel">
-                    <div class="carousel-inner">
-                        @foreach($veiculo->images as $index => $img)
-                            <div class="carousel-item {{ $index === 0 ? 'active' : '' }}">
-                                <img src="{{ asset('storage/' . $img) }}" class="d-block w-100" style="height: 480px; object-fit: cover;" alt="Foto do veículo">
-                            </div>
-                        @endforeach
-                    </div>
-                    
-                    <div class="photo-counter">
-                        <span id="current-photo">1</span> / {{ count($veiculo->images) }}
-                    </div>
-
-                    @if(count($veiculo->images) > 1)
-                        <button class="carousel-control-prev" type="button" data-bs-target="#carouselDetalhes" data-bs-slide="prev">
-                            <span class="carousel-control-prev-icon"></span>
-                        </button>
-                        <button class="carousel-control-next" type="button" data-bs-target="#carouselDetalhes" data-bs-slide="next">
-                            <span class="carousel-control-next-icon"></span>
-                        </button>
-                    @endif
+<div class="position-relative carousel-main-container mb-3">
+    <div id="carouselDetalhes" class="carousel slide" data-bs-ride="carousel">
+        <div class="carousel-inner">
+            @foreach($veiculo->images as $index => $img)
+                <div class="carousel-item {{ $index === 0 ? 'active' : '' }}">
+                    <img src="{{ asset('storage/' . $img) }}" class="d-block w-100" style="height: 480px; object-fit: cover; border-radius: 12px;" alt="Foto do veículo">
                 </div>
+            @endforeach
+        </div>
+
+        @if($totalImages > 1)
+            <button class="carousel-control-prev" type="button" data-bs-target="#carouselDetalhes" data-bs-slide="prev">
+                <span class="carousel-control-prev-icon"></span>
+            </button>
+            <button class="carousel-control-next" type="button" data-bs-target="#carouselDetalhes" data-bs-slide="next">
+                <span class="carousel-control-next-icon"></span>
+            </button>
+        @endif
+    </div>
+</div>
+
+<div class="thumbs-navigation-wrapper position-relative">
+    @if($totalImages > 5) {{-- Só mostra setas se houver muitas fotos --}}
+        <button class="thumb-arrow prev" onclick="scrollThumbs(-1)">
+            <i class="bi bi-chevron-left"></i>
+        </button>
+    @endif
+
+    <div class="thumbs-container" id="thumbsContainer">
+        @foreach($veiculo->images as $index => $img)
+            <div class="thumb-item {{ $index === 0 ? 'active' : '' }}" 
+                 onclick="goToSlide({{ $index }})" 
+                 data-index="{{ $index }}">
+                <img src="{{ asset('storage/' . $img) }}" alt="Miniatura {{ $index + 1 }}">
             </div>
+        @endforeach
+    </div>
 
-            @if($totalImages > 1)
-                <div class="thumb-container d-flex gap-2 py-2">
+    @if($totalImages > 5)
+        <button class="thumb-arrow next" onclick="scrollThumbs(1)">
+            <i class="bi bi-chevron-right"></i>
+        </button>
+    @endif
+</div>
 
-                    @foreach($veiculo->images as $index => $img)
-
-                        {{-- Mostra apenas até o limite --}}
-                        @if($index < $maxThumbs - 1)
-                            <img src="{{ asset('storage/' . $img) }}"
-                                class="img-thumbnail-nav {{ $index === 0 ? 'active' : '' }}"
-                                onclick="bootstrap.Carousel.getOrCreateInstance(document.getElementById('carouselDetalhes')).to({{ $index }})"
-                                alt="Miniatura {{ $index + 1 }}">
-
-                        {{-- Último card com +N --}}
-                        @elseif($index === $maxThumbs - 1)
-                            <div class="img-thumbnail-nav more-photos"
-                                onclick="bootstrap.Carousel.getOrCreateInstance(document.getElementById('carouselDetalhes')).to({{ $index }})">
-                                +{{ $totalImages - ($maxThumbs - 1) }}
-                            </div>
-                            @break
-                        @endif
-
-                    @endforeach
-
-                </div>
-            @endif
+            
 
             
             <div class="mt-4 p-4 bg-white specs-container shadow-sm border rounded-4">
@@ -579,5 +591,37 @@
             });
         }
     });
+</script>
+
+<script>
+function goToSlide(index) {
+    // Muda o slide do Bootstrap
+    const carousel = new bootstrap.Carousel(document.getElementById('carouselDetalhes'));
+    carousel.to(index);
+
+    // Atualiza classe ativa nas thumbs
+    document.querySelectorAll('.thumb-item').forEach(item => item.classList.remove('active'));
+    document.querySelector(`.thumb-item[data-index="${index}"]`).classList.add('active');
+}
+
+function scrollThumbs(direction) {
+    const container = document.getElementById('thumbsContainer');
+    const scrollAmount = 200; // Quantidade de pixels para rolar
+    container.scrollBy({
+        left: direction * scrollAmount,
+        behavior: 'smooth'
+    });
+}
+
+// Sincronizar quando o usuário usa as setas principais do carrossel
+document.getElementById('carouselDetalhes').addEventListener('slide.bs.carousel', function (e) {
+    const index = e.to;
+    document.querySelectorAll('.thumb-item').forEach(item => item.classList.remove('active'));
+    const activeThumb = document.querySelector(`.thumb-item[data-index="${index}"]`);
+    if(activeThumb) {
+        activeThumb.classList.add('active');
+        activeThumb.scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'center' });
+    }
+});
 </script>
 @endsection
