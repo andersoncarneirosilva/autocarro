@@ -24,42 +24,70 @@ class RegisteredUserController extends Controller
 
     public function store(Request $request): RedirectResponse
 {
-    // 1. Validação
-    $request->validate([
-        'name' => ['required', 'string', 'max:255'],
-        'email' => ['required', 'string', 'email', 'max:255', 'unique:'.User::class],
+    // 1. Limpa CPF e CNPJ antes de qualquer coisa (Remove tudo que não for número)
+    $request->merge([
+        'cpf' => $request->cpf ? preg_replace('/\D/', '', $request->cpf) : null,
+        'cnpj' => $request->cnpj ? preg_replace('/\D/', '', $request->cnpj) : null,
+    ]);
+    
+    // 1. Identifica o tipo de conta (Revenda se houver CNPJ ou se o account_type for dealer)
+    $isRevenda = $request->filled('cnpj') || $request->account_type === 'dealer';
+
+    // 2. Regras de Validação Personalizadas
+    $rules = [
+        'name'     => ['required', 'string', 'max:255'],
+        'email'    => ['required', 'string', 'email', 'max:255', 'unique:users,email'],
         'password' => ['required', 'confirmed', Rules\Password::defaults()],
         'whatsapp' => ['required', 'string'],
-    ]);
+    ];
+
+    // Mensagens de erro em português para o Alcecar
+    $messages = [
+        'email.unique' => 'Este e-mail já está cadastrado em nosso sistema.',
+        'cpf.unique'   => 'Este CPF já está sendo utilizado.',
+        'cnpj.required' => 'O campo CNPJ é obrigatório para revendas.',
+        'cpf.required'  => 'O campo CPF é obrigatório para usuários particulares.',
+    ];
+
+    if ($isRevenda) {
+        $rules['cnpj'] = ['required', 'string'];
+    } else {
+        $rules['cpf']  = ['required', 'string', 'unique:users,CPF'];
+    }
+
+    $request->validate($rules, $messages);
 
     try {
-        return DB::transaction(function () use ($request) {
+        return DB::transaction(function () use ($request, $isRevenda) {
             
-            // Determina se é revenda pelo preenchimento do CNPJ
-            $isRevenda = $request->filled('cnpj');
-
-            // Criar o Usuário
+            // Criar o Usuário Principal
             $user = User::create([
-                'name' => $request->name,
-                'email' => $request->email,
-                'password' => Hash::make($request->password),
+                'name'         => $request->name,
+                'email'        => $request->email,
+                // Salvamos o documento identificador na coluna CPF (seja CPF ou CNPJ)
+                'CPF'          => $isRevenda ? $request->cnpj : $request->cpf, 
+                'password'     => Hash::make($request->password),
                 'nivel_acesso' => $isRevenda ? 'Revenda' : 'Usuário',
-                'telefone' => $request->whatsapp,
-                'perfil' => $isRevenda ? 'Lojista' : 'Cliente',
+                'telefone'     => $request->whatsapp,
+                'perfil'       => $isRevenda ? 'Lojista' : 'Cliente',
+                'plano'        => 'Basic',
+                'status'       => 'Ativo',
+                'credito'      => 10,
+                'size_folder'  => 50,
             ]);
 
-            // Se for revenda, tenta salvar na tabela de revendas
+            // Se for revenda, salvar dados complementares na tabela de revendas
             if ($isRevenda) {
                 DB::table('revendas')->insert([
-                    'nome'   => $request->name,
-                    'CPNJ'   => $request->cnpj, // Use CNPJ se corrigiu no banco
-                    'fones'  => json_encode(['whatsapp' => $request->whatsapp]),
-                    'rua'    => $request->rua ?? '',
-                    'numero' => $request->numero ?? '',
-                    'bairro' => $request->bairro ?? '',
-                    'cidade' => $request->cidade ?? '',
-                    'estado' => $request->estado ?? '',
-                    'cep'    => $request->cep ?? '',
+                    'nome'       => $request->name,
+                    'CPNJ'       => $request->cnpj, // Atenção: Verifique se no banco é CPNJ ou CNPJ
+                    'fones'      => json_encode(['whatsapp' => $request->whatsapp]),
+                    'rua'        => $request->rua ?? '',
+                    'numero'     => $request->numero ?? '',
+                    'bairro'     => $request->bairro ?? '',
+                    'cidade'     => $request->cidade ?? '',
+                    'estado'     => $request->estado ?? '',
+                    'cep'        => $request->cep ?? '',
                     'created_at' => now(),
                     'updated_at' => now(),
                 ]);
@@ -71,8 +99,12 @@ class RegisteredUserController extends Controller
             return redirect(RouteServiceProvider::HOME);
         });
     } catch (\Exception $e) {
-        // Se algo der errado, volta com o erro para o usuário
-        return back()->withInput()->withErrors(['error' => 'Erro ao cadastrar: ' . $e->getMessage()]);
+        // Log do erro para o desenvolvedor (opcional)
+        \Log::error("Erro ao cadastrar no Alcecar: " . $e->getMessage());
+
+        return back()
+            ->withInput()
+            ->withErrors(['error' => 'Não foi possível concluir o cadastro. Verifique os dados e tente novamente.']);
     }
 }
 }

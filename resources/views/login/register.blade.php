@@ -114,6 +114,56 @@
     border-color: #FF4A17;
 }
     </style>
+    <style>
+    .modern-alert-container {
+        animation: slideInRight 0.5s ease-out;
+    }
+
+    .modern-alert {
+        background: #fff;
+        border-left: 5px solid #FF4A17;
+        border-radius: 8px;
+        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+        padding: 15px 20px;
+        position: relative;
+        overflow: hidden;
+    }
+
+    .alert-icon {
+        color: #FF4A17;
+        font-size: 22px;
+        margin-right: 15px;
+        margin-top: 2px;
+    }
+
+    .alert-title {
+        color: #333;
+        font-weight: 700;
+        margin-bottom: 5px;
+        font-size: 14px;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+    }
+
+    .alert-list {
+        margin: 0;
+        padding: 0;
+        list-style: none;
+    }
+
+    .alert-list li {
+        color: #666;
+        font-size: 13px;
+        line-height: 1.6;
+        position: relative;
+        padding-left: 15px;
+    }
+
+    @keyframes slideInRight {
+        from { opacity: 0; transform: translateY(-20px); }
+        to { opacity: 1; transform: translateY(0); }
+    }
+</style>
 </head>
 <body>
 <section class="ftco-section">
@@ -152,6 +202,23 @@
         </div>
     </div>
 
+    @if($errors->any())
+    <div class="modern-alert-container mb-4">
+        {{-- Mudança para align-items-center para centralizar verticalmente o ícone e a lista --}}
+        <div class="modern-alert d-flex align-items-center">
+            <div class="alert-icon">
+                <i class="fa fa-exclamation-circle"></i>
+            </div>
+            <div class="alert-content">
+                <ul class="alert-list">
+                    @foreach($errors->all() as $error)
+                        <li>{{ is_array($error) ? implode(', ', $error) : $error }}</li>
+                    @endforeach
+                </ul>
+            </div>
+        </div>
+    </div>
+@endif
     <div id="dealer-fields" style="{{ old('account_type') == 'dealer' ? 'display: block;' : 'display: none;' }}">
         <div class="row">
             <div class="col-md-7 form-group mb-4">
@@ -202,6 +269,13 @@
         <hr style="border-top: 1px solid #eee; margin-bottom: 25px;">
     </div>
 
+    <div id="cpf-field" class="row" style="{{ old('account_type', 'user') == 'dealer' ? 'display: none;' : '' }}">
+    <div class="col-md-12 form-group mb-4">
+        <label class="label">CPF</label>
+        <input type="text" class="form-control" name="cpf" id="cpf" value="{{ old('cpf') }}" placeholder="000.000.000-00">
+    </div>
+</div>
+
     <div class="row">
         <div class="col-md-12 form-group mb-4">
             <label class="label" id="label-nome">{{ old('account_type') == 'dealer' ? 'Nome da Revenda / Razão Social' : 'Nome Completo' }}</label>
@@ -235,16 +309,7 @@
         <button type="submit" class="form-control btn btn-primary px-3 shadow-sm">Finalizar Cadastro no Alcecar</button>
     </div>
 </form>
-@if($errors->any())
-    <div class="alert alert-danger">
-        <ul>
-            @foreach($errors->all() as $error)
-                {{-- O cast (string) evita o erro de htmlspecialchars caso o erro venha como array --}}
-                <li>{{ is_array($error) ? implode(', ', $error) : $error }}</li>
-            @endforeach
-        </ul>
-    </div>
-@endif
+
 </div>
                 </div>
             </div>
@@ -266,19 +331,22 @@
     
     if (type === 'dealer') {
         $('#dealer-fields').slideDown(); 
+        $('#cpf-field').slideUp(); // Esconde o CPF para Revendas
         labelNome.innerText = 'Nome da Revenda / Razão Social';
         $('#btn-dealer').addClass('active');
-        inputType.value = 'dealer'; // Atualiza o valor para o POST
+        inputType.value = 'dealer';
         
-        // Torna obrigatório apenas se for revenda
         $('#dealer-fields').find('input').prop('required', true);
+        $('#cpf').prop('required', false);
     } else {
         $('#dealer-fields').slideUp();
+        $('#cpf-field').slideDown(); // Mostra o CPF para Particulares
         labelNome.innerText = 'Nome Completo';
         $('#btn-user').addClass('active');
-        inputType.value = 'user'; // Atualiza o valor para o POST
+        inputType.value = 'user';
         
         $('#dealer-fields').find('input').prop('required', false);
+        $('#cpf').prop('required', true);
     }
 }
 
@@ -286,6 +354,7 @@
         // Máscaras
         $('#whatsapp').mask('(00) 00000-0000');
         $('#cnpj').mask('00.000.000/0000-00');
+        $('#cpf').mask('000.000.000-00');
         $('#cep').mask('00000-000');
 
         /**

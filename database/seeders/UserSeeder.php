@@ -16,6 +16,7 @@ class UserSeeder extends Seeder
     User::create([
         'name' => 'Anderson',
         'email' => 'andersonqipoa@gmail.com',
+        'CPF' => '013.887.090-07',
         'telefone' => '(51)9.99137.7276',
         'nivel_acesso' => 'Administrador',
         'password' => bcrypt('12345678'),
@@ -26,6 +27,7 @@ class UserSeeder extends Seeder
     User::create([
         'name' => 'Pedro',
         'email' => 'pedro@gmail.com',
+        'CPF' => '000.000.000-00',
         'telefone' => '(51)9.9999.9999',
         'nivel_acesso' => 'Usuário',
         'password' => bcrypt('12345678'),
