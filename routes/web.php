@@ -357,15 +357,15 @@ Route::get('/pesquisa-veiculos', [LojaController::class, 'searchGeral'])->name('
 // Rota para o AJAX (o que popula a lista enquanto digita)
 Route::get('/sugestoes', [LojaController::class, 'buscarSugestoes'])->name('veiculos.sugestoes');
 Route::get('/veiculos-novos', [LojaController::class, 'indexVeiculosNovos'])->name('veiculos.novos');
-Route::get('/veiculos-novos/pesquisa', [LojaController::class, 'searchVeiculosNovos'])->name('veiculos.novos.search');
+//Route::get('/veiculos-novos/pesquisa', [LojaController::class, 'searchVeiculosNovos'])->name('veiculos.novos.search');
 
 // Listagem e Busca de Semi-novos
 Route::get('/veiculos-semi-novos', [LojaController::class, 'indexVeiculosSemiNovos'])->name('veiculos.semi-novos');
-Route::get('/veiculos-semi-novos/pesquisa', [LojaController::class, 'searchVeiculosSemiNovos'])->name('veiculos.semi-novos.search');
+//Route::get('/veiculos-semi-novos/pesquisa', [LojaController::class, 'searchVeiculosSemiNovos'])->name('veiculos.semi-novos.search');
 
 // Veículos Usados
 Route::get('/veiculos-usados', [LojaController::class, 'indexVeiculosUsados'])->name('veiculos.usados');
-Route::get('/veiculos-usados/pesquisa', [LojaController::class, 'searchVeiculosUsados'])->name('veiculos.usados.search');
+//Route::get('/veiculos-usados/pesquisa', [LojaController::class, 'searchVeiculosUsados'])->name('veiculos.usados.search');
 
 Route::get('/contato', [LojaController::class, 'contato'])->name('loja.contato');
 

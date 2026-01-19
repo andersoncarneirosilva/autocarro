@@ -275,36 +275,40 @@ public function buscarSugestoes(Request $request)
 
 public function searchGeral(Request $request)
 {
-    // 1. Inicia a query para os resultados
     $query = Anuncio::query();
 
-    // 2. Dados agrupados para os Dropdowns de Marca/Modelo
-    $dadosAgrupados = Anuncio::where('status', 'Ativo')
+    // 1. Filtro Global: Apenas anúncios PUBLICADOS e veículos ATIVOS
+    $query->where('status_anuncio', 'Publicado')
+          ->where('status', 'Ativo');
+
+    // 2. Dados dinâmicos para preencher os filtros da View
+    // Buscamos apenas o que está publicado para não mostrar marcas de carros offline
+    $dadosAgrupados = Anuncio::where('status_anuncio', 'Publicado')
+        ->where('status', 'Ativo')
         ->select('marca_real', 'modelo_real')
         ->get()
         ->groupBy('marca_real')
-        ->map(function ($itens) {
-            return $itens->pluck('modelo_real')->unique()->values();
-        });
+        ->map(fn($itens) => $itens->pluck('modelo_real')->unique()->values());
 
-    // 3. BUSCAR ANOS CADASTRADOS NO BANCO (Resolvendo seu erro)
-    $anosDisponiveis = Anuncio::whereNotNull('ano')
-        ->where('ano', '!=', '')
+    $anosDisponiveis = Anuncio::where('status_anuncio', 'Publicado')
+        ->whereNotNull('ano')
         ->selectRaw('DISTINCT LEFT(ano, 4) as ano_fabricacao')
         ->orderBy('ano_fabricacao', 'desc')
         ->pluck('ano_fabricacao');
 
-    // --- Filtros ---
-
+    // 3. Aplicação dos Filtros da Request
     if ($request->filled('marca')) {
-        $query->where('marca_real', $request->marca);
+        $marcaBusca = strtoupper($request->marca);
+        // Tratamento para VW vindo do filtro
+        if ($marcaBusca === 'VW') $marcaBusca = 'VOLKSWAGEN';
+        
+        $query->where('marca_real', $marcaBusca);
     }
 
     if ($request->filled('modelo')) {
-        $query->where('modelo_real', $request->modelo);
+        $query->where('modelo_real', strtoupper($request->modelo));
     }
 
-    // Filtro de Ano ajustado para o formato da sua tabela (LIKE '1977%')
     if ($request->filled('ano')) {
         $query->where('ano', 'like', $request->ano . '%');
     }
@@ -313,10 +317,9 @@ public function searchGeral(Request $request)
         $query->where('valor', '<=', $request->valor);
     }
 
-    // 4. Busca os resultados (Atenção: verifique se o campo no banco é 'status' ou 'status_anuncio')
-    $veiculos = $query->where('status', 'Ativo')->paginate(12);
+    // 4. Execução da busca
+    $veiculos = $query->orderBy('created_at', 'desc')->paginate(12);
 
-    // 5. Retorna a view com TODAS as variáveis necessárias
     return view('loja.busca-resultados', compact('veiculos', 'dadosAgrupados', 'anosDisponiveis'));
 }
 

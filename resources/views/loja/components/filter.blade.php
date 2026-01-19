@@ -1,6 +1,9 @@
 <div class="filter-sidebar bg-white shadow-sm rounded-4 p-3">
-  <form action="{{ route('veiculos.novos.search') }}" method="GET" id="mainFilterForm">
-    
+    <form action="{{ route('veiculos.search.geral') }}" method="GET" id="mainFilterForm">
+    <input type="hidden" name="modelo" id="input-modelo">
+    <input type="hidden" name="ano" id="input-ano">
+    <input type="hidden" name="valor" id="input-preco">
+
     <div class="accordion accordion-flush" id="filterAccordion">
 
       <div class="accordion-item border-bottom">
@@ -94,17 +97,7 @@
         {{ $anoItem }}
     </button>
 @endforeach
-<script>
-    function filterBySingleYear(ano) {
-    // Busca o input hidden de ano no formulário principal
-    const inputAno = document.getElementById('input-ano');
-    if (inputAno) {
-        inputAno.value = ano;
-        // Submete o formulário automaticamente ao selecionar o ano
-        inputAno.closest('form').submit();
-    }
-}
-</script>
+
 {{-- Input hidden para armazenar o ano único apenas quando necessário --}}
 <input type="hidden" name="ano" id="hidden_ano" value="{{ request('ano') }}">
         </div>
@@ -176,3 +169,15 @@
     <button type="submit" class="btn btn-accent w-100 mt-4 fw-bold">APLICAR FILTROS</button>
   </form>
 </div>
+
+<script>
+function filterBySingleYear(ano) {
+    const form = document.getElementById('mainFilterForm');
+    const inputAno = document.getElementById('input-ano');
+    
+    if (inputAno && form) {
+        inputAno.value = ano;
+        form.submit(); // O navegador usará automaticamente o action="{{ route('veiculos.search.geral') }}"
+    }
+}
+</script>

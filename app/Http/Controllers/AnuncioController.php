@@ -53,9 +53,9 @@ class AnuncioController extends Controller
 
     public function store(Request $request)
 {
-    dd($request);
+    //dd($request);
     $data = $request->all();
-    dd($data);
+    //dd($data);
     $paths = [];
 
     if ($request->hasFile('images')) {
@@ -277,10 +277,8 @@ public function cadastroRapido(Request $request)
 
         // 2. Divide a string pelo primeiro "/" encontrado
         if (str_contains($textoLimpo, '/')) {
-            // Divide em no máximo 2 partes: antes e depois da primeira barra
             [$marcaReal, $modeloReal] = explode('/', $textoLimpo, 2);
         } else {
-            // Caso não tenha barra, tenta separar pelo primeiro espaço
             $partes = explode(' ', $textoLimpo, 2);
             $marcaReal  = $partes[0] ?? '';
             $modeloReal = $partes[1] ?? '';
@@ -289,6 +287,15 @@ public function cadastroRapido(Request $request)
         // Limpa espaços em branco e garante maiúsculas
         $marcaReal = trim(strtoupper($marcaReal));
         $modeloReal = trim(strtoupper($modeloReal));
+
+        // --- TRATAMENTO ESPECÍFICO PARA VW ---
+        if ($marcaReal === 'VW') {
+            $marcaReal = 'VOLKSWAGEN';
+        }
+
+        if ($marcaReal === 'GM') {
+            $marcaReal = 'CHEVROLET';
+        }
 
         // Verificar se o veículo já existe com a placa fornecida
         $veiculoExistente = Veiculo::where('placa', $placa)
