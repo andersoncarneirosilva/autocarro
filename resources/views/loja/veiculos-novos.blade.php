@@ -145,7 +145,7 @@
         <div class="row">
             <div class="col-lg-3 mb-4">
                 <div class="filter-sidebar bg-white shadow-sm rounded-4 p-3">
-  <form action="{{ route('veiculos.novos.search') }}" method="GET">
+  <form action="{{ route('veiculos.novos.search') }}" method="GET" id="mainFilterForm">
     
     <div class="accordion accordion-flush" id="filterAccordion">
 
@@ -157,11 +157,19 @@
         </h2>
         <div id="filterMarca" class="accordion-collapse collapse show" data-bs-parent="#filterAccordion">
           <div class="accordion-body px-0">
-            <div class="input-group input-group-sm mb-3 position-relative">
-              <input type="text" class="form-control border-end-0" placeholder="Digite o veículo" id="search-input-sidebar">
-              <span class="input-group-text bg-white border-start-0 text-muted"><i class="bi bi-search"></i></span>
-              <div id="suggestion-box-sidebar" class="list-group shadow d-none position-absolute w-100" style="top:100%; z-index:100;"></div>
-            </div>
+            <div class="input-group mb-3 position-relative">
+    <input type="text" 
+       name="search" 
+       class="form-control border-end-0" 
+       placeholder="Digite o veículo" 
+       id="search-input-sidebar" 
+       value="{{ request('search') }}"
+       onkeypress="if(event.key === 'Enter') { document.getElementById('hidden_ano').value = ''; }">
+    <span class="input-group-text bg-white border-start-0 text-muted">
+        <i class="bi bi-search"></i>
+    </span>
+    <div id="suggestion-box-sidebar" class="list-group shadow d-none position-absolute w-100" style="top:100%; z-index:100;"></div>
+</div>
             
             <div class="row g-2 text-center mb-2">
               @php $marcasPopulares = ['Volkswagen', 'Chevrolet', 'Fiat', 'Ford', 'Honda', 'Hyundai', 'Jeep', 'Nissan', 'Renault']; @endphp
@@ -223,15 +231,18 @@
         <div class="d-flex flex-wrap gap-1 overflow-auto" style="max-height: 150px; padding-bottom: 5px;">
             @foreach($anosDisponiveis as $anoItem)
     @php 
-        // Só fica ativo se o 'ano' individual for igual ao item 
-        // E se NÃO houver busca por período (ano_de/ano_ate)
         $isActive = request('ano') == $anoItem && !request('ano_de') && !request('ano_ate');
     @endphp
-    <button type="submit" name="ano" value="{{ $anoItem }}" 
-        class="btn btn-sm btn-filter-year {{ $isActive ? 'active' : '' }}">
+    {{-- Mudamos o botão para type="button" e usamos JS para enviar apenas o necessário --}}
+    <button type="button" 
+        class="btn btn-sm btn-filter-year {{ $isActive ? 'active' : '' }}"
+        onclick="filterBySingleYear('{{ $anoItem }}')">
         {{ $anoItem }}
     </button>
 @endforeach
+
+{{-- Input hidden para armazenar o ano único apenas quando necessário --}}
+<input type="hidden" name="ano" id="hidden_ano" value="{{ request('ano') }}">
         </div>
         
         @if(request('ano') || request('ano_de') || request('ano_ate'))
@@ -489,5 +500,39 @@
     .course-item { transition: transform 0.3s; background: #fff; border: 1px solid #eee; }
     .course-item:hover { transform: translateY(-5px); }
 </style>
+
+<script>
+// Função para quando clica em um ano específico (ex: 2019)
+function filterBySingleYear(year) {
+    const form = document.getElementById('mainFilterForm');
+    
+    // Limpa os campos de período para não dar conflito
+    document.getElementsByName('ano_de')[0].value = '';
+    document.getElementsByName('ano_ate')[0].value = '';
+    
+    // Define o valor no hidden e envia
+    document.getElementById('hidden_ano').value = year;
+    form.submit();
+}
+
+// Função para limpar filtros conflitantes ao enviar o formulário geral
+document.getElementById('mainFilterForm').addEventListener('submit', function(e) {
+    const searchInput = document.getElementById('search-input-sidebar').value;
+    const anoDe = document.getElementsByName('ano_de')[0].value;
+    const anoAte = document.getElementsByName('ano_ate')[0].value;
+    const hiddenAno = document.getElementById('hidden_ano');
+
+    // REGRA: Se o usuário digitou algo na busca ou preencheu o período (De/Até),
+    // nós removemos o filtro de "ano único" (o botão que estava selecionado)
+    if (searchInput.trim() !== '' || anoDe !== '' || anoAte !== '') {
+        hiddenAno.value = ''; 
+    }
+});
+
+// Função auxiliar para os inputs de ano (De/Até)
+function clearPeriodFilters() {
+    document.getElementById('hidden_ano').value = '';
+}
+</script>
 
     @endsection

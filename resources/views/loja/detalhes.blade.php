@@ -10,12 +10,74 @@
     }
 
     /* Galeria */
-    .carousel-main-container { border-radius: 15px; overflow: hidden; box-shadow: 0 4px 15px rgba(0,0,0,0.05); }
-    .img-thumbnail-nav { width: 100px; aspect-ratio: 4/3; object-fit: cover; cursor: pointer; border-radius: 10px; border: 2px solid transparent; transition: 0.3s; opacity: 0.7; }
-    .img-thumbnail-nav.active, .img-thumbnail-nav:hover { border-color: var(--nc-accent); opacity: 1; transform: scale(1.05); }
-    .thumb-container { scrollbar-width: none; -ms-overflow-style: none; }
-    .thumb-container::-webkit-scrollbar { display: none; }
-    .photo-counter { position: absolute; bottom: 15px; right: 15px; background: rgba(0,0,0,0.6); color: white; padding: 2px 12px; border-radius: 20px; font-size: 12px; z-index: 10; }
+/* Container geral */
+.carousel-main-container {
+    border-radius: 15px;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+}
+
+/* Apenas o carousel deve cortar */
+#carouselDetalhes {
+    overflow: hidden;
+    border-radius: 15px;
+}
+
+
+/* Miniaturas */
+.img-thumbnail-nav {
+    width: 100px;
+    aspect-ratio: 4 / 3;
+    object-fit: cover;
+    cursor: pointer;
+    border-radius: 10px;
+    border: 2px solid transparent;
+    transition: transform 0.2s ease, opacity 0.2s ease;
+    opacity: 0.7;
+    flex-shrink: 0;
+
+    /* 🔥 garante que o scale seja centrado */
+    transform-origin: center;
+}
+
+
+.img-thumbnail-nav.active,
+.img-thumbnail-nav:hover {
+    border-color: var(--nc-accent);
+    opacity: 1;
+    transform: scale(1.05);
+}
+
+/* Container das miniaturas */
+.thumb-container {
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    min-height: 80px;
+    gap: 8px;
+    padding: 6px 10px;
+}
+
+
+
+
+.thumb-container::-webkit-scrollbar {
+    display: none;
+}
+
+/* Contador de fotos */
+.photo-counter {
+    position: absolute;
+    bottom: 15px;
+    right: 15px;
+    background: rgba(0,0,0,0.6);
+    color: white;
+    padding: 2px 12px;
+    border-radius: 20px;
+    font-size: 12px;
+    z-index: 10;
+}
+
+
 
     /* Sidebar */
     .sticky-sidebar { position: sticky; top: 100px; }
@@ -163,11 +225,29 @@
     font-weight: 600;
     color: #444;
 }
+.more-photos {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    background: rgba(0,0,0,0.6);
+    color: #fff;
+    font-weight: 600;
+    font-size: 18px;
+
+    /* 🔥 NÃO escala o card */
+    transform: none !important;
+}
+
+.more-photos:hover {
+    background: rgba(0,0,0,0.75);
+}
+
 
 </style>
 
 <section class="container py-5 mt-5">
-    <nav class="d-flex gap-2 small text-muted mb-4 overflow-x-auto text-nowrap">
+    <nav class="d-flex gap-2 small text-muted mt-4 mb-4 overflow-x-auto text-nowrap">
         <a href="/" class="text-decoration-none text-muted">Início</a> / 
         <a href="/comprar" class="text-decoration-none text-muted">Comprar</a> / 
         <span class="text-dark fw-medium">{{ $veiculo->marca_exibicao }} {{ $veiculo->modelo_exibicao }}</span>
@@ -175,6 +255,11 @@
 
     <div class="row g-4">
         <div class="col-lg-7">
+            @php
+    $maxThumbs = 7; // quantidade de miniaturas visíveis
+    $totalImages = count($veiculo->images);
+@endphp
+
             <div class="position-relative carousel-main-container mb-3">
                 <div id="carouselDetalhes" class="carousel slide" data-bs-ride="carousel">
                     <div class="carousel-inner">
@@ -200,16 +285,32 @@
                 </div>
             </div>
 
-            @if(count($veiculo->images) > 1)
-                <div class="d-flex gap-2 overflow-auto thumb-container py-2">
+            @if($totalImages > 1)
+                <div class="thumb-container d-flex gap-2 py-2">
+
                     @foreach($veiculo->images as $index => $img)
-                        <img src="{{ asset('storage/' . $img) }}" 
-                             class="img-thumbnail-nav {{ $index === 0 ? 'active' : '' }}" 
-                             onclick="bootstrap.Carousel.getOrCreateInstance(document.getElementById('carouselDetalhes')).to({{ $index }})"
-                             alt="Miniatura {{ $index + 1 }}">
+
+                        {{-- Mostra apenas até o limite --}}
+                        @if($index < $maxThumbs - 1)
+                            <img src="{{ asset('storage/' . $img) }}"
+                                class="img-thumbnail-nav {{ $index === 0 ? 'active' : '' }}"
+                                onclick="bootstrap.Carousel.getOrCreateInstance(document.getElementById('carouselDetalhes')).to({{ $index }})"
+                                alt="Miniatura {{ $index + 1 }}">
+
+                        {{-- Último card com +N --}}
+                        @elseif($index === $maxThumbs - 1)
+                            <div class="img-thumbnail-nav more-photos"
+                                onclick="bootstrap.Carousel.getOrCreateInstance(document.getElementById('carouselDetalhes')).to({{ $index }})">
+                                +{{ $totalImages - ($maxThumbs - 1) }}
+                            </div>
+                            @break
+                        @endif
+
                     @endforeach
+
                 </div>
             @endif
+
             
             <div class="mt-4 p-4 bg-white specs-container shadow-sm border rounded-4">
     <h5 class="fw-bold mb-4 text-uppercase border-bottom pb-2 text-red specs-title" style="font-size: 0.9rem;">
