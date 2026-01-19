@@ -14,7 +14,7 @@
     
     <div class="search-bar-wrapper mt-4" data-aos="fade-up" data-aos-delay="300">
       <div class="search-container-custom">
-        <form action="#" method="GET" class="search-flex-container">
+        <form action="{{ route('veiculos.search.geral') }}" method="GET" class="search-flex-container">
 
           <div class="dropdown custom-field">
             <input type="hidden" name="marca" id="input-marca">
@@ -60,20 +60,14 @@
           </div>
 
           <div class="dropdown custom-field">
-            <input type="hidden" name="ano" id="input-ano">
-            <button class="select-trigger" type="button" data-bs-toggle="dropdown">
-              <span>Ano</span>
-              <svg ...></svg>
-            </button>
-            <div class="dropdown-menu custom-result-box-wrapper">
-              <div class="scroll-arrow up">▲</div>
-              <ul class="custom-result-box">
-                <li><button class="dropdown-item" type="button" data-value="2025">2025</button></li>
-                <li><button class="dropdown-item" type="button" data-value="2024">2024</button></li>
-              </ul>
-              <div class="scroll-arrow down">▼</div>
-            </div>
-          </div>
+        <input type="hidden" name="modelo" id="input-modelo" value="{{ request('modelo') }}">
+        <button class="select-trigger" type="button" data-bs-toggle="dropdown">
+            <span class="{{ request('modelo') ? '' : 'text-muted' }}">
+                {{ request('modelo') ? ucfirst(request('modelo')) : 'Modelo' }}
+            </span>
+            <svg ...></svg>
+        </button>
+        </div>
 
           <div class="dropdown custom-field">
             <input type="hidden" name="preco" id="input-preco">
@@ -150,33 +144,29 @@ document.addEventListener('DOMContentLoaded', function() {
     });
   });
 
-  function atualizarModelos(marcaSelecionada) {
+  // Dentro da função atualizarModelos(marcaSelecionada)
+function atualizarModelos(marcaSelecionada) {
     listaModelosUl.innerHTML = '';
     const modelos = dadosVeiculos[marcaSelecionada];
 
     if (modelos && modelos.length > 0) {
-      const primeiroModelo = modelos[0];
-      spanModelo.innerText = primeiroModelo;
-      spanModelo.style.color = '#000';
-      inputModelo.value = primeiroModelo.toLowerCase();
+        // Opcional: Não preencher automaticamente o primeiro, 
+        // para obrigar o usuário a escolher
+        spanModelo.innerText = 'Selecione o Modelo'; 
+        inputModelo.value = ''; 
 
-      modelos.forEach(modelo => {
-        const li = document.createElement('li');
-        const btn = document.createElement('button');
-        btn.className = 'dropdown-item';
-        btn.type = 'button';
-        btn.setAttribute('data-value', modelo.toLowerCase());
-        btn.innerText = modelo;
-        li.appendChild(btn);
-        listaModelosUl.appendChild(li);
-      });
-    } else {
-      spanModelo.innerText = 'Modelo';
-      spanModelo.style.color = '#999';
-      inputModelo.value = '';
-      listaModelosUl.innerHTML = '<li><span class="dropdown-item-text text-muted small">Nenhum modelo encontrado</span></li>';
+        modelos.forEach(modelo => {
+            const li = document.createElement('li');
+            const btn = document.createElement('button');
+            btn.className = 'dropdown-item';
+            btn.type = 'button';
+            btn.setAttribute('data-value', modelo.toLowerCase());
+            btn.innerText = modelo;
+            li.appendChild(btn);
+            listaModelosUl.appendChild(li);
+        });
     }
-  }
+}
 
   // --- Lógica de Auto Scroll nas Setas ---
   const scrollSpeed = 5; 

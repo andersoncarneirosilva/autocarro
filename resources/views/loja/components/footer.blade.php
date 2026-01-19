@@ -10,7 +10,7 @@
           <div class="footer-contact pt-3">
             <p>Na Alcecar, você não procura sozinho. Conectamos você ao veículo certo com uma curadoria inteligente e acompanhamento especializado do início ao fim.</p>
             {{-- Se tiver dados de contato reais, preencha abaixo, caso contrário pode remover esta div --}}
-            <p class="mt-3"><strong>Email:</strong> <span>contato@alcecar.com.br</span></p>
+            {{-- <p class="mt-3"><strong>Email:</strong> <span>contato@alcecar.com.br</span></p> --}}
           </div>
           <div class="social-links d-flex mt-4">
             <a href=""><i class="bi bi-facebook"></i></a>

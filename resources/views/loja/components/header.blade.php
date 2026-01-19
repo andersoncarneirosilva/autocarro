@@ -1,16 +1,34 @@
 <style>
-    /* Apenas na home */
+/* Estado inicial na Home */
 .header-transparent {
     background: transparent;
     box-shadow: none;
+    transition: all 0.3s ease; /* Transição suave para a troca de cor */
 }
 
-/* Demais páginas */
+/* Cor fixa nas outras páginas */
 .header-solid {
-    background: #ff4a17; /* ou a cor do seu tema */
+    background: #ff4a17; 
     box-shadow: 0 2px 15px rgba(0, 0, 0, 0.1);
 }
 
+/* Classe que o JS vai adicionar ao rolar */
+.header-scrolled {
+    background: #ff4a17 !important; /* Cor que deseja ao rolar */
+    box-shadow: 0 2px 15px rgba(0, 0, 0, 0.2);
+    padding: 10px 0; /* Opcional: diminui um pouco a altura ao rolar */
+}
+.navmenu>ul>li>a:before {
+    content: "";
+    position: absolute;
+    height: 2px;
+    bottom: -6px;
+    left: 0;
+    background-color: var(--nav-hover-color);
+    visibility: hidden;
+    width: 0px;
+    transition: all 0.3s ease-in-out 0s;
+  }
 </style>
 <header 
   id="header" 
@@ -66,3 +84,23 @@
     </div>
 </header>
 
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+  const header = document.querySelector('#header');
+  
+  // Função que verifica o scroll
+  function handleScroll() {
+    if (window.scrollY > 50) {
+      header.classList.add('header-scrolled');
+    } else {
+      header.classList.remove('header-scrolled');
+    }
+  }
+
+  // Executa ao carregar a página (caso já comece no meio)
+  handleScroll();
+
+  // Executa toda vez que rolar
+  window.addEventListener('scroll', handleScroll);
+});
+</script>

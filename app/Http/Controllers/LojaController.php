@@ -278,22 +278,33 @@ public function buscarSugestoes(Request $request)
 }
 public function searchGeral(Request $request)
 {
-    $termo = $request->get('termo');
+    // Inicia a query
+    $query = Anuncio::query();
 
-    $veiculos = \App\Models\Anuncio::query()
-        ->where('status', 'Ativo')
-        ->where('status_anuncio', 'Publicado')
-        ->when($termo, function($query) use ($termo) {
-            $query->where(function($q) use ($termo) {
-                $q->where('marca_real', 'LIKE', "%{$termo}%")
-                  ->orWhere('modelo_real', 'LIKE', "%{$termo}%");
-            });
-        })
-        ->orderBy('created_at', 'desc')
-        ->paginate(12);
+    // Filtro de Marca
+    if ($request->filled('marca')) {
+        $query->where('marca', $request->marca);
+    }
 
-    // Retorna para a view de resultados (ou você pode reutilizar a de novos/usados)
-    return view('loja.busca-resultados', compact('veiculos', 'termo'));
+    // Filtro de Modelo
+    if ($request->filled('modelo')) {
+        $query->where('modelo', $request->modelo);
+    }
+
+    // Filtro de Ano (Maior ou igual ao selecionado)
+    if ($request->filled('ano')) {
+        $query->where('ano', '>=', $request->ano);
+    }
+
+    // Filtro de Preço (Até o valor selecionado)
+    if ($request->filled('preco')) {
+        $query->where('preco', '<=', $request->preco);
+    }
+
+    // Busca os resultados (com paginação se desejar)
+    $veiculos = $query->where('status', 'disponivel')->paginate(12);
+
+    return view('loja.busca-resultados', compact('veiculos'));
 }
 
 }

@@ -227,7 +227,7 @@ h6 {
   --heading-color: #ffffff;
   color: var(--default-color);
   background-color: var(--background-color);
-  padding: 20px 0;
+  padding: 10px 0;
   transition: all 0.5s;
   z-index: 997;
 }
@@ -347,7 +347,7 @@ h6 {
     transition: 0.3s;
   }
 
-  .navmenu>ul>li>a:before {
+  /* .navmenu>ul>li>a:before {
     content: "";
     position: absolute;
     height: 2px;
@@ -357,7 +357,7 @@ h6 {
     visibility: hidden;
     width: 0px;
     transition: all 0.3s ease-in-out 0s;
-  }
+  } */
 
   .navmenu a:hover:before,
   .navmenu li:hover>a:before,
