@@ -30,6 +30,7 @@ use App\Http\Controllers\DocumentoController;
 use App\Http\Controllers\PixController;
 use App\Http\Controllers\LojaController;
 use App\Http\Controllers\SiteController;
+use App\Http\Controllers\RevendaController;
 
 use Illuminate\Support\Facades\Route;
 use Livewire\Livewire;
@@ -43,7 +44,7 @@ Route::middleware(['auth'])->group(function () {
 
     Broadcast::routes(['middleware' => ['auth:sanctum']]);
 
-    
+    Route::resource('revendas', RevendaController::class);
 // routes/web.php
 Route::post('/chat/mark-as-read', [ChatController::class, 'markAsRead']);
 

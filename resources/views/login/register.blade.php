@@ -24,7 +24,7 @@
         }
 
         .text-wrap {
-            background: linear-gradient(135deg, #730000 0%, #4d0000 100%) !important;
+            background: linear-gradient(135deg, #FF4A17 0%, #ac2500 100%) !important;
             display: flex;
             align-items: center;
             color: #fff;
@@ -47,7 +47,7 @@
         }
 
         .form-control:focus {
-            border-color: #730000;
+            border-color: #FF4A17;
             box-shadow: 0 0 0 0.2rem rgba(115, 0, 0, 0.1);
         }
 
@@ -61,8 +61,8 @@
         }
 
         .btn-primary {
-            background: #730000 !important;
-            border-color: #730000 !important;
+            background: #FF4A17 !important;
+            border-color: #FF4A17 !important;
             height: 45px;
             border-radius: 8px;
             font-weight: 600;
@@ -96,6 +96,23 @@
         .ftco-section {
             padding: 3em 0;
         }
+
+        /* Estilo para os botões de seleção */
+.btn-group-toggle .btn {
+    font-size: 11px;
+    font-weight: 700;
+    text-transform: uppercase;
+    padding: 5px 15px;
+}
+.btn-outline-danger {
+    color: #FF4A17;
+    border-color: #FF4A17;
+}
+.btn-outline-danger:not(:disabled):not(.disabled).active, 
+.btn-outline-danger:hover {
+    background-color: #FF4A17;
+    border-color: #FF4A17;
+}
     </style>
 </head>
 <body>
@@ -116,57 +133,119 @@
                     </div>
 
                     <div class="login-wrap p-4 p-lg-5" style="flex: 1;">
-                        <div class="d-flex">
-                            <div class="w-100">
-                                <h3 class="mb-4" style="font-weight: 700; color: #333;">Criar Conta</h3>
-                            </div>
-                        </div>
+    
 
-                        <form method="POST" action="{{ route('register') }}" class="signin-form">
-                            @csrf
-                            
-                            <div class="row">
-                                <div class="col-md-6 form-group mb-3">
-                                    <label class="label">Nome Completo</label>
-                                    <input type="text" class="form-control" name="name" placeholder="Ex: João Silva" value="{{ old('name') }}" required>
-                                    @error('name') <span class="error-message">{{ $message }}</span> @enderror
-                                </div>
+   <form method="POST" action="{{ route('register') }}" class="signin-form">
+    @csrf
+    
+    <input type="hidden" name="account_type" id="account_type" value="{{ old('account_type', 'user') }}">
 
-                                <div class="col-md-6 form-group mb-3">
-                                    <label class="label">WhatsApp / Celular</label>
-                                    <input type="text" class="form-control" name="whatsapp" id="whatsapp" placeholder="(00) 00000-0000" value="{{ old('whatsapp') }}" required>
-                                    @error('whatsapp') <span class="error-message">{{ $message }}</span> @enderror
-                                </div>
-                            </div>
+    <div class="d-flex align-items-center justify-content-between mb-4">
+        <h3 style="font-weight: 700; color: #333; margin: 0;">Criar Conta</h3>
+        <div class="btn-group btn-group-toggle" data-toggle="buttons">
+            <label id="btn-user" class="btn btn-outline-danger btn-sm {{ old('account_type', 'user') == 'user' ? 'active' : '' }}" onclick="toggleForm('user')">
+                Particular
+            </label>
+            <label id="btn-dealer" class="btn btn-outline-danger btn-sm {{ old('account_type') == 'dealer' ? 'active' : '' }}" onclick="toggleForm('dealer')">
+                Revenda
+            </label>
+        </div>
+    </div>
 
-                            <div class="form-group mb-3">
-                                <label class="label">E-mail Profissional</label>
-                                <input type="email" class="form-control" name="email" placeholder="email@exemplo.com" value="{{ old('email') }}" required>
-                                @error('email') <span class="error-message">{{ $message }}</span> @enderror
-                            </div>
-
-                            <div class="row">
-                                <div class="col-md-6 form-group mb-3">
-                                    <label class="label">Senha</label>
-                                    <input type="password" class="form-control" name="password" placeholder="••••••••" required>
-                                    @error('password') <span class="error-message">{{ $message }}</span> @enderror
-                                </div>
-
-                                <div class="col-md-6 form-group mb-3">
-                                    <label class="label">Confirmar Senha</label>
-                                    <input type="password" class="form-control" name="password_confirmation" placeholder="••••••••" required>
-                                </div>
-                            </div>
-
-                            <div class="form-group mt-3">
-                                <button type="submit" class="form-control btn btn-primary px-3">Finalizar Cadastro</button>
-                            </div>
-
-                            <p class="text-center mt-3" style="font-size: 12px; color: #999;">
-                                Ao se cadastrar, você concorda com nossos Termos de Uso.
-                            </p>
-                        </form>
+    <div id="dealer-fields" style="{{ old('account_type') == 'dealer' ? 'display: block;' : 'display: none;' }}">
+        <div class="row">
+            <div class="col-md-7 form-group mb-4">
+                <label class="label">CNPJ da Revenda</label>
+                <div class="input-group">
+                    <input type="text" class="form-control" name="cnpj" id="cnpj" value="{{ old('cnpj') }}" placeholder="00.000.000/0000-00" style="border-right: none;">
+                    <div class="input-group-append">
+                        <button class="btn btn-outline-secondary" type="button" id="btn-consulta-cnpj" style="border: 1px solid #dee2e6; border-left: none; border-radius: 0 8px 8px 0; background: #fff;">
+                            <i class="fa fa-search" style="color: #730000;"></i>
+                        </button>
                     </div>
+                </div>
+                <small id="cnpj-loading" style="display:none; color: #730000;">Consultando Receita...</small>
+            </div>
+            <div class="col-md-5 form-group mb-4">
+                <label class="label">CEP</label>
+                <input type="text" class="form-control" name="cep" id="cep" value="{{ old('cep') }}" placeholder="00000-000">
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-md-9 form-group mb-4">
+                <label class="label">Rua / Logradouro</label>
+                <input type="text" class="form-control" name="rua" value="{{ old('rua') }}" placeholder="Ex: Av. Principal">
+            </div>
+            <div class="col-md-3 form-group mb-4">
+                <label class="label">Nº</label>
+                <input type="text" class="form-control" name="numero" value="{{ old('numero') }}" placeholder="123">
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-md-6 form-group mb-4">
+                <label class="label">Bairro</label>
+                <input type="text" class="form-control" name="bairro" value="{{ old('bairro') }}" placeholder="Bairro">
+            </div>
+            <div class="col-md-6 form-group mb-4">
+                <label class="label">Cidade</label>
+                <input type="text" class="form-control" name="cidade" value="{{ old('cidade') }}" placeholder="Cidade">
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-12 form-group mb-4">
+                <label class="label">UF</label>
+                <input type="text" class="form-control" name="estado" value="{{ old('estado') }}" maxlength="2" placeholder="SP">
+            </div>
+        </div>
+        <hr style="border-top: 1px solid #eee; margin-bottom: 25px;">
+    </div>
+
+    <div class="row">
+        <div class="col-md-12 form-group mb-4">
+            <label class="label" id="label-nome">{{ old('account_type') == 'dealer' ? 'Nome da Revenda / Razão Social' : 'Nome Completo' }}</label>
+            <input type="text" class="form-control" name="name" placeholder="Nome do responsável ou da loja" value="{{ old('name') }}" required>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-md-6 form-group mb-4">
+            <label class="label">WhatsApp / Celular</label>
+            <input type="text" class="form-control" name="whatsapp" id="whatsapp" value="{{ old('whatsapp') }}" placeholder="(00) 00000-0000" required>
+        </div>
+        <div class="col-md-6 form-group mb-4">
+            <label class="label">E-mail Profissional</label>
+            <input type="email" class="form-control" name="email" value="{{ old('email') }}" placeholder="contato@email.com" required>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-md-6 form-group mb-4">
+            <label class="label">Criar Senha</label>
+            <input type="password" class="form-control" name="password" placeholder="••••••••" required>
+        </div>
+        <div class="col-md-6 form-group mb-4">
+            <label class="label">Confirmar Senha</label>
+            <input type="password" class="form-control" name="password_confirmation" placeholder="••••••••" required>
+        </div>
+    </div>
+
+    <div class="form-group mt-4">
+        <button type="submit" class="form-control btn btn-primary px-3 shadow-sm">Finalizar Cadastro no Alcecar</button>
+    </div>
+</form>
+@if($errors->any())
+    <div class="alert alert-danger">
+        <ul>
+            @foreach($errors->all() as $error)
+                {{-- O cast (string) evita o erro de htmlspecialchars caso o erro venha como array --}}
+                <li>{{ is_array($error) ? implode(', ', $error) : $error }}</li>
+            @endforeach
+        </ul>
+    </div>
+@endif
+</div>
                 </div>
             </div>
         </div>
@@ -175,9 +254,99 @@
 
 <script src="{{ url('layoutlogin/js/jquery.min.js') }}"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.mask/1.14.16/jquery.mask.min.js"></script>
+
+
+
 <script>
+    function toggleForm(type) {
+    const labelNome = document.getElementById('label-nome');
+    const inputType = document.getElementById('account_type');
+    
+    $('.btn-group-toggle .btn').removeClass('active');
+    
+    if (type === 'dealer') {
+        $('#dealer-fields').slideDown(); 
+        labelNome.innerText = 'Nome da Revenda / Razão Social';
+        $('#btn-dealer').addClass('active');
+        inputType.value = 'dealer'; // Atualiza o valor para o POST
+        
+        // Torna obrigatório apenas se for revenda
+        $('#dealer-fields').find('input').prop('required', true);
+    } else {
+        $('#dealer-fields').slideUp();
+        labelNome.innerText = 'Nome Completo';
+        $('#btn-user').addClass('active');
+        inputType.value = 'user'; // Atualiza o valor para o POST
+        
+        $('#dealer-fields').find('input').prop('required', false);
+    }
+}
+
     $(document).ready(function(){
+        // Máscaras
         $('#whatsapp').mask('(00) 00000-0000');
+        $('#cnpj').mask('00.000.000/0000-00');
+        $('#cep').mask('00000-000');
+
+        /**
+         * LÓGICA DE PERSISTÊNCIA:
+         * Verifica se o Laravel retornou erro de validação para uma Revenda
+         * Se sim, abre a aba automaticamente ao carregar a página
+         */
+        @if(old('account_type') == 'dealer' || $errors->has('cnpj'))
+            toggleForm('dealer');
+        @endif
+
+        // Consulta de CNPJ
+        function consultarCNPJ(cnpj) {
+            cnpj = cnpj.replace(/\D/g, '');
+            if (cnpj.length !== 14) return;
+
+            $('#btn-consulta-cnpj').html('<i class="fa fa-spinner fa-spin"></i>');
+
+            $.getJSON(`https://brasilapi.com.br/api/cnpj/v1/${cnpj}`, function(dados) {
+                if (dados.razao_social) {
+                    $("[name='name']").val(dados.razao_social);
+                    $("[name='rua']").val(dados.logradouro);
+                    $("[name='bairro']").val(dados.bairro);
+                    $("[name='cidade']").val(dados.municipio);
+                    $("[name='estado']").val(dados.uf);
+                    $("[name='cep']").val(dados.cep).trigger('input');
+                    $("[name='numero']").focus();
+                }
+            })
+            .always(function() {
+                $('#btn-consulta-cnpj').html('<i class="fa fa-search" style="color: #730000;"></i>');
+            });
+        }
+
+        $('#btn-consulta-cnpj').click(function() {
+            consultarCNPJ($('#cnpj').val());
+        });
+
+        $('#cnpj').blur(function() {
+            consultarCNPJ($(this).val());
+        });
+
+        // Consulta de CEP
+        $('#cep').blur(function() {
+            var cep = $(this).val().replace(/\D/g, '');
+            if (cep.length === 8) {
+                $.getJSON("https://viacep.com.br/ws/"+ cep +"/json/", function(dados) {
+                    if (!("erro" in dados)) {
+                        $("[name='rua']").val(dados.logradouro);
+                        $("[name='bairro']").val(dados.bairro);
+                        $("[name='cidade']").val(dados.localidade);
+                        $("[name='estado']").val(dados.uf);
+                        $("[name='numero']").focus();
+                    }
+                });
+            }
+        });
+
+        if($('#account_type').val() === 'dealer') {
+        $('#dealer-fields').find('input').prop('required', true);
+    }
     });
 </script>
 
