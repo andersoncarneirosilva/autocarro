@@ -24,6 +24,14 @@ class LojaController extends Controller
     // Executa a paginação após aplicar o filtro
     $veiculos = $query->paginate(10);
 
+    $dadosAgrupados = Anuncio::where('status', 'Ativo')
+        ->select('marca_real', 'modelo_real')
+        ->get()
+        ->groupBy('marca_real')
+        ->map(function ($itens) {
+            return $itens->pluck('modelo_real')->unique()->values();
+        });
+
     // Ajusta marca e modelo apenas para exibição
     $veiculos->getCollection()->transform(function ($veiculo) {
 
@@ -59,7 +67,7 @@ class LojaController extends Controller
         return $veiculo;
     });
 
-    return view('loja.index', compact('veiculos'));
+    return view('loja.index', compact('veiculos','dadosAgrupados'));
 }
 
 
@@ -281,14 +289,22 @@ public function searchGeral(Request $request)
     // Inicia a query
     $query = Anuncio::query();
 
+    $dadosAgrupados = Anuncio::where('status', 'Ativo')
+        ->select('marca_real', 'modelo_real')
+        ->get()
+        ->groupBy('marca_real')
+        ->map(function ($itens) {
+            return $itens->pluck('modelo_real')->unique()->values();
+        });
+
     // Filtro de Marca
     if ($request->filled('marca')) {
-        $query->where('marca', $request->marca);
+        $query->where('marca_real', $request->marca);
     }
 
     // Filtro de Modelo
     if ($request->filled('modelo')) {
-        $query->where('modelo', $request->modelo);
+        $query->where('modelo_real', $request->modelo);
     }
 
     // Filtro de Ano (Maior ou igual ao selecionado)
@@ -297,14 +313,14 @@ public function searchGeral(Request $request)
     }
 
     // Filtro de Preço (Até o valor selecionado)
-    if ($request->filled('preco')) {
-        $query->where('preco', '<=', $request->preco);
+    if ($request->filled('valor')) {
+        $query->where('valor', '<=', $request->valor);
     }
 
     // Busca os resultados (com paginação se desejar)
     $veiculos = $query->where('status', 'disponivel')->paginate(12);
 
-    return view('loja.busca-resultados', compact('veiculos'));
+    return view('loja.busca-resultados', compact('veiculos','dadosAgrupados'));
 }
 
 }

@@ -16,188 +16,158 @@
       <div class="search-container-custom">
         <form action="{{ route('veiculos.search.geral') }}" method="GET" class="search-flex-container">
 
-          <div class="dropdown custom-field">
-            <input type="hidden" name="marca" id="input-marca">
-            <button class="select-trigger" type="button" data-bs-toggle="dropdown">
-              <span>Marca</span>
-              <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="opacity-50"><path d="m6 9 6 6 6-6"></path></svg>
-            </button>
-            <div class="dropdown-menu custom-result-box-wrapper">
-              <div class="scroll-arrow up">▲</div>
-              <ul class="custom-result-box">
-                <li><button class="dropdown-item" type="button" data-value="chevrolet">Chevrolet</button></li>
-                <li><button class="dropdown-item" type="button" data-value="fiat">Fiat</button></li>
-                <li><button class="dropdown-item" type="button" data-value="ford">Ford</button></li>
-                <li><button class="dropdown-item" type="button" data-value="honda">Honda</button></li>
-                <li><button class="dropdown-item" type="button" data-value="hyundai">Hyundai</button></li>
-                <li><button class="dropdown-item" type="button" data-value="hyundai">Citroën</button></li>
-                <li><button class="dropdown-item" type="button" data-value="jeep">Jeep</button></li>
-                <li><button class="dropdown-item" type="button" data-value="nissan">Nissan</button></li>
-                <li><button class="dropdown-item" type="button" data-value="renault">Renault</button></li>
-                <li><button class="dropdown-item" type="button" data-value="toyota">Toyota</button></li>
-                <li><button class="dropdown-item" type="button" data-value="pegeout">Pegeout</button></li>
-                <li><button class="dropdown-item" type="button" data-value="vw">Volkswagen</button></li>
-                <li><button class="dropdown-item" type="button" data-value="caoa-chery">Caoa Chery</button></li>
-                <li><button class="dropdown-item" type="button" data-value="byd">BYD</button></li>
-              </ul>
-              <div class="scroll-arrow down">▼</div>
-            </div>
-          </div>
-
-          <div class="dropdown custom-field">
-            <input type="hidden" name="modelo" id="input-modelo"> 
-            <button class="select-trigger" type="button" data-bs-toggle="dropdown">
-              <span class="text-muted">Modelo</span>
-              <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="opacity-50"><path d="m6 9 6 6 6-6"></path></svg>
-            </button>
-            <div class="dropdown-menu custom-result-box-wrapper">
-              <div class="scroll-arrow up">▲</div>
-              <ul class="custom-result-box">
-                <li><span class="dropdown-item-text text-muted small">Selecione uma marca primeiro</span></li>
-              </ul>
-              <div class="scroll-arrow down">▼</div>
-            </div>
-          </div>
-
-          <div class="dropdown custom-field">
-        <input type="hidden" name="modelo" id="input-modelo" value="{{ request('modelo') }}">
+    <div class="dropdown custom-field">
+        <input type="hidden" name="marca" id="input-marca">
         <button class="select-trigger" type="button" data-bs-toggle="dropdown">
-            <span class="{{ request('modelo') ? '' : 'text-muted' }}">
-                {{ request('modelo') ? ucfirst(request('modelo')) : 'Modelo' }}
-            </span>
-            <svg ...></svg>
+            <span>Marca</span>
+            <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="opacity-50"><path d="m6 9 6 6 6-6"></path></svg>
         </button>
+        <div class="dropdown-menu custom-result-box-wrapper">
+            <div class="scroll-arrow up">▲</div>
+            <ul class="custom-result-box">
+                @foreach($dadosAgrupados as $marca => $modelos)
+                <li><button class="dropdown-item" type="button" data-value="{{ $marca }}">{{ $marca }}</button></li>
+                @endforeach
+            </ul>
+            <div class="scroll-arrow down">▼</div>
         </div>
+    </div>
 
-          <div class="dropdown custom-field">
-            <input type="hidden" name="preco" id="input-preco">
-            <button class="select-trigger" type="button" data-bs-toggle="dropdown">
-              <span>Preço</span>
-              <svg ...></svg>
-            </button>
-            <div class="dropdown-menu custom-result-box-wrapper">
-              <div class="scroll-arrow up">▲</div>
-              <ul class="custom-result-box">
+    <div class="dropdown custom-field">
+        <input type="hidden" name="modelo" id="input-modelo"> 
+        <button class="select-trigger" type="button" data-bs-toggle="dropdown">
+            <span class="text-muted">Modelo</span>
+            <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="opacity-50"><path d="m6 9 6 6 6-6"></path></svg>
+        </button>
+        <div class="dropdown-menu custom-result-box-wrapper">
+            <div class="scroll-arrow up">▲</div>
+            <ul class="custom-result-box" id="lista-modelos">
+                <li><span class="dropdown-item-text text-muted small">Selecione uma marca primeiro</span></li>
+            </ul>
+            <div class="scroll-arrow down">▼</div>
+        </div>
+    </div>
+
+    <div class="dropdown custom-field">
+        <input type="hidden" name="ano" id="input-ano">
+        <button class="select-trigger" type="button" data-bs-toggle="dropdown">
+            <span class="text-muted">Ano</span>
+            <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="opacity-50"><path d="m6 9 6 6 6-6"></path></svg>
+        </button>
+        <div class="dropdown-menu custom-result-box-wrapper">
+            <div class="scroll-arrow up">▲</div>
+            <ul class="custom-result-box">
+                @for ($i = date('Y') + 1; $i >= 1970; $i--)
+                    <li><button class="dropdown-item" type="button" data-value="{{ $i }}">{{ $i }}</button></li>
+                @endfor
+            </ul>
+            <div class="scroll-arrow down">▼</div>
+        </div>
+    </div>
+
+    <div class="dropdown custom-field">
+        <input type="hidden" name="valor" id="input-preco">
+        <button class="select-trigger" type="button" data-bs-toggle="dropdown">
+            <span>Preço</span>
+        </button>
+        <div class="dropdown-menu custom-result-box-wrapper">
+            <div class="scroll-arrow up">▲</div>
+            <ul class="custom-result-box">
                 <li><button class="dropdown-item" type="button" data-value="50000">Até R$ 50.000</button></li>
                 <li><button class="dropdown-item" type="button" data-value="100000">Até R$ 100.000</button></li>
-              </ul>
-              <div class="scroll-arrow down">▼</div>
-            </div>
-          </div>
+                <li><button class="dropdown-item" type="button" data-value="150000">Até R$ 150.000</button></li>
+                <li><button class="dropdown-item" type="button" data-value="200000">Até R$ 200.000</button></li>
+            </ul>
+            <div class="scroll-arrow down">▼</div>
+        </div>
+    </div>
 
-          <button type="submit" class="btn-search-purple">
-            <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"></circle><path d="m21 21-4.3-4.3"></path></svg>
-            <span>Buscar</span>
-          </button>
+    <button type="submit" class="btn-search-purple">
+        <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"></circle><path d="m21 21-4.3-4.3"></path></svg>
+        <span>Buscar</span>
+    </button>
 
-        </form>
+</form>
       </div>
     </div>
   </div>
 </section>
 
 
-
 <script>
-document.addEventListener('DOMContentLoaded', function() {
-  const dadosVeiculos = {
-    "chevrolet": ["Onix", "Onix Plus", "Tracker", "S10", "Spin", "Equinox"],
-    "fiat": ["Strada", "Mobi", "Argo", "Cronos", "Pulse", "Fastback", "Toro"],
-    "vw": ["Gol", "Polo", "Virtus", "Nivus", "T-Cross", "Taos", "Saveiro"],
-    "toyota": ["Corolla", "Corolla Cross", "Hilux", "SW4", "Yaris"],
-    "hyundai": ["HB20", "HB20S", "Creta", "Tucson"],
-    "jeep": ["Renegade", "Compass", "Commander", "Wrangler"],
-    "renault": ["Kwid", "Sandero", "Logan", "Duster", "Oroch", "Kardian"],
-    "honda": ["Civic", "City", "City Hatch", "HR-V", "ZR-V"],
-    "nissan": ["Kicks", "Versa", "Sentra", "Frontier"],
-    "ford": ["Ranger", "Maverick", "Territory", "Mustang"],
-    "caoa-chery": ["Tiggo 5X", "Tiggo 7", "Tiggo 8", "Arrizo 6"],
-    "byd": ["Dolphin", "Seal", "Song Plus", "Yuan Plus"]
-  };
+  document.addEventListener('DOMContentLoaded', function() {
+  // Injeta os dados reais vindos do banco de dados através do Laravel
+  const dadosVeiculos = {!! json_encode($dadosAgrupados) !!};
 
-  const dropdowns = document.querySelectorAll('.dropdown.custom-field');
   const inputMarca = document.querySelector('#input-marca');
   const inputModelo = document.querySelector('#input-modelo');
-  const spanModelo = inputModelo.closest('.dropdown').querySelector('.select-trigger span');
-  const listaModelosUl = inputModelo.closest('.dropdown').querySelector('.custom-result-box');
+  const dropdownModelo = inputModelo.closest('.dropdown');
+  const spanModelo = dropdownModelo.querySelector('.select-trigger span');
+  const listaModelosUl = dropdownModelo.querySelector('.custom-result-box');
 
-  // --- Lógica de Seleção dos Dropdowns ---
-  dropdowns.forEach(dropdown => {
+  // --- Delegação de Eventos para Seleção ---
+  document.addEventListener('click', function(e) {
+    const item = e.target.closest('.dropdown-item');
+    if (!item) return;
+
+    const dropdown = item.closest('.custom-field');
     const displaySpan = dropdown.querySelector('.select-trigger span');
     const hiddenInput = dropdown.querySelector('input[type="hidden"]');
 
-    dropdown.addEventListener('click', function(e) {
-      const item = e.target.closest('.dropdown-item');
-      if (!item) return;
+    const selectedText = item.innerText.trim();
+    const selectedValue = item.getAttribute('data-value');
 
-      e.preventDefault();
-      const selectedText = item.innerText.trim();
-      const selectedValue = item.getAttribute('data-value');
-
-      displaySpan.innerText = selectedText;
-      displaySpan.style.color = "#000";
-      if (hiddenInput) hiddenInput.value = selectedValue;
-
-      if (hiddenInput && hiddenInput.id === 'input-marca') {
-        atualizarModelos(selectedValue);
-      }
-    });
+    displaySpan.innerText = selectedText;
+    displaySpan.style.color = "#333";
+    
+    if (hiddenInput) {
+        hiddenInput.value = selectedValue;
+        
+        // Se for a marca, atualiza a lista de modelos reais
+        if (hiddenInput.id === 'input-marca') {
+            atualizarModelos(selectedValue);
+        }
+    }
   });
 
-  // Dentro da função atualizarModelos(marcaSelecionada)
-function atualizarModelos(marcaSelecionada) {
+  function atualizarModelos(marcaSelecionada) {
     listaModelosUl.innerHTML = '';
+    // Busca no objeto injetado
     const modelos = dadosVeiculos[marcaSelecionada];
 
     if (modelos && modelos.length > 0) {
-        // Opcional: Não preencher automaticamente o primeiro, 
-        // para obrigar o usuário a escolher
         spanModelo.innerText = 'Selecione o Modelo'; 
         inputModelo.value = ''; 
 
         modelos.forEach(modelo => {
             const li = document.createElement('li');
-            const btn = document.createElement('button');
-            btn.className = 'dropdown-item';
-            btn.type = 'button';
-            btn.setAttribute('data-value', modelo.toLowerCase());
-            btn.innerText = modelo;
-            li.appendChild(btn);
+            li.innerHTML = `<button class="dropdown-item" type="button" data-value="${modelo}">${modelo}</button>`;
             listaModelosUl.appendChild(li);
         });
+    } else {
+        listaModelosUl.innerHTML = '<li><span class="dropdown-item-text text-muted small">Sem modelos disponíveis</span></li>';
     }
-}
+  }
 
-  // --- Lógica de Auto Scroll nas Setas ---
-  const scrollSpeed = 5; 
+  // --- Lógica de Scroll Automático (Mantida) ---
   let scrollInterval;
+  const scrollSpeed = 4;
 
-  function startScrolling(element, direction) {
-    stopScrolling();
-    scrollInterval = setInterval(() => {
-      element.scrollTop += direction * scrollSpeed;
-    }, 16); // ~60fps para suavidade
-  }
-
-  function stopScrolling() {
-    clearInterval(scrollInterval);
-  }
-
-  // Eventos de Mouse nas setas
   document.addEventListener('mouseover', function(e) {
     const seta = e.target.closest('.scroll-arrow');
     if (seta) {
       const container = seta.closest('.custom-result-box-wrapper').querySelector('.custom-result-box');
       const direction = seta.classList.contains('up') ? -1 : 1;
-      startScrolling(container, direction);
+      stopScrolling();
+      scrollInterval = setInterval(() => { container.scrollTop += direction * scrollSpeed; }, 10);
     }
   });
 
   document.addEventListener('mouseout', function(e) {
-    if (e.target.closest('.scroll-arrow')) {
-      stopScrolling();
-    }
+    if (e.target.closest('.scroll-arrow')) stopScrolling();
   });
+
+  function stopScrolling() { clearInterval(scrollInterval); }
 });
 </script>
 <section id="categories-overlap" class="categories-overlap">

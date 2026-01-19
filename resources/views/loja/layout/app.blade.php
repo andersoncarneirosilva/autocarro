@@ -92,11 +92,20 @@
 
   .custom-result-box {
     max-height: 250px !important; 
-    overflow-y: hidden !important; /* ESCONDE O SCROLLBAR */
+    overflow-y: auto !important; /* Permite o scroll */
     padding: 8px !important;
     margin: 0;
     list-style: none;
-  }
+    
+    /* Esconde a barra de scroll padrão para manter o design (opcional) */
+    scrollbar-width: none; /* Firefox */
+    -ms-overflow-style: none; /* IE/Edge */
+}
+
+/* Esconde a barra no Chrome/Safari/Brave */
+.custom-result-box::-webkit-scrollbar {
+    display: none;
+}
 
   /* Estilo das Setas de Navegação */
   .scroll-arrow {
@@ -209,6 +218,144 @@
 }
 
 
+</style>
+
+{{-- ESTILO PARA O FILTRO --}}
+<style>
+  .accordion-button:not(.collapsed) { background-color: transparent; color: inherit; box-shadow: none; }
+  .accordion-button::after { background-size: 1rem; }
+  .brand-item:hover { background-color: #f8f9fa; border-color: var(--accent-color) !important; color: var(--accent-color); }
+  .cursor-pointer { cursor: pointer; }
+</style>
+<style>
+  /* Estilização Geral do Card */
+.course-item {
+    background: #fff;
+    border-radius: 15px;
+    border: 1px solid #eee;
+    overflow: hidden;
+    transition: all 0.3s ease;
+}
+
+.course-item:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+}
+
+/* Mini Cards de Info dentro do Card de Listagem */
+.card-spec-grid {
+    display: flex;
+    gap: 8px;
+    margin-bottom: 15px;
+}
+
+.mini-spec-card {
+    background: #f8f9fa;
+    border-radius: 8px;
+    padding: 6px 10px;
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    border: 1px solid #f0f0f0;
+}
+
+.mini-spec-card i {
+    color: #ff4a17;
+    font-size: 0.9rem;
+    margin-bottom: 2px;
+}
+
+.mini-spec-card span {
+    font-size: 0.7rem;
+    font-weight: 700;
+    color: #444;
+    text-transform: uppercase;
+}
+
+/* Badge de Preço e Categoria */
+.category-badge {
+    background: #fff0eb;
+    color: #ff4a17;
+    font-size: 11px;
+    font-weight: 700;
+    padding: 4px 10px;
+    border-radius: 50px;
+    text-transform: uppercase;
+}
+
+/* Container de Filtros */
+.active-filters {
+    background: #fff;
+    padding: 15px;
+    border-radius: 12px;
+    border: 1px solid #f0f0f0;
+}
+
+/* Estilo das Etiquetas (Pills) */
+.filter-pill {
+    background: #f8f9fa;
+    border: 1px solid #dee2e6;
+    border-radius: 50px;
+    padding: 6px 14px;
+    font-size: 0.85rem;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    transition: all 0.2s;
+}
+
+.filter-pill:hover {
+    border-color: #ff4a17;
+    background: #fffafa;
+}
+
+.filter-pill strong {
+    color: #333;
+}
+
+.filter-pill .remove-filter {
+    color: #adb5bd;
+    display: flex;
+    align-items: center;
+    transition: color 0.2s;
+}
+
+.filter-pill:hover .remove-filter {
+    color: #ff4a17;
+}
+
+/* Link de Limpar Tudo */
+.btn-clear-all {
+    font-size: 0.8rem;
+    color: #ff4a17;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    text-decoration: none;
+    padding: 5px 10px;
+}
+
+.btn-clear-all:hover {
+    color: #d43d12;
+    text-decoration: underline;
+}
+
+.btn-filter-year {
+    border: 1px solid #dee2e6;
+    color: #666;
+    background: #fff;
+    font-size: 0.75rem;
+    padding: 2px 8px;
+    border-radius: 5px;
+    transition: all 0.2s;
+}
+.btn-filter-year:hover, .btn-filter-year.active {
+    background-color: #ff4a17;
+    border-color: #ff4a17;
+    color: #fff;
+}
 </style>
 
 </head>

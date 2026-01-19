@@ -38,7 +38,7 @@
     <div class="container-fluid container-xl position-relative d-flex align-items-center justify-content-between">
 
       <a href="{{ route('loja.index') }}" class="logo d-flex align-items-center me-auto">
-        <img src="{{ url('layout/images/logo_carro.png') }}" alt="Logo">
+        <img src="{{ url('carbook/img/logo_texto.png') }}" alt="Alcecar">
       </a>
 
       <nav id="navmenu" class="navmenu">
