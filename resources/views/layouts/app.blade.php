@@ -4,7 +4,7 @@
 <head>
     
     <meta charset="utf-8" />
-    <title>@yield('title')</title>
+    <title>Alcecar | Gestão de Veículos e Automação de Procurações</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
     <meta name="keywords"
