@@ -7,7 +7,7 @@
 
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
-    <link rel="stylesheet" href="{{ url('layoutlogin/css/style.css') }}">
+    <link rel="stylesheet" href="{{ url('login/css/style.css') }}">
 
     <!-- Google tag (gtag.js) -->
 <script async src="https://www.googletagmanager.com/gtag/js?id=G-02FMMXT79W"></script>
@@ -125,7 +125,7 @@
                     <div class="text-wrap p-4 p-lg-5 text-center order-md-last">
                         <div class="text w-100">
                             <div class="sitename">
-                                <img src="{{ url('layout/images/logo_carro.png') }}" alt="Autocar Logo">
+                                <img src="{{ url('frontend/images/logo_alcecar.png') }}" alt="Autocar Logo">
                             </div>
                             <h2 style="color: white; font-weight: 700;">Bem-vindo!</h2>
                             <p style="color: rgba(255,255,255,0.8);">Ainda não possui acesso à nossa plataforma de gestão?</p>
@@ -181,8 +181,8 @@
     </div>
 </section>
 
-<script src="{{ url('layoutlogin/js/jquery.min.js') }}"></script>
-<script src="{{ url('layoutlogin/js/bootstrap.min.js') }}"></script>
+<script src="{{ url('login/js/jquery.min.js') }}"></script>
+<script src="{{ url('login/js/bootstrap.min.js') }}"></script>
 
 </body>
 </html>

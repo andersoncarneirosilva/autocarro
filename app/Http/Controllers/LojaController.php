@@ -228,21 +228,7 @@ public function show($slug)
     $veiculo->marca_exibicao = $traducoes[$marcaLimpa] ?? $marcaLimpa;
     $veiculo->modelo_exibicao = trim($modelo);
 
-    // --- MAPA DE BACKGROUND ---
-    $mapaBackground = [
-        'FORD'       => 'layout/images/brands/ford.jpg',
-        'FIAT'       => 'layout/images/brands/fiat.jpg',
-        'HONDA'      => 'layout/images/brands/honda.jpg',
-        'YAMAHA'     => 'layout/images/brands/yamaha.jpg',
-        'RENAULT'    => 'layout/images/brands/renault.jpg',
-        'VOLKSWAGEN' => 'layout/images/brands/volkswagen.jpg',
-        'CHEVROLET'  => 'layout/images/brands/chevrolet.jpg',
-    ];
-
-    // Agora usamos a marca já traduzida para buscar o background
-    $veiculo->background_image = asset(
-        $mapaBackground[$veiculo->marca_exibicao] ?? 'layout/images/brands/default.jpg'
-    );
+    
 
     return view('loja.detalhes', compact('veiculo'));
 }

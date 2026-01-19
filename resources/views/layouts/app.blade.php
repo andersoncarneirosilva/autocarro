@@ -16,33 +16,33 @@
     <!-- App favicon -->
     <meta name="csrf-token" content="{{ csrf_token() }}">
 
-    <link rel="shortcut icon" href="{{ url('images/favicon.ico') }}">
-    {{-- <script src="{{ url('assets/js/notificacoes.js') }}?v={{ time() }}"></script> --}}
+    <link rel="shortcut icon" href="{{ url('frontend/images/favicon/favicon.ico') }}">
+    {{-- <script src="{{ url('backend/js/notificacoes.js') }}?v={{ time() }}"></script> --}}
     <!-- Daterangepicker css -->
-    <link href="{{ url('assets/vendor/select2/css/select2.min.css') }}" rel="stylesheet" type="text/css" />
-    <link rel="stylesheet" href="{{ url('assets/vendor/daterangepicker/daterangepicker.css') }}">
+    <link href="{{ url('backend/vendor/select2/css/select2.min.css') }}" rel="stylesheet" type="text/css" />
+    <link rel="stylesheet" href="{{ url('backend/vendor/daterangepicker/daterangepicker.css') }}">
 
     <!-- Vector Map css -->
     <link rel="stylesheet"
-        href="{{ url('assets/vendor/admin-resources/jquery.vectormap/jquery-jvectormap-1.2.2.css') }}">
+        href="{{ url('backend/vendor/admin-resources/jquery.vectormap/jquery-jvectormap-1.2.2.css') }}">
     <!-- Theme Config Js -->
-    <script src="{{ url('assets/js/hyper-config.js') }}"></script>
+    <script src="{{ url('backend/js/hyper-config.js') }}"></script>
     <link href="https://cdn.jsdelivr.net/npm/fullcalendar@5.11.0/main.min.css" rel="stylesheet">
 
-    <link href="https://cdn.jsdelivr.net/npm/choices.js/public/assets/styles/choices.min.css" rel="stylesheet" />
-    <script src="https://cdn.jsdelivr.net/npm/choices.js/public/assets/scripts/choices.min.js"></script>
+    <link href="https://cdn.jsdelivr.net/npm/choices.js/public/backend/styles/choices.min.css" rel="stylesheet" />
+    <script src="https://cdn.jsdelivr.net/npm/choices.js/public/backend/scripts/choices.min.js"></script>
 
     <!-- App css -->
 
-    <link rel="stylesheet" href="{{ url('assets/css/app-saas.css') }}?v={{ time() }}" type="text/css" id="app-style">
+    <link rel="stylesheet" href="{{ url('backend/css/app-saas.css') }}?v={{ time() }}" type="text/css" id="app-style">
 
-    <link rel="stylesheet" href="{{ url('assets/css/chat.css') }}?v={{ time() }}" type="text/css">
+    <link rel="stylesheet" href="{{ url('backend/css/chat.css') }}?v={{ time() }}" type="text/css">
 
     <script src="https://cdn.jsdelivr.net/npm/apexcharts@3.41.0"></script>
 
     <!-- Icons css -->
-    <link href="{{ url('assets/css/icons.min.css') }}" rel="stylesheet" type="text/css" />
-    <link href="{{ url('assets/vendor/bootstrap-datepicker/css/bootstrap-datepicker.min.css') }}" rel="stylesheet"
+    <link href="{{ url('backend/css/icons.min.css') }}" rel="stylesheet" type="text/css" />
+    <link href="{{ url('backend/vendor/bootstrap-datepicker/css/bootstrap-datepicker.min.css') }}" rel="stylesheet"
         type="text/css" />
     {{-- <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" /> --}}
 
@@ -55,11 +55,8 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/sweetalert/2.1.0/sweetalert.min.js"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.inputmask/5.0.9/jquery.inputmask.min.js" integrity="sha512-F5Ul1uuyFlGnIT1dk2c4kB4DBdi5wnBJjVhL7gQlGh46Xn0VhvD8kgxLtjdZ5YN83gybk/aASUAlpdoWUjRR3g==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
-    <!-- Incluindo o jQuery Toast -->
-    <script src="{{ url('js/mask-cep.js') }}"></script>
-    <script src="{{ url('js/mask-phone.js') }}"></script>
 
-    {{-- <script src="{{ url('assets/js/pagamento.js') }}?v={{ time() }}"></script> --}}
+    {{-- <script src="{{ url('backend/js/pagamento.js') }}?v={{ time() }}"></script> --}}
 
     <!-- Google tag (gtag.js) -->
 <script async src="https://www.googletagmanager.com/gtag/js?id=G-02FMMXT79W"></script>
@@ -72,7 +69,7 @@
 </script>
 
 <!-- jstree css -->
-<link href="{{ url('assets/vendor/jstree/themes/default/style.min.css') }}" rel="stylesheet" type="text/css">
+<link href="{{ url('backend/vendor/jstree/themes/default/style.min.css') }}" rel="stylesheet" type="text/css">
 {{-- DESENVOLVIMENTO --}}
 {{-- @vite(['resources/css/app.css', 'resources/js/app.js']) --}}
 <style>
@@ -216,7 +213,7 @@
                 </style>
 
     <!-- Plugin css -->
-    <link rel="stylesheet" href="{{ url('assets/vendor/jquery-toast-plugin/jquery.toast.min.css') }}">
+    <link rel="stylesheet" href="{{ url('backend/vendor/jquery-toast-plugin/jquery.toast.min.css') }}">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
 
@@ -491,38 +488,38 @@
         </div>
     </div>
     <!-- Chart js -->
-    <script src="{{ url('assets/vendor/chart.js/chart.min.js') }}"></script>
+    <script src="{{ url('backend/vendor/chart.js/chart.min.js') }}"></script>
     <!-- Vendor js -->
-    <script src="{{ url('assets/js/vendor.min.js') }}"></script>
-    <script src="{{ url('assets/vendor/select2/js/select2.min.js') }}"></script>
-    <script src="{{ url('assets/vendor/daterangepicker/moment.min.js') }}"></script>
-    <script src="{{ url('assets/vendor/daterangepicker/daterangepicker.js') }}"></script>
+    <script src="{{ url('backend/js/vendor.min.js') }}"></script>
+    <script src="{{ url('backend/vendor/select2/js/select2.min.js') }}"></script>
+    <script src="{{ url('backend/vendor/daterangepicker/moment.min.js') }}"></script>
+    <script src="{{ url('backend/vendor/daterangepicker/daterangepicker.js') }}"></script>
     <!-- Input Mask js -->
-    <script src="{{ url('assets/vendor/jquery-mask-plugin/jquery.mask.min.js') }}"></script>
+    <script src="{{ url('backend/vendor/jquery-mask-plugin/jquery.mask.min.js') }}"></script>
     <!-- plugin js -->
-    <script src="{{ url('assets/vendor/dropzone/min/dropzone.min.js') }}"></script>
+    <script src="{{ url('backend/vendor/dropzone/min/dropzone.min.js') }}"></script>
     <!-- init js -->
-    <script src="{{ url('assets/js/ui/component.fileupload.js') }}"></script>
+    <script src="{{ url('backend/js/ui/component.fileupload.js') }}"></script>
     <!-- App js -->
-    <script src="{{ url('assets/js/app.min.js') }}"></script>
-    <script src="{{ url('assets/vendor/bootstrap-datepicker/js/bootstrap-datepicker.min.js') }}"></script>
-    <script src="{{ url('assets/vendor/bootstrap-datepicker/locales/bootstrap-datepicker.pt-BR.min.js') }}"></script>
+    <script src="{{ url('backend/js/app.min.js') }}"></script>
+    <script src="{{ url('backend/vendor/bootstrap-datepicker/js/bootstrap-datepicker.min.js') }}"></script>
+    <script src="{{ url('backend/vendor/bootstrap-datepicker/locales/bootstrap-datepicker.pt-BR.min.js') }}"></script>
 
 
-    <script src="{{ url('assets/vendor/handlebars/handlebars.min.js') }}"></script>
-    <script src="{{ url('assets/vendor/typeahead.js/typeahead.bundle.min.js') }}"></script>
+    <script src="{{ url('backend/vendor/handlebars/handlebars.min.js') }}"></script>
+    <script src="{{ url('backend/vendor/typeahead.js/typeahead.bundle.min.js') }}"></script>
     <!-- Script do Select2 -->
-    <script src="{{ url('assets/vendor/jquery-toast-plugin/jquery.toast.min.js') }}"></script>
+    <script src="{{ url('backend/vendor/jquery-toast-plugin/jquery.toast.min.js') }}"></script>
     <!-- Toastr Demo js -->
-    {{-- <script src="{{ url('assets/vendor/fullcalendar/index.global.min.js') }}"></script> --}}
+    {{-- <script src="{{ url('backend/vendor/fullcalendar/index.global.min.js') }}"></script> --}}
     <script src="https://cdn.jsdelivr.net/npm/fullcalendar@5.11.0/main.min.js"></script>
-    <script src="{{ url('assets/js/calendar.js') }}"></script>
+    <script src="{{ url('backend/js/calendar.js') }}"></script>
     <script src="https://cdn.socket.io/4.0.0/socket.io.min.js"></script>
     {{-- <script src="{{ mix('js/app.js') }}"></script> --}}
     
     <!-- jstree js -->
     @if(request()->is('perfil'))
-        <script src="{{ asset('assets/vendor/jstree/jstree.min.js') }}"></script>
+        <script src="{{ asset('backend/vendor/jstree/jstree.min.js') }}"></script>
     @endif
 
     

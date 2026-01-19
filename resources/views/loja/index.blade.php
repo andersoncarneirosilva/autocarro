@@ -6,10 +6,9 @@
 
 
  <section id="hero" class="hero section dark-background">
-  <img src="{{ url('carbook/img/hero_bg_alcecar.jpg') }}" alt="" data-aos="fade-in">
+  <img src="{{ url('frontend/images/hero_bg_alcecar.jpg') }}" alt="" data-aos="fade-in">
   <div class="container d-flex flex-column align-items-center">
     
-    {{-- <img src="{{ url('carbook/img/logo_alcecar.png') }}" alt="Alcecar" class="logo-hero" data-aos="zoom-in"> --}}
     <h2 data-aos="fade-up" data-aos-delay="100">Encontre o seu veículo</h2>
     <p data-aos="fade-up" data-aos-delay="200">Utilize a busca para encontrar o seu veículo</p>
     
@@ -183,7 +182,7 @@
       <div class="col">
         <div class="category-card" data-aos="fade-up" data-aos-delay="100">
           <div class="icon-box">
-            <img src="{{ url('carbook/img/categorias/hatch.png') }}" alt="Hatch" class="img-fluid">
+            <img src="{{ url('frontend/images/categorias/hatch.png') }}" alt="Hatch" class="img-fluid">
           </div>
           <h4>HATCH</h4>
         </div>
@@ -192,7 +191,7 @@
       <div class="col">
         <div class="category-card" data-aos="fade-up" data-aos-delay="200">
           <div class="icon-box">
-            <img src="{{ url('carbook/img/categorias/sedan.png') }}" alt="Sedan" class="img-fluid">
+            <img src="{{ url('frontend/images/categorias/sedan.png') }}" alt="Sedan" class="img-fluid">
           </div>
           <h4>SEDAN</h4>
         </div>
@@ -201,7 +200,7 @@
       <div class="col">
         <div class="category-card" data-aos="fade-up" data-aos-delay="300">
           <div class="icon-box">
-            <img src="{{ url('carbook/img/categorias/suv.png') }}" alt="SUV" class="img-fluid">
+            <img src="{{ url('frontend/images/categorias/suv.png') }}" alt="SUV" class="img-fluid">
           </div>
           <h4>SUV</h4>
         </div>
@@ -210,7 +209,7 @@
       <div class="col">
         <div class="category-card" data-aos="fade-up" data-aos-delay="400">
           <div class="icon-box">
-            <img src="{{ url('carbook/img/categorias/pickup.png') }}" alt="Pick-up" class="img-fluid">
+            <img src="{{ url('frontend/images/categorias/pickup.png') }}" alt="Pick-up" class="img-fluid">
           </div>
           <h4>PICK-UP</h4>
         </div>
@@ -219,7 +218,7 @@
       <div class="col">
         <div class="category-card" data-aos="fade-up" data-aos-delay="500">
           <div class="icon-box">
-            <img src="{{ url('carbook/img/categorias/utilitario.png') }}" alt="Utilitário" class="img-fluid">
+            <img src="{{ url('frontend/images/categorias/utilitario.png') }}" alt="Utilitário" class="img-fluid">
           </div>
           <h4>UTILITÁRIO</h4>
         </div>
@@ -337,74 +336,74 @@
 
           <div class="col-lg-3 col-md-4" data-aos="fade-up" data-aos-delay="100">
   <div class="features-item" style="display: flex; justify-content: center;">
-    <img src="{{ url('layout/logos_marcas/logo-audi.webp') }}" alt="">
+    <img src="{{ url('frontend/images/marcas/logo-audi.webp') }}" alt="">
   </div>
 </div>
 
 
           <div class="col-lg-3 col-md-4" data-aos="fade-up" data-aos-delay="200">
             <div class="features-item" style="display: flex; justify-content: center;">
-              <img src="{{ url('layout/logos_marcas/logo-bmw.webp') }}" alt="">
+              <img src="{{ url('frontend/images/marcas/logo-bmw.webp') }}" alt="">
             </div>
           </div>
 
           <div class="col-lg-3 col-md-4" data-aos="fade-up" data-aos-delay="300">
             <div class="features-item" style="display: flex; justify-content: center;">
-              <img src="{{ url('layout/logos_marcas/logo-chevrolet.webp') }}" alt="">
+              <img src="{{ url('frontend/images/marcas/logo-chevrolet.webp') }}" alt="">
             </div>
           </div>
 
           <div class="col-lg-3 col-md-4" data-aos="fade-up" data-aos-delay="400">
             <div class="features-item" style="display: flex; justify-content: center;">
-              <img src="{{ url('layout/logos_marcas/logo-fiat.webp') }}" alt="">
+              <img src="{{ url('frontend/images/marcas/logo-fiat.webp') }}" alt="">
             </div>
           </div>
 
           <div class="col-lg-3 col-md-4" data-aos="fade-up" data-aos-delay="500">
             <div class="features-item" style="display: flex; justify-content: center;">
-              <img src="{{ url('layout/logos_marcas/logo-ford.webp') }}" alt="">
+              <img src="{{ url('frontend/images/marcas/logo-ford.webp') }}" alt="">
             </div>
           </div>
 
           <div class="col-lg-3 col-md-4" data-aos="fade-up" data-aos-delay="600">
             <div class="features-item" style="display: flex; justify-content: center;">
-              <img src="{{ url('layout/logos_marcas/logo-honda.webp') }}" alt="">
+              <img src="{{ url('frontend/images/marcas/logo-honda.webp') }}" alt="">
             </div>
           </div>
 
           <div class="col-lg-3 col-md-4" data-aos="fade-up" data-aos-delay="700">
             <div class="features-item" style="display: flex; justify-content: center;">
-              <img src="{{ url('layout/logos_marcas/logo-hyundai.webp') }}" alt="">
+              <img src="{{ url('frontend/images/marcas/logo-hyundai.webp') }}" alt="">
             </div>
           </div>
 
           <div class="col-lg-3 col-md-4" data-aos="fade-up" data-aos-delay="800">
             <div class="features-item" style="display: flex; justify-content: center;">
-              <img src="{{ url('layout/logos_marcas/logo-nissan.webp') }}" alt="">
+              <img src="{{ url('frontend/images/marcas/logo-nissan.webp') }}" alt="">
             </div>
           </div>
 
           <div class="col-lg-3 col-md-4" data-aos="fade-up" data-aos-delay="900">
             <div class="features-item" style="display: flex; justify-content: center;">
-              <img src="{{ url('layout/logos_marcas/logo-peugeot.webp') }}" alt="">
+              <img src="{{ url('frontend/images/marcas/logo-peugeot.webp') }}" alt="">
             </div>
           </div>
 
           <div class="col-lg-3 col-md-4" data-aos="fade-up" data-aos-delay="1000">
             <div class="features-item" style="display: flex; justify-content: center;">
-              <img src="{{ url('layout/logos_marcas/logo-renault.webp') }}" alt="">
+              <img src="{{ url('frontend/images/marcas/logo-renault.webp') }}" alt="">
             </div>
           </div>
 
           <div class="col-lg-3 col-md-4" data-aos="fade-up" data-aos-delay="1100">
             <div class="features-item" style="display: flex; justify-content: center;">
-              <img src="{{ url('layout/logos_marcas/logo-toyota.webp') }}" alt="">
+              <img src="{{ url('frontend/images/marcas/logo-toyota.webp') }}" alt="">
             </div>
           </div>
 
           <div class="col-lg-3 col-md-4" data-aos="fade-up" data-aos-delay="1200">
             <div class="features-item" style="display: flex; justify-content: center;">
-              <img src="{{ url('layout/logos_marcas/logo-volkswagen.webp') }}" alt="">
+              <img src="{{ url('frontend/images/marcas/logo-volkswagen.webp') }}" alt="">
             </div>
           </div>
 
@@ -493,7 +492,7 @@
         <div class="row align-items-center g-4">
             <div class="col-lg-5">
                 <div class="image-container-clean">
-                    <img src="{{ url('carbook/img/header_app.png') }}" alt="NetCarros App" class="img-fluid">
+                    <img src="{{ url('frontend/images/header_app.png') }}" alt="NetCarros App" class="img-fluid">
                 </div>
             </div>
 

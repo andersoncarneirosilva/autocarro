@@ -19,6 +19,9 @@ return new class extends Migration {
             $table->string('estado', 2);
             $table->string('cep', 10);
             $table->timestamps();
+
+            $table->foreignId('user_id')->constrained()->onDelete('cascade');
+            
         });
     }
 

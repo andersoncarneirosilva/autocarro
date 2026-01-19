@@ -50,6 +50,9 @@ class AuthenticatedSessionController extends Controller
         if ($user->nivel_acesso === 'Usuário') {
             return redirect()->route('anuncios.index');
         }
+        if ($user->nivel_acesso === 'Revenda') {
+            return redirect()->route('anuncios.index');
+        }
 
         // 4. Se não for 'Usuário', vai para o dashboard padrão
         return redirect()->intended(RouteServiceProvider::HOME);
