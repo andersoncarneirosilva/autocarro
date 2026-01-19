@@ -1,6 +1,9 @@
 <!DOCTYPE html>
 <html lang="en">
   <head>
+    <meta charset="utf-8">
+  <meta content="width=device-width, initial-scale=1.0" name="viewport">
+  
     <title>Alcecar | Sua loja de Veículo</title>
   
   <meta name="description" content="Compre online com praticidade e segurança. Uma loja virtual completa com produtos selecionados, ofertas exclusivas e entrega rápida.">
