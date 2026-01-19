@@ -1,7 +1,5 @@
 @extends('loja.layout.app')
 
-@section('title', $veiculo->marca_exibicao . ' ' . $veiculo->modelo_exibicao)
-
 @section('content')
 <style>
     :root {

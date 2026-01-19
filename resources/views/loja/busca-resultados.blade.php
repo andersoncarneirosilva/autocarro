@@ -1,7 +1,5 @@
 @extends('loja.layout.app')
 
-@section('title', 'Veículos')
-
 @section('content')
 
 <style>
