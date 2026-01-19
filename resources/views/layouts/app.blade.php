@@ -2,6 +2,7 @@
 <html lang="pt-BR">
 
 <head>
+    
     <meta charset="utf-8" />
     <title>@yield('title')</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -59,6 +60,16 @@
     <script src="{{ url('js/mask-phone.js') }}"></script>
 
     {{-- <script src="{{ url('assets/js/pagamento.js') }}?v={{ time() }}"></script> --}}
+
+    <!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-02FMMXT79W"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'G-02FMMXT79W');
+</script>
 
 <!-- jstree css -->
 <link href="{{ url('assets/vendor/jstree/themes/default/style.min.css') }}" rel="stylesheet" type="text/css">
@@ -513,6 +524,8 @@
     @if(request()->is('perfil'))
         <script src="{{ asset('assets/vendor/jstree/jstree.min.js') }}"></script>
     @endif
+
+    
 </body>
 
 </html>
