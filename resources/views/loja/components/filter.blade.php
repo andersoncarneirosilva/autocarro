@@ -83,22 +83,28 @@
         </div>
 
         <div class="d-flex flex-wrap gap-1 overflow-auto" style="max-height: 150px; padding-bottom: 5px;">
-            @php
-    // Caso a variável não venha do controller, criamos uma lista de 1970 até hoje
-    $anosDisponiveis = $anosDisponiveis ?? range(date('Y'), 1970);
-@endphp
-
-@foreach($anosDisponiveis as $anoItem)
-    @php
-        $isActive = request('ano') == $anoItem;
+            @foreach($anosDisponiveis as $anoItem)
+    @php 
+        $isActive = request('ano') == $anoItem && !request('ano_de') && !request('ano_ate');
     @endphp
-    <button type="button"
+    {{-- Mudamos o botão para type="button" e usamos JS para enviar apenas o necessário --}}
+    <button type="button" 
         class="btn btn-sm btn-filter-year {{ $isActive ? 'active' : '' }}"
         onclick="filterBySingleYear('{{ $anoItem }}')">
         {{ $anoItem }}
     </button>
 @endforeach
-
+<script>
+    function filterBySingleYear(ano) {
+    // Busca o input hidden de ano no formulário principal
+    const inputAno = document.getElementById('input-ano');
+    if (inputAno) {
+        inputAno.value = ano;
+        // Submete o formulário automaticamente ao selecionar o ano
+        inputAno.closest('form').submit();
+    }
+}
+</script>
 {{-- Input hidden para armazenar o ano único apenas quando necessário --}}
 <input type="hidden" name="ano" id="hidden_ano" value="{{ request('ano') }}">
         </div>

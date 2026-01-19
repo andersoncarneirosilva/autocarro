@@ -103,9 +103,6 @@ public function searchVeiculosUsados(Request $request)
     return $this->processarBusca($request, 'Usado');
 }
 
-/**
- * Lógica centralizada de busca e listagem
- */
 private function processarBusca(Request $request, $estado = 'Novo')
 {
     $query = Anuncio::query();
@@ -250,15 +247,6 @@ public function show($slug)
     return view('loja.detalhes', compact('veiculo'));
 }
 
-public function contato()
-{
-    return view('loja.contato');
-}
-
-// public function site()
-// {
-//     return view('site.index');
-// }
 
 public function buscarSugestoes(Request $request)
 {
@@ -284,11 +272,13 @@ public function buscarSugestoes(Request $request)
     // RETORNA JSON (Essencial para o AJAX funcionar)
     return response()->json($sugestoes);
 }
+
 public function searchGeral(Request $request)
 {
-    // Inicia a query
+    // 1. Inicia a query para os resultados
     $query = Anuncio::query();
 
+    // 2. Dados agrupados para os Dropdowns de Marca/Modelo
     $dadosAgrupados = Anuncio::where('status', 'Ativo')
         ->select('marca_real', 'modelo_real')
         ->get()
@@ -297,30 +287,37 @@ public function searchGeral(Request $request)
             return $itens->pluck('modelo_real')->unique()->values();
         });
 
-    // Filtro de Marca
+    // 3. BUSCAR ANOS CADASTRADOS NO BANCO (Resolvendo seu erro)
+    $anosDisponiveis = Anuncio::whereNotNull('ano')
+        ->where('ano', '!=', '')
+        ->selectRaw('DISTINCT LEFT(ano, 4) as ano_fabricacao')
+        ->orderBy('ano_fabricacao', 'desc')
+        ->pluck('ano_fabricacao');
+
+    // --- Filtros ---
+
     if ($request->filled('marca')) {
         $query->where('marca_real', $request->marca);
     }
 
-    // Filtro de Modelo
     if ($request->filled('modelo')) {
         $query->where('modelo_real', $request->modelo);
     }
 
-    // Filtro de Ano (Maior ou igual ao selecionado)
+    // Filtro de Ano ajustado para o formato da sua tabela (LIKE '1977%')
     if ($request->filled('ano')) {
-        $query->where('ano', '>=', $request->ano);
+        $query->where('ano', 'like', $request->ano . '%');
     }
 
-    // Filtro de Preço (Até o valor selecionado)
     if ($request->filled('valor')) {
         $query->where('valor', '<=', $request->valor);
     }
 
-    // Busca os resultados (com paginação se desejar)
-    $veiculos = $query->where('status', 'disponivel')->paginate(12);
+    // 4. Busca os resultados (Atenção: verifique se o campo no banco é 'status' ou 'status_anuncio')
+    $veiculos = $query->where('status', 'Ativo')->paginate(12);
 
-    return view('loja.busca-resultados', compact('veiculos','dadosAgrupados'));
+    // 5. Retorna a view com TODAS as variáveis necessárias
+    return view('loja.busca-resultados', compact('veiculos', 'dadosAgrupados', 'anosDisponiveis'));
 }
 
 }
