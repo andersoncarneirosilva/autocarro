@@ -7,20 +7,20 @@
                 <!-- Logo light -->
                 <a href="{{ route('anuncios.index') }}" class="logo-light">
                     <span class="logo-lg">
-                        <img src="{{ asset('layout/images/logo_alcecar.png') }}" alt="logo">
+                        <img src="{{ asset('frontend/images/logo_alcecar.png') }}" alt="logo">
                     </span>
                     <span class="logo-sm">
-                        <img src="{{ url('layout/images/logo_texto.png') }}" alt="small logo">
+                        <img src="{{ url('frontend/images/logo_texto.png') }}" alt="small logo">
                     </span>
                 </a>
 
                 <!-- Logo Dark -->
                 <a href="{{ route('anuncios.index') }}" class="logo-dark">
                     <span class="logo-lg">
-                        <img src="{{ asset('layout/images/logo_alcecar.png') }}" alt="dark logo">
+                        <img src="{{ asset('frontend/images/logo_alcecar.png') }}" alt="dark logo">
                     </span>
                     <span class="logo-sm">
-                        <img src="{{ url('layout/images/logo_alcecar.png') }}" alt="small logo"> {{-- MENU RECOLHIDO CELULAR --}}
+                        <img src="{{ url('frontend/images/logo_alcecar.png') }}" alt="small logo"> {{-- MENU RECOLHIDO CELULAR --}}
                     </span>
                 </a>
             </div>

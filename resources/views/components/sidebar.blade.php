@@ -3,20 +3,20 @@
     <!-- Brand Logo Light -->
     <a href="#" class="logo logo-light">
         <span class="logo-lg">
-             <img src="{{ asset('layout/images/logo_texto.png') }}?v={{ time() }}" alt="logo"> {{-- MENU LATERAL --}}
+             <img src="{{ asset('frontend/images/logo_texto.png') }}?v={{ time() }}" alt="logo"> {{-- MENU LATERAL --}}
         </span>
         <span class="logo-sm">
-            <img src="{{ url('layout/images/logo_alcecar.png') }}" alt="small logo"> {{-- MENU RECOLHIDO --}}
+            <img src="{{ url('frontend/images/logo_alcecar.png') }}" alt="small logo"> {{-- MENU RECOLHIDO --}}
         </span>
     </a>
 
     <!-- Brand Logo Dark -->
     <a href="#" class="logo logo-dark">
         <span class="logo-lg">
-            <img src="{{ asset('layout/images/logo_texto.png') }}?v={{ time() }}" alt="dark logo">
+            <img src="{{ asset('frontend/images/logo_texto.png') }}?v={{ time() }}" alt="dark logo">
         </span>
         <span class="logo-sm">
-            <img src="{{ url('layout/images/logo_texto.png') }}?v={{ time() }}" alt="small logo">
+            <img src="{{ url('frontend/images/logo_texto.png') }}?v={{ time() }}" alt="small logo">
         </span>
     </a>
 
