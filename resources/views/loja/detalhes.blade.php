@@ -1,381 +1,482 @@
 @extends('loja.layout.app')
 
-@section('title', 'Veículos')
+@section('title', $veiculo->marca_exibicao . ' ' . $veiculo->modelo_exibicao)
 
 @section('content')
+<style>
+    :root {
+        --nc-accent: #ff4a17;
+        --nc-bg-light: #f8f9fa;
+    }
 
-    <div class="page-title" style="min-height: 320px; background-image: url('{{ $veiculo->background_image }}'); background-size: cover; background-position: center; position: relative;" data-aos="fade">
-    
-    <div class="heading-overlay" style="
-        position: absolute;
-        top: 0;
-        left: 0;
-        width: 100%;
-        height: 100%;
-        background-color: rgba(0, 0, 0, 0.6); /* Ajuste o 0.6 para mais ou menos escuridão */
-        z-index: 1;">
-    </div>
+    /* Galeria */
+    .carousel-main-container { border-radius: 15px; overflow: hidden; box-shadow: 0 4px 15px rgba(0,0,0,0.05); }
+    .img-thumbnail-nav { width: 100px; aspect-ratio: 4/3; object-fit: cover; cursor: pointer; border-radius: 10px; border: 2px solid transparent; transition: 0.3s; opacity: 0.7; }
+    .img-thumbnail-nav.active, .img-thumbnail-nav:hover { border-color: var(--nc-accent); opacity: 1; transform: scale(1.05); }
+    .thumb-container { scrollbar-width: none; -ms-overflow-style: none; }
+    .thumb-container::-webkit-scrollbar { display: none; }
+    .photo-counter { position: absolute; bottom: 15px; right: 15px; background: rgba(0,0,0,0.6); color: white; padding: 2px 12px; border-radius: 20px; font-size: 12px; z-index: 10; }
 
-    <div class="heading" style="position: relative; z-index: 2; padding-top: 80px;">
-        <div class="container position-relative mt-5">
-            <div class="row justify-content-center text-center">
-                <div class="col-lg-8 text-white">
-                    <h1 class="fw-bold">{{ $veiculo->marca_exibicao }}</h1>
-                    <p class="lead">{{ $veiculo->modelo_exibicao }}</p>
-                </div>
-            </div>
-        </div>
-    </div>
+    /* Sidebar */
+    .sticky-sidebar { position: sticky; top: 100px; }
+    .card-contato { border-radius: 15px !important; border: 1px solid #e9ecef !important; box-shadow: 0 10px 30px rgba(0,0,0,0.05) !important; }
+    .btn-whatsapp-detail { background-color: var(--nc-accent); color: white; border: none; font-weight: 600; padding: 12px; transition: 0.3s; }
+    .btn-whatsapp-detail:hover { background-color: #e63e0d; color: white; }
+    .btn-outline-location { border: 1px solid #dee2e6; color: #333; font-weight: 600; padding: 12px; transition: 0.3s; }
+    .btn-outline-location:hover { background-color: #f8f9fa; color: var(--nc-accent); border-color: var(--nc-accent); }
 
-    <nav class="breadcrumbs" style="position: relative; z-index: 2;">
-    <div class="container">
-        <ol>
-            <li><a href="{{ route('loja.index') }}">Página Inicial</a></li>
-            
-            @php
-                // Normaliza o estado para evitar erros de digitação (ex: "novo" vira "Novos")
-                $estado = mb_strtolower($veiculo->estado);
-                
-                if (str_contains($estado, 'novo') && !str_contains($estado, 'semi')) {
-                    $rota = route('veiculos.novos');
-                    $label = 'Novos';
-                } elseif (str_contains($estado, 'semi')) {
-                    $rota = route('veiculos.semi-novos');
-                    $label = 'Semi-novos';
-                } else {
-                    $rota = route('veiculos.usados');
-                    $label = 'Usados';
-                }
-            @endphp
+    /* Container da Ficha Técnica */
+.specs-container {
+    border: 1px solid #eee !important;
+    border-radius: 12px !important;
+    transition: all 0.3s ease;
+}
 
-            <li><a href="{{ $rota }}">{{ $label }}</a></li>
-            <li class="current">{{ $veiculo->modelo_exibicao }}</li>
-        </ol>
-    </div>
-</nav>
-</div>
+/* Título da Seção */
+.text-red {
+    color: #ff4a17; /* Cor padrão que usamos anteriormente */
+}
 
-{{-- {{ $veiculo->background_image }} --}}
+.specs-title {
+    font-size: 0.9rem;
+    letter-spacing: 1px;
+    color: #333;
+    position: relative;
+}
+/* Pequenos Cards Internos */
+.spec-item {
+    background-color: #ffffff;
+    border: 1px solid #f0f0f0; /* Borda sutil para o card interno */
+    border-radius: 10px;
+    padding: 12px;
+    height: 100%; /* Garante que todos tenham a mesma altura na linha */
+    transition: all 0.2s ease-in-out;
+}
+
+.spec-item:hover {
+    border-color: #ff4a17; /* Destaca com a cor principal no hover */
+    background-color: #fffaf9;
+    transform: translateY(-2px); /* Pequeno efeito de levitação */
+}
+
+/* Ajuste dos ícones dentro dos mini cards */
+.spec-item i {
+    width: 42px;
+    height: 42px;
+    min-width: 42px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 8px;
+    color: #ff4a17 !important;
+    font-size: 1.2rem !important;
+}
+
+/* Tipografia */
+.spec-label {
+    font-size: 0.7rem;
+    text-transform: uppercase;
+    color: #888;
+    display: block;
+    line-height: 1;
+    margin-bottom: 4px;
+}
+
+.spec-value {
+    font-size: 0.85rem;
+    color: #333;
+    display: block;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+/* Responsividade: ajuste para telas muito pequenas */
+@media (max-width: 576px) {
+    .spec-item i {
+        font-size: 1.2rem !important;
+        margin-right: 10px !important;
+    }
+    .spec-value {
+        font-size: 0.85rem;
+    }
+}
+
+/* Estilo para os Containers de Listas */
+.info-card-custom {
+    border: none !important;
+    border-radius: 12px !important;
+    background-color: #ffffff;
+    transition: transform 0.2s;
+}
+
+.info-card-custom h5 {
+    font-size: 1rem;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    display: flex;
+    align-items: center;
+}
+
+/* Estilo dos Itens das Listas */
+.list-item-custom {
+    font-size: 0.85rem;
+    color: #495057;
+    padding: 4px 8px;
+    display: flex;
+    align-items: flex-start;
+}
+
+.list-item-custom i {
+    color: #ff4a17; /* Laranja/Vermelho NetCarros */
+    margin-right: 8px;
+    font-size: 0.7rem;
+    margin-top: 4px;
+}
+
+/* Borda lateral colorida suave */
+.border-left-accent { border-left: 5px solid #ff4a17 !important; }
+.border-left-blue   { border-left: 5px solid #0d6efd !important; }
+.border-left-green  { border-left: 5px solid #198754 !important; }
+
+/* Descrição */
+.description-text {
+    font-size: 0.95rem;
+    color: #555;
+    text-align: justify;
+}
+
+/* Reaproveitando o estilo da Ficha Técnica para as outras listas */
+.spec-item.list-style i {
+    background: #f1f3f5; /* Fundo cinza suave para opcionais */
+    color: #6c757d !important;
+    font-size: 1.1rem !important;
+}
+
+/* Cores específicas para os ícones de cada categoria */
+.icon-adicionais i { background: #e7f1ff; color: #0d6efd !important; }
+.icon-opcionais i { background: #eaf7ed; color: #198754 !important; }
+.icon-upgrades i { background: #fff0eb; color: #ff4a17 !important; }
+
+.spec-value-list {
+    font-size: 0.85rem;
+    font-weight: 600;
+    color: #444;
+}
+
+</style>
 
 <section class="container py-5 mt-5">
-    
-    <div class="container section-title" data-aos="fade-up">
-        <h2>{{ $veiculo->marca_exibicao }}</h2>
-        <p>{{ $veiculo->modelo_exibicao }}<br></p>
-    </div>
-
+    <nav class="d-flex gap-2 small text-muted mb-4 overflow-x-auto text-nowrap">
+        <a href="/" class="text-decoration-none text-muted">Início</a> / 
+        <a href="/comprar" class="text-decoration-none text-muted">Comprar</a> / 
+        <span class="text-dark fw-medium">{{ $veiculo->marca_exibicao }} {{ $veiculo->modelo_exibicao }}</span>
+    </nav>
 
     <div class="row g-4">
-    <div class="col-lg-7">
-        <div class="row g-2">
-            <div class="{{ count($veiculo->images) > 1 ? 'col-lg-10 col-12' : 'col-12' }}">
-                <div id="carouselDetalhes" class="carousel slide shadow-sm rounded-1 overflow-hidden" data-bs-ride="carousel">
+        <div class="col-lg-7">
+            <div class="position-relative carousel-main-container mb-3">
+                <div id="carouselDetalhes" class="carousel slide" data-bs-ride="carousel">
                     <div class="carousel-inner">
                         @foreach($veiculo->images as $index => $img)
                             <div class="carousel-item {{ $index === 0 ? 'active' : '' }}">
-                                <img src="{{ asset('storage/' . $img) }}" class="d-block w-100" style="height: 460px; object-fit: cover;" alt="{{ $veiculo->marca }}">
+                                <img src="{{ asset('storage/' . $img) }}" class="d-block w-100" style="height: 480px; object-fit: cover;" alt="Foto do veículo">
                             </div>
                         @endforeach
                     </div>
                     
+                    <div class="photo-counter">
+                        <span id="current-photo">1</span> / {{ count($veiculo->images) }}
+                    </div>
+
                     @if(count($veiculo->images) > 1)
                         <button class="carousel-control-prev" type="button" data-bs-target="#carouselDetalhes" data-bs-slide="prev">
-                            <span class="carousel-control-prev-icon" style="width: 2rem; height: 2rem;"></span>
+                            <span class="carousel-control-prev-icon"></span>
                         </button>
                         <button class="carousel-control-next" type="button" data-bs-target="#carouselDetalhes" data-bs-slide="next">
-                            <span class="carousel-control-next-icon" style="width: 2rem; height: 2rem;"></span>
+                            <span class="carousel-control-next-icon"></span>
                         </button>
                     @endif
                 </div>
             </div>
 
             @if(count($veiculo->images) > 1)
-                <div class="col-2 d-none d-lg-block">
-                    <div class="d-flex flex-column gap-2 overflow-auto hide-scrollbar" style="max-height: 460px;">
-                        @foreach($veiculo->images as $index => $img)
-                            <div class="position-relative overflow-hidden rounded-1" style="aspect-ratio: 1/1;">
-                                <img src="{{ asset('storage/' . $img) }}" 
-                                     class="w-100 h-100 border-0 img-thumbnail-custom" 
-                                     style="object-fit: cover; cursor: pointer; filter: grayscale(20%);" 
-                                     onclick="bootstrap.Carousel.getInstance(document.getElementById('carouselDetalhes')).to({{ $index }})"
-                                     alt="Miniatura">
+                <div class="d-flex gap-2 overflow-auto thumb-container py-2">
+                    @foreach($veiculo->images as $index => $img)
+                        <img src="{{ asset('storage/' . $img) }}" 
+                             class="img-thumbnail-nav {{ $index === 0 ? 'active' : '' }}" 
+                             onclick="bootstrap.Carousel.getOrCreateInstance(document.getElementById('carouselDetalhes')).to({{ $index }})"
+                             alt="Miniatura {{ $index + 1 }}">
+                    @endforeach
+                </div>
+            @endif
+            
+            <div class="mt-4 p-4 bg-white specs-container shadow-sm border rounded-4">
+    <h5 class="fw-bold mb-4 text-uppercase border-bottom pb-2 text-red specs-title" style="font-size: 0.9rem;">
+        Ficha Técnica
+    </h5>
+    
+    <div class="row g-3"> {{-- Espaçamento entre os pequenos cards --}}
+        
+        <div class="col-md-3 col-6">
+            <div class="d-flex align-items-center spec-item shadow-none">
+                <i class="bi bi-speedometer2 me-2"></i>
+                <div>
+                    <span class="spec-label">KM</span>
+                    <span class="fw-bold spec-value">{{ number_format($veiculo->kilometragem, 0, ',', '.') }}</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-3 col-6">
+            <div class="d-flex align-items-center spec-item shadow-none">
+                <i class="bi bi-calendar3 me-2"></i>
+                <div>
+                    <span class="spec-label">Ano</span>
+                    <span class="fw-bold spec-value">{{ $veiculo->ano }}</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-3 col-6">
+            <div class="d-flex align-items-center spec-item shadow-none">
+                <i class="bi bi-card-text me-2"></i>
+                <div>
+                    <span class="spec-label">Placa</span>
+                    <span class="fw-bold spec-value">Final {{ substr($veiculo->placa, -1) }}</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-3 col-6">
+            <div class="d-flex align-items-center spec-item shadow-none">
+                <i class="bi bi-door-closed me-2"></i>
+                <div>
+                    <span class="spec-label">Portas</span>
+                    <span class="fw-bold spec-value">
+                        @if(strtoupper($veiculo->tipo) == 'MOTOCICLETA' || empty($veiculo->portas))
+                            N/A
+                        @else
+                            {{ $veiculo->portas }} Portas
+                        @endif
+                    </span>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-3 col-6">
+            <div class="d-flex align-items-center spec-item shadow-none">
+                <i class="bi bi-fuel-pump me-2"></i>
+                <div>
+                    <span class="spec-label">Combustível</span>
+                    <span class="fw-bold spec-value text-capitalize">{{ strtolower($veiculo->combustivel) }}</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-3 col-6">
+            <div class="d-flex align-items-center spec-item shadow-none">
+                <i class="bi bi-palette me-2"></i>
+                <div>
+                    <span class="spec-label">Cor</span>
+                    <span class="fw-bold spec-value text-capitalize">{{ strtolower($veiculo->cor) }}</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-3 col-6">
+            <div class="d-flex align-items-center spec-item shadow-none">
+                <i class="bi bi-gear-wide-connected me-2"></i>
+                <div>
+                    <span class="spec-label">Câmbio</span>
+                    <span class="fw-bold spec-value">{{ $veiculo->cambio }}</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-3 col-6">
+            <div class="d-flex align-items-center spec-item shadow-none">
+                <i class="bi bi-car-front me-2"></i>
+                <div>
+                    <span class="spec-label">Tipo</span>
+                    <span class="fw-bold spec-value text-capitalize">{{ strtolower($veiculo->tipo) }}</span>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+
+            @php 
+                $adicionais = collect(is_string($veiculo->adicionais) ? json_decode($veiculo->adicionais, true) : $veiculo->adicionais)->filter();
+                $opcionais = collect(is_string($veiculo->opcionais) ? json_decode($veiculo->opcionais, true) : $veiculo->opcionais)->filter();
+                $modificacoes = collect(is_string($veiculo->modificacoes) ? json_decode($veiculo->modificacoes, true) : $veiculo->modificacoes)->filter();
+            @endphp
+
+            {{-- Card: Adicionais --}}
+            @if($adicionais->isNotEmpty())
+            <div class="mt-4 p-4 bg-white specs-container shadow-sm border">
+                <h5 class="fw-bold mb-4 text-uppercase border-bottom pb-2 specs-title">
+                    <i class="bi bi-info-circle me-2"></i> Adicionais
+                </h5>
+                <div class="row g-3">
+                    @foreach($adicionais as $item)
+                        <div class="col-md-3 col-6">
+                            <div class="d-flex align-items-center spec-item list-style icon-adicionais">
+                                <i class="bi bi-patch-check me-2"></i>
+                                <span class="spec-value-list">{{ $item }}</span>
                             </div>
-                        @endforeach
-                    </div>
+                        </div>
+                    @endforeach
                 </div>
+            </div>
             @endif
+
+            {{-- Card: Opcionais e Equipamentos --}}
+            @if($opcionais->isNotEmpty())
+            <div class="mt-4 p-4 bg-white specs-container shadow-sm border">
+                <h5 class="fw-bold mb-4 text-uppercase border-bottom pb-2 specs-title">
+                    <i class="bi bi-plus-circle me-2"></i> Opcionais e Equipamentos
+                </h5>
+                <div class="row g-3">
+                    @foreach($opcionais as $item)
+                        <div class="col-md-3 col-6">
+                            <div class="d-flex align-items-center spec-item list-style icon-opcionais">
+                                <i class="bi bi-check2-all me-2"></i>
+                                <span class="spec-value-list">{{ $item }}</span>
+                            </div>
+                        </div>
+                    @endforeach
+                </div>
+            </div>
+            @endif
+
+            {{-- Card: Modificações / Upgrades --}}
+            @if($modificacoes->isNotEmpty())
+            <div class="mt-4 p-4 bg-white specs-container shadow-sm border">
+                <h5 class="fw-bold mb-4 text-uppercase border-bottom pb-2 text-red specs-title">
+                    <i class="bi bi-tools me-2"></i> Modificações e Upgrades
+                </h5>
+                <div class="row g-3">
+                    @foreach($modificacoes as $item)
+                        <div class="col-md-3 col-6">
+                            <div class="d-flex align-items-center spec-item list-style icon-upgrades">
+                                <i class="bi bi-lightning-charge me-2"></i>
+                                <span class="spec-value-list">{{ $item }}</span>
+                            </div>
+                        </div>
+                    @endforeach
+                </div>
+            </div>
+            @endif
+
+            {{-- Descrição Detalhada --}}
+            <div class="mt-4 p-4 bg-white specs-container shadow-sm border">
+                <h4 class="fw-bold border-bottom pb-2 specs-title text-uppercase">Descrição Detalhada</h4>
+                <div class="mt-3 description-text" style="white-space: pre-line; line-height: 1.8;">
+                    {!! nl2br(e($veiculo->observacoes ?? $veiculo->descricao ?? 'Nenhuma informação adicional fornecida.')) !!}
+                </div>
+            </div>
+
+
+
         </div>
-    </div>
 
-    <div class="col-lg-5">
-        <div class="p-4 p-xl-5 bg-white border rounded-1 h-100 d-flex flex-column shadow-sm">
-            <header class="mb-auto">
-    <nav aria-label="breadcrumb" class="mb-3">
-        <span class="text-uppercase text-muted fw-semibold" style="font-size: 0.65rem; letter-spacing: 1.5px;">Estoque Disponível</span>
-    </nav>
+        <div class="col-lg-5">
+            <div class="sticky-sidebar">
+                <div class="card card-contato p-4 bg-white">
+                    <h1 class="h3 mb-2 text-dark fw-bold">{{ $veiculo->marca_exibicao }} {{ $veiculo->modelo_exibicao }}</h1>
 
-    <h1 class="h3 mb-1 text-dark fw-bold" style="letter-spacing: -0.02em;">
-        {{ $veiculo->marca_exibicao }} {{ $veiculo->modelo_exibicao }}
-    </h1>
-    
-    <div class="d-flex align-items-center gap-3 text-secondary mb-4 pb-2 border-bottom">
-    @if($veiculo->ano)
-        <span class="small {{ ($veiculo->kilometragem || $veiculo->cambio) ? 'border-end pe-3' : '' }} text-uppercase fw-medium">
-            <i class="bi bi-calendar3 me-2"></i>{{ $veiculo->ano }}
-        </span>
-    @endif
+                    <div class="d-flex align-items-center gap-3 text-secondary mb-4 pb-3 border-bottom">
+                        @if($veiculo->ano)
+                            <span class="small border-end pe-3 text-uppercase fw-medium"><i class="bi bi-calendar3 me-2"></i>{{ $veiculo->ano }}</span>
+                        @endif
+                        @if($veiculo->kilometragem !== null)
+                            <span class="small border-end pe-3 fw-medium"><i class="bi bi-speedometer2 me-2"></i>{{ number_format($veiculo->kilometragem, 0, ',', '.') }} KM</span>
+                        @endif
+                        @if($veiculo->cambio)
+                            <span class="small text-uppercase fw-medium"><i class="bi bi-gear-wide-connected me-2"></i>{{ $veiculo->cambio }}</span>
+                        @endif
+                    </div>
 
-    @if($veiculo->kilometragem !== null)
-        <span class="small {{ $veiculo->cambio ? 'border-end pe-3' : '' }} fw-medium">
-            <i class="bi bi-speedometer2 me-2"></i>
-            {{ number_format($veiculo->kilometragem, 0, ',', '.') }} KM
-        </span>
-    @endif
+                    <div class="price-section mb-4">
+                        @if($veiculo->valor_oferta && $veiculo->valor_oferta < $veiculo->valor)
+                            <small class="text-muted text-decoration-line-through d-block">De: R$ {{ number_format($veiculo->valor, 2, ',', '.') }}</small>
+                            <h2 class="h1 fw-bold text-success mb-0">R$ {{ number_format($veiculo->valor_oferta, 2, ',', '.') }}</h2>
+                        @else
+                            <small class="text-muted text-uppercase fw-bold" style="font-size: 10px; letter-spacing: 1px;">Preço de Venda</small>
+                            <h2 class="h1 fw-bold text-dark mb-0">R$ {{ number_format($veiculo->valor, 2, ',', '.') }}</h2>
+                        @endif
+                    </div>
 
-    @if($veiculo->cambio)
-        <span class="small text-uppercase fw-medium">
-            <i class="bi bi-gear-wide-connected me-2"></i>
-            {{ $veiculo->cambio }}
-        </span>
-    @endif
-</div>
+                    @if($veiculo->exibir_parcelamento && $veiculo->qtd_parcelas > 1)
+                    @php
+                        $totalFinanciado = (float)$veiculo->qtd_parcelas * (float)$veiculo->valor_parcela;
+                        $custoJuros = round($totalFinanciado - (float)$veiculo->valor, 2);
+                        $possuiJuros = $custoJuros > 0.05; // Margem de erro para arredondamento
+                    @endphp
 
-    <div class="price-section my-4">
-        @if($veiculo->valor_oferta && $veiculo->valor_oferta < $veiculo->valor)
-            <span class="text-muted text-decoration-line-through small d-block mb-1">Valor de tabela: R$ {{ number_format($veiculo->valor, 2, ',', '.') }}</span>
-            <h2 class="h1 fw-bold text-dark mb-0">
-                R$ {{ number_format($veiculo->valor_oferta, 2, ',', '.') }}
-            </h2>
-        @else
-            <span class="text-muted small d-block mb-1 text-uppercase fw-semibold" style="letter-spacing: 1px;">Preço de Venda</span>
-            <h2 class="h1 fw-bold text-dark mb-0">
-                R$ {{ number_format($veiculo->valor, 2, ',', '.') }}
-            </h2>
-        @endif
-    </div>
+                    <div class="p-3 border rounded-1 bg-light-subtle shadow-sm mb-4" style="border-style: dashed !important; border-color: #dee2e6 !important;">
+                        <div class="d-flex justify-content-between align-items-center mb-2">
+                            <span class="text-uppercase fw-bold text-muted" style="font-size: 0.6rem; letter-spacing: 0.5px;">Sugestão de Parcelamento</span>
+                            @if(!$possuiJuros)
+                                <span class="badge bg-success-subtle text-success border border-success-subtle text-uppercase" style="font-size: 0.55rem;">Taxa Zero</span>
+                            @endif
+                        </div>
 
-    @if($veiculo->exibir_parcelamento && $veiculo->qtd_parcelas > 1)
-        @php
-            $totalFinanciado = (float)$veiculo->qtd_parcelas * (float)$veiculo->valor_parcela;
-            $custoJuros = round($totalFinanciado - (float)$veiculo->valor, 2);
-            $possuiJuros = $custoJuros > 0.05; // Margem de erro para arredondamento
-        @endphp
+                        <div class="d-flex align-items-baseline gap-2">
+                            <h4 class="fw-bold mb-0 text-dark">{{ $veiculo->qtd_parcelas }}x</h4>
+                            <span class="text-muted small">de</span>
+                            <h4 class="fw-bold mb-0 text-primary">R$ {{ number_format($veiculo->valor_parcela, 2, ',', '.') }}</h4>
+                        </div>
 
-        <div class="p-3 border rounded-1 bg-light-subtle shadow-sm mb-4" style="border-style: dashed !important; border-color: #dee2e6 !important;">
-            <div class="d-flex justify-content-between align-items-center mb-2">
-                <span class="text-uppercase fw-bold text-muted" style="font-size: 0.6rem; letter-spacing: 0.5px;">Sugestão de Parcelamento</span>
-                @if(!$possuiJuros)
-                    <span class="badge bg-success-subtle text-success border border-success-subtle text-uppercase" style="font-size: 0.55rem;">Taxa Zero</span>
+                        <div class="mt-2 pt-2 border-top border-white-50">
+                            <div class="d-flex justify-content-between align-items-center" style="font-size: 0.72rem;">
+                                <span class="text-muted">Total a prazo: <strong>R$ {{ number_format($totalFinanciado, 2, ',', '.') }}</strong></span>
+                                @if($possuiJuros)
+                                    <span class="text-danger fw-medium">+ R$ {{ number_format($custoJuros, 2, ',', '.') }} juros</span>
+                                @endif
+                            </div>
+                            <small class="text-muted d-block mt-1" style="font-size: 0.65rem;">
+                                Simulação baseada em taxa de {{ number_format($veiculo->taxa_juros, 2, ',', '.') }}% a.m.
+                            </small>
+                        </div>
+                    </div>
                 @endif
-            </div>
-
-            <div class="d-flex align-items-baseline gap-2">
-                <h4 class="fw-bold mb-0 text-dark">{{ $veiculo->qtd_parcelas }}x</h4>
-                <span class="text-muted small">de</span>
-                <h4 class="fw-bold mb-0 text-primary">R$ {{ number_format($veiculo->valor_parcela, 2, ',', '.') }}</h4>
-            </div>
-
-            <div class="mt-2 pt-2 border-top border-white-50">
-                <div class="d-flex justify-content-between align-items-center" style="font-size: 0.72rem;">
-                    <span class="text-muted">Total a prazo: <strong>R$ {{ number_format($totalFinanciado, 2, ',', '.') }}</strong></span>
-                    @if($possuiJuros)
-                        <span class="text-danger fw-medium">+ R$ {{ number_format($custoJuros, 2, ',', '.') }} juros</span>
-                    @endif
-                </div>
-                <small class="text-muted d-block mt-1" style="font-size: 0.65rem;">
-                    Simulação baseada em taxa de {{ number_format($veiculo->taxa_juros, 2, ',', '.') }}% a.m.
-                </small>
-            </div>
-        </div>
-    @endif
-</header>
-
-            <footer class="mt-4 mt-lg-5">
-                <div class="d-grid gap-2">
-                    <a href="https://wa.me/555199999999?text=Olá, tenho interesse no {{ $veiculo->marca }} {{ $veiculo->ano }}"
-                    target="_blank"
-                    class="btn btn-accent btn-lg py-3 fw-semibold shadow-none rounded-1 d-flex align-items-center justify-content-center">
-
-                        <i class="bi bi-whatsapp me-2"></i>
-                        Solicitar Proposta
-                    </a>
-
-                    
-                    <div class="row g-2 mt-1">
+                    <div class="row g-2">
                         <div class="col-6">
-                            <button class="btn btn-outline-secondary btn-sm w-100 py-2 text-uppercase fw-bold rounded-1 border-light-subtle" style="font-size: 0.7rem;">
-                                <i class="bi bi-geo-alt me-1"></i> Loja
-                            </button>
+                            <a href="https://wa.me/55{{ $veiculo->whatsapp }}" target="_blank" class="btn btn-whatsapp-detail w-100 rounded-3 d-flex align-items-center justify-content-center">
+                                <i class="bi bi-whatsapp me-2"></i> Proposta
+                            </a>
                         </div>
                         <div class="col-6">
-                            <a
-    href="https://wa.me/?text={{ urlencode(
-        'Olá! Confira este veículo: ' .
-        $veiculo->marca_exibicao . ' ' .
-        $veiculo->modelo_exibicao . ' - ' .
-        url()->current()
-    ) }}"
-    target="_blank"
-    class="btn btn-outline-secondary btn-sm w-100 py-2 text-uppercase fw-bold rounded-1 border-light-subtle"
-    style="font-size: 0.7rem;"
->
-    <i class="bi bi-whatsapp me-1"></i> Enviar
-</a>
-
+                            <a href="https://maps.google.com/?q={{ urlencode($veiculo->unidade->endereco ?? 'Sua Loja Aqui') }}" target="_blank" class="btn btn-outline-location w-100 rounded-3 d-flex align-items-center justify-content-center">
+                                <i class="bi bi-geo-alt me-2"></i> Onde Estamos
+                            </a>
                         </div>
                     </div>
                 </div>
-            </footer>
+            </div>
         </div>
     </div>
-</div>
-
-<style>
-    .hide-scrollbar::-webkit-scrollbar { display: none; }
-    .hide-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
     
-    .img-thumbnail-custom {
-        transition: transform 0.4s ease, filter 0.4s ease;
-    }
-    
-    .img-thumbnail-custom:hover {
-        transform: scale(1.1);
-        filter: grayscale(0%) !important;
-    }
-
-    .fw-bold { font-weight: 700 !important; }
-    .fw-semibold { font-weight: 600 !important; }
-    
-    /* Botão preto sólido para um ar mais executivo */
-    .btn-dark:hover {
-        background-color: #333 !important;
-        transform: none;
-    }
-</style>
-
-    <div class="mt-4 p-4 bg-white shadow-sm rounded border">
-        <h5 class="fw-bold mb-4 text-uppercase border-bottom pb-2 text-red">Ficha Técnica</h5>
-        <div class="row g-4">
-            <div class="col-md-3 col-6">
-                <div class="d-flex align-items-center">
-                    <i class="bi bi-speedometer2 fs-3 text-red me-3"></i>
-                    <div><small class="text-muted d-block">Kilometragem</small><span class="fw-bold">{{ number_format($veiculo->kilometragem, 0, ',', '.') }} km</span></div>
-                </div>
-            </div>
-            <div class="col-md-3 col-6">
-                <div class="d-flex align-items-center">
-                    <i class="bi bi-calendar3 fs-3 text-red me-3"></i>
-                    <div><small class="text-muted d-block">Ano/Modelo</small><span class="fw-bold">{{ $veiculo->ano }}</span></div>
-                </div>
-            </div>
-            <div class="col-md-3 col-6">
-                <div class="d-flex align-items-center">
-                    <i class="bi bi-card-text fs-3 text-red me-3"></i>
-                    <div><small class="text-muted d-block">Final da Placa</small><span class="fw-bold">{{ substr($veiculo->placa, -1) }}</span></div>
-                </div>
-            </div>
-            <div class="col-md-3 col-6">
-                <div class="d-flex align-items-center">
-    <i class="bi bi-door-closed fs-3 text-red me-3"></i>
-    <div>
-        <small class="text-muted d-block">Nº Portas</small>
-        <span class="fw-bold">
-            @if(strtoupper($veiculo->tipo) == 'MOTOCICLETA' || empty($veiculo->portas))
-                <span class="fw-bold text-capitalize">Não aplicável</span>
-            @else
-                {{ $veiculo->portas }} Portas
-            @endif
-        </span>
-    </div>
-</div>
-            </div>
-            <div class="col-md-3 col-6">
-                <div class="d-flex align-items-center">
-                    <i class="bi bi-fuel-pump fs-3 text-red me-3"></i>
-                    <div><small class="text-muted d-block">Combustível</small><span class="fw-bold text-capitalize">{{ strtolower($veiculo->combustivel) }}</span></div>
-                </div>
-            </div>
-            <div class="col-md-3 col-6">
-                <div class="d-flex align-items-center">
-                    <i class="bi bi-palette fs-3 text-red me-3"></i>
-                    <div><small class="text-muted d-block">Cor</small><span class="fw-bold text-capitalize">{{ strtolower($veiculo->cor) }}</span></div>
-                </div>
-            </div>
-            <div class="col-md-3 col-6">
-                <div class="d-flex align-items-center">
-                    <i class="bi bi-gear-wide-connected fs-3 text-red me-3"></i>
-                    <div><small class="text-muted d-block">Câmbio</small><span class="fw-bold">{{ $veiculo->cambio }}</span></div>
-                </div>
-            </div>
-            <div class="col-md-3 col-6">
-                <div class="d-flex align-items-center">
-                    <i class="bi bi-car-front fs-3 text-red me-3"></i>
-                    <div><small class="text-muted d-block">Carroceria</small><span class="fw-bold text-capitalize">{{ strtolower($veiculo->tipo) }}</span></div>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    @php 
-        $adicionais = is_array($veiculo->adicionais) ? $veiculo->adicionais : json_decode($veiculo->adicionais, true);
-        if(is_string($adicionais)) $adicionais = json_decode($adicionais, true);
-    @endphp
-    @if(!empty($adicionais))
-    <div class="mt-4 p-4 bg-white shadow-sm rounded border-start border-primary border-4">
-        <h5 class="fw-bold mb-3 text-secondary"><i class="bi bi-info-square fs-6"></i> Adicionais</h5>
-        <div class="row">
-            @foreach($adicionais as $item)
-                <div class="col-md-3 col-6 mb-2">
-                    <i class="bi bi-dot text-red fs-6"></i> {{ $item }}
-                </div>
-            @endforeach
-        </div>
-    </div>
-    @endif
-
-    @php 
-        $opcionais = is_array($veiculo->opcionais) ? $veiculo->opcionais : json_decode($veiculo->opcionais, true);
-        if(is_string($opcionais)) $opcionais = json_decode($opcionais, true);
-    @endphp
-    @if(!empty($opcionais))
-    <div class="mt-4 p-4 bg-white shadow-sm rounded border-start border-success border-4">
-        <h5 class="fw-bold mb-3 text-secondary"><i class="bi bi-plus-circle fs-6"></i> Opcionais e Equipamentos</h5>
-        <div class="row">
-            @foreach($opcionais as $item)
-                <div class="col-md-3 col-6 mb-2">
-                    <i class="bi bi-dot text-red fs-6"></i> {{ $item }}
-                </div>
-            @endforeach
-        </div>
-    </div>
-    @endif
-
-    @php 
-        $modificacoes = is_array($veiculo->modificacoes) ? $veiculo->modificacoes : json_decode($veiculo->modificacoes, true);
-        if(is_string($modificacoes)) $modificacoes = json_decode($modificacoes, true);
-    @endphp
-    @if(!empty($modificacoes))
-    <div class="mt-4 p-4 bg-white shadow-sm rounded border-start border-danger border-4">
-        <h5 class="fw-bold mb-3 text-secondary">
-    <i class="bi bi-tools fs-6"></i> Modificações / Upgrades
-</h5>
-        <div class="row">
-            @foreach($modificacoes as $item)
-                <div class="col-md-3 col-6 mb-2">
-                    <i class="bi bi-dot text-red fs-6"></i> {{ $item }}
-                </div>
-            @endforeach
-        </div>
-    </div>
-    @endif
-
-    <div class="mt-4 p-4 bg-white shadow-sm rounded border">
-        <h4 class="fw-bold border-bottom pb-2">Descrição Detalhada</h4>
-        <p class="text-muted mt-3" style="white-space: pre-line; line-height: 1.8;">
-            {{ $veiculo->observacoes ?? $veiculo->descricao ?? 'Nenhuma informação adicional fornecida.' }}
-        </p>
-    </div>
-
 </section>
 
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const carouselEl = document.getElementById('carouselDetalhes');
+        if (carouselEl) {
+            const thumbnails = document.querySelectorAll('.img-thumbnail-nav');
+            const counter = document.getElementById('current-photo');
+
+            carouselEl.addEventListener('slide.bs.carousel', event => {
+                thumbnails.forEach(t => t.classList.remove('active'));
+                if(thumbnails[event.to]) thumbnails[event.to].classList.add('active');
+                counter.innerText = event.to + 1;
+            });
+        }
+    });
+</script>
 @endsection

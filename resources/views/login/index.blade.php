@@ -26,7 +26,7 @@
 
         /* Branding e Cores */
         .text-wrap {
-            background: linear-gradient(135deg, #730000 0%, #4d0000 100%) !important;
+            background: linear-gradient(135deg, #ff4a17 0%, #790000 100%) !important;
             display: flex;
             align-items: center;
         }
@@ -49,7 +49,7 @@
         }
 
         .form-control:focus {
-            border-color: #730000;
+            border-color: #ff4a17;
             box-shadow: 0 0 0 0.2rem rgba(115, 0, 0, 0.1);
         }
 
@@ -63,8 +63,7 @@
         }
 
         .btn-primary {
-            background: #730000 !important;
-            border-color: #730000 !important;
+            background: #ff4a17 !important;
             height: 50px;
             border-radius: 8px;
             font-weight: 600;
@@ -73,19 +72,19 @@
         }
 
         .btn-primary:hover {
-            background: #5a0000 !important;
+            background: #ff4a17 !important;
             transform: translateY(-1px);
         }
 
         .error-message {
-            color: #dc3545;
+            color: #9e222e;
             font-size: 13px;
             margin-top: 6px;
             font-weight: 500;
         }
 
         a {
-            color: #730000;
+            color: #ff4a17;
             font-weight: 500;
             transition: 0.3s;
         }

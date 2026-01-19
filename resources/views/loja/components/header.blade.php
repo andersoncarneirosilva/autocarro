@@ -36,7 +36,7 @@
 
 #header .btn-getstarted {
     background: #ffffff;
-    color: #5B0000;
+    color: #ff4a17;
     padding: 8px 25px;
     border-radius: 50px;
     transition: 0.3s;
@@ -48,7 +48,7 @@
 /* --- 3. ESTADO FIXO COLORIDO (Páginas como /veiculos-novos) --- */
 /* Aplicado via Blade quando não é index ou show */
 #header.header-dark-text {
-    background-color: #5B0000 !important;
+    background-color: #ff4a17 !important;
     box-shadow: 0px 2px 15px rgba(0, 0, 0, 0.1);
 }
 
@@ -59,7 +59,7 @@
 
 #header.header-dark-text .btn-getstarted {
     background: #ffffff !important;
-    color: #5B0000 !important;
+    color: #ff4a17 !important;
 }
 
 /* --- 4. ESTADO APÓS SCROLL (Sempre Branco) --- */
@@ -76,7 +76,7 @@
 }
 
 #header.header-scrolled .btn-getstarted {
-    background: #5B0000 !important;
+    background: #ff4a17 !important;
     color: #ffffff !important;
 }
 
@@ -95,7 +95,7 @@
 }
 
 #header .navmenu .dropdown ul li a:hover {
-    color: #5B0000 !important;
+    color: #ff4a17 !important;
     background-color: #f8f9fa;
 }
 
@@ -116,7 +116,7 @@
         font-size: 13px;
     }
 }
-</style><header id="header" class="header d-flex align-items-center fixed-top {{ !in_array(Route::currentRouteName(), ['loja.index', 'veiculo.show']) ? 'header-dark-text' : '' }}">
+</style><header id="header" class="header d-flex align-items-center fixed-top {{ !in_array(Route::currentRouteName(), ['loja.index']) ? 'header-dark-text' : '' }}">
     <div class="container-fluid container-xl position-relative d-flex align-items-center justify-content-between">
 
       <a href="{{ route('loja.index') }}" class="logo d-flex align-items-center me-auto">
