@@ -277,7 +277,7 @@
 @endphp
 
 <div class="position-relative carousel-main-container mb-3">
-    <div id="carouselDetalhes" class="carousel slide" data-bs-ride="carousel">
+    <div id="carouselDetalhes" class="carousel slide" data-bs-ride="false" data-bs-interval="false">
         <div class="carousel-inner">
             @foreach($veiculo->images as $index => $img)
                 <div class="carousel-item {{ $index === 0 ? 'active' : '' }}">
