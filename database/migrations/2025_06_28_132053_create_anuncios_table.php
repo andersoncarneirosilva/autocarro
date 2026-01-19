@@ -17,22 +17,22 @@ return new class extends Migration
             // OBRIGATORIAS
             $table->string('marca_real')->nullable();
             $table->string('modelo_real')->nullable();
-            $table->string('marca');
-            $table->string('placa');
-            $table->string('chassi');
+            $table->string('marca')->nullable();
+            $table->string('placa')->nullable();
+            $table->string('chassi')->nullable();
             $table->string('cor');
             $table->string('ano');
-            $table->string('renavam');
-            $table->string('nome');
-            $table->string('cpf');
-            $table->string('cidade');
-            $table->string('crv');
-            $table->string('placaAnterior');
-            $table->string('categoria');
-            $table->string('motor');
+            $table->string('renavam')->nullable();
+            $table->string('nome')->nullable();
+            $table->string('cpf')->nullable();
+            $table->string('cidade')->nullable();
+            $table->string('crv')->nullable();
+            $table->string('placaAnterior')->nullable();
+            $table->string('categoria')->nullable();
+            $table->string('motor')->nullable();
             $table->string('combustivel');
-            $table->string('infos');
-            $table->string('tipo');
+            $table->string('infos')->nullable();
+            $table->string('tipo')->nullable();
 
             //  OPCIONAIS
             $table->string('cambio')->nullable();

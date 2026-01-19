@@ -142,7 +142,12 @@ Route::prefix('documentos')->group(function () {
         ->name('documentos.upload');
 });
 
+    Route::post('/anuncios/cadastro-rapido', [AnuncioController::class, 'cadastroRapido'])->name('anuncios.cadastro-rapido');
+    // Rota para exibir o formulário de cadastro manual
+Route::get('/anuncios/cadastro-manual', [AnuncioController::class, 'cadastroManual'])->name('anuncios.cadastro-manual');
 
+// Rota para processar o envio do formulário (POST)
+Route::post('/anuncios/cadastro-manual/store', [AnuncioController::class, 'storeManual'])->name('anuncios.store-manual');
 // --- 1. ROTAS GLOBAIS E DE LISTAGEM (Sempre no topo para evitar conflito com {id}) ---
 Route::get('/anuncios', [AnuncioController::class, 'index'])->name('anuncios.index');
 Route::get('/anuncios/arquivados', [AnuncioController::class, 'indexArquivados'])->name('anuncios.arquivados');
@@ -293,7 +298,6 @@ Route::get('/anuncios/{id}', [AnuncioController::class, 'show'])->name('anuncios
 
     // Route::post('/estoque', [EstoqueController::class, 'store'])->name('estoque.store');
     // Route::get('/estoque', [EstoqueController::class, 'index'])->name('estoque.index');
-    Route::post('/veiculos/cadastro-rapido', [AnuncioController::class, 'cadastroRapido'])->name('veiculos.cadastro-rapido');
 
 
 

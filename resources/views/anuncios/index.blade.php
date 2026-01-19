@@ -65,7 +65,7 @@ document.addEventListener('DOMContentLoaded', function () {
                                         class="dropdown-item">
                                         Cadastro rápido
                                     </a>
-                                    <a href="{{ route('veiculos.create-proc-manual') }}" class="dropdown-item">
+                                    <a href="{{ route('anuncios.cadastro-manual') }}" class="dropdown-item">
                                         Cadastro manual
                                     </a>
                                 </div>

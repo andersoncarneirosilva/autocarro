@@ -6,7 +6,7 @@
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-hidden="true"></button>
             </div>
             <div class="modal-body">
-                <form action="{{ route('veiculos.cadastro-rapido') }}" method="POST" enctype="multipart/form-data" id="formDoc">
+                <form action="{{ route('anuncios.cadastro-rapido') }}" method="POST" enctype="multipart/form-data" id="formDoc">
                     @csrf
                     <div class="row align-items-start">
                             <div class="mb-3">

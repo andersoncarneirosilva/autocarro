@@ -183,6 +183,63 @@ public function forcarAcentosMaiusculos($texto)
         return $texto;
     }
 
+    public function cadastroManual()
+{
+    // Opcional: Você pode carregar marcas pré-definidas ou deixar campos de texto livre
+    // como você já tem a lógica de tratamento de marcas, podemos deixar os campos abertos.
+    
+    return view('anuncios.create-manual');
+}
+
+public function storeManual(Request $request)
+{
+    $data = $request->except(['_token', 'images']);
+
+    // Usuário logado
+    $data['user_id'] = Auth::id();
+
+    $adicionaisArray = array_map(function ($item) {
+    return ucwords(str_replace('_', ' ', strtolower($item)));
+}, $request->input('adicionais', []));
+
+$data['adicionais'] = json_encode($adicionaisArray, JSON_UNESCAPED_UNICODE);
+
+
+$opcionaisArray = array_map(function ($item) {
+    return ucwords(str_replace('_', ' ', strtolower($item)));
+}, $request->input('opcionais', []));
+
+$data['opcionais'] = json_encode($opcionaisArray, JSON_UNESCAPED_UNICODE);
+
+
+    // Upload de imagens
+    $imagens = [];
+
+    if ($request->hasFile('images')) {
+        foreach ($request->file('images') as $image) {
+            $path = $image->store('veiculos', 'public');
+            $imagens[] = $path;
+        }
+    }
+
+    $data['images'] = json_encode($imagens);
+
+    // Exemplo de campo manual fixo
+    $data['status'] = 'ATIVO';
+
+    Anuncio::create($data);
+
+    return redirect()
+        ->route('anuncios.index')
+        ->with('success', 'Anúncio cadastrado com sucesso!');
+}
+
+
+
+
+
+
+
 public function cadastroRapido(Request $request)
     {
 
