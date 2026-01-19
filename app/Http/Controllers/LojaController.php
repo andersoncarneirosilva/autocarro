@@ -119,27 +119,48 @@ private function processarBusca(Request $request, $estado = 'Novo')
         'honda'      => 'HONDA'
     ];
 
-    // Filtros de busca (Mantendo sua lógica existente)
+    // Filtros de busca
     if ($request->filled('search') || $request->filled('marca')) {
         $termo = strtolower($request->search ?? $request->marca);
         $sigla = $mapeamentoMarcas[$termo] ?? $termo;
         $query->where('marca', 'LIKE', "%{$sigla}%");
     }
 
+// --- AJUSTE DOS FILTROS DE ANO ---
+
+// Damos prioridade total à FAIXA (De/Até). Se ela existir, ignoramos o botão individual 'ano'.
+if ($request->filled('ano_de') || $request->filled('ano_ate')) {
+    if ($request->filled('ano_de')) {
+        $query->whereRaw('SUBSTRING_INDEX(ano, "/", 1) >= ?', [$request->ano_de]);
+    }
+    if ($request->filled('ano_ate')) {
+        $query->whereRaw('SUBSTRING_INDEX(ano, "/", 1) <= ?', [$request->ano_ate]);
+    }
+} 
+// Somente se não houver De/Até, verificamos o botão individual 'ano'
+elseif ($request->filled('ano')) {
+    $query->where('ano', 'LIKE', $request->ano . '%');
+}
+    // ---------------------------------
+
     // Outros filtros
     $query->when($request->tipo, fn($q, $t) => $q->where('tipo', $t));
     $query->when($request->min_price, fn($q, $min) => $q->where('valor', '>=', (float)$min));
     $query->when($request->max_price, fn($q, $max) => $q->where('valor', '<=', (float)$max));
-    $query->when($request->ano_de, fn($q, $ano) => $q->where('ano', 'LIKE', "{$ano}%"));
+
+    // Busca os anos disponíveis para o filtro lateral (para enviar para a view)
+    $anosDisponiveis = Anuncio::where('status', 'Ativo')
+        ->where('estado', $estado)
+        ->selectRaw('DISTINCT SUBSTRING_INDEX(ano, "/", 1) as ano_simples')
+        ->orderBy('ano_simples', 'desc')
+        ->pluck('ano_simples');
 
     $veiculos = $query->orderBy('created_at', 'desc')->paginate(12);
     
-    // 2. APLICA A TRANSFORMAÇÃO DE MARCA/MODELO (Sua lógica de limpeza)
+    // Transformação para exibição
     $veiculos->getCollection()->transform(function ($veiculo) {
         $texto = $veiculo->marca;
-        if (str_starts_with($texto, 'I/')) {
-            $texto = substr($texto, 2);
-        }
+        if (str_starts_with($texto, 'I/')) { $texto = substr($texto, 2); }
         
         if (str_contains($texto, '/')) {
             [$marca, $modelo] = explode('/', $texto, 2);
@@ -151,10 +172,12 @@ private function processarBusca(Request $request, $estado = 'Novo')
 
         $veiculo->marca_exibicao  = trim($marca);
         $veiculo->modelo_exibicao = trim($modelo);
+        // Limpa o ano para exibir apenas os 4 primeiros dígitos na listagem
+        $veiculo->ano_exibicao = substr($veiculo->ano, 0, 4);
+        
         return $veiculo;
     });
 
-    // Define qual view retornar baseado no estado
     $viewMap = [
         'Novo'      => 'loja.veiculos-novos',
         'Semi-novo' => 'loja.veiculos-semi-novos',
@@ -163,7 +186,8 @@ private function processarBusca(Request $request, $estado = 'Novo')
 
     $view = $viewMap[$estado] ?? 'loja.veiculos-novos';
     
-    return view($view, compact('veiculos'));
+    // Importante: Passar os $anosDisponiveis para a view
+    return view($view, compact('veiculos', 'anosDisponiveis'));
 }
 
 public function show($slug)
