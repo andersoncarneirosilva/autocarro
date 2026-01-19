@@ -100,7 +100,28 @@
 .avatar-stack .avatar-img:nth-child(3) {
     z-index: 1;
 }
+/* Mantendo o padrão do seu avatar-img */
+.avatar-text {
+    width: 32px; /* Ajustado para 32px conforme seu HTML anterior */
+    height: 32px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    border: 2px solid #fff;
+    box-shadow: 0 0 0 1px #ccc;
+    background-color: #730000; /* Cor do Alcecar */
+    color: #fff;
+    font-weight: bold;
+    font-size: 13px;
+    transition: all 0.2s ease-in-out;
+}
 
+/* Efeito de destaque ao passar o mouse */
+.nav-link:hover .avatar-text {
+    transform: scale(1.05);
+    box-shadow: 0 0 0 1px #730000;
+}
 
 
 

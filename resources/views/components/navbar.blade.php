@@ -214,11 +214,13 @@ observer.observe(document.body, { childList: true, subtree: true });
                     role="button" aria-haspopup="false" aria-expanded="false">
                     <span class="account-user-avatar">
                         @if(auth()->user()->image)
-                        <img src="../../storage/{{ auth()->user()->image }}" alt="user-image" width="32" height="32"
-                            class="rounded-circle">
+                            {{-- Usa a classe avatar-img do seu stack para manter o estilo --}}
+                            <img src="{{ asset('storage/' . auth()->user()->image) }}" alt="user-image" width="32" height="32" class="avatar-img rounded-circle" style="margin-left:0;">
                         @else
-                        <img src="{{ url('assets/img/icon_user.png') }}" alt="user-image" width="32"
-                            class="rounded-circle">
+                            {{-- Novo elemento com a inicial --}}
+                            <div class="avatar-text">
+                                {{ strtoupper(substr(auth()->user()->name, 0, 1)) }}
+                            </div>
                         @endif
                     </span>
                     <span class="d-lg-flex flex-column gap-1 d-none">
