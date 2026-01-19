@@ -7,7 +7,7 @@
 
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
-    <link rel="stylesheet" href="{{ url('login/css/style.css') }}">
+    <link rel="stylesheet" href="{{ url('sitelogin/css/style.css') }}">
 
     <style>
         body {
@@ -317,7 +317,7 @@
     </div>
 </section>
 
-<script src="{{ url('login/js/jquery.min.js') }}"></script>
+<script src="{{ url('sitelogin/js/jquery.min.js') }}"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.mask/1.14.16/jquery.mask.min.js"></script>
 
 
