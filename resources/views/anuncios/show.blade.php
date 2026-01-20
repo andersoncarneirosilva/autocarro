@@ -117,8 +117,8 @@ document.addEventListener('DOMContentLoaded', function () {
             </button>
         </form>
     @else
-        <span class="badge badge-outline-warning p-1 px-2">
-            <i class="mdi mdi-clock-outline me-1"></i> Aguardando
+        <span class="badge badge-outline-danger p-1 px-2">
+            <i class="mdi mdi-clock-outline me-1"></i> Aguardando publicação
         </span>
 
         <form action="{{ route('anuncios.publicar', $veiculo->id) }}" method="POST" class="d-inline form-publicar">

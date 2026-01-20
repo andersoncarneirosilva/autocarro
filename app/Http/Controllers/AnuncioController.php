@@ -419,7 +419,7 @@ public function cadastroRapido(Request $request)
             'tipo' => $tipo,
             'infos' => $infos,
             'status' => 'Ativo',
-            'status_anuncio' => 'Aguardando publicação',
+            'status_anuncio' => 'Aguardando',
             'arquivo_doc' => $urlDoc,
             'size_doc' => $size_doc,
             'user_id' => $userId,

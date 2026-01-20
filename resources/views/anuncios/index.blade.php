@@ -83,7 +83,7 @@ document.addEventListener('DOMContentLoaded', function () {
                                 <th>Cor</th>
                                 <th>KM</th>
                                 <th>Câmbio</th>
-                                <th>Portas</th>
+                                <th>Anúncio</th>
                                 <th>Ações</th>
                             </tr>
                         </thead>
@@ -129,59 +129,23 @@ document.addEventListener('DOMContentLoaded', function () {
                             <td>{{ $veiculo->kilometragem ?? 'Não consta' }}</td>
                             <td>{{ $veiculo->cambio ?? 'Não consta' }}</td>
                             <td>
-    @if($veiculo->status_anuncio == 'Publicado')
-        <span class="badge bg-success"><i class="bi bi-check-circle me-1"></i> Publicado</span>
-    @elseif($veiculo->status_anuncio == 'Aguardando' || $veiculo->status_anuncio == 'Espera')
-        <span class="badge bg-warning text-dark"><i class="bi bi-clock me-1"></i> Em Espera</span>
-    @elseif($veiculo->status_anuncio == 'Vendido')
-        <span class="badge bg-info text-white"><i class="bi bi-cart-check me-1"></i> Vendido</span>
-    @elseif($veiculo->status_anuncio == 'Inativo')
-        <span class="badge bg-danger"><i class="bi bi-x-octagon me-1"></i> Inativo</span>
-    @else
-        <span class="badge bg-secondary">{{ $veiculo->status_anuncio ?? 'Não consta' }}</span>
-    @endif
-</td>
-
-
-                                <td class="table-action position-relative">
-                                                <div class="dropdown btn-group">
-                                                    <button class="btn btn-info btn-sm dropdown-toggle" type="button"
-                                                        data-bs-toggle="dropdown" aria-haspopup="true" data-bs-boundary="viewport"
-                                                        aria-expanded="false">
-                                                        Ações
-                                                    </button>
-                                                    <div class="dropdown-menu dropdown-menu-animated dropdown-menu-end">
-
-                                                        <a href="{{ route('anuncios.show', $veiculo->id) }}"
-                                                            class="dropdown-item">Ver/Editar</a>
-
-                                                        <!-- Formulário Oculto para Arquivar -->
-                                                        <form action="{{ route('anuncios.arquivar', $veiculo->id) }}"
-                                                            method="POST" style="display: none;"
-                                                            id="form-arquivar-{{ $veiculo->id }}">
-                                                            @csrf
-                                                            @method('PUT')
-                                                        </form>
-
-                                                        <!-- Link para Arquivar com SweetAlert -->
-                                                        <a href="#" onclick="confirmArchive({{ $veiculo->id }});"
-                                                            class="dropdown-item">
-                                                            Arquivar
-                                                        </a>
-
-                                                        <!-- Link que dispara o SweetAlert -->
-                                                        <a href="#" onclick="confirmDelete({{ $veiculo->id }})" class="dropdown-item text-danger">
-                                                            Excluir
-                                                        </a>
-
-                                                        <!-- Formulário invisível para enviar a exclusão -->
-                                                        <form id="form-delete-{{ $veiculo->id }}" action="{{ route('anuncios.destroy', $veiculo->id) }}" method="POST" style="display: none;">
-                                                            @csrf
-                                                            @method('DELETE')
-                                                        </form>
-                                                    </div>
-                                                </div>
-                                            </td>
+                                @if($veiculo->status_anuncio == 'Publicado')
+                                    <span class="badge bg-success"><i class="bi bi-check-circle me-1"></i> Publicado</span>
+                                @elseif($veiculo->status_anuncio == 'Aguardando')
+                                    <span class="badge bg-warning text-dark"><i class="bi bi-clock me-1"></i> Não publicado</span>
+                                @elseif($veiculo->status_anuncio == 'Vendido')
+                                    <span class="badge bg-info text-white"><i class="bi bi-cart-check me-1"></i> Vendido</span>
+                                @elseif($veiculo->status_anuncio == 'Inativo')
+                                    <span class="badge bg-danger"><i class="bi bi-x-octagon me-1"></i> Inativo</span>
+                                @else
+                                    <span class="badge bg-secondary">{{ $veiculo->status_anuncio ?? 'Não consta' }}</span>
+                                @endif
+                            </td>
+                            <td class="table-action">
+                                <a href="{{ route('anuncios.show', $veiculo->id) }}" class="action-icon">
+                                    <i class="mdi mdi-eye"></i>
+                                </a>
+                            </td>
                             </tr>
                             @endforeach
                         </tbody>

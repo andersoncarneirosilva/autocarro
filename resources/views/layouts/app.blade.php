@@ -59,14 +59,14 @@
     {{-- <script src="{{ url('backend/js/pagamento.js') }}?v={{ time() }}"></script> --}}
 
     <!-- Google tag (gtag.js) -->
-<script async src="https://www.googletagmanager.com/gtag/js?id=G-02FMMXT79W"></script>
+{{-- <script async src="https://www.googletagmanager.com/gtag/js?id=G-02FMMXT79W"></script>
 <script>
   window.dataLayer = window.dataLayer || [];
   function gtag(){dataLayer.push(arguments);}
   gtag('js', new Date());
 
   gtag('config', 'G-02FMMXT79W');
-</script>
+</script> --}}
 
 <!-- jstree css -->
 <link href="{{ url('backend/vendor/jstree/themes/default/style.min.css') }}" rel="stylesheet" type="text/css">
@@ -110,7 +110,7 @@
     border-radius: 50%;
     border: 2px solid #fff;
     box-shadow: 0 0 0 1px #ccc;
-    background-color: #730000; /* Cor do Alcecar */
+    background-color: #727cf5; /* Cor do Alcecar */
     color: #fff;
     font-weight: bold;
     font-size: 13px;
@@ -120,7 +120,7 @@
 /* Efeito de destaque ao passar o mouse */
 .nav-link:hover .avatar-text {
     transform: scale(1.05);
-    box-shadow: 0 0 0 1px #730000;
+    box-shadow: 0 0 0 1px #727cf5;
 }
 
 
@@ -473,38 +473,18 @@
     <!-- End Preloader-->
     <!-- Begin page -->
     <div class="wrapper">
-        <!-- ========== Topbar Start ========== -->
         @include('components.navbar')
-        <!-- ========== Topbar End ========== -->
-
-        <!-- ========== Left Sidebar Start ========== -->
         @include('components.sidebar')
-        <!-- ========== Left Sidebar End ========== -->
 
         <div class="content-page">
             <div class="content">
                 <div class="container-fluid">
-                    {{-- <div class="row">
-                            <div class="col-12">
-                                <div class="page-title-box"> --}}
-
-
-
-
-
-
-
+                    
                     @include('sweetalert::alert')
                     @yield('content')
-                    {{-- </div>
-                            </div>
-                        </div> --}}
                 </div>
             </div>
-
-            <!-- Footer Start -->
             @include('components.footer')
-            <!-- end Footer -->
 
         </div>
     </div>
