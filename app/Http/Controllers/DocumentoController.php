@@ -20,25 +20,20 @@ class DocumentoController extends Controller
         
         $userId = Auth::id();
         $anuncio = Anuncio::findOrFail($anuncio_id);
-        
-        //$anuncio_id_real = $anuncio->anuncio_id;
-
         $cliente = Cliente::findOrFail($request->cliente_id);
         $configProc = ModeloProcuracoes::where('user_id', $userId)->first();
-        //dd($cliente->id);
-        // Verificação de Outorgados (Igual ao seu original)
-        if (!$configProc || empty($configProc->outorgados)) {
-            alert()->error('Erro!', 'Por favor, cadastre ao menos um Outorgado nas configurações.')
-            ->persistent(true);
-            return back();
-            }
-            
-            // Configurações de Data
-            $dataAtual = Carbon::now();
-            $dataPorExtenso = $dataAtual->translatedFormat('d \d\e F \d\e Y');
-            
 
-        // Inicializar FPDF
+        // Verificação de Outorgados
+        if (!$configProc || empty($configProc->outorgados)) {
+            return back()->with('error_title', 'Configuração Pendente')
+                        ->with('error', 'Por favor, cadastre ao menos um Outorgado nas configurações.');
+        }
+                
+        // Configurações de Data
+        $dataAtual = Carbon::now();
+        $dataPorExtenso = $dataAtual->translatedFormat('d \d\e F \d\e Y');
+
+        // Inicializar FPDF (Mantendo sua lógica de construção do PDF)
         $pdf = new Fpdf();
         $pdf->SetMargins(15, 15, 15);
         $pdf->AddPage();
@@ -105,34 +100,42 @@ class DocumentoController extends Controller
         $pdf->SetFont('Arial', 'B', 11);
         $pdf->Cell(0, 10, strtoupper(utf8_decode($cliente->nome)), 0, 1, 'C');
 
-        // SALVAMENTO DO ARQUIVO
-        $nomeArquivo = 'PROCURACAO_' . strtoupper($anuncio->placa) . '_' . time() . '.pdf';
-        $pastaUsuario = "documentos/usuario_{$userId}/procuracoes";
-        $caminhoCompleto = storage_path("app/public/{$pastaUsuario}/{$nomeArquivo}");
+        // --- NOVO BLOCO DE SALVAMENTO PADRONIZADO ---
+    
+        // 1. Define o nome do arquivo e o caminho da pasta do anúncio
+        $nomeArquivo = 'PROCURACAO_' . strtoupper($anuncio->placa) . '.pdf';
+        $pastaRelativa = "documentos/usuario_{$userId}/anuncios/anuncio_{$anuncio->id}/";
+        $pastaDestino = storage_path("app/public/{$pastaRelativa}");
 
-        if (!file_exists(storage_path("app/public/{$pastaUsuario}"))) {
-            mkdir(storage_path("app/public/{$pastaUsuario}"), 0777, true);
+        // 2. Garante que a pasta do anúncio existe
+        if (!file_exists($pastaDestino)) {
+            mkdir($pastaDestino, 0775, true);
         }
 
+        $caminhoCompleto = $pastaDestino . $nomeArquivo;
+
+        // 3. Salva o PDF no disco
         $pdf->Output('F', $caminhoCompleto);
         
-        // ATUALIZAR OU CRIAR REGISTRO NA TABELA DOCUMENTOS
+        // 4. ATUALIZAR OU CRIAR REGISTRO NA TABELA DOCUMENTOS
+        // Salvamos o caminho relativo para facilitar o uso da Facade Storage
         $documento = Documento::updateOrCreate(
             ['anuncio_id' => $anuncio->id],
             [
                 'user_id' => $userId,
                 'cliente_id' => $cliente->id,
-                'arquivo_proc' => "{$pastaUsuario}/{$nomeArquivo}",
+                'arquivo_proc' => $pastaRelativa . $nomeArquivo,
                 'size_proc' => filesize($caminhoCompleto),
                 'size_proc_pdf' => 'A4'
             ]
         );
         
+        // Verificação de ATPV-E (Se houver)
         if ($request->tipo_documento == 'atpve') {
             $this->gerarPdfAtpve($anuncio, $cliente, $userId, $request->valor_venda);
         }
 
-        return back()->with('success', 'Procuração gerada e vinculada com sucesso!');
+        return back()->with('success', 'Procuração gerada e salva na pasta do anúncio!');
     }
 
 

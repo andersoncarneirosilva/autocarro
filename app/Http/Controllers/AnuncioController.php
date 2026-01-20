@@ -113,17 +113,34 @@ class AnuncioController extends Controller
     }
 
     public function destroy($id)
-    {
-        // dd($id);
-
-        if (! $veiculo = $this->model->find($id)) {
-            return redirect()->route('anuncios.index')->with('error', 'Veículo não encontrado!');
-        }
-
-        if ($veiculo->delete()) {
-            return redirect()->route('anuncios.index')->with('success', 'Veículo excluído com sucesso!');
-        }
+{
+    $userId = Auth::id();
+    
+    // 1. Localiza o registro no banco de dados
+    if (! $doc = $this->model->find($id)) {
+        return redirect()->route('anuncios.index')
+            ->with('error_title', 'Erro ao localizar')
+            ->with('error', 'Veículo ou documento não encontrado!');
     }
+
+    // 2. Define o caminho da pasta específica deste anúncio
+    $caminhoPastaAnuncio = "documentos/usuario_{$userId}/anuncios/anuncio_{$id}/";
+
+    // 3. Exclui a pasta física e todos os arquivos dentro dela (CRLV, procurações, etc.)
+    // Usamos o Storage::disk('public')->deleteDirectory para remover a pasta recursivamente
+    if (Storage::disk('public')->exists($caminhoPastaAnuncio)) {
+        Storage::disk('public')->deleteDirectory($caminhoPastaAnuncio);
+    }
+
+    // 4. Exclui o registro do banco de dados
+    if ($doc->delete()) {
+        return redirect()->route('anuncios.index')
+            ->with('success', 'Veículo e todos os arquivos associados foram removidos com sucesso!');
+    }
+
+    return redirect()->route('anuncios.index')
+        ->with('error', 'Erro ao processar a exclusão no banco de dados.');
+}
 
     public function arquivar($id)
 {
@@ -246,197 +263,142 @@ $data['opcionais'] = json_encode($opcionaisArray, JSON_UNESCAPED_UNICODE);
 
 
 public function cadastroRapido(Request $request)
-    {
+{
+    $userId = Auth::id();
+    $user = Auth::user();
 
-         //dd($request);
-
-        $userId = Auth::id(); // Obtém o ID do usuário autenticado
-        // Localiza o usuário logado
-        $user = User::find($userId);
-
-        $request->validate([
-        'arquivo_doc' => 'required|mimes:pdf|max:10240', // mimes:pdf garante a extensão, max:10240 limita a 10MB
+    // 1. Validação do Arquivo
+    $request->validate([
+        'arquivo_doc' => 'required|mimes:pdf|max:10240',
     ], [
         'arquivo_doc.mimes' => 'O documento deve ser obrigatoriamente um arquivo PDF.',
         'arquivo_doc.max' => 'O arquivo não pode ser maior que 10MB.'
     ]);
 
-        $arquivo = $request->file('arquivo_doc');
+    $arquivo = $request->file('arquivo_doc');
+    $size_doc = $arquivo->getSize();
 
+    // 2. Leitura do PDF
+    try {
+        $parser = new \Smalot\PdfParser\Parser();
+        $pdf = $parser->parseFile($arquivo->getPathname());
+        $textoPagina = $pdf->getPages()[0]->getText();
+        $linhas = explode("\n", $textoPagina);
 
-        // Caminho para a pasta do usuário
-        $pastaUsuario = "documentos/usuario_{$userId}/";
-
-        // Tamanho do novo arquivo
-        $size_doc = $arquivo->getSize(); // Em bytes
-        // dd($tamanhoNovoArquivo);
-
-        $nomeOriginal = $arquivo->getClientOriginalName();
-
-        $parser = new Parser;
-
-        $pdf = $parser->parseFile($arquivo);
-
-        foreach ($pdf->getPages() as $numeroPagina => $pagina) {
-            $textoPagina = $pagina->getText();
-            //dd($textoPagina);
-            $linhas = explode("\n", $textoPagina);
-            if ($linhas[3] != 'SECRETARIA NACIONAL DE TRÂNSITO - SENATRAN') {
-                alert()->error('Selecione um documento 2024.');
-
-                return redirect()->route('veiculos.index');
-            }
-
-            // Extrair dados do veículo
-            
-            $marca = $this->model->extrairMarca($textoPagina);
-            $placa = $this->model->extrairPlaca($textoPagina);
-            $chassi = $this->model->extrairChassi($textoPagina);
-            $cor = $this->model->extrairCor($textoPagina);
-            $anoModelo = $this->model->extrairAnoModelo($textoPagina);
-            $renavam = $this->model->extrairRevanam($textoPagina);
-            $nome = $this->model->extrairNome($textoPagina);
-            $cpf = $this->model->extrairCpf($textoPagina);
-            $cidade = $this->model->extrairCidade($textoPagina);
-            $crv = $this->model->extrairCrv($textoPagina);
-            $placaAnterior = $this->model->extrairPlacaAnterior($textoPagina);
-            $categoria = $this->model->extrairCategoria($textoPagina);
-            $motor = $this->model->extrairMotor($textoPagina);
-            $combustivel = $this->model->extrairCombustivel($textoPagina);
-            $infos = $this->model->extrairInfos($textoPagina);
-            $tipo = $this->model->extrairEspecie($textoPagina);
-
-            // dd($marca);
-
-            // Verifica se o veículo é importado
-            if (strpos($marca, 'I/') === 0) {
-                $marcaVeiculo = $this->model->extrairMarcaImportado($textoPagina);
-                $modeloVeiculo = $this->model->extrairModeloImportado($textoPagina);
-                // dd("Importado: " . $marcaVeiculo) . " Modelo: " . $modeloVeiculo;
-            } else {
-                $marcaVeiculo = $this->model->extrairMarcaVeiculo($textoPagina);
-                $modeloVeiculo = $this->model->extrairModeloVeiculo($textoPagina);
-                // dd("Não Importado: " . $marcaVeiculo . " Modelo: " . $modeloVeiculo);
-            }
-
-            $nomeImagem = 'images/veiculos/'.strtolower($tipo)."/$modeloVeiculo/".
-                strtolower(str_replace(['/', ' '], '_', $marcaVeiculo)).'_'.
-                strtolower(str_replace(['/', ' '], '_', $modeloVeiculo)).'_'.
-                strtolower(str_replace(' ', '_', $cor)).'.jpg';
-             //dd($nomeImagem);
-            // Caminho real do arquivo no servidor
-            $caminhoImagem = public_path($nomeImagem);
-
+        // Validação do órgão emissor e ano (Aviso amigável 2024+)
+        if (!isset($linhas[3]) || trim($linhas[3]) != 'SECRETARIA NACIONAL DE TRÂNSITO - SENATRAN') {
+            return redirect()->route('anuncios.index')
+                ->with('error_title', 'Documento Inválido')
+                ->with('error', 'O sistema Alcecar aceita apenas CRLV Digital (PDF) oficial emitido a partir de 2024.');
         }
-
-        // Lógica para tratar e separar Marca e Modelo
-        $textoLimpo = $marca;
-
-        // 1. Remove o prefixo de importado "I/" se existir
-        if (str_starts_with($textoLimpo, 'I/')) {
-            $textoLimpo = substr($textoLimpo, 2);
-        }
-
-        // 2. Divide a string pelo primeiro "/" encontrado
-        if (str_contains($textoLimpo, '/')) {
-            [$marcaReal, $modeloReal] = explode('/', $textoLimpo, 2);
-        } else {
-            $partes = explode(' ', $textoLimpo, 2);
-            $marcaReal  = $partes[0] ?? '';
-            $modeloReal = $partes[1] ?? '';
-        }
-
-        // Limpa espaços em branco e garante maiúsculas
-        $marcaReal = trim(strtoupper($marcaReal));
-        $modeloReal = trim(strtoupper($modeloReal));
-
-        // --- TRATAMENTO ESPECÍFICO PARA VW ---
-        if ($marcaReal === 'VW') {
-            $marcaReal = 'VOLKSWAGEN';
-        }
-
-        if ($marcaReal === 'GM') {
-            $marcaReal = 'CHEVROLET';
-        }
-
-        // Verificar se o veículo já existe com a placa fornecida
-        $veiculoExistente = Veiculo::where('placa', $placa)
-            ->where('user_id', $userId)
-            ->first();
-
-        if ($veiculoExistente) {
-            alert()->warning('Atenção!', 'Veículo já cadastrado.')
-                ->persistent(true)
-                ->autoClose(3000) // Fecha automaticamente após 5 segundos
-                ->timerProgressBar();
-
-            return redirect()->route('veiculos.index');
-        }
-
-        // Garante que a pasta "crlv" existe
-        $pastaDestino = storage_path('app/public/'.$pastaUsuario.'crlv/');
-        // dd($pastaDestino);
-        $numeroRandom = rand(1000, 9999);
-
-        $urlDoc = asset('storage/'.$pastaUsuario.'crlv/'.$placa.'_'.$numeroRandom.'.pdf'); // Adiciona a extensão .pdf
-        // dd($urlDoc);
-
-        if (! file_exists($pastaDestino)) {
-            mkdir($pastaDestino, 0777, true); // Cria a pasta com permissões recursivas
-        }
-
-        // Define o caminho completo do arquivo com a extensão .pdf
-        $caminhoDoc = $pastaDestino.$placa.'_'.$numeroRandom.'.pdf';
-
-        // Move o arquivo para a pasta com o nome correto
-        $arquivo->move($pastaDestino, $placa.'_'.$numeroRandom.'.pdf');
-
-        // Verifica se o arquivo foi salvo
-        if (! file_exists($caminhoDoc)) {
-            return response()->json(['error' => 'Erro ao salvar o arquivo.'], 500);
-        }
-
-        $nomeFormatado = $this->forcarAcentosMaiusculos($nome);
-
-        // DATA CASDASTRO RAPIDO
-        $data = [
-            'nome' => strtoupper($nomeFormatado),
-            'cpf' => $cpf,
-            'cidade' => $cidade,
-            'marca' => strtoupper($marca),
-            'marca_real' => strtoupper($marcaReal),
-            'modelo_real' => strtoupper($modeloReal),
-            'placa' => strtoupper($placa),
-            'chassi' => strtoupper($chassi),
-            'cor' => strtoupper($cor),
-            'ano' => $anoModelo,
-            'renavam' => $renavam,
-            'crv' => $crv,
-            'placaAnterior' => $placaAnterior,
-            'categoria' => $categoria,
-            'motor' => $motor,
-            'combustivel' => $combustivel,
-            'tipo' => $tipo,
-            'infos' => $infos,
-            'status' => 'Ativo',
-            'status_anuncio' => 'Aguardando',
-            'arquivo_doc' => $urlDoc,
-            'size_doc' => $size_doc,
-            'user_id' => $userId,
-        ];
-
-        // CADASTRO RAPIDO
-        if ($this->model->create($data)) {
-
-            if ($user && ($user->plano == 'Padrão' || $user->plano == 'Pro' || $user->plano == 'Teste')) {
-                $user->decrement('credito', 5);
-            }
-
-            return back()->with('success', 'Veículo cadastrado com sucesso!');
-
-            return redirect()->route('veiculos.index');
-        }
+    } catch (\Exception $e) {
+        return redirect()->route('anuncios.index')
+            ->with('error_title', 'Erro na leitura')
+            ->with('error', 'Não foi possível ler os dados do PDF. Certifique-se de que não é uma foto convertida em PDF.');
     }
+
+    // 3. Extração de Dados (Usando seu Model)
+    $placa = strtoupper($this->model->extrairPlaca($textoPagina));
+    
+    // Verificar duplicidade antes de processar tudo
+    if (Anuncio::where('placa', $placa)->where('user_id', $userId)->exists()) {
+        return redirect()->route('anuncios.index')
+            ->with('error_title', 'Veículo já cadastrado')
+            ->with('error', "A placa $placa já consta em sua base de dados.");
+    }
+
+    // Extração dos demais campos
+    $marca = $this->model->extrairMarca($textoPagina);
+    $chassi = $this->model->extrairChassi($textoPagina);
+    $cor = $this->model->extrairCor($textoPagina);
+    $anoModelo = $this->model->extrairAnoModelo($textoPagina);
+    $renavam = $this->model->extrairRevanam($textoPagina);
+    $nome = $this->model->extrairNome($textoPagina);
+    $cpf = $this->model->extrairCpf($textoPagina);
+    $cidade = $this->model->extrairCidade($textoPagina);
+    $crv = $this->model->extrairCrv($textoPagina);
+    $placaAnterior = $this->model->extrairPlacaAnterior($textoPagina);
+    $categoria = $this->model->extrairCategoria($textoPagina);
+    $motor = $this->model->extrairMotor($textoPagina);
+    $combustivel = $this->model->extrairCombustivel($textoPagina);
+    $infos = $this->model->extrairInfos($textoPagina);
+    $tipo = $this->model->extrairEspecie($textoPagina);
+
+    // Lógica de Marca/Modelo
+    $textoLimpo = str_starts_with($marca, 'I/') ? substr($marca, 2) : $marca;
+    if (str_contains($textoLimpo, '/')) {
+        [$marcaReal, $modeloReal] = explode('/', $textoLimpo, 2);
+    } else {
+        $partes = explode(' ', $textoLimpo, 2);
+        $marcaReal = $partes[0] ?? '';
+        $modeloReal = $partes[1] ?? '';
+    }
+
+    // Normalização de marcas
+    $marcaReal = trim(strtoupper($marcaReal));
+    if ($marcaReal === 'VW') $marcaReal = 'VOLKSWAGEN';
+    if ($marcaReal === 'GM') $marcaReal = 'CHEVROLET';
+
+    // 4. Criação do Registro no Banco (Primeira fase)
+    $data = [
+        'nome' => strtoupper($this->forcarAcentosMaiusculos($nome)),
+        'cpf' => $cpf,
+        'cidade' => $cidade,
+        'marca' => strtoupper($marca),
+        'marca_real' => $marcaReal,
+        'modelo_real' => trim(strtoupper($modeloReal)),
+        'placa' => $placa,
+        'chassi' => strtoupper($chassi),
+        'cor' => strtoupper($cor),
+        'ano' => $anoModelo,
+        'renavam' => $renavam,
+        'crv' => $crv,
+        'placaAnterior' => $placaAnterior,
+        'categoria' => $categoria,
+        'motor' => $motor,
+        'combustivel' => $combustivel,
+        'tipo' => $tipo,
+        'infos' => $infos,
+        'status' => 'Ativo',
+        'status_anuncio' => 'Aguardando',
+        'size_doc' => $size_doc,
+        'user_id' => $userId,
+    ];
+
+    $novoAnuncio = $this->model->create($data);
+
+    if ($novoAnuncio) {
+        // 5. Salvamento do Arquivo na nova estrutura: usuario/anuncios/anuncio_{id}
+        $anuncioId = $novoAnuncio->id;
+        $pastaRelativa = "documentos/usuario_{$userId}/anuncios/anuncio_{$anuncioId}/";
+        $pastaDestino = storage_path('app/public/' . $pastaRelativa);
+
+        if (!file_exists($pastaDestino)) {
+            mkdir($pastaDestino, 0775, true);
+        }
+
+        $nomeFinalArquivo = "crlv_{$placa}.pdf";
+        
+        // Move o arquivo
+        $arquivo->move($pastaDestino, $nomeFinalArquivo);
+
+        // Atualiza o registro com o caminho do arquivo
+        $novoAnuncio->update([
+            'arquivo_doc' => $pastaRelativa . $nomeFinalArquivo
+        ]);
+
+        // 6. Gestão de Créditos
+        if ($user && in_array($user->plano, ['Padrão', 'Pro', 'Teste'])) {
+            $user->decrement('credito', 5);
+        }
+
+        return redirect()->route('anuncios.index')
+            ->with('success', 'Veículo importado e cadastrado com sucesso!');
+    }
+
+    return redirect()->route('anuncios.index')
+        ->with('error', 'Falha ao salvar os dados no sistema.');
+}
 
    public function updateInfoBasica(Request $request, $id)
 {

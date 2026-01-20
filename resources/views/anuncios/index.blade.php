@@ -14,18 +14,29 @@ document.addEventListener('DOMContentLoaded', function () {
         toast: true,
         position: 'top-end',
         showConfirmButton: false,
-        timer: 4000,
+        timer: 6000, // Aumentei um pouco o tempo para dar tempo de ler a mensagem longa
         timerProgressBar: true,
         background: '#fff',
         color: '#313a46',
+        didOpen: (toast) => {
+            toast.addEventListener('mouseenter', Swal.stopTimer)
+            toast.addEventListener('mouseleave', Swal.resumeTimer)
+        }
     });
 
     @if (session('success'))
-        Toast.fire({ icon: 'success', title: '{{ session('success') }}' });
+        Toast.fire({ 
+            icon: 'success', 
+            title: '{{ session('success') }}' 
+        });
     @endif
 
     @if (session('error'))
-        Toast.fire({ icon: 'error', title: '{{ session('error') }}' });
+        Toast.fire({ 
+            icon: 'error', 
+            title: '{{ session('error_title') ?? "Ops!" }}', // Título em negrito
+            text: '{{ session('error') }}' // Mensagem detalhada em baixo
+        });
     @endif
 });
 </script>
@@ -83,7 +94,7 @@ document.addEventListener('DOMContentLoaded', function () {
                                 <th>Cor</th>
                                 <th>KM</th>
                                 <th>Câmbio</th>
-                                <th>Anúncio</th>
+                                <th>Portas</th>
                                 <th>Ações</th>
                             </tr>
                         </thead>
@@ -141,12 +152,32 @@ document.addEventListener('DOMContentLoaded', function () {
                                     <span class="badge bg-secondary">{{ $veiculo->status_anuncio ?? 'Não consta' }}</span>
                                 @endif
                             </td>
+
+
                             <td class="table-action">
                                 <a href="{{ route('anuncios.show', $veiculo->id) }}" class="action-icon">
-                                    <i class="mdi mdi-eye"></i>
+                                    <i class="mdi mdi-pencil-box-outline me-2"></i>
                                 </a>
+
+                                <a href="#" onclick="confirmArchive({{ $veiculo->id }});" class="action-icon">
+                                    <i class="mdi mdi-archive-arrow-down-outline me-2"></i>
+                                </a>
+
+                                <a href="#" onclick="confirmDelete({{ $veiculo->id }})" class="action-icon text-danger">
+                                    <i class="mdi mdi-trash-can-outline me-2"></i>
+                                </a>
+
+                                <form action="{{ route('anuncios.arquivar', $veiculo->id) }}" method="POST" style="display: none;" id="form-arquivar-{{ $veiculo->id }}">
+                                    @csrf
+                                    @method('PUT')
+                                </form>
+
+                                <form id="form-delete-{{ $veiculo->id }}" action="{{ route('anuncios.destroy', $veiculo->id) }}" method="POST" style="display: none;">
+                                    @csrf
+                                    @method('DELETE')
+                                </form>
                             </td>
-                            </tr>
+                        </tr>
                             @endforeach
                         </tbody>
                     </table>
