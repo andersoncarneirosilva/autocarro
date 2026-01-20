@@ -19,7 +19,7 @@ class LojaController extends Controller
 {
     //dd($request);
     // Inicia a query filtrando apenas anúncios publicados
-    $query = Anuncio::query()->where('status_anuncio', 'Publicado'); 
+    $query = Anuncio::with('user.revenda')->where('status_anuncio', 'Publicado');
 
     // Executa a paginação após aplicar o filtro
     $veiculos = $query->paginate(10);
@@ -105,12 +105,14 @@ public function searchVeiculosUsados(Request $request)
 
 private function processarBusca(Request $request, $estado = 'Novo')
 {
-    $query = Anuncio::query();
+    $query = Anuncio::with('user.revenda');
 
     // 1. REGRAS GLOBAIS
     $query->where('status', 'Ativo')
           ->where('status_anuncio', 'Publicado')
           ->where('estado', $estado);
+
+    $veiculos = $query->orderBy('created_at', 'desc')->paginate(12);
 
     // Mapeamento de Marcas
     $mapeamentoMarcas = [

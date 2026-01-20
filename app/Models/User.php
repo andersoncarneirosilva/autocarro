@@ -26,7 +26,7 @@ class User extends Authenticatable
     protected $fillable = [
         'name',
         'email',
-        'CPF',
+        'cpf',
         'telefone',
         'nivel_acesso',
         'password',
@@ -55,6 +55,12 @@ class User extends Authenticatable
         'last_login_at' => 'datetime',
         'password_changed_at' => 'datetime',
     ];
+
+public function revenda()
+{
+    // O segundo parâmetro 'user_id' é a chave estrangeira na tabela revendas
+    return $this->hasOne(Revenda::class, 'user_id');
+}
 
     public function assinaturas()
     {

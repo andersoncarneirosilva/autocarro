@@ -76,7 +76,12 @@ class AnuncioController extends Controller
     public function show($id)
 {
     // Carrega o anúncio com os documentos e o cliente já vinculado
-    $veiculo = Anuncio::with(['documentos', 'cliente'])->find($id);
+    // Se estiver buscando por ID no painel
+    $veiculo = Anuncio::with('user.revenda')->findOrFail($id);
+    
+    // Pega o slug da revenda através do relacionamento
+    $slugRevenda = $veiculo->user->revenda->slug ?? 'vendedor';
+
     $documentos = Documento::find($id);
     if (!$veiculo) {
         return redirect()->route('anuncios.index');
@@ -84,7 +89,7 @@ class AnuncioController extends Controller
 
     $clientes = Cliente::orderBy('nome', 'asc')->get();
 
-    return view('anuncios.show', compact('veiculo', 'clientes','documentos'));
+    return view('anuncios.show', compact('veiculo', 'clientes','documentos', 'slugRevenda'));
 }
 
     public function update(Request $request, $id)

@@ -11,6 +11,7 @@ class Revenda extends Model
 
     protected $fillable = [
         'nome',
+        'cnpj',
         'fones',
         'rua',
         'numero',
@@ -18,6 +19,8 @@ class Revenda extends Model
         'cidade',
         'estado',
         'cep',
+        'slug',
+        'background',
     ];
 
     protected $casts = [

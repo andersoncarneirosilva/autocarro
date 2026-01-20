@@ -10,7 +10,7 @@ return new class extends Migration {
         Schema::create('revendas', function (Blueprint $table) {
             $table->id();
             $table->string('nome');
-            $table->string('CPNJ');
+            $table->string('cnpj');
             $table->json('fones');
             $table->string('rua');
             $table->string('numero', 20);
@@ -18,8 +18,10 @@ return new class extends Migration {
             $table->string('cidade');
             $table->string('estado', 2);
             $table->string('cep', 10);
+            $table->string('background')->nullable();
             $table->timestamps();
-
+            
+            $table->string('slug')->unique(); // 'nome-da-revenda'
             $table->foreignId('user_id')->constrained()->onDelete('cascade');
             
         });

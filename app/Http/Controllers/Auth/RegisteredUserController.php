@@ -14,7 +14,7 @@ use Illuminate\Support\Facades\Hash;
 use Illuminate\Validation\Rules;
 use Illuminate\View\View;
 use Illuminate\Support\Facades\DB;
-
+use Illuminate\Support\Str; 
 class RegisteredUserController extends Controller
 {
     public function create(): View
@@ -22,7 +22,7 @@ class RegisteredUserController extends Controller
         return view('login.register');
     }
 
-    public function store(Request $request): RedirectResponse
+public function store(Request $request): RedirectResponse
 {
     // 1. Limpa CPF e CNPJ antes de qualquer coisa (apenas números)
     $request->merge([
@@ -51,7 +51,7 @@ class RegisteredUserController extends Controller
     ];
 
     if ($isRevenda) {
-        $rules['cnpj'] = ['required', 'string', 'unique:users,CPF']; // CNPJ tbm valida na coluna CPF de users
+        $rules['cnpj'] = ['required', 'string', 'unique:users,CPF'];
     } else {
         $rules['cpf']  = ['required', 'string', 'unique:users,CPF'];
     }
@@ -65,15 +65,15 @@ class RegisteredUserController extends Controller
     ];
 
     $request->validate($rules, $messages);
-
     try {
         return DB::transaction(function () use ($request, $isRevenda) {
             
+            $documento = $isRevenda ? $request->cnpj : $request->cpf;
             // 5. Criar o Usuário Principal
             $user = User::create([
                 'name'         => $request->name,
                 'email'        => $request->email,
-                'CPF'          => $isRevenda ? $request->cnpj : $request->cpf, 
+                'cpf'          => $documento,
                 'password'     => Hash::make($request->password),
                 'nivel_acesso' => $isRevenda ? 'Revenda' : 'Usuário',
                 'telefone'     => $request->whatsapp,
@@ -84,12 +84,24 @@ class RegisteredUserController extends Controller
                 'size_folder'  => 50,
             ]);
 
-            // 6. Se for revenda, salvar com user_id na tabela de revendas
+            // 6. Se for revenda, salvar com user_id e SLUG na tabela de revendas
             if ($isRevenda) {
+                // Geração do Slug Amigável
+                $slugBase = Str::slug($request->name);
+                $slug = $slugBase;
+                
+                // Verifica se já existe esse slug e adiciona um contador se necessário
+                $i = 1;
+                while (DB::table('revendas')->where('slug', $slug)->exists()) {
+                    $slug = $slugBase . '-' . $i;
+                    $i++;
+                }
+
                 DB::table('revendas')->insert([
-                    'user_id'    => $user->id, // Vínculo correto (Relacionamento 1:1)
+                    'user_id'    => $user->id,
                     'nome'       => $request->name,
-                    'CPNJ'       => $request->cnpj, 
+                    'slug'       => $slug, // <-- CAMPO ADICIONADO PARA RESOLVER O ERRO
+                    'cnpj'       => $request->cnpj, 
                     'fones'      => json_encode(['whatsapp' => $request->whatsapp]),
                     'rua'        => $request->rua ?? '',
                     'numero'     => $request->numero ?? '',
@@ -104,6 +116,13 @@ class RegisteredUserController extends Controller
 
             event(new Registered($user));
             Auth::login($user);
+
+            // 7. Redirecionamento condicional
+            // Se for revenda, podemos mandar direto para a página dela ou dashboard
+            // if ($isRevenda) {
+            //     // Se você usou o prefixo /loja/ no web.php, mude para url('/loja/' . $slug)
+            //     return redirect()->to(url('/loja/' . $slug)); 
+            // }
 
             return redirect(RouteServiceProvider::HOME);
         });

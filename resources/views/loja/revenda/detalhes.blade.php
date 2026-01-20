@@ -263,25 +263,34 @@
 <section class="container py-5 mt-5">
     <nav class="d-flex gap-2 small text-muted mt-4 mb-4 overflow-x-auto text-nowrap">
         <a href="/" class="text-decoration-none text-muted">Início</a> / 
-        <a href="/comprar" class="text-decoration-none text-muted">Comprar</a> / 
+        <a href="{{ url('/loja/' . $revenda->slug) }}" class="text-decoration-none text-muted">
+    {{ $revenda->nome }}
+</a>/ 
         <span class="text-dark fw-medium">{{ $veiculo->marca_exibicao }} {{ $veiculo->modelo_exibicao }}</span>
     </nav>
 
     <div class="row g-4">
         <div class="col-lg-7">
             @php
-    $totalImages = count($veiculo->images);
+    // Decodifica a string JSON para um array PHP
+    $imagensArray = is_string($veiculo->images) ? json_decode($veiculo->images, true) : $veiculo->images;
+    
+    // Garante que se não houver imagens, seja um array vazio para não quebrar o loop
+    $imagensArray = $imagensArray ?? [];
+    
+    $totalImages = count($imagensArray);
     $maxThumbs = 7;
 @endphp
 
 <div class="position-relative carousel-main-container mb-3">
     <div id="carouselDetalhes" class="carousel slide" data-bs-ride="false" data-bs-interval="false">
         <div class="carousel-inner">
-            @foreach($veiculo->images as $index => $img)
-                <div class="carousel-item {{ $index === 0 ? 'active' : '' }}">
-                    <img src="{{ asset('storage/' . $img) }}" class="d-block w-100" style="height: 480px; object-fit: cover; border-radius: 12px;" alt="Foto do veículo">
-                </div>
-            @endforeach
+            {{-- Troque $veiculo->images por $imagensArray --}}
+@foreach($imagensArray as $index => $img)
+    <div class="carousel-item {{ $index === 0 ? 'active' : '' }}">
+        <img src="{{ asset('storage/' . $img) }}" class="d-block w-100" ...>
+    </div>
+@endforeach
         </div>
 
         @if($totalImages > 1)
@@ -303,13 +312,14 @@
     @endif
 
     <div class="thumbs-container" id="thumbsContainer">
-        @foreach($veiculo->images as $index => $img)
-            <div class="thumb-item {{ $index === 0 ? 'active' : '' }}" 
-                 onclick="goToSlide({{ $index }})" 
-                 data-index="{{ $index }}">
-                <img src="{{ asset('storage/' . $img) }}" alt="Miniatura {{ $index + 1 }}">
-            </div>
-        @endforeach
+        {{-- Troque $veiculo->images por $imagensArray --}}
+@foreach($imagensArray as $index => $img)
+    <div class="thumb-item {{ $index === 0 ? 'active' : '' }}" 
+         onclick="goToSlide({{ $index }})" 
+         data-index="{{ $index }}">
+        <img src="{{ asset('storage/' . $img) }}" alt="Miniatura {{ $index + 1 }}">
+    </div>
+@endforeach
     </div>
 
     @if($totalImages > 5)
@@ -557,12 +567,40 @@
                 @endif
                     <div class="row g-2">
                         <div class="col-6">
-                            <a href="https://wa.me/55{{ $veiculo->whatsapp }}" target="_blank" class="btn btn-whatsapp-detail w-100 rounded-3 d-flex align-items-center justify-content-center">
-                                <i class="bi bi-whatsapp me-2"></i> Proposta
-                            </a>
+                            @php
+                                // 1. Decodifica o JSON da coluna fones
+                                $fones = json_decode($revenda->fones, true);
+                                $whatsappRaw = $fones['whatsapp'] ?? '';
+
+                                // 2. Remove tudo que não for número (limpa parênteses, espaços e traços)
+                                $whatsappLimpo = preg_replace('/\D/', '', $whatsappRaw);
+                                
+                                // 3. Monta a mensagem automática (opcional)
+                                $mensagem = urlencode("Olá! Vi o anúncio do " . $veiculo->marca_exibicao . " " . $veiculo->modelo_exibicao . " no Alcecar e gostaria de mais informações.");
+                            @endphp
+
+                            @if($whatsappLimpo)
+                                <a href="https://wa.me/55{{ $whatsappLimpo }}?text={{ $mensagem }}" 
+                                target="_blank" 
+                                class="btn btn-whatsapp-detail w-100 rounded-3 d-flex align-items-center justify-content-center">
+                                    <i class="bi bi-whatsapp me-2"></i> Proposta
+                                </a>
+                            @else
+                                <button class="btn btn-secondary w-100 rounded-3 d-flex align-items-center justify-content-center" disabled>
+                                    <i class="bi bi-telephone me-2"></i> Sem WhatsApp
+                                </button>
+                            @endif
                         </div>
                         <div class="col-6">
-                            <a href="https://maps.google.com/?q={{ urlencode($veiculo->unidade->endereco ?? 'Sua Loja Aqui') }}" target="_blank" class="btn btn-outline-location w-100 rounded-3 d-flex align-items-center justify-content-center">
+                            @php
+                                // Monta a string de endereço completa para o Google Maps
+                                $enderecoCompleto = "{$revenda->rua}, {$revenda->numero} - {$revenda->bairro}, {$revenda->cidade} - {$revenda->estado}, {$revenda->cep}";
+                                $googleMapsUrl = "https://www.google.com/maps/search/?api=1&query=" . urlencode($enderecoCompleto);
+                            @endphp
+
+                            <a href="{{ $googleMapsUrl }}" 
+                            target="_blank" 
+                            class="btn btn-outline-location w-100 rounded-3 d-flex align-items-center justify-content-center">
                                 <i class="bi bi-geo-alt me-2"></i> Onde Estamos
                             </a>
                         </div>

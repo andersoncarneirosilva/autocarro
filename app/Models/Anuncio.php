@@ -75,6 +75,13 @@ protected static function boot()
     });
 }
 
+public function revenda()
+{
+    // Um anúncio pertence a um usuário, que tem uma revenda
+    // Se o seu banco usa user_id na tabela revendas:
+    return $this->hasOneThrough(Revenda::class, User::class, 'id', 'user_id', 'user_id', 'id');
+}
+
      public function user()
     {
         return $this->belongsTo(User::class);

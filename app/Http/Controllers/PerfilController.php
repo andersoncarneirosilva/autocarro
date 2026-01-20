@@ -3,11 +3,13 @@
 namespace App\Http\Controllers;
 
 use App\Models\User;
+use App\Models\Revenda;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Log;
+
 
 class PerfilController extends Controller
 {
@@ -20,15 +22,17 @@ class PerfilController extends Controller
     }
 
     public function index()
-    {
+{
+    $user = auth()->user();
+    
+    // Forçamos a busca pelo ID do usuário logado
+    $revenda = Revenda::where('user_id', $user->id)->first();
 
-        $userId = Auth::id();
-        $user = User::find($userId);
+    // Debug opcional: se quiser testar se está encontrando, descomente a linha abaixo:
+    // dd($revenda); 
 
-        
-        return view('perfil.index', compact(['user']));
-
-    }
+    return view('perfil.index', compact('user', 'revenda'));
+}
 
     private function getFilesAndFolders($path, $relativePath = '', $userId = null)
 {
@@ -234,4 +238,92 @@ public function deleteFolders(Request $request)
 
         return redirect()->route('perfil.index');
     }
+
+    
+
+public function updateRevenda(Request $request)
+{
+    Log::info('🔵 updateRevenda iniciado');
+
+    try {
+        $user = auth()->user();
+        Log::info('👤 Usuário autenticado', ['user_id' => $user?->id]);
+
+        $revenda = Revenda::where('user_id', $user->id)->first();
+        Log::info('🏪 Revenda encontrada', ['revenda' => $revenda?->id]);
+
+        if (!$revenda) {
+            throw new \Exception('Revenda não encontrada');
+        }
+
+        // ⚠️ IMPORTANTE: nunca pegar tudo quando tem upload
+        $data = $request->except('background');
+        Log::info('📦 Dados recebidos', $data);
+
+        Log::info('📂 Tem arquivo background?', [
+            'hasFile' => $request->hasFile('background'),
+            'file_valid' => $request->hasFile('background')
+                ? $request->file('background')->isValid()
+                : false,
+        ]);
+
+        if ($request->hasFile('background')) {
+            $file = $request->file('background');
+
+            Log::info('🖼️ Arquivo recebido', [
+                'original_name' => $file->getClientOriginalName(),
+                'mime' => $file->getClientMimeType(),
+                'size' => $file->getSize(),
+            ]);
+
+            if ($file->isValid()) {
+                $path = $file->store("revendas/{$revenda->slug}", 'public');
+
+                Log::info('💾 Resultado do store()', [
+                    'path' => $path,
+                    'exists' => $path
+                        ? Storage::disk('public')->exists($path)
+                        : false,
+                ]);
+
+                if (!$path) {
+                    throw new \Exception('store() retornou null');
+                }
+
+                if ($revenda->background && Storage::disk('public')->exists($revenda->background)) {
+                    Storage::disk('public')->delete($revenda->background);
+                    Log::info('🗑️ Background antigo removido');
+                }
+
+                $data['background'] = $path;
+            } else {
+                Log::warning('❌ Arquivo inválido');
+            }
+        }
+
+        $data['fones'] = json_encode([
+            'whatsapp' => $request->whatsapp
+        ]);
+
+        Log::info('📝 Dados finais para update()', $data);
+
+        $updated = $revenda->update($data);
+
+        Log::info('✅ Update executado', ['updated' => $updated]);
+
+        return back()->with('success', 'Dados atualizados com sucesso!');
+
+    } catch (\Throwable $e) {
+        Log::error('🔥 Erro no updateRevenda', [
+            'message' => $e->getMessage(),
+            'line' => $e->getLine(),
+            'file' => $e->getFile(),
+        ]);
+
+        return back()->withErrors([
+            'error' => $e->getMessage()
+        ]);
+    }
+}
+
 }

@@ -31,6 +31,7 @@ use App\Http\Controllers\PixController;
 use App\Http\Controllers\LojaController;
 use App\Http\Controllers\SiteController;
 use App\Http\Controllers\RevendaController;
+use App\Http\Controllers\RevendaPublicaController;
 
 use Illuminate\Support\Facades\Route;
 use Livewire\Livewire;
@@ -185,6 +186,7 @@ Route::get('/anuncios/{id}', [AnuncioController::class, 'show'])->name('anuncios
     Route::get('/dashboard', [DashController::class, 'index'])->name('dashboard.index');
 
     // PERFIL
+    Route::put('/perfil/revenda/update', [PerfilController::class, 'updateRevenda'])->name('perfil.revenda.update');
     Route::put('/perfil/{id}', [PerfilController::class, 'update'])->name('perfil.update');
     Route::get('/perfil/{id}/edit', [PerfilController::class, 'edit'])->name('perfil.edit');
     Route::get('/perfil', [PerfilController::class, 'index'])->name('perfil.index');
@@ -376,5 +378,9 @@ Route::get('/contato', [LojaController::class, 'contato'])->name('loja.contato')
 
 Route::get('/', [LojaController::class, 'index'])->name('loja.index');
 
-
+// Rota para perfil público da revenda
+// Em vez de /{slug}, use /loja/{slug} ou /v/{slug} (v de vitrine)
+Route::get('/loja/{slug}', [RevendaPublicaController::class, 'show'])->name('revenda.publica');
+Route::get('/loja/{loja_slug}/veiculo/{veiculo_slug}', [RevendaPublicaController::class, 'detalhesVeiculo'])
+    ->name('loja.veiculo.detalhes');
 require __DIR__.'/auth.php';
