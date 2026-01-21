@@ -9,10 +9,10 @@
     <meta name="csrf-token" content="{{ csrf_token() }}">
 
     <link rel="shortcut icon" href="{{ url('images/favicon.ico') }}">
-    <script src="{{ url('assets/js/hyper-config.js') }}"></script>
+    <script src="{{ url('backend/js/hyper-config.js') }}"></script>
 
-    <link href="{{ url('assets/css/app-saas.css') }}" rel="stylesheet" type="text/css" id="app-style" />
-    <link href="{{ url('assets/css/icons.min.css') }}" rel="stylesheet" type="text/css" />
+    <link href="{{ url('backend/css/app-saas.css') }}" rel="stylesheet" type="text/css" id="app-style" />
+    <link href="{{ url('backend/css/icons.min.css') }}" rel="stylesheet" type="text/css" />
 
 </head>
 
@@ -38,7 +38,7 @@
                         <!-- Logo -->
                         <div class="card-body p-4">
                             <div class="text-center">
-                                <img src="{{ url('assets/images/svg/file-searching.svg') }}" height="90" alt="File not found Image">
+                                <span><img src="backend/images/logo_texto.png" alt="logo" height="22"></span>
 
                                 <h1 class="text-error mt-4">419</h1>
                                 <h4 class="text-uppercase text-danger mt-3">Erro ao realizar o login</h4>
@@ -58,12 +58,15 @@
     <!-- end page -->
 
     <footer class="footer footer-alt">
-        2018 -
-        <script>document.write(new Date().getFullYear())</script> © Hyper - Coderthemes.com
-    </footer>
+    2025 - <span id="current-year"></span> © Alcecar - alcecar.com.br
+</footer>
+
+<script>
+    document.getElementById('current-year').textContent = new Date().getFullYear();
+</script>
     <!-- Vendor js -->
-    <script src="{{ url('assets/js/vendor.min.js') }}"></script> 
-    <script src="{{ url('assets/js/app.min.js') }}"></script>
+    <script src="{{ url('backend/js/vendor.min.js') }}"></script> 
+    <script src="{{ url('backend/js/app.min.js') }}"></script>
 
 </body>
 

@@ -4,15 +4,15 @@
 
 <head>
     <meta charset="utf-8" />
-    <title>@yield('title')</title>
+    <title>@yield('title')test</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="csrf-token" content="{{ csrf_token() }}">
 
     <link rel="shortcut icon" href="{{ url('images/favicon.ico') }}">
-    <script src="{{ url('assets/js/hyper-config.js') }}"></script>
+    <script src="{{ url('backend/js/hyper-config.js') }}"></script>
 
-    <link href="{{ url('assets/css/app-saas.css') }}" rel="stylesheet" type="text/css" id="app-style" />
-    <link href="{{ url('assets/css/icons.min.css') }}" rel="stylesheet" type="text/css" />
+    <link href="{{ url('backend/css/app-saas.css') }}" rel="stylesheet" type="text/css" id="app-style" />
+    <link href="{{ url('backend/css/icons.min.css') }}" rel="stylesheet" type="text/css" />
 
 </head>
 
@@ -38,7 +38,7 @@
                         <!-- Logo -->
                         <div class="card-header py-4 text-center bg-primary">
                             <a href="index.html">
-                                <span><img src="assets/images/logo.png" alt="logo" height="22"></span>
+                                <span><img src="backend/images/logo_texto.png" alt="logo" height="22"></span>
                             </a>
                         </div>
 
@@ -62,12 +62,15 @@
     <!-- end page -->
 
     <footer class="footer footer-alt">
-        2018 -
-        <script>document.write(new Date().getFullYear())</script> © Hyper - Coderthemes.com
-    </footer>
+    2025 - <span id="current-year"></span> © Alcecar - alcecar.com.br
+</footer>
+
+<script>
+    document.getElementById('current-year').textContent = new Date().getFullYear();
+</script>
     <!-- Vendor js -->
-    <script src="{{ url('assets/js/vendor.min.js') }}"></script> 
-    <script src="{{ url('assets/js/app.min.js') }}"></script>
+    <script src="{{ url('backend/js/vendor.min.js') }}"></script> 
+    <script src="{{ url('backend/js/app.min.js') }}"></script>
 
 </body>
 

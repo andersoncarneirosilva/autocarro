@@ -28,6 +28,7 @@ class AnuncioController extends Controller
 
    public function index()
 {
+    abort(404);
     // Filtra pelos anúncios onde o user_id é o ID do usuário logado
     $veiculos = Anuncio::where('user_id', auth()->id())
                         // Onde o status é ativo (removido case-sensitive se necessário)
