@@ -28,10 +28,8 @@ class AnuncioController extends Controller
 
    public function index()
 {
-    abort(404);
     // Filtra pelos anúncios onde o user_id é o ID do usuário logado
     $veiculos = Anuncio::where('user_id', auth()->id())
-                        // Onde o status é ativo (removido case-sensitive se necessário)
                         ->where('status', 'Ativo') 
                         ->orderBy('created_at', 'desc')
                         ->paginate(10);
@@ -56,9 +54,7 @@ class AnuncioController extends Controller
 
     public function store(Request $request)
 {
-    //dd($request);
     $data = $request->all();
-    //dd($data);
     $paths = [];
 
     if ($request->hasFile('images')) {

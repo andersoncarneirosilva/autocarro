@@ -108,7 +108,7 @@ public function store(Request $request): RedirectResponse
                     'nome'       => $request->name,
                     'slug'       => $slug,
                     'cnpj'       => $request->cnpj, 
-                    'fones'      => $fonesJson, // Salva: {"whatsapp":"51991919191"}
+                    'fones'      => $fonesJson,
                     'rua'        => $request->rua ?? '',
                     'numero'     => $request->numero ?? '',
                     'bairro'     => $request->bairro ?? '',

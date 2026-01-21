@@ -37,7 +37,7 @@
                     <div class="card">
                         <!-- Logo -->
                         <div class="card-header py-4 text-center bg-primary">
-                            <a href="/">
+                            <a href="{{ route('login') }}">
                                 <span><img src="backend/images/logo_texto.png" alt="logo" height="22"></span>
                             </a>
                         </div>
@@ -48,7 +48,7 @@
                                 <h4 class="text-uppercase text-danger mt-3">Página não encontrada</h4>
                                 <p class="text-muted mt-3">Parece que você pode ter tomado o caminho errado. Não se preocupe... acontece com os melhores de nós.</p>
 
-                                <a class="btn btn-info mt-3" href="/"><i class="mdi mdi-reply"></i> Voltar</a>
+                                <a class="btn btn-info mt-3" href="{{ route('login') }}"><i class="mdi mdi-reply"></i> Voltar</a>
                             </div>
                         </div> <!-- end card-body-->
                     </div>
