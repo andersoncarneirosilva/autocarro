@@ -79,8 +79,7 @@ public function store(Request $request): RedirectResponse
                 'cpf'          => $documento,
                 'password'     => Hash::make($request->password),
                 'nivel_acesso' => $isRevenda ? 'Revenda' : 'Usuário',
-                'telefone'     => $request->whatsapp, // Aqui salva o número limpo (ex: 51991919191)
-                'perfil'       => $isRevenda ? 'Lojista' : 'Cliente',
+                'telefone'     => $request->whatsapp,
                 'plano'        => 'Basic',
                 'status'       => 'Ativo',
                 'credito'      => 10,

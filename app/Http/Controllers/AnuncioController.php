@@ -26,10 +26,12 @@ class AnuncioController extends Controller
         $this->model = $user;
     }
 
-    public function index()
+   public function index()
 {
-    // Filtra apenas onde o status é 'ativo' (ou o valor que você usa para itens não arquivados)
-    $veiculos = Anuncio::where('status', 'ativo')
+    // Filtra pelos anúncios onde o user_id é o ID do usuário logado
+    $veiculos = Anuncio::where('user_id', auth()->id())
+                        // Onde o status é ativo (removido case-sensitive se necessário)
+                        ->where('status', 'Ativo') 
                         ->orderBy('created_at', 'desc')
                         ->paginate(10);
 
