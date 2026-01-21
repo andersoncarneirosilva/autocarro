@@ -2,116 +2,98 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Configuracao;
-use App\Models\ModeloProcuracoes;
+use App\Models\ModeloProcuracao;
 use App\Models\Outorgado;
-use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Log;
 
 class ConfiguracoesController extends Controller
 {
-    protected $model;
-
-    public function __construct(Configuracao $docs)
+    public function index()
     {
-        $this->model = $docs;
-    }
-
-    public function index(Request $request)
-    {
-        $title = 'Excluir!';
-        $text = 'Tem certeza que deseja excluir?';
-        confirmDelete($title, $text);
-
         $userId = Auth::id();
-        $user = User::find($userId);
-
         
-        // dd($user);
-        // Paginar os registros de Outorgado
+        // Dados para a View
+        $modeloProc = ModeloProcuracao::where('user_id', $userId)->get();
         $outorgados = Outorgado::where('user_id', $userId)->get();
 
-        // Filtrar os registros de ModeloProcuracoes pelo user_id do usuário logado
-        $modeloProc = ModeloProcuracoes::where('user_id', $userId)->get()->map(function ($modelo) {
-            // Decodificar o campo "outorgados" (JSON)
-            $outorgadosIds = json_decode($modelo->outorgados, true);
-
-            // Buscar os registros de "outorgados" relacionados
-            $modelo->outorgadosDetalhes = Outorgado::whereIn('id', $outorgadosIds)->get();
-
-            return $modelo;
-        });
-
-        // Passa os dados necessários para a view
         return view('configuracoes.index', compact('modeloProc', 'outorgados'));
     }
 
-    public function storeOrUpdate(Request $request)
-    {
-        // Obtém o ID do usuário logado
-        $userId = Auth::id();
+    /**
+     * Salva ou Atualiza o modelo (Create/Update)
+     */
+    public function saveProcuracao(Request $request)
+{
+    try {
+        $request->validate([
+            'conteudo' => 'required|string',
+            'cidade' => 'required|string',
+            'outorgados' => 'required|array|min:1|max:3',
+            'outorgados.*' => 'exists:outorgados,id',
+        ]);
 
-        // Obtém os textos necessários
-        $textoInicio = TextoInicio::first();
-        $textoPoder = TextoPoder::first();
-        $cidade = Cidade::first();
+        $modelo = ModeloProcuracao::updateOrCreate(
+            ['user_id' => Auth::id()], 
+            [
+                'conteudo'   => $request->conteudo,
+                'cidade'     => $request->cidade,
+                'outorgados' => $request->outorgados,
+            ]
+        );
 
-        // Verifica se o campo "outorgados" foi enviado e é um array
-        if ($request->has('outorgados') && is_array($request->outorgados)) {
-            // Salva o array de outorgados como JSON
-            $outorgadosJson = json_encode($request->outorgados);
+        // Retorna com a chave 'success' para ativar o seu script de Toast
+        return redirect()->route('configuracoes.index')
+            ->with('success', 'Configuração salva com sucesso!');
 
-            // Verifica se já existe um cadastro na tabela
-            $existeCadastro = ModeloProcuracoes::first();
-
-            if ($existeCadastro) {
-                // Atualiza o registro existente
-                $existeCadastro->update([
-                    'outorgados' => $outorgadosJson,
-                    'texto_inicial' => $textoInicio->texto_inicio, // Salva texto_inicial como string
-                    'texto_final' => $textoPoder->texto_final,    // Salva texto_final como string
-                    'user_id' => $userId,           // Salva o ID do usuário logado
-                    'cidade' => $cidade->cidade,
-                ]);
-            } else {
-                // Cria um novo registro
-                ModeloProcuracoes::create([
-                    'outorgados' => $outorgadosJson,
-                    'texto_inicial' => $textoInicio ? $textoInicio->texto_inicio : null,
-                    'texto_final' => $textoPoder ? $textoPoder->texto_final : null,
-                    'user_id' => $userId,
-                    'cidade' => $cidade ? $cidade->cidade : null,
-                ]);
-            }
-        } else {
-            // Retorna erro caso 'outorgados' não seja enviado ou não seja um array
-            return redirect()->back()->withErrors(['outorgados' => 'O campo outorgados é obrigatório e deve ser um array.']);
-        }
-
-        // Redireciona com mensagem de sucesso
-        alert()->success('Outorgado selecionado com sucesso!');
-
-        return redirect()->route('configuracoes.index');
+    } catch (\Exception $e) {
+        Log::error('Erro ao salvar configuração Alcecar:', ['error' => $e->getMessage()]);
+        
+        // Retorna com a chave 'error' para o Toast
+        return redirect()->back()
+            ->with('error', 'Não foi possível salvar as alterações.');
     }
+}
 
-    // public function update(Request $request, $id){
-    //     $doc = ConfigProc::findOrFail($id);
+    /**
+     * Retorna os dados para o Modal (Read)
+     */
+    public function showProcuracao($id)
+{
+    $modelo = ModeloProcuracao::where('user_id', Auth::id())->findOrFail($id);
+    
+    // Se o cast estiver no model, $modelo->outorgados já é um array.
+    // Se não estiver, fazemos a checagem manual:
+    $ids = is_array($modelo->outorgados) 
+           ? $modelo->outorgados 
+           : json_decode($modelo->outorgados, true) ?? [];
 
-    //     $doc->update($request->all());
+    $detalhesOutorgados = Outorgado::whereIn('id', $ids)->get();
 
-    //     alert()->success('Procuração editada com sucesso!');
-    //     return redirect()->route('configuracoes.index');
-    // }
+    return response()->json([
+        'success' => true,
+        'data' => [
+            'conteudo' => $modelo->conteudo,
+            'cidade' => $modelo->cidade,
+            'outorgados' => $detalhesOutorgados
+        ]
+    ]);
+}
 
-    // public function show($id){
-    //     $configuracao = ConfigProc::find($id);
+    /**
+     * Exclui o modelo (Delete)
+     */
+    public function deleteProcuracao($id)
+    {
+        try {
+            $modelo = ModeloProcuracao::where('user_id', Auth::id())->findOrFail($id);
+            $modelo->delete();
 
-    //     if (!$configuracao) {
-    //         return response()->json(['error' => 'Configuração não encontrada'], 404);
-    //     }
-
-    //     return response()->json($configuracao);
-    // }
-
+            alert()->success('Excluído!', 'O modelo foi removido.');
+            return redirect()->route('configuracoes.index');
+        } catch (\Exception $e) {
+            return redirect()->back()->with('error', 'Erro ao excluir.');
+        }
+    }
 }

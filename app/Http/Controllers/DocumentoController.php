@@ -7,142 +7,130 @@ use App\Models\Anuncio;
 use App\Models\Cliente;
 use App\Models\Documento;
 use App\Models\Outorgado;
-use App\Models\ModeloProcuracoes;
+use App\Models\ModeloProcuracao;
 use Illuminate\Support\Facades\Auth;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Storage;
 use FPDF;
 use Smalot\PdfParser\Parser;
+use Barryvdh\DomPDF\Facade\Pdf;
+
 class DocumentoController extends Controller
 {
-    public function gerarProcuracao(Request $request, $anuncio_id)
-    {
+    public function gerarProcuracao(Request $request, $anuncioId)
+{
+    // 1. Busca os dados iniciais
+    $userId = auth()->id();
+    $anuncio = Anuncio::findOrFail($anuncioId);
+    $cliente = Cliente::findOrFail($request->cliente_id);
+    $modelo = ModeloProcuracao::where('user_id', $userId)->firstOrFail();
+$tipoDoc = $request->input('tipo_documento');
+    if ($tipoDoc === 'atpve') {
+        // Chama sua função privada específica para ATPV-e
+        $resultado = $this->gerarPdfAtpve($anuncio, $cliente, $userId, $request->valor_venda);
         
-        $userId = Auth::id();
-        $anuncio = Anuncio::findOrFail($anuncio_id);
-        $cliente = Cliente::findOrFail($request->cliente_id);
-        $configProc = ModeloProcuracoes::where('user_id', $userId)->first();
-
-        // Verificação de Outorgados
-        if (!$configProc || empty($configProc->outorgados)) {
-            return back()->with('error_title', 'Configuração Pendente')
-                        ->with('error', 'Por favor, cadastre ao menos um Outorgado nas configurações.');
-        }
-                
-        // Configurações de Data
-        $dataAtual = Carbon::now();
-        $dataPorExtenso = $dataAtual->translatedFormat('d \d\e F \d\e Y');
-
-        // Inicializar FPDF (Mantendo sua lógica de construção do PDF)
-        $pdf = new Fpdf();
-        $pdf->SetMargins(15, 15, 15);
-        $pdf->AddPage();
-        $pdf->SetFont('Arial', 'B', 14);
-
-        // Título
-        $pdf->Cell(0, 10, utf8_decode('PROCURAÇÃO'), 0, 1, 'C');
-        $pdf->Ln(8);
-
-        // OUTORGANTE (Dados do Cliente selecionado no Modal)
-        $pdf->SetFont('Arial', 'B', 11);
-        $pdf->Cell(0, 5, 'OUTORGANTE: ' . strtoupper(utf8_decode($cliente->nome)), 0, 1, 'L');
-        $pdf->SetFont('Arial', '', 11);
-        $pdf->Cell(0, 5, "CPF/CNPJ: " . $cliente->cpf_cnpj, 0, 1, 'L');
-        $pdf->Cell(0, 5, utf8_decode("ENDEREÇO: " . strtoupper($cliente->endereco . ', ' . $cliente->cidade)), 0, 1, 'L');
-        
-        $pdf->Ln(5);
-        $pdf->Cell(0, 0, '___________________________________________________________________________', 0, 1, 'L');
-        $pdf->Ln(8);
-
-        // OUTORGADOS (Lógica original de buscar do JSON)
-        $outorgadosIds = json_decode($configProc->outorgados, true);
-        $outorgados = Outorgado::whereIn('id', $outorgadosIds)->get();
-
-        foreach ($outorgados as $outorgado) {
-            $pdf->SetFont('Arial', 'B', 11);
-            $pdf->Cell(0, 5, utf8_decode("OUTORGADO: {$outorgado->nome_outorgado}"), 0, 1, 'L');
-            $pdf->SetFont('Arial', '', 11);
-            $pdf->Cell(0, 5, "CPF: {$outorgado->cpf_outorgado}", 0, 1, 'L');
-            $pdf->Cell(0, 5, utf8_decode("ENDEREÇO: {$outorgado->end_outorgado}"), 0, 1, 'L');
-            $pdf->Ln(4);
-        }
-
-        $pdf->Ln(4);
-        $pdf->Cell(0, 0, '___________________________________________________________________________', 0, 1, 'L');
-        $pdf->Ln(8);
-
-        // TEXTO INICIAL (Poderes)
-        $pdf->SetFont('Arial', '', 10);
-        $textoLimpo = str_replace("\n", ' ', $configProc->texto_inicial);
-        $pdf->MultiCell(0, 5, utf8_decode($textoLimpo), 0, 'J');
-
-        // DADOS DO VEÍCULO (Vindo do objeto $anuncio do banco)
-        $pdf->Ln(5);
-        $pdf->SetFont('Arial', 'B', 11);
-        $pdf->Cell(100, 6, 'MARCA/MODELO: ' . strtoupper(utf8_decode($anuncio->marca . '/' . $anuncio->modelo)), 0, 0, 'L');
-        $pdf->Cell(0, 6, 'PLACA: ' . strtoupper($anuncio->placa), 0, 1, 'L');
-        $pdf->Cell(100, 6, 'CHASSI: ' . strtoupper($anuncio->chassi), 0, 0, 'L');
-        $pdf->Cell(0, 6, 'COR: ' . strtoupper(utf8_decode($anuncio->cor)), 0, 1, 'L');
-        $pdf->Cell(100, 6, 'ANO: ' . $anuncio->ano, 0, 0, 'L');
-        $pdf->Cell(0, 6, 'RENAVAM: ' . $anuncio->renavam, 0, 1, 'L');
-
-        // TEXTO FINAL
-        $pdf->Ln(5);
-        $pdf->SetFont('Arial', '', 10);
-        $textoFinalLimpo = str_replace("\n", ' ', $configProc->texto_final);
-        $pdf->MultiCell(0, 5, utf8_decode($textoFinalLimpo), 0, 'J');
-
-        // DATA E ASSINATURA
-        $pdf->Ln(10);
-        $pdf->Cell(0, 10, utf8_decode("$configProc->cidade, $dataPorExtenso"), 0, 1, 'R');
-        $pdf->Ln(15);
-        $pdf->Cell(0, 0, '_________________________________________________', 0, 1, 'C');
-        $pdf->SetFont('Arial', 'B', 11);
-        $pdf->Cell(0, 10, strtoupper(utf8_decode($cliente->nome)), 0, 1, 'C');
-
-        // --- NOVO BLOCO DE SALVAMENTO PADRONIZADO ---
-    
-        // 1. Define o nome do arquivo e o caminho da pasta do anúncio
-        $nomeArquivo = 'PROCURACAO_' . strtoupper($anuncio->placa) . '.pdf';
-        $pastaRelativa = "documentos/usuario_{$userId}/anuncios/anuncio_{$anuncio->id}/";
-        $pastaDestino = storage_path("app/public/{$pastaRelativa}");
-
-        // 2. Garante que a pasta do anúncio existe
-        if (!file_exists($pastaDestino)) {
-            mkdir($pastaDestino, 0775, true);
-        }
-
-        $caminhoCompleto = $pastaDestino . $nomeArquivo;
-
-        // 3. Salva o PDF no disco
-        $pdf->Output('F', $caminhoCompleto);
-        
-        // 4. ATUALIZAR OU CRIAR REGISTRO NA TABELA DOCUMENTOS
-        // Salvamos o caminho relativo para facilitar o uso da Facade Storage
-        $documento = Documento::updateOrCreate(
-            ['anuncio_id' => $anuncio->id],
-            [
-                'user_id' => $userId,
-                'cliente_id' => $cliente->id,
-                'arquivo_proc' => $pastaRelativa . $nomeArquivo,
-                'size_proc' => filesize($caminhoCompleto),
-                'size_proc_pdf' => 'A4'
-            ]
-        );
-        
-        // Verificação de ATPV-E (Se houver)
-        if ($request->tipo_documento == 'atpve') {
-            $this->gerarPdfAtpve($anuncio, $cliente, $userId, $request->valor_venda);
-        }
-
-        return back()->with('success', 'Procuração gerada e salva na pasta do anúncio!');
+        return redirect()->route('anuncios.show', $anuncioId)
+                ->with('success', 'Solicitação ATPV-e emitida com sucesso!');
     }
+
+    $html = $modelo->conteudo;
+
+    // 2. Substituições de Tags (Mantendo sua lógica)
+    $substituicoes = [
+        '{NOME_CLIENTE}'     => strtoupper($cliente->nome),
+        '{CPF_CLIENTE}'      => $cliente->cpf,
+        '{ENDERECO_CLIENTE}' => strtoupper($cliente->endereco . ', ' . $cliente->cidade),
+        '{PLACA}'            => strtoupper($anuncio->placa),
+        '{CHASSI}'           => strtoupper($anuncio->chassi),
+        '{RENAVAM}'          => $anuncio->renavam,
+        '{MARCA_MODELO}'     => strtoupper($anuncio->marca . ' / ' . $anuncio->modelo),
+        '{CIDADE}'           => strtoupper($modelo->cidade),
+        '{COR}'          => strtoupper($anuncio->cor),
+        '{DATA_EXTENSO}'     => \Carbon\Carbon::now()->translatedFormat('d \d\e F \d\e Y'),
+    ];
+    $html = str_replace(array_keys($substituicoes), array_values($substituicoes), $html);
+
+    // 3. Lógica do Repetidor de Outorgados (Regex)
+    $outorgadosIds = is_array($modelo->outorgados) ? $modelo->outorgados : json_decode($modelo->outorgados, true);
+    $outorgados = Outorgado::whereIn('id', $outorgadosIds)->get();
+
+    preg_match('/{INICIO_OUTORGADOS}(.*?){FIM_OUTORGADOS}/s', $html, $matches);
+    if (isset($matches[1])) {
+        $blocoTemplate = $matches[1];
+        $blocoProcessado = "";
+        foreach ($outorgados as $out) {
+            $item = str_replace('{NOME_OUTORGADO}', strtoupper($out->nome_outorgado), $blocoTemplate);
+            $item = str_replace('{CPF_OUTORGADO}', $out->cpf_outorgado, $item);
+            $item = str_replace('{ENDERECO_OUTORGADO}', strtoupper($out->end_outorgado), $item);
+            $blocoProcessado .= $item;
+        }
+        $html = preg_replace('/{INICIO_OUTORGADOS}.*?{FIM_OUTORGADOS}/s', $blocoProcessado, $html);
+    }
+
+    // 4. Configuração de Caminhos e Nomes
+    $placaLimpa = str_replace([' ', '-'], '', strtoupper($anuncio->placa));
+    $nomeArquivo = "procuracao_{$placaLimpa}.pdf";
+    
+    $pastaRelativa = "documentos/usuario_{$userId}/anuncios/anuncio_{$anuncioId}/";
+    $diretorioCompleto = storage_path('app/public/' . $pastaRelativa);
+
+    if (!file_exists($diretorioCompleto)) {
+        mkdir($diretorioCompleto, 0775, true);
+    }
+
+    $caminhoFisico = $diretorioCompleto . $nomeArquivo;
+
+    // 5. Gera o PDF e Salva o Arquivo Físico
+    $pdf = \Pdf::loadView('pdfs.procuracao', ['corpo' => $html]);
+    $pdf->save($caminhoFisico);
+
+    // 6. Persistência na Tabela 'documentos'
+    // Pegamos o tamanho do arquivo em bytes
+    $sizeBytes = file_exists($caminhoFisico) ? filesize($caminhoFisico) : 0;
+
+    Documento::updateOrCreate(
+        [
+            'user_id'    => $userId,
+            'anuncio_id' => $anuncioId,
+            'cliente_id' => $cliente->id,
+        ],
+        [
+            'arquivo_proc'  => $pastaRelativa . $nomeArquivo,
+            'size_proc'     => $sizeBytes,
+            'size_proc_pdf' => $this->formatSizeUnits($sizeBytes), // Helper para exibir ex: "1.2 MB"
+        ]
+    );
+
+    return redirect()->route('anuncios.show', $anuncioId)
+            ->with('success', 'Procuração emitida e salva com sucesso!');
+}
+
+/**
+ * Função auxiliar para formatar o tamanho do arquivo
+ */
+private function formatSizeUnits($bytes)
+{
+    if ($bytes >= 1048576) {
+        $bytes = number_format($bytes / 1048576, 2) . ' MB';
+    } elseif ($bytes >= 1024) {
+        $bytes = number_format($bytes / 1024, 2) . ' KB';
+    } elseif ($bytes > 1) {
+        $bytes = $bytes . ' bytes';
+    } elseif ($bytes == 1) {
+        $bytes = $bytes . ' byte';
+    } else {
+        $bytes = '0 bytes';
+    }
+    return $bytes;
+}
+    //return back()->with('success', 'Procuração gerada com sucesso!');
+
 
 
     private function gerarPdfAtpve($anuncio, $cliente, $userId, $valorVenda)
 {
     //dd($anuncio);
-    $configProc = ModeloProcuracoes::where('user_id', $userId)->first();
+    $configProc = ModeloProcuracao::where('user_id', $userId)->first();
     $outorgados = Outorgado::first();
 
     $dataAtual = Carbon::now();
@@ -409,7 +397,7 @@ class DocumentoController extends Controller
         $pdf->Cell(0, 8, 'Assinatura do vendedor/representante legal', 0, 1, 'C');
 
     // Salvamento
-    $nomeArquivo = 'atpve_'.$anuncio->placa.'_'.time().'.pdf';
+    $nomeArquivo = 'atpve_'. $anuncio->placa . '.pdf';
     $caminhoRelativo = "documentos/usuario_{$userId}/atpves/{$nomeArquivo}";
     $caminhoAbsoluto = storage_path("app/public/".$caminhoRelativo);
 
@@ -420,6 +408,7 @@ class DocumentoController extends Controller
     $pdfContent = $pdf->Output('S');
     Storage::disk('public')->put($caminhoRelativo, $pdfContent);
 
+    //dd($pdfContent);
     // Atualiza a tabela documentos
     Documento::updateOrCreate(
         ['anuncio_id' => $anuncio->id],

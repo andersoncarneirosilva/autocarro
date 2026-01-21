@@ -32,6 +32,7 @@ use App\Http\Controllers\LojaController;
 use App\Http\Controllers\SiteController;
 use App\Http\Controllers\RevendaController;
 use App\Http\Controllers\RevendaPublicaController;
+use App\Http\Controllers\ModeloProcuracaoController;
 
 use Illuminate\Support\Facades\Route;
 use Livewire\Livewire;
@@ -346,6 +347,20 @@ Route::delete('/veiculos/{veiculo}/foto', [\App\Http\Controllers\VeiculoControll
     Route::post('/modeloprocuracoes/store', [ModeloProcuracoesController::class, 'store'])->name('modeloprocuracoes.store');
     Route::get('/modeloprocuracoes/select/{id}', [ModeloProcuracoesController::class, 'select'])->name('modeloprocuracoes.select');
     Route::post('/modeloprocuracoes/confirm/{id}', [ModeloProcuracoesController::class, 'confirm'])->name('modeloprocuracoes.confirm');
+
+    // ROTA PARA A PÁGINA DE CONFIGURAÇÕES (Index e Salvar Modelo)
+Route::get('/configuracoes', [ModeloProcuracaoController::class, 'index'])->name('configuracoes.index');
+Route::post('/modelo-procuracoes/store', [ModeloProcuracaoController::class, 'store'])->name('modeloprocuracao.store');
+Route::get('/modeloprocs/{id}', [ModeloProcuracaoController::class, 'show'])->name('modeloprocuracoes.show');
+
+Route::prefix('configuracoes')->group(function () {
+    Route::get('/', [ConfiguracoesController::class, 'index'])->name('configuracoes.index');
+    
+    // CRUD do Modelo de Procuração
+    Route::post('/procuracao/salvar', [ConfiguracoesController::class, 'saveProcuracao'])->name('configuracoes.procuracao.save');
+    Route::get('/procuracao/detalhes/{id}', [ConfiguracoesController::class, 'showProcuracao'])->name('configuracoes.procuracao.show');
+    Route::delete('/procuracao/excluir/{id}', [ConfiguracoesController::class, 'deleteProcuracao'])->name('configuracoes.procuracao.delete');
+});
 
 });
 

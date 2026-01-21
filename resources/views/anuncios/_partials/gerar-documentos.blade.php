@@ -46,22 +46,50 @@
 
     <div class="modal-footer">
         <button type="button" class="btn btn-light rounded-pill px-4" data-bs-dismiss="modal">Cancelar</button>
-        <button type="submit" class="btn btn-primary rounded-pill px-4">
-            <i class="mdi mdi-check me-1"></i> Confirmar e Gerar
-        </button>
+        <button type="submit" class="btn btn-primary rounded-pill px-4" id="btnGerarProc">
+    <i class="mdi mdi-check me-1"></i> Confirmar e Gerar
+</button>
     </div>
 </form>
-
 <script>
+document.addEventListener('DOMContentLoaded', function() {
+    // 1. Unificamos as funções em um único listener
+    const formDocs = document.querySelector('#modalGerarDocs form');
+    const btnConfirmar = document.getElementById('btnGerarProc');
+
+    if (formDocs && btnConfirmar) {
+        formDocs.addEventListener('submit', function(e) {
+            // Verificamos se o formulário é válido (HTML5 validation)
+            if (!formDocs.checkValidity()) {
+                return;
+            }
+
+            // Usamos um pequeno timeout para garantir que o navegador 
+            // inicie o processo de envio antes de desabilitar o botão
+            setTimeout(() => {
+                btnConfirmar.disabled = true;
+                btnConfirmar.innerHTML = `
+                    <span class="spinner-border spinner-border-sm me-1" role="status" aria-hidden="true"></span>
+                    Gerando...
+                `;
+            }, 50);
+        });
+    }
+});
+
+// Função de alternar campos (mantida)
 function toggleValorCampo() {
     var tipo = document.getElementById('tipo_documento').value;
     var divValor = document.getElementById('div_valor_venda');
+    var inputValor = divValor.querySelector('input');
+    
     if (tipo === 'atpve') {
         divValor.style.display = 'block';
-        divValor.querySelector('input').required = true;
+        inputValor.required = true;
     } else {
         divValor.style.display = 'none';
-        divValor.querySelector('input').required = false;
+        inputValor.required = false;
+        inputValor.value = ''; // Limpa o valor se mudar para procuração
     }
 }
 </script>

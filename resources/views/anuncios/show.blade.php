@@ -546,7 +546,7 @@ document.addEventListener('DOMContentLoaded', function () {
                 </div>
                 <div class="col ps-0 text-start">
                     {{-- O link usa o campo direto do veículo --}}
-                    <a href="{{ $veiculo->arquivo_doc }}" target="_blank" class="text-muted fw-bold d-block text-truncate font-13" title="{{ basename($veiculo->arquivo_doc) }}">
+                    <a href="{{ asset('storage/' . $veiculo->arquivo_doc) }}" target="_blank" class="text-muted fw-bold d-block text-truncate font-13" title="{{ basename($veiculo->arquivo_doc) }}">
                         {{ basename($veiculo->arquivo_doc) }}
                     </a>
                     <p class="mb-0 font-12 text-muted">

@@ -1,38 +1,70 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <meta charset="utf-8">
+    <meta charset="UTF-8">
     <style>
-        body { font-family: sans-serif; line-height: 1.5; font-size: 12pt; }
-        .titulo { text-align: center; font-weight: bold; font-size: 16pt; margin-bottom: 30px; }
-        .secao { font-weight: bold; margin-top: 20px; text-transform: uppercase; }
-        .texto { text-align: justify; margin-top: 10px; }
-        .assinatura { margin-top: 50px; text-align: center; }
-        .linha { border-top: 1px solid #000; width: 300px; margin: 0 auto; }
+        /* Configurações da Folha A4 */
+        @page { 
+            size: A4;
+            /* Margens padrão de documentos jurídicos: 
+               Superior e Esquerda maiores para grampeamento/furo */
+            margin: 1.0cm 1.5cm 1.0cm 1.5cm; 
+        }
+
+        body { 
+            font-family: 'Helvetica', 'Arial', sans-serif; 
+            font-size: 11pt; /* 11pt ou 12pt é o ideal para leitura */
+            line-height: 1.6; /* Espaçamento entre linhas levemente maior */
+            text-align: justify;
+            color: #000;
+            margin: 0;
+            padding: 0;
+            width: 100%;
+        }
+
+        hr {
+        border: 0;
+        border-top: 0.5pt solid #000 !important; /* Espessura técnica de linha jurídica */
+        height: 0;
+        margin: 20px auto;
+        width: 100%; /* Respeita as margens de 1.5cm do @page */
+        opacity: 1;
+    }
+
+    /* Caso você use a técnica do parágrafo com borda no editor */
+    .content p[style*="border-top"], 
+    .content p[style*="border-bottom"] {
+        border-color: #000 !important;
+        border-width: 0.5pt !important;
+        border-style: solid !important;
+        display: block;
+        width: 100% !important;
+    }
+
+    /* Reduz o espaço excessivo entre os dados dos Outorgados */
+    .content p {
+        margin-bottom: 8pt; /* Diminuído de 12pt para economizar espaço */
+    }
+
+        /* Formatação de parágrafos */
+        p { 
+            margin-bottom: 12pt; 
+            margin-top: 0; 
+            orphans: 3; /* Evita que uma linha fique sozinha no fim da página */
+            widows: 3;  /* Evita que uma linha fique sozinha no topo da página */
+        }
+
+        strong { font-weight: bold; }
+
+        /* Ajuste para que tabelas e imagens não estourem a largura */
+        table, img {
+            max-width: 100%;
+        }
     </style>
 </head>
 <body>
-    <div class="titulo">PROCURAÇÃO</div>
-
-    <div class="secao">Outorgante:</div>
-    <p><strong>{{ $cliente->nome }}</strong>, CPF/CNPJ: {{ $cliente->cpf_cnpj }}, residente em {{ $cliente->endereco }}.</p>
-
-    <div class="secao">Outorgados:</div>
-    @foreach($outorgados as $o)
-        <p><strong>{{ $o->nome_outorgado }}</strong>, CPF: {{ $o->cpf_outorgado }}.</p>
-    @endforeach
-
-    <div class="secao">Poderes:</div>
-    <div class="texto">{{ $configProc->texto_inicial }}</div>
-
-    <div class="secao">Veículo:</div>
-    <p>MARCA/MODELO: {{ $anuncio->marca }} | PLACA: {{ $anuncio->placa }} | CHASSI: {{ $anuncio->chassi }}</p>
-
-    <div class="assinatura">
-        <p>{{ $configProc->cidade }}, {{ now()->translatedFormat('d \d\e F \d\e Y') }}</p>
-        <br><br>
-        <div class="linha"></div>
-        <p><strong>{{ $cliente->nome }}</strong></p>
+    <div class="content">
+        {!! $corpo !!}
     </div>
 </body>
 </html>

@@ -94,7 +94,7 @@ document.addEventListener('DOMContentLoaded', function () {
                                 <th>Cor</th>
                                 <th>KM</th>
                                 <th>Câmbio</th>
-                                <th>Portas</th>
+                                <th>Anúncio</th>
                                 <th>Ações</th>
                             </tr>
                         </thead>
@@ -156,7 +156,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
                             <td class="table-action">
                                 <a href="{{ route('anuncios.show', $veiculo->id) }}" class="action-icon">
-                                    <i class="mdi mdi-pencil-box-outline me-2"></i>
+                                    <i class="mdi mdi-eye me-2"></i>
                                 </a>
 
                                 <a href="#" onclick="confirmArchive({{ $veiculo->id }});" class="action-icon">
