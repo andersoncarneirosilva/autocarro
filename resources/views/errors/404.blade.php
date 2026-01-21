@@ -37,7 +37,7 @@
                     <div class="card">
                         <!-- Logo -->
                         <div class="card-header py-4 text-center bg-primary">
-                            <a href="index.html">
+                            <a href="/">
                                 <span><img src="backend/images/logo_texto.png" alt="logo" height="22"></span>
                             </a>
                         </div>
