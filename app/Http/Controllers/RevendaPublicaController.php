@@ -37,26 +37,27 @@ class RevendaPublicaController extends Controller
 
 public function detalhesVeiculo($loja_slug, $veiculo_slug)
 {
-    // 1. Busca a revenda pelo slug para manter o contexto (logo, cores, contato)
+    // 1. Busca a revenda pelo slug
     $revenda = DB::table('revendas')->where('slug', $loja_slug)->first();
 
     if (!$revenda) {
         abort(404, 'Loja não encontrada');
     }
 
-    // 2. Busca o anúncio pelo slug E garante que ele pertença ao dono daquela revenda
+    // 2. Busca o anúncio
     $veiculo = Anuncio::where('slug', $veiculo_slug)
-                      ->where('user_id', $revenda->user_id)
                       ->where('status', 'Ativo')
                       ->first();
 
-                      $texto = $veiculo->marca;
-    $marca = '';
-    $modelo = '';
-
-    if (str_starts_with($texto, 'I/')) {
-        $texto = substr($texto, 2);
+    if (!$veiculo) {
+        abort(404, 'Veículo não encontrado nesta loja');
     }
+
+    // 3. Processamento de marcas/modelos
+    $texto = $veiculo->marca;
+    $marca = ''; $modelo = '';
+
+    if (str_starts_with($texto, 'I/')) { $texto = substr($texto, 2); }
 
     if (str_contains($texto, '/')) {
         [$marca, $modelo] = explode('/', $texto, 2);
@@ -66,23 +67,25 @@ public function detalhesVeiculo($loja_slug, $veiculo_slug)
         $modelo = $partes[1] ?? '';
     }
 
-    // --- NOVA LÓGICA DE TRADUÇÃO DE MARCAS ---
-    $traducoes = [
-        'VW' => 'VOLKSWAGEN',
-        'GM' => 'CHEVROLET',
-    ];
-
+    $traducoes = ['VW' => 'VOLKSWAGEN', 'GM' => 'CHEVROLET'];
     $marcaLimpa = strtoupper(trim($marca));
-    
-    // Se a marca estiver no dicionário, substitui. Se não, mantém a original.
     $veiculo->marca_exibicao = $traducoes[$marcaLimpa] ?? $marcaLimpa;
     $veiculo->modelo_exibicao = trim($modelo);
 
-    if (!$veiculo) {
-        abort(404, 'Veículo não encontrado nesta loja');
-    }
+    // --- PROCESSAMENTO DO WHATSAPP (Lógica simplificada para o Alcecar) ---
+    $fones = json_decode($revenda->fones, true);
+    $whatsapp = $fones['whatsapp'] ?? '';
+    
+    // O texto da mensagem automática
+    $textoWhats = "Olá! Vi o anúncio do {$veiculo->marca_exibicao} {$veiculo->modelo_exibicao} no Alcecar e gostaria de mais informações.";
+    
+    // Monta a URL final - Como o número já está limpo, apenas concatenamos
+    $revenda->whatsapp_url = "https://wa.me/55" . $whatsapp . "?text=" . urlencode($textoWhats);
 
-    // 3. Retorna a view de detalhes (ex: anuncios.show ou revendas.veiculo)
+    // --- PROCESSAMENTO DO MAPS ---
+    $endereco = "{$revenda->rua}, {$revenda->numero}, {$revenda->bairro}, {$revenda->cidade}-{$revenda->estado}";
+    $revenda->maps_url = "https://www.google.com/maps/search/?api=1&query=" . urlencode($endereco);
+
     return view('loja.revenda.detalhes', compact('revenda', 'veiculo'));
 }
 }

@@ -566,45 +566,22 @@
                     </div>
                 @endif
                     <div class="row g-2">
-                        <div class="col-6">
-                            @php
-                                // 1. Decodifica o JSON da coluna fones
-                                $fones = json_decode($revenda->fones, true);
-                                $whatsappRaw = $fones['whatsapp'] ?? '';
+    <div class="col-6">
+        <a href="{{ $revenda->whatsapp_url }}" 
+           target="_blank" 
+           class="btn btn-whatsapp-detail w-100 rounded-3 d-flex align-items-center justify-content-center btn-custom-height">
+            <i class="bi bi-whatsapp me-2"></i> Proposta
+        </a>
+    </div>
 
-                                // 2. Remove tudo que não for número (limpa parênteses, espaços e traços)
-                                $whatsappLimpo = preg_replace('/\D/', '', $whatsappRaw);
-                                
-                                // 3. Monta a mensagem automática (opcional)
-                                $mensagem = urlencode("Olá! Vi o anúncio do " . $veiculo->marca_exibicao . " " . $veiculo->modelo_exibicao . " no Alcecar e gostaria de mais informações.");
-                            @endphp
-
-                            @if($whatsappLimpo)
-                                <a href="https://wa.me/55{{ $whatsappLimpo }}?text={{ $mensagem }}" 
-                                target="_blank" 
-                                class="btn btn-whatsapp-detail w-100 rounded-3 d-flex align-items-center justify-content-center">
-                                    <i class="bi bi-whatsapp me-2"></i> Proposta
-                                </a>
-                            @else
-                                <button class="btn btn-secondary w-100 rounded-3 d-flex align-items-center justify-content-center" disabled>
-                                    <i class="bi bi-telephone me-2"></i> Sem WhatsApp
-                                </button>
-                            @endif
-                        </div>
-                        <div class="col-6">
-                            @php
-                                // Monta a string de endereço completa para o Google Maps
-                                $enderecoCompleto = "{$revenda->rua}, {$revenda->numero} - {$revenda->bairro}, {$revenda->cidade} - {$revenda->estado}, {$revenda->cep}";
-                                $googleMapsUrl = "https://www.google.com/maps/search/?api=1&query=" . urlencode($enderecoCompleto);
-                            @endphp
-
-                            <a href="{{ $googleMapsUrl }}" 
-                            target="_blank" 
-                            class="btn btn-outline-location w-100 rounded-3 d-flex align-items-center justify-content-center">
-                                <i class="bi bi-geo-alt me-2"></i> Onde Estamos
-                            </a>
-                        </div>
-                    </div>
+    <div class="col-6">
+        <a href="{{ $revenda->maps_url }}" 
+           target="_blank" 
+           class="btn btn-outline-location w-100 rounded-3 d-flex align-items-center justify-content-center btn-custom-height">
+            <i class="bi bi-geo-alt me-2"></i> Onde Estamos
+        </a>
+    </div>
+</div>
                 </div>
             </div>
         </div>

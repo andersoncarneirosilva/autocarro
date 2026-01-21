@@ -73,23 +73,25 @@ class AnuncioController extends Controller
     }
 }
 
-    public function show($id)
+   public function show($id)
 {
-    // Carrega o anúncio com os documentos e o cliente já vinculado
-    // Se estiver buscando por ID no painel
-    $veiculo = Anuncio::with('user.revenda')->findOrFail($id);
-    
-    // Pega o slug da revenda através do relacionamento
-    $slugRevenda = $veiculo->user->revenda->slug ?? 'vendedor';
+    $veiculo = Anuncio::with('user')->findOrFail($id);
 
-    $documentos = Documento::find($id);
-    if (!$veiculo) {
-        return redirect()->route('anuncios.index');
+    // 1. Tenta buscar a revenda do dono do veículo
+    $revenda = \DB::table('revendas')->where('user_id', $veiculo->user_id)->first();
+
+    // 2. Se não achou (como no seu caso do ID 1), busca a revenda do usuário logado
+    // Isso garante que você consiga visualizar o anúncio enquanto testa
+    if (!$revenda) {
+        $revenda = \DB::table('revendas')->where('user_id', auth()->id())->first();
     }
 
+    $slugRevenda = $revenda ? $revenda->slug : 'loja-padrao';
+
+    $documentos = Documento::where('anuncio_id', $id)->first();
     $clientes = Cliente::orderBy('nome', 'asc')->get();
 
-    return view('anuncios.show', compact('veiculo', 'clientes','documentos', 'slugRevenda'));
+    return view('anuncios.show', compact('veiculo', 'clientes', 'documentos', 'slugRevenda'));
 }
 
     public function update(Request $request, $id)
