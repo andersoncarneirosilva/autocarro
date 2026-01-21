@@ -97,7 +97,7 @@ document.addEventListener('DOMContentLoaded', function () {
                     </div>
 
                     @can('access-admin') 
-                        <button type="button" class="btn btn-red btn-sm rounded-pill shadow-sm px-3" 
+                        <button type="button" class="btn btn-primary btn-sm rounded-pill shadow-sm px-3" 
                                 data-bs-toggle="modal" data-bs-target="#modalCadastrarUsuario">
                             <i class="uil uil-plus me-1"></i> Novo Usuário
                         </button>
@@ -129,7 +129,7 @@ document.addEventListener('DOMContentLoaded', function () {
              style="width: 38px; height: 38px; object-fit: cover;">
     @else
         <div class="rounded-circle me-3 d-flex align-items-center justify-content-center shadow-sm border text-white fw-bold" 
-             style="width: 38px; height: 38px; background-color: #5b0000; font-size: 16px;">
+             style="width: 38px; height: 38px; background-color: #727cf5; font-size: 16px;">
             {{ strtoupper(substr($user->name, 0, 1)) }}
         </div>
     @endif

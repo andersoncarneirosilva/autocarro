@@ -47,7 +47,7 @@
                         <div class="input-group">
                             <input type="text" name="search" placeholder="Informe a placa" class="form-control">
                             <span class="mdi mdi-magnify search-icon"></span>
-                            <button type="submit" class="btn btn-red">Buscar</button>
+                            <button type="submit" class="btn btn-primary">Buscar</button>
                         </div>
                     </form>
                 </div>
@@ -58,7 +58,7 @@
                         <div class="input-group">
                             <input type="text" name="search" placeholder="Buscar usuário" class="form-control">
                             <span class="mdi mdi-magnify search-icon"></span>
-                            <button type="submit" class="btn btn-red">Buscar</button>
+                            <button type="submit" class="btn btn-primary">Buscar</button>
                         </div>
                     </form>
                 </div>
@@ -69,7 +69,7 @@
                     <div class="input-group">
                         <input type="text" name="search" placeholder="Buscar clientes" class="form-control">
                         <span class="mdi mdi-magnify search-icon"></span>
-                        <button type="submit" class="btn btn-red">Buscar</button>
+                        <button type="submit" class="btn btn-primary">Buscar</button>
                     </div>
                 </form>
             </div>
@@ -80,7 +80,7 @@
                     <div class="input-group">
                         <input type="text" name="search" placeholder="Informe a placa..." class="form-control">
                         <span class="mdi mdi-magnify search-icon"></span>
-                        <button type="submit" class="btn btn-red">Buscar</button>
+                        <button type="submit" class="btn btn-primary">Buscar</button>
                     </div>
                 </form>
             </div>

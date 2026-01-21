@@ -163,6 +163,7 @@ Route::put('/anuncios/arquivar/{id}', [AnuncioController::class, 'arquivar'])->n
 
 // 2. AGORA coloque a sua rota (específica por ter o sufixo /update-info-basica)
 // Adicione esta linha junto com as outras rotas de anúncios
+Route::post('/anuncios/{id}/foto-principal/{index}', [AnuncioController::class, 'setMainFoto'])->name('anuncios.setMainFoto');
 Route::patch('/anuncios/{id}/remover-publicacao', [AnuncioController::class, 'removerPublicacao'])->name('anuncios.remover');
 Route::patch('/anuncios/{id}/publicar', [AnuncioController::class, 'publicar'])->name('anuncios.publicar');
 Route::put('/anuncios/{id}/upload-fotos', [AnuncioController::class, 'uploadFotos'])->name('anuncios.uploadFotos');

@@ -667,4 +667,28 @@ public function removerPublicacao($id)
     }
 }
 
+public function setMainFoto($id, $index)
+{
+    $veiculo = Anuncio::findOrFail($id);
+    $imagens = json_decode($veiculo->images, true) ?? [];
+
+    if (isset($imagens[$index])) {
+        // 1. Remove a imagem da posição atual
+        $fotoPrincipal = $imagens[$index];
+        unset($imagens[$index]);
+
+        // 2. Coloca ela no início do array
+        array_unshift($imagens, $fotoPrincipal);
+
+        // 3. Reindexa o array e salva
+        $veiculo->update([
+            'images' => json_encode(array_values($imagens))
+        ]);
+
+        return response()->json(['success' => true]);
+    }
+
+    return response()->json(['success' => false], 400);
+}
+
 }

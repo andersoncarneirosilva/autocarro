@@ -104,7 +104,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
         <a href="{{ route('loja.veiculo.detalhes', ['loja_slug' => $slugRevenda, 'veiculo_slug' => $veiculo->slug]) }}" 
    target="_blank" 
-   class="btn btn-primary btn-sm rounded-pill px-3" 
+   class="btn btn-primary btn-sm  px-3" 
    title="Visualizar Anúncio">
     <i class="mdi mdi-eye-outline me-1"></i> Ver anúncio na loja
 </a>
@@ -112,7 +112,7 @@ document.addEventListener('DOMContentLoaded', function () {
         <form action="{{ route('anuncios.remover', $veiculo->id) }}" method="POST" class="d-inline form-remover">
             @csrf
             @method('PATCH')
-            <button type="button" class="btn btn-danger btn-sm rounded-pill px-3 btn-remover">
+            <button type="button" class="btn btn-danger btn-sm  px-3 btn-remover">
                 <i class="mdi mdi-eye-off-outline me-1"></i> Remover do Site
             </button>
         </form>
@@ -124,7 +124,7 @@ document.addEventListener('DOMContentLoaded', function () {
         <form action="{{ route('anuncios.publicar', $veiculo->id) }}" method="POST" class="d-inline form-publicar">
             @csrf
             @method('PATCH')
-            <button type="button" class="btn btn-success btn-sm rounded-pill px-3 btn-publicar">
+            <button type="button" class="btn btn-success btn-sm  px-3 btn-publicar">
                 <i class="mdi mdi-rocket-launch me-1"></i> Publicar
             </button>
         </form>
@@ -221,7 +221,7 @@ document.addEventListener('DOMContentLoaded', function () {
                 <h4 class="header-title text-primary mb-0">
                     <i class="mdi mdi-car-info me-1"></i> Informações básicas
                 </h4>
-                <button type="button" class="btn btn-outline-primary btn-sm rounded-pill" data-bs-toggle="modal" data-bs-target="#modalEditarInfoBasica">
+                <button type="button" class="btn btn-outline-primary btn-sm " data-bs-toggle="modal" data-bs-target="#modalEditarInfoBasica">
                     <i class="mdi mdi-sync me-1"></i> Atualizar Dados
                 </button>
             </div>
@@ -288,7 +288,7 @@ document.addEventListener('DOMContentLoaded', function () {
     <div class="mb-4">
         <div class="d-flex justify-content-between align-items-center mb-2">
             <h4 class="header-title text-primary mb-0">Foto Principal</h4>
-            <button type="button" class="btn btn-outline-primary btn-sm rounded-pill" data-bs-toggle="modal" data-bs-target="#modalUploadFotos">
+            <button type="button" class="btn btn-outline-primary btn-sm " data-bs-toggle="modal" data-bs-target="#modalUploadFotos">
                 <i class="mdi mdi-camera-plus me-1"></i> Fotos
             </button>
         </div>
@@ -323,7 +323,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
     <div class="d-flex justify-content-between align-items-center mb-3">
     <h4 class="header-title text-primary mb-0">Valor e oferta</h4>
-    <button type="button" class="btn btn-outline-primary btn-sm rounded-pill" data-bs-toggle="modal" data-bs-target="#modalEditarPrecos">
+    <button type="button" class="btn btn-outline-primary btn-sm " data-bs-toggle="modal" data-bs-target="#modalEditarPrecos">
         <i class="mdi mdi-currency-usd"></i> Atualizar preço
     </button>
 </div>
@@ -402,7 +402,7 @@ document.addEventListener('DOMContentLoaded', function () {
                 <h4 class="header-title text-primary mb-0 text-uppercase" style="letter-spacing: 1px;">
                     Descrição do Anúncio
                 </h4>
-                <button type="button" class="btn btn-outline-primary btn-sm rounded-pill" data-bs-toggle="modal" data-bs-target="#modalDescricao">
+                <button type="button" class="btn btn-outline-primary btn-sm " data-bs-toggle="modal" data-bs-target="#modalDescricao">
                     <i class="mdi mdi-pencil me-1"></i> Atualizar descrição
                 </button>
             </div>
@@ -425,12 +425,12 @@ document.addEventListener('DOMContentLoaded', function () {
 
                                     @if(is_array($listaAdicionais) && count($listaAdicionais) > 0)
                                         {{-- Caso já existam itens cadastrados --}}
-                                        <button class="btn btn-xs btn-outline-primary rounded-pill px-3" data-bs-toggle="modal" data-bs-target="#modalAdicionais">
+                                        <button class="btn btn-xs btn-outline-primary  px-3" data-bs-toggle="modal" data-bs-target="#modalAdicionais">
                                             <i class="mdi mdi-pencil me-1"></i> Atualizar adicionais
                                         </button>
                                     @else
                                         {{-- Caso esteja vazio [], null ou string vazia --}}
-                                        <button class="btn btn-xs btn-primary rounded-pill px-3 shadow-sm" data-bs-toggle="modal" data-bs-target="#modalAdicionais">
+                                        <button class="btn btn-xs btn-primary  px-3 shadow-sm" data-bs-toggle="modal" data-bs-target="#modalAdicionais">
                                             <i class="mdi mdi-plus me-1"></i> Adicionar adicionais
                                         </button>
                                     @endif
@@ -457,12 +457,12 @@ document.addEventListener('DOMContentLoaded', function () {
 
                                     @if(is_array($listaOpcionais) && count($listaOpcionais) > 0)
                                         {{-- Se o array tem itens, o botão é de ATUALIZAR --}}
-                                        <button class="btn btn-xs btn-outline-primary rounded-pill px-3" data-bs-toggle="modal" data-bs-target="#modalOpcionais">
+                                        <button class="btn btn-xs btn-outline-primary  px-3" data-bs-toggle="modal" data-bs-target="#modalOpcionais">
                                             <i class="mdi mdi-pencil me-1"></i> Atualizar opcionais
                                         </button>
                                     @else
                                         {{-- Se for vazio [], null ou string vazia, o botão é de ADICIONAR --}}
-                                        <button class="btn btn-xs btn-primary rounded-pill px-3 shadow-sm" data-bs-toggle="modal" data-bs-target="#modalOpcionais">
+                                        <button class="btn btn-xs btn-primary  px-3 shadow-sm" data-bs-toggle="modal" data-bs-target="#modalOpcionais">
                                             <i class="mdi mdi-plus me-1"></i> Adicionar opcionais
                                         </button>
                                     @endif
@@ -488,12 +488,12 @@ document.addEventListener('DOMContentLoaded', function () {
 
         @if(is_array($listaModificacoes) && count($listaModificacoes) > 0)
             {{-- Se já existem modificações registradas --}}
-            <button class="btn btn-xs btn-outline-primary rounded-pill px-3" data-bs-toggle="modal" data-bs-target="#modalModificacoes">
+            <button class="btn btn-xs btn-outline-primary  px-3" data-bs-toggle="modal" data-bs-target="#modalModificacoes">
                 <i class="mdi mdi-pencil me-1"></i> Atualizar modificações
             </button>
         @else
             {{-- Se estiver vazio [], null ou string vazia --}}
-            <button class="btn btn-xs btn-primary rounded-pill px-3 shadow-sm" data-bs-toggle="modal" data-bs-target="#modalModificacoes">
+            <button class="btn btn-xs btn-primary  px-3 shadow-sm" data-bs-toggle="modal" data-bs-target="#modalModificacoes">
                 <i class="mdi mdi-plus me-1"></i> Adicionar modificações
             </button>
         @endif
@@ -517,7 +517,7 @@ document.addEventListener('DOMContentLoaded', function () {
             <div class="d-flex justify-content-between align-items-center mb-3">
                 <h5 class="text-primary mb-0"><i class="mdi mdi-file me-1"></i> Documentos</h5>
                 
-                <button type="button" class="btn btn-outline-primary btn-xs rounded-pill" data-bs-toggle="modal" data-bs-target="#modalGerarDocs">
+                <button type="button" class="btn btn-outline-primary btn-xs " data-bs-toggle="modal" data-bs-target="#modalGerarDocs">
                     <i class="mdi mdi-pencil"></i> Gerar documentos
                 </button>
             </div>

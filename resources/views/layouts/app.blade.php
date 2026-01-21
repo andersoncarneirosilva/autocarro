@@ -29,8 +29,8 @@
     <script src="{{ url('backend/js/hyper-config.js') }}"></script>
     <link href="https://cdn.jsdelivr.net/npm/fullcalendar@5.11.0/main.min.css" rel="stylesheet">
 
-    <link href="https://cdn.jsdelivr.net/npm/choices.js/public/backend/styles/choices.min.css" rel="stylesheet" />
-    <script src="https://cdn.jsdelivr.net/npm/choices.js/public/backend/scripts/choices.min.js"></script>
+    {{-- <link href="https://cdn.jsdelivr.net/npm/choices.js/public/backend/styles/choices.min.css" rel="stylesheet" />
+    <script src="https://cdn.jsdelivr.net/npm/choices.js/public/backend/scripts/choices.min.js"></script> --}}
 
     <!-- App css -->
 
