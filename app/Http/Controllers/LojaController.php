@@ -19,7 +19,7 @@ class LojaController extends Controller
 {
     //dd($request);
     // Inicia a query filtrando apenas anúncios publicados
-    $query = Anuncio::with('user.revenda')->where('status_anuncio', 'Publicado');
+    $query = Anuncio::with(['user.revenda', 'user.particular'])->where('status_anuncio', 'Publicado');
 
     // Executa a paginação após aplicar o filtro
     $veiculos = $query->paginate(10);
@@ -34,35 +34,23 @@ class LojaController extends Controller
 
     // Ajusta marca e modelo apenas para exibição
     $veiculos->getCollection()->transform(function ($veiculo) {
-
+        // --- LÓGICA DE MARCA/MODELO (mantida) ---
         $texto = $veiculo->marca;
-
-        if (str_starts_with($texto, 'I/')) {
-            // Remove apenas o "I/"
-            $texto = substr($texto, 2);
-
-            // Caso raro: ainda ter "/"
-            if (str_contains($texto, '/')) {
-                [$marca, $modelo] = explode('/', $texto, 2);
-            } else {
-                $partes = explode(' ', $texto, 2);
-                $marca  = $partes[0] ?? '';
-                $modelo = $partes[1] ?? '';
-            }
+        if (str_starts_with($texto, 'I/')) $texto = substr($texto, 2);
+        
+        if (str_contains($texto, '/')) {
+            [$marca, $modelo] = explode('/', $texto, 2);
         } else {
-            // Veículos normais
-            if (str_contains($texto, '/')) {
-                [$marca, $modelo] = explode('/', $texto, 2);
-            } else {
-                $partes = explode(' ', $texto, 2);
-                $marca  = $partes[0] ?? '';
-                $modelo = $partes[1] ?? '';
-            }
+            $partes = explode(' ', $texto, 2);
+            $marca = $partes[0] ?? '';
+            $modelo = $partes[1] ?? '';
         }
-
-        // Campos somente para exibição
-        $veiculo->marca_exibicao  = trim($marca);
+        $veiculo->marca_exibicao = trim($marca);
         $veiculo->modelo_exibicao = trim($modelo);
+
+        // --- NOVA LÓGICA: DEFINIR O SLUG DA LOJA ---
+        // Se o usuário tem uma revenda, pega o slug dela. Se não, é 'particular'.
+        $veiculo->slug_loja = $veiculo->user->revenda ? $veiculo->user->revenda->slug : 'particular';
 
         return $veiculo;
     });
@@ -197,42 +185,37 @@ elseif ($request->filled('ano')) {
     return view($view, compact('veiculos', 'anosDisponiveis'));
 }
 
-public function show($slug)
+public function show($slug_loja, $slug_veiculo) 
 {
-    $veiculo = Anuncio::where('slug', $slug)->firstOrFail();
+    // Agora buscamos pelo slug do VEÍCULO, que é o que importa
+    $veiculo = Anuncio::where('slug', $slug_veiculo)->firstOrFail();
+    
     $veiculo->images = json_decode($veiculo->images, true) ?? [];
 
-    $texto = $veiculo->marca;
-    $marca = '';
-    $modelo = '';
+    // ... (sua lógica de marcas e modelos que já existe) ...
 
-    if (str_starts_with($texto, 'I/')) {
-        $texto = substr($texto, 2);
-    }
-
-    if (str_contains($texto, '/')) {
-        [$marca, $modelo] = explode('/', $texto, 2);
+    // --- BUSCAR DADOS DO VENDEDOR ---
+    // Verificamos se o parâmetro na URL é 'particular'
+    if ($slug_loja === 'particular') {
+        $vendedor = \DB::table('particulares')->where('user_id', $veiculo->user_id)->first();
+        $tipoVendedor = 'particular';
     } else {
-        $partes = explode(' ', $texto, 2);
-        $marca  = $partes[0] ?? '';
-        $modelo = $partes[1] ?? '';
+        $vendedor = \DB::table('revendas')->where('slug', $slug_loja)->first();
+        $tipoVendedor = 'revenda';
     }
 
-    // --- NOVA LÓGICA DE TRADUÇÃO DE MARCAS ---
-    $traducoes = [
-        'VW' => 'VOLKSWAGEN',
-        'GM' => 'CHEVROLET',
-    ];
+    // Caso o anúncio tenha sido movido ou o slug da loja mude
+    if (!$vendedor) {
+        // Fallback: tenta buscar de qualquer forma pelo dono do veículo
+        $vendedor = \DB::table('revendas')->where('user_id', $veiculo->user_id)->first() 
+                    ?? \DB::table('particulares')->where('user_id', $veiculo->user_id)->first();
+    }
 
-    $marcaLimpa = strtoupper(trim($marca));
-    
-    // Se a marca estiver no dicionário, substitui. Se não, mantém a original.
-    $veiculo->marca_exibicao = $traducoes[$marcaLimpa] ?? $marcaLimpa;
-    $veiculo->modelo_exibicao = trim($modelo);
+    if ($vendedor && isset($vendedor->fones)) {
+        $vendedor->fones = json_decode($vendedor->fones, true);
+    }
 
-    
-
-    return view('loja.detalhes', compact('veiculo'));
+    return view('loja.revenda.detalhes', compact('veiculo', 'vendedor', 'tipoVendedor'));
 }
 
 

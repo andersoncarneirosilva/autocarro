@@ -1,7 +1,10 @@
 @forelse ($veiculos as $veiculo)
     <div class="col-md-6 col-lg-4 d-flex align-items-stretch mb-4" data-aos="zoom-in" data-aos-delay="100">
         {{-- O link agora envolve todo o conteúdo do card --}}
-        <a href="{{ route('loja.veiculo.detalhes', ['loja_slug' => $veiculo->user->revenda->slug ?? 'vendedor', 'veiculo_slug' => $veiculo->slug]) }}" class="text-decoration-none w-100">
+        <a href="{{ route('loja.veiculo.detalhes', [
+    'slug_loja' => $veiculo->user->revenda->slug ?? 'particular', 
+    'slug_veiculo' => $veiculo->slug
+]) }}" class="text-decoration-none w-100">
             
             <div class="course-item w-100 shadow-sm border-0 bg-white rounded-4 overflow-hidden h-100">
                 

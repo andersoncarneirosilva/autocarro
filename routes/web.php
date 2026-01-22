@@ -396,6 +396,8 @@ Route::get('/', [LojaController::class, 'index'])->name('loja.index');
 
 // Rota para perfil público da revenda
 // Em vez de /{slug}, use /loja/{slug} ou /v/{slug} (v de vitrine)
+// Exemplo de como deve estar para aceitar o "particular" como um slug
+Route::get('/loja/{slug_loja}/veiculo/{slug_veiculo}', [LojaController::class, 'show'])->name('loja.veiculo.detalhes');
 Route::get('/loja/{slug}', [RevendaPublicaController::class, 'show'])->name('revenda.publica');
 Route::get('/loja/{loja_slug}/veiculo/{veiculo_slug}', [RevendaPublicaController::class, 'detalhesVeiculo'])
     ->name('loja.veiculo.detalhes');

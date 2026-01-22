@@ -102,11 +102,11 @@ document.addEventListener('DOMContentLoaded', function () {
             <i class="mdi mdi-check-decagram me-1"></i> Anúncio Publicado
         </span>
 
-        <a href="{{ route('loja.veiculo.detalhes', ['loja_slug' => $slugRevenda, 'veiculo_slug' => $veiculo->slug]) }}" 
+        <a href="{{ route('loja.veiculo.detalhes', [$slugRevenda, $veiculo->slug]) }}" 
    target="_blank" 
    class="btn btn-primary btn-sm  px-3" 
    title="Visualizar Anúncio">
-    <i class="mdi mdi-eye-outline me-1"></i> Ver anúncio na loja
+    <i class="mdi mdi-eye-outline me-1"></i> Ver anúncio
 </a>
 
         <form action="{{ route('anuncios.remover', $veiculo->id) }}" method="POST" class="d-inline form-remover">

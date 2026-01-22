@@ -306,17 +306,13 @@
 
     <div class="action-button" style="position: relative; z-index: 2;">
     
-    {{-- Acessamos a revenda através do veículo --}}
-    @php 
-        $slugRevenda = $veiculo->user->revenda->slug ?? 'vendedor-particular'; 
-    @endphp
 
-    <a href="{{ route('loja.veiculo.detalhes', ['loja_slug' => $slugRevenda, 'veiculo_slug' => $veiculo->slug]) }}"
-       class="btn btn-outline-get-started d-flex align-items-center gap-2"
-       style="border-radius: 50px; padding: 8px 18px; font-size: 12px; font-weight: 700; transition: 0.3s; border-width: 2px;">
-        DETALHES
-        <i class="bi bi-arrow-right-short" style="font-size: 1.2rem; line-height: 0;"></i>
-    </a>
+    <a href="{{ route('loja.veiculo.detalhes', ['slug_loja' => $veiculo->slug_loja, 'slug_veiculo' => $veiculo->slug]) }}"
+   class="btn btn-outline-get-started d-flex align-items-center gap-2"
+   style="border-radius: 50px; padding: 8px 18px; font-size: 12px; font-weight: 700; transition: 0.3s; border-width: 2px;">
+    DETALHES
+    <i class="bi bi-arrow-right-short" style="font-size: 1.2rem; line-height: 0;"></i>
+</a>
 </div>
 
 </div>

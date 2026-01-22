@@ -75,22 +75,34 @@ class AnuncioController extends Controller
    public function show($id)
 {
     $veiculo = Anuncio::with('user')->findOrFail($id);
+    $userId = $veiculo->user_id;
 
-    // 1. Tenta buscar a revenda do dono do veículo
-    $revenda = \DB::table('revendas')->where('user_id', $veiculo->user_id)->first();
-
-    // 2. Se não achou (como no seu caso do ID 1), busca a revenda do usuário logado
-    // Isso garante que você consiga visualizar o anúncio enquanto testa
+    // 1. Tenta buscar na tabela de revendas
+    $revenda = \DB::table('revendas')->where('user_id', $userId)->first();
+    
+    // 2. Se não encontrar na revenda, busca na tabela de particulares
+    $particular = null;
     if (!$revenda) {
-        $revenda = \DB::table('revendas')->where('user_id', auth()->id())->first();
+        $particular = \DB::table('particulares')->where('user_id', $userId)->first();
     }
 
-    $slugRevenda = $revenda ? $revenda->slug : 'loja-padrao';
+    // 3. Define o perfil que será exibido (prioriza revenda, depois particular)
+    $perfilDono = $revenda ?: $particular;
+
+    // 4. Define o slug: se for revenda usa o slug do banco, se for particular usa 'particular'
+    // Se o dono for revenda, usamos o slug dela. Caso contrário, fixamos 'particular'
+    $slugRevenda = ($revenda) ? $revenda->slug : 'particular';
 
     $documentos = Documento::where('anuncio_id', $id)->first();
     $clientes = Cliente::orderBy('nome', 'asc')->get();
 
-    return view('anuncios.show', compact('veiculo', 'clientes', 'documentos', 'slugRevenda'));
+    return view('anuncios.show', compact(
+        'veiculo', 
+        'clientes', 
+        'documentos', 
+        'slugRevenda', 
+        'perfilDono'
+    ));
 }
 
     public function update(Request $request, $id)

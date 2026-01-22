@@ -15,6 +15,8 @@ use Illuminate\Validation\Rules;
 use Illuminate\View\View;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str; 
+
+
 class RegisteredUserController extends Controller
 {
     public function create(): View
@@ -24,8 +26,7 @@ class RegisteredUserController extends Controller
 
 public function store(Request $request): RedirectResponse
 {
-    // 1. Limpa CPF, CNPJ e WhatsApp antes de tudo
-    // Removemos parênteses, espaços e traços para manter o padrão no banco
+    // 1. Limpa CPF, CNPJ e WhatsApp
     $request->merge([
         'cpf'      => $request->cpf ? preg_replace('/\D/', '', $request->cpf) : null,
         'cnpj'     => $request->cnpj ? preg_replace('/\D/', '', $request->cnpj) : null,
@@ -35,7 +36,7 @@ public function store(Request $request): RedirectResponse
     // 2. Identifica o tipo de conta
     $isRevenda = $request->filled('cnpj') || $request->account_type === 'dealer';
 
-    // 3. Pool de frases (Mantido)
+    // 3. Pool de frases
     $frasesDuplicado = [
         'Epa! Este documento já possui um cadastro ativo no Alcecar.',
         'Opa, cadastro duplicado! Este CPF/CNPJ já está na nossa garagem.',
@@ -48,12 +49,12 @@ public function store(Request $request): RedirectResponse
     $rules = [
         'name'     => ['required', 'string', 'max:255'],
         'email'    => ['required', 'string', 'email', 'max:255', 'unique:users,email'],
-        'password' => ['required', 'confirmed', Rules\Password::defaults()],
-        'whatsapp' => ['required', 'string', 'min:10'], // Mínimo de 10 dígitos (DDD + número)
+        'password' => ['required', 'confirmed', \Illuminate\Validation\Rules\Password::defaults()],
+        'whatsapp' => ['required', 'string', 'min:10'],
     ];
 
     if ($isRevenda) {
-        $rules['cnpj'] = ['required', 'string', 'unique:users,cpf']; // Corrigido para bater com a coluna da tabela users
+        $rules['cnpj'] = ['required', 'string', 'unique:users,cpf']; 
     } else {
         $rules['cpf']  = ['required', 'string', 'unique:users,cpf'];
     }
@@ -78,7 +79,7 @@ public function store(Request $request): RedirectResponse
                 'email'        => $request->email,
                 'cpf'          => $documento,
                 'password'     => Hash::make($request->password),
-                'nivel_acesso' => $isRevenda ? 'Revenda' : 'Usuário',
+                'nivel_acesso' => $isRevenda ? 'Revenda' : 'Particular',
                 'telefone'     => $request->whatsapp,
                 'plano'        => 'Basic',
                 'status'       => 'Ativo',
@@ -86,38 +87,41 @@ public function store(Request $request): RedirectResponse
                 'size_folder'  => 50,
             ]);
 
-            // 6. Se for revenda, salvar na tabela de revendas
+            // 6. Preparar dados comuns para as tabelas auxiliares
+            $fonesJson = json_encode(['whatsapp' => $request->whatsapp]);
+            $commonData = [
+                'user_id'    => $user->id,
+                'nome'       => $request->name,
+                'fones'      => $fonesJson,
+                'rua'        => $request->rua ?? '',
+                'numero'     => $request->numero ?? '',
+                'bairro'     => $request->bairro ?? '',
+                'cidade'     => $request->cidade ?? '',
+                'estado'     => $request->estado ?? '',
+                'cep'        => $request->cep ?? '',
+                'created_at' => now(),
+                'updated_at' => now(),
+            ];
+
             if ($isRevenda) {
+                // Lógica de Slug exclusiva para Revendas
                 $slugBase = Str::slug($request->name);
                 $slug = $slugBase;
-                
                 $i = 1;
                 while (DB::table('revendas')->where('slug', $slug)->exists()) {
                     $slug = $slugBase . '-' . $i;
                     $i++;
                 }
 
-                // ESTRUTURA CORRETA DO WHATSAPP:
-                // Passamos um array associativo simples para o json_encode
-                $fonesJson = json_encode([
-                    'whatsapp' => $request->whatsapp
-                ]);
-
-                DB::table('revendas')->insert([
-                    'user_id'    => $user->id,
-                    'nome'       => $request->name,
-                    'slug'       => $slug,
-                    'cnpj'       => $request->cnpj, 
-                    'fones'      => $fonesJson,
-                    'rua'        => $request->rua ?? '',
-                    'numero'     => $request->numero ?? '',
-                    'bairro'     => $request->bairro ?? '',
-                    'cidade'     => $request->cidade ?? '',
-                    'estado'     => $request->estado ?? '',
-                    'cep'        => $request->cep ?? '',
-                    'created_at' => now(),
-                    'updated_at' => now(),
-                ]);
+                DB::table('revendas')->insert(array_merge($commonData, [
+                    'cnpj' => $request->cnpj,
+                    'slug' => $slug
+                ]));
+            } else {
+                // Inserção na tabela de Particulares
+                DB::table('particulares')->insert(array_merge($commonData, [
+                    'cpf' => $request->cpf // Salvamos o CPF na coluna CNPJ para manter o padrão que você pediu
+                ]));
             }
 
             event(new Registered($user));
@@ -127,7 +131,7 @@ public function store(Request $request): RedirectResponse
         });
     } catch (\Exception $e) {
         \Log::error("Erro no cadastro Alcecar: " . $e->getMessage());
-        return back()->withInput()->withErrors(['error' => 'Erro: ' . $e->getMessage()]);
+        return back()->withInput()->withErrors(['error' => 'Ocorreu um erro ao processar seu cadastro.']);
     }
 }
 }

@@ -263,9 +263,15 @@
 <section class="container py-5 mt-5">
     <nav class="d-flex gap-2 small text-muted mt-4 mb-4 overflow-x-auto text-nowrap">
         <a href="/" class="text-decoration-none text-muted">Início</a> / 
-        <a href="{{ url('/loja/' . $revenda->slug) }}" class="text-decoration-none text-muted">
-    {{ $revenda->nome }}
-</a>/ 
+        @if($tipoVendedor === 'revenda' && isset($vendedor->slug))
+    <a href="{{ url('/loja/' . $vendedor->slug) }}" class="text-decoration-none text-muted">
+        {{ $vendedor->nome }}
+    </a>
+@else
+    <span class="text-muted">
+        {{ $vendedor->nome ?? 'Vendedor Particular' }}
+    </span>
+@endif 
         <span class="text-dark fw-medium">{{ $veiculo->marca_exibicao }} {{ $veiculo->modelo_exibicao }}</span>
     </nav>
 
@@ -567,20 +573,36 @@
                 @endif
                     <div class="row g-2">
     <div class="col-6">
-        <a href="{{ $revenda->whatsapp_url }}" 
-           target="_blank" 
-           class="btn btn-whatsapp-detail w-100 rounded-3 d-flex align-items-center justify-content-center btn-custom-height">
-            <i class="bi bi-whatsapp me-2"></i> Proposta
-        </a>
-    </div>
+    @php
+        // Prepara o número do WhatsApp (remove caracteres não numéricos)
+        $whatsapp = $vendedor->fones['whatsapp'] ?? '';
+        $whatsappLimpo = preg_replace('/\D/', '', $whatsapp);
+        
+        // Mensagem padrão para a proposta
+        $mensagem = "Olá " . $vendedor->nome . ", vi seu anúncio do " . $veiculo->marca_exibicao . " " . $veiculo->modelo_exibicao . " no Alcecar e gostaria de fazer uma proposta.";
+        $whatsappUrl = "https://wa.me/55" . $whatsappLimpo . "?text=" . urlencode($mensagem);
+    @endphp
 
-    <div class="col-6">
-        <a href="{{ $revenda->maps_url }}" 
-           target="_blank" 
-           class="btn btn-outline-location w-100 rounded-3 d-flex align-items-center justify-content-center btn-custom-height">
-            <i class="bi bi-geo-alt me-2"></i> Onde Estamos
-        </a>
-    </div>
+    <a href="{{ $whatsappUrl }}" 
+       target="_blank" 
+       class="btn btn-whatsapp-detail w-100 rounded-3 d-flex align-items-center justify-content-center btn-custom-height">
+        <i class="bi bi-whatsapp me-2"></i> Proposta
+    </a>
+</div>
+
+<div class="col-6">
+    @php
+        // Monta a URL do Google Maps baseada no endereço do vendedor (seja revenda ou particular)
+        $enderecoCompleto = "{$vendedor->rua}, {$vendedor->numero}, {$vendedor->bairro}, {$vendedor->cidade} - {$vendedor->estado}";
+        $mapsUrl = "https://www.google.com/maps/search/?api=1&query=" . urlencode($enderecoCompleto);
+    @endphp
+
+    <a href="{{ $mapsUrl }}" 
+       target="_blank" 
+       class="btn btn-outline-location w-100 rounded-3 d-flex align-items-center justify-content-center btn-custom-height">
+        <i class="bi bi-geo-alt me-2"></i> Onde Estamos
+    </a>
+</div>
 </div>
                 </div>
             </div>

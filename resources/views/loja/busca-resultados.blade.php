@@ -192,9 +192,14 @@
                                 @endif
                             </div>
                             
-                            <a href="{{ url('veiculo/' . $veiculo->slug) }}" class="btn btn-sm px-3 rounded-pill fw-bold text-white" style="background: #ff4a17; font-size: 0.75rem;">
-                                VER MAIS
-                            </a>
+                            <a href="{{ route('loja.veiculo.detalhes', [
+    'slug_loja' => $veiculo->user->revenda->slug ?? 'particular', 
+    'slug_veiculo' => $veiculo->slug
+]) }}" 
+class="btn btn-sm px-3 rounded-pill fw-bold text-white" 
+style="background: #ff4a17; font-size: 0.75rem;">
+    VER MAIS
+</a>
                         </div>
                     </div>
                 </div>

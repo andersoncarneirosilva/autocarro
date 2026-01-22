@@ -62,6 +62,10 @@ public function revenda()
     return $this->hasOne(Revenda::class, 'user_id');
 }
 
+public function particular()
+    {
+        return $this->hasOne(Particular::class);
+    }
     public function assinaturas()
     {
         return $this->hasMany(Assinatura::class, 'user_id');
