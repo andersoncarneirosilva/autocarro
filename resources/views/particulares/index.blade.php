@@ -36,10 +36,31 @@ document.addEventListener('DOMContentLoaded', function () {
     </div>
 
     <div>
-        <a href="{{ route('particulares.create') }}" class="btn btn-primary d-flex align-items-center px-4 rounded-pill shadow-sm" style="background: #ff4a17; border: none; height: 45px; font-weight: 600;">
-            <i class="bi bi-plus-circle me-2" style="font-size: 1.2rem;"></i>
-            CRIAR NOVO ANÚNCIO
-        </a>
+        @php
+    $limiteAtingido = $contagem >= 2;
+@endphp
+
+@if($limiteAtingido)
+    <button class="btn btn-secondary d-flex align-items-center px-4 rounded-pill shadow-sm" 
+            style="height: 45px; font-weight: 600; cursor: not-allowed;" 
+            disabled 
+            title="Limite de 2 anúncios atingido">
+        <i class="bi bi-slash-circle me-2" style="font-size: 1.2rem;"></i>
+        LIMITE DE ANÚNCIOS ATINGIDO
+    </button>
+@else
+    <a href="{{ route('particulares.create') }}" 
+       class="btn btn-primary d-flex align-items-center px-4 rounded-pill shadow-sm" 
+       style="background: #ff4a17; border: none; height: 45px; font-weight: 600;">
+        <i class="bi bi-plus-circle me-2" style="font-size: 1.2rem;"></i>
+        CRIAR NOVO ANÚNCIO
+    </a>
+@endif
+
+{{-- Opcional: Aviso visual abaixo do botão --}}
+@if($limiteAtingido)
+    <p class="text-danger mt-2 small"><i class="bi bi-info-circle"></i> Você atingiu o limite máximo de 2 anúncios para conta Particular.</p>
+@endif
     </div>
 </div>
 

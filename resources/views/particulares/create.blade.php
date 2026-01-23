@@ -145,20 +145,6 @@ document.addEventListener('DOMContentLoaded', function () {
 
 
  <section id="services" class="services section">
-    {{-- Título e Botão --}}
-    {{-- <div class="container d-flex justify-content-between align-items-center mb-5 aos-init aos-animate" data-aos="fade-up">
-        <div class="section-title mb-0" style="padding-bottom: 0; text-align: left;">
-            <h2 style="margin-bottom: 0; line-height: 1;">Meus</h2>
-            <p style="margin-bottom: 0; font-size: 2rem; font-weight: 700; color: #333;">Anúncios</p>
-        </div>
-
-        <div>
-            <a href="{{ route('particulares.create') }}" class="btn btn-primary d-flex align-items-center px-4 rounded-pill shadow-sm" style="background: #ff4a17; border: none; height: 45px; font-weight: 600;">
-                <i class="bi bi-plus-circle me-2" style="font-size: 1.2rem;"></i>
-                CRIAR NOVO ANÚNCIO
-            </a>
-        </div>
-    </div> --}}
 
     {{-- Container do Formulário --}}
     <div class="container aos-init aos-animate" data-aos="fade-up" data-aos-delay="100">

@@ -113,10 +113,7 @@
                         <ul style="right: 0; left: auto; min-width: 200px;">
                             <li class="px-3 py-2 border-bottom mb-1" style="font-size: 0.85rem; color: #666;">
                                 <span>Olá, <strong>{{ explode(' ', auth()->user()->name)[0] }}</strong></span>
-                                <br>
-                                <small class="text-muted" style="font-size: 0.7rem; text-transform: uppercase;">
-                                    Perfil: {{ auth()->user()->nivel_acesso }}
-                                </small>
+                                
                             </li>
 
                             {{-- Lógica de Redirecionamento Desktop --}}

@@ -24,9 +24,11 @@ class ParticularController extends Controller
         ->orderBy('created_at', 'desc')
         ->get();
 
+    $contagem = $veiculos->count();
+
         //dd($veiculos);
     // 3. Retornamos a view passando a variável veiculos
-    return view('particulares.index', compact('veiculos'));
+    return view('particulares.index', compact('veiculos', 'contagem'));
 }
 
 
