@@ -306,7 +306,7 @@
     </div>
 
     <div class="form-group mt-4">
-        <button type="submit" class="form-control btn btn-primary px-3 shadow-sm">Finalizar Cadastro no Alcecar</button>
+        <button type="submit" class="form-control btn btn-primary px-3 shadow-sm">Cadastrar</button>
     </div>
 </form>
 

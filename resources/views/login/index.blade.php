@@ -41,7 +41,7 @@
                             </div>
                             <h2 style="color: white; font-weight: 700;">Bem-vindo!</h2>
                             <p style="color: rgba(255,255,255,0.8);">Ainda não possui acesso à nossa plataforma?</p>
-                            <a href="{{ route('register') }}" class="btn btn-outline-white mt-3">Criar Conta no Alcecar</a>
+                            <a href="{{ route('register') }}" class="btn btn-outline-white mt-3">Criar Conta</a>
                         </div>
                     </div>
 
@@ -86,7 +86,7 @@
                             </div>
 
                             <div class="form-group mt-4">
-                                <button type="submit" class="form-control btn btn-primary submit px-3">Entrar no Alcecar</button>
+                                <button type="submit" class="form-control btn btn-primary submit px-3">Acessar</button>
                             </div>
 
                             <div class="form-group d-flex justify-content-between mt-4">
