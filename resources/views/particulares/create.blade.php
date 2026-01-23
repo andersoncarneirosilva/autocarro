@@ -484,10 +484,10 @@ document.addEventListener('DOMContentLoaded', function () {
 <hr>
 
                     <div class="col-md-12 mt-4">
-                        <label class="form-label font-weight-bold">Fotos do Veículo</label>
-                        <input type="file" name="images[]" class="form-control" multiple accept="image/*">
-                        <small class="text-muted">Selecione várias fotos de uma vez.</small>
-                    </div>
+    <label class="form-label font-weight-bold">Foto Principal do Veículo</label>
+    <input type="file" name="image" class="form-control" accept="image/*" required>
+    <small class="text-muted">Selecione a melhor foto para o seu anúncio (Máx. 1 arquivo).</small>
+</div>
 
                  <hr>
 

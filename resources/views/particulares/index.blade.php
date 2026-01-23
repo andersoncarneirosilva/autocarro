@@ -46,7 +46,7 @@ document.addEventListener('DOMContentLoaded', function () {
             disabled 
             title="Limite de 2 anúncios atingido">
         <i class="bi bi-slash-circle me-2" style="font-size: 1.2rem;"></i>
-        LIMITE DE ANÚNCIOS ATINGIDO
+        CRIAR NOVO ANÚNCIO
     </button>
 @else
     <a href="{{ route('particulares.create') }}" 

@@ -83,15 +83,21 @@ public function store(Request $request)
     }, $request->input('opcionais', []));
     $data['opcionais'] = json_encode($opcionaisArray, JSON_UNESCAPED_UNICODE);
 
-    // Upload de múltiplas imagens
-    $imagens = [];
-    if ($request->hasFile('images')) {
-        foreach ($request->file('images') as $image) {
-            $path = $image->store('veiculos', 'public');
-            $imagens[] = $path;
-        }
+    // Upload da foto única
+    if ($request->hasFile('image')) {
+        // Salva a imagem na pasta 'veiculos' dentro de storage/app/public
+        $path = $request->file('image')->store('veiculos', 'public');
+        
+        // Atribui o caminho da imagem ao campo 'image' do banco
+        $data['image'] = $path; 
+
+        // IMPORTANTE: Se o seu banco ainda exige a coluna 'images' (no plural) como JSON, 
+        // salve o caminho dentro de um array. Caso contrário, remova a linha abaixo.
+        $data['images'] = json_encode([$path]); 
+    } else {
+        $data['image'] = null;
+        $data['images'] = json_encode([]);
     }
-    $data['images'] = json_encode($imagens);
 
     // --- CAMPOS MANUAIS FIXOS ---
     $data['status'] = 'ATIVO'; 

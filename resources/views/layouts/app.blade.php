@@ -59,14 +59,14 @@
     {{-- <script src="{{ url('backend/js/pagamento.js') }}?v={{ time() }}"></script> --}}
 
     <!-- Google tag (gtag.js) -->
-{{-- <script async src="https://www.googletagmanager.com/gtag/js?id=G-02FMMXT79W"></script>
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-02FMMXT79W"></script>
 <script>
   window.dataLayer = window.dataLayer || [];
   function gtag(){dataLayer.push(arguments);}
   gtag('js', new Date());
 
   gtag('config', 'G-02FMMXT79W');
-</script> --}}
+</script>
 
 <!-- jstree css -->
 <link href="{{ url('backend/vendor/jstree/themes/default/style.min.css') }}" rel="stylesheet" type="text/css">
