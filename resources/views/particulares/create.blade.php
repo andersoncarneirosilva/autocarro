@@ -264,9 +264,9 @@ document.addEventListener('DOMContentLoaded', function () {
                         <select name="estado" class="form-control" required>
                             <option value="">Selecione a condição</option>
 
-                            <option value="NOVO">Novo</option>
-                            <option value="SEMI-NOVO">Semi-novo</option>
-                            <option value="USADO">Usado</option>
+                            <option value="Novo">Novo</option>
+                            <option value="Semi-novo">Semi-novo</option>
+                            <option value="Usado">Usado</option>
                         </select>
                     </div>
 

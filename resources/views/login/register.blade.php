@@ -278,7 +278,7 @@
 
     <div class="row">
         <div class="col-md-12 form-group mb-4">
-            <label class="label" id="label-nome">{{ old('account_type') == 'dealer' ? 'Nome da Revenda / Razão Social' : 'Nome Completo' }}</label>
+            <label class="label" id="label-nome">{{ old('account_type') == 'dealer' ? 'Nome da Revenda / Razão Social' : 'Nome' }}</label>
             <input type="text" class="form-control" name="name" placeholder="Nome do responsável ou da loja" value="{{ old('name') }}" required>
         </div>
     </div>
@@ -295,15 +295,18 @@
     </div>
 
     <div class="row">
-        <div class="col-md-6 form-group mb-4">
-            <label class="label">Criar Senha</label>
-            <input type="password" class="form-control" name="password" placeholder="••••••••" required>
-        </div>
-        <div class="col-md-6 form-group mb-4">
-            <label class="label">Confirmar Senha</label>
-            <input type="password" class="form-control" name="password_confirmation" placeholder="••••••••" required>
-        </div>
+    <div class="col-md-6 form-group mb-4">
+        <label class="label">Criar Senha</label>
+        <input type="password" class="form-control" name="password" placeholder="••••••••" required minlength="8">
+        <small class="text-muted" style="font-size: 0.75rem;">
+            <i class="bi bi-info-circle"></i> Mínimo de 8 caracteres.
+        </small>
     </div>
+    <div class="col-md-6 form-group mb-4">
+        <label class="label">Confirmar Senha</label>
+        <input type="password" class="form-control" name="password_confirmation" placeholder="••••••••" required minlength="8">
+    </div>
+</div>
 
     <div class="form-group mt-4">
         <button type="submit" class="form-control btn btn-primary px-3 shadow-sm">Cadastrar</button>
@@ -341,7 +344,7 @@
     } else {
         $('#dealer-fields').slideUp();
         $('#cpf-field').slideDown(); // Mostra o CPF para Particulares
-        labelNome.innerText = 'Nome Completo';
+        labelNome.innerText = 'Nome da Revenda';
         $('#btn-user').addClass('active');
         inputType.value = 'user';
         

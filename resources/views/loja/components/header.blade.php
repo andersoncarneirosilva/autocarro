@@ -58,14 +58,14 @@
           <li><a href="{{ route('veiculos.novos') }}" class="{{ request()->routeIs('veiculos.novos') ? 'active' : '' }}">Novos</a></li>
           <li><a href="{{ route('veiculos.semi-novos') }}" class="{{ request()->routeIs('veiculos.semi-novos') ? 'active' : '' }}">Semi-novos</a></li>
           <li><a href="{{ route('veiculos.usados') }}" class="{{ request()->routeIs('veiculos.usados') ? 'active' : '' }}">Usados</a></li>
-          <li class="dropdown">
+          {{-- <li class="dropdown">
             <a href="#"><span>Especiais</span> <i class="bi bi-chevron-down toggle-dropdown"></i></a>
             <ul>
               <li><a href="#">Clássicos</a></li>
               <li><a href="#">Esportivos</a></li>
               <li><a href="#">Modificados</a></li>
             </ul>
-          </li>
+          </li> --}}
 
           {{-- Dropdown de Usuário para Mobile --}}
           @auth
@@ -96,7 +96,7 @@
 
       @auth
         <div class="d-flex align-items-center">
-            {{-- Menu Dropdown acoplado ao Avatar --}}
+          
             <nav class="navmenu">
                 <ul>
                     <li class="dropdown">
@@ -116,7 +116,6 @@
                                 
                             </li>
 
-                            {{-- Lógica de Redirecionamento Desktop --}}
                             <li>
                                 <a href="{{ auth()->user()->nivel_acesso === 'Particular' ? route('particulares.index') : url('/anuncios') }}" class="d-flex align-items-center">
                                     <i class="bi bi-speedometer2 me-2"></i> Meu Painel

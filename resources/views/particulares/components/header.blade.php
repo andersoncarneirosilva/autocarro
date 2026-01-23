@@ -38,6 +38,8 @@
 
 
 </style>
+
+
 <header 
   id="header" 
   class="header d-flex align-items-center fixed-top 
@@ -48,93 +50,26 @@
       <a href="{{ route('loja.index') }}" class="logo d-flex align-items-center me-auto">
         <img src="{{ url('frontend/images/logo_texto.png') }}" alt="Alcecar">
       </a>
-
+      @auth
       <nav id="navmenu" class="navmenu">
         <ul>
-          <li><a href="{{ route('loja.index') }}" class="{{ request()->routeIs('loja.index') ? 'active' : '' }}">Home</a></li>
-          <li><a href="{{ route('veiculos.novos') }}" class="{{ request()->routeIs('veiculos.novos') ? 'active' : '' }}">Novos</a></li>
-          <li><a href="{{ route('veiculos.semi-novos') }}" class="{{ request()->routeIs('veiculos.semi-novos') ? 'active' : '' }}">Semi-novos</a></li>
-          <li><a href="{{ route('veiculos.usados') }}" class="{{ request()->routeIs('veiculos.usados') ? 'active' : '' }}">Usados</a></li>
-          <li class="dropdown">
-            <a href="#"><span>Especiais</span> <i class="bi bi-chevron-down toggle-dropdown"></i></a>
-            <ul>
-              <li><a href="#">Clássicos</a></li>
-              <li><a href="#">Esportivos</a></li>
-              <li><a href="#">Modificados</a></li>
-            </ul>
+          <li>
+              <a href="{{ url('/particulares/dashboard') }}" class="d-flex align-items-center">
+                    Meu Painel
+              </a>
           </li>
-
-          {{-- Dropdown de Usuário para Mobile (opcional, para facilitar o toque) --}}
-          @auth
-          <li class="dropdown d-xl-none">
-            <a href="#"><span>Minha Conta</span> <i class="bi bi-chevron-down toggle-dropdown"></i></a>
-            <ul>
-              <li><a href="{{ url('/particulares/dashboard') }}">Meu Painel</a></li>
-              <li>
-                <form method="POST" action="{{ route('logout') }}">
-                    @csrf
-                    <a href="#" onclick="event.preventDefault(); this.closest('form').submit();">Sair</a>
-                </form>
-              </li>
-            </ul>
+          <li>
+              <form method="POST" action="{{ route('logout') }}">
+                  @csrf
+                  <a href="#" class="d-flex align-items-center" onclick="event.preventDefault(); this.closest('form').submit();">
+                        Sair
+                  </a>
+              </form>
           </li>
-          @endauth
+         
         </ul>
         <i class="mobile-nav-toggle d-xl-none bi bi-list"></i>
       </nav>
-
-      @auth
-        <div class="d-flex align-items-center">
-            {{-- Menu Dropdown acoplado ao Avatar --}}
-            <nav class="navmenu">
-                <ul>
-                    <li class="dropdown">
-                        <a href="#" class="p-0 border-0">
-                            @if(auth()->user()->image)
-                                <img src="{{ asset('storage/' . auth()->user()->image) }}" alt="user-image" width="40" height="40" class="rounded-circle border border-white shadow-sm">
-                            @else
-                                <div class="avatar-text" style="width: 40px; height: 40px; background-color: #730000; color: white; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: bold; border: 2px solid #fff; box-shadow: 0 2px 5px rgba(0,0,0,0.1);">
-                                    {{ strtoupper(substr(auth()->user()->name, 0, 1)) }}
-                                </div>
-                            @endif
-                            {{-- Ícone discreto indicando que é um menu --}}
-                            <i class="bi bi-chevron-down toggle-dropdown ms-1" style="font-size: 0.7rem;"></i>
-                        </a>
-                        <ul style="right: 0; left: auto; min-width: 200px;">
-                            {{-- Saudação visível em todos os dispositivos --}}
-                            <li class="px-3 py-2 border-bottom mb-1" style="font-size: 0.85rem; color: #666;">
-                                <span>Olá, <strong>{{ explode(' ', auth()->user()->name)[0] }}</strong></span>
-                            </li>
-
-                            <li>
-                                <a href="{{ url('/particulares/dashboard') }}" class="d-flex align-items-center">
-                                    <i class="bi bi-speedometer2 me-2"></i> Meu Painel
-                                </a>
-                            </li>
-
-                            @if(auth()->user()->revenda)
-                                <li>
-                                    <a href="{{ url('/loja/' . auth()->user()->revenda->slug) }}" class="d-flex align-items-center">
-                                        <i class="bi bi-shop me-2"></i> Minha loja
-                                    </a>
-                                </li>
-                            @endif
-
-                            <li><hr class="dropdown-divider mx-2"></li>
-
-                            <li>
-                                <form method="POST" action="{{ route('logout') }}">
-                                    @csrf
-                                    <a href="#" class="text-danger d-flex align-items-center" onclick="event.preventDefault(); this.closest('form').submit();">
-                                        <i class="bi bi-box-arrow-right me-2"></i> Sair
-                                    </a>
-                                </form>
-                            </li>
-                        </ul>
-                    </li>
-                </ul>
-            </nav>
-        </div>
       @endauth
 
       @guest

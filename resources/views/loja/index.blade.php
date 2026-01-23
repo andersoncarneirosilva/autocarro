@@ -257,7 +257,7 @@
         <span class="text-uppercase fw-bold text-muted" style="font-size: 12px; letter-spacing: 1px;">
             {{ $veiculo->marca_real }}
         </span>
-        <span class="badge {{ $veiculo->estado == 'Novo' ? 'bg-primary' : 'bg-dark' }} rounded-pill px-3" style="font-size: 10px;">
+        <span class="badge {{ $veiculo->estado == 'NOVO' ? 'bg-primary' : 'bg-dark' }} rounded-pill px-3" style="font-size: 10px;">
             {{ strtoupper($veiculo->estado) }}
         </span>
     </div>
