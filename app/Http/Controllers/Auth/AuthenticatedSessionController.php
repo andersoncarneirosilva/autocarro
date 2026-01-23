@@ -37,54 +37,54 @@ class AuthenticatedSessionController extends Controller
     // }
     public function store(LoginRequest $request): RedirectResponse
 {
-    // 1. Pega o tipo de conta selecionado no formulário (user ou dealer)
     $accountTypeSelected = $request->input('account_type');
 
-    // 2. Tenta a autenticação básica
     if (Auth::guard('web')->attempt($request->only('email', 'password'))) {
         
         $user = Auth::user();
 
-        // 3. Verificação de Status (Segurança extra para o Alcecar)
         if ($user->status !== 'Ativo') {
             Auth::logout();
-            return back()->withErrors([
-                'email' => 'Sua conta está inativa. Entre em contato com o suporte.',
-            ]);
+            return back()->withErrors(['email' => 'Sua conta está inativa.']);
         }
 
-        // 4. Validação do Tipo de Conta (Garante que o login condiz com o perfil)
-        $isDealerSelection = ($accountTypeSelected === 'dealer' && $user->nivel_acesso !== 'Revenda');
-        $isUserSelection = ($accountTypeSelected === 'user' && $user->nivel_acesso !== 'Particular');
+        // --- AJUSTE PARA ADMINISTRADOR ---
+        // Se NÃO for Administrador, aplicamos a trava de tipo de conta
+        if ($user->nivel_acesso !== 'Administrador') {
+            $isDealerSelection = ($accountTypeSelected === 'dealer' && $user->nivel_acesso !== 'Revenda');
+            $isUserSelection = ($accountTypeSelected === 'user' && $user->nivel_acesso !== 'Particular');
 
-        if ($isDealerSelection || $isUserSelection) {
-            Auth::logout();
-            return back()->withErrors([
-                'email' => 'Esta conta não possui acesso como ' . ($accountTypeSelected === 'dealer' ? 'Revenda.' : 'Pessoa Particular.'),
-            ]);
+            if ($isDealerSelection || $isUserSelection) {
+                Auth::logout();
+                return back()->withErrors([
+                    'email' => 'Esta conta não possui acesso como ' . ($accountTypeSelected === 'dealer' ? 'Revenda.' : 'Pessoa Particular.'),
+                ]);
+            }
         }
 
         $request->session()->regenerate();
 
-        // 5. Redirecionamentos baseados no Layout/Pasta
+        // --- REDIRECIONAMENTOS ---
         
-        // Particular vai para a nova estrutura de painel
+        // 1. Administrador vai para o Dashboard Geral
+        if ($user->nivel_acesso === 'Administrador') {
+           return redirect()->intended(RouteServiceProvider::HOME);
+        }
+
+        // 2. Particular
         if ($user->nivel_acesso === 'Particular') {
             return redirect()->route('particulares.index');
         }
 
-        // Revenda vai para o painel padrão de anúncios
+        // 3. Revenda
         if ($user->nivel_acesso === 'Revenda') {
             return redirect()->route('anuncios.index');
         }
 
-        // Caso exista um Admin ou outro nível, vai para o Home padrão
         return redirect()->intended(RouteServiceProvider::HOME);
     }
 
-    return back()->withErrors([
-        'email' => 'As credenciais fornecidas são incorretas.',
-    ]);
+    return back()->withErrors(['email' => 'As credenciais fornecidas são incorretas.']);
 }
     /**
      * Destroy an authenticated session.
