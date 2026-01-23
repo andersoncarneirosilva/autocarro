@@ -37,7 +37,7 @@
         </div>
 
         <div class="col-lg-4 col-md-12 footer-newsletter">
-          <h4>Nossa Newsletter</h4>
+          {{-- <h4>Nossa Newsletter</h4>
           <p>Assine nossa newsletter e receba as últimas ofertas e novidades do nosso estoque!</p>
           <form action="forms/newsletter.php" method="post" class="php-email-form">
             <div class="newsletter-form">
@@ -47,7 +47,7 @@
             <div class="loading">Carregando</div>
             <div class="error-message"></div>
             <div class="sent-message">Sua solicitação de inscrição foi enviada. Obrigado!</div>
-          </form>
+          </form> --}}
         </div>
 
       </div>
