@@ -38,6 +38,9 @@
 
 
 </style>
+
+
+
 <header 
   id="header" 
   class="header d-flex align-items-center fixed-top 
@@ -64,12 +67,20 @@
             </ul>
           </li>
 
-          {{-- Dropdown de Usuário para Mobile (opcional, para facilitar o toque) --}}
+          {{-- Dropdown de Usuário para Mobile --}}
           @auth
           <li class="dropdown d-xl-none">
             <a href="#"><span>Minha Conta</span> <i class="bi bi-chevron-down toggle-dropdown"></i></a>
             <ul>
-              <li><a href="{{ url('/anuncios') }}">Meu Painel</a></li>
+              {{-- Lógica de Redirecionamento Mobile --}}
+              <li>
+                <a href="{{ auth()->user()->nivel_acesso === 'Particular' ? route('particulares.index') : url('/anuncios') }}">
+                    Meu Painel
+                </a>
+              </li>
+              @if(auth()->user()->nivel_acesso === 'Revenda' && auth()->user()->revenda)
+                <li><a href="{{ url('/loja/' . auth()->user()->revenda->slug) }}">Minha Loja</a></li>
+              @endif
               <li>
                 <form method="POST" action="{{ route('logout') }}">
                     @csrf
@@ -97,22 +108,25 @@
                                     {{ strtoupper(substr(auth()->user()->name, 0, 1)) }}
                                 </div>
                             @endif
-                            {{-- Ícone discreto indicando que é um menu --}}
                             <i class="bi bi-chevron-down toggle-dropdown ms-1" style="font-size: 0.7rem;"></i>
                         </a>
                         <ul style="right: 0; left: auto; min-width: 200px;">
-                            {{-- Saudação visível em todos os dispositivos --}}
                             <li class="px-3 py-2 border-bottom mb-1" style="font-size: 0.85rem; color: #666;">
                                 <span>Olá, <strong>{{ explode(' ', auth()->user()->name)[0] }}</strong></span>
+                                <br>
+                                <small class="text-muted" style="font-size: 0.7rem; text-transform: uppercase;">
+                                    Perfil: {{ auth()->user()->nivel_acesso }}
+                                </small>
                             </li>
 
+                            {{-- Lógica de Redirecionamento Desktop --}}
                             <li>
-                                <a href="{{ url('/anuncios') }}" class="d-flex align-items-center">
+                                <a href="{{ auth()->user()->nivel_acesso === 'Particular' ? route('particulares.index') : url('/anuncios') }}" class="d-flex align-items-center">
                                     <i class="bi bi-speedometer2 me-2"></i> Meu Painel
                                 </a>
                             </li>
 
-                            @if(auth()->user()->revenda)
+                            @if(auth()->user()->nivel_acesso === 'Revenda' && auth()->user()->revenda)
                                 <li>
                                     <a href="{{ url('/loja/' . auth()->user()->revenda->slug) }}" class="d-flex align-items-center">
                                         <i class="bi bi-shop me-2"></i> Minha loja
