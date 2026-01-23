@@ -33,6 +33,7 @@ use App\Http\Controllers\SiteController;
 use App\Http\Controllers\RevendaController;
 use App\Http\Controllers\RevendaPublicaController;
 use App\Http\Controllers\ModeloProcuracaoController;
+use App\Http\Controllers\ParticularController;
 
 use Illuminate\Support\Facades\Route;
 use Livewire\Livewire;
@@ -45,6 +46,11 @@ use Illuminate\Support\Facades\Broadcast;
 Route::middleware(['auth'])->group(function () {
 
     Broadcast::routes(['middleware' => ['auth:sanctum']]);
+
+    Route::get('/particulares/create', [ParticularController::class, 'create'])->name('particulares.create');
+    Route::post('/particulares/store', [ParticularController::class, 'store'])->name('particulares.store');
+    Route::get('/particulares/dashboard', [ParticularController::class, 'index'])->name('particulares.index');
+    Route::delete('/particulares/destroy/{id}', [ParticularController::class, 'destroy'])->name('particulares.destroy');
 
     Route::resource('revendas', RevendaController::class);
 // routes/web.php

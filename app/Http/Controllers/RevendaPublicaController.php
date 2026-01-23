@@ -11,6 +11,7 @@ class RevendaPublicaController extends Controller
     public function show($slug)
 {
     // 1. Busca a revenda
+    //abort(500);
     $revenda = DB::table('revendas')->where('slug', $slug)->first();
 
     if (!$revenda) {

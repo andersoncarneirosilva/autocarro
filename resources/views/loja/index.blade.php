@@ -255,7 +255,7 @@
     {{-- Topo: Marca e Badge de Estado --}}
     <div class="d-flex justify-content-between align-items-center mb-2">
         <span class="text-uppercase fw-bold text-muted" style="font-size: 12px; letter-spacing: 1px;">
-            {{ $veiculo->marca_exibicao }}
+            {{ $veiculo->marca_real }}
         </span>
         <span class="badge {{ $veiculo->estado == 'Novo' ? 'bg-primary' : 'bg-dark' }} rounded-pill px-3" style="font-size: 10px;">
             {{ strtoupper($veiculo->estado) }}
@@ -265,7 +265,7 @@
     {{-- Título --}}
     <a href="{{ url('veiculo/' . $veiculo->slug) }}" class="stretched-link text-decoration-none">
         <h3 class="mb-3" style="color: #212529; font-weight: 700; font-size: 1.25rem; transition: 0.3s;">
-            {{ $veiculo->modelo_exibicao }}
+            {{ $veiculo->modelo_real }}
         </h3>
     </a>
 

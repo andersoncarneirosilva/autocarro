@@ -69,7 +69,7 @@
           <li class="dropdown d-xl-none">
             <a href="#"><span>Minha Conta</span> <i class="bi bi-chevron-down toggle-dropdown"></i></a>
             <ul>
-              <li><a href="{{ url('/anuncios') }}">Meu Painel</a></li>
+              <li><a href="{{ url('/particulares/dashboard') }}">Meu Painel</a></li>
               <li>
                 <form method="POST" action="{{ route('logout') }}">
                     @csrf
@@ -107,7 +107,7 @@
                             </li>
 
                             <li>
-                                <a href="{{ url('/anuncios') }}" class="d-flex align-items-center">
+                                <a href="{{ url('/particulares/dashboard') }}" class="d-flex align-items-center">
                                     <i class="bi bi-speedometer2 me-2"></i> Meu Painel
                                 </a>
                             </li>
