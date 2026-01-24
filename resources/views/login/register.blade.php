@@ -370,8 +370,9 @@ document.addEventListener('DOMContentLoaded', function() {
                     selectCidade.innerHTML = '<option value="">Selecione a Cidade</option>';
                     cidades.forEach(cidade => {
                         const option = document.createElement('option');
-                        option.value = cidade.nome;
-                        option.textContent = cidade.nome;
+                        // .toUpperCase() transforma em maiúsculas antes de definir o valor
+                        option.value = cidade.nome.toUpperCase(); 
+                        option.textContent = cidade.nome.toUpperCase();
                         selectCidade.appendChild(option);
                     });
                     selectCidade.disabled = false;
