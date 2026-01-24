@@ -275,7 +275,7 @@
         @endif
     @endif 
 
-    / <span class="text-dark fw-medium">{{ $veiculo->marca_real }}/{{ $veiculo->modelo_real }}</span>
+    / <span class="text-dark fw-medium">{{ $veiculo->marca_real }} - {{ $veiculo->modelo_real }}</span>
 </nav>
 
     <div class="row g-4">
