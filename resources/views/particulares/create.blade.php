@@ -491,6 +491,13 @@ document.addEventListener('DOMContentLoaded', function () {
 
                  <hr>
 
+                     <div class="col-md-12 mt-4">
+                        <label class="form-label font-weight-bold">Descrição</label>
+                        <textarea class="form-control" name="descricao" id="" cols="30" rows="10"></textarea>
+                    </div>
+
+                 <hr>
+
                        <div class="row">
     <div class="col-md-6 mt-4">
         <label class="form-label text-muted">Valor de Venda (R$)</label>

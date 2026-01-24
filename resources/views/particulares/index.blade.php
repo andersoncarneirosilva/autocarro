@@ -37,7 +37,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
     <div>
         @php
-    $limiteAtingido = $contagem >= 1;
+    $limiteAtingido = $contagem >= 2;
 @endphp
 
 @if($limiteAtingido)

@@ -57,6 +57,7 @@ class Anuncio extends Model
         'adicionais',
         'opcionais',
         'modificacoes',
+        'descricao',
         'images'     => 'array',
 
     ];

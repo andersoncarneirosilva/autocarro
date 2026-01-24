@@ -97,6 +97,7 @@ public function store(Request $request)
     $data['status'] = 'ATIVO'; 
     $data['status_anuncio'] = 'Publicado';
     $data['placa'] = strtoupper($request->placa);
+    $data['descricao'] = $request->descricao; 
 
     // Cria o registro no banco de dados
     Anuncio::create($data);
