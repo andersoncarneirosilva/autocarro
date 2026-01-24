@@ -310,173 +310,94 @@ document.addEventListener('DOMContentLoaded', function () {
 </select>
 </div>
 <hr>
-                    <div class="col-md-12">
-    <label class="form-label mb-2">Adicionais do Veículo</label>
+                    <div class="col-md-12 mt-3">
+    <label class="form-label mb-3 fw-bold">Adicionais do Veículo</label>
 
-    <div class="row">
-        <div class="col-md-4">
-            <div class="form-check">
-                <input class="form-check-input" type="checkbox" name="adicionais[]" value="ACEITA_TROCA" id="adicional_aceita_troca">
-                <label class="form-check-label" for="adicional_aceita_troca">Aceita Troca</label>
-            </div>
+    <div class="row g-3">
+        @php
+            // Lista de adicionais conforme seu trecho anterior
+            $itensAdicionais = [
+                "Aceita Troca", 
+                "Adaptado para pessoas com deficiência", 
+                "Consórcio", 
+                "Garantia de Fábrica", 
+                "IPVA Pago", 
+                "Licenciado", 
+                "Não aceita troca", 
+                "Colecionador", 
+                "Todas Revisões feitas", 
+                "Único Dono", 
+                "Veículo de Concessionária", 
+                "Veículo Financiado"
+            ];
+            
+            // Divide os 12 itens em 3 colunas de 4 itens cada
+            $colunasAdicionais = array_chunk($itensAdicionais, ceil(count($itensAdicionais) / 3));
+        @endphp
 
-            <div class="form-check">
-                <input class="form-check-input" type="checkbox" name="adicionais[]" value="PCD" id="adicional_pcd">
-                <label class="form-check-label" for="adicional_pcd">Adaptado para pessoas com deficiência</label>
+        @foreach($colunasAdicionais as $coluna)
+            <div class="col-md-4">
+                @foreach($coluna as $item)
+                    @php
+                        // Cria um ID amigável: "Único Dono" vira "adi_unico_dono"
+                        $slugAdi = 'adi_' . Str::slug($item, '_');
+                    @endphp
+                    <div class="form-check mb-2">
+                        <input class="form-check-input" 
+                               type="checkbox" 
+                               name="adicionais[]" 
+                               value="{{ $item }}" 
+                               id="{{ $slugAdi }}">
+                        <label class="form-check-label small" for="{{ $slugAdi }}">
+                            {{ $item }}
+                        </label>
+                    </div>
+                @endforeach
             </div>
-
-            <div class="form-check">
-                <input class="form-check-input" type="checkbox" name="adicionais[]" value="CONSORCIO" id="adicional_consorcio">
-                <label class="form-check-label" for="adicional_consorcio">Consórcio</label>
-            </div>
-
-            <div class="form-check">
-                <input class="form-check-input" type="checkbox" name="adicionais[]" value="GARANTIA_FABRICA" id="adicional_garantia">
-                <label class="form-check-label" for="adicional_garantia">Garantia de Fábrica</label>
-            </div>
-        </div>
-
-        <div class="col-md-4">
-            <div class="form-check">
-                <input class="form-check-input" type="checkbox" name="adicionais[]" value="IPVA_PAGO" id="adicional_ipva">
-                <label class="form-check-label" for="adicional_ipva">IPVA Pago</label>
-            </div>
-
-            <div class="form-check">
-                <input class="form-check-input" type="checkbox" name="adicionais[]" value="LICENCIADO" id="adicional_licenciado">
-                <label class="form-check-label" for="adicional_licenciado">Licenciado</label>
-            </div>
-
-            <div class="form-check">
-                <input class="form-check-input" type="checkbox" name="adicionais[]" value="NAO_ACEITA_TROCA" id="adicional_nao_troca">
-                <label class="form-check-label" for="adicional_nao_troca">Não aceita troca</label>
-            </div>
-
-            <div class="form-check">
-                <input class="form-check-input" type="checkbox" name="adicionais[]" value="COLECIONADOR" id="adicional_colecionador">
-                <label class="form-check-label" for="adicional_colecionador">Peça de Colecionador</label>
-            </div>
-        </div>
-
-        <div class="col-md-4">
-            <div class="form-check">
-                <input class="form-check-input" type="checkbox" name="adicionais[]" value="REVISOES_EM_DIA" id="adicional_revisoes">
-                <label class="form-check-label" for="adicional_revisoes">Todas Revisões feitas</label>
-            </div>
-
-            <div class="form-check">
-                <input class="form-check-input" type="checkbox" name="adicionais[]" value="UNICO_DONO" id="adicional_unico_dono">
-                <label class="form-check-label" for="adicional_unico_dono">Único Dono</label>
-            </div>
-
-            <div class="form-check">
-                <input class="form-check-input" type="checkbox" name="adicionais[]" value="CONCESSIONARIA" id="adicional_concessionaria">
-                <label class="form-check-label" for="adicional_concessionaria">Veículo de Concessionária</label>
-            </div>
-
-            <div class="form-check">
-                <input class="form-check-input" type="checkbox" name="adicionais[]" value="FINANCIADO" id="adicional_financiado">
-                <label class="form-check-label" for="adicional_financiado">Veículo Financiado</label>
-            </div>
-        </div>
+        @endforeach
     </div>
 </div>
 
 <hr>
 <div class="col-md-12 mt-3">
-    <label class="form-label mb-2">Opcionais do Veículo</label>
+    <label class="form-label mb-3 fw-bold">Opcionais do Veículo</label>
 
-    <div class="row">
-        <div class="col-md-4">
-            <div class="form-check">
-                <input class="form-check-input" type="checkbox" name="opcionais[]" value="AIRBAG" id="opcional_airbag">
-                <label class="form-check-label" for="opcional_airbag">Air Bag</label>
-            </div>
+    <div class="row g-3" style="max-height: 400px; overflow-y: auto; overflow-x: hidden;">
+        @php
+            $todosOpcionais = [
+                "Air Bag", "Air Bag Cortina", "Air Bag Duplo", "Alarme", "Alerta colisão frontal", "Ar Condicionado", "Ar Condicionado Digital", "Ar Quente",
+                "Banco com Aquecimento", "Banco de Couro", "Banco Elétrico", "Banco Recaro", "Banco Regulável Altura", "Cabine Dupla", "Cabine Estendida",
+                "Cabine Simples", "Câmbio CVT", "Câmera de Ré", "Capota Marítima", "Chave Reserva",
+                "Controle de Estabilidade", "Controle de Tração", "Desembaçador Traseiro", "Direção Elétrica", "Direção Escamoteável", "Direção Hidráulica", "Direção Multifuncional",
+                "Engate para Reboque", "Estribo", "Farol Acendimento Aut.", "Farol Auxiliar", "Farol de LED", "Farol Regulagem Elétrica", "Freio de Mão Eletrônico",
+                "Freios ABS", "Freios com EBD", "GPS", "Interface", "Legalizado", "Limpador Traseiro", "Lona Maritima", "Manual do proprietário", "Media Nav", "Monitor Pressão de Pneus",
+                "Multimídia", "Parachoques na cor", "Park Assist", "Partida Elétrica", "Película Solar", "Piloto adaptativo", "Piloto Automatico",
+                "Porta Malas Elétrico", "Protetor de Caçamba", "Protetor de Carter", "Quebra Mato", "Rack de teto", "Rádio com espelhamento celular", "Rádio u-connect", "Rastreador",
+                "Rebaixado", "Retrovisor Elétrico", "Retrovisor Rebatimento Aut.", "Rodas de Liga Leve", "Santo Antônio", "Sensor de Chuva", "Sensor de Estacionamento",
+                "Som no Volante", "Som Original", "Som Rádio",
+                "Som Rádio CD", "Som Rádio DVD", "Som Rádio MP3", "Spoiler", "Start Stop", "Suspensão Regulável", "Teto Panoramico", "Teto Solar", "Tração 4x2", "Tração 4x4",
+                "Tração AWD", "Travas Elétricas", "Turbo", "Vidros Elétricos", "Vidros Verdes", "Xenon"
+            ];
+            
+            // Divide o array em 3 partes para as colunas
+            $colunas = array_chunk($todosOpcionais, ceil(count($todosOpcionais) / 3));
+        @endphp
 
-            <div class="form-check">
-                <input class="form-check-input" type="checkbox" name="opcionais[]" value="AIRBAG_DUPLO" id="opcional_airbag_duplo">
-                <label class="form-check-label" for="opcional_airbag_duplo">Air Bag Duplo</label>
+        @foreach($colunas as $opcionaisColuna)
+            <div class="col-md-4">
+                @foreach($opcionaisColuna as $item)
+                    @php
+                        $slug = Str::slug($item, '_');
+                    @endphp
+                    <div class="form-check mb-2">
+                        <input class="form-check-input" type="checkbox" name="opcionais[]" value="{{ $item }}" id="opc_{{ $slug }}">
+                        <label class="form-check-label small" for="opc_{{ $slug }}">
+                            {{ $item }}
+                        </label>
+                    </div>
+                @endforeach
             </div>
-
-            <div class="form-check">
-                <input class="form-check-input" type="checkbox" name="opcionais[]" value="ALARME" id="opcional_alarme">
-                <label class="form-check-label" for="opcional_alarme">Alarme</label>
-            </div>
-
-            <div class="form-check">
-                <input class="form-check-input" type="checkbox" name="opcionais[]" value="BLINDADO" id="opcional_blindado">
-                <label class="form-check-label" for="opcional_blindado">Blindado</label>
-            </div>
-
-            <div class="form-check">
-                <input class="form-check-input" type="checkbox" name="opcionais[]" value="SENSOR_ESTACIONAMENTO" id="opcional_sensor">
-                <label class="form-check-label" for="opcional_sensor">Sensor de Estacionamento</label>
-            </div>
-        </div>
-
-        <div class="col-md-4">
-            <div class="form-check">
-                <input class="form-check-input" type="checkbox" name="opcionais[]" value="BANCO_COURO" id="opcional_banco_couro">
-                <label class="form-check-label" for="opcional_banco_couro">Banco de Couro</label>
-            </div>
-
-            <div class="form-check">
-                <input class="form-check-input" type="checkbox" name="opcionais[]" value="BANCO_RECARO" id="opcional_banco_recaro">
-                <label class="form-check-label" for="opcional_banco_recaro">Banco Recaro</label>
-            </div>
-
-            <div class="form-check">
-                <input class="form-check-input" type="checkbox" name="opcionais[]" value="PADDLE_SHIFT" id="opcional_paddle">
-                <label class="form-check-label" for="opcional_paddle">Paddle Shift / Borboleta</label>
-            </div>
-
-            <div class="form-check">
-                <input class="form-check-input" type="checkbox" name="opcionais[]" value="TETO_SOLAR" id="opcional_teto_solar">
-                <label class="form-check-label" for="opcional_teto_solar">Teto Solar</label>
-            </div>
-        </div>
-
-        <div class="col-md-4">
-            <div class="form-check">
-                <input class="form-check-input" type="checkbox" name="opcionais[]" value="ENGATE_REBOQUE" id="opcional_engate">
-                <label class="form-check-label" for="opcional_engate">Engate para Reboque</label>
-            </div>
-
-            <div class="form-check">
-                <input class="form-check-input" type="checkbox" name="opcionais[]" value="FAROL_AUXILIAR" id="opcional_farol_aux">
-                <label class="form-check-label" for="opcional_farol_aux">Farol Auxiliar</label>
-            </div>
-
-            <div class="form-check">
-                <input class="form-check-input" type="checkbox" name="opcionais[]" value="FAROL_LED" id="opcional_farol_led">
-                <label class="form-check-label" for="opcional_farol_led">Farol de LED</label>
-            </div>
-
-            <div class="form-check">
-                <input class="form-check-input" type="checkbox" name="opcionais[]" value="RODAS_LIGA_LEVE" id="opcional_rodas">
-                <label class="form-check-label" for="opcional_rodas">Rodas de Liga Leve</label>
-            </div>
-
-            <div class="form-check">
-                <input class="form-check-input" type="checkbox" name="opcionais[]" value="SANTO_ANTONIO" id="opcional_santo_antonio">
-                <label class="form-check-label" for="opcional_santo_antonio">Santo Antônio</label>
-            </div>
-
-            <div class="form-check">
-                <input class="form-check-input" type="checkbox" name="opcionais[]" value="SPOILER" id="opcional_spoiler">
-                <label class="form-check-label" for="opcional_spoiler">Spoiler</label>
-            </div>
-
-            <div class="form-check">
-                <input class="form-check-input" type="checkbox" name="opcionais[]" value="XENON" id="opcional_xenon">
-                <label class="form-check-label" for="opcional_xenon">Xenon</label>
-            </div>
-
-            <div class="form-check">
-                <input class="form-check-input" type="checkbox" name="opcionais[]" value="PELICULA_SOLAR" id="opcional_pelicula">
-                <label class="form-check-label" for="opcional_pelicula">Película Solar</label>
-            </div>
-        </div>
+        @endforeach
     </div>
 </div>
 
