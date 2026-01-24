@@ -252,31 +252,25 @@
 
         <div class="details position-relative p-4">
 
-            {{-- Topo: Marca e Badge de Condição (Novo/Usado) --}}
+            {{-- Topo: Marca e Badge de Condição --}}
             <div class="d-flex justify-content-between align-items-center mb-2">
                 <span class="text-uppercase fw-bold text-muted" style="font-size: 12px; letter-spacing: 1px;">
                     {{ $veiculo->marca_real }}
                 </span>
-                <span class="badge {{ $veiculo->condicao == 'NOVO' ? 'bg-primary' : 'bg-dark' }} rounded-pill px-3" style="font-size: 10px;">
+                <span class="badge {{ $veiculo->condicao == 'NOVO' ? 'bg-primary' : 'bg-primary' }} rounded-pill" style="font-size: 10px;">
                     {{ strtoupper($veiculo->condicao ?? 'USADO') }}
                 </span>
             </div>
 
-            {{-- Título --}}
-            <a href="{{ url('veiculo/' . $veiculo->slug) }}" class="stretched-link text-decoration-none">
-                <h3 class="mb-1" style="color: #212529; font-weight: 700; font-size: 1.25rem; transition: 0.3s;">
+            {{-- Título: Ajustado com d-block e margens no H3 --}}
+            <a href="{{ url('veiculo/' . $veiculo->slug) }}" class="stretched-link text-decoration-none d-block">
+                <h3 class="mt-3 mb-3" style="color: #212529; font-weight: 700; font-size: 1.25rem; transition: 0.3s;">
                     {{ $veiculo->modelo_real }}
                 </h3>
-            </a>
-
-            {{-- Localização: Cidade e Estado --}}
-            <div class="mb-3 text-muted" style="font-size: 12px;">
-                <i class="bi bi-geo-alt-fill text-danger"></i> 
-                {{ $veiculo->user->cidade ?? 'Cidade não informada' }} - {{ $veiculo->user->estado ?? 'UF' }}
-            </div>
+            </a>           
 
             {{-- Informações Técnicas com Ícones (Grid) --}}
-            <div class="row g-0 border-top border-bottom py-2 mb-3 text-muted" style="font-size: 13px;">
+            <div class="row g-0 border-top border-bottom py-2 mb-3 text-muted mt-3" style="font-size: 13px;">
                 <div class="col-4 border-end text-center">
                     <i class="bi bi-speedometer2 d-block mb-1"></i>
                     {{ number_format($veiculo->kilometragem, 0, ',', '.') }} km
@@ -289,6 +283,12 @@
                     <i class="bi bi-gear-wide-connected d-block mb-1"></i>
                     {{ $veiculo->cambio }}
                 </div>
+            </div>
+
+            {{-- Localização: Cidade e Estado --}}
+            <div class="mb-3 text-muted" style="font-size: 12px;">
+                <i class="bi bi-geo-alt-fill text-danger"></i> 
+                {{ $veiculo->user->cidade ?? 'Cidade não informada' }} - {{ $veiculo->user->estado ?? 'UF' }}
             </div>
 
             {{-- Área de Preço e Botão --}}
