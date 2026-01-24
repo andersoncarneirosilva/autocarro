@@ -262,18 +262,21 @@
 
 <section class="container py-5 mt-5">
     <nav class="d-flex gap-2 small text-muted mt-4 mb-4 overflow-x-auto text-nowrap">
-        <a href="/" class="text-decoration-none text-muted">Início</a> / 
-        @if($tipoVendedor === 'revenda' && isset($vendedor->slug))
-    <a href="{{ url('/loja/' . $vendedor->slug) }}" class="text-decoration-none text-muted">
-        {{ $vendedor->nome }}
-    </a>
-@else
-    <span class="text-muted">
-        {{ $vendedor->nome ?? 'Vendedor Particular' }}
-    </span>
-@endif 
-        <span class="text-dark fw-medium">{{ $veiculo->marca_real }} {{ $veiculo->marca_real }}</span>
-    </nav>
+    <a href="/" class="text-decoration-none text-muted">Início</a> 
+    
+    @if($tipoVendedor === 'revenda')
+        / 
+        @if(isset($vendedor->slug))
+            <a href="{{ url('/loja/' . $vendedor->slug) }}" class="text-decoration-none text-muted">
+                {{ $vendedor->nome }}
+            </a>
+        @else
+            <span class="text-muted">{{ $vendedor->nome }}</span>
+        @endif
+    @endif 
+
+    / <span class="text-dark fw-medium">{{ $veiculo->marca_real }}/{{ $veiculo->modelo_real }}</span>
+</nav>
 
     <div class="row g-4">
         <div class="col-lg-7">
