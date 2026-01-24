@@ -263,7 +263,7 @@
             </div>
 
             {{-- Título: Ajustado com d-block e margens no H3 --}}
-            <a href="{{ url('veiculo/' . $veiculo->slug) }}" class="stretched-link text-decoration-none d-block">
+            <a href="{{ route('loja.veiculo.detalhes', ['slug_loja' => $veiculo->slug_loja, 'slug_veiculo' => $veiculo->slug]) }}" class="stretched-link text-decoration-none d-block">
                 <h3 class="mt-3 mb-3" style="color: #212529; font-weight: 700; font-size: 1.25rem; transition: 0.3s;">
                     {{ $veiculo->modelo_real }}
                 </h3>
