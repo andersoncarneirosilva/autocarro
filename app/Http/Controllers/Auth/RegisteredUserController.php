@@ -81,6 +81,8 @@ class RegisteredUserController extends Controller
                     'password'     => Hash::make($request->password),
                     'nivel_acesso' => $isRevenda ? 'Revenda' : 'Particular',
                     'telefone'     => $request->whatsapp,
+                    'cidade'     => $request->cidade ?? '',
+                    'estado'     => $request->estado ?? '',
                     'plano'        => 'Basic',
                     'status'       => 'Ativo',
                     'credito'      => 10,
