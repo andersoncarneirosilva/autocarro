@@ -607,10 +607,12 @@
     </a>
 </div>
 
+@if($tipoVendedor === 'revenda')
 <div class="col-6">
     @php
-        // Monta a URL do Google Maps baseada no endereço do vendedor (seja revenda ou particular)
+        // Monta o endereço para o Google Maps
         $enderecoCompleto = "{$vendedor->rua}, {$vendedor->numero}, {$vendedor->bairro}, {$vendedor->cidade} - {$vendedor->estado}";
+        // Link oficial e funcional do Google Maps
         $mapsUrl = "https://www.google.com/maps/search/?api=1&query=" . urlencode($enderecoCompleto);
     @endphp
 
@@ -620,6 +622,7 @@
         <i class="bi bi-geo-alt me-2"></i> Onde Estamos
     </a>
 </div>
+@endif
 </div>
                 </div>
             </div>
