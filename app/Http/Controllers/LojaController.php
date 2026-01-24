@@ -48,6 +48,11 @@ class LojaController extends Controller
         $veiculo->marca_exibicao = trim($marca);
         $veiculo->modelo_exibicao = trim($modelo);
 
+        $cidade = $veiculo->user->cidade ?? 'Cidade não informada';
+    $estado = $veiculo->user->estado ?? '';
+    
+    // Cria uma propriedade virtual para facilitar no Blade
+    $veiculo->localizacao_exibicao = $estado ? "{$cidade} - {$estado}" : $cidade;
         // --- NOVA LÓGICA: DEFINIR O SLUG DA LOJA ---
         // Se o usuário tem uma revenda, pega o slug dela. Se não, é 'particular'.
         $veiculo->slug_loja = $veiculo->user->revenda ? $veiculo->user->revenda->slug : 'particular';

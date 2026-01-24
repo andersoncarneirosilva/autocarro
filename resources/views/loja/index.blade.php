@@ -237,89 +237,96 @@
     <div class="row gy-5">
 
       @foreach ($veiculos as $veiculo)
-        @php
-            $imagens = json_decode($veiculo->images, true) ?? [];
-            $imgUrl = count($imagens) ? asset('storage/' . $imagens[0]) : asset('assets/img/default-car.png');
-        @endphp
+    @php
+        $imagens = json_decode($veiculo->images, true) ?? [];
+        $imgUrl = count($imagens) ? asset('storage/' . $imagens[0]) : asset('assets/img/default-car.png');
+    @endphp
 
-        <div class="col-xl-4 col-md-6 aos-init aos-animate" data-aos="zoom-in" data-aos-delay="200">
-          <div class="service-item">
-            
-            {{-- Foto do Veículo --}}
-            <div class="img">
-              <img src="{{ $imgUrl }}" class="img-fluid" alt="{{ $veiculo->modelo_exibicao }}" style="width: 100%; height: 250px; object-fit: cover;">
+    <div class="col-xl-4 col-md-6 aos-init aos-animate" data-aos="zoom-in" data-aos-delay="200">
+      <div class="service-item">
+        
+        {{-- Foto do Veículo --}}
+        <div class="img">
+          <img src="{{ $imgUrl }}" class="img-fluid" alt="{{ $veiculo->modelo_exibicao }}" style="width: 100%; height: 250px; object-fit: cover;">
+        </div>
+
+        <div class="details position-relative p-4">
+
+            {{-- Topo: Marca e Badge de Condição (Novo/Usado) --}}
+            <div class="d-flex justify-content-between align-items-center mb-2">
+                <span class="text-uppercase fw-bold text-muted" style="font-size: 12px; letter-spacing: 1px;">
+                    {{ $veiculo->marca_real }}
+                </span>
+                <span class="badge {{ $veiculo->condicao == 'NOVO' ? 'bg-primary' : 'bg-dark' }} rounded-pill px-3" style="font-size: 10px;">
+                    {{ strtoupper($veiculo->condicao ?? 'USADO') }}
+                </span>
             </div>
 
-            <div class="details position-relative p-4">
-    
-    {{-- Topo: Marca e Badge de Estado --}}
-    <div class="d-flex justify-content-between align-items-center mb-2">
-        <span class="text-uppercase fw-bold text-muted" style="font-size: 12px; letter-spacing: 1px;">
-            {{ $veiculo->marca_real }}
-        </span>
-        <span class="badge {{ $veiculo->estado == 'NOVO' ? 'bg-primary' : 'bg-dark' }} rounded-pill px-3" style="font-size: 10px;">
-            {{ strtoupper($veiculo->estado) }}
-        </span>
-    </div>
+            {{-- Título --}}
+            <a href="{{ url('veiculo/' . $veiculo->slug) }}" class="stretched-link text-decoration-none">
+                <h3 class="mb-1" style="color: #212529; font-weight: 700; font-size: 1.25rem; transition: 0.3s;">
+                    {{ $veiculo->modelo_real }}
+                </h3>
+            </a>
 
-    {{-- Título --}}
-    <a href="{{ url('veiculo/' . $veiculo->slug) }}" class="stretched-link text-decoration-none">
-        <h3 class="mb-3" style="color: #212529; font-weight: 700; font-size: 1.25rem; transition: 0.3s;">
-            {{ $veiculo->modelo_real }}
-        </h3>
-    </a>
-
-    {{-- Informações Técnicas com Ícones (Grid) --}}
-    <div class="row g-0 border-top border-bottom py-2 mb-3 text-muted" style="font-size: 13px;">
-        <div class="col-4 border-end text-center">
-            <i class="bi bi-speedometer2 d-block mb-1"></i>
-            {{ number_format($veiculo->kilometragem, 0, ',', '.') }} km
-        </div>
-        <div class="col-4 border-end text-center">
-            <i class="bi bi-calendar3 d-block mb-1"></i>
-            {{ $veiculo->ano }}
-        </div>
-        <div class="col-4 text-center">
-            <i class="bi bi-gear-wide-connected d-block mb-1"></i>
-            {{ $veiculo->cambio }}
-        </div>
-    </div>
-
-    {{-- Área de Preço --}}
-    <div class="d-flex justify-content-between align-items-end mt-3">
-    
-    {{-- Lado Esquerdo: Preços --}}
-    <div class="price-box d-flex flex-column justify-content-end align-items-start">
-        @if($veiculo->valor_oferta && $veiculo->valor_oferta < $veiculo->valor)
-            <span class="text-muted text-decoration-line-through mb-0" style="font-size: 0.8rem;">
-                R$ {{ number_format($veiculo->valor, 2, ',', '.') }}
-            </span>
-            <div class="fw-bold text-success" style="font-size: 1.5rem; line-height: 1;">
-                <span style="font-size: 0.9rem;">R$</span> {{ number_format($veiculo->valor_oferta, 2, ',', '.') }}
+            {{-- Localização: Cidade e Estado --}}
+            <div class="mb-3 text-muted" style="font-size: 12px;">
+                <i class="bi bi-geo-alt-fill text-danger"></i> 
+                {{ $veiculo->user->cidade ?? 'Cidade não informada' }} - {{ $veiculo->user->estado ?? 'UF' }}
             </div>
-        @else
-            <div class="fw-bold text-dark" style="font-size: 1.5rem; line-height: 1;">
-                <span style="font-size: 0.9rem;">R$</span> {{ number_format($veiculo->valor, 2, ',', '.') }}
+
+            {{-- Informações Técnicas com Ícones (Grid) --}}
+            <div class="row g-0 border-top border-bottom py-2 mb-3 text-muted" style="font-size: 13px;">
+                <div class="col-4 border-end text-center">
+                    <i class="bi bi-speedometer2 d-block mb-1"></i>
+                    {{ number_format($veiculo->kilometragem, 0, ',', '.') }} km
+                </div>
+                <div class="col-4 border-end text-center">
+                    <i class="bi bi-calendar3 d-block mb-1"></i>
+                    {{ $veiculo->ano }}
+                </div>
+                <div class="col-4 text-center">
+                    <i class="bi bi-gear-wide-connected d-block mb-1"></i>
+                    {{ $veiculo->cambio }}
+                </div>
             </div>
-        @endif
+
+            {{-- Área de Preço e Botão --}}
+            <div class="d-flex justify-content-between align-items-end mt-3">
+                
+                {{-- Lado Esquerdo: Preços --}}
+                <div class="price-box d-flex flex-column justify-content-end align-items-start" style="min-height: 50px;">
+                    @if($veiculo->valor_oferta && $veiculo->valor_oferta > 0 && $veiculo->valor_oferta < $veiculo->valor)
+                        {{-- Com Oferta --}}
+                        <span class="text-muted text-decoration-line-through mb-0" style="font-size: 0.8rem;">
+                            R$ {{ number_format($veiculo->valor, 2, ',', '.') }}
+                        </span>
+                        <div class="fw-bold text-success" style="font-size: 1.5rem; line-height: 1;">
+                            <span style="font-size: 0.9rem;">R$</span> {{ number_format($veiculo->valor_oferta, 2, ',', '.') }}
+                        </div>
+                    @else
+                        {{-- Preço Normal (Fica em Verde e posicionado corretamente) --}}
+                        <div class="fw-bold text-success" style="font-size: 1.5rem; line-height: 1; padding-top: 15px;">
+                            <span style="font-size: 0.9rem;">R$</span> {{ number_format($veiculo->valor, 2, ',', '.') }}
+                        </div>
+                    @endif
+                </div>
+
+                {{-- Botão Detalhes --}}
+                <div class="action-button" style="position: relative; z-index: 2;">
+                    <a href="{{ route('loja.veiculo.detalhes', ['slug_loja' => $veiculo->slug_loja, 'slug_veiculo' => $veiculo->slug]) }}"
+                       class="btn btn-outline-get-started d-flex align-items-center gap-2"
+                       style="border-radius: 50px; padding: 8px 18px; font-size: 12px; font-weight: 700; transition: 0.3s; border-width: 2px;">
+                        DETALHES
+                        <i class="bi bi-arrow-right-short" style="font-size: 1.2rem; line-height: 0;"></i>
+                    </a>
+                </div>
+
+            </div> {{-- Fim Preço e Botão --}}
+        </div> {{-- Fim Details --}}
+      </div>
     </div>
-
-    <div class="action-button" style="position: relative; z-index: 2;">
-    
-
-    <a href="{{ route('loja.veiculo.detalhes', ['slug_loja' => $veiculo->slug_loja, 'slug_veiculo' => $veiculo->slug]) }}"
-   class="btn btn-outline-get-started d-flex align-items-center gap-2"
-   style="border-radius: 50px; padding: 8px 18px; font-size: 12px; font-weight: 700; transition: 0.3s; border-width: 2px;">
-    DETALHES
-    <i class="bi bi-arrow-right-short" style="font-size: 1.2rem; line-height: 0;"></i>
-</a>
-</div>
-
-</div>
-</div>
-          </div>
-        </div>
-        @endforeach
+@endforeach
 
     </div>
   </div>
