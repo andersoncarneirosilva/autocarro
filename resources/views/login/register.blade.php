@@ -283,6 +283,21 @@
         </div>
     </div>
 
+   <div class="row">
+        <div class="col-md-6 form-group mb-4">
+            <label class="label">Estado</label>
+            <select class="form-control" name="estado" id="estado" required>
+                <option value="">Selecione o Estado</option>
+                </select>
+        </div>
+        <div class="col-md-6 form-group mb-4">
+            <label class="label">Cidade</label>
+            <select class="form-control" name="cidade" id="cidade" required disabled>
+                <option value="">Selecione a cidade</option>
+            </select>
+        </div>
+    </div>
+
     <div class="row">
         <div class="col-md-6 form-group mb-4">
             <label class="label">WhatsApp / Celular</label>
@@ -323,7 +338,50 @@
 <script src="{{ url('sitelogin/js/jquery.min.js') }}"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.mask/1.14.16/jquery.mask.min.js"></script>
 
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const selectEstado = document.getElementById('estado');
+    const selectCidade = document.getElementById('cidade');
 
+    // 1. Carregar Estados
+    fetch('https://servicodados.ibge.gov.br/api/v1/localidades/estados?orderBy=nome')
+        .then(response => response.json())
+        .then(estados => {
+            estados.forEach(estado => {
+                const option = document.createElement('option');
+                option.value = estado.sigla; // Salva a sigla (ex: SC)
+                option.textContent = estado.nome;
+                selectEstado.appendChild(option);
+            });
+        });
+
+    // 2. Escutar mudança no Estado para carregar Cidades
+    selectEstado.addEventListener('change', function() {
+        const estadoSigla = this.value;
+        
+        // Limpa e desabilita o select de cidades
+        selectCidade.innerHTML = '<option value="">Carregando cidades...</option>';
+        selectCidade.disabled = true;
+
+        if (estadoSigla) {
+            fetch(`https://servicodados.ibge.gov.br/api/v1/localidades/estados/${estadoSigla}/municipios?orderBy=nome`)
+                .then(response => response.json())
+                .then(cidades => {
+                    selectCidade.innerHTML = '<option value="">Selecione a Cidade</option>';
+                    cidades.forEach(cidade => {
+                        const option = document.createElement('option');
+                        option.value = cidade.nome;
+                        option.textContent = cidade.nome;
+                        selectCidade.appendChild(option);
+                    });
+                    selectCidade.disabled = false;
+                });
+        } else {
+            selectCidade.innerHTML = '<option value="">Selecione um Estado primeiro</option>';
+        }
+    });
+});
+</script>
 
 <script>
     function toggleForm(type) {

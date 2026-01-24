@@ -28,6 +28,8 @@ class User extends Authenticatable
         'email',
         'cpf',
         'telefone',
+        'cidade',
+        'estado',
         'nivel_acesso',
         'password',
         'image',

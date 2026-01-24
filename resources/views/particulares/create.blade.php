@@ -154,7 +154,7 @@ document.addEventListener('DOMContentLoaded', function () {
                 <div class="shadow-sm border-0" style="border-radius: 15px; background: #fff; overflow: hidden;">
                     {{-- Cabeçalho --}}
                     <div class="bg-dark text-white p-4">
-                        <h4 class="mb-0 fw-bold text-white"><i class="bi bi-car-front  me-2"></i>Cadastro Manual de Veículo</h4>
+                        <h4 class="mb-0 fw-bold text-white"><i class="bi bi-car-front  me-2"></i>Cadastro de Veículo</h4>
                     </div>
 
                     {{-- Corpo --}}
