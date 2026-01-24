@@ -530,8 +530,18 @@
         <div class="col-lg-5">
             <div class="sticky-sidebar">
                 <div class="card card-contato p-4 bg-white">
-                    <h1 class="h3 mb-2 text-dark fw-bold">{{ $veiculo->marca_real }} {{ $veiculo->modelo_real }}</h1>
-
+                    <div class="d-flex justify-content-between align-items-start mb-2">
+        <h1 class="h3 mb-0 text-dark fw-bold">{{ $veiculo->marca_real }} {{ $veiculo->modelo_real }}</h1>
+        
+        <button type="button" 
+                onclick="copiarLink(this)" 
+                class="btn btn-outline-secondary rounded-3 d-flex align-items-center justify-content-center"
+                style="width: 30px; height: 30px; border-width: 2px; flex-shrink: 0;"
+                data-url="{{ url()->current() }}"
+                title="Copiar Link">
+            <i class="bi bi-share fs-5"></i>
+        </button>
+    </div>
                     <div class="d-flex align-items-center gap-3 text-secondary mb-4 pb-3 border-bottom">
                         @if($veiculo->ano)
                             <span class="small border-end pe-3 text-uppercase fw-medium"><i class="bi bi-calendar3 me-2"></i>{{ $veiculo->ano }}</span>
@@ -632,8 +642,32 @@
     
 </section>
 
-
 <script>
+    // FUNÇÃO GLOBAL (Acessível pelo onclick do HTML)
+    function copiarLink(button) {
+        const url = button.getAttribute('data-url');
+        const icon = button.querySelector('i');
+
+        navigator.clipboard.writeText(url).then(() => {
+            // Feedback visual: botão verde e ícone de check
+            button.classList.remove('btn-outline-secondary');
+            button.classList.add('btn-success', 'text-white');
+            icon.classList.remove('bi-link-45deg');
+            icon.classList.add('bi-check2'); 
+
+            setTimeout(() => {
+                // Volta ao estado original
+                button.classList.remove('btn-success', 'text-white');
+                button.classList.add('btn-outline-secondary');
+                icon.classList.remove('bi-check2');
+                icon.classList.add('bi-link-45deg');
+            }, 2000);
+        }).catch(err => {
+            console.error('Erro ao copiar: ', err);
+        });
+    }
+
+    // LÓGICA DO CARROSSEL (Executa após o DOM carregar)
     document.addEventListener('DOMContentLoaded', function() {
         const carouselEl = document.getElementById('carouselDetalhes');
         if (carouselEl) {
@@ -643,7 +677,7 @@
             carouselEl.addEventListener('slide.bs.carousel', event => {
                 thumbnails.forEach(t => t.classList.remove('active'));
                 if(thumbnails[event.to]) thumbnails[event.to].classList.add('active');
-                counter.innerText = event.to + 1;
+                if(counter) counter.innerText = event.to + 1;
             });
         }
     });
