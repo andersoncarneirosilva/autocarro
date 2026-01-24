@@ -13,7 +13,7 @@
 
   <meta property="og:type" content="website">
   <meta property="og:url" content="https://alcecar.com.br/">
-  <meta property="og:title" content="Loja Virtual | Compre Online com Facilidade">
+  <meta property="og:title" content="Alcecar | Compre Online com Facilidade">
   <meta property="og:description" content="Descubra uma nova forma de comprar online. Produtos de qualidade, navegação simples e pagamento seguro em um só lugar.">
   <meta property="og:image" content="{{ url('layout/images/logo_carro.png') }}">
 

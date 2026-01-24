@@ -272,7 +272,7 @@
         {{ $vendedor->nome ?? 'Vendedor Particular' }}
     </span>
 @endif 
-        <span class="text-dark fw-medium">{{ $veiculo->marca_exibicao }} {{ $veiculo->modelo_exibicao }}</span>
+        <span class="text-dark fw-medium">{{ $veiculo->marca_real }} {{ $veiculo->marca_real }}</span>
     </nav>
 
     <div class="row g-4">
@@ -513,7 +513,7 @@
         <div class="col-lg-5">
             <div class="sticky-sidebar">
                 <div class="card card-contato p-4 bg-white">
-                    <h1 class="h3 mb-2 text-dark fw-bold">{{ $veiculo->marca_exibicao }} {{ $veiculo->modelo_exibicao }}</h1>
+                    <h1 class="h3 mb-2 text-dark fw-bold">{{ $veiculo->marca_real }} {{ $veiculo->modelo_real }}</h1>
 
                     <div class="d-flex align-items-center gap-3 text-secondary mb-4 pb-3 border-bottom">
                         @if($veiculo->ano)
@@ -579,7 +579,7 @@
         $whatsappLimpo = preg_replace('/\D/', '', $whatsapp);
         
         // Mensagem padrão para a proposta
-        $mensagem = "Olá " . $vendedor->nome . ", vi seu anúncio do " . $veiculo->marca_exibicao . " " . $veiculo->modelo_exibicao . " no Alcecar e gostaria de fazer uma proposta.";
+        $mensagem = "Olá " . $vendedor->nome . ", vi seu anúncio do " . $veiculo->marca_real . " " . $veiculo->modelo_real . " no Alcecar e gostaria de fazer uma proposta.";
         $whatsappUrl = "https://wa.me/55" . $whatsappLimpo . "?text=" . urlencode($mensagem);
     @endphp
 
