@@ -211,14 +211,27 @@ public function show($slug_loja, $slug_veiculo)
 
     // Caso o anúncio tenha sido movido ou o slug da loja mude
     if (!$vendedor) {
-        // Fallback: tenta buscar de qualquer forma pelo dono do veículo
-        $vendedor = \DB::table('revendas')->where('user_id', $veiculo->user_id)->first() 
-                    ?? \DB::table('particulares')->where('user_id', $veiculo->user_id)->first();
-    }
+    $vendedor = \DB::table('revendas')->where('user_id', $veiculo->user_id)->first() 
+                ?? \DB::table('particulares')->where('user_id', $veiculo->user_id)->first();
+}
 
-    if ($vendedor && isset($vendedor->fones)) {
+// --- NOVA LÓGICA DE TRATAMENTO ---
+if ($vendedor) {
+    // Decodifica os fones se existirem
+    if (isset($vendedor->fones)) {
         $vendedor->fones = json_decode($vendedor->fones, true);
     }
+
+    // Se cidade ou estado estiverem vazios no vendedor, busca na tabela users
+    if (empty($vendedor->cidade) || empty($vendedor->estado)) {
+        $usuarioDono = \DB::table('users')->where('id', $veiculo->user_id)->first();
+        
+        if ($usuarioDono) {
+            $vendedor->cidade = $vendedor->cidade ?: $usuarioDono->cidade;
+            $vendedor->estado = $vendedor->estado ?: $usuarioDono->estado;
+        }
+    }
+}
 
     return view('loja.revenda.detalhes', compact('veiculo', 'vendedor', 'tipoVendedor'));
 }

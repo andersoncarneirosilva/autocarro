@@ -534,13 +534,13 @@
         <h1 class="h3 mb-0 text-dark fw-bold">{{ $veiculo->marca_real }} {{ $veiculo->modelo_real }}</h1>
         
         <button type="button" 
-                onclick="copiarLink(this)" 
-                class="btn btn-outline-secondary rounded-3 d-flex align-items-center justify-content-center"
-                style="width: 30px; height: 30px; border-width: 2px; flex-shrink: 0;"
-                data-url="{{ url()->current() }}"
-                title="Copiar Link">
-            <i class="bi bi-share fs-5"></i>
-        </button>
+        onclick="copiarLink(this)" 
+        class="btn p-0 border-0 d-flex align-items-center justify-content-center text-secondary shadow-none"
+        style="width: 30px; height: 30px; flex-shrink: 0; background: transparent;"
+        data-url="{{ url()->current() }}"
+        title="Copiar Link">
+    <i class="bi bi-share fs-5"></i>
+</button>
     </div>
                     <div class="d-flex align-items-center gap-3 text-secondary mb-4 pb-3 border-bottom">
                         @if($veiculo->ano)
@@ -599,40 +599,46 @@
                     </div>
                 @endif
                     <div class="row g-2">
+    {{-- Botão de Proposta --}}
     <div class="col-6">
-    @php
-        // Prepara o número do WhatsApp (remove caracteres não numéricos)
-        $whatsapp = $vendedor->fones['whatsapp'] ?? '';
-        $whatsappLimpo = preg_replace('/\D/', '', $whatsapp);
-        
-        // Mensagem padrão para a proposta
-        $mensagem = "Olá " . $vendedor->nome . ", vi seu anúncio do " . $veiculo->marca_real . " " . $veiculo->modelo_real . " no Alcecar e gostaria de fazer uma proposta.";
-        $whatsappUrl = "https://wa.me/55" . $whatsappLimpo . "?text=" . urlencode($mensagem);
-    @endphp
+        @php
+            $whatsapp = $vendedor->fones['whatsapp'] ?? '';
+            $whatsappLimpo = preg_replace('/\D/', '', $whatsapp);
+            $mensagem = "Olá " . $vendedor->nome . ", vi seu anúncio do " . $veiculo->marca_real . " " . $veiculo->modelo_real . " no Alcecar e gostaria de fazer uma proposta.";
+            $whatsappUrl = "https://wa.me/55" . $whatsappLimpo . "?text=" . urlencode($mensagem);
+        @endphp
 
-    <a href="{{ $whatsappUrl }}" 
-       target="_blank" 
-       class="btn btn-whatsapp-detail w-100 rounded-3 d-flex align-items-center justify-content-center btn-custom-height">
-        <i class="bi bi-whatsapp me-2"></i> Proposta
-    </a>
-</div>
+        <a href="{{ $whatsappUrl }}" 
+           target="_blank" 
+           class="btn btn-whatsapp-detail w-100 rounded-3 d-flex align-items-center justify-content-center btn-custom-height">
+            <i class="bi bi-whatsapp me-2"></i> Proposta
+        </a>
+    </div>
 
-@if($tipoVendedor === 'revenda')
-<div class="col-6">
-    @php
-        // Monta o endereço para o Google Maps
-        $enderecoCompleto = "{$vendedor->rua}, {$vendedor->numero}, {$vendedor->bairro}, {$vendedor->cidade} - {$vendedor->estado}";
-        // Link oficial e funcional do Google Maps
-        $mapsUrl = "https://www.google.com/maps/search/?api=1&query=" . urlencode($enderecoCompleto);
-    @endphp
+    @if($tipoVendedor === 'revenda')
+        {{-- Botão Revenda --}}
+        <div class="col-6">
+            @php
+                $enderecoCompleto = "{$vendedor->rua}, {$vendedor->numero}, {$vendedor->bairro}, {$vendedor->cidade} - {$vendedor->estado}";
+                $mapsUrl = "https://www.google.com/maps/search/?api=1&query=" . urlencode($enderecoCompleto);
+            @endphp
 
-    <a href="{{ $mapsUrl }}" 
-       target="_blank" 
-       class="btn btn-outline-location w-100 rounded-3 d-flex align-items-center justify-content-center btn-custom-height">
-        <i class="bi bi-geo-alt me-2"></i> Onde Estamos
-    </a>
-</div>
-@endif
+            <a href="{{ $mapsUrl }}" 
+               target="_blank" 
+               class="btn btn-outline-location w-100 rounded-3 d-flex align-items-center justify-content-center btn-custom-height">
+                <i class="bi bi-geo-alt me-2"></i> Onde Estamos
+            </a>
+        </div>
+    @else
+        {{-- Botão Particular (Ajustado para ter o mesmo tamanho) --}}
+        <div class="col-6">
+            <div class="btn btn-outline-secondary w-100 rounded-3 d-flex align-items-center justify-content-center btn-custom-height bg-light text-muted border-light-subtle" 
+                 style="cursor: default; pointer-events: none; padding: 12px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">
+                <i class="bi bi-geo-alt-fill me-1 text-danger"></i>
+                {{ $vendedor->cidade }} / {{ $vendedor->estado }}
+            </div>
+        </div>
+    @endif
 </div>
 
                 </div>
@@ -645,27 +651,23 @@
 <script>
     // FUNÇÃO GLOBAL (Acessível pelo onclick do HTML)
     function copiarLink(button) {
-        const url = button.getAttribute('data-url');
-        const icon = button.querySelector('i');
+    const url = button.getAttribute('data-url');
+    const icon = button.querySelector('i');
 
-        navigator.clipboard.writeText(url).then(() => {
-            // Feedback visual: botão verde e ícone de check
-            button.classList.remove('btn-outline-secondary');
-            button.classList.add('btn-success', 'text-white');
-            icon.classList.remove('bi-link-45deg');
-            icon.classList.add('bi-check2'); 
+    navigator.clipboard.writeText(url).then(() => {
+        // Feedback visual: Muda a cor do ícone e o símbolo
+        icon.classList.remove('bi-share', 'text-secondary');
+        icon.classList.add('bi-check-lg', 'text-success');
 
-            setTimeout(() => {
-                // Volta ao estado original
-                button.classList.remove('btn-success', 'text-white');
-                button.classList.add('btn-outline-secondary');
-                icon.classList.remove('bi-check2');
-                icon.classList.add('bi-link-45deg');
-            }, 2000);
-        }).catch(err => {
-            console.error('Erro ao copiar: ', err);
-        });
-    }
+        setTimeout(() => {
+            // Volta ao estado original (ícone de compartilhar cinza)
+            icon.classList.remove('bi-check-lg', 'text-success');
+            icon.classList.add('bi-share', 'text-secondary');
+        }, 5000);
+    }).catch(err => {
+        console.error('Erro ao copiar: ', err);
+    });
+}
 
     // LÓGICA DO CARROSSEL (Executa após o DOM carregar)
     document.addEventListener('DOMContentLoaded', function() {
