@@ -4,24 +4,19 @@
   <meta charset="utf-8">
   <meta content="width=device-width, initial-scale=1.0" name="viewport">
 
-  <title>Alcecar | Referência em Compra e Venda de Veículos</title>
-  
-  <meta name="description" content="O portal ideal para encontrar carros e motos. Busque, compare e escolha o veículo perfeito para você com praticidade e segurança no Alcecar.">
-  <meta name="keywords" content="carros usados, seminovos, comprar carros, motos, busca de veículos, classificados automotivos, Alcecar">
-  <meta name="author" content="Alcecar">
-  <meta name="robots" content="index, follow">
+  <title>@yield('title', 'Alcecar | Referência em Compra e Venda de Veículos')</title>
 
   <meta property="og:type" content="website">
-  <meta property="og:url" content="https://alcecar.com.br/">
-  <meta property="og:title" content="Alcecar | A busca inteligente para seu novo veículo">
-  <meta property="og:description" content="Milhares de ofertas de carros, motos e utilitários. A maneira mais fácil e rápida de encontrar o veículo que combina com você.">
-  <meta property="og:image" content="{{ url('frontend/images/logo_alcecar.png') }}">
+  <meta property="og:url" content="{{ url()->current() }}">
+  <meta property="og:title" content="@yield('title', 'Alcecar | A busca inteligente para seu novo veículo')">
+  <meta property="og:description" content="@yield('description', 'Milhares de ofertas de carros, motos e utilitários no Alcecar.')">
+  <meta property="og:image" content="@yield('image', url('frontend/images/logo_alcecar.png'))">
 
-  <meta property="twitter:card" content="summary_large_image"> 
-  <meta property="twitter:url" content="https://alcecar.com.br/">
-  <meta property="twitter:title" content="Alcecar | Encontre seu carro ou moto ideal">
-  <meta property="twitter:description" content="Pare de procurar e comece a encontrar. O Alcecar facilita sua busca por veículos novos e usados em todo o Brasil.">
-  <meta property="twitter:image" content="{{ url('frontend/images/logo_alcecar.png') }}">
+  <meta property="twitter:card" content="summary_large_image">
+  <meta property="twitter:url" content="{{ url()->current() }}">
+  <meta property="twitter:title" content="@yield('title', 'Alcecar | Encontre seu carro ou moto ideal')">
+  <meta property="twitter:description" content="@yield('description', 'O Alcecar facilita sua busca por veículos novos e usados.')">
+  <meta property="twitter:image" content="@yield('image', url('frontend/images/logo_alcecar.png'))">
   <!-- Fonts -->
   <link href="https://fonts.googleapis.com" rel="preconnect">
   <link href="https://fonts.gstatic.com" rel="preconnect" crossorigin>

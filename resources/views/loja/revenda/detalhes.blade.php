@@ -1,6 +1,20 @@
 @extends('loja.layout.app')
 
+@php
+    // Se já for array, usa ele. Se for string, decodifica. Se for nulo, retorna array vazio.
+    $imagens = is_array($veiculo->images) ? $veiculo->images : json_decode($veiculo->images, true) ?? [];
+    
+    $shareImg = count($imagens) ? asset('storage/' . $imagens[0]) : asset('frontend/images/logo_alcecar.png');
+    $shareTitle = $veiculo->marca_real . ' ' . $veiculo->modelo_real . ' - Alcecar';
+    $shareDesc = "Confira este " . $veiculo->modelo_real . " ano " . $veiculo->ano . " por R$ " . number_format($veiculo->valor, 2, ',', '.') . " no Alcecar.";
+@endphp
+
+@section('title', $shareTitle)
+@section('description', $shareDesc)
+@section('image', $shareImg)
+
 @section('content')
+
 <style>
     :root {
         --nc-accent: #ff4a17;
