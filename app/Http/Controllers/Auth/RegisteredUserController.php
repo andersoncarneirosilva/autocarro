@@ -127,6 +127,16 @@ class RegisteredUserController extends Controller
                 event(new Registered($user));
                 Auth::login($user);
 
+                // --- AJUSTE DE REDIRECIONAMENTO PÓS-CADASTRO ---
+                if ($user->nivel_acesso === 'Particular') {
+                    return redirect()->route('particulares.index');
+                }
+
+                if ($user->nivel_acesso === 'Revenda') {
+                    return redirect()->route('anuncios.index');
+                }
+
+                // Fallback caso seja outro nível
                 return redirect(RouteServiceProvider::HOME);
             });
         } catch (\Exception $e) {
