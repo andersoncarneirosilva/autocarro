@@ -98,9 +98,9 @@ style="background: #ff4a17; font-size: 0.75rem;">
             <div class="col-12 text-center py-5">
                 <div class="bg-white p-5 rounded-4 border shadow-sm">
                     <i class="bi bi-search fs-1 text-muted"></i>
-                    <h4 class="mt-3 fw-bold">Nenhum veículo encontrado</h4>
-                    <p class="text-muted">Não encontramos resultados para os filtros aplicados. Tente limpar os filtros ou mudar os termos da busca.</p>
-                    <a href="{{ route('veiculos.novos') }}" class="btn btn-outline-dark rounded-pill px-4 mt-2">Ver todo o estoque</a>
+                    <h4 class="mt-3 fw-bold">Nenhum veículo cadastrado</h4>
+                    <p class="text-muted">Cadastre seu primeiro veículo.</p>
+                    <a href="{{ route('particulares.create') }}" class="btn btn-outline-dark rounded-pill px-4 mt-2">Cadastrar veículo</a>
                 </div>
             </div>
         @endforelse
