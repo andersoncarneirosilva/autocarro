@@ -59,7 +59,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
 {{-- Opcional: Aviso visual abaixo do botão --}}
 @if($limiteAtingido)
-    <p class="text-danger mt-2 small"><i class="bi bi-info-circle"></i> Você atingiu o limite máximo de 2 anúncios para conta Particular.</p>
+    <p class="text-danger mt-2 small"><i class="bi bi-info-circle"></i> Você atingiu o limite máximo de 1 anúncio para conta Particular.</p>
 @endif
     </div>
 </div>
