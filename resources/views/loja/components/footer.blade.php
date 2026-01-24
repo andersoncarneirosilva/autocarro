@@ -29,12 +29,33 @@
         </div>
 
         <div class="col-lg-2 col-md-3 footer-links">
-          <h4>Lojista</h4>
-          <ul>
-            <li><i class="bi bi-chevron-right"></i> <a href="{{ route('login')}}">Área do lojista</a></li>
-            <li><i class="bi bi-chevron-right"></i> <a href="{{ route('anuncios.index') }}">Gerenciar anúncios</a></li>
-          </ul>
-        </div>
+    <h4>Área do Cliente</h4>
+    <ul>
+        @auth
+            {{-- Link para o Painel (Dinâmico conforme nível de acesso) --}}
+            <li>
+                <i class="bi bi-chevron-right"></i>
+                <a href="{{ auth()->user()->nivel_acesso === 'Particular' ? route('particulares.index') : url('/anuncios') }}">
+                    Meu Painel
+                </a>
+            </li>
+
+            {{-- Link específico para Revenda --}}
+            @if(auth()->user()->nivel_acesso === 'Revenda' && auth()->user()->revenda)
+                <li>
+                    <i class="bi bi-chevron-right"></i>
+                    <a href="{{ url('/loja/' . auth()->user()->revenda->slug) }}">
+                        Minha Loja
+                    </a>
+                </li>
+            @endif
+        @else
+            {{-- Se não estiver logado --}}
+            <li><i class="bi bi-chevron-right"></i> <a href="{{ route('login') }}">Entrar</a></li>
+            <li><i class="bi bi-chevron-right"></i> <a href="{{ route('register') }}">Cadastrar-se</a></li>
+        @endauth
+    </ul>
+</div>
 
         <div class="col-lg-4 col-md-12 footer-newsletter">
           {{-- <h4>Nossa Newsletter</h4>
