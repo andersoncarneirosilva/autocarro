@@ -13,6 +13,7 @@ class Anuncio extends Model
         'marca',
         'marca_real',
         'modelo_real',
+        'versao',
         'placa',
         'chassi',
         'cor',
@@ -45,6 +46,8 @@ class Anuncio extends Model
         'user_id',
 
         'kilometragem',
+        'modelo_carro',
+        'visitas',
         'portas',
         'cambio',
         'valor',

@@ -164,87 +164,61 @@ document.addEventListener('DOMContentLoaded', function () {
                         <form action="{{ route('particulares.store') }}" method="POST" enctype="multipart/form-data">
                 @csrf
                 
+                <input type="hidden" name="marca_nome" id="marca_nome">
+<input type="hidden" name="modelo_nome" id="modelo_nome">
+<input type="hidden" name="versao_nome" id="versao_nome">
+
                 <div class="row g-3">
-                    <div class="col-md-4">
-    <label class="form-label">Marca</label>
-    <select name="marca_real" class="form-control" required>
-        <option value="">Selecione a marca</option>
-
-        <optgroup label="Marcas Mais Vendidas no Brasil">
-            <option value="CHEVROLET">Chevrolet</option>
-            <option value="VOLKSWAGEN">Volkswagen</option>
-            <option value="FIAT">Fiat</option>
-            <option value="FORD">Ford</option>
-            <option value="TOYOTA">Toyota</option>
-            <option value="HYUNDAI">Hyundai</option>
-            <option value="RENAULT">Renault</option>
-            <option value="HONDA">Honda</option>
-            <option value="JEEP">Jeep</option>
-            <option value="NISSAN">Nissan</option>
-        </optgroup>
-
-        <optgroup label="Outras Marcas Populares">
-            <option value="PEUGEOT">Peugeot</option>
-            <option value="CITROEN">Citroën</option>
-            <option value="MITSUBISHI">Mitsubishi</option>
-            <option value="KIA">Kia</option>
-            <option value="SUZUKI">Suzuki</option>
-            <option value="SUBARU">Subaru</option>
-            <option value="JAC">JAC Motors</option>
-        </optgroup>
-
-        <optgroup label="Marcas Premium">
-            <option value="BMW">BMW</option>
-            <option value="MERCEDES-BENZ">Mercedes-Benz</option>
-            <option value="AUDI">Audi</option>
-            <option value="VOLVO">Volvo</option>
-            <option value="LAND ROVER">Land Rover</option>
-            <option value="PORSCHE">Porsche</option>
-            <option value="MINI">Mini</option>
-        </optgroup>
-
-        <optgroup label="Elétricos e Novas Montadoras">
-            <option value="BYD">BYD</option>
-            <option value="CHERY">Chery</option>
-            <option value="GWM">GWM</option>
-            <option value="RAM">RAM</option>
-        </optgroup>
-
-    </select>
-</div>
-
-                    <div class="col-md-2">
-                        <label class="form-label">Modelo</label>
-                        <input type="text" name="modelo_real" class="form-control" placeholder="GOL 1.0, CG 160 START...">
-                    </div>
-                    <div class="col-md-2">
+                    <div class="col-md-3">
                         <label class="form-label">Tipo de veículo</label>
                         <select name="tipo"  class="form-control" required>
                             <option value="">Selecione o tipo</option>
                             <option value="AUTOMOVEL">Carro</option>
-                            <option value="CAMINHONETE">Caminhonete</option>
                             <option value="MOTOCICLETA">Moto</option>
                         </select>
                     </div>
-                    <div class="col-md-2">
+                    <div class="col-md-3">
+                        <label class="form-label">Marca</label>
+                        <select name="marca_real" id="marca" class="form-control">
+                            <option value="">Selecione</option>
+                        </select>
+                    </div>
+
+                    <div class="col-md-3">
+                        <label class="form-label">Modelo</label>
+                        <select name="modelo_real" id="modelo_carro" class="form-control" required disabled>
+                            <option value="">Selecione a marca</option>
+                        </select>
+                    </div>
+
+                    <div class="col-md-3">
+                        <label class="form-label">Versão</label>
+                        <select name="versao" id="versao" class="form-control" required disabled>
+                            <option value="">Selecione o modelo</option>
+                        </select>
+                    </div>
+                </div>
+                    <div class="row g-2">
+                    
+                    <div class="col-md-3">
                         <label class="form-label">Placa</label>
                         <input type="text" name="placa" class="form-control" 
                             placeholder="ABC1D23" 
                             style="text-transform: uppercase;">
                     </div>
-                    <div class="col-md-2">
+                    <div class="col-md-3">
                         <label class="form-label">Ano (Fabricação/Modelo)</label>
                         <input type="text" name="ano" id="input-ano" class="form-control" 
                             placeholder="2020/2021" maxlength="9">
                     </div>
 
-                    <div class="col-md-2">
+                    <div class="col-md-3">
                         <label class="form-label">Cor</label>
                         <input type="text" name="cor" class="form-control">
                     </div>
 
 
-                    <div class="col-md-4">
+                    <div class="col-md-3">
                         <label class="form-label">Combustível</label>
                         <select name="combustivel" class="form-control" required>
                             <option value="">Selecione o combustível</option>
@@ -258,36 +232,15 @@ document.addEventListener('DOMContentLoaded', function () {
                             <option value="HIBRIDO">Híbrido</option>
                         </select>
                     </div>
-
-                    <div class="col-md-4">
-                        <label class="form-label">Condição do Veículo</label>
-                        <select name="estado" class="form-control" required>
-                            <option value="">Selecione a condição</option>
-
-                            <option value="Novo">Novo</option>
-                            <option value="Semi-novo">Semi-novo</option>
-                            <option value="Usado">Usado</option>
-                        </select>
                     </div>
 
-                    <div class="col-md-2">
-                        <label class="form-label">Kilometragem</label>
-                        <input type="text" name="kilometragem" id="kilometragem" class="form-control" placeholder="Ex: 54.000">
-                    </div>
+<div class="row g-2">
+                    
 
 
 
-<div class="col-md-4">
-<label for="categoria_especial" class="form-label text-muted">Categoria Especial</label>
-                <select class="form-control" name="especiais" id="especiais">
-                    <option value="" selected>Nenhuma (Padrão)</option>
-                    <option value="Clássico">Clássico</option>
-                    <option value="Esportivo">Esportivo</option>
-                    <option value="Modificado">Modificado</option>
-                </select>
-                <small class="text-muted font-11">Opcional para veículos diferenciados.</small>
-</div>
-<div class="col-md-4">
+
+<div class="col-md-3">
     <label for="cambio" class="form-label text-muted">Câmbio</label>
                 <select class="form-control" name="cambio" id="cambio" required>
                     <option value="" disabled>Selecione o câmbio</option>
@@ -296,20 +249,33 @@ document.addEventListener('DOMContentLoaded', function () {
                     <option value="CVT">CVT</option>
                 </select>
 </div>
-<div class="col-md-4">
-    <label for="portas" class="form-label text-muted">
-                    Portas
-                </label>
-                
+<div class="col-md-3">
+    <label for="portas" class="form-label text-muted">Portas</label>
                 <select class="form-control" name="portas" id="portas">
-    <option value="">Selecione...</option> {{-- Adicionado para quando for moto --}}
+    <option value="" disabled selected>Selecione...</option>
     <option value="2">2 Portas</option>
     <option value="3">3 Portas</option>
     <option value="4">4 Portas</option>
     <option value="5">5 Portas</option>
 </select>
 </div>
+<div class="col-md-3">
+                        <label class="form-label">Kilometragem</label>
+                        <input type="text" name="kilometragem" id="kilometragem" class="form-control" placeholder="Ex: 54.000">
+                    </div>
+                    <div class="col-md-3">
+    <label for="portas" class="form-label text-muted">Portas</label>
+                <select class="form-control" name="modelo_carro" id="portas">
+    <option value="" disabled selected>Selecione a categoria</option>
+    <option value="HATCH">HATCH</option>
+    <option value="SEDAN">SEDAN</option>
+    <option value="SUV">SUV</option>
+    <option value="PICK-UP">PICK-UP</option>
+    <option value="UTILITÁRIO">UTILITÁRIO</option>
+</select>
+</div>
 <hr>
+
                     <div class="col-md-12 mt-3">
     <label class="form-label mb-3 fw-bold">Adicionais do Veículo</label>
 
@@ -457,7 +423,6 @@ document.addEventListener('DOMContentLoaded', function () {
                 translation: {'A': { pattern: /[A-Za-z0-9]/ }},
                 onKeyPress: function (v, e) { e.currentTarget.value = v.toUpperCase(); }
             });
-            console.log("Máscaras Alcecar prontas.");
         } else {
             setTimeout(verificarBibliotecas, 100);
         }
@@ -489,4 +454,155 @@ document.addEventListener('DOMContentLoaded', function () {
         }
     });
 </script>
+
+
+<script>
+
+document.addEventListener('DOMContentLoaded', function() {
+    const selectTipo = document.querySelector('select[name="tipo"]');
+    const selectMarca = document.getElementById('marca');
+    const selectModelo = document.getElementById('modelo_carro');
+    const selectVersao = document.getElementById('versao');
+    const inputAno = document.getElementById('input-ano');
+    const selectCombustivel = document.querySelector('select[name="combustivel"]');
+
+    // Função auxiliar para definir a rota da API com base no seu HTML
+    function getTipoRota() {
+        const valor = selectTipo.value;
+        if (valor === 'MOTOCICLETA') return 'motos';
+        return 'carros'; // Para AUTOMOVEL e CAMINHONETE
+    }
+
+    const BASE_URL = 'https://parallelum.com.br/fipe/api/v1';
+
+    // 1. Ao mudar o TIPO, carrega as MARCAS
+    selectTipo.addEventListener('change', function() {
+        const tipo = getTipoRota();
+        
+        // Reseta todos os campos subsequentes
+        selectMarca.innerHTML = '<option value="">Carregando...</option>';
+        selectModelo.innerHTML = '<option value="">Selecione a marca</option>';
+        selectVersao.innerHTML = '<option value="">Selecione o modelo</option>';
+        selectModelo.disabled = true;
+        selectVersao.disabled = true;
+
+        if (this.value) {
+            fetch(`${BASE_URL}/${tipo}/marcas`)
+                .then(response => response.json())
+                .then(marcas => {
+                    selectMarca.innerHTML = '<option value="">Selecione a Marca</option>';
+                    marcas.forEach(marca => {
+                        const opt = document.createElement('option');
+                        opt.value = marca.codigo;
+                        opt.textContent = marca.nome;
+                        selectMarca.appendChild(opt);
+                    });
+                })
+                .catch(err => console.error("Erro ao carregar marcas", err));
+        }
+    });
+
+    // 2. Ao mudar a MARCA, carrega os MODELOS
+    
+    // 1. Ao mudar a MARCA
+selectMarca.addEventListener('change', function() {
+    const tipo = getTipoRota();
+    const marcaId = this.value;
+    
+    // Captura o NOME da marca selecionada
+    const marcaNome = this.options[this.selectedIndex].text;
+    document.getElementById('marca_nome').value = marcaNome;
+
+    selectModelo.innerHTML = '<option value="">Carregando...</option>';
+    selectVersao.innerHTML = '<option value="">Selecione o modelo</option>';
+    selectModelo.disabled = true;
+    selectVersao.disabled = true;
+
+    if (marcaId) {
+        fetch(`${BASE_URL}/${tipo}/marcas/${marcaId}/modelos`)
+            .then(response => response.json())
+            .then(data => {
+                selectModelo.innerHTML = '<option value="">Selecione o Modelo</option>';
+                data.modelos.forEach(modelo => {
+                    const opt = document.createElement('option');
+                    opt.value = modelo.codigo;
+                    opt.textContent = modelo.nome;
+                    selectModelo.appendChild(opt);
+                });
+                selectModelo.disabled = false;
+            });
+    }
+});
+
+// 2. Ao mudar o MODELO
+selectModelo.addEventListener('change', function() {
+    const tipo = getTipoRota();
+    const marcaId = selectMarca.value;
+    const modeloId = this.value;
+    
+    // Captura o NOME do modelo selecionado
+    const modeloNome = this.options[this.selectedIndex].text;
+    document.getElementById('modelo_nome').value = modeloNome;
+
+    selectVersao.innerHTML = '<option value="">Carregando...</option>';
+    selectVersao.disabled = true;
+
+    if (modeloId) {
+        fetch(`${BASE_URL}/${tipo}/marcas/${marcaId}/modelos/${modeloId}/anos`)
+            .then(response => response.json())
+            .then(anos => {
+                selectVersao.innerHTML = '<option value="">Selecione a Versão</option>';
+                anos.forEach(ano => {
+                    const opt = document.createElement('option');
+                    opt.value = ano.codigo;
+                    opt.textContent = ano.nome;
+                    selectVersao.appendChild(opt);
+                });
+                selectVersao.disabled = false;
+            });
+    }
+});
+
+// 3. Ao selecionar a VERSÃO
+selectVersao.addEventListener('change', function() {
+    const tipo = getTipoRota();
+    const marcaId = selectMarca.value;
+    const modeloId = selectModelo.value;
+    const anoId = this.value;
+    
+    // Captura o NOME da versão/ano selecionado
+    const versaoNome = this.options[this.selectedIndex].text;
+    document.getElementById('versao_nome').value = versaoNome;
+
+    if (anoId) {
+        fetch(`${BASE_URL}/${tipo}/marcas/${marcaId}/modelos/${modeloId}/anos/${anoId}`)
+            .then(response => response.json())
+            .then(veiculo => {
+                // Preenche o Ano (Ex: 2023/2023)
+                if(inputAno) inputAno.value = `${veiculo.AnoModelo}/${veiculo.AnoModelo}`;
+
+                // Tenta selecionar o combustível automaticamente
+                if(selectCombustivel) {
+                    const fipeComb = veiculo.Combustivel.toUpperCase();
+                    Array.from(selectCombustivel.options).forEach(opt => {
+                        if (fipeComb.includes(opt.value)) {
+                            opt.selected = true;
+                        }
+                    });
+
+                    // Lógica Extra: Se for Elétrico ou Híbrido, coloca câmbio Automático
+                    const selectCambio = document.getElementById('cambio');
+                    if (fipeComb.includes('ELÉTRICO') || fipeComb.includes('HÍBRIDO')) {
+                        if (selectCambio) selectCambio.value = 'Automático';
+                    }
+                }
+            });
+    }
+});
+});
+
+</script>
+
+
+
 @endsection

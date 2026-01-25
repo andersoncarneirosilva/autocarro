@@ -44,13 +44,22 @@ public function store(Request $request)
 {
     $request->validate([
         'ano' => ['required', 'regex:/^\d{4}\/\d{4}$/'],
-        'valor' => ['required'], // Certifique-se de validar o valor
+        'valor' => ['required'],
+        'marca_nome' => ['required'], // Valida que o nome da marca foi capturado
+        'modelo_nome' => ['required'],
+        'versao_nome' => ['required'],
     ], [
-        'ano.regex' => 'O campo ano deve seguir o padrão Fabricação/Modelo (ex: 2020/2021).'
+        'ano.regex' => 'O campo ano deve seguir o padrão Fabricação/Modelo (ex: 2020/2021).',
+        'marca_nome.required' => 'Selecione uma marca válida.',
     ]);
 
-    // Obtém os dados exceto tokens e arquivos
+    // 1. Obtém os dados exceto tokens e arquivos
     $data = $request->except(['_token', 'images']);
+
+    // --- AJUSTE PARA SALVAR NOMES EM VEZ DE IDs ---
+    $data['marca_real']  = $request->marca_nome;  // Salva "AUDI"
+    $data['modelo_real'] = $request->modelo_nome; // Salva "A3 Sedan"
+    $data['versao']      = $request->versao_nome; // Salva "2023 Gasolina"
 
     // 2. Limpa o 'valor'
     if ($request->filled('valor')) {
@@ -61,23 +70,24 @@ public function store(Request $request)
     if ($request->filled('valor_oferta')) {
         $data['valor_oferta'] = str_replace(['.', ','], ['', '.'], $request->valor_oferta);
     } else {
-        $data['valor_oferta'] = null; // Garante que não envie string vazia
+        $data['valor_oferta'] = null;
     }
 
+    // 4. Limpa kilometragem (remover pontos e vírgulas para salvar como número puro)
     if (isset($data['kilometragem'])) {
-        $data['kilometragem'] = str_replace(',', '', $request->kilometragem);
+        $data['kilometragem'] = preg_replace('/\D/', '', $request->kilometragem);
     }
 
     // Atribui o Usuário logado ao anúncio
     $data['user_id'] = Auth::id();
 
-    // Tratamento de Adicionais (Transforma ACEITA_TROCA em Aceita Troca)
+    // Tratamento de Adicionais
     $adicionaisArray = array_map(function ($item) {
         return ucwords(str_replace('_', ' ', strtolower($item)));
     }, $request->input('adicionais', []));
     $data['adicionais'] = json_encode($adicionaisArray, JSON_UNESCAPED_UNICODE);
 
-    // Tratamento de Opcionais (Transforma AIRBAG em Airbag)
+    // Tratamento de Opcionais
     $opcionaisArray = array_map(function ($item) {
         return ucwords(str_replace('_', ' ', strtolower($item)));
     }, $request->input('opcionais', []));

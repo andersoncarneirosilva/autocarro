@@ -158,11 +158,11 @@
                     {{-- Conteúdo do Card --}}
                     <div class="course-content p-3">
                         <div class="d-flex justify-content-between align-items-center mb-1">
-                            <p class="mb-0 text-muted small fw-bold text-uppercase" style="font-size: 0.65rem;">{{ $veiculo->marca_exibicao ?? $veiculo->marca }}</p>
+                            <p class="mb-0 text-muted small fw-bold text-uppercase" style="font-size: 0.65rem;">{{ $veiculo->marca_real }}</p>
                             <span class="text-success small fw-bold" style="font-size: 0.7rem;"><i class="bi bi-check-circle-fill me-1"></i>{{ $veiculo->estado }}</span>
                         </div>
                         
-                        <h3 class="h6 fw-bold text-dark mb-3 text-truncate">{{ $veiculo->modelo_exibicao ?? $veiculo->modelo }}</h3>
+                        <h3 class="h6 fw-bold text-dark mb-3 text-truncate">{{ $veiculo->modelo_real }}</h3>
 
                         {{-- Grid de Mini Cards (Estilo Ficha Técnica) --}}
                         <div class="card-spec-grid d-flex gap-2 mb-3">

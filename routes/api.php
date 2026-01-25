@@ -36,3 +36,11 @@ Route::post('/chat/get-chat', [ChatController::class, 'getChat'])->middleware('a
 Route::post('/chat/send-message', [ChatController::class, 'sendMessage'])->name('chat.sendMessage');
 
 
+// Rotas para buscar dados dinamicamente
+Route::get('/api/modelos/{marca_id}', function($marca_id) {
+    return App\Models\Modelo::where('marca_id', $marca_id)->get();
+});
+
+Route::get('/api/versoes/{modelo_id}', function($modelo_id) {
+    return App\Models\Versao::where('modelo_id', $modelo_id)->get();
+});
