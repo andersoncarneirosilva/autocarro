@@ -34,15 +34,17 @@
 
   <!-- Main CSS File -->
   <link href="{{ url('frontend/css/main.css') }}" rel="stylesheet">
-  <!-- Google tag (gtag.js) -->
-<script async src="https://www.googletagmanager.com/gtag/js?id=G-02FMMXT79W"></script>
-<script>
-  window.dataLayer = window.dataLayer || [];
-  function gtag(){dataLayer.push(arguments);}
-  gtag('js', new Date());
-
-  gtag('config', 'G-02FMMXT79W');
-</script>
+@if(app()->isProduction())
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-02FMMXT79W"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+      gtag('config', 'G-02FMMXT79W');
+    </script>
+    @else
+    {{-- Não carregou --}}
+@endif
 
 <style>
   /* 1. CONTAINER E FLEXIBILIDADE */
