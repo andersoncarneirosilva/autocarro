@@ -41,17 +41,15 @@
   <link href="{{ url('frontend/css/main.css') }}" rel="stylesheet">
 
 
-@if(app()->isProduction())
-    <script async src="https://www.googletagmanager.com/gtag/js?id=G-02FMMXT79W"></script>
-    <script>
-      window.dataLayer = window.dataLayer || [];
-      function gtag(){dataLayer.push(arguments);}
-      gtag('js', new Date());
-      gtag('config', 'G-02FMMXT79W');
-    </script>
-    @else
-    {{-- Não carregou --}}
-@endif
+  <!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-02FMMXT79W"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'G-02FMMXT79W');
+</script>
 
 <style>
   /* 1. CONTAINER E FLEXIBILIDADE */

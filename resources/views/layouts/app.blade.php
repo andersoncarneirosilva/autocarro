@@ -59,17 +59,14 @@
     {{-- <script src="{{ url('backend/js/pagamento.js') }}?v={{ time() }}"></script> --}}
 
   <!-- Google tag (gtag.js) -->
-@if(app()->isProduction())
-    <script async src="https://www.googletagmanager.com/gtag/js?id=G-02FMMXT79W"></script>
-    <script>
-      window.dataLayer = window.dataLayer || [];
-      function gtag(){dataLayer.push(arguments);}
-      gtag('js', new Date());
-      gtag('config', 'G-02FMMXT79W');
-    </script>
-    @else
-    {{-- Não carregou --}}
-@endif
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-02FMMXT79W"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'G-02FMMXT79W');
+</script>
 
 <!-- jstree css -->
 <link href="{{ url('backend/vendor/jstree/themes/default/style.min.css') }}" rel="stylesheet" type="text/css">
