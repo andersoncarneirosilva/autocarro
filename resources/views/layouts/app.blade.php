@@ -58,20 +58,15 @@
 <script src="https://cdn.ckeditor.com/ckeditor5/41.0.0/super-build/ckeditor.js"></script>
     {{-- <script src="{{ url('backend/js/pagamento.js') }}?v={{ time() }}"></script> --}}
 
-    <!-- Google tag (gtag.js) -->
-@env('production')
-    <script async src="https://www.googletagmanager.com/gtag/js?id=G-02FMMXT79W"></script>
-    <script>
-      window.dataLayer = window.dataLayer || [];
-      function gtag(){dataLayer.push(arguments);}
-      gtag('js', new Date());
+  <!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-02FMMXT79W"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
 
-      gtag('config', 'G-02FMMXT79W');
-    </script>
-
-@else
-<!-- NÂO CARREGOU -->
-   @endenv
+  gtag('config', 'G-02FMMXT79W');
+</script>
 
 <!-- jstree css -->
 <link href="{{ url('backend/vendor/jstree/themes/default/style.min.css') }}" rel="stylesheet" type="text/css">
