@@ -20,21 +20,6 @@ class AuthenticatedSessionController extends Controller
         return view('login.index');
     }
 
-    /**
-     * Handle an incoming authentication request.
-     */
-    // public function store(LoginRequest $request): RedirectResponse
-    // {
-    //     if (Auth::guard('web')->attempt($request->only('email', 'password'))) {
-    //         $request->session()->regenerate();
-
-    //         return redirect()->intended(RouteServiceProvider::HOME);
-    //     }
-
-    //     return back()->withErrors([
-    //         'email' => 'As credenciais fornecidas são incorretas.',
-    //     ]);
-    // }
     public function store(LoginRequest $request): RedirectResponse
 {
     $accountTypeSelected = $request->input('account_type');
