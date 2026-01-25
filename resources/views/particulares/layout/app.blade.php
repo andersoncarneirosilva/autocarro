@@ -50,6 +50,7 @@
 
   gtag('config', 'G-02FMMXT79W');
 </script> --}}
+    <!-- Google tag (gtag.js) -->
 @env('production')
     <script async src="https://www.googletagmanager.com/gtag/js?id=G-02FMMXT79W"></script>
     <script>
@@ -59,7 +60,10 @@
 
       gtag('config', 'G-02FMMXT79W');
     </script>
-@endenv
+
+@else
+<!-- NÂO CARREGOU -->
+   @endenv
 <style>
   /* 1. CONTAINER E FLEXIBILIDADE */
   .search-container-custom {

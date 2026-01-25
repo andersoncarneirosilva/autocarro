@@ -68,7 +68,10 @@
 
       gtag('config', 'G-02FMMXT79W');
     </script>
-@endenv
+
+@else
+<!-- NÂO CARREGOU -->
+   @endenv
 
 <!-- jstree css -->
 <link href="{{ url('backend/vendor/jstree/themes/default/style.min.css') }}" rel="stylesheet" type="text/css">
