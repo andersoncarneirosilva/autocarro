@@ -42,101 +42,67 @@ document.addEventListener('DOMContentLoaded', function () {
     </div>
 </div>
 
-
-<div class="card">
-    <div class="card-body">
-        <div class="row">
-<div class="container">
-    <div class="card shadow border-0" style="border-radius: 15px;">
-        <div class="card-header bg-dark text-white p-4" style="border-radius: 15px 15px 0 0;">
-            <h4 class="mb-0">Cadastro Manual de Veículo</h4>
-        </div>
-        <div class="card-body p-4">
-            <form action="{{ route('anuncios.store-manual') }}" method="POST" enctype="multipart/form-data">
+<div class="container-fluid p-0"> <div class="row g-0"> <div class="col-12">
+            
+            <div class="card border-0" style="border-radius: 0;"> 
+                <div class="card-header bg-dark text-white p-4" style="border-radius: 0;">
+                    <h4 class="mb-0"><i class="fas fa-car me-2"></i>Cadastro Manual de Veículo</h4>
+                </div>
+                
+                <div class="card-body p-4 p-md-5"> 
+                    <form action="{{ route('anuncios.store-manual') }}" method="POST" enctype="multipart/form-data">
                 @csrf
                 
-                <div class="row g-3">
-                    <div class="col-md-4">
-    <label class="form-label">Marca</label>
-    <select name="marca_real" class="form-control" required>
-        <option value="">Selecione a marca</option>
+                <input type="hidden" name="marca_nome" id="marca_nome">
+                <input type="hidden" name="modelo_nome" id="modelo_nome">
+                <input type="hidden" name="versao_nome" id="versao_nome">
 
-        <optgroup label="Marcas Mais Vendidas no Brasil">
-            <option value="CHEVROLET">Chevrolet</option>
-            <option value="VOLKSWAGEN">Volkswagen</option>
-            <option value="FIAT">Fiat</option>
-            <option value="FORD">Ford</option>
-            <option value="TOYOTA">Toyota</option>
-            <option value="HYUNDAI">Hyundai</option>
-            <option value="RENAULT">Renault</option>
-            <option value="HONDA">Honda</option>
-            <option value="JEEP">Jeep</option>
-            <option value="NISSAN">Nissan</option>
-        </optgroup>
-
-        <optgroup label="Outras Marcas Populares">
-            <option value="PEUGEOT">Peugeot</option>
-            <option value="CITROEN">Citroën</option>
-            <option value="MITSUBISHI">Mitsubishi</option>
-            <option value="KIA">Kia</option>
-            <option value="SUZUKI">Suzuki</option>
-            <option value="SUBARU">Subaru</option>
-            <option value="JAC">JAC Motors</option>
-        </optgroup>
-
-        <optgroup label="Marcas Premium">
-            <option value="BMW">BMW</option>
-            <option value="MERCEDES-BENZ">Mercedes-Benz</option>
-            <option value="AUDI">Audi</option>
-            <option value="VOLVO">Volvo</option>
-            <option value="LAND ROVER">Land Rover</option>
-            <option value="PORSCHE">Porsche</option>
-            <option value="MINI">Mini</option>
-        </optgroup>
-
-        <optgroup label="Elétricos e Novas Montadoras">
-            <option value="BYD">BYD</option>
-            <option value="CHERY">Chery</option>
-            <option value="GWM">GWM</option>
-            <option value="RAM">RAM</option>
-        </optgroup>
-
-    </select>
-</div>
-
-                    <div class="col-md-2">
-                        <label class="form-label">Modelo</label>
-                        <input type="text" name="modelo_real" class="form-control" placeholder="GOL 1.0, CG 160 START...">
-                    </div>
-                    <div class="col-md-2">
-                        <label class="form-label">Tipo de veículo</label>
-                        <select name="tipo"  class="form-control" required>
+                <div class="row g-3 mb-4">
+                    <div class="col-md-3">
+                        <label class="form-label fw-bold">Tipo de veículo</label>
+                        <select name="tipo" class="form-control" required>
                             <option value="">Selecione o tipo</option>
                             <option value="AUTOMOVEL">Carro</option>
-                            <option value="CAMINHONETE">Caminhonete</option>
                             <option value="MOTOCICLETA">Moto</option>
                         </select>
                     </div>
-                    <div class="col-md-2">
-                        <label class="form-label">Placa</label>
-                        <input type="text" name="placa" class="form-control" placeholder="ABC1D23">
+                    <div class="col-md-3">
+                        <label class="form-label fw-bold">Marca</label>
+                        <select name="marca_real" id="marca" class="form-control" required>
+                            <option value="">Selecione</option>
+                        </select>
                     </div>
-                    <div class="col-md-2">
-                        <label class="form-label">Ano (Fabricação/Modelo)</label>
-                        <input type="text" name="ano" class="form-control" placeholder="2020/2021">
+                    <div class="col-md-3">
+                        <label class="form-label fw-bold">Modelo</label>
+                        <select name="modelo_real" id="modelo_carro" class="form-control" required disabled>
+                            <option value="">Selecione a marca</option>
+                        </select>
                     </div>
-
-                    <div class="col-md-2">
-                        <label class="form-label">Cor</label>
-                        <input type="text" name="cor" class="form-control">
+                    <div class="col-md-3">
+                        <label class="form-label fw-bold">Versão</label>
+                        <select name="versao" id="versao" class="form-control" required disabled>
+                            <option value="">Selecione o modelo</option>
+                        </select>
                     </div>
+                </div>
 
-
-                    <div class="col-md-4">
-                        <label class="form-label">Combustível</label>
+                <div class="row g-3 mb-4">
+                    <div class="col-md-3">
+                        <label class="form-label fw-bold">Placa</label>
+                        <input type="text" name="placa" class="form-control" placeholder="ABC1D23" style="text-transform: uppercase;">
+                    </div>
+                    <div class="col-md-3">
+                        <label class="form-label fw-bold">Ano (Fab/Mod)</label>
+                        <input type="text" name="ano" id="input-ano" class="form-control" placeholder="2020/2021" maxlength="9">
+                    </div>
+                    <div class="col-md-3">
+                        <label class="form-label fw-bold">Cor</label>
+                        <input type="text" name="cor" class="form-control" placeholder="Ex: Branco">
+                    </div>
+                    <div class="col-md-3">
+                        <label class="form-label fw-bold">Combustível</label>
                         <select name="combustivel" class="form-control" required>
-                            <option value="">Selecione o combustível</option>
-
+                            <option value="">Selecione...</option>
                             <option value="GASOLINA">Gasolina</option>
                             <option value="ETANOL">Etanol</option>
                             <option value="FLEX">Flex</option>
@@ -146,215 +112,315 @@ document.addEventListener('DOMContentLoaded', function () {
                             <option value="HIBRIDO">Híbrido</option>
                         </select>
                     </div>
+                </div>
 
-                    <div class="col-md-4">
-                        <label class="form-label">Condição do Veículo</label>
-                        <select name="estado" class="form-control" required>
-                            <option value="">Selecione a condição</option>
-
-                            <option value="NOVO">Novo</option>
-                            <option value="SEMI-NOVO">Semi-novo</option>
-                            <option value="USADO">Usado</option>
+                <div class="row g-3 mb-4">
+                    <div class="col-md-3">
+                        <label class="form-label fw-bold">Câmbio</label>
+                        <select class="form-control" name="cambio" id="cambio" required>
+                            <option value="" disabled selected>Selecione...</option>
+                            <option value="Manual">Manual</option>
+                            <option value="Automático">Automático</option>
+                            <option value="CVT">CVT</option>
                         </select>
                     </div>
-
-                    <div class="col-md-2">
-                        <label class="form-label">Kilometragem</label>
-                        <input type="number" name="kilometragem" class="form-control">
+                    <div class="col-md-3">
+                        <label class="form-label fw-bold">Portas</label>
+                        <select class="form-control" name="portas" id="portas">
+                            <option value="" disabled selected>Selecione...</option>
+                            <option value="2">2 Portas</option>
+                            <option value="3">3 Portas</option>
+                            <option value="4">4 Portas</option>
+                            <option value="5">5 Portas</option>
+                        </select>
                     </div>
-
-<hr>
-                    <div class="col-md-12">
-    <label class="form-label mb-2">Adicionais do Veículo</label>
-
-    <div class="row">
-        <div class="col-md-4">
-            <div class="form-check">
-                <input class="form-check-input" type="checkbox" name="adicionais[]" value="ACEITA_TROCA" id="adicional_aceita_troca">
-                <label class="form-check-label" for="adicional_aceita_troca">Aceita Troca</label>
-            </div>
-
-            <div class="form-check">
-                <input class="form-check-input" type="checkbox" name="adicionais[]" value="PCD" id="adicional_pcd">
-                <label class="form-check-label" for="adicional_pcd">Adaptado para pessoas com deficiência</label>
-            </div>
-
-            <div class="form-check">
-                <input class="form-check-input" type="checkbox" name="adicionais[]" value="CONSORCIO" id="adicional_consorcio">
-                <label class="form-check-label" for="adicional_consorcio">Consórcio</label>
-            </div>
-
-            <div class="form-check">
-                <input class="form-check-input" type="checkbox" name="adicionais[]" value="GARANTIA_FABRICA" id="adicional_garantia">
-                <label class="form-check-label" for="adicional_garantia">Garantia de Fábrica</label>
-            </div>
-        </div>
-
-        <div class="col-md-4">
-            <div class="form-check">
-                <input class="form-check-input" type="checkbox" name="adicionais[]" value="IPVA_PAGO" id="adicional_ipva">
-                <label class="form-check-label" for="adicional_ipva">IPVA Pago</label>
-            </div>
-
-            <div class="form-check">
-                <input class="form-check-input" type="checkbox" name="adicionais[]" value="LICENCIADO" id="adicional_licenciado">
-                <label class="form-check-label" for="adicional_licenciado">Licenciado</label>
-            </div>
-
-            <div class="form-check">
-                <input class="form-check-input" type="checkbox" name="adicionais[]" value="NAO_ACEITA_TROCA" id="adicional_nao_troca">
-                <label class="form-check-label" for="adicional_nao_troca">Não aceita troca</label>
-            </div>
-
-            <div class="form-check">
-                <input class="form-check-input" type="checkbox" name="adicionais[]" value="COLECIONADOR" id="adicional_colecionador">
-                <label class="form-check-label" for="adicional_colecionador">Peça de Colecionador</label>
-            </div>
-        </div>
-
-        <div class="col-md-4">
-            <div class="form-check">
-                <input class="form-check-input" type="checkbox" name="adicionais[]" value="REVISOES_EM_DIA" id="adicional_revisoes">
-                <label class="form-check-label" for="adicional_revisoes">Todas Revisões feitas</label>
-            </div>
-
-            <div class="form-check">
-                <input class="form-check-input" type="checkbox" name="adicionais[]" value="UNICO_DONO" id="adicional_unico_dono">
-                <label class="form-check-label" for="adicional_unico_dono">Único Dono</label>
-            </div>
-
-            <div class="form-check">
-                <input class="form-check-input" type="checkbox" name="adicionais[]" value="CONCESSIONARIA" id="adicional_concessionaria">
-                <label class="form-check-label" for="adicional_concessionaria">Veículo de Concessionária</label>
-            </div>
-
-            <div class="form-check">
-                <input class="form-check-input" type="checkbox" name="adicionais[]" value="FINANCIADO" id="adicional_financiado">
-                <label class="form-check-label" for="adicional_financiado">Veículo Financiado</label>
-            </div>
-        </div>
-    </div>
-</div>
-
-<hr>
-<div class="col-md-12 mt-3">
-    <label class="form-label mb-2">Opcionais do Veículo</label>
-
-    <div class="row">
-        <div class="col-md-4">
-            <div class="form-check">
-                <input class="form-check-input" type="checkbox" name="opcionais[]" value="AIRBAG" id="opcional_airbag">
-                <label class="form-check-label" for="opcional_airbag">Air Bag</label>
-            </div>
-
-            <div class="form-check">
-                <input class="form-check-input" type="checkbox" name="opcionais[]" value="AIRBAG_DUPLO" id="opcional_airbag_duplo">
-                <label class="form-check-label" for="opcional_airbag_duplo">Air Bag Duplo</label>
-            </div>
-
-            <div class="form-check">
-                <input class="form-check-input" type="checkbox" name="opcionais[]" value="ALARME" id="opcional_alarme">
-                <label class="form-check-label" for="opcional_alarme">Alarme</label>
-            </div>
-
-            <div class="form-check">
-                <input class="form-check-input" type="checkbox" name="opcionais[]" value="BLINDADO" id="opcional_blindado">
-                <label class="form-check-label" for="opcional_blindado">Blindado</label>
-            </div>
-
-            <div class="form-check">
-                <input class="form-check-input" type="checkbox" name="opcionais[]" value="SENSOR_ESTACIONAMENTO" id="opcional_sensor">
-                <label class="form-check-label" for="opcional_sensor">Sensor de Estacionamento</label>
-            </div>
-        </div>
-
-        <div class="col-md-4">
-            <div class="form-check">
-                <input class="form-check-input" type="checkbox" name="opcionais[]" value="BANCO_COURO" id="opcional_banco_couro">
-                <label class="form-check-label" for="opcional_banco_couro">Banco de Couro</label>
-            </div>
-
-            <div class="form-check">
-                <input class="form-check-input" type="checkbox" name="opcionais[]" value="BANCO_RECARO" id="opcional_banco_recaro">
-                <label class="form-check-label" for="opcional_banco_recaro">Banco Recaro</label>
-            </div>
-
-            <div class="form-check">
-                <input class="form-check-input" type="checkbox" name="opcionais[]" value="PADDLE_SHIFT" id="opcional_paddle">
-                <label class="form-check-label" for="opcional_paddle">Paddle Shift / Borboleta</label>
-            </div>
-
-            <div class="form-check">
-                <input class="form-check-input" type="checkbox" name="opcionais[]" value="TETO_SOLAR" id="opcional_teto_solar">
-                <label class="form-check-label" for="opcional_teto_solar">Teto Solar</label>
-            </div>
-        </div>
-
-        <div class="col-md-4">
-            <div class="form-check">
-                <input class="form-check-input" type="checkbox" name="opcionais[]" value="ENGATE_REBOQUE" id="opcional_engate">
-                <label class="form-check-label" for="opcional_engate">Engate para Reboque</label>
-            </div>
-
-            <div class="form-check">
-                <input class="form-check-input" type="checkbox" name="opcionais[]" value="FAROL_AUXILIAR" id="opcional_farol_aux">
-                <label class="form-check-label" for="opcional_farol_aux">Farol Auxiliar</label>
-            </div>
-
-            <div class="form-check">
-                <input class="form-check-input" type="checkbox" name="opcionais[]" value="FAROL_LED" id="opcional_farol_led">
-                <label class="form-check-label" for="opcional_farol_led">Farol de LED</label>
-            </div>
-
-            <div class="form-check">
-                <input class="form-check-input" type="checkbox" name="opcionais[]" value="RODAS_LIGA_LEVE" id="opcional_rodas">
-                <label class="form-check-label" for="opcional_rodas">Rodas de Liga Leve</label>
-            </div>
-
-            <div class="form-check">
-                <input class="form-check-input" type="checkbox" name="opcionais[]" value="SANTO_ANTONIO" id="opcional_santo_antonio">
-                <label class="form-check-label" for="opcional_santo_antonio">Santo Antônio</label>
-            </div>
-
-            <div class="form-check">
-                <input class="form-check-input" type="checkbox" name="opcionais[]" value="SPOILER" id="opcional_spoiler">
-                <label class="form-check-label" for="opcional_spoiler">Spoiler</label>
-            </div>
-
-            <div class="form-check">
-                <input class="form-check-input" type="checkbox" name="opcionais[]" value="XENON" id="opcional_xenon">
-                <label class="form-check-label" for="opcional_xenon">Xenon</label>
-            </div>
-
-            <div class="form-check">
-                <input class="form-check-input" type="checkbox" name="opcionais[]" value="PELICULA_SOLAR" id="opcional_pelicula">
-                <label class="form-check-label" for="opcional_pelicula">Película Solar</label>
-            </div>
-        </div>
-    </div>
-</div>
-
-
-
-
-                    <div class="col-md-12 mt-4">
-                        <label class="form-label font-weight-bold">Fotos do Veículo</label>
-                        <input type="file" name="images[]" class="form-control" multiple accept="image/*">
-                        <small class="text-muted">Selecione várias fotos de uma vez.</small>
+                    <div class="col-md-3">
+                        <label class="form-label fw-bold">Kilometragem</label>
+                        <input type="text" name="kilometragem" id="kilometragem" class="form-control" placeholder="Ex: 54.000">
+                    </div>
+                    <div class="col-md-3">
+                        <label class="form-label fw-bold">Categoria</label>
+                        <select class="form-control" name="modelo_carro" id="categoria_veiculo">
+                            <option value="" disabled selected>Selecione...</option>
+                            <option value="HATCH">HATCH</option>
+                            <option value="SEDAN">SEDAN</option>
+                            <option value="SUV">SUV</option>
+                            <option value="PICK-UP">PICK-UP</option>
+                            <option value="UTILITÁRIO">UTILITÁRIO</option>
+                        </select>
                     </div>
                 </div>
 
-                <div class="mt-5 d-flex justify-content-end gap-2">
+                <hr class="my-4">
+
+                <div class="col-md-12 mb-4">
+                    <label class="form-label mb-3 fw-bold text-primary">Adicionais do Veículo</label>
+                    <div class="row g-3">
+                        @php
+                            $itensAdicionais = ["Aceita Troca", "Adaptado para PCD", "Consórcio", "Garantia de Fábrica", "IPVA Pago", "Licenciado", "Não aceita troca", "Colecionador", "Todas Revisões feitas", "Único Dono", "Veículo de Concessionária", "Veículo Financiado"];
+                            $colunasAdicionais = array_chunk($itensAdicionais, ceil(count($itensAdicionais) / 3));
+                        @endphp
+                        @foreach($colunasAdicionais as $coluna)
+                            <div class="col-md-4">
+                                @foreach($coluna as $item)
+                                    <div class="form-check mb-2">
+                                        <input class="form-check-input" type="checkbox" name="adicionais[]" value="{{ $item }}" id="adi_{{ Str::slug($item, '_') }}">
+                                        <label class="form-check-label small" for="adi_{{ Str::slug($item, '_') }}">{{ $item }}</label>
+                                    </div>
+                                @endforeach
+                            </div>
+                        @endforeach
+                    </div>
+                </div>
+
+                <hr class="my-4">
+
+                <div class="col-md-12 mb-4">
+                    <label class="form-label mb-3 fw-bold text-primary">Opcionais do Veículo</label>
+                    <div class="row g-3 px-2" style="max-height: 350px; overflow-y: auto; border: 1px solid #eee; padding: 15px; border-radius: 10px;">
+                        @php
+                            $todosOpcionais = ["Air Bag", "Alarme", "Ar Condicionado", "Ar Condicionado Digital", "Banco de Couro", "Banco Elétrico", "Câmera de Ré", "Central Multimídia", "Chave Reserva", "Controle de Estabilidade", "Direção Elétrica", "Direção Hidráulica", "Farol de LED", "Freios ABS", "Piloto Automático", "Retrovisor Elétrico", "Rodas de Liga Leve", "Sensor de Estacionamento", "Teto Solar", "Travas Elétricas", "Vidros Elétricos"];
+                            $colunas = array_chunk($todosOpcionais, ceil(count($todosOpcionais) / 3));
+                        @endphp
+                        @foreach($colunas as $opcionaisColuna)
+                            <div class="col-md-4">
+                                @foreach($opcionaisColuna as $item)
+                                    <div class="form-check mb-2">
+                                        <input class="form-check-input" type="checkbox" name="opcionais[]" value="{{ $item }}" id="opc_{{ Str::slug($item, '_') }}">
+                                        <label class="form-check-label small" for="opc_{{ Str::slug($item, '_') }}">{{ $item }}</label>
+                                    </div>
+                                @endforeach
+                            </div>
+                        @endforeach
+                    </div>
+                </div>
+
+                <div class="row mb-4">
+                    <div class="col-md-12">
+                        <label class="form-label fw-bold">Fotos do Veículo</label>
+                        <input type="file" name="images[]" class="form-control" multiple accept="image/*">
+                    </div>
+                </div>
+
+                <div class="col-md-12 mb-4">
+                    <label class="form-label fw-bold">Descrição do Anúncio</label>
+                    <textarea class="form-control" name="descricao" rows="5" placeholder="Detalhe o estado do veículo, revisões, etc..."></textarea>
+                </div>
+
+                <div class="row g-3 p-3 bg-light rounded-3 mb-4">
+                    <div class="col-md-6">
+                        <label class="form-label fw-bold">Valor de Venda (R$)</label>
+                        <input type="text" class="form-control form-control-lg money" name="valor" placeholder="0,00" required>
+                    </div>
+                    <div class="col-md-6">
+                        <label class="form-label fw-bold text-muted">Valor de Oferta (Opcional)</label>
+                        <input type="text" class="form-control form-control-lg money" name="valor_oferta" placeholder="0,00">
+                    </div>
+                </div>
+
+                <div class="d-flex justify-content-end gap-2 mt-5">
                     <a href="{{ url()->previous() }}" class="btn btn-light px-4">Cancelar</a>
-                    <button type="submit" class="btn btn-primary px-5" style="background-color: #ff4a17; border: none;">
-                        Finalizar Cadastro
+                    <button type="submit" class="btn btn-primary px-5 shadow-sm" style="background-color: #ff4a17; border: none; font-weight: bold;">
+                        PUBLICAR ANÚNCIO
                     </button>
                 </div>
             </form>
+                </div>
+            </div>
+
         </div>
     </div>
 </div>
-        </div>
-    </div>
-</div>
+
+
+<script>
+    // 1. Função Autonoma para carregar bibliotecas e aplicar máscaras
+    (function verificarBibliotecas() {
+        if (typeof jQuery !== 'undefined' && typeof $.fn.mask !== 'undefined') {
+            // Aplica a máscara em todos os campos monetários
+            $('.money').mask('#.##0,00', {reverse: true});
+            $('#input-ano').mask('0000/0000');
+            $('input[name="placa"]').mask('AAAAAAA', {
+                translation: {'A': { pattern: /[A-Za-z0-9]/ }},
+                onKeyPress: function (v, e) { e.currentTarget.value = v.toUpperCase(); }
+            });
+        } else {
+            setTimeout(verificarBibliotecas, 100);
+        }
+    })();
+
+    // 2. Comportamentos do Formulário
+    document.addEventListener('DOMContentLoaded', function() {
+        // Lógica Moto vs Carro
+        const selectTipo = document.querySelector('select[name="tipo"]');
+        const selectPortas = document.querySelector('#portas');
+        if (selectTipo && selectPortas) {
+            const togglePortas = () => {
+                const isMoto = selectTipo.value === 'MOTOCICLETA';
+                selectPortas.disabled = isMoto;
+                selectPortas.required = !isMoto;
+                selectPortas.style.backgroundColor = isMoto ? "#e9ecef" : "#fff";
+                if(isMoto) selectPortas.value = "";
+            };
+            selectTipo.addEventListener('change', togglePortas);
+            togglePortas();
+        }
+
+        // Kilometragem (Apenas números)
+        const inputKM = document.querySelector('#kilometragem');
+        if (inputKM) {
+            inputKM.addEventListener('input', function() {
+                this.value = this.value.replace(/\D/g, '');
+            });
+        }
+    });
+</script>
+
+
+<script>
+
+document.addEventListener('DOMContentLoaded', function() {
+    const selectTipo = document.querySelector('select[name="tipo"]');
+    const selectMarca = document.getElementById('marca');
+    const selectModelo = document.getElementById('modelo_carro');
+    const selectVersao = document.getElementById('versao');
+    const inputAno = document.getElementById('input-ano');
+    const selectCombustivel = document.querySelector('select[name="combustivel"]');
+
+    // Função auxiliar para definir a rota da API com base no seu HTML
+    function getTipoRota() {
+        const valor = selectTipo.value;
+        if (valor === 'MOTOCICLETA') return 'motos';
+        return 'carros'; // Para AUTOMOVEL e CAMINHONETE
+    }
+
+    const BASE_URL = 'https://parallelum.com.br/fipe/api/v1';
+
+    // 1. Ao mudar o TIPO, carrega as MARCAS
+    selectTipo.addEventListener('change', function() {
+        const tipo = getTipoRota();
+        
+        // Reseta todos os campos subsequentes
+        selectMarca.innerHTML = '<option value="">Carregando...</option>';
+        selectModelo.innerHTML = '<option value="">Selecione a marca</option>';
+        selectVersao.innerHTML = '<option value="">Selecione o modelo</option>';
+        selectModelo.disabled = true;
+        selectVersao.disabled = true;
+
+        if (this.value) {
+            fetch(`${BASE_URL}/${tipo}/marcas`)
+                .then(response => response.json())
+                .then(marcas => {
+                    selectMarca.innerHTML = '<option value="">Selecione a Marca</option>';
+                    marcas.forEach(marca => {
+                        const opt = document.createElement('option');
+                        opt.value = marca.codigo;
+                        opt.textContent = marca.nome;
+                        selectMarca.appendChild(opt);
+                    });
+                })
+                .catch(err => console.error("Erro ao carregar marcas", err));
+        }
+    });
+
+    // 2. Ao mudar a MARCA, carrega os MODELOS
+    
+    // 1. Ao mudar a MARCA
+selectMarca.addEventListener('change', function() {
+    const tipo = getTipoRota();
+    const marcaId = this.value;
+    
+    // Captura o NOME da marca selecionada
+    const marcaNome = this.options[this.selectedIndex].text;
+    document.getElementById('marca_nome').value = marcaNome;
+
+    selectModelo.innerHTML = '<option value="">Carregando...</option>';
+    selectVersao.innerHTML = '<option value="">Selecione o modelo</option>';
+    selectModelo.disabled = true;
+    selectVersao.disabled = true;
+
+    if (marcaId) {
+        fetch(`${BASE_URL}/${tipo}/marcas/${marcaId}/modelos`)
+            .then(response => response.json())
+            .then(data => {
+                selectModelo.innerHTML = '<option value="">Selecione o Modelo</option>';
+                data.modelos.forEach(modelo => {
+                    const opt = document.createElement('option');
+                    opt.value = modelo.codigo;
+                    opt.textContent = modelo.nome;
+                    selectModelo.appendChild(opt);
+                });
+                selectModelo.disabled = false;
+            });
+    }
+});
+
+// 2. Ao mudar o MODELO
+selectModelo.addEventListener('change', function() {
+    const tipo = getTipoRota();
+    const marcaId = selectMarca.value;
+    const modeloId = this.value;
+    
+    // Captura o NOME do modelo selecionado
+    const modeloNome = this.options[this.selectedIndex].text;
+    document.getElementById('modelo_nome').value = modeloNome;
+
+    selectVersao.innerHTML = '<option value="">Carregando...</option>';
+    selectVersao.disabled = true;
+
+    if (modeloId) {
+        fetch(`${BASE_URL}/${tipo}/marcas/${marcaId}/modelos/${modeloId}/anos`)
+            .then(response => response.json())
+            .then(anos => {
+                selectVersao.innerHTML = '<option value="">Selecione a Versão</option>';
+                anos.forEach(ano => {
+                    const opt = document.createElement('option');
+                    opt.value = ano.codigo;
+                    opt.textContent = ano.nome;
+                    selectVersao.appendChild(opt);
+                });
+                selectVersao.disabled = false;
+            });
+    }
+});
+
+// 3. Ao selecionar a VERSÃO
+selectVersao.addEventListener('change', function() {
+    const tipo = getTipoRota();
+    const marcaId = selectMarca.value;
+    const modeloId = selectModelo.value;
+    const anoId = this.value;
+    
+    // Captura o NOME da versão/ano selecionado
+    const versaoNome = this.options[this.selectedIndex].text;
+    document.getElementById('versao_nome').value = versaoNome;
+
+    if (anoId) {
+        fetch(`${BASE_URL}/${tipo}/marcas/${marcaId}/modelos/${modeloId}/anos/${anoId}`)
+            .then(response => response.json())
+            .then(veiculo => {
+                // Preenche o Ano (Ex: 2023/2023)
+                if(inputAno) inputAno.value = `${veiculo.AnoModelo}/${veiculo.AnoModelo}`;
+
+                // Tenta selecionar o combustível automaticamente
+                if(selectCombustivel) {
+                    const fipeComb = veiculo.Combustivel.toUpperCase();
+                    Array.from(selectCombustivel.options).forEach(opt => {
+                        if (fipeComb.includes(opt.value)) {
+                            opt.selected = true;
+                        }
+                    });
+
+                    // Lógica Extra: Se for Elétrico ou Híbrido, coloca câmbio Automático
+                    const selectCambio = document.getElementById('cambio');
+                    if (fipeComb.includes('ELÉTRICO') || fipeComb.includes('HÍBRIDO')) {
+                        if (selectCambio) selectCambio.value = 'Automático';
+                    }
+                }
+            });
+    }
+});
+});
+
+</script>
 @endsection

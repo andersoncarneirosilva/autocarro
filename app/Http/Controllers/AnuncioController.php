@@ -228,40 +228,61 @@ public function forcarAcentosMaiusculos($texto)
 
 public function storeManual(Request $request)
 {
+    // 1. Pega os dados exceto imagens e token
     $data = $request->except(['_token', 'images']);
 
-    // Usuário logado
+    // 2. Limpeza dos valores monetários (CONVERSÃO PARA DECIMAL)
+    // Transforma "1.250,00" em "1250.00"
+    if ($request->filled('valor')) {
+        $data['valor'] = str_replace(['.', ','], ['', '.'], $request->valor);
+    }
+
+    if ($request->filled('valor_oferta')) {
+        $data['valor_oferta'] = str_replace(['.', ','], ['', '.'], $request->valor_oferta);
+    } else {
+        $data['valor_oferta'] = null;
+    }
+
+    // 3. Limpeza da Kilometragem (Remove tudo que não for número)
+    if ($request->filled('kilometragem')) {
+        $data['kilometragem'] = preg_replace('/\D/', '', $request->kilometragem);
+    }
+
+    // 4. Mapeamento dos Nomes vindos da FIPE (para salvar texto e não IDs)
+    $data['marca_real']  = $request->marca_nome;
+    $data['modelo_real'] = $request->modelo_nome;
+    $data['versao']      = $request->versao_nome;
+
+    // 5. Usuário logado
     $data['user_id'] = Auth::id();
 
+    // 6. Tratamento de Adicionais e Opcionais
     $adicionaisArray = array_map(function ($item) {
-    return ucwords(str_replace('_', ' ', strtolower($item)));
-}, $request->input('adicionais', []));
+        return ucwords(str_replace('_', ' ', strtolower($item)));
+    }, $request->input('adicionais', []));
+    $data['adicionais'] = json_encode($adicionaisArray, JSON_UNESCAPED_UNICODE);
 
-$data['adicionais'] = json_encode($adicionaisArray, JSON_UNESCAPED_UNICODE);
+    $opcionaisArray = array_map(function ($item) {
+        return ucwords(str_replace('_', ' ', strtolower($item)));
+    }, $request->input('opcionais', []));
+    $data['opcionais'] = json_encode($opcionaisArray, JSON_UNESCAPED_UNICODE);
 
-
-$opcionaisArray = array_map(function ($item) {
-    return ucwords(str_replace('_', ' ', strtolower($item)));
-}, $request->input('opcionais', []));
-
-$data['opcionais'] = json_encode($opcionaisArray, JSON_UNESCAPED_UNICODE);
-
-
-    // Upload de imagens
+    // 7. Upload de imagens
     $imagens = [];
-
     if ($request->hasFile('images')) {
         foreach ($request->file('images') as $image) {
             $path = $image->store('veiculos', 'public');
             $imagens[] = $path;
         }
     }
-
     $data['images'] = json_encode($imagens);
 
-    // Exemplo de campo manual fixo
+    // 8. Campos Fixos
     $data['status'] = 'ATIVO';
+    $data['status_anuncio'] = 'Aguardando';
+    $data['placa'] = strtoupper($request->placa);
 
+    // 9. Criação do Registro
     Anuncio::create($data);
 
     return redirect()

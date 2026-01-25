@@ -263,25 +263,28 @@ document.addEventListener('DOMContentLoaded', function () {
                 
             </div>
             <hr>
+
+            @if($veiculo->nome)
             <div class="d-flex justify-content-between align-items-center mb-3">
-                                    <h4 class="header-title mb-3 text-primary"><i class="mdi mdi-card-account-details-outline me-1"></i> Informações do Proprietário</h4>
-                                    
-                                </div>
-                                
-                                <div class="row mb-3">
-                                    <div class="col-md-4">
-                                        <p class="mb-1 text-muted">Nome do Proprietário</p>
-                                        <h5 class="mt-0">{{ $veiculo->nome }}</h5>
-                                    </div>  
-                                    <div class="col-md-4">
-                                        <p class="mb-1 text-muted">Cidade/UF</p>
-                                        <h5 class="mt-0">{{ $veiculo->cidade }}</h5>
-                                    </div>  
-                                    <div class="col-md-4">
-                                        <p class="mb-1 text-muted">CPF</p>
-                                        <h5 class="mt-0">{{ $veiculo->cpf }}</h5>
-                                    </div>
-                                </div>  
+                <h4 class="header-title mb-3 text-primary"><i class="mdi mdi-card-account-details-outline me-1"></i> Informações do Proprietário</h4>
+                
+            </div>
+            
+            <div class="row mb-3">
+                <div class="col-md-4">
+                    <p class="mb-1 text-muted">Nome do Proprietário</p>
+                    <h5 class="mt-0">{{ $veiculo->nome }}</h5>
+                </div>  
+                <div class="col-md-4">
+                    <p class="mb-1 text-muted">Cidade/UF</p>
+                    <h5 class="mt-0">{{ $veiculo->cidade }}</h5>
+                </div>  
+                <div class="col-md-4">
+                    <p class="mb-1 text-muted">CPF</p>
+                    <h5 class="mt-0">{{ $veiculo->cpf }}</h5>
+                </div>
+            </div>  
+            @endif
                             </div>
 
                             <div class="col-md-4 border-start">

@@ -192,15 +192,16 @@ elseif ($request->filled('ano')) {
 
 public function show($slug_loja, $slug_veiculo) 
 {
-    // Agora buscamos pelo slug do VEÍCULO, que é o que importa
+    // 1. Busca pelo slug do veículo
     $veiculo = Anuncio::where('slug', $slug_veiculo)->firstOrFail();
     
+    // CORREÇÃO: Usar a variável correta ($veiculo) para incrementar
+    $veiculo->increment('visitas');
+
+    // Tratamento de imagens
     $veiculo->images = json_decode($veiculo->images, true) ?? [];
 
-    // ... (sua lógica de marcas e modelos que já existe) ...
-
-    // --- BUSCAR DADOS DO VENDEDOR ---
-    // Verificamos se o parâmetro na URL é 'particular'
+    // 2. Lógica do Vendedor
     if ($slug_loja === 'particular') {
         $vendedor = \DB::table('particulares')->where('user_id', $veiculo->user_id)->first();
         $tipoVendedor = 'particular';
@@ -209,29 +210,27 @@ public function show($slug_loja, $slug_veiculo)
         $tipoVendedor = 'revenda';
     }
 
-    // Caso o anúncio tenha sido movido ou o slug da loja mude
+    // Fallback caso o vendedor não seja encontrado pelo slug/tipo
     if (!$vendedor) {
-    $vendedor = \DB::table('revendas')->where('user_id', $veiculo->user_id)->first() 
-                ?? \DB::table('particulares')->where('user_id', $veiculo->user_id)->first();
-}
-
-// --- NOVA LÓGICA DE TRATAMENTO ---
-if ($vendedor) {
-    // Decodifica os fones se existirem
-    if (isset($vendedor->fones)) {
-        $vendedor->fones = json_decode($vendedor->fones, true);
+        $vendedor = \DB::table('revendas')->where('user_id', $veiculo->user_id)->first() 
+                    ?? \DB::table('particulares')->where('user_id', $veiculo->user_id)->first();
     }
 
-    // Se cidade ou estado estiverem vazios no vendedor, busca na tabela users
-    if (empty($vendedor->cidade) || empty($vendedor->estado)) {
-        $usuarioDono = \DB::table('users')->where('id', $veiculo->user_id)->first();
-        
-        if ($usuarioDono) {
-            $vendedor->cidade = $vendedor->cidade ?: $usuarioDono->cidade;
-            $vendedor->estado = $vendedor->estado ?: $usuarioDono->estado;
+    // 3. Tratamento de Dados do Vendedor
+    if ($vendedor) {
+        if (isset($vendedor->fones)) {
+            $vendedor->fones = json_decode($vendedor->fones, true);
+        }
+
+        if (empty($vendedor->cidade) || empty($vendedor->estado)) {
+            $usuarioDono = \DB::table('users')->where('id', $veiculo->user_id)->first();
+            
+            if ($usuarioDono) {
+                $vendedor->cidade = $vendedor->cidade ?: $usuarioDono->cidade;
+                $vendedor->estado = $vendedor->estado ?: $usuarioDono->estado;
+            }
         }
     }
-}
 
     return view('loja.revenda.detalhes', compact('veiculo', 'vendedor', 'tipoVendedor'));
 }

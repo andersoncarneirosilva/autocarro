@@ -95,6 +95,7 @@ document.addEventListener('DOMContentLoaded', function () {
                                 <th>KM</th>
                                 <th>Câmbio</th>
                                 <th>Anúncio</th>
+                                <th>Visitas</th>
                                 <th>Ações</th>
                             </tr>
                         </thead>
@@ -152,6 +153,7 @@ document.addEventListener('DOMContentLoaded', function () {
                                     <span class="badge bg-secondary">{{ $veiculo->status_anuncio ?? 'Não consta' }}</span>
                                 @endif
                             </td>
+                            <td>{{ $veiculo->visitas }}</td>
 
 
                             <td class="table-action">
