@@ -303,10 +303,7 @@
 
         <button type="button" 
                 class="btn p-0 border-0 d-flex align-items-center justify-content-center text-secondary shadow-none"
-                style="width: 30px; height: 30px; flex-shrink: 0; background: transparent;"
-                data-bs-toggle="modal" 
-                data-bs-target="#shareModal"
-                title="Compartilhar">
+                style="width: 30px; height: 30px; flex-shrink: 0; background: transparent;">
             <i class="bi bi-heart fs-5"></i>
         </button>
         
