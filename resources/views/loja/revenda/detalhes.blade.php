@@ -300,6 +300,15 @@
             <i class="mdi mdi-calendar-clock me-1"></i>
             Anunciado em: {{ \Carbon\Carbon::parse($veiculo->created_at)->format('d/m/Y') }}
         </span>
+
+        <button type="button" 
+                class="btn p-0 border-0 d-flex align-items-center justify-content-center text-secondary shadow-none"
+                style="width: 30px; height: 30px; flex-shrink: 0; background: transparent;"
+                data-bs-toggle="modal" 
+                data-bs-target="#shareModal"
+                title="Compartilhar">
+            <i class="bi bi-heart fs-5"></i>
+        </button>
         
         <button type="button" 
                 class="btn p-0 border-0 d-flex align-items-center justify-content-center text-secondary shadow-none"
@@ -662,6 +671,63 @@
     
 </section>
 
+<section class="container py-5 mt-55">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h4 class="fw-bold m-0">Confira outros veículos</h4>
+        <a href="{{ route('anuncios.index') }}" class="text-decoration-none fw-medium" style="color: #ff4a17;">Ver todos</a>
+    </div>
+
+    <div class="row g-3">
+        @foreach($outrosVeiculos as $item)
+            @php
+                $fotosItem = is_array($item->images) ? $item->images : json_decode($item->images, true) ?? [];
+                $capaItem = count($fotosItem) ? asset('storage/' . $fotosItem[0]) : asset('frontend/images/placeholder.png');
+            @endphp
+            <div class="col-6 col-md-4 col-lg-3">
+                <a href="{{ route('anuncios.show', $item->slug) }}" class="text-decoration-none text-dark">
+                    <div class="card h-100 border-0 shadow-sm overflow-hidden" style="border-radius: 12px; transition: transform 0.2s;">
+                        <div class="position-relative" style="padding-top: 65%; overflow: hidden;">
+                            <img src="{{ $capaItem }}" class="position-absolute top-0 start-0 w-100 h-100 object-fit-cover" alt="{{ $item->marca_real }}">
+                            
+                            @if($item->valor_oferta)
+                                <span class="position-absolute top-0 end-0 bg-danger text-white px-2 py-1 small m-2 rounded-2" style="font-size: 10px;">OFERTA</span>
+                            @endif
+                        </div>
+
+                        <div class="card-body p-2 p-md-3">
+                            <h6 class="text-truncate mb-1 fw-bold" title="{{ $item->marca_real }} {{ $item->modelo_real }}">
+                                {{ $item->marca_real }} {{ $item->modelo_real }}
+                            </h6>
+                            <div class="d-flex justify-content-between align-items-center mb-2">
+                                <span class="text-muted small">{{ $item->ano }}</span>
+                                <span class="text-muted small">{{ number_format($item->kilometragem, 0, ',', '.') }} km</span>
+                            </div>
+                            
+                            @if($item->valor_oferta)
+                                <div class="d-flex flex-column">
+                                    <small class="text-muted text-decoration-line-through" style="font-size: 11px;">R$ {{ number_format($item->valor, 2, ',', '.') }}</small>
+                                    <span class="fw-bold text-primary" style="color: #ff4a17 !important;">R$ {{ number_format($item->valor_oferta, 2, ',', '.') }}</span>
+                                </div>
+                            @else
+                                <span class="fw-bold text-primary" style="color: #ff4a17 !important;">R$ {{ number_format($item->valor, 2, ',', '.') }}</span>
+                            @endif
+                        </div>
+                    </div>
+                </a>
+            </div>
+        @endforeach
+    </div>
+</section>
+
+<style>
+    /* Efeito de zoom suave ao passar o mouse */
+    .card:hover {
+        transform: translateY(-5px);
+    }
+    .object-fit-cover {
+        object-fit: cover;
+    }
+</style>
 <script>
     // FUNÇÃO GLOBAL (Acessível pelo onclick do HTML)
     function copiarLink(button) {

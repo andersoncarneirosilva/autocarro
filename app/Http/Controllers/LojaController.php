@@ -195,6 +195,12 @@ public function show($slug_loja, $slug_veiculo)
     // 1. Busca pelo slug do veículo
     $veiculo = Anuncio::where('slug', $slug_veiculo)->firstOrFail();
     
+    // Busca outros 4 veículos, excluindo o atual
+    $outrosVeiculos = Anuncio::where('id', '!=', $veiculo->id)
+                             ->where('status', 'ATIVO')
+                             ->limit(4)
+                             ->get();
+
     // CORREÇÃO: Usar a variável correta ($veiculo) para incrementar
     $veiculo->increment('visitas');
 
@@ -232,7 +238,7 @@ public function show($slug_loja, $slug_veiculo)
         }
     }
 
-    return view('loja.revenda.detalhes', compact('veiculo', 'vendedor', 'tipoVendedor'));
+    return view('loja.revenda.detalhes', compact('veiculo', 'vendedor', 'tipoVendedor','outrosVeiculos'));
 }
 
 
