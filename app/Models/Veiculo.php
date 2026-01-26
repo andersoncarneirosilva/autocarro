@@ -21,6 +21,9 @@ class Veiculo extends Model
         'cpf',
         'endereco',
         'marca',
+        'marca',
+        'modelo',
+        'versao',
         'placa',
         'chassi',
         'cor',
@@ -36,27 +39,35 @@ class Veiculo extends Model
         'tipo',
         'arquivo_doc',
         'size_doc',
-        'arquivo_proc',
-        'size_proc',
-        'arquivo_proc_assinado',
-        'arquivo_atpve',
-        'size_atpve',
-        'arquivo_atpve_assinado',
-        'size_proc_pdf',
-        'size_atpve_pdf',
         'images',
-        'class_status',
         'status',
+        'especiais',
         'user_id',
 
         'kilometragem',
+        'modelo_carro',
+        'visitas',
         'portas',
         'cambio',
         'valor',
         'valor_oferta',
+        'qtd_parcelas',
+        'taxa_juros',
+        'valor_parcela',
+        'exibir_parcelamento',
         'observacoes',
+        'adicionais',
         'opcionais',
+        'modificacoes',
+        'descricao',
+        'images'     => 'array',
 
+    ];
+
+    protected $casts = [
+        'adicionais' => 'array',
+        'opcionais' => 'array',
+        'modificacoes' => 'array',
     ];
 
     // Relacionamento com o usuário
@@ -64,6 +75,12 @@ class Veiculo extends Model
     {
         return $this->belongsTo(User::class);
     }
+
+    public function documentos()
+{
+    // Um veículo possui um registro de documentos
+    return $this->hasOne(Documento::class, 'veiculo_id');
+}
 
     public function getSearch(?string $search, $userId)
     {

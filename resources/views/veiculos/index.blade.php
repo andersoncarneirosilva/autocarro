@@ -1,35 +1,44 @@
 @extends('layouts.app')
 
-@section('title', 'Veículos')
-
 @section('content')
 
-@include('veiculos._partials.cadastro-rapido')
+@include('veiculos._modals.cadastro-rapido')
+
+{{-- Toasts de sessão --}}
+@if (session('success') || session('error'))
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+    const Toast = Swal.mixin({
+        toast: true,
+        position: 'top-end',
+        showConfirmButton: false,
+        timer: 6000, // Aumentei um pouco o tempo para dar tempo de ler a mensagem longa
+        timerProgressBar: true,
+        background: '#fff',
+        color: '#313a46',
+        didOpen: (toast) => {
+            toast.addEventListener('mouseenter', Swal.stopTimer)
+            toast.addEventListener('mouseleave', Swal.resumeTimer)
+        }
+    });
 
     @if (session('success'))
-        <script>
-            toastr.success("{{ session('success') }}");
-        </script>
+        Toast.fire({ 
+            icon: 'success', 
+            title: '{{ session('success') }}' 
+        });
     @endif
 
     @if (session('error'))
-        <script>
-            toastr.error("{{ session('error') }}");
-        </script>
-    @endif
-
-    <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            const selectElement = document.getElementById('idCliente');
-            const choices = new Choices(selectElement, {
-                searchEnabled: true,
-                itemSelectText: '',
-                removeItemButton: true,
-                noResultsText: 'Nenhuma opção encontrada',
-                noChoicesText: 'Nenhum cliente cadastrado',
-            });
+        Toast.fire({ 
+            icon: 'error', 
+            title: '{{ session('error_title') ?? "Ops!" }}', // Título em negrito
+            text: '{{ session('error') }}' // Mensagem detalhada em baixo
         });
-    </script>
+    @endif
+});
+</script>
+@endif
 
 <div class="row">
     <div class="col-12">
@@ -40,412 +49,204 @@
                     <li class="breadcrumb-item active">Veículos</li>
                 </ol>
             </div>
-            <div class="d-flex align-items-center">
-                <h3 class="page-title mb-0">Veículos</h3>
-                <button type="button" 
-                    class="btn btn-sm text-dark" 
-                    data-bs-toggle="modal" 
-                    data-bs-target="#dicas">
-                    <i class="mdi mdi-help-circle-outline fs-4"></i>
-                </button>
+            <h3 class="page-title">Veículos</h3>
+        </div>
+    </div>
+</div>
+
+
+<div class="card">
+    <div class="card-body p-4">
+        <div class="row mb-3">
+            <div class="col-md-8">
+                <form action="{{ route('veiculos.index') }}" method="GET" class="d-flex flex-wrap align-items-center">
+                    <div class="input-group" style="width: 300px;">
+                        <input type="text" name="search" class="form-control" placeholder="Buscar placa, marca ou modelo..." value="{{ request('search') }}">
+                        <button class="btn btn-secondary" type="submit">
+                            <i class="mdi mdi-magnify"></i>
+                        </button>
+                    </div>
+                    @if(request('search'))
+                        <a href="{{ route('veiculos.index') }}" class="btn btn-link text-muted">Limpar filtros</a>
+                    @endif
+                </form>
+            </div>
+            <div class="col-md-4 text-end">
+                <div class="dropdown btn-group">
+                    <button class="btn btn-primary btn-sm dropdown-toggle" type="button" data-bs-toggle="dropdown">
+                        <i class="mdi mdi-plus me-1"></i>Cadastrar
+                    </button>
+                    <div class="dropdown-menu dropdown-menu-animated dropdown-menu-end">
+                        <a href="#" data-bs-toggle="modal" data-bs-target="#cadastro-rapido" class="dropdown-item">Cadastro rápido</a>
+                        <a href="{{ route('veiculos.cadastro-manual') }}" class="dropdown-item">Cadastro manual</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-sm-12">
+                @if ($veiculos->total() != 0)
+                <div class="table-custom-container">
+                    <table class="table table-custom table-nowrap table-hover mb-0">
+                        <thead class="table-dark">
+                            <tr>
+                                <th>Placa</th>
+                                <th>Marca/Modelo</th>
+                                <th>Ano/Modelo</th>
+                                <th>Cor</th>
+                                <th>KM</th>
+                                <th>Câmbio</th>
+                                <th>Doc</th>
+                                <th class="text-end">Ações</th>
+                            </tr>
+                        </thead>
+                        <tbody id="table-body">
+                            @foreach ($veiculos as $veiculo)
+                            <tr>
+                               <td class="d-flex align-items-center">
+                                @php
+                                    // Decodifica o JSON de imagens e pega a primeira
+                                    $imagens = json_decode($veiculo->images);
+                                    $primeiraImagem = !empty($imagens) ? $imagens[0] : null;
+                                    
+                                    // Pega a primeira letra da placa para o avatar reserva
+                                    $inicialPlaca = substr($veiculo->placa, 0, 1);
+                                @endphp
+
+                                <div class="me-3">
+                                    @if($primeiraImagem)
+                                    <a href="{{ route('veiculos.show', $veiculo->id) }}" class="dropdown-item">
+                                        <img src="{{ asset('storage/' . $primeiraImagem) }}" 
+                                            alt="Veículo" 
+                                            class="rounded-circle" 
+                                            style="width: 40px; height: 40px; object-fit: cover; border: 1px solid #dee2e6;">
+                                    </a>
+                                    @else
+                                    <a href="{{ route('veiculos.show', $veiculo->id) }}" class="dropdown-item">
+                                        <div class="rounded-circle d-flex align-items-center justify-content-center bg-primary text-white" 
+                                            style="width: 40px; height: 40px; font-weight: bold; font-size: 1.2rem; text-transform: uppercase;">
+                                            {{ $inicialPlaca }}
+                                        </div>
+                                    </a>
+                                    @endif
+                                </div>
+
+                                <div>
+                                    <span class="fw-bold d-block">{{ $veiculo->placa }}</span>
+                                    <small class="text-muted">{{ $veiculo->tipo }}</small>
+                                </div>
+                            </td>  
+                            <td>
+                                <div>
+                                    <span class="fw-bold d-block">{{ $veiculo->marca }}</span>
+                                    <small class="text-muted">{{ $veiculo->modelo }}</small>
+                                </div>
+                            </td>
+                            <td>{{ $veiculo->ano }}</td>
+                            <td>{{ $veiculo->cor }}</td>
+                            <td>{{ $veiculo->kilometragem ?? 'Não consta' }}</td>
+                            <td>{{ $veiculo->cambio ?? 'Não consta' }}</td>
+
+                            <td>
+                                    @if($veiculo->crv === "***")
+                                        <span class="badge badge-outline-danger">FÍSICO</span>
+                                    @else
+                                        <span class="badge badge-outline-success">DIGITAL</span>
+                                    @endif
+                                </td>
+                            <td class="text-end">
+                                <div class="d-flex justify-content-end gap-2">
+                                    <a href="{{ route('veiculos.show', $veiculo->id) }}" 
+                                    class="btn btn-sm btn-soft-primary" 
+                                    title="Visualizar Detalhes">
+                                        <i class="mdi mdi-eye font-18"></i>
+                                    </a>
+
+                                    <a href="javascript:void(0);" 
+                                    onclick="confirmArchive({{ $veiculo->id }});" 
+                                    class="btn btn-sm btn-soft-warning" 
+                                    title="Arquivar Veículo">
+                                        <i class="mdi mdi-archive-arrow-down-outline font-18"></i>
+                                    </a>
+
+                                    <a href="javascript:void(0);" 
+                                    onclick="confirmDelete({{ $veiculo->id }})" 
+                                    class="btn btn-sm btn-soft-danger" 
+                                    title="Excluir Veículo">
+                                        <i class="mdi mdi-trash-can-outline font-18"></i>
+                                    </a>
+                                </div>
+
+                                {{-- Formulários Ocultos --}}
+                                <form action="{{ route('veiculos.arquivar', $veiculo->id) }}" method="POST" id="form-arquivar-{{ $veiculo->id }}" style="display: none;">
+                                    @csrf
+                                    @method('PUT')
+                                </form>
+
+                                <form action="{{ route('veiculos.destroy', $veiculo->id) }}" method="POST" id="form-delete-{{ $veiculo->id }}" style="display: none;">
+                                    @csrf
+                                    @method('DELETE')
+                                </form>
+                            </td>
+                        </tr>
+                            @endforeach
+                        </tbody>
+                    </table>
+                </div>
+
+                {{-- Paginação --}}
+                <div class="mt-3 d-flex justify-content-between align-items-center">
+                    <p class="text-muted font-13 mb-0">
+                        Mostrando {{ $quantidadePaginaAtual }} de {{ $veiculos->total() }} veículos ativos.
+                    </p>
+                    <div>
+                        {{ $veiculos->links() }}
+                    </div>
+                </div>
+
+                @elseif($veiculos->total() == 0)
+                    <div class="alert alert-info bg-transparent text-info" role="alert">
+                        <i class="mdi mdi-information-outline me-2"></i>Nenhum veículo arquivado encontrado.
+                    </div>
+                @endif
             </div>
         </div>
     </div>
 </div>
 
 
-<div id="dicas" class="modal fade" tabindex="-1" role="dialog"  aria-hidden="true">
-    <div class="modal-dialog modal-lg">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h4 class="modal-title">Dica</h4>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-hidden="true"></button>
-            </div>
-            <div class="modal-body">
-                <h5>Gerando uma procuração</h5>
-                <ul>
-                    <li>Clique no botão cadastrar e selecione o cadastro automático.</li>
-                    <li>Insira o endereço do outorgado e o documento em PDF.</li>
-                </ul>
-                <div class="ratio ratio-16x9 mb-3">
-                    <video controls>
-                        <source src="https://proconline.com.br/images/videos/cadastrar-veiculo.mp4" type="video/mp4">
-                        Seu navegador não suporta a tag de vídeo.
-                    </video>
-                </div>
-                
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-light" data-bs-dismiss="modal">Fechar</button>
-            </div>
-        </div>
-    </div>
-</div>
-
-    <div class="card">
-        <div class="card-body">
-            <div class="row">
-                <div class="col-sm-12">
-                    <div class="card-header d-flex justify-content-between align-items-center">
-                        <h4 class="header-title">Veículos disponíveis</h4>
-                        <div class="dropdown">
-
-
-                            <div class="dropdown btn-group">
-                                <button class="btn btn-primary btn-sm dropdown-toggle" type="button"
-                                    data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                    Cadastrar
-                                </button>
-                                <div class="dropdown-menu dropdown-menu-animated dropdown-menu-end">
-                                    <a href="#" data-bs-toggle="modal" data-bs-target="#cadastro-rapido"
-                                        class="dropdown-item">
-                                        Cadastro rápido
-                                    </a>
-                                    <a href="{{ route('veiculos.create-proc-manual') }}" class="dropdown-item">
-                                        Cadastro manual
-                                    </a>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    @if ($veiculos->total() != 0)
-                        <div class="table-responsive-sm">
-                            <table class="table table-hover table-striped table-centered mb-0">
-                                <thead class="table-dark">
-                                    <tr>
-                                        <th>Ver</th>
-                                        <th>Placa</th>
-                                        <th>Veículo</th>
-                                        <th>Ano/Modelo</th>
-                                        <th>KM</th>
-                                        <th>DOC</th>
-                                        <th>Valor</th>
-                                        <th>Oferta</th>
-                                        <th>Ações</th>
-                                    </tr>
-                                </thead>
-
-                                <tbody>
-                                    @foreach ($veiculos as $doc)
-                                        <tr>
-                                            <td class="d-flex align-items-center">
-                                                <div class="avatar-stack">
-                                                    @if($doc->images)
-                                                        @foreach(json_decode($doc->images) as $key => $image)
-                                                            @if($key < 1) <!-- Limite de 3 avatares -->
-                                                               <img src="{{ url("storage/{$image}") }}" class="rounded-circle avatar-img" />
-                                                            @endif
-                                                        @endforeach
-                                                    @else
-                                                        <img src="{{ url('assets/img/icon_user.png') }}" class="rounded-circle avatar-img" />
-                                                    @endif
-                                                </div>
-                                            </td>
-                                            <td>{{ $doc->placa }}</td>
-                                            <td>{{ $doc->marca }}</td>
-                                            <td>{{ $doc->ano }}</td>
-                                            <td>{{ $doc->kilometragem }}</td>
-                                            <td>
-                                                @if ($doc->crv === '***')
-                                                    <span class="badge badge-outline-danger">FÍSICO</span>
-                                                @else
-                                                    <!-- Mostre uma mensagem ou deixe em branco -->
-                                                    <span class="badge badge-outline-success">DIGITAL</span>
-                                                @endif
-                                            </td>
-                                            <td>R${{ $doc->valor }}</td>
-                                            <td>
-                                                @if(!empty($doc->valor_oferta))
-                                                    R$ {{ $doc->valor_oferta }}
-                                                @else
-                                                    Sem oferta
-                                                @endif
-                                            </td>
-
-                                            
-
-                                            <td class="table-action">
-                                                <div class="dropdown btn-group">
-                                                    <button class="btn btn-primary btn-sm dropdown-toggle" type="button"
-                                                        data-bs-toggle="dropdown" aria-haspopup="true"
-                                                        aria-expanded="false">
-                                                        Ações
-                                                    </button>
-                                                    <div class="dropdown-menu dropdown-menu-animated dropdown-menu-end">
-
-                                                        <a href="{{ route('veiculos.show', $doc->id) }}"
-                                                            class="dropdown-item">Ver/Editar</a>
-
-                                                        {{-- <a href="{{ $doc->arquivo_proc }}" class="dropdown-item"
-                                                            target="_blank">
-                                                            Baixar Procuração
-                                                        </a>
-                                                        <a href="{{ $doc->arquivo_atpve ?? '#' }}"
-                                                            class="dropdown-item {{ empty($doc->arquivo_atpve) ? 'disabled' : '' }}"
-                                                            target="_blank">
-                                                            Baixar Solicitação ATPVe
-                                                        </a>
-
-                                                        <a href="javascript:void(0);" class="dropdown-item"
-                                                            onclick="openProcModal(event, {{ $doc->id }})">
-                                                            Gerar procuração
-                                                        </a>
-
-                                                        <a href="javascript:void(0);"
-                                                            class="dropdown-item {{ $doc->crv === '***' ? 'disabled' : '' }}"
-                                                            onclick="{{ $doc->crv === '***' ? 'return false;' : "openAddressModal(event, $doc->id)" }}">
-                                                            Gerar Solicitação ATPVe
-                                                        </a> --}}
-
-                                                        <!-- Formulário Oculto para Arquivar -->
-                                                        <form action="{{ route('veiculos.arquivar', $doc->id) }}"
-                                                            method="POST" style="display: none;"
-                                                            id="form-arquivar-{{ $doc->id }}">
-                                                            @csrf
-                                                            @method('PUT')
-                                                        </form>
-
-                                                        <!-- Link para Arquivar com SweetAlert -->
-                                                        <a href="#" onclick="confirmArchive({{ $doc->id }});"
-                                                            class="dropdown-item">
-                                                            Arquivar
-                                                        </a>
-
-                                                        <a href="{{ route('veiculos.destroy', $doc->id) }}"
-                                                            data-confirm-delete="true" class="dropdown-item text-danger">
-                                                            Excluir
-                                                        </a>
-
-                                                        <script>
-                                                            function confirmArchive(id) {
-                                                                Swal.fire({
-                                                                    title: "Arquivar Veículo",
-                                                                    text: "Tem certeza que deseja arquivar este veículo?",
-                                                                    icon: "warning",
-                                                                    showCancelButton: true,
-                                                                    confirmButtonText: "Sim, arquivar!",
-                                                                    cancelButtonText: "Cancelar"
-                                                                }).then((result) => {
-                                                                    if (result.isConfirmed) {
-                                                                        document.getElementById('form-arquivar-' + id).submit();
-                                                                    }
-                                                                });
-                                                            }
-                                                        </script>
-
-
-
-                                                    </div>
-                                                </div>
-                                            </td>
-                                        </tr>
-                                    @endforeach
-                                </tbody>
-                            </table>
-                        </div>
-                    @elseif($veiculos->total() == 0)
-                        <div class="alert alert-danger bg-transparent text-danger" role="alert">
-                            NENHUM RESULTADO ENCONTRADO!
-                        </div>
-                    @endif
-                    @if (!$modeloOut)
-                        <div class="alert alert-light text-bg-light border-0" role="alert">
-                            Acesse a página <a href="{{ route('outorgados.index') }}">Outorgados</a> para realizar o cadastro.
-                        </div>
-                    @endif
-                    @if (!$modeloProc)
-                        <div class="alert alert-light text-bg-light border-0" role="alert">
-                            Acesse a página <a href="{{ route('configuracoes.index') }}">Procuração</a> para configurar um modelo.
-                        </div>
-                    @endif
-
-                </div>
-
-                <br><br>
-
-            </div><br>
-            @if ($veiculos->total() != 0)
-            <div class="row d-flex align-items-center justify-content-between">
-                <!-- Texto de exibição alinhado à esquerda -->
-                <div class="col-sm-12 col-md-5 d-flex align-items-center">
-                    <div class="dataTables_info" id="basic-datatable_info" role="status" aria-live="polite">
-                        Exibindo {{ $quantidadePaginaAtual }} de {{ $quantidadeTotal }} veículos cadastrados
-                    </div>
-                </div>
-                
-
-                <!-- Paginação alinhada ao final (direita) -->
-                <div class="col-sm-12 col-md-7 d-flex align-items-center justify-content-end">
-                    <div class="dataTables_paginate paging_simple_numbers">
-                        {{ $veiculos->appends([
-                                'search' => request()->get('search', ''),
-                            ])->links('components.pagination') }}
-                    </div>
-                </div>
-            </div>
-            @endif
-
-
-
-
-
-
-        </div>
-    </div>
-
-
-
-
-
-        
-
-
-
-        <div class="modal fade" id="addressModal" tabindex="-1" role="dialog" aria-labelledby="addressModalLabel"
-            aria-hidden="true">
-            <div class="modal-dialog" role="document">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h5 class="modal-title" id="addressModalLabel">Gerar solicitação ATPVe</h5>
-                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-hidden="true"></button>
-                    </div>
-                    <div class="modal-body">
-                        <form id="addressForm" method="POST" class="needs-validation" novalidate>
-                            @csrf <!-- Necessário para o Laravel validar a requisição -->
-                            <div class="form-group">
-                                <label for="outorgado">Selecione o outorgado: <span style="color: red;">*</span></label>
-                                <select id="outorgado" name="outorgado" class="form-control"
-                                    placeholder="Selecione o outorgado">
-                                    <option value="">Selecione o outorgado</option>
-                                    @foreach ($outorgados as $outorgado)
-                                        <option value="{{ $outorgado->id }}"
-                                            data-nome="{{ $outorgado->nome_outorgado }}"
-                                            data-cpf="{{ $outorgado->cpf_outorgado }}"
-                                            data-email="{{ $outorgado->email_outorgado }}">
-                                            {{ $outorgado->nome_outorgado }}
-                                        </option>
-                                    @endforeach
-                                </select>
-                                <input type="hidden" id="nome_outorgado" name="nome_outorgado" value="">
-                                <input type="hidden" id="email_outorgado" name="email_outorgado" value="">
-                                <input type="hidden" id="cpf_outorgado" name="cpf_outorgado" value="">
-                                <script>
-                                    document.getElementById('outorgado').addEventListener('change', function() {
-                                        const selectedOption = this.options[this.selectedIndex];
-                                        document.getElementById('nome_outorgado').value = selectedOption.getAttribute('data-nome') || '';
-                                        document.getElementById('email_outorgado').value = selectedOption.getAttribute('data-email') || '';
-                                        document.getElementById('cpf_outorgado').value = selectedOption.getAttribute('data-cpf') || '';
-                                    });
-                                </script>
-
-                            </div>
-                            <br>
-                            <div class="form-group">
-                                <label for="idCliente">Selecione o cliente: <span style="color: red;">*</span></label>
-                                <select id="idCliente" name="cliente[]" class="form-control"
-                                    placeholder="Selecione o cliente">
-                                    <option value="">Selecione o cliente</option>
-                                    @foreach ($clientes as $cliente)
-                                        <option value="{{ $cliente->id }}">{{ $cliente->nome }}</option>
-                                    @endforeach
-                                </select>
-                            </div>
-
-                            <br>
-                            <!-- Campo adicional para valor -->
-
-                            <div class="form-group">
-                                <label for="valor">Valor: <span style="color: red;">*</span></label>
-                                <div class="input-group flex-nowrap">
-                                    <span class="input-group-text" id="basic-addon1">R$</span>
-                                    <input type="text" class="form-control" id="valor" name="valor"
-                                        placeholder="Insira o valor" required>
-                                </div>
-
-                            </div>
-                            <input type="hidden" id="docId" name="docId">
-                        </form>
-                    </div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-light" data-bs-dismiss="modal">Fechar</button>
-                        <button type="button" class="btn btn-primary" onclick="submitAddress()">Gerar</button>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-<!-- JavaScript para focar no campo quando o modal abrir -->
 <script>
-    document.addEventListener("DOMContentLoaded", function () {
-        var meuModal = document.getElementById("procModal");
-        meuModal.addEventListener("shown.bs.modal", function () {
-            document.getElementById("endereco").focus();
+    function confirmArchive(id) {
+        Swal.fire({
+            title: "Arquivar Veículo",
+            text: "Tem certeza que deseja arquivar este veículo?",
+            icon: "warning",
+            showCancelButton: true,
+            confirmButtonText: "Sim, arquivar!",
+            cancelButtonText: "Cancelar"
+        }).then((result) => {
+            if (result.isConfirmed) {
+                document.getElementById('form-arquivar-' + id).submit();
+            }
         });
+    }
+</script>
+<script>
+function confirmDelete(id) {
+    Swal.fire({
+        title: "Excluir Veículo",
+        text: "Essa ação não pode ser desfeita. Deseja continuar?",
+        icon: "warning",
+        showCancelButton: true,
+        confirmButtonText: "Sim, excluir!",
+        cancelButtonText: "Cancelar"
+    }).then((result) => {
+        if (result.isConfirmed) {
+            document.getElementById('form-delete-' + id).submit();
+        }
     });
+}
 </script>
 
-        <script>
-            $(document).ready(function() {
-                // Máscara para o campo de valor: formato R$ 1.000,00
-                $('#valor').mask('000.000.000.000.000,00', {
-                    reverse: true
-                });
-            });
-        </script>
-        <script>
-            function openAddressModal(event, docId) {
-                // Armazena o ID do documento globalmente
-                window.selectedDocId = docId;
-
-                // Atualiza o campo oculto no formulário com o ID do documento
-                document.getElementById('docId').value = docId;
-
-                // Exibe o modal
-                $('#addressModal').modal('show');
-            }
-
-            function openProcModal(event, docId) {
-                // Armazena o ID do documento globalmente
-                window.selectedDocId = docId;
-
-                // Atualiza o campo oculto no formulário com o ID do documento
-                document.getElementById('docId').value = docId;
-
-                // Exibe o modal
-                $('#procModal').modal('show');
-            }
-
-            function submitProc() {
-
-                const docId = window.selectedDocId;
-                //console.log(docId);
-                // Atualiza a ação do formulário para incluir o ID do documento na rota
-                const form = document.getElementById('procForm');
-                form.action = `{{ url('veiculos/store-proc') }}/${docId}`; //secure_url
-
-                // Envia o formulário
-                form.submit();
-            }
-
-            function submitAddress() {
-                const selectedClient = $('#idCliente').val(); // Corrigido para o id correto do select
-
-                if (!selectedClient || selectedClient.length === 0) {
-                    Swal.fire('Erro', 'Você precisa selecionar um cliente antes de continuar.', 'error');
-                    return;
-                }
-
-                const docId = window.selectedDocId;
-
-                // Atualiza a ação do formulário para incluir o ID do documento na rota
-                const form = document.getElementById('addressForm');
-                form.action = `{{ app()->isLocal() ? url('veiculos/store-atpve') : secure_url('veiculos/store-atpve') }}/${docId}`;
-
-                // Envia o formulário
-                form.submit();
-            }
-        </script>
-
-
-
-    @endsection
+@endsection

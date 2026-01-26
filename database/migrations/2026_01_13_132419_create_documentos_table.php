@@ -17,7 +17,7 @@ return new class extends Migration
         // Relacionamentos (Foreign Keys)
         $table->foreignId('user_id')->constrained('users')->onDelete('cascade');
         $table->foreignId('cliente_id')->constrained('clientes')->onDelete('cascade');
-        $table->foreignId('anuncio_id')->constrained('anuncios')->onDelete('cascade');
+        $table->foreignId('veiculo_id')->constrained('veiculos')->onDelete('cascade');
         // Campos específicos solicitados
         $table->string('arquivo_proc'); // NO NULL conforme seu esquema
         $table->bigInteger('size_proc')->unsigned()->nullable();

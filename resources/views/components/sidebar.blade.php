@@ -45,42 +45,42 @@
             </li>
 
             {{-- <li class="side-nav-item">
-                <a href="{{ route('anuncios.index') }}" class="side-nav-link">
+                <a href="{{ route('veiculos.index') }}" class="side-nav-link">
                     <i class="mdi mdi-help-circle-outline"></i>
-                    <span> Anuncios </span>
+                    <span> veiculos </span>
                 </a>
             </li> --}}
 
             {{-- <li class="side-nav-item">
                 <a data-bs-toggle="collapse" href="#configuracao" aria-expanded="false" aria-controls="sidebarLayouts" class="side-nav-link">
                     <i class="uil-car"></i>
-                    <span> Anuncios </span>
+                    <span> veiculos </span>
                     <span class="menu-arrow"></span>
                 </a>
                 <div class="collapse" id="configuracao">
                     <ul class="side-nav-second-level">
                         <li>
-                            <a href="{{ route('anuncios.index') }}">Ativos</a>
+                            <a href="{{ route('veiculos.index') }}">Ativos</a>
                         </li>
                         <li>
-                            <a href="{{ route('anuncios.arquivados') }}">Arquivados</a>
+                            <a href="{{ route('veiculos.arquivados') }}">Arquivados</a>
                         </li>
                     </ul>
                 </div>
             </li> --}}
             
             <li class="side-nav-item">
-                <a href="{{ route('anuncios.index') }}" class="side-nav-link">
+                <a href="{{ route('veiculos.index') }}" class="side-nav-link">
                     <i class="uil-car"></i>
-                    <span> Anúncios ativos </span>
+                    <span> Veículos ativos </span>
                 </a>
             </li>
 
             <li class="side-nav-item">
-                <a href="{{ route('anuncios.arquivados') }}/" class="side-nav-link">
+                <a href="{{ route('veiculos.arquivados') }}/" class="side-nav-link">
                     <i class="uil-car-slash"></i>
                     
-                    <span> Anúncios Arquivados </span>
+                    <span> Veículos Arquivados </span>
                 </a>
             </li>
 
@@ -122,7 +122,7 @@
                         <a href="{{ url('/loja/' . auth()->user()->revenda->slug) }}" class="btn btn-secondary btn-sm">Ver loja</a>
                     </div>
             @endif --}}
-            <div class="mt-auto"></div>
+            {{-- <div class="mt-auto"></div>
             @if(auth()->user()->nivel_acesso === 'Revenda' && auth()->user()->revenda)
     <div class="help-box text-white text-center">
         <div class="mb-2">
@@ -153,7 +153,7 @@
     .leftside-menu-dark .help-box {
         background: #ff4a17; /* Cor sólida caso queira destaque total */
     }
-</style>
+</style> --}}
             
         </ul>
     </div>

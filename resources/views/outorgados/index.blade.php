@@ -6,16 +6,29 @@
 
 @include('outorgados._partials.cadastrar-outorgado')
 
-@if(session('success'))
-    <script>
-        toastr.success("{{ session('success') }}");
-    </script>
-@endif
+@include('outorgados._partials.editar-outorgado')
 
-@if(session('error'))
-    <script>
-        toastr.error("{{ session('error') }}");
-    </script>
+{{-- Toasts de sessão --}}
+@if (session('success') || session('error'))
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        const Toast = Swal.mixin({
+            toast: true,
+            position: 'top-end',
+            showConfirmButton: false,
+            timer: 4000,
+            timerProgressBar: true
+        });
+
+        @if (session('success'))
+            Toast.fire({ icon: 'success', title: '{{ session('success') }}' });
+        @endif
+
+        @if (session('error'))
+            Toast.fire({ icon: 'error', title: '{{ session('error') }}' });
+        @endif
+    });
+</script>
 @endif
 
 <div class="row">
@@ -55,7 +68,7 @@
                     </div>
 
                     {{-- Ajustei o data-bs-target para o modal de Outorgados --}}
-                    <button type="button" class="btn btn-red btn-sm rounded-pill shadow-sm px-3" 
+                    <button type="button" class="btn btn-primary  btn-sm px-3" 
                             data-bs-toggle="modal" data-bs-target="#modalCadastroOut">
                         <i class="uil uil-plus me-1"></i> Novo Outorgado
                     </button>
@@ -80,7 +93,7 @@
                         <td>
                             <div class="d-flex align-items-center">
                                 <div class="rounded-circle me-3 d-flex align-items-center justify-content-center shadow-sm border text-white fw-bold" 
-                                     style="width: 38px; height: 38px; background-color: #730000; font-size: 16px;">
+                                     style="width: 38px; height: 38px; background-color: #727cf5; font-size: 16px;">
                                     {{ strtoupper(substr($out->nome_outorgado, 0, 1)) }}
                                 </div>
                                 <span class="fw-semibold text-dark">{{ $out->nome_outorgado }}</span>
@@ -100,12 +113,17 @@
                         <td class="text-center">
                             <div class="d-flex justify-content-center gap-2">
                                 <button type="button" class="btn-action edit" data-id="{{ $out->id }}" onclick="openEditModalOutorgado(event)">
-                                    <i class="uil uil-pen"></i>
+                                    <i class="mdi mdi-pencil"></i>
                                 </button>
                                 
-                                <a href="{{ route('outorgados.destroy', $out->id) }}" class="btn-action delete" data-confirm-delete="true">
+                                <form action="{{ route('outorgados.destroy', $out->id) }}" method="POST" id="delete-form-{{ $out->id }}" style="display: none;">
+                                    @csrf
+                                    @method('DELETE')
+                                </form>
+
+                                <button type="button" class="btn-action delete" onclick="confirmDelete({{ $out->id }})">
                                     <i class="mdi mdi-delete"></i>
-                                </a>
+                                </button>
                             </div>
                         </td>
                     </tr>
@@ -164,124 +182,20 @@
             e.target.value = value;
         });
     });
+
+    function confirmDelete(id) {
+    Swal.fire({
+        title: 'Tem certeza?',
+        text: "Esta ação não poderá ser revertida!",
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonText: 'Sim, excluir!',
+        cancelButtonText: 'Cancelar'
+    }).then((result) => {
+        if (result.isConfirmed) {
+            document.getElementById('delete-form-' + id).submit();
+        }
+    })
+}
 </script>
-
-{{-- <script>
-    // Função para validar CPF
-    function validarCPF(cpf) {
-        // Remove caracteres não numéricos
-        cpf = cpf.replace(/[^\d]+/g, '');
-
-        // Verifica se o CPF tem 11 dígitos ou é uma sequência repetida
-        if (cpf.length !== 11 || /^(\d)\1+$/.test(cpf)) {
-            return false;
-        }
-
-        // Função para calcular os dígitos verificadores
-        function calcularDigito(base) {
-            let soma = 0;
-            for (let i = 0; i < base.length; i++) {
-                soma += base[i] * (base.length + 1 - i);
-            }
-            const resto = soma % 11;
-            return resto < 2 ? 0 : 11 - resto;
-        }
-
-        // Calcula o primeiro dígito verificador
-        const primeiroDigito = calcularDigito(cpf.slice(0, 9));
-
-        // Verifica o primeiro dígito
-        if (primeiroDigito !== parseInt(cpf[9], 10)) {
-            return false;
-        }
-
-        // Calcula o segundo dígito verificador
-        const segundoDigito = calcularDigito(cpf.slice(0, 10));
-
-        // Verifica o segundo dígito
-        return segundoDigito === parseInt(cpf[10], 10);
-    }
-
-    // Adiciona evento no envio do formulário
-    document.getElementById('form-cad').addEventListener('submit', function (e) {
-        e.preventDefault(); // Impede o envio do formulário para verificar antes
-        const cpfInput = document.getElementById('cpf_outorgado');
-
-        if (validarCPF(cpfInput.value)) {
-            // CPF válido, aqui você pode prosseguir com o envio do formulário
-            //alert('CPF válido!');
-             e.target.submit(); // Envia o formulário caso o CPF seja válido
-        } else {
-            // Exibe o SweetAlert com erro por 5 segundos
-            Swal.fire({
-                icon: 'error',
-                title: 'CPF Inválido!',
-                text: 'O CPF informado não é válido.',
-                timer: 5000, // Exibe por 5 segundos
-                showConfirmButton: true, // Remove o botão de confirmação
-                timerProgressBar: true,
-            });
-        }
-    });
-</script> --}}
-
-{{-- <script>
-    // Função para validar CPF
-    function validarCPF(cpf) {
-        // Remove caracteres não numéricos
-        cpf = cpf.replace(/[^\d]+/g, '');
-
-        // Verifica se o CPF tem 11 dígitos ou é uma sequência repetida
-        if (cpf.length !== 11 || /^(\d)\1+$/.test(cpf)) {
-            return false;
-        }
-
-        // Função para calcular os dígitos verificadores
-        function calcularDigito(base) {
-            let soma = 0;
-            for (let i = 0; i < base.length; i++) {
-                soma += base[i] * (base.length + 1 - i);
-            }
-            const resto = soma % 11;
-            return resto < 2 ? 0 : 11 - resto;
-        }
-
-        // Calcula o primeiro dígito verificador
-        const primeiroDigito = calcularDigito(cpf.slice(0, 9));
-
-        // Verifica o primeiro dígito
-        if (primeiroDigito !== parseInt(cpf[9], 10)) {
-            return false;
-        }
-
-        // Calcula o segundo dígito verificador
-        const segundoDigito = calcularDigito(cpf.slice(0, 10));
-
-        // Verifica o segundo dígito
-        return segundoDigito === parseInt(cpf[10], 10);
-    }
-
-    // Adiciona evento no envio do formulário
-    document.getElementById('edit-form-cad').addEventListener('submit', function (e) {
-    e.preventDefault(); // Impede o envio do formulário para verificar antes
-    const cpfInput = document.getElementById('edit_cpf_outorgado');
-
-    if (validarCPF(cpfInput.value)) {
-        // CPF válido, aqui você pode prosseguir com o envio do formulário
-        e.target.submit(); // Envia o formulário caso o CPF seja válido
-    } else {
-        // Exibe o SweetAlert com erro por 5 segundos
-        Swal.fire({
-            icon: 'error',
-            title: 'CPF Inválido!',
-            text: 'O CPF informado não é válido.',
-            timer: 5000, // Exibe por 5 segundos
-            showConfirmButton: true, // Remove o botão de confirmação
-            timerProgressBar: true,
-        });
-    }
-});
-
-</script> --}}
-
     @endsection

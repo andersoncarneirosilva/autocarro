@@ -1,27 +1,23 @@
 @extends('layouts.app')
 
-@section('title', 'Veículos')
-
 @section('content')
 
-@if(session('success'))
-    <script>
-        toastr.success("{{ session('success') }}");
-    </script>
-@endif
-
+{{-- Toasts de sessão --}}
+@if (session('success'))
 <script>
     document.addEventListener('DOMContentLoaded', function () {
-        const selectElement = document.getElementById('idCliente');
-        const choices = new Choices(selectElement, {
-            searchEnabled: true, // Ativa a busca
-            itemSelectText: '', // Remove o texto de seleção padrão
-            removeItemButton: true, // Permite remover itens da seleção
-            noResultsText: 'Nenhuma opção encontrada', // Texto ao não encontrar resultados na busca
-            noChoicesText: 'Nenhum cliente cadastrado', // Texto quando não há opções
+        Swal.fire({
+            toast: true,
+            position: 'top-end',
+            icon: 'success',
+            title: '{{ session('success') }}',
+            showConfirmButton: false,
+            timer: 3000,
+            timerProgressBar: true
         });
     });
 </script>
+@endif
 
 <div class="row">
     <div class="col-12">
@@ -29,359 +25,174 @@
             <div class="page-title-right">
                 <ol class="breadcrumb m-0">
                     <li class="breadcrumb-item"><a href="{{ route('dashboard.index') }}">Dashboard</a></li>
-                    <li class="breadcrumb-item active">Veículos arquivados</li>
+                    <li class="breadcrumb-item"><a href="{{ route('veiculos.index') }}">Veículos</a></li>
+                    <li class="breadcrumb-item active">Arquivados</li>
                 </ol>
             </div>
-            <h3 class="page-title">Veículos arquivados
-                {{-- <button type="button" 
-                    class="btn btn-warning btn-sm opacity-75 text-dark" 
-                    data-bs-toggle="modal" 
-                    data-bs-target="#dicas">
-                    <i class="mdi mdi-lightbulb-on-outline"></i>
-                </button> --}}
-            </h3>
+            <h3 class="page-title">Veículos Arquivados</h3>
         </div>
     </div>
 </div>
 
-{{-- <div id="dicas" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="standard-modalLabel" aria-hidden="true">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h4 class="modal-title" id="standard-modalLabel">Dica</h4>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-hidden="true"></button>
-            </div>
-            <div class="modal-body">
-                <h5>Gerando uma procuração</h5>
-                <li>Clique no botão cadastrar e selecione o cadastro automático.</li>
-                <li>Insira o endereço do outorgado e o documento em pdf.</li>
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-light" data-bs-dismiss="modal">Fechar</button>
-            </div>
-        </div><!-- /.modal-content -->
-    </div><!-- /.modal-dialog -->
-</div><!-- /.modal --> --}}
 <div class="card">
-    <div class="card-body">
+    <div class="card-body p-4">
+        <div class="row mb-3">
+            <div class="col-md-8">
+                <form action="{{ route('veiculos.arquivados') }}" method="GET" class="d-flex align-items-center">
+                    <div class="input-group" style="width: 300px;">
+                        <input type="text" name="search" class="form-control" placeholder="Buscar nos arquivados..." value="{{ request('search') }}">
+                        <button class="btn btn-secondary" type="submit">
+                            <i class="mdi mdi-magnify"></i>
+                        </button>
+                    </div>
+                    @if(request('search'))
+                        <a href="{{ route('veiculos.arquivados') }}" class="btn btn-link text-muted">Limpar</a>
+                    @endif
+                </form>
+            </div>
+        </div>
+
         <div class="row">
             <div class="col-sm-12">
-
                 @if ($veiculos->total() != 0)
-                <div class="table-responsive-sm">
-                    <table class="table table-hover table-centered mb-0">
+                <div class="table-custom-container">
+                    <table class="table table-custom table-nowrap table-hover mb-0">
                         <thead class="table-dark">
                             <tr>
-                                <th>#</th>
                                 <th>Placa</th>
-                                <th>Veículo</th>
+                                <th>Marca/Modelo</th>
                                 <th>Ano/Modelo</th>
-                                <th>DOC</th>
-                                <th>Proc. Assinada</th>
-                                <th>ATPVe Assinada</th>
-                                <th>Ações</th>
+                                <th>Cor</th>
+                                <th>KM</th>
+                                <th>Câmbio</th>
+                                <th>Doc</th>
+                                <th class="text-end">Ações</th>
                             </tr>
                         </thead>
-
                         <tbody>
-                            @foreach ($veiculos as $doc)
-                                <tr>
-                                    <td><a href="{{ route('veiculos.show', $doc->id) }}" title="Visualizar"
-                                        style="text-decoration: none;" class="">
-                                        {{-- <i class="mdi mdi-eye fs-5"></i> --}}
-                                        <img class="rounded-circle border" 
-                                            src="{{ url("$doc->image") }}" 
-                                            alt="Veículo" 
-                                            width="31"
-                                            onerror="this.onerror=null;this.src='{{ url('images/veiculos/default.jpg') }}';">
-                                    </a>
-                                </td>
-                                    <td>{{ $doc->placa }}</td>
-                                    <td>{{ $doc->marca }}</td>
-                                    <td>{{ $doc->ano }}</td>
-                                    <td>
-                                        @if($doc->crv === "***")
-                                        <span class="badge badge-outline-danger">FÍSICO</span>
-                                        @else
-                                            <!-- Mostre uma mensagem ou deixe em branco -->
-                                            <span class="badge badge-outline-success">DIGITAL</span>
-                                        @endif
-                                    </td>
-                                    <td>
-                                        @if(!empty($doc->arquivo_proc_assinado))
-                                            <a href="{{ $doc->arquivo_proc_assinado }}" target="_blank">PROC</a>
-                                        @else
-                                            <!-- Mostre uma mensagem ou deixe em branco -->
-                                            <span>Não consta</span>
-                                        @endif
-                                    </td>
-                                    <td>
-                                        @if(!empty($doc->arquivo_atpve_assinado))
-                                            <a href="{{ $doc->arquivo_atpve_assinado }}" target="_blank">ATPVe</a>
-                                        @else
-                                            <!-- Mostre uma mensagem ou deixe em branco -->
-                                            <span>Não consta</span>
-                                        @endif
-                                    </td>
-                                    
-                                    <td class="table-action">
-                                        <div class="dropdown btn-group">
-                                            <button class="btn btn-info btn-sm dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                                Ações
-                                            </button>
-                                            <div class="dropdown-menu dropdown-menu-animated dropdown-menu-end">
+                            @foreach ($veiculos as $veiculo)
+                            <tr>
+                                <td class="d-flex align-items-center">
+                                    @php
+                                        $imagens = json_decode($veiculo->images);
+                                        $primeiraImagem = !empty($imagens) ? $imagens[0] : null;
+                                        $inicialPlaca = substr($veiculo->placa, 0, 1);
+                                    @endphp
 
-                                                <form action="{{ route('veiculos.desarquivar', $doc->id) }}" method="POST" style="display: none;" id="form-desarquivar-{{ $doc->id }}">
-                                                    @csrf
-                                                    @method('PUT')
-                                                </form>
-                                                
-                                                <a href="#" onclick="confirmRestore({{ $doc->id }});" class="dropdown-item">
-                                                    Restaurar
-                                                </a>
-                                                
-                                                <script>
-                                                    function confirmRestore(id) {
-                                                        Swal.fire({
-                                                            title: "Restaurar!",
-                                                            text: "Deseja restaurar este veículo?",
-                                                            icon: "warning",
-                                                            showCancelButton: true,
-                                                            confirmButtonText: "Sim, restaurar!"
-                                                        }).then((result) => {
-                                                            if (result.isConfirmed) {
-                                                                document.getElementById('form-desarquivar-' + id).submit();
-                                                            }
-                                                        });
-                                                    }
-                                                </script>
-                                                
-
-                                                <a href="{{ route('veiculos.destroy', $doc->id) }}" 
-                                                    data-confirm-delete="true"
-                                                    class="dropdown-item">
-                                                    Excluir
-                                                </a>
-
+                                    <div class="me-3">
+                                        @if($primeiraImagem)
+                                            <img src="{{ asset('storage/' . $primeiraImagem) }}" class="rounded-circle" style="width: 40px; height: 40px; object-fit: cover; border: 1px solid #dee2e6;">
+                                        @else
+                                            <div class="rounded-circle d-flex align-items-center justify-content-center bg-secondary text-white" 
+                                                style="width: 40px; height: 40px; font-weight: bold; text-transform: uppercase;">
+                                                {{ $inicialPlaca }}
                                             </div>
-                                        </div>
-                                    </td>
-                                </tr>
+                                        @endif
+                                    </div>
+
+                                    <div>
+                                        <span class="fw-bold d-block">{{ $veiculo->placa }}</span>
+                                        <small class="badge bg-soft-secondary text-secondary">Arquivado</small>
+                                    </div>
+                                </td>  
+                                <td>
+                                    <span class="fw-bold d-block">{{ $veiculo->marca }}</span>
+                                    <small class="text-muted">{{ $veiculo->modelo }}</small>
+                                </td>
+                                <td>{{ $veiculo->ano }}</td>
+                                <td>{{ $veiculo->cor }}</td>
+                            <td>{{ $veiculo->kilometragem ?? 'Não consta' }}</td>
+                            <td>{{ $veiculo->cambio ?? 'Não consta' }}</td>
+                                <td>
+                                    @if($veiculo->crv === "***")
+                                        <span class="badge badge-outline-danger">FÍSICO</span>
+                                    @else
+                                        <span class="badge badge-outline-success">DIGITAL</span>
+                                    @endif
+                                </td>
+                                <td class="text-end">
+    <div class="d-flex justify-content-end gap-2">
+        <a href="javascript:void(0);" 
+           onclick="confirmRestore({{ $veiculo->id }});" 
+           class="btn btn-sm btn-soft-success" 
+           title="Restaurar Veículo">
+            <i class="mdi mdi-restore font-18"></i>
+        </a>
+
+        <a href="javascript:void(0);" 
+           onclick="confirmDelete({{ $veiculo->id }});" 
+           class="btn btn-sm btn-soft-danger" 
+           title="Excluir Permanentemente">
+            <i class="mdi mdi-trash-can-outline font-18"></i>
+        </a>
+    </div>
+
+    {{-- Formulários Ocultos --}}
+    <form action="{{ route('veiculos.desarquivar', $veiculo->id) }}" method="POST" id="form-desarquivar-{{ $veiculo->id }}" style="display:none;">
+        @csrf @method('PUT')
+    </form>
+    
+    <form action="{{ route('veiculos.destroy', $veiculo->id) }}" method="POST" id="form-delete-{{ $veiculo->id }}" style="display:none;">
+        @csrf @method('DELETE')
+    </form>
+</td>
+                            </tr>
                             @endforeach
                         </tbody>
                     </table>
                 </div>
-                    @elseif($veiculos->total() == 0)
-                        <div class="alert alert-danger bg-transparent text-danger" role="alert">
-                            NENHUM RESULTADO ENCONTRADO!
-                        </div>
-                    @endif
-                    @if(!$modeloProc) 
-                        <div class="alert alert-light text-bg-light border-0" role="alert">
-                            Acesse a página <a href="{{ route('outorgados.index')}}">Outorgados</a> e <a href="{{ route('configuracoes.index')}}">Procuração</a> para configurar o modelo de textos.
-                        </div>
-                    @endif
 
-            </div>
-            <br><br>
-        </div><br>
-        @if ($veiculos->total() != 0)
-        <div class="row d-flex align-items-center justify-content-between">
-            <!-- Texto de exibição alinhado à esquerda -->
-            <div class="col-sm-12 col-md-5 d-flex align-items-center">
-                <div class="dataTables_info" id="basic-datatable_info" role="status" aria-live="polite">
-                    Exibindo {{ $quantidadePaginaAtual }} de {{ $quantidadeTotal }} veículos arquivados
+                <div class="mt-3 d-flex justify-content-between align-items-center">
+                    <p class="text-muted font-13 mb-0">
+                        Mostrando {{ $veiculos->count() }} de {{ $veiculos->total() }} arquivados.
+                    </p>
+                    <div>
+                        {{ $veiculos->links() }}
+                    </div>
                 </div>
-            </div>
-        
-            <!-- Paginação alinhada ao final (direita) -->
-            <div class="col-sm-12 col-md-7 d-flex align-items-center justify-content-end">
-                <div class="dataTables_paginate paging_simple_numbers">
-                    {{ $veiculos->appends([
-                        'search' => request()->get('search', '')
-                    ])->links('components.pagination') }}
-                </div>
-            </div>
-        </div>
-        @endif
-    </div>
-</div>
-                                      
 
-
-<div id="standard-modal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="standard-modalLabel"
-aria-hidden="true">
-    <div class="modal-dialog modal-lg">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h4 class="modal-title" id="standard-modalLabel">Novo veículo</h4>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-hidden="true"></button>
-            </div>
-            <div class="modal-body">
-                @include('veiculos.create')
-            </div>
-        </div><!-- /.modal-content -->
-    </div><!-- /.modal-dialog -->
-</div><!-- /.modal -->
-
-<div class="modal fade" id="procModal" tabindex="-1" role="dialog" aria-hidden="true">
-    <div class="modal-dialog" role="document">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title">Gerar procuração</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-hidden="true"></button>
-            </div>
-            <div class="modal-body">
-                <form id="procForm" method="POST">
-                    @csrf <!-- Necessário para o Laravel validar a requisição -->
-                    <div class="form-group">
-                        <div class="mb-3">
-                            <label>Endereço: <span style="color: red;">*</span></label>
-                            <div class="col-lg">
-                                <input class="form-control" type="text" name="endereco" required>
-                            </div>
-                        </div>
+                @else
+                    <div class="alert alert-info bg-transparent text-info" role="alert">
+                        <i class="mdi mdi-information-outline me-2"></i>Nenhum veículo arquivado encontrado.
                     </div>
-                    <br>
-
-                    <input type="hidden" id="docId" name="docId">
-                </form>
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-light" data-bs-dismiss="modal">Fechar</button>
-                <button type="button" class="btn btn-primary" onclick="submitProc()">Gerar</button>
-            </div>
-        </div>
-    </div>
-</div>
-
-
-<div class="modal fade" id="addressModal" tabindex="-1" role="dialog" aria-labelledby="addressModalLabel" aria-hidden="true">
-    <div class="modal-dialog" role="document">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="addressModalLabel">Gerar solicitação ATPVe</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-hidden="true"></button>
-            </div>
-            <div class="modal-body">
-                <form id="addressForm" method="POST" class="needs-validation" novalidate>
-                    @csrf <!-- Necessário para o Laravel validar a requisição -->
-                    <div class="form-group">
-                        <label for="outorgado">Selecione o outorgado: <span style="color: red;">*</span></label>
-                        <select id="outorgado" name="outorgado" class="form-control" placeholder="Selecione o outorgado">
-                            <option value="">Selecione o outorgado</option>
-                            @foreach ($outorgados as $outorgado)
-                            <option value="{{ $outorgado->id }}" data-nome="{{ $outorgado->nome_outorgado }}" data-cpf="{{ $outorgado->cpf_outorgado }}" data-email="{{ $outorgado->email_outorgado }}">
-                                {{ $outorgado->nome_outorgado }}
-                            </option>
-                            @endforeach
-                        </select>
-                        <input type="hidden" id="nome_outorgado" name="nome_outorgado" value="">
-                        <input type="hidden" id="email_outorgado" name="email_outorgado" value="">
-                        <input type="hidden" id="cpf_outorgado" name="cpf_outorgado" value="">
-                        <script>
-                            document.getElementById('outorgado').addEventListener('change', function () {
-                                const selectedOption = this.options[this.selectedIndex];
-                                document.getElementById('nome_outorgado').value = selectedOption.getAttribute('data-nome') || '';
-                                document.getElementById('email_outorgado').value = selectedOption.getAttribute('data-email') || '';
-                                document.getElementById('cpf_outorgado').value = selectedOption.getAttribute('data-cpf') || '';
-                            });
-                        </script>
-
-                    </div>
-                    <br>
-                    <div class="form-group">
-                        <label for="idCliente">Selecione o cliente: <span style="color: red;">*</span></label>
-                        <select id="idCliente" name="cliente[]" class="form-control" placeholder="Selecione o cliente">
-                            <option value="">Selecione o cliente</option>
-                            @foreach ($clientes as $cliente)
-                                <option value="{{ $cliente->id }}">{{ $cliente->nome }}</option>
-                            @endforeach
-                        </select>
-                    </div>
-                    
-                    <br>
-                    <!-- Campo adicional para valor -->
-                    
-                    <div class="form-group">
-                        <label for="valor">Valor: <span style="color: red;">*</span></label>
-                        <div class="input-group flex-nowrap">
-                            <span class="input-group-text" id="basic-addon1">R$</span>
-                            <input type="text" class="form-control" id="valor" name="valor" placeholder="Insira o valor" required>
-                        </div>
-                        
-                    </div>
-                    <input type="hidden" id="docId" name="docId">
-                </form>
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-light" data-bs-dismiss="modal">Fechar</button>
-                <button type="button" class="btn btn-primary" onclick="submitAddress()">Gerar</button>
+                @endif
             </div>
         </div>
     </div>
 </div>
 
 <script>
-    $(document).ready(function(){
-        // Máscara para o campo de valor: formato R$ 1.000,00
-        $('#valor').mask('000.000.000.000.000,00', {reverse: true});
-    });
-</script>
-<script>
-    function openAddressModal(event, docId) {
-        // Armazena o ID do documento globalmente
-        window.selectedDocId = docId;
-    
-        // Atualiza o campo oculto no formulário com o ID do documento
-        document.getElementById('docId').value = docId;
-    
-        // Exibe o modal
-        $('#addressModal').modal('show');
+    function confirmRestore(id) {
+        Swal.fire({
+            title: "Restaurar Veículo?",
+            text: "O veículo voltará para a lista de ativos.",
+            icon: "question",
+            showCancelButton: true,
+            confirmButtonColor: "#10c469",
+            confirmButtonText: "Sim, restaurar!",
+            cancelButtonText: "Cancelar"
+        }).then((result) => {
+            if (result.isConfirmed) {
+                document.getElementById('form-desarquivar-' + id).submit();
+            }
+        });
     }
 
-    function openProcModal(event, docId) {
-        // Armazena o ID do documento globalmente
-        window.selectedDocId = docId;
-    
-        // Atualiza o campo oculto no formulário com o ID do documento
-        document.getElementById('docId').value = docId;
-    
-        // Exibe o modal
-        $('#procModal').modal('show');
-    }
-
-    function submitProc() {
-    
-        const docId = window.selectedDocId;
-        //console.log(docId);
-        // Atualiza a ação do formulário para incluir o ID do documento na rota
-        const form = document.getElementById('procForm');
-        form.action = `{{ url('veiculos/store-proc') }}/${docId}`; //secure_url
-    
-        // Envia o formulário
-        form.submit();
-    }
-    
-    function submitAddress() {
-        const selectedClient = $('#idCliente').val(); // Corrigido para o id correto do select
-    
-        if (!selectedClient || selectedClient.length === 0) {
-            Swal.fire('Erro', 'Você precisa selecionar um cliente antes de continuar.', 'error');
-            return;
-        }
-    
-        const docId = window.selectedDocId;
-    
-        // Atualiza a ação do formulário para incluir o ID do documento na rota
-        const form = document.getElementById('addressForm');
-        form.action = `{{ url('veiculos/store-atpve') }}/${docId}`; //secure_url
-    
-        // Envia o formulário
-        form.submit();
+    function confirmDelete(id) {
+        Swal.fire({
+            title: "Excluir Permanentemente?",
+            text: "Esta ação não pode ser revertida!",
+            icon: "warning",
+            showCancelButton: true,
+            confirmButtonColor: "#ff5b5b",
+            confirmButtonText: "Sim, excluir!",
+            cancelButtonText: "Cancelar"
+        }).then((result) => {
+            if (result.isConfirmed) {
+                document.getElementById('form-delete-' + id).submit();
+            }
+        });
     }
 </script>
-
-    
 
 @endsection

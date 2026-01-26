@@ -137,58 +137,9 @@ Route::post('/chat/mark-as-read', [ChatController::class, 'markAsRead']);
 
     Route::post('/upload/temp', [AnuncioController::class, 'temp'])->name('upload.temp');
 
-    // Rotas para Documentação
-Route::prefix('documentos')->group(function () {
-    // Rota para gerar a Procuração
-    Route::post('/gerar-procuracao/{veiculo_id}', [DocumentoController::class, 'gerarProcuracao'])
-        ->name('documentos.gerar.procuracao');
 
-    // Rota para gerar o ATPVe
-    Route::get('/gerar-atpve/{veiculo_id}', [DocumentoController::class, 'gerarAtpve'])
-        ->name('documentos.gerar.atpve');
-        
-    // Rota para upload (caso precise salvar manualmente os assinados)
-    Route::post('/upload/{veiculo_id}', [DocumentoController::class, 'store'])
-        ->name('documentos.upload');
-});
 
-    Route::post('/anuncios/cadastro-rapido', [AnuncioController::class, 'cadastroRapido'])->name('anuncios.cadastro-rapido');
-    // Rota para exibir o formulário de cadastro manual
-Route::get('/anuncios/cadastro-manual', [AnuncioController::class, 'cadastroManual'])->name('anuncios.cadastro-manual');
-
-// Rota para processar o envio do formulário (POST)
-Route::post('/anuncios/cadastro-manual/store', [AnuncioController::class, 'storeManual'])->name('anuncios.store-manual');
-// --- 1. ROTAS GLOBAIS E DE LISTAGEM (Sempre no topo para evitar conflito com {id}) ---
-Route::get('/anuncios', [AnuncioController::class, 'index'])->name('anuncios.index');
-Route::get('/anuncios/arquivados', [AnuncioController::class, 'indexArquivados'])->name('anuncios.arquivados');
-Route::get('/anuncios/create', [AnuncioController::class, 'create'])->name('anuncios.create');
-Route::post('/anuncios', [AnuncioController::class, 'store'])->name('anuncios.store');
-
-// --- 2. ROTAS COM AÇÕES ESPECÍFICAS ---
-Route::put('/anuncios/desarquivar/{id}', [AnuncioController::class, 'desarquivar'])->name('anuncios.desarquivar');
-Route::put('/anuncios/arquivar/{id}', [AnuncioController::class, 'arquivar'])->name('anuncios.arquivar');
-
-// 2. AGORA coloque a sua rota (específica por ter o sufixo /update-info-basica)
-// Adicione esta linha junto com as outras rotas de anúncios
-Route::put('/anuncios/update-info/{id}', [AnuncioController::class, 'updateInfo'])->name('anuncios.update-info');
-Route::post('/anuncios/{id}/foto-principal/{index}', [AnuncioController::class, 'setMainFoto'])->name('anuncios.setMainFoto');
-Route::patch('/anuncios/{id}/remover-publicacao', [AnuncioController::class, 'removerPublicacao'])->name('anuncios.remover');
-Route::patch('/anuncios/{id}/publicar', [AnuncioController::class, 'publicar'])->name('anuncios.publicar');
-Route::put('/anuncios/{id}/upload-fotos', [AnuncioController::class, 'uploadFotos'])->name('anuncios.uploadFotos');
-Route::delete('/anuncios/{id}/foto/{index}', [AnuncioController::class, 'deleteFoto'])->name('anuncios.deleteFoto');
-Route::put('/anuncios/{id}/update-descricao', [AnuncioController::class, 'updateDescricao'])->name('anuncios.updateDescricao');
-Route::put('/anuncios/{id}/update-adicionais', [AnuncioController::class, 'updateAdicionais'])->name('anuncios.updateAdicionais');
-Route::put('/anuncios/{id}/update-modificacoes', [AnuncioController::class, 'updateModificacoes'])->name('anuncios.updateModificacoes');
-Route::put('/anuncios/{id}/update-opcionais', [AnuncioController::class, 'updateOpcionais'])->name('anuncios.updateOpcionais');
-Route::put('/anuncios/{id}/update-precos', [AnuncioController::class, 'updatePrecos'])->name('anuncios.updatePrecos');
-Route::put('/anuncios/{id}/update-info-basica', [AnuncioController::class, 'updateInfoBasica'])->name('anuncios.updateInfoBasica');
-
-// 3. Por último as rotas genéricas que podem "confundir" o Laravel
-
-Route::delete('/anuncios/{id}', [AnuncioController::class, 'destroy'])->name('anuncios.destroy');
-Route::put('/anuncios/{id}', [AnuncioController::class, 'update'])->name('anuncios.update');
-Route::get('/anuncios/{id}/edit', [AnuncioController::class, 'edit'])->name('anuncios.edit');
-Route::get('/anuncios/{id}', [AnuncioController::class, 'show'])->name('anuncios.show');
+    
 
 
 
@@ -339,7 +290,7 @@ Route::delete('/veiculos/{veiculo}/foto', [\App\Http\Controllers\VeiculoControll
 
     Route::put('/veiculos/update/{id}', [VeiculoController::class, 'update'])->name('veiculos.update');
     Route::get('/veiculos/edit/{id}', [VeiculoController::class, 'edit'])->name('veiculos.edit');
-    Route::get('/veiculos', [VeiculoController::class, 'index'])->name('veiculos.index');
+    
     Route::get('/veiculos/arquivados', [VeiculoController::class, 'indexArquivados'])->name('veiculos.arquivados');
     Route::get('/veiculos/create-proc-manual', [VeiculoController::class, 'createProcManual'])->name('veiculos.create-proc-manual');
 
@@ -371,6 +322,62 @@ Route::prefix('configuracoes')->group(function () {
     Route::delete('/procuracao/excluir/{id}', [ConfiguracoesController::class, 'deleteProcuracao'])->name('configuracoes.procuracao.delete');
 });
 
+
+///////////////////////////////
+    //                          //
+    //          VEICULOS        //
+    //                          //
+    //////////////////////////////
+    Route::post('/veiculos/cadastro-rapido', [VeiculoController::class, 'cadastroRapido'])->name('veiculos.cadastro-rapido');
+    // Rota para exibir o formulário de cadastro manual
+    Route::get('/veiculos/cadastro-manual', [VeiculoController::class, 'cadastroManual'])->name('veiculos.cadastro-manual');
+
+    // Rota para processar o envio do formulário (POST)
+    Route::post('/veiculos/cadastro-manual/store', [VeiculoController::class, 'storeManual'])->name('veiculos.store-manual');
+    // --- 1. ROTAS GLOBAIS E DE LISTAGEM (Sempre no topo para evitar conflito com {id}) ---
+    Route::get('/veiculos', [VeiculoController::class, 'index'])->name('veiculos.index');
+    Route::get('/veiculos/arquivados', [VeiculoController::class, 'indexArquivados'])->name('veiculos.arquivados');
+    Route::get('/veiculos/create', [VeiculoController::class, 'create'])->name('veiculos.create');
+    Route::post('/veiculos', [VeiculoController::class, 'store'])->name('veiculos.store');
+
+    // --- 2. ROTAS COM AÇÕES ESPECÍFICAS ---
+    Route::put('/veiculos/desarquivar/{id}', [VeiculoController::class, 'desarquivar'])->name('veiculos.desarquivar');
+    Route::put('/veiculos/arquivar/{id}', [VeiculoController::class, 'arquivar'])->name('veiculos.arquivar');
+
+    // 2. AGORA coloque a sua rota (específica por ter o sufixo /update-info-basica)
+    // Adicione esta linha junto com as outras rotas de anúncios
+    Route::put('/veiculos/update-info/{id}', [VeiculoController::class, 'updateInfo'])->name('veiculos.update-info');
+    Route::post('/veiculos/{id}/foto-principal/{index}', [VeiculoController::class, 'setMainFoto'])->name('veiculos.setMainFoto');
+    Route::patch('/veiculos/{id}/remover-publicacao', [VeiculoController::class, 'removerPublicacao'])->name('veiculos.remover');
+    Route::patch('/veiculos/{id}/publicar', [VeiculoController::class, 'publicar'])->name('veiculos.publicar');
+    Route::put('/veiculos/{id}/upload-fotos', [VeiculoController::class, 'uploadFotos'])->name('veiculos.uploadFotos');
+    Route::delete('/veiculos/{id}/foto/{index}', [VeiculoController::class, 'deleteFoto'])->name('veiculos.deleteFoto');
+    Route::put('/veiculos/{id}/update-descricao', [VeiculoController::class, 'updateDescricao'])->name('veiculos.updateDescricao');
+    Route::put('/veiculos/{id}/update-adicionais', [VeiculoController::class, 'updateAdicionais'])->name('veiculos.updateAdicionais');
+    Route::put('/veiculos/{id}/update-modificacoes', [VeiculoController::class, 'updateModificacoes'])->name('veiculos.updateModificacoes');
+    Route::put('/veiculos/{id}/update-opcionais', [VeiculoController::class, 'updateOpcionais'])->name('veiculos.updateOpcionais');
+    Route::put('/veiculos/{id}/update-precos', [VeiculoController::class, 'updatePrecos'])->name('veiculos.updatePrecos');
+    Route::put('/veiculos/{id}/update-info-basica', [VeiculoController::class, 'updateInfoBasica'])->name('veiculos.updateInfoBasica');
+
+    // 3. Por último as rotas genéricas que podem "confundir" o Laravel
+
+    Route::get('/veiculos', [VeiculoController::class, 'index'])->name('veiculos.index');
+
+        // Rotas para Documentação
+    Route::prefix('documentos')->group(function () {
+        // Rota para gerar a Procuração
+        Route::post('/gerar-procuracao/{veiculo_id}', [DocumentoController::class, 'gerarProcuracao'])
+            ->name('documentos.gerar.procuracao');
+
+        // Rota para gerar o ATPVe
+        Route::get('/gerar-atpve/{veiculo_id}', [DocumentoController::class, 'gerarAtpve'])
+            ->name('documentos.gerar.atpve');
+            
+        // Rota para upload (caso precise salvar manualmente os assinados)
+        Route::post('/upload/{veiculo_id}', [DocumentoController::class, 'store'])
+            ->name('documentos.upload');
+    });
+
 });
 
 Route::get('/reset-password/{token}', [PasswordResetController::class, 'showResetForm'])->name('password.reset');
@@ -378,39 +385,6 @@ Route::post('/reset-password', [PasswordResetController::class, 'reset'])->name(
 
 Route::post('/enviar-contato', [ContatoController::class, 'enviarEmail'])->name('contato.enviar');
 
-Route::get('/buscar-modelos', [LojaController::class, 'buscarModelos'])->name('buscar.modelos');
-Route::get('/veiculo/{slug}', [LojaController::class, 'show'])->name('veiculo.show');
-// Listagem e Busca de Novos
-// Rota para pesquisa geral (Todos os estados: novo, usado, semi-novo)
-// Rota para a PÁGINA de resultados (o que abre quando clica em BUSCAR)
-Route::get('/pesquisa-veiculos', [LojaController::class, 'searchGeral'])->name('veiculos.search.geral');
-
-// Rota para o AJAX (o que popula a lista enquanto digita)
-Route::get('/sugestoes', [LojaController::class, 'buscarSugestoes'])->name('veiculos.sugestoes');
-Route::get('/veiculos-novos', [LojaController::class, 'indexVeiculosNovos'])->name('veiculos.novos');
-//Route::get('/veiculos-novos/pesquisa', [LojaController::class, 'searchVeiculosNovos'])->name('veiculos.novos.search');
-
-// Listagem e Busca de Semi-novos
-Route::get('/veiculos-semi-novos', [LojaController::class, 'indexVeiculosSemiNovos'])->name('veiculos.semi-novos');
-//Route::get('/veiculos-semi-novos/pesquisa', [LojaController::class, 'searchVeiculosSemiNovos'])->name('veiculos.semi-novos.search');
-
-// Veículos Usados
-Route::get('/veiculos-usados', [LojaController::class, 'indexVeiculosUsados'])->name('veiculos.usados');
-//Route::get('/veiculos-usados/pesquisa', [LojaController::class, 'searchVeiculosUsados'])->name('veiculos.usados.search');
-
-Route::get('/contato', [LojaController::class, 'contato'])->name('loja.contato');
-
-Route::get('/', [LojaController::class, 'index'])->name('loja.index');
-
-Route::get('/', [LojaController::class, 'index'])->name('loja.index');
-// Rota para perfil público da revenda
-// Em vez de /{slug}, use /loja/{slug} ou /v/{slug} (v de vitrine)
-// Exemplo de como deve estar para aceitar o "particular" como um slug
-Route::get('/loja/{slug_loja}/veiculo/{slug_veiculo}', [LojaController::class, 'show'])->name('loja.veiculo.detalhes');
-Route::get('/loja/{slug}', [RevendaPublicaController::class, 'show'])->name('revenda.publica');
-Route::get('/loja/{loja_slug}/veiculo/{veiculo_slug}', [RevendaPublicaController::class, 'detalhesVeiculo'])
-    ->name('loja.veiculo.detalhes');
-
-Route::get('/revendas', [RevendaController::class, 'index'])->name('revendas.index');
+Route::get('/', [LojaController::class, 'index'])->name('site.index');
 
 require __DIR__.'/auth.php';

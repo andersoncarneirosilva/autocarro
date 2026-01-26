@@ -15,54 +15,46 @@ return new class extends Migration
             $table->id();
 
             // OBRIGATORIAS
-            $table->string('marca');
-            $table->string('placa');
-            $table->string('chassi');
+            $table->string('marca')->nullable();
+            $table->string('modelo')->nullable();
+            $table->string('versao')->nullable();
+            $table->string('placa')->nullable();
+            $table->string('chassi')->nullable();
             $table->string('cor');
             $table->string('ano');
-            $table->string('renavam');
-            $table->string('nome');
-            $table->string('cpf');
-            $table->string('cidade');
-            $table->string('crv');
-            $table->string('placaAnterior');
-            $table->string('categoria');
-            $table->string('motor');
-            $table->string('combustivel');
-            $table->string('infos');
-            $table->string('tipo');
+            $table->string('renavam')->nullable();
+            $table->string('nome')->nullable();
+            $table->string('cpf')->nullable();
+            $table->string('cidade')->nullable();
+            $table->string('crv')->nullable();
+            $table->string('placaAnterior')->nullable();
+            $table->string('categoria')->nullable();
+            $table->string('motor')->nullable();
+            $table->string('combustivel')->nullable();
+            $table->string('infos')->nullable();
+            $table->string('tipo')->nullable();
 
             //  OPCIONAIS
             $table->string('cambio')->nullable();
             $table->string('portas')->nullable();
+            $table->string('estado')->nullable();
+            $table->string('especiais')->nullable();
             $table->decimal('valor', 15, 2)->nullable();
             $table->decimal('valor_oferta', 15, 2)->nullable();
-            
+            $table->integer('qtd_parcelas')->nullable()->default(1);
+            $table->decimal('taxa_juros', 5, 2)->nullable()->default(0);
+            $table->decimal('valor_parcela', 15, 2)->nullable();
+            $table->boolean('exibir_parcelamento')->default(false);
             $table->string('kilometragem')->nullable();
             $table->text('observacoes')->nullable();
             $table->json('adicionais')->nullable();
             $table->json('opcionais')->nullable();
             $table->json('modificacoes')->nullable();
             $table->json('descricao')->nullable();
-
             $table->json('images')->nullable();
             $table->string('status')->nullable();
-
-            
-            $table->string('endereco')->nullable();
-            
             $table->string('arquivo_doc')->nullable();
-            $table->string('arquivo_proc')->nullable();
-            $table->string('arquivo_proc_assinado')->nullable();
-            $table->string('arquivo_atpve')->nullable();
-            $table->string('arquivo_atpve_assinado')->nullable();
-
-            $table->string('size_proc_pdf')->nullable();
-            $table->string('size_atpve_pdf')->nullable();
-
             $table->unsignedBigInteger('size_doc')->nullable();
-            $table->unsignedBigInteger('size_proc')->nullable();
-            $table->unsignedBigInteger('size_atpve')->nullable();
 
             $table->foreignId('user_id')->constrained()->onDelete('cascade');
 

@@ -1,2 +1,20 @@
-User-agent: *
-Disallow:
+PROCURAÇÃO
+
+OUTORGANTE: {NOME_CLIENTE}
+CPF: {CPF_CLIENTE}
+ENDEREÇO: {ENDERECO_CLIENTE}
+______________________________________________________________________________________
+
+{INICIO_OUTORGADOS}
+OUTORGADO: {NOME_OUTORGADO}
+CPF: {CPF_OUTORGADO}
+ENDEREÇO: {ENDERECO_OUTORGADO}
+{FIM_OUTORGADOS}
+______________________________________________________________________________________
+FINS E PODERES: O OUTORGANTE confere ao OUTORGADO amplos e ilimitados poderes para o fim especial de vender a quem quiser, receber valores de venda, transferir para si próprio ou terceiros, em causa própria, locar ou de qualquer forma alienar ou onerar o veículo de sua propriedade com as seguintes características:
+
+MARCA: {MARCA_MODELO} PLACA:  {PLACA}
+CHASSI:  {CHASSI} COR:  
+ANO/MODELO: {MARCA_MODELO} RENAVAM: {RENAVAM}
+______________________________________________________________________________________
+Assinar requerimentos, com poderes também para requerer, junto aos CRVAS/DETRAN-RS, os processos de 2ª vias de CRV/CRLV, Baixa Definitiva do veículo, Alterações de informações do veículo, Solicitar DCPPO e CRLV digital e ATPV-E, fazer declaração de residência, fazer alteração de informações no veículo, fazer ocorrência policial de perda de documento do veículo, assinar termo de responsabilidade pela não apresentação de placas e lacre, fazer troca de município, receber valores por indenização de Seguradoras, assinar contratos de inclusão e instrumentos de liberação de Alienação e Reserva de Domínio para si próprio ou terceiros, endossar documentos, usar o veículo em apreço, manejando o mesmo em qualquer parte do território nacional ou estrangeiro, ficando cível e criminalmente responsável por qualquer acidente ou ocorrência, pagar taxas, multas e impostos, liberar e retirar o veículo de depósitos do DETRAN, CRD e DELEGACIAS DE POLÍCIA CIVIL, EPTC, PRF, POLÍCIA FEDERAL, BRIGADA MILITAR, POLÍCIA RODOVIÁRIA ESTADUAL, assinar termos de liberação, dar declarações e finalmente, usar e gozar do veículo como coisa sua e sem interferência ou autorização de outros, podendo ainda requerer perante autoridade alfandegária ou aduaneira de país estrangeiro licença ou permissão de turismo pelo tempo que julgar conveniente, podendo substabelecer a presente no todo ou em parte. O outorgante pelo presente instrumento declara-se responsável pelo pagamento de multas e impostos do veículo acima descrito e caracterizado, até a data da outorga do presente mandato. ESTA PROCURAÇÃO É OUTORGADA EM CARÁTER IRREVOGÁVEL E IRRETRATÁVEL, SEM QUALQUER PRESTAÇÃO DE CONTAS AO PROPRIETÁRIO, HERDEIROS OU TERCEIROS, VISTO TER SIDO QUITADO O PREÇO DO VALOR DE VENDA DA TABELA FIPE NESTA DATA AO PROPRIETÁRIO.

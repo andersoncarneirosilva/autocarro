@@ -14,22 +14,22 @@
     <meta property="og:url" content="https://alcecar.com.br/">
     <meta property="og:title" content="Gestão de Veículos e Automação de Procurações">
     <meta property="og:description" content="Otimize sua produtividade com nosso sistema de gestão automotiva. Geração de documentos em poucos cliques.">
-    <meta property="og:image" content="{{ url('layout/images/logo_carro.png') }}">
+    <meta property="og:image" content="{{ url('layout_site/images/logo_carro.png') }}">
 
     <meta property="twitter:card" content="summary_large_image"> 
     <meta property="twitter:url" content="https://alcecar.com.br/">
     <meta property="twitter:title" content="Gestão de Veículos e Automação de Procurações">
     <meta property="twitter:description" content="Otimize sua produtividade com nosso sistema de gestão automotiva.">
-    <meta property="twitter:image" content="{{ url('layout/images/logo_carro.png') }}">
+    <meta property="twitter:image" content="{{ url('layout_site/images/logo_carro.png') }}">
 
     <meta name="description" content="">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <link rel="shortcut icon" href="{{ url('layout/images/favicon.png') }}" type="image/png">
-    <link rel="stylesheet" href="{{ url('layout/css/animate.css') }}">
-    <link rel="stylesheet" href="{{ url('layout/css/LineIcons.2.0.css') }}">
-    <link rel="stylesheet" href="{{ url('layout/css/bootstrap.4.5.2.min.css') }}">
-    <link rel="stylesheet" href="{{ url('layout/css/default.css') }}">
-    <link rel="stylesheet" href="{{ url('layout/css/style.css') }}">
+    <link rel="shortcut icon" href="{{ url('layout_site/images/favicon.png') }}" type="image/png">
+    <link rel="stylesheet" href="{{ url('layout_site/css/animate.css') }}">
+    <link rel="stylesheet" href="{{ url('layout_site/css/LineIcons.2.0.css') }}">
+    <link rel="stylesheet" href="{{ url('layout_site/css/bootstrap.4.5.2.min.css') }}">
+    <link rel="stylesheet" href="{{ url('layout_site/css/default.css') }}">
+    <link rel="stylesheet" href="{{ url('layout_site/css/style.css') }}">
     
 </head>
 
@@ -114,7 +114,7 @@
                     <div class="col-lg-12">
                         <nav class="navbar navbar-expand-lg">
                             <a class="navbar-brand" href="{{ route('site.index') }}">
-                                <img src="{{ url('layout/images/logo_b_car.png') }}" style="width: 180px">
+                                <img src="{{ url('layout_site/images/logo_texto.png') }}" style="width: 180px">
                             </a>
                             <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
                                 <span class="toggler-icon"></span>
@@ -154,9 +154,9 @@
         </div> <!-- header navbar -->
 
         <div id="home" class="header_hero d-lg-flex align-items-center">
-            <img class="shape shape-1" src="{{ url('layout/images/shape-1.svg') }}" alt="shape">
-            <img class="shape shape-2" src="{{ url('layout/images/shape-2.svg') }}" alt="shape">
-            <img class="shape shape-3" src="{{ url('layout/images/shape-3.svg') }}" alt="shape">
+            <img class="shape shape-1" src="{{ url('layout_site/images/shape-1.svg') }}" alt="shape">
+            <img class="shape shape-2" src="{{ url('layout_site/images/shape-2.svg') }}" alt="shape">
+            <img class="shape shape-3" src="{{ url('layout_site/images/shape-3.svg') }}" alt="shape">
             
             <div class="container">
                 <div class="row align-items-center">
@@ -184,8 +184,8 @@
             </div> <!-- container -->
             <div class="header_image d-flex align-items-end">
                 <div class="image wow fadeInRightBig" data-wow-duration="1.3s" data-wow-delay="1.8s">
-                    <img src="{{ url('layout/images/header_app.png') }}" alt="header App">
-                    <img src="{{ url('layout/images/dots.svg') }}" alt="dots" class="dots">
+                    <img src="{{ url('layout_site/images/header_app.png') }}" alt="header App">
+                    <img src="{{ url('layout_site/images/dots.svg') }}" alt="dots" class="dots">
                 </div> <!-- image -->
             </div> <!-- header image -->
         </div> <!-- header hero -->
@@ -282,8 +282,8 @@
         <div class="row align-items-center">
             <div class="col-lg-6 col-md-9">
                 <div class="about_image mt-50 wow fadeInRightBig" data-wow-duration="1.3s" data-wow-delay="0.5s">
-                    <img class="image" src="{{ url('layout/images/header_app_2.png') }}">
-                    <img class="dots" src="{{ url('layout/images/dots.svg') }}" alt="dots">
+                    <img class="image" src="{{ url('layout_site/images/header_app_2.png') }}">
+                    <img class="dots" src="{{ url('layout_site/images/dots.svg') }}" alt="dots">
                 </div>
             </div>
 
@@ -447,10 +447,10 @@
     <div class="container">
         <div class="download_app">
             <div class="download_shape">
-                <img src="{{ url('layout/images/shape-5.svg') }}" alt="shape">
+                <img src="{{ url('layout_site/images/shape-5.svg') }}" alt="shape">
             </div>
             <div class="download_shape_2">
-                <img src="{{ url('layout/images/shape-6.png') }}" alt="shape">
+                <img src="{{ url('layout_site/images/shape-6.png') }}" alt="shape">
             </div>
 
             <div class="download_app_content">
@@ -501,7 +501,7 @@
 
     <div class="download_app_image d-none d-lg-flex align-items-end">
         <div class="image wow fadeInRightBig" data-wow-duration="1.3s" data-wow-delay="0.5s">
-            <img src="{{ url('layout/images/header_app_3.png') }}" alt="Proconline">
+            <img src="{{ url('layout_site/images/header_app_3.png') }}" alt="Proconline">
         </div>
     </div>
 </section>
@@ -522,7 +522,7 @@
             <div class="col-lg-4 col-md-8">
                 <div class="single_blog blog_1 mt-30 wow fadeInUp" data-wow-duration="1.3s" data-wow-delay="0.2s">
                     <div class="blog_image">
-                        <img src="{{ url('layout/images/blog-1.jpg') }}" alt="Segurança de Dados">
+                        <img src="{{ url('layout_site/images/blog-1.jpg') }}" alt="Segurança de Dados">
                     </div>
                     <div class="blog_content">
                         <div class="blog_meta d-flex justify-content-between">
@@ -540,7 +540,7 @@
             <div class="col-lg-4 col-md-8">
                 <div class="single_blog blog_2 mt-30 wow fadeInUp" data-wow-duration="1.3s" data-wow-delay="0.5s">
                     <div class="blog_image">
-                        <img src="{{ url('layout/images/blog-2.jpg') }}" alt="Interface Intuitiva">
+                        <img src="{{ url('layout_site/images/blog-2.jpg') }}" alt="Interface Intuitiva">
                     </div>
                     <div class="blog_content">
                         <div class="blog_meta d-flex justify-content-between">
@@ -558,7 +558,7 @@
             <div class="col-lg-4 col-md-8">
                 <div class="single_blog blog_3 mt-30 wow fadeInUp" data-wow-duration="1.3s" data-wow-delay="0.8s">
                     <div class="blog_image">
-                        <img src="{{ url('layout/images/blog-3.jpg') }}" alt="Suporte e Nuvem">
+                        <img src="{{ url('layout_site/images/blog-3.jpg') }}" alt="Suporte e Nuvem">
                     </div>
                     <div class="blog_content">
                         <div class="blog_meta d-flex justify-content-between">
@@ -721,14 +721,14 @@ function sendToWhatsApp(event) {
 
 
     <a href="#" class="back-to-top"><i class="lni lni-chevron-up"></i></a>
-    <script src="{{ url('layout/js/vendor/jquery-1.12.4.min.js') }}"></script>
-<script src="{{ url('layout/js/vendor/modernizr-3.7.1.min.js') }}"></script>
-<script src="{{ url('layout/js/popper.min.js') }}"></script>
-<script src="{{ url('layout/js/bootstrap.4.5.2.min.js') }}"></script>
-<script src="{{ url('layout/js/jquery.easing.min.js') }}"></script>
-<script src="{{ url('layout/js/scrolling-nav.js') }}"></script>
-<script src="{{ url('layout/js/wow.min.js') }}"></script>
-<script src="{{ url('layout/js/main.js') }}"></script>
+    <script src="{{ url('layout_site/js/vendor/jquery-1.12.4.min.js') }}"></script>
+<script src="{{ url('layout_site/js/vendor/modernizr-3.7.1.min.js') }}"></script>
+<script src="{{ url('layout_site/js/popper.min.js') }}"></script>
+<script src="{{ url('layout_site/js/bootstrap.4.5.2.min.js') }}"></script>
+<script src="{{ url('layout_site/js/jquery.easing.min.js') }}"></script>
+<script src="{{ url('layout_site/js/scrolling-nav.js') }}"></script>
+<script src="{{ url('layout_site/js/wow.min.js') }}"></script>
+<script src="{{ url('layout_site/js/main.js') }}"></script>
     
 </body>
 

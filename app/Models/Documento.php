@@ -10,7 +10,7 @@ class Documento extends Model
     use HasFactory;
 
     protected $fillable = [
-        'user_id', 'anuncio_id', 'cliente_id',
+        'user_id', 'veiculo_id', 'cliente_id',
         'arquivo_proc', 'size_proc', 'arquivo_proc_assinado',
         'arquivo_atpve', 'size_atpve', 'arquivo_atpve_assinado',
         'size_proc_pdf', 'size_atpve_pdf'
@@ -18,7 +18,7 @@ class Documento extends Model
 
     public function anuncio()
 {
-    return $this->belongsTo(Anuncio::class, 'anuncio_id');
+    return $this->belongsTo(Veiculo::class, 'veiculo_id');
 }
 
     // Relacionamentos

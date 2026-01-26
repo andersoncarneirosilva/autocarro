@@ -1,22 +1,53 @@
 @extends('layouts.app')
 
-@section('title', 'Detalhes do veículo')
+@section('title', 'Detalhes do Veículo - ' . $veiculo->placa)
 
 @section('content')
 
+@include('veiculos._modals.editar-info-veiculo')
+
+@include('veiculos._modals.editar-info-basicas')
+
+@include('veiculos._modals.editar-precos')
+
+@include('veiculos._modals.editar-opcionais')
+
+@include('veiculos._modals.editar-modificacoes')
+
+@include('veiculos._modals.editar-adicionais')
+
+@include('veiculos._modals.editar-descricao')
+
+@include('veiculos._modals.editar-fotos')
+
+@include('veiculos._modals.gerar-documentos')
+
+{{-- Toasts de sessão --}}
+@if (session('success') || session('error'))
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+    const Toast = Swal.mixin({
+        toast: true,
+        position: 'top-end',
+        showConfirmButton: false,
+        timer: 4000,
+        timerProgressBar: true,
+        background: '#fff',
+        color: '#313a46',
+    });
+
     @if (session('success'))
-        <script>
-            toastr.success("{{ session('success') }}");
-        </script>
+        Toast.fire({ icon: 'success', title: '{{ session('success') }}' });
     @endif
 
     @if (session('error'))
-        <script>
-            toastr.error("{{ session('error') }}");
-        </script>
+        Toast.fire({ icon: 'error', title: '{{ session('error') }}' });
     @endif
+});
+</script>
+@endif
 
-    <div class="row">
+<div class="row">
         <div class="col-12">
             <div class="page-title-box">
                 <div class="page-title-right">
@@ -30,296 +61,527 @@
             </div>
         </div>
     </div>
-    <br>
 
-    <div class="row">
-        <div class="col-xl-4 col-lg-5">
-            <div class="card shadow-sm overflow-hidden">
 
-    {{-- Imagem do veículo no topo --}}
-    @php
-        $imagens = json_decode($veiculo->images ?? '[]', true);
-        $primeiraImagem = $imagens[0] ?? null;
-    @endphp
 
-    @if($primeiraImagem)
-        <img src="{{ asset("storage/{$primeiraImagem}") }}"
-            class="w-100"
-            style="height: 260px; object-fit: cover; object-position: center; border-bottom: 1px solid #dee2e6;">
-    @else
-        <img src="{{ asset('assets/img/icon_user.png') }}"
-            class="w-100"
-            style="height: 260px; object-fit: cover; object-position: center; background: #f8f9fa;">
-    @endif
+<div class="row">
+    <div class="col-12">
+        <div class="card">
+            <div class="card-body">
 
-    {{-- Conteúdo do card --}}
-    <div class="card-body">
-        {{-- Coloque aqui o conteúdo do card --}}
-        <h5 class="text-primary text-center mb-3">Resumo do Veículo</h5>
-        {{-- ... restante do conteúdo ... --}}
+
+                <div class="d-flex align-items-center justify-content-between mb-3 border-bottom">
+    <ul class="nav nav-tabs nav-bordered border-0 mb-0">
+        <li class="nav-item">
+            <a href="#info-geral" data-bs-toggle="tab" aria-expanded="false" class="nav-link active">
+                <i class="mdi mdi-car-info d-md-none d-block"></i>
+                <span class="d-none d-md-block">Dados do Veículo</span>
+            </a>
+        </li>
+        <li class="nav-item">
+            <a href="#opcionais-tab" data-bs-toggle="tab" aria-expanded="false" class="nav-link">
+                <i class="mdi mdi-star-outline d-md-none d-block"></i>
+                <span class="d-none d-md-block">Opcionais e Modificações</span>
+            </a>
+        </li>
+        <li class="nav-item">
+            <a href="#fotos-desc" data-bs-toggle="tab" aria-expanded="true" class="nav-link">
+                <i class="mdi mdi-image-multiple d-md-none d-block"></i>
+                <span class="d-none d-md-block">Descrição</span>
+            </a>
+        </li>
+        <li class="nav-item">
+            <a href="#proprietario" data-bs-toggle="tab" aria-expanded="false" class="nav-link">
+                <i class="mdi mdi-account-circle d-md-none d-block"></i>
+                <span class="d-none d-md-block">Documentos</span>
+            </a>
+        </li>
+    </ul>
+</div>
+
+                <div class="tab-content">
+                    
+                    <div class="tab-pane show active" id="info-geral">
+                        <div class="row">
+                            <div class="col-md-8 px-md-3">
+                                <div class="d-flex justify-content-between align-items-center mb-3">
+                <h4 class="header-title text-primary mb-0">
+                    <i class="mdi mdi-car-info me-1"></i> Informações do veículo
+                </h4>
+                <button type="button" class="btn btn-outline-primary btn-sm " data-bs-toggle="modal" data-bs-target="#modalEditarInfoVeiculo">
+                    <i class="mdi mdi-sync me-1"></i> Atualizar Dados
+                </button>
+            </div>
+
+                                <div class="row">
+                                    <div class="col-md-4"> 
+                                        <p class="mb-1 text-muted">Marca/Modelo</p>
+                                        <h5 class="mt-0">{{ $veiculo->marca }}/{{ $veiculo->modelo }}</h5>
+                                        
+                                        <p class="mb-1 text-muted">Cor</p>
+                                        <h5 class="mt-0">{{ $veiculo->cor }}</h5>
+                                        <p class="mb-1 text-muted">Motor</p>
+                                        <h5 class="mt-0">{{ $veiculo->motor  ?? "Não consta" }}</h5>
+                                        {{-- <p class="mb-1 text-muted">Chassi</p>
+                                        <h5 class="mt-0">{{ $veiculo->chassi }}</h5> --}}
+                                    </div>
+                                    <div class="col-md-4"> 
+                                        <p class="mb-1 text-muted">Placa / Anterior</p>
+                                        <h5 class="mt-0">{{ $veiculo->placa }} <small class="text-muted">({{ $veiculo->placaAnterior ?? "Não consta" }})</small></h5>
+                                        <p class="mb-1 text-muted">Combustível</p>
+                                        <h5 class="mt-0">{{ $veiculo->combustivel }}</h5>
+                                        <p class="mb-1 text-muted">Renavam</p>
+                                        <h5 class="mt-0">{{ $veiculo->renavam }}</h5>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <p class="mb-1 text-muted">Ano</p>
+                                        <h5 class="mt-0">{{ $veiculo->ano }}</h5>
+                                        <p class="mb-1 text-muted">Tipo / Categoria</p>
+                                        <h5 class="mt-0">{{ $veiculo->tipo }} / {{ $veiculo->categoria }}</h5>
+                                        <p class="mb-1 text-muted">Número do CRV</p>
+                                        <h5 class="mt-0">{{ $veiculo->crv }}</h5>
+                                    </div>
+                                </div>
+                                <hr>
+
+                                
+                                <div class="d-flex justify-content-between align-items-center mb-3">
+                <h4 class="header-title text-primary mb-0">
+                    <i class="mdi mdi-car-info me-1"></i> Informações básicas
+                </h4>
+                <button type="button" class="btn btn-outline-primary btn-sm " data-bs-toggle="modal" data-bs-target="#modalEditarInfoBasica">
+                    <i class="mdi mdi-sync me-1"></i> Atualizar Dados
+                </button>
+            </div>
+            <div class="row">
+                <div class="col-md-4">
+                    <p class="mb-1 text-muted">Câmbio</p>
+                    <h5 class="mt-0">{{ $veiculo->cambio ?? 'N/A' }}</h5>
+                    
+                </div>
+                <div class="col-md-4">
+                    <p class="mb-1 text-muted">Kilometragem</p>
+                    <h5 class="mt-0">{{ $veiculo->kilometragem ?? '0' }} KM</h5>
+                </div>
+                <div class="col-md-4">
+                     
+                    <p class="mb-1 text-muted">Portas</p>
+                        @if(strtoupper($veiculo->tipo) == 'MOTOCICLETA')
+                            <small>(Não aplicável)</small> 
+                            @else
+                            <h5 class="mt-0">{{ $veiculo->portas }} portas</h5>
+                            @endif
+                </div>
+                
+            </div>
+
+            <div class="row">
+                <div class="col-md-4">
+                    <p class="mb-1 text-muted">Especial</p>
+                    <h5 class="mt-0">{{ $veiculo->especiais ?? 'Não informado' }}</h5>
+                </div>
+                <div class="col-md-4">
+
+                </div>
+                
+            </div>
+            <hr>
+
+            @if($veiculo->nome)
+            <div class="d-flex justify-content-between align-items-center mb-3">
+                <h4 class="header-title mb-3 text-primary"><i class="mdi mdi-card-account-details-outline me-1"></i> Informações do Proprietário</h4>
+                
+            </div>
+            
+            <div class="row mb-3">
+                <div class="col-md-4">
+                    <p class="mb-1 text-muted">Nome do Proprietário</p>
+                    <h5 class="mt-0">{{ $veiculo->nome }}</h5>
+                </div>  
+                <div class="col-md-4">
+                    <p class="mb-1 text-muted">Cidade/UF</p>
+                    <h5 class="mt-0">{{ $veiculo->cidade }}</h5>
+                </div>  
+                <div class="col-md-4">
+                    <p class="mb-1 text-muted">CPF</p>
+                    <h5 class="mt-0">{{ $veiculo->cpf }}</h5>
+                </div>
+            </div>  
+            @endif
+                            </div>
+
+                            <div class="col-md-4 border-start">
+    <div class="mb-4">
+        <div class="d-flex justify-content-between align-items-center mb-2">
+            <h4 class="header-title text-primary mb-0">Foto Principal</h4>
+            <button type="button" class="btn btn-outline-primary btn-sm " data-bs-toggle="modal" data-bs-target="#modalUploadFotos">
+                <i class="mdi mdi-camera-plus me-1"></i> Fotos
+            </button>
+        </div>
+        
+        @php $imagens = json_decode($veiculo->images); @endphp
+                            
+        
+        <div class="position-relative border rounded p-1 bg-white shadow-sm">
+            @if(!empty($imagens))
+                                <div id="carouselVeiculo" class="carousel slide" data-bs-ride="carousel">
+                                    <div class="carousel-inner">
+                                        @foreach($imagens as $key => $img)
+                                            <div class="carousel-item {{ $key == 0 ? 'active' : '' }}">
+                                                <img src="{{ asset('storage/' . $img) }}" class="d-block w-100 rounded" style="max-height: 400px; object-fit: cover;">
+                                            </div>
+                                        @endforeach
+                                    </div>
+                                    <button class="carousel-control-prev" type="button" data-bs-target="#carouselVeiculo" data-bs-slide="prev">
+                                        <span class="carousel-control-prev-icon"></span>
+                                    </button>
+                                    <button class="carousel-control-next" type="button" data-bs-target="#carouselVeiculo" data-bs-slide="next">
+                                        <span class="carousel-control-next-icon"></span>
+                                    </button>
+                                </div>
+                            @else
+                                <div class="bg-light rounded d-flex align-items-center justify-content-center" style="height: 300px;">
+                                    <i class="mdi mdi-image-off text-muted font-24"></i>
+                                </div>
+                            @endif
+        </div>
     </div>
+
+    <div class="d-flex justify-content-between align-items-center mb-3">
+    <h4 class="header-title text-primary mb-0">Valor e oferta</h4>
+    <button type="button" class="btn btn-outline-primary btn-sm " data-bs-toggle="modal" data-bs-target="#modalEditarPrecos">
+        <i class="mdi mdi-currency-usd"></i> Atualizar preço
+    </button>
+</div>
+
+<div class="row g-2"> 
+    <div class="col-6">
+        <div class="card mb-0 border shadow-none bg-light-lighten h-100">
+            <div class="card-body p-2 text-center">
+                <h6 class="text-muted text-uppercase font-11 mt-0 text-truncate">Valor de Venda</h6>
+                <h3 class="text-success mb-0">R$ {{ number_format($veiculo->valor, 2, ',', '.') }}</h3>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-6">
+        <div class="card mb-0 border shadow-none bg-light-lighten h-100">
+            <div class="card-body p-2 text-center">
+                <h6 class="text-muted text-uppercase font-11 mt-0 text-truncate">Oferta Mínima</h6>
+                <h3 class="text-primary mb-0">R$ {{ number_format($veiculo->valor_oferta, 2, ',', '.') }}</h3>
+            </div>
+        </div>
+    </div>
+
+    @if($veiculo->exibir_parcelamento == 1 && $veiculo->qtd_parcelas > 1)
+        @php
+            $totalFinanciado = $veiculo->qtd_parcelas * $veiculo->valor_parcela;
+            $diferencaJuros = $totalFinanciado - $veiculo->valor;
+        @endphp
+
+        <div class="col-12 mt-2">
+    <div class="card mb-0 border shadow-none" style="background-color: #f8f9fa; border-style: dashed !important;">
+        <div class="card-body p-2 text-center">
+            @php
+                $totalFinanciado = $veiculo->qtd_parcelas * $veiculo->valor_parcela;
+                $custoJuros = $totalFinanciado - $veiculo->valor;
+            @endphp
+
+            <p class="mb-0 text-dark fw-bold" style="font-size: 15px;">
+                {{ $veiculo->qtd_parcelas }}x de 
+                <span class="text-primary">R$ {{ number_format($veiculo->valor_parcela, 2, ',', '.') }}</span>
+            </p>
+            
+            <div class="mt-1 pt-1 border-top border-light">
+                <small class="text-muted d-block" style="font-size: 11px;">
+                    @if($veiculo->taxa_juros > 0)
+                        <i class="mdi mdi-trending-up me-1 text-danger"></i>
+                        Total: <strong>R$ {{ number_format($totalFinanciado, 2, ',', '.') }}</strong> 
+                        <span class="mx-1">|</span> 
+                        Juros: <strong class="text-danger">+ R$ {{ number_format($custoJuros, 2, ',', '.') }}</strong>
+                    @else
+                        <i class="mdi mdi-check-circle-outline me-1 text-success"></i>
+                        <strong>Total: R$ {{ number_format($totalFinanciado, 2, ',', '.') }}</strong>
+                        <span class="badge bg-soft-success text-success ms-1">TAXA ZERO</span>
+                    @endif
+                </small>
+                
+                <small class="text-muted d-block mt-1" style="font-size: 10px;">
+                    Custo do financiamento calculado com taxa de {{ number_format($veiculo->taxa_juros, 2, ',', '.') }}% a.m.
+                </small>
+            </div>
+        </div>
+    </div>
+</div>
+    @endif
+</div>
 </div>
 
 
-    <div class="card shadow-sm">
-        <div class="card-body">
+                        </div>
+                    </div>
 
-            
-
-            {{-- Título --}}
-            <h5 class="text-primary text-center mb-3">
-                <i class="mdi mdi-car-side me-1"></i>Resumo do Veículo
-            </h5>
-
-            {{-- Informações rápidas --}}
-            <div class="text-start small">
-                <p class="mb-2">
-                    <strong class="text-muted">Placa:</strong>
-                    <span class=" ms-1">{{ $veiculo->placa }}</span>
-                </p>
-
-                <p class="mb-2">
-                    <strong class="text-muted">Ano/Modelo:</strong>
-                    <span class=" ms-1">{{ $veiculo->ano }}</span>
-                </p>
-
-                <p class="mb-2">
-                    <strong class="text-muted">Kilometragem:</strong>
-                    <span class=" ms-1">{{ $veiculo->kilometragem }}</span>
-                </p>
-
-                <p class="mb-2">
-                    <strong class="text-muted">Câmbio:</strong>
-                    <span class=" ms-1">{{ $veiculo->cambio }}</span>
-                </p>
-
-                <p class="mb-0">
-                    <strong class="text-muted">Valor:</strong>
-                    <span class="fw-bold text-danger ms-1">R$ {{ number_format(floatval(preg_replace('/[^\d,.-]/', '', str_replace(',', '.', $veiculo->valor))), 2, ',', '.') }}
-</span>
-                </p>
+                    <div class="tab-pane" id="fotos-desc">
+    <div class="row">
+        <div class="col-md-12 px-md-3">
+            <div class="d-flex justify-content-between align-items-center mb-3">
+                <h4 class="header-title text-primary mb-0 text-uppercase" style="letter-spacing: 1px;">
+                    Descrição do Anúncio
+                </h4>
+                <button type="button" class="btn btn-outline-primary btn-sm " data-bs-toggle="modal" data-bs-target="#modalDescricao">
+                    <i class="mdi mdi-pencil me-1"></i> Atualizar descrição
+                </button>
             </div>
-
-            <hr class="my-3">
-
-            {{-- Botões de ação --}}
-            <div class="d-flex flex-wrap justify-content-center gap-2">
-                <button type="button" class="btn btn-sm btn-outline-info">
-                    <i class="mdi mdi-pencil-outline me-1"></i> Editar
-                </button>
-                <button type="button" class="btn btn-sm btn-outline-primary">
-                    <i class="mdi mdi-archive-outline me-1"></i> Arquivar
-                </button>
-                <button type="button" class="btn btn-sm btn-outline-success">
-                    <i class="mdi mdi-cash-multiple me-1"></i> Vender
-                </button>
-                <button type="button" class="btn btn-sm btn-outline-danger">
-                    <i class="mdi mdi-delete-outline me-1"></i> Excluir
-                </button>
+            
+            <div class="border p-4 rounded bg-white shadow-none" style="min-height: 150px;">
+                <div class="text-muted" style="white-space: pre-wrap; line-height: 1.6; font-size: 14px;">{{ trim($veiculo->observacoes) ?: 'Nenhuma observação cadastrada.' }}</div>
             </div>
         </div>
     </div>
 </div>
 
+                    <div class="tab-pane" id="opcionais-tab">
+                        <div class="row">
+                            <div class="col-md-4 px-md-3">
+                                <div class="d-flex justify-content-between align-items-center mb-2">
+                                    <h5 class="text-primary"><i class="mdi mdi-plus-box-outline me-1"></i> Adicionais</h5>
+                                    @php
+                                        $listaAdicionais = is_array($veiculo->adicionais) ? $veiculo->adicionais : json_decode($veiculo->adicionais, true);
+                                    @endphp
 
-                        <div class="col-xl-8 col-lg-7">
-                            
-                            <div class="card">
-                                <div class="card-body">
-                                    <ul class="nav nav-pills bg-nav-pills nav-justified mb-3" role="tablist">
-                                        <li class="nav-item" role="presentation">
-                                            <a href="#aboutme" data-bs-toggle="tab" aria-expanded="false" class="nav-link rounded-0 active" aria-selected="true" role="tab">
-                                                Informações gerais
-                                            </a>
-                                        </li>
-                                        <li class="nav-item" role="presentation">
-                                            <a href="#timeline" data-bs-toggle="tab" aria-expanded="true" class="nav-link rounded-0" aria-selected="false" role="tab" tabindex="-1">
-                                                Documentação
-                                            </a>
-                                        </li>
-                                        <li class="nav-item" role="presentation">
-                                            <a href="#settings" data-bs-toggle="tab" aria-expanded="false" class="nav-link rounded-0" aria-selected="false" role="tab" tabindex="-1">
-                                                Fotos
-                                            </a>
-                                        </li>
-                                    </ul>
-                                    <div class="tab-content">
-                                        <div class="tab-pane active show" id="aboutme" role="tabpanel">
+                                    @if(is_array($listaAdicionais) && count($listaAdicionais) > 0)
+                                        {{-- Caso já existam itens cadastrados --}}
+                                        <button class="btn btn-xs btn-outline-primary  px-3" data-bs-toggle="modal" data-bs-target="#modalAdicionais">
+                                            <i class="mdi mdi-pencil me-1"></i> Atualizar adicionais
+                                        </button>
+                                    @else
+                                        {{-- Caso esteja vazio [], null ou string vazia --}}
+                                        <button class="btn btn-xs btn-primary  px-3 shadow-sm" data-bs-toggle="modal" data-bs-target="#modalAdicionais">
+                                            <i class="mdi mdi-plus me-1"></i> Adicionar adicionais
+                                        </button>
+                                    @endif
+                                </div>
+                                <div class="d-flex flex-wrap gap-2 p-2 border rounded min-height-100 bg-light-lighten">
+                                    @php $adicionais = json_decode($veiculo->adicionais) ?? []; @endphp
 
-                                            @include('veiculos._partials.info-veiculo')
+                                    @forelse($adicionais as $ad)
+                                        <span class="badge badge-outline-secondary px-2 py-1 fw-normal" style="font-size: 13px;">
+                                            {{ $ad }}
+                                        </span>
+                                    @empty
+                                        <span class="text-muted small p-1">Nenhum adicional selecionado.</span>
+                                    @endforelse
+                                </div>
+                            </div>
+                            <div class="col-md-4 mb-4">
+                                <div class="d-flex justify-content-between align-items-center mb-2">
+                                    <h5 class="text-primary mb-0"><i class="mdi mdi-check-all me-1"></i> Opcionais</h5>
+                                    
+                                @php
+                                    $listaOpcionais = is_array($veiculo->opcionais) ? $veiculo->opcionais : json_decode($veiculo->opcionais, true);
+                                @endphp
 
-                                        </div> <!-- end tab-pane -->
-                                        <!-- end about me section content -->
+                                    @if(is_array($listaOpcionais) && count($listaOpcionais) > 0)
+                                        {{-- Se o array tem itens, o botão é de ATUALIZAR --}}
+                                        <button class="btn btn-xs btn-outline-primary  px-3" data-bs-toggle="modal" data-bs-target="#modalOpcionais">
+                                            <i class="mdi mdi-pencil me-1"></i> Atualizar opcionais
+                                        </button>
+                                    @else
+                                        {{-- Se for vazio [], null ou string vazia, o botão é de ADICIONAR --}}
+                                        <button class="btn btn-xs btn-primary  px-3 shadow-sm" data-bs-toggle="modal" data-bs-target="#modalOpcionais">
+                                            <i class="mdi mdi-plus me-1"></i> Adicionar opcionais
+                                        </button>
+                                    @endif
 
-                                        <div class="tab-pane" id="timeline" role="tabpanel">
+                                </div>
+                                <div class="d-flex flex-wrap gap-2 p-2 border rounded min-height-100 bg-light-lighten">
+                                    @forelse(json_decode($veiculo->opcionais) ?? [] as $opt)
+                                        <span class="badge badge-outline-secondary px-2 py-1 fw-normal" style="font-size: 13px;">
+                                            {{ $opt }}
+                                        </span>
+                                    @empty
+                                        <span class="text-muted small p-1">Nenhum opcional selecionado.</span>
+                                    @endforelse
+                                </div>
+                            </div>
 
-                                                @include('veiculos._partials.docs-veiculo')
+<div class="col-md-4 mb-4">
+    <div class="d-flex justify-content-between align-items-center mb-2">
+        <h5 class="text-primary mb-0"><i class="mdi mdi-auto-fix me-1"></i> Modificações</h5>
+        @php
+            $listaModificacoes = is_array($veiculo->modificacoes) ? $veiculo->modificacoes : json_decode($veiculo->modificacoes, true);
+        @endphp
 
-                                            <!-- Story Box-->
-                                            <div class="border border-light rounded p-2 mb-3">
-                                                
-                                            </div>
-
-                                            
-
-                                        </div>
-                                        <!-- end timeline content-->
-                                        
-                                        <div class="tab-pane" id="settings" role="tabpanel">
-                                            @php
-                                                $fotos = json_decode($veiculo->images ?? '[]', true);
-                                            @endphp
-
-                                            <div class="container py-4">
-                                                <div class="d-flex justify-content-between align-items-center mb-4">
-                                                    <h4 class="mb-0">Galeria de Fotos</h4>
-                                                    <button class="btn btn-sm btn-primary" data-bs-toggle="modal" data-bs-target="#modalAdicionarFoto">
-                                                        <i class="bi bi-plus-circle me-1"></i> Adicionar Fotos
-                                                    </button>
-                                                </div>
-
-                                                <div class="row g-3">
-                                                    @foreach($fotos as $index => $foto)
-                                                        <div class="col-6 col-md-4 col-lg-3 position-relative">
-                                                            <div class="card shadow-sm border-0">
-                                                                <div class="position-relative">
-                                                                    <img src="{{ asset('storage/' . $foto) }}" class="card-img-top img-fluid rounded" alt="Foto">
-                                                                    
-                                                                    <!-- Botão de Remover -->
-                                                                    <form action="{{ route('veiculos.removerFoto', $veiculo->id) }}" method="POST"
-                                                class="form-remover-foto position-absolute top-0 end-0 m-1">
-                                                @csrf
-                                                @method('DELETE')
-                                                <input type="hidden" name="foto" value="{{ $foto }}">
-                                                <button type="button"
-                                                        class="btn btn-sm btn-danger rounded-circle btn-confirm-delete"
-                                                        style="width: 28px; height: 28px; line-height: 1; padding: 0;"
-                                                        title="Remover Foto">
-                                                    <i class="mdi mdi-trash-can-outline"></i>
-                                                </button>
-                                            </form>
-
-
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                @endforeach
-                                            </div>
-                                        </div>
-
-
-
-                                        </div>
-                                        <!-- end settings content-->
-
-                                    </div> <!-- end tab-content -->
-                                </div> <!-- end card body -->
-                            </div> <!-- end card -->
-                        </div> <!-- end col -->
+        @if(is_array($listaModificacoes) && count($listaModificacoes) > 0)
+            {{-- Se já existem modificações registradas --}}
+            <button class="btn btn-xs btn-outline-primary  px-3" data-bs-toggle="modal" data-bs-target="#modalModificacoes">
+                <i class="mdi mdi-pencil me-1"></i> Atualizar modificações
+            </button>
+        @else
+            {{-- Se estiver vazio [], null ou string vazia --}}
+            <button class="btn btn-xs btn-primary  px-3 shadow-sm" data-bs-toggle="modal" data-bs-target="#modalModificacoes">
+                <i class="mdi mdi-plus me-1"></i> Adicionar modificações
+            </button>
+        @endif
+    </div>
+    <div class="d-flex flex-wrap gap-2 p-2 border rounded min-height-100 bg-light-lighten">
+        @forelse(json_decode($veiculo->modificacoes) ?? [] as $mod)
+            <span class="badge badge-outline-secondary px-2 py-1 fw-normal" style="font-size: 13px;">
+                {{ $mod }}
+            </span>
+        @empty
+            <span class="text-muted small p-1">Nenhuma modificação.</span>
+        @endforelse
+    </div>
+</div>
+                        </div>
                     </div>
 
-        
-
-
-@include('veiculos._partials.modals')
-
-
-<script>
-            function openAddressModal(event, docId) {
-                // Armazena o ID do documento globalmente
-                window.selectedDocId = docId;
-
-                // Atualiza o campo oculto no formulário com o ID do documento
-                document.getElementById('docId').value = docId;
-
-                // Exibe o modal
-                $('#addressModal').modal('show');
-            }
-
-            function openProcModal(event, docId) {
-                // Armazena o ID do documento globalmente
-                window.selectedDocId = docId;
-
-                // Atualiza o campo oculto no formulário com o ID do documento
-                document.getElementById('docId').value = docId;
-
-                // Exibe o modal
-                $('#procModal').modal('show');
-            }
-
-            function openCrlvModal(event, docId) {
-                // Armazena o ID do documento globalmente
-                window.selectedDocId = docId;
-
-                // Atualiza o campo oculto no formulário com o ID do documento
-                document.getElementById('docId').value = docId;
-
-                // Exibe o modal
-                $('#crlvModal').modal('show');
-            }
-
-            function submitProc() {
-
-                const docId = window.selectedDocId;
-                //console.log(docId);
-                // Atualiza a ação do formulário para incluir o ID do documento na rota
-                const form = document.getElementById('procForm');
-                form.action = `{{ url('veiculos/store-proc') }}/${docId}`; //secure_url
-
-                // Envia o formulário
-                form.submit();
-            }
-
-            function submitCrlv() {
-
-                const docId = window.selectedDocId;
-                //console.log(docId);
-                // Atualiza a ação do formulário para incluir o ID do documento na rota
-                const form = document.getElementById('docForm');
-                form.action = `{{ url('veiculos/store-crlv') }}/${docId}`; //secure_url
-
-                // Envia o formulário
-                form.submit();
-            }
-
-            function submitAddress() {
+                    <div class="tab-pane" id="proprietario">
+    <div class="row">
+        <div class="col-md-12 px-md-3">
+            <div class="d-flex justify-content-between align-items-center mb-3">
+                <h5 class="text-primary mb-0"><i class="mdi mdi-file me-1"></i> Documentos</h5>
                 
+                <button type="button" class="btn btn-outline-primary btn-xs " data-bs-toggle="modal" data-bs-target="#modalGerarDocs">
+                    <i class="mdi mdi-pencil"></i> Gerar documentos
+                </button>
+            </div>
+            
+            <ul class="list-group list-group-flush border rounded bg-light-lighten">
 
-                const docId = window.selectedDocId;
 
-                // Atualiza a ação do formulário para incluir o ID do documento na rota
-                const form = document.getElementById('addressForm');
-                form.action = `{{ app()->isLocal() ? url('veiculos/store-atpve') : secure_url('veiculos/store-atpve') }}/${docId}`;
+    <li class="list-group-item bg-transparent py-3">
+    <div class="d-flex align-items-center mb-2">
+        <i class="mdi mdi-file-document-outline me-2 font-18 text-muted"></i>
+        <div>
+            <span class="fw-medium d-block">CRLV</span>
+            <small class="text-muted">Certificado de Registro e Licenciamento de Veículo</small>
+        </div>
+    </div>
 
+    @if($veiculo->arquivo_doc)
+        <div class="shadow-none border rounded p-2 bg-white">
+            <div class="row align-items-center">
+                <div class="col-auto">
+                    <div class="avatar-sm">
+                        <span class="avatar-title bg-light bg-soft-danger text-danger rounded">
+                            <i class="mdi mdi-file-pdf-box font-24"></i>
+                        </span>
+                    </div>
+                </div>
+                <div class="col ps-0 text-start">
+                    {{-- O link usa o campo direto do veículo --}}
+                    <a href="{{ asset('storage/' . $veiculo->arquivo_doc) }}" target="_blank" class="text-muted fw-bold d-block text-truncate font-13" title="{{ basename($veiculo->arquivo_doc) }}">
+                        {{ basename($veiculo->arquivo_doc) }}
+                    </a>
+                    <p class="mb-0 font-12 text-muted">
+                        {{-- Caso você tenha o tamanho salvo no banco, senão pode exibir 'Documento PDF' --}}
+                        {{ isset($veiculo->size_doc) ? number_format($veiculo->size_doc / 1024, 2, ',', '.') . ' KB' : 'Documento Digital' }}
+                    </p>
+                </div>
+                <div class="col-auto">
+                    <a href="{{ $veiculo->arquivo_doc }}" download class="btn btn-link btn-sm text-muted">
+                        <i class="mdi mdi-download font-18"></i>
+                    </a>
+                </div>
+            </div>
+        </div>
+    @else
+        <div class="d-flex justify-content-between align-items-center bg-light-lighten border border-dashed rounded p-2">
+            <span class="text-muted font-12 italic">Documento não anexado</span>
+            <span class="badge bg-soft-warning text-warning border border-warning">Pendente</span>
+        </div>
+    @endif
+</li>
 
-                // Envia o formulário
-                form.submit();
-            }
-        </script>
+    <li class="list-group-item bg-transparent py-3">
+    <div class="d-flex align-items-center mb-2">
+        <i class="mdi mdi-file-certificate-outline me-2 font-18 text-muted"></i>
+        <div>
+            <span class="fw-medium d-block">Procuração</span>
+            <small class="text-muted">Documento de representação jurídica</small>
+        </div>
+    </div>
 
-        <script>
-document.addEventListener('DOMContentLoaded', function () {
-    document.querySelectorAll('.btn-confirm-delete').forEach(button => {
-        button.addEventListener('click', function () {
-            const form = this.closest('form');
+    @if($veiculo->documentos && $veiculo->documentos->arquivo_proc)
+        <div class="shadow-none border rounded p-2 bg-white">
+            <div class="row align-items-center">
+                <div class="col-auto">
+                    <div class="avatar-sm">
+                        <span class="avatar-title bg-light bg-soft-danger text-danger rounded">
+                            <i class="mdi mdi-file-pdf-box font-24"></i>
+                        </span>
+                    </div>
+                </div>
+                <div class="col ps-0 text-start">
+                    <a href="{{ asset('storage/' . $veiculo->documentos->arquivo_proc) }}" target="_blank" class="text-muted fw-bold d-block text-truncate font-13" title="{{ basename($veiculo->documentos->arquivo_proc) }}">
+                        {{ basename($veiculo->documentos->arquivo_proc) }}
+                    </a>
+                    <p class="mb-0 font-12 text-muted">
+                        {{ number_format($veiculo->documentos->size_proc / 1024, 2, ',', '.') }} KB
+                    </p>
+                </div>
+                <div class="col-auto">
+                    <a href="{{ asset('storage/' . $veiculo->documentos->arquivo_proc) }}" download class="btn btn-link btn-sm text-muted">
+                        <i class="mdi mdi-download font-18"></i>
+                    </a>
+                </div>
+            </div>
+        </div>
+    @else
+        <div class="d-flex justify-content-between align-items-center bg-light-lighten border border-dashed rounded p-2">
+            <span class="text-muted font-12 italic">Arquivo não gerado</span>
+            <span class="badge bg-soft-secondary text-secondary border border-secondary">N/A</span>
+        </div>
+    @endif
+</li>
 
-            Swal.fire({
-                title: 'Tem certeza?',
-                text: 'Esta foto será removida permanentemente.',
-                icon: 'warning',
-                showCancelButton: true,
-                confirmButtonText: 'Sim, remover',
-                cancelButtonText: 'Cancelar',
-                confirmButtonColor: '#d33',
-                cancelButtonColor: '#6c757d'
-            }).then((result) => {
-                if (result.isConfirmed) {
-                    form.submit();
-                }
-            });
-        });
-    });
-});
-</script>
+    <li class="list-group-item bg-transparent py-3">
+    <div class="d-flex align-items-center mb-2">
+        <i class="mdi mdi-file-send-outline me-2 font-18 text-muted"></i>
+        <div>
+            <span class="fw-medium d-block">Solicitação ATPVe</span>
+            <small class="text-muted">Intenção de venda e transferência</small>
+        </div>
+    </div>
 
+    @if($veiculo->documentos && $veiculo->documentos->arquivo_atpve)
+        <div class="shadow-none border rounded p-2 bg-white">
+            <div class="row align-items-center">
+                <div class="col-auto">
+                    <div class="avatar-sm">
+                        <span class="avatar-title bg-light bg-soft-danger text-danger rounded">
+                            <i class="mdi mdi-file-pdf-box font-24"></i>
+                        </span>
+                    </div>
+                </div>
+                <div class="col ps-0 text-start">
+                    <a href="{{ asset('storage/' . $veiculo->documentos->arquivo_atpve) }}" target="_blank" class="text-muted fw-bold d-block text-truncate font-13" title="{{ basename($veiculo->documentos->arquivo_atpve) }}">
+                        {{ basename($veiculo->documentos->arquivo_atpve) }}
+                    </a>
+                    <p class="mb-0 font-12 text-muted">
+                        {{ number_format($veiculo->documentos->size_atpve / 1024, 2, ',', '.') }} KB
+                    </p>
+                </div>
+                <div class="col-auto">
+                    <a href="{{ asset('storage/' . $veiculo->documentos->arquivo_atpve) }}" download class="btn btn-link btn-sm text-muted">
+                        <i class="mdi mdi-download font-18"></i>
+                    </a>
+                </div>
+            </div>
+        </div>
+    @else
+        <div class="d-flex justify-content-between align-items-center bg-light-lighten border border-dashed rounded p-2">
+            <span class="text-muted font-12 italic">Documento não gerado</span>
+            <span class="badge bg-soft-secondary text-secondary border border-secondary">N/A</span>
+        </div>
+    @endif
+</li>
+</ul>
+        </div>
+    </div>
+</div>
+
+                </div> </div> </div> </div> </div>
 @endsection

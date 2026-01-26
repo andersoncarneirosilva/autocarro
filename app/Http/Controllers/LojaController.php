@@ -17,6 +17,8 @@ class LojaController extends Controller
 
     public function index(Request $request)
 {
+
+return view('site.index');
     
     //dd($request);
     // Inicia a query filtrando apenas anúncios publicados

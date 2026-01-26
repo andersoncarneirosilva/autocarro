@@ -3,7 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use App\Models\Anuncio;
+use App\Models\Veiculo;
 use App\Models\Cliente;
 use App\Models\Documento;
 use App\Models\Outorgado;
@@ -17,19 +17,21 @@ use Barryvdh\DomPDF\Facade\Pdf;
 
 class DocumentoController extends Controller
 {
-    public function gerarProcuracao(Request $request, $anuncioId)
+    public function gerarProcuracao(Request $request, $veiculoId)
 {
     // 1. Busca os dados iniciais
     $userId = auth()->id();
-    $anuncio = Anuncio::findOrFail($anuncioId);
+    $veiculo = Veiculo::findOrFail($veiculoId);
     $cliente = Cliente::findOrFail($request->cliente_id);
     $modelo = ModeloProcuracao::where('user_id', $userId)->firstOrFail();
-$tipoDoc = $request->input('tipo_documento');
+    //dd($modelo);
+    $tipoDoc = $request->input('tipo_documento');
+
     if ($tipoDoc === 'atpve') {
         // Chama sua função privada específica para ATPV-e
-        $resultado = $this->gerarPdfAtpve($anuncio, $cliente, $userId, $request->valor_venda);
+        $resultado = $this->gerarPdfAtpve($veiculo, $cliente, $userId, $request->valor_venda);
         
-        return redirect()->route('anuncios.show', $anuncioId)
+        return redirect()->route('veiculos.show', $veiculoId)
                 ->with('success', 'Solicitação ATPV-e emitida com sucesso!');
     }
 
@@ -40,12 +42,12 @@ $tipoDoc = $request->input('tipo_documento');
         '{NOME_CLIENTE}'     => strtoupper($cliente->nome),
         '{CPF_CLIENTE}'      => $cliente->cpf,
         '{ENDERECO_CLIENTE}' => strtoupper($cliente->endereco . ', ' . $cliente->cidade),
-        '{PLACA}'            => strtoupper($anuncio->placa),
-        '{CHASSI}'           => strtoupper($anuncio->chassi),
-        '{RENAVAM}'          => $anuncio->renavam,
-        '{MARCA_MODELO}'     => strtoupper($anuncio->marca . ' / ' . $anuncio->modelo),
+        '{PLACA}'            => strtoupper($veiculo->placa),
+        '{CHASSI}'           => strtoupper($veiculo->chassi),
+        '{RENAVAM}'          => $veiculo->renavam,
+        '{MARCA_MODELO}'     => strtoupper($veiculo->marca . ' / ' . $veiculo->modelo),
         '{CIDADE}'           => strtoupper($modelo->cidade),
-        '{COR}'          => strtoupper($anuncio->cor),
+        '{COR}'          => strtoupper($veiculo->cor),
         '{DATA_EXTENSO}'     => \Carbon\Carbon::now()->translatedFormat('d \d\e F \d\e Y'),
     ];
     $html = str_replace(array_keys($substituicoes), array_values($substituicoes), $html);
@@ -68,18 +70,21 @@ $tipoDoc = $request->input('tipo_documento');
     }
 
     // 4. Configuração de Caminhos e Nomes
-    $placaLimpa = str_replace([' ', '-'], '', strtoupper($anuncio->placa));
+    // 4. Configuração de Caminhos e Nomes
+    $placaLimpa = str_replace([' ', '-'], '', strtoupper($veiculo->placa));
     $nomeArquivo = "procuracao_{$placaLimpa}.pdf";
-    
-    $pastaRelativa = "documentos/usuario_{$userId}/anuncios/anuncio_{$anuncioId}/";
+
+    // USE $veiculo->id EM VEZ DE $veiculo
+    $pastaRelativa = "documentos/usuario_{$userId}/veiculos/veiculo_{$veiculo->id}/";
     $diretorioCompleto = storage_path('app/public/' . $pastaRelativa);
 
+    // Garanta que a pasta exista antes de salvar
     if (!file_exists($diretorioCompleto)) {
-        mkdir($diretorioCompleto, 0775, true);
+        mkdir($diretorioCompleto, 0755, true);
     }
 
     $caminhoFisico = $diretorioCompleto . $nomeArquivo;
-
+    
     // 5. Gera o PDF e Salva o Arquivo Físico
     $pdf = \Pdf::loadView('pdfs.procuracao', ['corpo' => $html]);
     $pdf->save($caminhoFisico);
@@ -91,7 +96,7 @@ $tipoDoc = $request->input('tipo_documento');
     Documento::updateOrCreate(
         [
             'user_id'    => $userId,
-            'anuncio_id' => $anuncioId,
+            'veiculo_id' => $veiculoId,
             'cliente_id' => $cliente->id,
         ],
         [
@@ -101,7 +106,7 @@ $tipoDoc = $request->input('tipo_documento');
         ]
     );
 
-    return redirect()->route('anuncios.show', $anuncioId)
+    return redirect()->route('veiculos.show', $veiculoId)
             ->with('success', 'Procuração emitida e salva com sucesso!');
 }
 
@@ -411,7 +416,7 @@ private function formatSizeUnits($bytes)
     //dd($pdfContent);
     // Atualiza a tabela documentos
     Documento::updateOrCreate(
-        ['anuncio_id' => $anuncio->id],
+        ['veiculo_id' => $anuncio->id],
         [
             'user_id' => $userId,
             'cliente_id' => $cliente->id,

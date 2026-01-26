@@ -5,7 +5,7 @@
             <!-- Topbar Brand Logo -->
             <div class="logo-topbar">
                 <!-- Logo light -->
-                <a href="{{ route('anuncios.index') }}" class="logo-light">
+                <a href="{{ route('veiculos.index') }}" class="logo-light">
                     <span class="logo-lg">
                         <img src="{{ asset('frontend/images/logo_alcecar.png') }}" alt="logo">
                     </span>
@@ -15,7 +15,7 @@
                 </a>
 
                 <!-- Logo Dark -->
-                <a href="{{ route('anuncios.index') }}" class="logo-dark">
+                <a href="{{ route('veiculos.index') }}" class="logo-dark">
                     <span class="logo-lg">
                         <img src="{{ asset('frontend/images/logo_alcecar.png') }}" alt="dark logo">
                     </span>
