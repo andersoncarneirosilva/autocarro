@@ -8,53 +8,30 @@ class RevendaController extends Controller
 {
     public function index()
     {
-        return Revenda::all();
+        $revendas = Revenda::orderBy('nome', 'asc')->get();
+        return view('loja.revendas.index', compact('revendas'));
     }
 
-    public function store(Request $request)
+    // Exibe o estoque de uma revenda específica
+    public function show($slug)
     {
-        //dd($request);
-        $data = $request->validate([
-            'nome'    => 'required|string|max:255',
-            'fones'   => 'required|array',
-            'rua'     => 'required|string|max:255',
-            'numero'  => 'required|string|max:20',
-            'bairro'  => 'required|string|max:255',
-            'cidade'  => 'required|string|max:255',
-            'estado'  => 'required|string|size:2',
-            'cep'     => 'required|string|max:10',
-        ]);
+        $revenda = Revenda::where('slug', $slug)->firstOrFail();
 
-        return Revenda::create($data);
-    }
+        // Filtra apenas anúncios ativos e publicados desta revenda específica
+        $veiculos = Anuncio::where('user_id', $revenda->user_id)
+                            ->where('status', 'Ativo')
+                            ->where('status_anuncio', 'Publicado')
+                            ->orderBy('created_at', 'desc')
+                            ->paginate(9);
 
-    public function show(Revenda $revenda)
-    {
-        return $revenda;
-    }
+        // Busca anos para o filtro lateral
+        $anosDisponiveis = Anuncio::where('user_id', $revenda->user_id)
+            ->where('status_anuncio', 'Publicado')
+            ->whereNotNull('ano')
+            ->selectRaw('DISTINCT LEFT(ano, 4) as ano_fabricacao')
+            ->orderBy('ano_fabricacao', 'desc')
+            ->pluck('ano_fabricacao');
 
-    public function update(Request $request, Revenda $revenda)
-    {
-        $data = $request->validate([
-            'nome'    => 'sometimes|string|max:255',
-            'fones'   => 'sometimes|array',
-            'rua'     => 'sometimes|string|max:255',
-            'numero'  => 'sometimes|string|max:20',
-            'bairro'  => 'sometimes|string|max:255',
-            'cidade'  => 'sometimes|string|max:255',
-            'estado'  => 'sometimes|string|size:2',
-            'cep'     => 'sometimes|string|max:10',
-        ]);
-
-        $revenda->update($data);
-
-        return $revenda;
-    }
-
-    public function destroy(Revenda $revenda)
-    {
-        $revenda->delete();
-
-        return response()->noContent();
+        return view('loja.revenda.index', compact('revenda', 'veiculos', 'anosDisponiveis'));
     }
 }

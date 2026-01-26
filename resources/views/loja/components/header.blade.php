@@ -54,6 +54,7 @@
       <nav id="navmenu" class="navmenu">
         <ul>
           <li><a href="{{ route('loja.index') }}" class="{{ request()->routeIs('loja.index') ? 'active' : '' }}">Home</a></li>
+          <li><a href="{{ route('revendas.index') }}" class="{{ request()->routeIs('revendas.index') ? 'active' : '' }}">Revendas</a></li>
           <li><a href="{{ route('veiculos.novos') }}" class="{{ request()->routeIs('veiculos.novos') ? 'active' : '' }}">Novos</a></li>
           <li><a href="{{ route('veiculos.semi-novos') }}" class="{{ request()->routeIs('veiculos.semi-novos') ? 'active' : '' }}">Semi-novos</a></li>
           <li><a href="{{ route('veiculos.usados') }}" class="{{ request()->routeIs('veiculos.usados') ? 'active' : '' }}">Usados</a></li>

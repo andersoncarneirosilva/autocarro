@@ -52,7 +52,10 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/particulares/dashboard', [ParticularController::class, 'index'])->name('particulares.index');
     Route::delete('/particulares/destroy/{id}', [ParticularController::class, 'destroy'])->name('particulares.destroy');
 
-    Route::resource('revendas', RevendaController::class);
+    // Listagem de todas as revendas
+Route::get('/revendas', [RevendaController::class, 'index'])->name('revendas.index');
+
+Route::get('/loja/{slug}', [RevendaController::class, 'show'])->name('loja.revenda');
 // routes/web.php
 Route::post('/chat/mark-as-read', [ChatController::class, 'markAsRead']);
 
@@ -401,6 +404,7 @@ Route::get('/contato', [LojaController::class, 'contato'])->name('loja.contato')
 
 Route::get('/', [LojaController::class, 'index'])->name('loja.index');
 
+Route::get('/', [LojaController::class, 'index'])->name('loja.index');
 // Rota para perfil público da revenda
 // Em vez de /{slug}, use /loja/{slug} ou /v/{slug} (v de vitrine)
 // Exemplo de como deve estar para aceitar o "particular" como um slug
@@ -409,5 +413,5 @@ Route::get('/loja/{slug}', [RevendaPublicaController::class, 'show'])->name('rev
 Route::get('/loja/{loja_slug}/veiculo/{veiculo_slug}', [RevendaPublicaController::class, 'detalhesVeiculo'])
     ->name('loja.veiculo.detalhes');
 
-    
+
 require __DIR__.'/auth.php';
