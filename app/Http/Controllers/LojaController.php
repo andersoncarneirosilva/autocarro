@@ -17,6 +17,7 @@ class LojaController extends Controller
 
     public function index(Request $request)
 {
+    
     //dd($request);
     // Inicia a query filtrando apenas anúncios publicados
     $query = Anuncio::with(['user.revenda', 'user.particular'])->where('status_anuncio', 'Publicado');
@@ -192,6 +193,7 @@ elseif ($request->filled('ano')) {
 
 public function show($slug_loja, $slug_veiculo) 
 {
+    
     // 1. Busca pelo slug do veículo
     $veiculo = Anuncio::where('slug', $slug_veiculo)->firstOrFail();
     

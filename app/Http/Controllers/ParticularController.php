@@ -14,6 +14,7 @@ class ParticularController extends Controller
 {
    public function index()
 {
+    
     // 1. Pegamos o ID do usuário particular logado
     $userId = Auth::id();
 

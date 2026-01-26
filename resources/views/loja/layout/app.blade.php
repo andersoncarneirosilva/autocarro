@@ -86,28 +86,30 @@
 
   /* 2. CAIXA DE RESULTADOS E SETAS (Efeito solicitado) */
   .custom-result-box-wrapper {
-    width: 100%;
-    border: none !important;
-    border-radius: 15px !important;
-    box-shadow: 0 10px 30px rgba(0,0,0,0.15) !important;
-    margin-top: 10px !important;
-    background: #fff !important;
-    z-index: 1000;
-    overflow: hidden; /* Corta o conteúdo para as setas funcionarem */
-    padding: 0 !important;
-  }
+    display: none; /* Esconde por padrão */
+    position: absolute;
+    inset: 0px auto auto 0px;
+    margin: 0px;
+    transform: translate(0px, 58px); /* Ajusta a posição abaixo do botão */
+}
 
+.custom-result-box-wrapper.show {
+    display: flex !important;
+    flex-direction: column;
+}
+.dropdown.custom-field {
+    position: relative;
+}
   .custom-result-box {
     max-height: 250px !important; 
-    overflow-y: auto !important; /* Permite o scroll */
+    overflow-y: auto !important; 
+    scroll-behavior: smooth; /* Adiciona suavidade ao rolar via script */
     padding: 8px !important;
     margin: 0;
     list-style: none;
-    
-    /* Esconde a barra de scroll padrão para manter o design (opcional) */
-    scrollbar-width: none; /* Firefox */
-    -ms-overflow-style: none; /* IE/Edge */
-}
+    scrollbar-width: none; 
+    -ms-overflow-style: none; 
+  }
 
 /* Esconde a barra no Chrome/Safari/Brave */
 .custom-result-box::-webkit-scrollbar {
@@ -120,11 +122,13 @@
     justify-content: center;
     align-items: center;
     background: #fff;
-    height: 25px;
+    height: 30px; /* Um pouco maior para melhor toque */
     cursor: pointer;
-    font-size: 12px;
+    font-size: 10px;
+    color: #999;
     transition: 0.2s;
     user-select: none;
+    z-index: 10;
   }
   .scroll-arrow:hover { background: #f8f8f8; color: #b32d2d; }
   .scroll-arrow.up { border-bottom: 1px solid #eee; }

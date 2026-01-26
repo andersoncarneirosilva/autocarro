@@ -10,28 +10,29 @@ class RevendaPublicaController extends Controller
 {
     public function show($slug)
 {
-    // 1. Busca a revenda
-    //abort(500);
+    // 1. Busca a revenda pelo slug
     $revenda = DB::table('revendas')->where('slug', $slug)->first();
 
     if (!$revenda) {
         abort(404); 
     }
 
-    // 2. Busca anos disponíveis (apenas desta revenda para ser mais preciso)
+    // 2. Busca anos disponíveis
+    // Filtramos por user_id e status_anuncio 'Publicado'
     $anosDisponiveis = Anuncio::where('user_id', $revenda->user_id)
-        ->where('status_anuncio', 'Publicado')
+        ->where('status_anuncio', 'Publicado') 
         ->whereNotNull('ano')
         ->selectRaw('DISTINCT LEFT(ano, 4) as ano_fabricacao')
         ->orderBy('ano_fabricacao', 'desc')
         ->pluck('ano_fabricacao');
 
     // 3. Busca os anúncios COM PAGINAÇÃO
-    // Use paginate(9) para mostrar 3 colunas por 3 linhas
+    // Ajustado para filtrar exatamente o que está ATIVO e PUBLICADO
     $veiculos = Anuncio::where('user_id', $revenda->user_id)
-                        ->where('status', 'Ativo')
+                        ->where('status', 'Ativo') // Status do registro
+                        ->where('status_anuncio', 'Publicado') // Status da moderação/venda
                         ->orderBy('created_at', 'desc')
-                        ->paginate(9); // <--- MUDANÇA AQUI
+                        ->paginate(9);
 
     return view('loja.revenda.index', compact('revenda', 'veiculos', 'anosDisponiveis'));
 }

@@ -408,4 +408,6 @@ Route::get('/loja/{slug_loja}/veiculo/{slug_veiculo}', [LojaController::class, '
 Route::get('/loja/{slug}', [RevendaPublicaController::class, 'show'])->name('revenda.publica');
 Route::get('/loja/{loja_slug}/veiculo/{veiculo_slug}', [RevendaPublicaController::class, 'detalhesVeiculo'])
     ->name('loja.veiculo.detalhes');
+
+    
 require __DIR__.'/auth.php';

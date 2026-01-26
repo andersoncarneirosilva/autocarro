@@ -148,24 +148,36 @@
   }
 
   // --- Lógica de Scroll Automático (Mantida) ---
-  let scrollInterval;
-  const scrollSpeed = 4;
+  document.querySelectorAll('.custom-result-box-wrapper').forEach(wrapper => {
+    const list = wrapper.querySelector('.custom-result-box');
+    const upArrow = wrapper.querySelector('.scroll-arrow.up');
+    const downArrow = wrapper.querySelector('.scroll-arrow.down');
 
-  document.addEventListener('mouseover', function(e) {
-    const seta = e.target.closest('.scroll-arrow');
-    if (seta) {
-      const container = seta.closest('.custom-result-box-wrapper').querySelector('.custom-result-box');
-      const direction = seta.classList.contains('up') ? -1 : 1;
-      stopScrolling();
-      scrollInterval = setInterval(() => { container.scrollTop += direction * scrollSpeed; }, 10);
+    if (list && upArrow && downArrow) {
+        // Scroll ao clicar
+        upArrow.addEventListener('click', () => {
+            list.scrollBy({ top: -100, behavior: 'smooth' });
+        });
+
+        downArrow.addEventListener('click', () => {
+            list.scrollBy({ top: 100, behavior: 'smooth' });
+        });
+
+        // Otimização Premium: Esconde as setas se não houver conteúdo suficiente para rolar
+        const checkScroll = () => {
+            const hasScroll = list.scrollHeight > list.clientHeight;
+            upArrow.style.display = hasScroll ? 'flex' : 'none';
+            downArrow.style.display = hasScroll ? 'flex' : 'none';
+        };
+
+        // Verifica ao abrir o dropdown (usando evento do Bootstrap)
+        wrapper.parentElement.addEventListener('shown.bs.dropdown', checkScroll);
+        
+        // Verifica se a lista mudar (novos modelos carregados)
+        const observer = new MutationObserver(checkScroll);
+        observer.observe(list, { childList: true });
     }
-  });
-
-  document.addEventListener('mouseout', function(e) {
-    if (e.target.closest('.scroll-arrow')) stopScrolling();
-  });
-
-  function stopScrolling() { clearInterval(scrollInterval); }
+});
 });
 </script>
 <section id="categories-overlap" class="categories-overlap">
