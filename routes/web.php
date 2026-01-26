@@ -53,9 +53,7 @@ Route::middleware(['auth'])->group(function () {
     Route::delete('/particulares/destroy/{id}', [ParticularController::class, 'destroy'])->name('particulares.destroy');
 
     // Listagem de todas as revendas
-Route::get('/revendas', [RevendaController::class, 'index'])->name('revendas.index');
 
-Route::get('/loja/{slug}', [RevendaController::class, 'show'])->name('loja.revenda');
 // routes/web.php
 Route::post('/chat/mark-as-read', [ChatController::class, 'markAsRead']);
 
@@ -413,5 +411,6 @@ Route::get('/loja/{slug}', [RevendaPublicaController::class, 'show'])->name('rev
 Route::get('/loja/{loja_slug}/veiculo/{veiculo_slug}', [RevendaPublicaController::class, 'detalhesVeiculo'])
     ->name('loja.veiculo.detalhes');
 
+Route::get('/revendas', [RevendaController::class, 'index'])->name('revendas.index');
 
 require __DIR__.'/auth.php';
