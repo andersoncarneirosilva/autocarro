@@ -36,14 +36,14 @@
         <ul class="side-nav">
 
             <li class="side-nav-title">Menu</li>
-            @can('access-admin')
+            
             <li class="side-nav-item">
                 <a href="{{ route('dashboard.index') }}" class="side-nav-link">
                     <i class="uil-apps"></i>
                     <span> Dashboard </span>
                 </a>
             </li>
-@endcan
+
             {{-- <li class="side-nav-item">
                 <a href="{{ route('anuncios.index') }}" class="side-nav-link">
                     <i class="mdi mdi-help-circle-outline"></i>
