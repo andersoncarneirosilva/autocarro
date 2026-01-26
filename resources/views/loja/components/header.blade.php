@@ -8,13 +8,13 @@
 
 /* Cor fixa nas outras páginas */
 .header-solid {
-    background: #ff4a17; 
+    background: #b32d2d; 
     box-shadow: 0 2px 15px rgba(0, 0, 0, 0.1);
 }
 
 /* Classe que o JS vai adicionar ao rolar */
 .header-scrolled {
-    background: #ff4a17 !important; /* Cor que deseja ao rolar */
+    background: #b32d2d !important; /* Cor que deseja ao rolar */
     box-shadow: 0 2px 15px rgba(0, 0, 0, 0.2);
     padding: 10px 0; /* Opcional: diminui um pouco a altura ao rolar */
 }
