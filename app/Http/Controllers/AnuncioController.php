@@ -279,6 +279,7 @@ public function storeManual(Request $request)
 
     // 8. Campos Fixos
     $data['status'] = 'ATIVO';
+    $data['categoria'] = 'PARTICULAR';
     $data['status_anuncio'] = 'Aguardando';
     $data['placa'] = strtoupper($request->placa);
 
@@ -432,6 +433,26 @@ public function cadastroRapido(Request $request)
 
     return redirect()->route('anuncios.index')
         ->with('error', 'Falha ao salvar os dados no sistema.');
+}
+
+public function updateInfo(Request $request, $id)
+{
+    $anuncio = Anuncio::findOrFail($id);
+
+    // Captura apenas os campos enviados no modal
+    $data = $request->only([
+        'placa', 'placaAnterior', 'cor', 'motor', 
+        'combustivel', 'renavam', 'ano', 'categoria', 
+        'crv', 'marca_real', 'modelo_real'
+    ]);
+
+    // Forçar placa em maiúsculo
+    if($request->has('placa')) $data['placa'] = strtoupper($request->placa);
+    if($request->has('placaAnterior')) $data['placaAnterior'] = strtoupper($request->placaAnterior);
+
+    $anuncio->update($data);
+
+    return redirect()->back()->with('success', 'Dados atualizados com sucesso!');
 }
 
    public function updateInfoBasica(Request $request, $id)

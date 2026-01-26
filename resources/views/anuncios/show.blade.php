@@ -4,6 +4,8 @@
 
 @section('content')
 
+@include('anuncios._partials.editar-info-veiculo')
+
 @include('anuncios._partials.editar-info-basicas')
 
 @include('anuncios._partials.editar-precos')
@@ -184,22 +186,29 @@ document.addEventListener('DOMContentLoaded', function () {
                     <div class="tab-pane show active" id="info-geral">
                         <div class="row">
                             <div class="col-md-8 px-md-3">
-                                
-                                <h4 class="header-title mb-3 text-primary"><i class="mdi mdi-card-account-details-outline me-1"></i> Informações do veículo</h4>
+                                <div class="d-flex justify-content-between align-items-center mb-3">
+                <h4 class="header-title text-primary mb-0">
+                    <i class="mdi mdi-car-info me-1"></i> Informações do veículo
+                </h4>
+                <button type="button" class="btn btn-outline-primary btn-sm " data-bs-toggle="modal" data-bs-target="#modalEditarInfoVeiculo">
+                    <i class="mdi mdi-sync me-1"></i> Atualizar Dados
+                </button>
+            </div>
+
                                 <div class="row">
                                     <div class="col-md-4"> 
                                         <p class="mb-1 text-muted">Placa / Anterior</p>
-                                        <h5 class="mt-0">{{ $veiculo->placa }} <small class="text-muted">({{ $veiculo->placaAnterior }})</small></h5>
+                                        <h5 class="mt-0">{{ $veiculo->placa }} <small class="text-muted">({{ $veiculo->placaAnterior ?? "Não consta" }})</small></h5>
                                         <p class="mb-1 text-muted">Cor</p>
                                         <h5 class="mt-0">{{ $veiculo->cor }}</h5>
                                         <p class="mb-1 text-muted">Motor</p>
-                                        <h5 class="mt-0">{{ $veiculo->motor }}</h5>
+                                        <h5 class="mt-0">{{ $veiculo->motor  ?? "Não consta" }}</h5>
                                         {{-- <p class="mb-1 text-muted">Chassi</p>
                                         <h5 class="mt-0">{{ $veiculo->chassi }}</h5> --}}
                                     </div>
                                     <div class="col-md-4"> 
                                         <p class="mb-1 text-muted">Marca/Modelo</p>
-                                        <h5 class="mt-0">{{ $veiculo->marca }}</h5>
+                                        <h5 class="mt-0">{{ $veiculo->marca_real }}/{{ $veiculo->modelo_real }}</h5>
                                         <p class="mb-1 text-muted">Combustível</p>
                                         <h5 class="mt-0">{{ $veiculo->combustivel }}</h5>
                                         <p class="mb-1 text-muted">Renavam</p>
