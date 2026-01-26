@@ -10,7 +10,7 @@
   <meta property="og:url" content="{{ url()->current() }}">
   <meta property="og:title" content="@yield('title', 'Alcecar | A busca inteligente para seu novo veículo')">
   <meta property="og:description" content="@yield('description', 'Milhares de ofertas de carros, motos e utilitários no Alcecar.')">
-  <meta property="og:image" content="@yield('image', url('frontend/images/logo_alcecar.png'))">
+  <meta property="og:image" content="@yield('image')">
 
   <meta property="twitter:card" content="summary_large_image">
   <meta property="twitter:url" content="{{ url()->current() }}">

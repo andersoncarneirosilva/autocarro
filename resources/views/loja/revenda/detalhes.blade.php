@@ -15,6 +15,7 @@
 
 @section('content')
 
+@include('loja.components.modal-compartilhar')
 <style>
     :root {
         --nc-accent: #ff4a17;
@@ -275,22 +276,42 @@
 </style>
 
 <section class="container py-5 mt-5">
-    <nav class="d-flex gap-2 small text-muted mt-4 mb-4 overflow-x-auto text-nowrap">
-    <a href="/" class="text-decoration-none text-muted">Início</a> 
+    <div class="d-flex flex-wrap justify-content-between align-items-center mt-4 mb-4 gap-3">
     
-    @if($tipoVendedor === 'revenda')
-        / 
-        @if(isset($vendedor->slug))
-            <a href="{{ url('/loja/' . $vendedor->slug) }}" class="text-decoration-none text-muted">
-                {{ $vendedor->nome }}
-            </a>
-        @else
-            <span class="text-muted">{{ $vendedor->nome }}</span>
-        @endif
-    @endif 
+    <nav class="d-flex gap-2 small text-muted overflow-x-auto text-nowrap">
+        <a href="/" class="text-decoration-none text-muted">Início</a> 
+        
+        @if($tipoVendedor === 'revenda')
+            / 
+            @if(isset($vendedor->slug))
+                <a href="{{ url('/loja/' . $vendedor->slug) }}" class="text-decoration-none text-muted">
+                    {{ $vendedor->nome }}
+                </a>
+            @else
+                <span class="text-muted">{{ $vendedor->nome }}</span>
+            @endif
+        @endif 
 
-    / <span class="text-dark fw-medium">{{ $veiculo->marca_real }} - {{ $veiculo->modelo_real }}</span>
-</nav>
+        / <span class="text-dark fw-medium">{{ $veiculo->marca_real }} - {{ $veiculo->modelo_real }}</span>
+    </nav>
+
+    <div class="d-flex align-items-center gap-3">
+        <span class="small text-muted">
+            <i class="mdi mdi-calendar-clock me-1"></i>
+            Anunciado em: {{ \Carbon\Carbon::parse($veiculo->created_at)->format('d/m/Y') }}
+        </span>
+        
+        <button type="button" 
+                class="btn p-0 border-0 d-flex align-items-center justify-content-center text-secondary shadow-none"
+                style="width: 30px; height: 30px; flex-shrink: 0; background: transparent;"
+                data-bs-toggle="modal" 
+                data-bs-target="#shareModal"
+                title="Compartilhar">
+            <i class="bi bi-share fs-5"></i>
+        </button>
+    </div>
+</div>
+
 
     <div class="row g-4">
         <div class="col-lg-7">
@@ -533,14 +554,7 @@
                     <div class="d-flex justify-content-between align-items-start mb-2">
         <h1 class="h3 mb-0 text-dark fw-bold">{{ $veiculo->marca_real }} {{ $veiculo->modelo_real }}</h1>
         
-        <button type="button" 
-        onclick="copiarLink(this)" 
-        class="btn p-0 border-0 d-flex align-items-center justify-content-center text-secondary shadow-none"
-        style="width: 30px; height: 30px; flex-shrink: 0; background: transparent;"
-        data-url="{{ url()->current() }}"
-        title="Copiar Link">
-    <i class="bi bi-share fs-5"></i>
-</button>
+        
     </div>
                     <div class="d-flex align-items-center gap-3 text-secondary mb-4 pb-3 border-bottom">
                         @if($veiculo->ano)
