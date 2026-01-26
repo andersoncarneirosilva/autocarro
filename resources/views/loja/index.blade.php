@@ -422,7 +422,7 @@
     
     <style>
 :root {
-    --accent-color-why: #ff4a17; /* Laranja Alcecar */
+    --accent-color-why: #b32d2d; /* Laranja Alcecar */
     --accent-light-why: rgba(255, 74, 23, 0.1);
 }
 

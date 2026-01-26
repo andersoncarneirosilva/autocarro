@@ -126,7 +126,7 @@
     transition: 0.2s;
     user-select: none;
   }
-  .scroll-arrow:hover { background: #f8f8f8; color: #ff4a17; }
+  .scroll-arrow:hover { background: #f8f8f8; color: #b32d2d; }
   .scroll-arrow.up { border-bottom: 1px solid #eee; }
   .scroll-arrow.down { border-top: 1px solid #eee; }
 
@@ -140,10 +140,10 @@
     border: none;
     background: none;
   }
-  .dropdown-item:hover { background-color: #f0f0f0 !important; color: #ff4a17 !important; }
+  .dropdown-item:hover { background-color: #f0f0f0 !important; color: #b32d2d !important; }
 
   .btn-search-purple {
-    background-color: #ff4a17 !important;
+    background-color: #b32d2d !important;
     color: #fff !important;
     border: none !important;
     border-radius: 15px !important;
@@ -184,7 +184,7 @@
 
 .category-card:hover {
   transform: translateY(-10px);
-  border-color: #ff4a17;
+  border-color: #b32d2d;
 }
 
 /* 4. Ícones e Títulos */
@@ -269,7 +269,7 @@
 }
 
 .mini-spec-card i {
-    color: #ff4a17;
+    color: #b32d2d;
     font-size: 0.9rem;
     margin-bottom: 2px;
 }
@@ -284,7 +284,7 @@
 /* Badge de Preço e Categoria */
 .category-badge {
     background: #fff0eb;
-    color: #ff4a17;
+    color: #b32d2d;
     font-size: 11px;
     font-weight: 700;
     padding: 4px 10px;
@@ -314,7 +314,7 @@
 }
 
 .filter-pill:hover {
-    border-color: #ff4a17;
+    border-color: #b32d2d;
     background: #fffafa;
 }
 
@@ -330,13 +330,13 @@
 }
 
 .filter-pill:hover .remove-filter {
-    color: #ff4a17;
+    color: #b32d2d;
 }
 
 /* Link de Limpar Tudo */
 .btn-clear-all {
     font-size: 0.8rem;
-    color: #ff4a17;
+    color: #b32d2d;
     font-weight: 600;
     text-transform: uppercase;
     letter-spacing: 0.5px;
@@ -359,8 +359,8 @@
     transition: all 0.2s;
 }
 .btn-filter-year:hover, .btn-filter-year.active {
-    background-color: #ff4a17;
-    border-color: #ff4a17;
+    background-color: #b32d2d;
+    border-color: #b32d2d;
     color: #fff;
 }
 </style>
