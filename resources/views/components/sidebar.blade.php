@@ -90,7 +90,7 @@
                     <i class="uil-users-alt"></i>
                     <span> Clientes </span>
                 </a>
-            </li>
+            </li>            
 
             <li class="side-nav-item">
                 <a data-bs-toggle="collapse" href="#configuracao" aria-expanded="false" aria-controls="sidebarLayouts" class="side-nav-link">
@@ -114,7 +114,46 @@
                     </ul>
                 </div>
             </li>
-            
+            {{-- @if(auth()->user()->nivel_acesso === 'Revenda' && auth()->user()->revenda)
+            <div class="help-box text-white text-center">
+                        <img src="assets/images/svg/help-icon.svg" height="90" alt="Helper Icon Image">
+                        <h5 class="mt-3">Minha loja</h5>
+                        <p class="mb-3">Ver loja</p>
+                        <a href="{{ url('/loja/' . auth()->user()->revenda->slug) }}" class="btn btn-secondary btn-sm">Ver loja</a>
+                    </div>
+            @endif --}}
+            <div class="mt-auto"></div>
+            @if(auth()->user()->nivel_acesso === 'Revenda' && auth()->user()->revenda)
+    <div class="help-box text-white text-center">
+        <div class="mb-2">
+            <i class="mdi mdi-storefront-outline" style="font-size: 2.5rem; opacity: 0.8;"></i>
+        </div>
+        
+        <h5 class="mt-0 small fw-bold text-uppercase" style="letter-spacing: 1px;">Minha Loja</h5>
+        <p class="mb-2 small opacity-75">Confira como os clientes veem sua loja</p>
+        
+        <a href="{{ url('/loja/' . auth()->user()->revenda->slug) }}" 
+           target="_blank" 
+           class="btn btn-sm btn-light fw-bold shadow-sm px-3">
+            <i class="mdi mdi-open-in-new me-1"></i> Acessar Loja
+        </a>
+    </div>
+@endif
+
+<style>
+    /* Ajuste para o Sidebar do Alcecar */
+    .help-box {
+        background: rgba(255, 255, 255, 0.07); /* Fundo sutil para o sidebar dark */
+        margin: 15px;
+        padding: 20px 10px;
+        border-radius: 8px;
+        border: 1px solid rgba(255, 255, 255, 0.1);
+    }
+    /* Se o sidebar for Laranja Alcecar */
+    .leftside-menu-dark .help-box {
+        background: #ff4a17; /* Cor sólida caso queira destaque total */
+    }
+</style>
             
         </ul>
     </div>

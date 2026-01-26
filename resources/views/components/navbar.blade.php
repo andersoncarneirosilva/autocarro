@@ -151,13 +151,7 @@ observer.observe(document.body, { childList: true, subtree: true });
 
             {{-- Notificações --- HABILITAR notificaçoes.js --}}
             {{-- Notificações --- HABILITAR script logo acima nessa pagina --}}
-            @if(auth()->user()->nivel_acesso === 'Revenda' && auth()->user()->revenda)
-    <div class="p-3">
-        <a href="{{ url('/loja/' . auth()->user()->revenda->slug) }}" target="_blank" class="btn btn-outline-primary btn-sm w-100">
-            <i class="fa fa-external-link-alt"></i> Visualizar Minha Loja
-        </a>
-    </div>
-@endif
+            
             <li class="dropdown notification-list">
                 <a class="nav-link dropdown-toggle arrow-none" data-bs-toggle="dropdown" href="#" role="button" aria-haspopup="false" aria-expanded="false">
                     <i class="ri-notification-3-line font-22"></i>

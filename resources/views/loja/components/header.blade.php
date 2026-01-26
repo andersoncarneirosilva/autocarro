@@ -40,11 +40,10 @@
 </style>
 
 
-
 <header 
   id="header" 
   class="header d-flex align-items-center fixed-top 
-  {{ request()->routeIs('loja.index') ? 'header-transparent' : 'header-solid' }}">
+  {{ (request()->is('/') || (request()->is('loja/*') && !Str::contains(request()->url(), '/veiculo/'))) ? 'header-transparent' : 'header-solid' }}">
 
     <div class="container-fluid container-xl position-relative d-flex align-items-center justify-content-between">
 
