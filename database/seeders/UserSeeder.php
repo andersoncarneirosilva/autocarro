@@ -24,14 +24,14 @@ class UserSeeder extends Seeder
     ]);
 
     // Usuário Pedro
-    User::create([
-        'name' => 'Pedro',
-        'email' => 'alcemar@gmail.com',
-        'CPF' => '000.000.000-00',
-        'telefone' => '(51)9.9999.9999',
-        'nivel_acesso' => 'Revenda',
-        'password' => bcrypt('12345678'),
-        'status' => 'Ativo',
-    ]);
+    // User::create([
+    //     'name' => 'Pedro',
+    //     'email' => 'alcemar@gmail.com',
+    //     'CPF' => '000.000.000-00',
+    //     'telefone' => '(51)9.9999.9999',
+    //     'nivel_acesso' => 'Revenda',
+    //     'password' => bcrypt('12345678'),
+    //     'status' => 'Ativo',
+    // ]);
 }
 }
