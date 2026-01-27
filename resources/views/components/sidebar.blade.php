@@ -113,6 +113,9 @@
                         <li>
                             <a href="{{ route('configuracoes.index') }}">Procuração</a>
                         </li>
+                        <li>
+                            <a href="{{ route('configuracoes.solicitacao.indexAtpve') }}">Solicitação ATPVe</a>
+                        </li>
                         @can('access-admin') 
                         <li>
                             <a href="{{ route('users.index') }}">Usuários</a>

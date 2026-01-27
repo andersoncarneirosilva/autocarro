@@ -35,6 +35,7 @@ use App\Http\Controllers\RevendaPublicaController;
 use App\Http\Controllers\ModeloProcuracaoController;
 use App\Http\Controllers\PartiularController;
 use App\Http\Controllers\MultaController;
+use App\Http\Controllers\SolicitacaoController;
 
 use Illuminate\Support\Facades\Route;
 use Livewire\Livewire;
@@ -109,8 +110,6 @@ Route::post('/chat/mark-as-read', [ChatController::class, 'markAsRead']);
     Route::post('/produtos', [ItemController::class, 'store'])->name('produtos.store');
 
     Route::get('/planos', [PaymentController::class, 'index'])->name('planos.index');
-    // Route::get('/pedidos/create', [PedidoController::class, 'create'])->name('pedidos.create');
-    // Route::post('/pedidos', [PedidoController::class, 'store'])->name('pedidos.store');
 
     Route::get('/pagamento-confirmado', function () {
         return view('pagamentos.sucesso'); // Retorna a view correta
@@ -138,12 +137,6 @@ Route::post('/chat/mark-as-read', [ChatController::class, 'markAsRead']);
 
     Route::post('/upload/temp', [AnuncioController::class, 'temp'])->name('upload.temp');
 
-
-
-    
-
-
-
     // DASHBOARD
     Route::get('/dashboard', [DashController::class, 'index'])->name('dashboard.index');
 
@@ -153,12 +146,6 @@ Route::post('/chat/mark-as-read', [ChatController::class, 'markAsRead']);
     Route::get('/perfil/{id}/edit', [PerfilController::class, 'edit'])->name('perfil.edit');
     Route::get('/perfil', [PerfilController::class, 'index'])->name('perfil.index');
 
-    // DOCUMENTOS
-    // Route::post('documentos/gerarProc/{id}/{doc}', [DocumentosController::class, 'gerarProc'])->name('documentos.gerarProc');
-    // Route::get('/documentos/{id}', [DocumentosController::class, 'show'])->name('documentos.show');
-    // Route::delete('/documentos/{id}', [DocumentosController::class, 'destroy'])->name('documentos.destroy');
-    // Route::get('/documentos', [DocumentosController::class, 'index'])->name('documentos.index');
-    // Route::post('/documentos', [DocumentosController::class, 'store'])->name('documentos.store');
 
     Route::put('/calendar/update/{id}', [CalendarController::class, 'update']);
     Route::put('/calendar/move/{id}', [CalendarController::class, 'update']);
@@ -173,13 +160,7 @@ Route::post('/chat/mark-as-read', [ChatController::class, 'markAsRead']);
     Route::post('/procuracoes', [ProcuracaoController::class, 'store'])->name('procuracoes.store');
 
     Route::post('/outorgados/store-or-update', [ConfiguracoesController::class, 'storeOrUpdate'])->name('outorgados.storeOrUpdate');
-    Route::get('/configuracoes/{id}', [ConfiguracoesController::class, 'show'])->name('configuracoes.show');
-    Route::delete('/configuracoes/{id}', [ConfiguracoesController::class, 'destroy'])->name('configuracoes.destroy');
-    Route::put('/configuracoes/{id}', [ConfiguracoesController::class, 'update'])->name('configuracoes.update');
-    Route::get('/configuracoes/create', [ConfiguracoesController::class, 'create'])->name('configuracoes.create');
-    Route::get('/configuracoes', [ConfiguracoesController::class, 'index'])->name('configuracoes.index');
-    Route::post('/configuracoes', [ConfiguracoesController::class, 'store'])->name('configuracoes.store');
-    Route::post('/configuracoes/gerarProc/{id}', [ConfiguracoesController::class, 'gerarProc'])->name('configuracoes.gerarProc');
+    
 
     Route::get('/outorgados/{id}', [OutorgadoController::class, 'show'])->name('outorgados.show');
     Route::put('/outorgados/{id}', [OutorgadoController::class, 'update'])->name('outorgados.update');
@@ -230,75 +211,6 @@ Route::post('/chat/mark-as-read', [ChatController::class, 'markAsRead']);
     Route::post('/cidades', [CidadeController::class, 'store'])->name('cidades.store');
     Route::get('/cidades', [CidadeController::class, 'index'])->name('cidades.index');
 
-    Route::get('/ordensdeservicos/buscarservicos', [OrdemController::class, 'buscarServicos'])->name('ordensdeservicos.buscarservicos');
-    Route::get('/ordensdeservicos/buscar', [OrdemController::class, 'buscarClientes'])->name('ordensdeservicos.buscar');
-    Route::get('/ordensdeservicos', [OrdemController::class, 'index'])->name('ordensdeservicos.index');
-
-
-    Route::get('/ajuda', function () {
-        return view('ajuda.index'); // Retorna a view ajuda.blade.php
-    })->name('ajuda.index');
-
-    // Route::get('/ordem-servico/{id}/rel-ordem', [OrdemController::class, 'gerarPDFOrdemServico'])->name('rel-ordem');
-    // Route::delete('/ordensdeservicos/{id}', [OrdemController::class, 'destroy'])->name('ordensdeservicos.destroy');
-    // Route::get('/ordensdeservicos/{id}/marcar-pago', [OrdemController::class, 'marcarpago'])->name('ordensdeservicos.marcarpago');
-    // Route::put('/ordensdeservicos/{id}', [OrdemController::class, 'update'])->name('ordensdeservicos.update');
-    // Route::get('/ordensdeservicos/{id}/edit', [OrdemController::class, 'edit'])->name('ordensdeservicos.edit');
-    // Route::get('/ordensdeservicos', [OrdemController::class, 'index'])->name('ordensdeservicos.index');
-    // Route::get('/ordensdeservicos/create', [OrdemController::class, 'create'])->name('ordensdeservicos.create');
-    // Route::post('/ordensdeservicos', [OrdemController::class, 'store'])->name('ordensdeservicos.store');
-    // Route::get('/ordensdeservicos/{id}', [OrdemController::class, 'show'])->name('ordensdeservicos.show');
-
-    // Route::resource('ordensdeservicos', OrdemController::class);
-
-    // DOC RAPIDO
-
-    // Route::get('/estoque/create-atpve', [EstoqueController::class, 'createAtpve'])->name('estoque.create-atpve');
-
-    // Route::get('/estoque/{id}', [EstoqueController::class, 'show'])->name('estoque.show');
-    // Route::put('/estoque/{id}', [EstoqueController::class, 'update'])->name('estoque.update');
-    // Route::delete('/estoque/{id}', [EstoqueController::class, 'destroy'])->name('estoque.destroy');
-    // Route::get('/estoque/create', [EstoqueController::class, 'create'])->name('estoque.create');
-    // Route::post('/estoque/store-atpve/{id}', [EstoqueController::class, 'storeAtpve'])->name('estoque.store_atpve');
-
-    // Route::post('/estoque', [EstoqueController::class, 'store'])->name('estoque.store');
-    // Route::get('/estoque', [EstoqueController::class, 'index'])->name('estoque.index');
-
-
-
-//     Route::delete('/veiculos/enviar_email/{id}', [VeiculoController::class, 'enviarEmail'])->name('veiculos.enviar_email');
-
-//     Route::post('/veiculos/{veiculo}/fotos', [\App\Http\Controllers\VeiculoController::class, 'adicionarFotos'])->name('veiculos.adicionarFotos');
-// Route::delete('/veiculos/{veiculo}/foto', [\App\Http\Controllers\VeiculoController::class, 'removerFoto'])->name('veiculos.removerFoto');
-
-//     Route::delete('/veiculos/excluir_atpve_assinado/{id}', [VeiculoController::class, 'destroyAtpveAssinado'])->name('veiculos.excluir_atpve_assinado');
-//     Route::delete('/veiculos/excluir_proc_assinado/{id}', [VeiculoController::class, 'destroyProcAssinado'])->name('veiculos.excluir_proc_assinado');
-//     Route::delete('/veiculos/excluir_atpve/{id}', [VeiculoController::class, 'destroyAtpve'])->name('veiculos.excluir_atpve');
-//     Route::delete('/veiculos/excluir_proc/{id}', [VeiculoController::class, 'destroyProc'])->name('veiculos.excluir_proc');
-//     Route::delete('/veiculos/excluir_doc/{id}', [VeiculoController::class, 'destroyDoc'])->name('veiculos.excluir_doc');
-
-//     // ATUALIZAR CRLV
-//     Route::put('/veiculos/store-crlv/{id}', [VeiculoController::class, 'updateCrlv'])->name('veiculos.update-crlv');
-
-    
-//     Route::post('/veiculos/store-proc/{id}', [VeiculoController::class, 'storeProc'])->name('veiculos.store-proc');
-//     Route::post('/veiculos/store-atpve/{id}', [VeiculoController::class, 'storeAtpve'])->name('veiculos.store-atpve');
-//     // Route::get('/veiculos/create-atpve', [VeiculoController::class, 'createAtpve'])->name('veiculos.create-atpve');
-
-//     Route::put('/veiculos/desarquivar/{id}', [VeiculoController::class, 'desarquivar'])->name('veiculos.desarquivar');
-//     Route::put('/veiculos/arquivar/{id}', [VeiculoController::class, 'arquivar'])->name('veiculos.arquivar');
-//     Route::delete('/veiculos/{id}', [VeiculoController::class, 'destroy'])->name('veiculos.destroy');
-
-//     Route::put('/veiculos/update/{id}', [VeiculoController::class, 'update'])->name('veiculos.update');
-//     Route::get('/veiculos/edit/{id}', [VeiculoController::class, 'edit'])->name('veiculos.edit');
-    
-//     Route::get('/veiculos/arquivados', [VeiculoController::class, 'indexArquivados'])->name('veiculos.arquivados');
-//     Route::get('/veiculos/create-proc-manual', [VeiculoController::class, 'createProcManual'])->name('veiculos.create-proc-manual');
-
-//     Route::get('/veiculos/create', [VeiculoController::class, 'create'])->name('veiculos.create');
-//     Route::post('/veiculos/store-proc-manual', [VeiculoController::class, 'storeProcManual'])->name('veiculos.store-proc-manual');
-//     Route::post('/veiculos', [VeiculoController::class, 'store'])->name('veiculos.store');
-//     Route::get('/veiculos/show/{id}', [VeiculoController::class, 'show'])->name('veiculos.show');
 
     Route::get('/modeloprocs/{id}', [ModeloProcuracoesController::class, 'show'])->name('modeloprocs.show');
     Route::put('/modeloprocs/{id}', [ModeloProcuracoesController::class, 'update'])->name('modeloprocs.update');
@@ -310,17 +222,24 @@ Route::post('/chat/mark-as-read', [ChatController::class, 'markAsRead']);
     Route::post('/modeloprocuracoes/confirm/{id}', [ModeloProcuracoesController::class, 'confirm'])->name('modeloprocuracoes.confirm');
 
     // ROTA PARA A PÁGINA DE CONFIGURAÇÕES (Index e Salvar Modelo)
-Route::get('/configuracoes', [ModeloProcuracaoController::class, 'index'])->name('configuracoes.index');
 Route::post('/modelo-procuracoes/store', [ModeloProcuracaoController::class, 'store'])->name('modeloprocuracao.store');
 Route::get('/modeloprocs/{id}', [ModeloProcuracaoController::class, 'show'])->name('modeloprocuracoes.show');
 
 Route::prefix('configuracoes')->group(function () {
+    // Página Principal de Configurações
     Route::get('/', [ConfiguracoesController::class, 'index'])->name('configuracoes.index');
     
-    // CRUD do Modelo de Procuração
+    // --- MÓDULO: PROCURAÇÃO ---
     Route::post('/procuracao/salvar', [ConfiguracoesController::class, 'saveProcuracao'])->name('configuracoes.procuracao.save');
     Route::get('/procuracao/detalhes/{id}', [ConfiguracoesController::class, 'showProcuracao'])->name('configuracoes.procuracao.show');
     Route::delete('/procuracao/excluir/{id}', [ConfiguracoesController::class, 'deleteProcuracao'])->name('configuracoes.procuracao.delete');
+    Route::post('/procuracao/gerar/{id}', [ConfiguracoesController::class, 'gerarProc'])->name('configuracoes.gerarProc');
+
+    // --- MÓDULO: SOLICITAÇÃO ATPVe ---
+    // Designer / Index da Solicitação
+    Route::get('/solicitacao', [ConfiguracoesController::class, 'indexAtpve'])->name('configuracoes.solicitacao.indexAtpve');
+    // Salvar o conteúdo do Designer
+    Route::post('/solicitacao/salvar', [ConfiguracoesController::class, 'saveAtpve'])->name('configuracoes.solicitacao.save');
 });
 
 

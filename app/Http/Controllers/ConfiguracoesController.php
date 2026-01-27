@@ -21,6 +21,15 @@ class ConfiguracoesController extends Controller
         return view('configuracoes.index', compact('modeloProc', 'outorgados'));
     }
 
+   public function indexAtpve()
+{
+    $modeloAtpve = \App\Models\ModeloAtpve::where('user_id', auth()->id())->first();
+    $outorgados = \App\Models\Outorgado::where('user_id', auth()->id())->get();
+    
+    // Certifique-se de que o caminho da view está correto
+    return view('configuracoes.solicitacoes', compact('modeloAtpve', 'outorgados'));
+}
+
     /**
      * Salva ou Atualiza o modelo (Create/Update)
      */
@@ -96,4 +105,24 @@ class ConfiguracoesController extends Controller
             return redirect()->back()->with('error', 'Erro ao excluir.');
         }
     }
+
+    public function saveAtpve(Request $request)
+{
+    // Validação básica
+    $request->validate([
+        'conteudo' => 'required',
+        'cidade' => 'required'
+    ]);
+
+    // Salva ou atualiza o modelo do usuário logado
+    \App\Models\ModeloAtpve::updateOrCreate(
+        ['user_id' => auth()->id()],
+        [
+            'conteudo' => $request->conteudo,
+            'cidade' => $request->cidade
+        ]
+    );
+
+    return back()->with('success', 'Modelo de Solicitação ATPVe atualizado com sucesso!');
+}
 }
