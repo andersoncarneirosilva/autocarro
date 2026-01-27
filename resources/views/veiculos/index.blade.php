@@ -91,12 +91,12 @@ document.addEventListener('DOMContentLoaded', function () {
                     <table class="table table-custom table-nowrap table-hover mb-0">
                         <thead class="table-dark">
                             <tr>
-                                <th>Placa</th>
                                 <th>Marca/Modelo</th>
+                                <th>Placa</th>
                                 <th>Ano/Modelo</th>
                                 <th>Cor</th>
                                 <th>KM</th>
-                                <th>Câmbio</th>
+                                <th>Valor</th>
                                 <th>Doc</th>
                                 <th class="text-end">Ações</th>
                             </tr>
@@ -133,20 +133,33 @@ document.addEventListener('DOMContentLoaded', function () {
                                 </div>
 
                                 <div>
-                                    <span class="fw-bold d-block">{{ $veiculo->placa }}</span>
-                                    <small class="text-muted">{{ $veiculo->tipo }}</small>
+                                    <span class="fw-bold d-block">{{ $veiculo->marca }}</span>
+                                    <small class="text-muted">{{ $veiculo->modelo }}</small>
+                                    
                                 </div>
                             </td>  
                             <td>
                                 <div>
-                                    <span class="fw-bold d-block">{{ $veiculo->marca }}</span>
-                                    <small class="text-muted">{{ $veiculo->modelo }}</small>
+                                    <span class="fw-bold d-block">{{ $veiculo->placa }}</span>
                                 </div>
                             </td>
                             <td>{{ $veiculo->ano }}</td>
                             <td>{{ $veiculo->cor }}</td>
                             <td>{{ $veiculo->kilometragem ?? 'Não consta' }}</td>
-                            <td>{{ $veiculo->cambio ?? 'Não consta' }}</td>
+                            <td>
+                                @if($veiculo->valor_oferta > 0)
+                                        <small class="text-muted d-block" style="text-decoration: line-through; font-size: 0.75rem;">
+                                            R$ {{ number_format($veiculo->valor, 2, ',', '.') }}
+                                        </small>
+                                        <span class="fw-bold text-danger">
+                                            R$ {{ number_format($veiculo->valor_oferta, 2, ',', '.') }}
+                                        </span>
+                                    @else
+                                        <span class="fw-bold text-dark">
+                                            R$ {{ number_format($veiculo->valor ?? 0, 2, ',', '.') }}
+                                        </span>
+                                    @endif
+                            </td>
 
                             <td>
                                     @if($veiculo->crv === "***")
@@ -195,15 +208,17 @@ document.addEventListener('DOMContentLoaded', function () {
                     </table>
                 </div>
 
-                {{-- Paginação --}}
-                <div class="mt-3 d-flex justify-content-between align-items-center">
-                    <p class="text-muted font-13 mb-0">
-                        Mostrando {{ $quantidadePaginaAtual }} de {{ $veiculos->total() }} veículos ativos.
-                    </p>
-                    <div>
-                        {{ $veiculos->links() }}
-                    </div>
-                </div>
+                {{-- Paginação Customizada Alcecar --}}
+<div class="mt-4 d-flex justify-content-between align-items-center">
+    <div class="text-muted font-13">
+        Mostrando de <b>{{ $veiculos->firstItem() }}</b> até <b>{{ $veiculos->lastItem() }}</b> 
+        de um total de <b>{{ $veiculos->total() }}</b> veículos.
+    </div>
+    <nav>
+        {{-- Aqui chamamos o seu arquivo específico --}}
+        {{ $veiculos->appends(request()->query())->links('components.pagination') }}
+    </nav>
+</div>
 
                 @elseif($veiculos->total() == 0)
                     <div class="alert alert-info bg-transparent text-info" role="alert">
@@ -248,5 +263,6 @@ function confirmDelete(id) {
     });
 }
 </script>
+
 
 @endsection

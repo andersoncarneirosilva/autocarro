@@ -69,43 +69,20 @@
     </div>
 
     <div class="col-md-4">
-        @if($dadosFipe)
-            <div class="card widget-flat border-success border">
-                <div class="card-body">
-                    <div class="float-end">
-                        <i class="mdi mdi-calculator widget-icon bg-success-lighten text-success"></i>
-                    </div>
-                    <h5 class="text-muted fw-normal mt-0" title="{{ $dadosFipe['referenceMonth'] }}">Tabela FIPE</h5>
-                    <h3 class="mt-3 mb-2 text-success">{{ $dadosFipe['price'] }}</h3>
-                    <p class="mb-0 text-muted">
-                        @php
-                            $valorVenda = $veiculo->valor_oferta > 0 ? $veiculo->valor_oferta : $veiculo->valor;
-                            $valorFipe = (float) str_replace(['R$', '.', ','], ['', '', '.'], $dadosFipe['price']);
-                            $diff = $valorVenda - $valorFipe;
-                            $percent = ($diff / $valorFipe) * 100;
-                        @endphp
-                        <span class="{{ $diff > 0 ? 'text-danger' : 'text-success' }} me-2">
-                            <i class="mdi {{ $diff > 0 ? 'mdi-arrow-up' : 'mdi-arrow-down' }}"></i> 
-                            {{ number_format(abs($percent), 1) }}% vs FIPE
-                        </span>
-                    </p>
-                </div>
+    <div class="card widget-flat border-success border">
+        <div class="card-body">
+            <div class="float-end">
+                <i class="mdi mdi-calculator widget-icon bg-success-lighten text-success"></i>
             </div>
-        @else
-            <div class="card widget-flat border-secondary border">
-                <div class="card-body">
-                    <div class="float-end">
-                        <i class="mdi mdi-alert-circle-outline widget-icon bg-secondary-lighten text-secondary"></i>
-                    </div>
-                    <h5 class="text-muted fw-normal mt-0">Tabela FIPE</h5>
-                    <h3 class="mt-3 mb-2 text-muted">FIPE não encontrada</h3>
-                    <p class="mb-0 text-muted">
-                        <span class="text-nowrap">Atualize a Marca, Modelo e versão do veículo</span>
-                    </p>
-                </div>
-            </div>
-        @endif
+            <h5 class="text-muted fw-normal mt-0">Tabela FIPE</h5>
+            <h3 class="mt-3 mb-2 text-success" id="fipe-price">---</h3>
+            <p class="mb-0 text-muted">
+                <span id="fipe-comparison"></span>
+                <small class="d-block text-truncate" id="fipe-info">Carregando...</small>
+            </p>
+        </div>
     </div>
+</div>
 </div>
 
 @if($dadosFipe)

@@ -63,7 +63,7 @@
                 <h3 class="mt-3 mb-3">{{ $totalAtivos }}</h3>
                 <p class="mb-0 text-muted">
                     <span class="text-success me-2"><i class="mdi mdi-check-circle-outline"></i> Ativo</span>
-                    <span class="text-nowrap">Disponíveis</span>
+                    {{-- <span class="text-nowrap">Disponíveis</span> --}}
                 </p>
             </div>
         </div>
@@ -79,7 +79,7 @@
                 <h3 class="mt-3 mb-3">{{ $totalClientes }}</h3>
                 <p class="mb-0 text-muted">
                     <span class="text-info me-2"><i class="mdi mdi-account-plus"></i> Base</span>
-                    <span class="text-nowrap">Cadastros totais</span>
+                    {{-- <span class="text-nowrap">Cadastros totais</span> --}}
                 </p>
             </div>
         </div>
@@ -95,7 +95,7 @@
                 <h3 class="mt-3 mb-3">{{ $totalArquivados }}</h3>
                 <p class="mb-0 text-muted">
                     <span class="text-warning me-2"><i class="mdi mdi-history"></i> Histórico</span>
-                    <span class="text-nowrap">Fora de estoque</span>
+                    {{-- <span class="text-nowrap">Fora de estoque</span> --}}
                 </p>
             </div>
         </div>
@@ -111,7 +111,7 @@
                 <h3 class="mt-3 mb-3">R$ {{ number_format($valorEstoque, 2, ',', '.') }}</h3>
                 <p class="mb-0 text-muted">
                     <span class="text-success me-2"><i class="mdi mdi-trending-up"></i> Patrimônio</span>
-                    <span class="text-nowrap">Valor de mercado</span>
+                    {{-- <span class="text-nowrap">Valor de mercado</span> --}}
                 </p>
             </div>
         </div>
@@ -132,8 +132,8 @@
                     <table class="table table-centered table-nowrap table-hover mb-0">
                         <thead class="table-light">
                             <tr>
-                                <th>Veículo / Placa</th>
-                                <th>Proprietário / CPF</th>
+                                <th>Veículo</th>
+                                <th>Placa</th>
                                 <th>Combustível</th>
                                 <th>Ano</th>
                                 <th>Valor</th>
@@ -145,19 +145,50 @@
                             @forelse($ultimosVeiculos as $veiculo)
                             <tr>
                                 <td>
-                                    <div class="d-flex align-items-center">
-                                        @php $images = json_decode($veiculo->images); @endphp
-                                        <img src="{{ isset($images[0]) ? asset('storage/' . $images[0]) : asset('assets/images/no-image.png') }}" 
-                                             alt="veiculo" class="me-3 rounded-circle" height="40" width="40" style="object-fit: cover;">
-                                        <div>
-                                            <h5 class="font-14 my-1 fw-medium">{{ $veiculo->marca }} {{ $veiculo->modelo }}</h5>
-                                            <span class="badge badge-outline-secondary font-11">{{ $veiculo->placa }}</span>
-                                        </div>
-                                    </div>
-                                </td>
+    <div class="d-flex align-items-center">
+        @php 
+            $images = json_decode($veiculo->images); 
+            $inicialPlaca = substr($veiculo->placa, 0, 1);
+        @endphp
+
+        <a href="{{ route('veiculos.show', $veiculo->id) }}" class="me-3 transition-all hover-scale">
+            @if(isset($images[0]))
+                <img src="{{ asset('storage/' . $images[0]) }}" 
+                     alt="veiculo" class="rounded-circle border" height="40" width="40" style="object-fit: cover;">
+            @else
+                <div class="rounded-circle d-flex align-items-center justify-content-center bg-primary-lighten text-primary fw-bold border border-primary-lighten" 
+                     style="width: 40px; height: 40px; min-width: 40px; font-size: 16px;">
+                    {{ strtoupper($inicialPlaca) }}
+                </div>
+            @endif
+        </a>
+
+        <div>
+            <h5 class="font-14 my-1 fw-bold text-dark">
+                <a href="{{ route('veiculos.show', $veiculo->id) }}" class="text-dark">{{ $veiculo->marca }}</a>
+            </h5>
+            <p class="mb-1 mt-0 font-12 text-muted">{{ $veiculo->modelo }}</p>
+            
+        </div>
+    </div>
+</td>
+
+<style>
+    /* Efeito de hover suave para indicar que é clicável */
+    .hover-scale:hover {
+        transform: scale(1.1);
+        display: inline-block;
+    }
+    .transition-all {
+        transition: all 0.2s ease-in-out;
+    }
+    .bg-primary-lighten { 
+        background-color: rgba(114, 124, 245, 0.15) !important; 
+    }
+    .font-10 { font-size: 10px; }
+</style>
                                 <td>
-                                    <div class="text-muted font-13">{{ $veiculo->nome }}</div>
-                                    <div class="font-12"><b>CPF:</b> {{ $veiculo->cpf }}</div>
+                                    <span class="badge badge-outline-secondary font-10 tracking-wider">{{ $veiculo->placa }}</span>
                                 </td>
                                 <td>
                                     @php
@@ -171,8 +202,19 @@
                                     <span class="badge {{ $badgeColor }}">{{ strtoupper($veiculo->combustivel ?? 'N/A') }}</span>
                                 </td>
                                 <td>{{ $veiculo->ano }}</td>
-                                <td>
-                                    <span class="fw-bold">R$ {{ number_format($veiculo->valor ?? 0, 2, ',', '.') }}</span>
+                                <td class="align-middle">
+                                    @if($veiculo->valor_oferta > 0)
+                                        <small class="text-muted d-block" style="text-decoration: line-through; font-size: 0.75rem;">
+                                            R$ {{ number_format($veiculo->valor, 2, ',', '.') }}
+                                        </small>
+                                        <span class="fw-bold text-danger">
+                                            R$ {{ number_format($veiculo->valor_oferta, 2, ',', '.') }}
+                                        </span>
+                                    @else
+                                        <span class="fw-bold text-dark">
+                                            R$ {{ number_format($veiculo->valor ?? 0, 2, ',', '.') }}
+                                        </span>
+                                    @endif
                                 </td>
                                 <td>
                                     @if($veiculo->status == 'Ativo')

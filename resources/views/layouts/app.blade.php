@@ -387,19 +387,24 @@
     
     .btn-action i { line-height: 1; }
 </style>
+
 <style>
-    /* Container que controla a rolagem e o arredondamento externo */
+/* Container principal */
 .table-custom-container {
-    max-height: 550px;
-    overflow-y: auto;
-    overflow-x: auto;
     border: 1px solid #dee2e6;
     border-radius: 0.8rem !important;
     background-color: #ffffff;
     box-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.075);
+    margin-bottom: 20px;
+    
+    /* Ativa o scroll horizontal apenas quando necessário */
+    overflow-x: auto;
+    overflow-y: hidden;
+    
+    /* Suaviza o scroll no mobile */
+    -webkit-overflow-scrolling: touch;
 }
 
-/* Estilização da Tabela */
 .table-custom {
     width: 100%;
     margin-bottom: 0 !important;
@@ -407,53 +412,60 @@
     border-spacing: 0;
 }
 
-/* Cabeçalho Fixo e Estilizado */
+/* Cabeçalho */
 .table-custom thead th {
-    position: sticky;
-    top: 0;
-    z-index: 10;
     background-color: #313a46 !important;
     color: #ffffff !important;
     padding: 15px !important;
-    letter-spacing: 0.5px;
     text-transform: uppercase;
     font-size: 0.75rem;
     font-weight: 600;
     border: none;
-    white-space: nowrap;
+    /* Impede que o título da coluna quebre em várias linhas */
+    white-space: nowrap; 
 }
 
-/* Arredondamento dos cantos superiores do cabeçalho */
-.table-custom thead tr:first-child th:first-child { 
-    border-top-left-radius: 0.8rem; 
-}
-.table-custom thead tr:first-child th:last-child { 
-    border-top-right-radius: 0.8rem; 
-}
-
-/* Estilo das linhas e células */
+/* Células */
 .table-custom tbody td {
     padding: 12px 15px !important;
     vertical-align: middle;
     color: #6c757d;
     border-bottom: 1px solid #f1f3fa;
+    /* Impede que o conteúdo das células se esprema */
+    white-space: nowrap; 
 }
 
-/* Efeito Hover nas linhas */
-.table-custom tbody tr:hover {
-    background-color: #f8f9fa;
+/* --- AJUSTE PARA CELULAR --- */
+@media (max-width: 767px) {
+    .table-custom {
+        /* Define uma largura mínima para a tabela no mobile */
+        /* Isso força o surgimento da barra de scroll horizontal */
+        min-width: 800px; 
+    }
+    
+    .table-custom-container {
+        /* Garante que a borda arredondada não desapareça com o scroll */
+        position: relative;
+    }
 }
 
-/* Barra de rolagem elegante (opcional) */
+/* Personalização da barra de rolagem para não ficar feia no desktop */
 .table-custom-container::-webkit-scrollbar {
-    width: 6px;
-    height: 6px;
+    height: 8px;
+}
+.table-custom-container::-webkit-scrollbar-track {
+    background: #f1f1f1;
+    border-radius: 10px;
 }
 .table-custom-container::-webkit-scrollbar-thumb {
     background: #d1d3e2;
     border-radius: 10px;
 }
+.table-custom-container::-webkit-scrollbar-thumb:hover {
+    background: #b7b9cc;
+}
 </style>
+
 </head>
 
 <body>

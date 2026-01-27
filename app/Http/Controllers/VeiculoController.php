@@ -1443,52 +1443,15 @@ class VeiculoController extends Controller
         $pdf->Line($x, $y + 2, $x + $largura, $y + 2); // Linha sublinhada
     }
 
-    public function show($id)
+   public function show($id)
 {
     $userId = Auth::id();
     $veiculo = $this->model->with('documentos')->where('user_id', $userId)->find($id);
 
     if (!$veiculo) return redirect()->route('veiculos.index');
 
+    // Definimos como null para o Blade saber que não há carregamento prévio via PHP
     $dadosFipe = null;
-
-    try {
-        // 1. Mapear Tipo (cars, motorcycles, trucks)
-        $tipo = match(strtolower($veiculo->tipo)) {
-            'motocicleta', 'moto' => 'motorcycles',
-            'caminhão', 'caminhao' => 'trucks',
-            default => 'cars'
-        };
-
-        // 2. Buscar ID da Marca
-        $marcas = Http::get("https://fipe.parallelum.com.br/api/v2/{$tipo}/brands")->json();
-        $marcaId = collect($marcas)->first(fn($m) => strtoupper($m['name']) == strtoupper($veiculo->marca))['code'] ?? null;
-
-        if ($marcaId) {
-            // 3. Buscar ID do Modelo (Busca por aproximação de nome)
-            $modelos = Http::get("https://fipe.parallelum.com.br/api/v2/{$tipo}/brands/{$marcaId}/models")->json();
-            $modeloId = collect($modelos)->first(function($mod) use ($veiculo) {
-                return str_contains(strtoupper($mod['name']), strtoupper($veiculo->modelo));
-            })['code'] ?? null;
-
-            if ($modeloId) {
-                // 4. Buscar ID do Ano (Ex: 2020-1)
-                $anos = Http::get("https://fipe.parallelum.com.br/api/v2/{$tipo}/brands/{$marcaId}/models/{$modeloId}/years")->json();
-                $anoDesejado = substr($veiculo->ano, 0, 4);
-                $anoId = collect($anos)->first(fn($a) => str_starts_with($a['code'], $anoDesejado))['code'] ?? null;
-
-                if ($anoId) {
-                    // 5. Consulta Final conforme a documentação V2
-                    $response = Http::get("https://fipe.parallelum.com.br/api/v2/{$tipo}/brands/{$marcaId}/models/{$modeloId}/years/{$anoId}");
-                    if ($response->successful()) {
-                        $dadosFipe = $response->json();
-                    }
-                }
-            }
-        }
-    } catch (\Exception $e) {
-        // Silenciar erro para não travar a página
-    }
 
     $clientes = Cliente::where('user_id', $userId)->get();
     $outorgados = Outorgado::where('user_id', $userId)->get();
