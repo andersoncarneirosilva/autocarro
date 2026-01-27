@@ -13,15 +13,25 @@
             position: 'top-end',
             showConfirmButton: false,
             timer: 6000,
-            timerProgressBar: true
+            timerProgressBar: true,
+            didOpen: (toast) => {
+                toast.addEventListener('mouseenter', Swal.stopTimer)
+                toast.addEventListener('mouseleave', Swal.resumeTimer)
+            }
         });
 
         @if (session('success'))
-            Toast.fire({ icon: 'success', title: '{{ session('success') }}' });
+            Toast.fire({ 
+                icon: 'success', 
+                title: '{{ session('success') }}' 
+            });
         @endif
 
         @if (session('error'))
-            Toast.fire({ icon: 'error', title: '{{ session('error') }}' });
+            Toast.fire({ 
+                icon: 'error', 
+                title: '{{ session('error') }}' 
+            });
         @endif
     });
 </script>
@@ -41,18 +51,51 @@
 </div>
 <br>
 
+
 <div class="row">
     <div class="col-xxl-3 col-lg-6">
         <div class="card widget-flat">
             <div class="card-body">
                 <div class="float-end">
-                    <i class="mdi mdi-car widget-icon bg-primary-lighten text-primary"></i>
+                    <i class="mdi mdi-car-multiple widget-icon bg-primary-lighten text-primary"></i>
                 </div>
-                <h5 class="text-muted fw-normal mt-0" title="Total de Veículos Ativos">Estoque Ativo</h5>
-                <h3 class="mt-3 mb-3">#</h3>
+                <h5 class="text-muted fw-normal mt-0" title="Veículos disponíveis">Estoque Ativo</h5>
+                <h3 class="mt-3 mb-3">{{ $totalAtivos }}</h3>
                 <p class="mb-0 text-muted">
-                    <span class="text-success me-2"><i class="mdi mdi-arrow-up-bold"></i> 5.27%</span>
-                    <span class="text-nowrap">Desde o último mês</span>
+                    <span class="text-success me-2"><i class="mdi mdi-check-circle-outline"></i> Ativo</span>
+                    <span class="text-nowrap">Disponíveis</span>
+                </p>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-xxl-3 col-lg-6">
+        <div class="card widget-flat">
+            <div class="card-body">
+                <div class="float-end">
+                    <i class="mdi mdi-account-group widget-icon bg-info-lighten text-info"></i>
+                </div>
+                <h5 class="text-muted fw-normal mt-0" title="Total de clientes">Clientes</h5>
+                <h3 class="mt-3 mb-3">{{ $totalClientes }}</h3>
+                <p class="mb-0 text-muted">
+                    <span class="text-info me-2"><i class="mdi mdi-account-plus"></i> Base</span>
+                    <span class="text-nowrap">Cadastros totais</span>
+                </p>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-xxl-3 col-lg-6">
+        <div class="card widget-flat">
+            <div class="card-body">
+                <div class="float-end">
+                    <i class="mdi mdi-archive-outline widget-icon bg-warning-lighten text-warning"></i>
+                </div>
+                <h5 class="text-muted fw-normal mt-0" title="Veículos arquivados">Arquivados</h5>
+                <h3 class="mt-3 mb-3">{{ $totalArquivados }}</h3>
+                <p class="mb-0 text-muted">
+                    <span class="text-warning me-2"><i class="mdi mdi-history"></i> Histórico</span>
+                    <span class="text-nowrap">Fora de estoque</span>
                 </p>
             </div>
         </div>
@@ -64,82 +107,98 @@
                 <div class="float-end">
                     <i class="mdi mdi-currency-usd widget-icon bg-success-lighten text-success"></i>
                 </div>
-                <h5 class="text-muted fw-normal mt-0" title="Soma total dos valores">Valor do Estoque</h5>
-                <h3 class="mt-3 mb-3">R$ #</h3>
+                <h5 class="text-muted fw-normal mt-0" title="Soma dos preços ativos">Valor em Estoque</h5>
+                <h3 class="mt-3 mb-3">R$ {{ number_format($valorEstoque, 2, ',', '.') }}</h3>
                 <p class="mb-0 text-muted">
-                    <span class="text-nowrap">Capital investido</span>
-                </p>
-            </div>
-        </div>
-    </div>
-
-    <div class="col-xxl-3 col-lg-6">
-        <div class="card widget-flat">
-            <div class="card-body">
-                <div class="float-end">
-                    <i class="mdi mdi-eye-outline widget-icon bg-info-lighten text-info"></i>
-                </div>
-                <h5 class="text-muted fw-normal mt-0" title="Total de visitas em todos os anúncios">Visualizações</h5>
-                <h3 class="mt-3 mb-3">#</h3>
-                <p class="mb-0 text-muted">
-                    <span class="text-primary me-2" style="color: #ff4a17 !important;"><i class="mdi mdi-fire"></i> Engajamento</span>
-                    <span class="text-nowrap">Cliques em anúncios</span>
-                </p>
-            </div>
-        </div>
-    </div>
-
-    <div class="col-xxl-3 col-lg-6">
-        <div class="card widget-flat">
-            <div class="card-body">
-                <div class="float-end">
-                    <i class="mdi mdi-tag-outline widget-icon bg-warning-lighten text-warning"></i>
-                </div>
-                <h5 class="text-muted fw-normal mt-0" title="Veículos com valor de oferta preenchido">Em Promoção</h5>
-                <h3 class="mt-3 mb-3">#</h3>
-                <p class="mb-0 text-muted">
-                    <span class="text-danger me-2"><i class="mdi mdi-trending-down"></i> Preço baixo</span>
-                    <span class="text-nowrap">Veículos com desconto</span>
+                    <span class="text-success me-2"><i class="mdi mdi-trending-up"></i> Patrimônio</span>
+                    <span class="text-nowrap">Valor de mercado</span>
                 </p>
             </div>
         </div>
     </div>
 </div>
+
+
 <div class="row">
-    <div class="col-xl-8 col-lg-12">
+    <div class="col-12">
         <div class="card">
             <div class="card-body">
                 <div class="d-flex justify-content-between align-items-center mb-3">
-                    <h4 class="header-title">Veículos Mais Vistos (Top Performance)</h4>
-                    <a href="{{ route('veiculos.index') }}" class="btn btn-sm btn-light">Ver todos</a>
+                    <h4 class="header-title">Gestão de Frota</h4>
+                    <a href="{{ route('veiculos.index') }}" class="btn btn-sm btn-primary">Ver todos</a>
                 </div>
 
                 <div class="table-responsive">
                     <table class="table table-centered table-nowrap table-hover mb-0">
                         <thead class="table-light">
                             <tr>
-                                <th>Veículo</th>
-                                <th>Preço</th>
-                                <th>Visitas</th>
+                                <th>Veículo / Placa</th>
+                                <th>Proprietário / CPF</th>
+                                <th>Combustível</th>
+                                <th>Ano</th>
+                                <th>Valor</th>
                                 <th>Status</th>
-                                <th style="width: 80px;">Ação</th>
+                                <th style="width: 100px;" class="text-center">Ações</th>
                             </tr>
                         </thead>
                         <tbody>
-                           
+                            @forelse($ultimosVeiculos as $veiculo)
+                            <tr>
+                                <td>
+                                    <div class="d-flex align-items-center">
+                                        @php $images = json_decode($veiculo->images); @endphp
+                                        <img src="{{ isset($images[0]) ? asset('storage/' . $images[0]) : asset('assets/images/no-image.png') }}" 
+                                             alt="veiculo" class="me-3 rounded-circle" height="40" width="40" style="object-fit: cover;">
+                                        <div>
+                                            <h5 class="font-14 my-1 fw-medium">{{ $veiculo->marca }} {{ $veiculo->modelo }}</h5>
+                                            <span class="badge badge-outline-secondary font-11">{{ $veiculo->placa }}</span>
+                                        </div>
+                                    </div>
+                                </td>
+                                <td>
+                                    <div class="text-muted font-13">{{ $veiculo->nome }}</div>
+                                    <div class="font-12"><b>CPF:</b> {{ $veiculo->cpf }}</div>
+                                </td>
+                                <td>
+                                    @php
+                                        $badgeColor = match(strtolower($veiculo->combustivel)) {
+                                            'gasolina' => 'bg-info',
+                                            'flex' => 'bg-primary',
+                                            'diesel' => 'bg-warning',
+                                            default => 'bg-secondary'
+                                        };
+                                    @endphp
+                                    <span class="badge {{ $badgeColor }}">{{ strtoupper($veiculo->combustivel ?? 'N/A') }}</span>
+                                </td>
+                                <td>{{ $veiculo->ano }}</td>
+                                <td>
+                                    <span class="fw-bold">R$ {{ number_format($veiculo->valor ?? 0, 2, ',', '.') }}</span>
+                                </td>
+                                <td>
+                                    @if($veiculo->status == 'Ativo')
+                                        <span class="badge bg-success-lighten text-success"><i class="mdi mdi-circle font-10"></i> Ativo</span>
+                                    @else
+                                        <span class="badge bg-secondary-lighten text-secondary">Arquivado</span>
+                                    @endif
+                                </td>
+                                <td class="text-center">
+                                    <a href="{{ route('veiculos.show', $veiculo->id) }}" class="action-icon text-info" title="Visualizar"> 
+                                        <i class="mdi mdi-eye-outline"></i>
+                                    </a>
+                                </td>
+                            </tr>
+                            @empty
+                            <tr>
+                                <td colspan="7" class="text-center p-4 text-muted">Nenhum registro encontrado no Alcecar.</td>
+                            </tr>
+                            @endforelse
                         </tbody>
                     </table>
-                </div> </div> </div> </div> <div class="col-xl-4 col-lg-12">
-        <div class="card">
-            <div class="card-body">
-                <h4 class="header-title mb-3">Distribuição por Combustível</h4>
-                
-                <div id="donut-combustivel" class="apex-charts" style="min-height: 320px;"></div>
-                
-                <div class="mt-3 text-center">
-                    <p class="text-muted font-13 mb-0">Total de variedades: <strong>/strong></p>
-                </div>
-            </div> </div> </div> </div>
+                </div> 
+            </div> 
+        </div> 
+    </div> 
+</div>
 
 
 

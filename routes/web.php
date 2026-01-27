@@ -265,39 +265,39 @@ Route::post('/chat/mark-as-read', [ChatController::class, 'markAsRead']);
 
 
 
-    Route::delete('/veiculos/enviar_email/{id}', [VeiculoController::class, 'enviarEmail'])->name('veiculos.enviar_email');
+//     Route::delete('/veiculos/enviar_email/{id}', [VeiculoController::class, 'enviarEmail'])->name('veiculos.enviar_email');
 
-    Route::post('/veiculos/{veiculo}/fotos', [\App\Http\Controllers\VeiculoController::class, 'adicionarFotos'])->name('veiculos.adicionarFotos');
-Route::delete('/veiculos/{veiculo}/foto', [\App\Http\Controllers\VeiculoController::class, 'removerFoto'])->name('veiculos.removerFoto');
+//     Route::post('/veiculos/{veiculo}/fotos', [\App\Http\Controllers\VeiculoController::class, 'adicionarFotos'])->name('veiculos.adicionarFotos');
+// Route::delete('/veiculos/{veiculo}/foto', [\App\Http\Controllers\VeiculoController::class, 'removerFoto'])->name('veiculos.removerFoto');
 
-    Route::delete('/veiculos/excluir_atpve_assinado/{id}', [VeiculoController::class, 'destroyAtpveAssinado'])->name('veiculos.excluir_atpve_assinado');
-    Route::delete('/veiculos/excluir_proc_assinado/{id}', [VeiculoController::class, 'destroyProcAssinado'])->name('veiculos.excluir_proc_assinado');
-    Route::delete('/veiculos/excluir_atpve/{id}', [VeiculoController::class, 'destroyAtpve'])->name('veiculos.excluir_atpve');
-    Route::delete('/veiculos/excluir_proc/{id}', [VeiculoController::class, 'destroyProc'])->name('veiculos.excluir_proc');
-    Route::delete('/veiculos/excluir_doc/{id}', [VeiculoController::class, 'destroyDoc'])->name('veiculos.excluir_doc');
+//     Route::delete('/veiculos/excluir_atpve_assinado/{id}', [VeiculoController::class, 'destroyAtpveAssinado'])->name('veiculos.excluir_atpve_assinado');
+//     Route::delete('/veiculos/excluir_proc_assinado/{id}', [VeiculoController::class, 'destroyProcAssinado'])->name('veiculos.excluir_proc_assinado');
+//     Route::delete('/veiculos/excluir_atpve/{id}', [VeiculoController::class, 'destroyAtpve'])->name('veiculos.excluir_atpve');
+//     Route::delete('/veiculos/excluir_proc/{id}', [VeiculoController::class, 'destroyProc'])->name('veiculos.excluir_proc');
+//     Route::delete('/veiculos/excluir_doc/{id}', [VeiculoController::class, 'destroyDoc'])->name('veiculos.excluir_doc');
 
-    // ATUALIZAR CRLV
-    Route::put('/veiculos/store-crlv/{id}', [VeiculoController::class, 'updateCrlv'])->name('veiculos.update-crlv');
+//     // ATUALIZAR CRLV
+//     Route::put('/veiculos/store-crlv/{id}', [VeiculoController::class, 'updateCrlv'])->name('veiculos.update-crlv');
 
     
-    Route::post('/veiculos/store-proc/{id}', [VeiculoController::class, 'storeProc'])->name('veiculos.store-proc');
-    Route::post('/veiculos/store-atpve/{id}', [VeiculoController::class, 'storeAtpve'])->name('veiculos.store-atpve');
-    // Route::get('/veiculos/create-atpve', [VeiculoController::class, 'createAtpve'])->name('veiculos.create-atpve');
+//     Route::post('/veiculos/store-proc/{id}', [VeiculoController::class, 'storeProc'])->name('veiculos.store-proc');
+//     Route::post('/veiculos/store-atpve/{id}', [VeiculoController::class, 'storeAtpve'])->name('veiculos.store-atpve');
+//     // Route::get('/veiculos/create-atpve', [VeiculoController::class, 'createAtpve'])->name('veiculos.create-atpve');
 
-    Route::put('/veiculos/desarquivar/{id}', [VeiculoController::class, 'desarquivar'])->name('veiculos.desarquivar');
-    Route::put('/veiculos/arquivar/{id}', [VeiculoController::class, 'arquivar'])->name('veiculos.arquivar');
-    Route::delete('/veiculos/{id}', [VeiculoController::class, 'destroy'])->name('veiculos.destroy');
+//     Route::put('/veiculos/desarquivar/{id}', [VeiculoController::class, 'desarquivar'])->name('veiculos.desarquivar');
+//     Route::put('/veiculos/arquivar/{id}', [VeiculoController::class, 'arquivar'])->name('veiculos.arquivar');
+//     Route::delete('/veiculos/{id}', [VeiculoController::class, 'destroy'])->name('veiculos.destroy');
 
-    Route::put('/veiculos/update/{id}', [VeiculoController::class, 'update'])->name('veiculos.update');
-    Route::get('/veiculos/edit/{id}', [VeiculoController::class, 'edit'])->name('veiculos.edit');
+//     Route::put('/veiculos/update/{id}', [VeiculoController::class, 'update'])->name('veiculos.update');
+//     Route::get('/veiculos/edit/{id}', [VeiculoController::class, 'edit'])->name('veiculos.edit');
     
-    Route::get('/veiculos/arquivados', [VeiculoController::class, 'indexArquivados'])->name('veiculos.arquivados');
-    Route::get('/veiculos/create-proc-manual', [VeiculoController::class, 'createProcManual'])->name('veiculos.create-proc-manual');
+//     Route::get('/veiculos/arquivados', [VeiculoController::class, 'indexArquivados'])->name('veiculos.arquivados');
+//     Route::get('/veiculos/create-proc-manual', [VeiculoController::class, 'createProcManual'])->name('veiculos.create-proc-manual');
 
-    Route::get('/veiculos/create', [VeiculoController::class, 'create'])->name('veiculos.create');
-    Route::post('/veiculos/store-proc-manual', [VeiculoController::class, 'storeProcManual'])->name('veiculos.store-proc-manual');
-    Route::post('/veiculos', [VeiculoController::class, 'store'])->name('veiculos.store');
-    Route::get('/veiculos/show/{id}', [VeiculoController::class, 'show'])->name('veiculos.show');
+//     Route::get('/veiculos/create', [VeiculoController::class, 'create'])->name('veiculos.create');
+//     Route::post('/veiculos/store-proc-manual', [VeiculoController::class, 'storeProcManual'])->name('veiculos.store-proc-manual');
+//     Route::post('/veiculos', [VeiculoController::class, 'store'])->name('veiculos.store');
+//     Route::get('/veiculos/show/{id}', [VeiculoController::class, 'show'])->name('veiculos.show');
 
     Route::get('/modeloprocs/{id}', [ModeloProcuracoesController::class, 'show'])->name('modeloprocs.show');
     Route::put('/modeloprocs/{id}', [ModeloProcuracoesController::class, 'update'])->name('modeloprocs.update');
@@ -334,8 +334,7 @@ Route::prefix('configuracoes')->group(function () {
 
     // Rota para processar o envio do formulário (POST)
     Route::post('/veiculos/cadastro-manual/store', [VeiculoController::class, 'storeManual'])->name('veiculos.store-manual');
-    // --- 1. ROTAS GLOBAIS E DE LISTAGEM (Sempre no topo para evitar conflito com {id}) ---
-    Route::get('/veiculos', [VeiculoController::class, 'index'])->name('veiculos.index');
+
     Route::get('/veiculos/arquivados', [VeiculoController::class, 'indexArquivados'])->name('veiculos.arquivados');
     Route::get('/veiculos/create', [VeiculoController::class, 'create'])->name('veiculos.create');
     Route::post('/veiculos', [VeiculoController::class, 'store'])->name('veiculos.store');
@@ -359,21 +358,18 @@ Route::prefix('configuracoes')->group(function () {
     Route::put('/veiculos/{id}/update-precos', [VeiculoController::class, 'updatePrecos'])->name('veiculos.updatePrecos');
     Route::put('/veiculos/{id}/update-info-basica', [VeiculoController::class, 'updateInfoBasica'])->name('veiculos.updateInfoBasica');
 
-    // 3. Por último as rotas genéricas que podem "confundir" o Laravel
 
     Route::get('/veiculos', [VeiculoController::class, 'index'])->name('veiculos.index');
-
-        // Rotas para Documentação
+    Route::get('/veiculos/{id}', [VeiculoController::class, 'show'])->name('veiculos.show');
+    Route::delete('/veiculos/{id}', [VeiculoController::class, 'destroy'])->name('veiculos.destroy');
+    
     Route::prefix('documentos')->group(function () {
-        // Rota para gerar a Procuração
         Route::post('/gerar-procuracao/{veiculo_id}', [DocumentoController::class, 'gerarProcuracao'])
             ->name('documentos.gerar.procuracao');
 
-        // Rota para gerar o ATPVe
         Route::get('/gerar-atpve/{veiculo_id}', [DocumentoController::class, 'gerarAtpve'])
             ->name('documentos.gerar.atpve');
             
-        // Rota para upload (caso precise salvar manualmente os assinados)
         Route::post('/upload/{veiculo_id}', [DocumentoController::class, 'store'])
             ->name('documentos.upload');
     });
