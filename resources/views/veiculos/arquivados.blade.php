@@ -35,12 +35,20 @@
 </div>
 
 <div class="card">
-    <div class="card-body p-4">
-        <div class="row mb-3">
+    <div class="card-body p-2">
+
+        <div class="row align-items-center mb-4">
+            <div class="col-md-4">
+                <h4 class="header-title mb-1 text-dark fw-bold">Veículos Arquivados</h4>
+                <p class="text-muted font-13 mb-0">Gerencie as informações dos veículos.</p>
+            </div>
+            
             <div class="col-md-8">
-                <form action="{{ route('veiculos.arquivados') }}" method="GET" class="d-flex align-items-center">
+                <div class="d-flex flex-wrap align-items-center justify-content-sm-end gap-3">
+                    <div class="search-box">
+                        <form action="{{ route('veiculos.arquivados') }}" method="GET" class="d-flex flex-wrap align-items-center">
                     <div class="input-group" style="width: 300px;">
-                        <input type="text" name="search" class="form-control" placeholder="Buscar nos arquivados..." value="{{ request('search') }}">
+                        <input type="text" name="search" class="form-control" placeholder="Buscar placa, marca ou modelo..." value="{{ request('search') }}">
                         <button class="btn btn-secondary" type="submit">
                             <i class="mdi mdi-magnify"></i>
                         </button>
@@ -49,22 +57,23 @@
                         <a href="{{ route('veiculos.arquivados') }}" class="btn btn-link text-muted">Limpar</a>
                     @endif
                 </form>
+                    </div>
+
+                </div>
             </div>
         </div>
 
-        <div class="row">
-            <div class="col-sm-12">
                 @if ($veiculos->total() != 0)
                 <div class="table-custom-container">
                     <table class="table table-custom table-nowrap table-hover mb-0">
                         <thead class="table-dark">
                             <tr>
-                                <th>Placa</th>
                                 <th>Marca/Modelo</th>
+                                <th>Placa</th>
                                 <th>Ano/Modelo</th>
                                 <th>Cor</th>
                                 <th>KM</th>
-                                <th>Câmbio</th>
+                                <th>Valor</th>
                                 <th>Doc</th>
                                 <th class="text-end">Ações</th>
                             </tr>
@@ -72,38 +81,64 @@
                         <tbody>
                             @foreach ($veiculos as $veiculo)
                             <tr>
-                                <td class="d-flex align-items-center">
-                                    @php
-                                        $imagens = json_decode($veiculo->images);
-                                        $primeiraImagem = !empty($imagens) ? $imagens[0] : null;
-                                        $inicialPlaca = substr($veiculo->placa, 0, 1);
-                                    @endphp
+                               <td class="d-flex align-items-center">
+                                @php
+                                    // Decodifica o JSON de imagens e pega a primeira
+                                    $imagens = json_decode($veiculo->images);
+                                    $primeiraImagem = !empty($imagens) ? $imagens[0] : null;
+                                    
+                                    // Pega a primeira letra da placa para o avatar reserva
+                                    $inicialPlaca = substr($veiculo->placa, 0, 1);
+                                @endphp
 
-                                    <div class="me-3">
-                                        @if($primeiraImagem)
-                                            <img src="{{ asset('storage/' . $primeiraImagem) }}" class="rounded-circle" style="width: 40px; height: 40px; object-fit: cover; border: 1px solid #dee2e6;">
-                                        @else
-                                            <div class="rounded-circle d-flex align-items-center justify-content-center bg-secondary text-white" 
-                                                style="width: 40px; height: 40px; font-weight: bold; text-transform: uppercase;">
-                                                {{ $inicialPlaca }}
-                                            </div>
-                                        @endif
-                                    </div>
+                                <div class="me-3">
+                                    @if($primeiraImagem)
+                                    
+                                        <img src="{{ asset('storage/' . $primeiraImagem) }}" 
+                                            alt="Veículo" 
+                                            class="rounded-circle" 
+                                            style="width: 40px; height: 40px; object-fit: cover; border: 1px solid #dee2e6;">
+                                    
+                                    @else
+                                    
+                                        <div class="rounded-circle d-flex align-items-center justify-content-center bg-secondary text-white" 
+                                            style="width: 40px; height: 40px; font-weight: bold; font-size: 1.2rem; text-transform: uppercase;">
+                                            {{ $inicialPlaca }}
+                                        </div>
+                                    
+                                    @endif
+                                </div>
 
-                                    <div>
-                                        <span class="fw-bold d-block">{{ $veiculo->placa }}</span>
-                                        <small class="badge bg-soft-secondary text-secondary">Arquivado</small>
-                                    </div>
-                                </td>  
-                                <td>
+                                <div>
                                     <span class="fw-bold d-block">{{ $veiculo->marca }}</span>
                                     <small class="text-muted">{{ $veiculo->modelo }}</small>
-                                </td>
-                                <td>{{ $veiculo->ano }}</td>
-                                <td>{{ $veiculo->cor }}</td>
+                                    
+                                </div>
+                            </td>  
+                            <td>
+                                <div>
+                                    <span class="fw-bold d-block">{{ $veiculo->placa }}</span>
+                                </div>
+                            </td>
+                            <td>{{ $veiculo->ano }}</td>
+                            <td>{{ $veiculo->cor }}</td>
                             <td>{{ $veiculo->kilometragem ?? 'Não consta' }}</td>
-                            <td>{{ $veiculo->cambio ?? 'Não consta' }}</td>
-                                <td>
+                            <td>
+                                @if($veiculo->valor_oferta > 0)
+                                        <small class="text-muted d-block" style="text-decoration: line-through; font-size: 0.75rem;">
+                                            R$ {{ number_format($veiculo->valor, 2, ',', '.') }}
+                                        </small>
+                                        <span class="fw-bold text-danger">
+                                            R$ {{ number_format($veiculo->valor_oferta, 2, ',', '.') }}
+                                        </span>
+                                    @else
+                                        <span class="fw-bold text-dark">
+                                            R$ {{ number_format($veiculo->valor ?? 0, 2, ',', '.') }}
+                                        </span>
+                                    @endif
+                            </td>
+
+                            <td>
                                     @if($veiculo->crv === "***")
                                         <span class="badge badge-outline-danger">FÍSICO</span>
                                     @else
@@ -158,8 +193,6 @@
                 @endif
             </div>
         </div>
-    </div>
-</div>
 
 <script>
     function confirmRestore(id) {

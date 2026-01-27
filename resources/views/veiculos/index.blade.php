@@ -56,10 +56,19 @@ document.addEventListener('DOMContentLoaded', function () {
 
 
 <div class="card">
-    <div class="card-body p-4">
-        <div class="row mb-3">
+    <div class="card-body p-2">
+
+
+    <div class="row align-items-center mb-4">
+            <div class="col-md-4">
+                <h4 class="header-title mb-1 text-dark fw-bold">Veículos Cadastrados</h4>
+                <p class="text-muted font-13 mb-0">Gerencie as informações dos veículos.</p>
+            </div>
+            
             <div class="col-md-8">
-                <form action="{{ route('veiculos.index') }}" method="GET" class="d-flex flex-wrap align-items-center">
+                <div class="d-flex flex-wrap align-items-center justify-content-sm-end gap-3">
+                    <div class="search-box">
+                        <form action="{{ route('veiculos.index') }}" method="GET" class="d-flex flex-wrap align-items-center">
                     <div class="input-group" style="width: 300px;">
                         <input type="text" name="search" class="form-control" placeholder="Buscar placa, marca ou modelo..." value="{{ request('search') }}">
                         <button class="btn btn-secondary" type="submit">
@@ -70,10 +79,10 @@ document.addEventListener('DOMContentLoaded', function () {
                         <a href="{{ route('veiculos.index') }}" class="btn btn-link text-muted">Limpar filtros</a>
                     @endif
                 </form>
-            </div>
-            <div class="col-md-4 text-end">
-                <div class="dropdown btn-group">
-                    <button class="btn btn-primary btn-sm dropdown-toggle" type="button" data-bs-toggle="dropdown">
+                    </div>
+
+                    <div class="dropdown btn-group">
+                    <button class="btn btn-primary dropdown-toggle" type="button" data-bs-toggle="dropdown">
                         <i class="mdi mdi-plus me-1"></i>Cadastrar
                     </button>
                     <div class="dropdown-menu dropdown-menu-animated dropdown-menu-end">
@@ -81,11 +90,9 @@ document.addEventListener('DOMContentLoaded', function () {
                         <a href="{{ route('veiculos.cadastro-manual') }}" class="dropdown-item">Cadastro manual</a>
                     </div>
                 </div>
+                </div>
             </div>
         </div>
-
-        <div class="row">
-            <div class="col-sm-12">
                 @if ($veiculos->total() != 0)
                 <div class="table-custom-container">
                     <table class="table table-custom table-nowrap table-hover mb-0">
@@ -225,10 +232,6 @@ document.addEventListener('DOMContentLoaded', function () {
                         <i class="mdi mdi-information-outline me-2"></i>Nenhum veículo arquivado encontrado.
                     </div>
                 @endif
-            </div>
-        </div>
-    </div>
-</div>
 
 
 <script>
