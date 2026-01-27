@@ -18,6 +18,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\Http;
 use Mail;
 
 use Smalot\PdfParser\Parser;
@@ -1445,17 +1446,54 @@ class VeiculoController extends Controller
     public function show($id)
 {
     $userId = Auth::id();
-    // Carrega o veículo com a relação documentos
-    $veiculo = $this->model->with('documentos')->find($id);
+    $veiculo = $this->model->with('documentos')->where('user_id', $userId)->find($id);
 
-    if (!$veiculo) {
-        return redirect()->route('veiculos.index');
+    if (!$veiculo) return redirect()->route('veiculos.index');
+
+    $dadosFipe = null;
+
+    try {
+        // 1. Mapear Tipo (cars, motorcycles, trucks)
+        $tipo = match(strtolower($veiculo->tipo)) {
+            'motocicleta', 'moto' => 'motorcycles',
+            'caminhão', 'caminhao' => 'trucks',
+            default => 'cars'
+        };
+
+        // 2. Buscar ID da Marca
+        $marcas = Http::get("https://fipe.parallelum.com.br/api/v2/{$tipo}/brands")->json();
+        $marcaId = collect($marcas)->first(fn($m) => strtoupper($m['name']) == strtoupper($veiculo->marca))['code'] ?? null;
+
+        if ($marcaId) {
+            // 3. Buscar ID do Modelo (Busca por aproximação de nome)
+            $modelos = Http::get("https://fipe.parallelum.com.br/api/v2/{$tipo}/brands/{$marcaId}/models")->json();
+            $modeloId = collect($modelos)->first(function($mod) use ($veiculo) {
+                return str_contains(strtoupper($mod['name']), strtoupper($veiculo->modelo));
+            })['code'] ?? null;
+
+            if ($modeloId) {
+                // 4. Buscar ID do Ano (Ex: 2020-1)
+                $anos = Http::get("https://fipe.parallelum.com.br/api/v2/{$tipo}/brands/{$marcaId}/models/{$modeloId}/years")->json();
+                $anoDesejado = substr($veiculo->ano, 0, 4);
+                $anoId = collect($anos)->first(fn($a) => str_starts_with($a['code'], $anoDesejado))['code'] ?? null;
+
+                if ($anoId) {
+                    // 5. Consulta Final conforme a documentação V2
+                    $response = Http::get("https://fipe.parallelum.com.br/api/v2/{$tipo}/brands/{$marcaId}/models/{$modeloId}/years/{$anoId}");
+                    if ($response->successful()) {
+                        $dadosFipe = $response->json();
+                    }
+                }
+            }
+        }
+    } catch (\Exception $e) {
+        // Silenciar erro para não travar a página
     }
 
     $clientes = Cliente::where('user_id', $userId)->get();
     $outorgados = Outorgado::where('user_id', $userId)->get();
 
-    return view('veiculos.show', compact('veiculo', 'outorgados', 'clientes'));
+    return view('veiculos.show', compact('veiculo', 'outorgados', 'clientes', 'dadosFipe'));
 }
 
     public function edit($id)
@@ -1467,6 +1505,78 @@ class VeiculoController extends Controller
 
         return view('veiculos.edit', compact('veiculo'));
     }
+
+     public function cadastroManual()
+{
+    // Opcional: Você pode carregar marcas pré-definidas ou deixar campos de texto livre
+    // como você já tem a lógica de tratamento de marcas, podemos deixar os campos abertos.
+    
+    return view('veiculos.create-manual');
+}
+
+public function storeManual(Request $request)
+{
+    // 1. Pega os dados exceto imagens e token
+    $data = $request->except(['_token', 'images']);
+
+    // 2. Limpeza dos valores monetários (CONVERSÃO PARA DECIMAL)
+    // Transforma "1.250,00" em "1250.00"
+    if ($request->filled('valor')) {
+        $data['valor'] = str_replace(['.', ','], ['', '.'], $request->valor);
+    }
+
+    if ($request->filled('valor_oferta')) {
+        $data['valor_oferta'] = str_replace(['.', ','], ['', '.'], $request->valor_oferta);
+    } else {
+        $data['valor_oferta'] = null;
+    }
+
+    // 3. Limpeza da Kilometragem (Remove tudo que não for número)
+    if ($request->filled('kilometragem')) {
+        $data['kilometragem'] = preg_replace('/\D/', '', $request->kilometragem);
+    }
+
+    // 4. Mapeamento dos Nomes vindos da FIPE (para salvar texto e não IDs)
+    $data['marca']  = $request->marca_nome;
+    $data['modelo'] = $request->modelo_nome;
+    $data['versao']      = $request->versao_nome;
+
+    // 5. Usuário logado
+    $data['user_id'] = Auth::id();
+
+    // 6. Tratamento de Adicionais e Opcionais
+    $adicionaisArray = array_map(function ($item) {
+        return ucwords(str_replace('_', ' ', strtolower($item)));
+    }, $request->input('adicionais', []));
+    $data['adicionais'] = json_encode($adicionaisArray, JSON_UNESCAPED_UNICODE);
+
+    $opcionaisArray = array_map(function ($item) {
+        return ucwords(str_replace('_', ' ', strtolower($item)));
+    }, $request->input('opcionais', []));
+    $data['opcionais'] = json_encode($opcionaisArray, JSON_UNESCAPED_UNICODE);
+
+    // 7. Upload de imagens
+    $imagens = [];
+    if ($request->hasFile('images')) {
+        foreach ($request->file('images') as $image) {
+            $path = $image->store('veiculos', 'public');
+            $imagens[] = $path;
+        }
+    }
+    $data['images'] = json_encode($imagens);
+
+    // 8. Campos Fixos
+    $data['status'] = 'ATIVO';
+    $data['categoria'] = 'PARTICULAR';
+    $data['placa'] = strtoupper($request->placa);
+
+    // 9. Criação do Registro
+    Veiculo::create($data);
+
+    return redirect()
+        ->route('veiculos.index')
+        ->with('success', 'Veículo cadastrado com sucesso!');
+}
 
     // ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     // ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -1730,20 +1840,31 @@ public function updateInfo(Request $request, $id)
 {
     $Veiculo = Veiculo::findOrFail($id);
 
-    // Captura apenas os campos enviados no modal
-    $data = $request->only([
-        'placa', 'placaAnterior', 'cor', 'motor', 
-        'combustivel', 'renavam', 'ano', 'categoria', 
-        'crv', 'marca_real', 'modelo_real'
-    ]);
+    // Mapeamos os nomes que vêm dos inputs ocultos do buscador FIPE
+    // para as colunas corretas do banco de dados.
+    $data = [
+        'placa'         => strtoupper($request->placa),
+        'placaAnterior' => strtoupper($request->placaAnterior),
+        'cor'           => strtoupper($request->cor),
+        'motor'         => $request->motor,
+        'combustivel'   => $request->combustivel,
+        'renavam'       => $request->renavam,
+        'ano'           => $request->ano,
+        'crv'           => $request->crv,
+        // Usamos os nomes capturados pelo JS (marca_nome, modelo_nome, versao_nome)
+        'marca'         => $request->marca_nome ?? $Veiculo->marca,
+        'modelo'        => $request->modelo_nome ?? $Veiculo->modelo,
+        'versao'        => $request->versao_nome ?? $Veiculo->versao,
+    ];
 
-    // Forçar placa em maiúsculo
-    if($request->has('placa')) $data['placa'] = strtoupper($request->placa);
-    if($request->has('placaAnterior')) $data['placaAnterior'] = strtoupper($request->placaAnterior);
+    // Se você criou a coluna codigo_fipe, adicione ela aqui também:
+    if($request->has('versao')) {
+        $data['codigo_fipe'] = $request->versao; // O value do select versão é o código/ID
+    }
 
     $Veiculo->update($data);
 
-    return redirect()->back()->with('success', 'Dados atualizados com sucesso!');
+    return redirect()->back()->with('success', 'Dados do veículo atualizados com sucesso!');
 }
 
    public function updateInfoBasica(Request $request, $id)

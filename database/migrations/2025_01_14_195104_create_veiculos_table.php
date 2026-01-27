@@ -50,7 +50,7 @@ return new class extends Migration
             $table->json('adicionais')->nullable();
             $table->json('opcionais')->nullable();
             $table->json('modificacoes')->nullable();
-            $table->json('descricao')->nullable();
+            $table->text('descricao')->nullable();
             $table->json('images')->nullable();
             $table->string('status')->nullable();
             $table->string('arquivo_doc')->nullable();

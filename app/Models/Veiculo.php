@@ -21,7 +21,6 @@ class Veiculo extends Model
         'cpf',
         'endereco',
         'marca',
-        'marca',
         'modelo',
         'versao',
         'placa',
@@ -45,7 +44,6 @@ class Veiculo extends Model
         'user_id',
 
         'kilometragem',
-        'modelo_carro',
         'visitas',
         'portas',
         'cambio',
