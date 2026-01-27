@@ -232,7 +232,8 @@ document.addEventListener('DOMContentLoaded', function () {
                         <i class="mdi mdi-information-outline me-2"></i>Nenhum veículo arquivado encontrado.
                     </div>
                 @endif
-
+    </div>
+</div>
 
 <script>
     function confirmArchive(id) {

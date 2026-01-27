@@ -92,12 +92,12 @@
                 </a>
             </li>   
             
-            {{-- <li class="side-nav-item">
-                <a href="{{ route('ordensdeservicos.index') }}" class="side-nav-link">
+            <li class="side-nav-item">
+                <a href="{{ route('multas.index') }}" class="side-nav-link">
                     <i class="uil-users-alt"></i>
-                    <span> Ordens de Serviço </span>
+                    <span> Multas </span>
                 </a>
-            </li>    --}}
+            </li>   
 
             <li class="side-nav-item">
                 <a data-bs-toggle="collapse" href="#configuracao" aria-expanded="false" aria-controls="sidebarLayouts" class="side-nav-link">

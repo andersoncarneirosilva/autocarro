@@ -1,0 +1,136 @@
+<?php
+
+namespace App\Http\Controllers;
+
+use App\Models\Multa;
+use App\Models\Veiculo;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Auth;
+
+class MultaController extends Controller
+{
+    public function index()
+{
+    $userId = Auth::id();
+    // Pega as multas com paginação
+    $multas = Multa::with('veiculo')
+        ->whereHas('veiculo', fn($q) => $q->where('user_id', $userId))
+        ->paginate(10);
+
+    // Pega todos os veículos para o Select do Modal
+    $veiculos_list = Veiculo::where('user_id', $userId)->orderBy('placa')->get();
+
+    return view('multas.index', compact('multas', 'veiculos_list'));
+}
+
+    public function store(Request $request)
+{
+    $this->limparValor($request);
+    if ($request->has('valor')) {
+        $request->merge([
+            'valor' => str_replace(',', '.', str_replace('.', '', $request->valor))
+        ]);
+    }
+
+    // Adicionamos todos os campos do modal na validação
+    $data = $request->validate([
+        'veiculo_id'      => 'required|exists:veiculos,id',
+        'descricao'       => 'required|string|max:255',
+        'valor'           => 'required|numeric',
+        'data_infracao'   => 'required|date',
+        // Campos opcionais (nullable) que estavam faltando:
+        'codigo_infracao' => 'nullable|string|max:50',
+        'data_vencimento' => 'nullable|date',
+        'orgao_emissor'   => 'nullable|string|max:100',
+        'status'          => 'required|in:pendente,pago,recurso',
+        'observacoes'     => 'nullable|string',
+    ]);
+
+    // Agora o $data contém todos os índices, e o Multa::create vai salvar tudo
+    Multa::create($data);
+
+    return redirect()->back()->with('success', 'Multa cadastrada com sucesso!');
+}
+
+public function update(Request $request, $id)
+{
+    $this->limparValor($request);
+    // 1. Localiza a multa ou retorna 404
+    $userId = auth()->id();
+$multa = Multa::whereHas('veiculo', function($q) use ($userId) {
+    $q->where('user_id', $userId);
+})->findOrFail($id);
+
+    // 2. Tratamento para o valor (converte padrão BR para americano se necessário)
+    if ($request->has('valor')) {
+        $valorLimpo = str_replace(',', '.', str_replace('.', '', $request->valor));
+        $request->merge(['valor' => $valorLimpo]);
+    }
+
+    // 3. Validação dos dados
+    $data = $request->validate([
+        'veiculo_id'      => 'required|exists:veiculos,id',
+        'descricao'       => 'required|string|max:255',
+        'valor'           => 'required|numeric',
+        'data_infracao'   => 'required|date',
+        'codigo_infracao' => 'nullable|string|max:50',
+        'data_vencimento' => 'nullable|date',
+        'orgao_emissor'   => 'nullable|string|max:100',
+        'status'          => 'required|in:pendente,pago,recurso',
+        'observacoes'     => 'nullable|string',
+    ]);
+
+    // 4. Atualiza os dados no banco
+    $multa->update($data);
+
+    // 5. Retorna com mensagem de sucesso
+    return redirect()->route('multas.index')->with('success', 'Multa atualizada com sucesso!');
+}
+
+    public function updateStatus(Request $request, $id)
+    {
+        $multa = Multa::findOrFail($id);
+        $multa->update(['status' => $request->status]);
+        return redirect()->back()->with('success', 'Status da multa atualizado!');
+    }
+
+   private function limparValor(Request $request)
+{
+    if ($request->has('valor') && !empty($request->valor)) {
+        $valor = $request->valor;
+
+        // Se o valor contiver vírgula (veio da máscara do JS)
+        if (strpos($valor, ',') !== false) {
+            $valor = str_replace('.', '', $valor);  // Remove o ponto de milhar (ex: 1.250,00 -> 1250,00)
+            $valor = str_replace(',', '.', $valor); // Troca a vírgula pelo ponto (ex: 1250,00 -> 1250.00)
+        } 
+        // Se não tiver vírgula, mas for apenas números, o Laravel já entende como float/int
+
+        $request->merge(['valor' => (float) $valor]);
+    }
+}
+
+public function marcarComoPago($id)
+{
+    $multa = Multa::whereHas('veiculo', function($q) {
+        $q->where('user_id', auth()->id());
+    })->findOrFail($id);
+
+    $multa->update(['status' => 'pago']);
+
+    return redirect()->back()->with('success', 'Multa marcada como paga!');
+}
+
+    public function destroy($id)
+{
+    $userId = auth()->id();
+    $multa = Multa::whereHas('veiculo', function($q) use ($userId) {
+        $q->where('user_id', $userId);
+    })->findOrFail($id);
+
+    $multa->delete();
+
+    return redirect()->back()->with('success', 'Multa excluída com sucesso!');
+}
+}

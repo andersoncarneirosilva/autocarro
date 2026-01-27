@@ -1,7 +1,7 @@
 <div class="modal fade" id="modalModificacoes" tabindex="-1" aria-hidden="true">
     <div class="modal-dialog modal-xl modal-dialog-centered modal-dialog-scrollable">
         <div class="modal-content">
-            <div class="modal-header bg-light">
+            <div class="modal-header bg-dark text-white">
                 <h5 class="modal-title"><i class="mdi mdi-auto-fix me-1"></i> Editar Modificações</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>

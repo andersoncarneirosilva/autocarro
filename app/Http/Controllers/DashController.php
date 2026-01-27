@@ -7,6 +7,7 @@ use App\Models\DashModel;
 use App\Models\Event;
 use App\Models\User;
 use App\Models\Veiculo;
+use App\Models\Multa;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -24,39 +25,45 @@ class DashController extends Controller
 
     public function index()
 {
-    // Obtém o ID do usuário logado
     $userId = auth()->id();
 
-    // Contagem de veículos ativos do usuário
-    $totalAtivos = Veiculo::where('user_id', $userId)
-        ->where('status', 'Ativo')
-        ->count();
+    // Veículos e Clientes
+    $totalAtivos = Veiculo::where('user_id', $userId)->where('status', 'Ativo')->count();
+    $totalArquivados = Veiculo::where('user_id', $userId)->where('status', 'Arquivado')->count();
+    $totalClientes = Cliente::where('user_id', $userId)->count();
+    $valorEstoque = Veiculo::where('user_id', $userId)->where('status', 'Ativo')->sum('valor');
+    $ultimosVeiculos = Veiculo::where('user_id', $userId)->latest()->take(5)->get();
 
-    // Contagem de veículos arquivados do usuário
-    $totalArquivados = Veiculo::where('user_id', $userId)
-        ->where('status', 'Arquivado')
-        ->count();
+    // Multas - Ajustado para pegar apenas multas dos veículos do usuário logado
+    $totalMultasPendente = Multa::whereHas('veiculo', function($q) use ($userId) {
+            $q->where('user_id', $userId);
+        })->where('status', '!=', 'pago')->sum('valor');
 
-    // Contagem total de clientes do usuário
-    $totalClientes = Cliente::where('user_id', $userId)
-        ->count();
+    $qtdMultasVencidas = Multa::whereHas('veiculo', function($q) use ($userId) {
+            $q->where('user_id', $userId);
+        })->where('status', '!=', 'pago')
+          ->where('data_vencimento', '<', now())
+          ->count();
+    
+    $multasCriticas = Multa::with('veiculo')
+        ->whereHas('veiculo', function($q) use ($userId) {
+            $q->where('user_id', $userId);
+        })
+        ->where('status', '!=', 'pago')
+        ->orderBy('data_vencimento', 'asc')
+        ->take(5)
+        ->get();
 
-    // Soma do valor de venda de todos os veículos ativos do usuário
-    $valorEstoque = Veiculo::where('user_id', $userId)
-        ->where('status', 'Ativo')
-        ->sum('valor');
-
-    $ultimosVeiculos = Veiculo::where('user_id', $userId)
-    ->latest() // Ordena pelos mais recentes
-    ->take(5)  // Limita a 5 registros
-    ->get();
-
+    // Retornando tudo solto no compact (mais simples)
     return view('dashboard.index', compact(
         'totalAtivos', 
         'totalArquivados', 
         'totalClientes', 
         'valorEstoque',
-        'ultimosVeiculos'
+        'ultimosVeiculos',
+        'totalMultasPendente',
+        'qtdMultasVencidas',
+        'multasCriticas'
     ));
 }
 }

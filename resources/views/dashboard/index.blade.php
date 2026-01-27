@@ -73,22 +73,6 @@
         <div class="card widget-flat">
             <div class="card-body">
                 <div class="float-end">
-                    <i class="mdi mdi-account-group widget-icon bg-info-lighten text-info"></i>
-                </div>
-                <h5 class="text-muted fw-normal mt-0" title="Total de clientes">Clientes</h5>
-                <h3 class="mt-3 mb-3">{{ $totalClientes }}</h3>
-                <p class="mb-0 text-muted">
-                    <span class="text-info me-2"><i class="mdi mdi-account-plus"></i> Base</span>
-                    {{-- <span class="text-nowrap">Cadastros totais</span> --}}
-                </p>
-            </div>
-        </div>
-    </div>
-
-    <div class="col-xxl-3 col-lg-6">
-        <div class="card widget-flat">
-            <div class="card-body">
-                <div class="float-end">
                     <i class="mdi mdi-archive-outline widget-icon bg-warning-lighten text-warning"></i>
                 </div>
                 <h5 class="text-muted fw-normal mt-0" title="Veículos arquivados">Arquivados</h5>
@@ -100,6 +84,23 @@
             </div>
         </div>
     </div>
+
+    <div class="col-xxl-3 col-lg-6">
+        <div class="card widget-flat">
+            <div class="card-body">
+                <div class="float-end">
+                    <i class="mdi mdi-alert-decagram widget-icon bg-danger-lighten text-danger"></i>
+                </div>
+                <h5 class="text-muted fw-normal mt-0" title="Multas pendentes ou em recurso">Multas em Aberto</h5>
+                <h3 class="mt-3 mb-3 text-danger">R$ {{ number_format($totalMultasPendente, 2, ',', '.') }}</h3>
+                <p class="mb-0 text-muted">
+                    <span class="text-danger me-2"><i class="mdi mdi-bell-ring"></i> {{ $qtdMultasVencidas }} vencidas</span>
+                </p>
+            </div>
+        </div>
+    </div>
+
+    
 
     <div class="col-xxl-3 col-lg-6">
         <div class="card widget-flat">
@@ -242,7 +243,52 @@
     </div> 
 </div>
 
-
+<div class="row">
+    <div class="col-xl-12">
+        <div class="card">
+            <div class="card-body">
+                <div class="d-flex justify-content-between align-items-center mb-2">
+                    <h4 class="header-title"><i class="mdi mdi- gavel me-1"></i> Multas Críticas (Vencidas/Próximas)</h4>
+                    <a href="{{ route('multas.index') }}" class="btn btn-sm btn-outline-danger">Gerenciar Multas</a>
+                </div>
+                <div class="table-responsive">
+                    <table class="table table-sm table-centered mb-0">
+                        <thead class="table-light">
+                            <tr>
+                                <th>Veículo</th>
+                                <th>Vencimento</th>
+                                <th>Valor</th>
+                                <th>Status</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @forelse($multasCriticas as $multa)
+                            <tr>
+                                <td><span class="fw-bold">{{ $multa->veiculo->placa }}</span> - {{ $multa->veiculo->modelo }}</td>
+                                <td>
+                                    <span class="{{ \Carbon\Carbon::parse($multa->data_vencimento)->isPast() ? 'text-danger fw-bold' : '' }}">
+                                        {{ \Carbon\Carbon::parse($multa->data_vencimento)->format('d/m/Y') }}
+                                    </span>
+                                </td>
+                                <td>R$ {{ number_format($multa->valor, 2, ',', '.') }}</td>
+                                <td>
+                                    <span class="badge {{ $multa->status == 'pendente' ? 'bg-danger' : 'bg-warning' }}">
+                                        {{ strtoupper($multa->status) }}
+                                    </span>
+                                </td>
+                            </tr>
+                            @empty
+                            <tr>
+                                <td colspan="4" class="text-center text-muted">Nenhuma multa crítica no momento.</td>
+                            </tr>
+                            @endforelse
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
 
         <!-- Para Mobile -->
         <div class="card ribbon-box d-block d-md-none">

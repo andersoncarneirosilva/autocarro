@@ -61,7 +61,9 @@
 </div>
 
                 <div class="modal-footer bg-light">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+                            <i class="fas fa-times me-1"></i> Fechar
+                        </button>
                     
                     <button type="submit" class="btn btn-primary" id="submitButton">
                         <i class="mdi mdi-check me-1"></i> Salvar

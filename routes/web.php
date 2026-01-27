@@ -33,7 +33,8 @@ use App\Http\Controllers\SiteController;
 use App\Http\Controllers\RevendaController;
 use App\Http\Controllers\RevendaPublicaController;
 use App\Http\Controllers\ModeloProcuracaoController;
-use App\Http\Controllers\ParticularController;
+use App\Http\Controllers\PartiularController;
+use App\Http\Controllers\MultaController;
 
 use Illuminate\Support\Facades\Route;
 use Livewire\Livewire;
@@ -373,6 +374,17 @@ Route::prefix('configuracoes')->group(function () {
         Route::post('/upload/{veiculo_id}', [DocumentoController::class, 'store'])
             ->name('documentos.upload');
     });
+
+
+    Route::patch('/multas/{id}/pagar', [MultaController::class, 'marcarComoPago'])->name('multas.pagar');
+    // Rota Resource (Index, Create, Store, Show, Edit, Update, Destroy)
+    Route::resource('multas', MultaController::class);
+
+    // Rota específica para atualização de status (Pendente/Pago/Recurso)
+    Route::patch('multas/{id}/status', [MultaController::class, 'updateStatus'])->name('multas.updateStatus');
+
+    // Rota para listar multas de um veículo específico (útil para a aba do veículo)
+    Route::get('veiculos/{veiculo}/multas', [MultaController::class, 'porVeiculo'])->name('multas.veiculo');
 
 });
 
