@@ -94,7 +94,7 @@
             
             <li class="side-nav-item">
                 <a href="{{ route('multas.index') }}" class="side-nav-link">
-                    <i class="uil-users-alt"></i>
+                    <i class="uil-file-alt"></i>
                     <span> Multas </span>
                 </a>
             </li>   

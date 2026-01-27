@@ -49,7 +49,34 @@
         </div>
     </div>
 </div>
-<br>
+
+
+<!-- Para Mobile -->
+<div class="card ribbon-box d-block d-md-none">
+    <div class="card-body">
+        <div class="ribbon ribbon-success float-end"><i class="mdi mdi-access-point me-1"></i> 27.01.2026</div>
+        <h5 class="text-success float-start mt-0">Novidades no App!</h5>
+        <div class="ribbon-content">
+            <ul>
+            <li class="mb-1">
+                <strong>Gestão de Multas:</strong> Novo módulo para controle de infrações e recursos.
+            </li>
+            <li class="mb-1">
+                <strong>Alertas Inteligentes:</strong> Avisos visuais de multas vencidas ou próximas do vencimento.
+            </li>
+            <li class="mb-1">
+                <strong>Baixa Rápida:</strong> Marque multas como pagas com um clique.
+            </li>
+            <li class="mb-1">
+                <strong>Interface Responsiva:</strong> Tabelas otimizadas com scroll horizontal para dispositivos móveis.
+            </li>
+            </ul>
+            <div class="text-center mt-2">
+        <a href="{{ route('multas.index') }}" class="btn btn-sm btn-soft-success">Conferir Multas</a>
+    </div>
+        </div>
+    </div>
+</div> 
 
 
 <div class="row">
@@ -119,19 +146,21 @@
     </div>
 </div>
 
-
 <div class="row">
     <div class="col-12">
         <div class="card">
-            <div class="card-body">
-                <div class="d-flex justify-content-between align-items-center mb-3">
-                    <h4 class="header-title">Gestão de Frota</h4>
-                    <a href="{{ route('veiculos.index') }}" class="btn btn-sm btn-primary">Ver todos</a>
+            <div class="card-body p-2"> {{-- Padding reduzido para alinhar com o container --}}
+                <div class="d-flex justify-content-between align-items-center mb-3 p-2">
+                    <h4 class="header-title mb-0 text-dark fw-bold">Gestão de Frota</h4>
+                    <a href="{{ route('veiculos.index') }}" class="btn btn-sm btn-primary">
+                        <i class="mdi mdi-arrow-right me-1"></i>Ver todos
+                    </a>
                 </div>
 
-                <div class="table-responsive">
-                    <table class="table table-centered table-nowrap table-hover mb-0">
-                        <thead class="table-light">
+                {{-- Substituído table-responsive por table-custom-container --}}
+                <div class="table-custom-container">
+                    <table class="table table-custom table-nowrap table-hover mb-0">
+                        <thead class="table-dark"> {{-- Cabeçalho escuro para padronizar --}}
                             <tr>
                                 <th>Veículo</th>
                                 <th>Placa</th>
@@ -139,55 +168,39 @@
                                 <th>Ano</th>
                                 <th>Valor</th>
                                 <th>Status</th>
-                                <th style="width: 100px;" class="text-center">Ações</th>
+                                <th style="width: 80px;" class="text-center">Ações</th>
                             </tr>
                         </thead>
                         <tbody>
                             @forelse($ultimosVeiculos as $veiculo)
                             <tr>
                                 <td>
-    <div class="d-flex align-items-center">
-        @php 
-            $images = json_decode($veiculo->images); 
-            $inicialPlaca = substr($veiculo->placa, 0, 1);
-        @endphp
+                                    <div class="d-flex align-items-center">
+                                        @php 
+                                            $images = json_decode($veiculo->images); 
+                                            $inicialPlaca = substr($veiculo->placa, 0, 1);
+                                        @endphp
 
-        <a href="{{ route('veiculos.show', $veiculo->id) }}" class="me-3 transition-all hover-scale">
-            @if(isset($images[0]))
-                <img src="{{ asset('storage/' . $images[0]) }}" 
-                     alt="veiculo" class="rounded-circle border" height="40" width="40" style="object-fit: cover;">
-            @else
-                <div class="rounded-circle d-flex align-items-center justify-content-center bg-primary-lighten text-primary fw-bold border border-primary-lighten" 
-                     style="width: 40px; height: 40px; min-width: 40px; font-size: 16px;">
-                    {{ strtoupper($inicialPlaca) }}
-                </div>
-            @endif
-        </a>
+                                        <a href="{{ route('veiculos.show', $veiculo->id) }}" class="me-3 transition-all hover-scale">
+                                            @if(isset($images[0]))
+                                                <img src="{{ asset('storage/' . $images[0]) }}" 
+                                                     alt="veiculo" class="rounded-circle border" height="40" width="40" style="object-fit: cover;">
+                                            @else
+                                                <div class="rounded-circle d-flex align-items-center justify-content-center bg-primary text-white fw-bold" 
+                                                     style="width: 40px; height: 40px; min-width: 40px; font-size: 16px;">
+                                                    {{ strtoupper($inicialPlaca) }}
+                                                </div>
+                                            @endif
+                                        </a>
 
-        <div>
-            <h5 class="font-14 my-1 fw-bold text-dark">
-                <a href="{{ route('veiculos.show', $veiculo->id) }}" class="text-dark">{{ $veiculo->marca }}</a>
-            </h5>
-            <p class="mb-1 mt-0 font-12 text-muted">{{ $veiculo->modelo }}</p>
-            
-        </div>
-    </div>
-</td>
-
-<style>
-    /* Efeito de hover suave para indicar que é clicável */
-    .hover-scale:hover {
-        transform: scale(1.1);
-        display: inline-block;
-    }
-    .transition-all {
-        transition: all 0.2s ease-in-out;
-    }
-    .bg-primary-lighten { 
-        background-color: rgba(114, 124, 245, 0.15) !important; 
-    }
-    .font-10 { font-size: 10px; }
-</style>
+                                        <div>
+                                            <h5 class="font-14 my-1 fw-bold text-dark">
+                                                <a href="{{ route('veiculos.show', $veiculo->id) }}" class="text-dark">{{ $veiculo->marca }}</a>
+                                            </h5>
+                                            <p class="mb-0 font-12 text-muted">{{ $veiculo->modelo }}</p>
+                                        </div>
+                                    </div>
+                                </td>
                                 <td>
                                     <span class="badge badge-outline-secondary font-10 tracking-wider">{{ $veiculo->placa }}</span>
                                 </td>
@@ -225,8 +238,8 @@
                                     @endif
                                 </td>
                                 <td class="text-center">
-                                    <a href="{{ route('veiculos.show', $veiculo->id) }}" class="action-icon text-info" title="Visualizar"> 
-                                        <i class="mdi mdi-eye-outline"></i>
+                                    <a href="{{ route('veiculos.show', $veiculo->id) }}" class="btn btn-sm btn-soft-info" title="Visualizar"> 
+                                        <i class="mdi mdi-eye-outline font-16"></i>
                                     </a>
                                 </td>
                             </tr>
@@ -237,79 +250,110 @@
                             @endforelse
                         </tbody>
                     </table>
-                </div> 
+                </div> {{-- Fim table-custom-container --}}
             </div> 
         </div> 
     </div> 
 </div>
 
+<style>
+    /* Estilos preservados para o Dashboard */
+    .hover-scale:hover { transform: scale(1.1); }
+    .transition-all { transition: all 0.2s ease-in-out; }
+    .bg-primary-lighten { background-color: rgba(114, 124, 245, 0.15) !important; }
+    .font-10 { font-size: 10px; }
+</style>
 <div class="row">
     <div class="col-xl-12">
         <div class="card">
-            <div class="card-body">
-                <div class="d-flex justify-content-between align-items-center mb-2">
-                    <h4 class="header-title"><i class="mdi mdi- gavel me-1"></i> Multas Críticas (Vencidas/Próximas)</h4>
-                    <a href="{{ route('multas.index') }}" class="btn btn-sm btn-outline-danger">Gerenciar Multas</a>
+            <div class="card-body p-2"> {{-- Mantendo o padding p-2 igual ao seu --}}
+                
+                <div class="row align-items-center mb-3 p-2">
+                    <div class="col-md-6">
+                        <h4 class="header-title mb-1 text-dark fw-bold">
+                            <i class="mdi mdi-gavel me-1 text-danger"></i> Multas Críticas
+                        </h4>
+                        <p class="text-muted font-13 mb-0">Multas vencidas ou próximas do vencimento.</p>
+                    </div>
+                    <div class="col-md-6 text-end">
+                        <a href="{{ route('multas.index') }}" class="btn btn-sm btn-primary">
+                            <i class="mdi mdi-format-list-bulleted me-1"></i> Ver todas
+                        </a>
+                    </div>
                 </div>
-                <div class="table-responsive">
-                    <table class="table table-sm table-centered mb-0">
-                        <thead class="table-light">
+
+                <div class="table-custom-container">
+                    <table class="table table-custom table-nowrap table-hover mb-0">
+                        <thead class="table-dark"> {{-- Usando table-dark como na sua de veículos --}}
                             <tr>
                                 <th>Veículo</th>
+                                <th>Infração</th>
                                 <th>Vencimento</th>
                                 <th>Valor</th>
                                 <th>Status</th>
+                                <th class="text-end">Ação</th>
                             </tr>
                         </thead>
                         <tbody>
                             @forelse($multasCriticas as $multa)
                             <tr>
-                                <td><span class="fw-bold">{{ $multa->veiculo->placa }}</span> - {{ $multa->veiculo->modelo }}</td>
+                                <td class="d-flex align-items-center">
+                                    {{-- Mini Avatar da Placa --}}
+                                    <div class="rounded-circle d-flex align-items-center justify-content-center bg-danger-lighten text-danger fw-bold border" 
+                                         style="width: 35px; height: 35px; min-width: 35px; font-size: 11px;">
+                                        {{ substr($multa->veiculo->placa, 0, 1) }}
+                                    </div>
+                                    <div class="ms-2">
+                                        <span class="fw-bold d-block">{{ $multa->veiculo->placa }}</span>
+                                        <small class="text-muted">{{ $multa->veiculo->modelo }}</small>
+                                    </div>
+                                </td>
                                 <td>
-                                    <span class="{{ \Carbon\Carbon::parse($multa->data_vencimento)->isPast() ? 'text-danger fw-bold' : '' }}">
-                                        {{ \Carbon\Carbon::parse($multa->data_vencimento)->format('d/m/Y') }}
+                                    <span class="text-truncate d-inline-block" style="max-width: 150px;" title="{{ $multa->descricao }}">
+                                        {{ $multa->descricao }}
                                     </span>
                                 </td>
-                                <td>R$ {{ number_format($multa->valor, 2, ',', '.') }}</td>
                                 <td>
-                                    <span class="badge {{ $multa->status == 'pendente' ? 'bg-danger' : 'bg-warning' }}">
-                                        {{ strtoupper($multa->status) }}
+                                    @php
+                                        $vencimento = \Carbon\Carbon::parse($multa->data_vencimento);
+                                        $isVencida = $vencimento->isPast() && $multa->status != 'pago';
+                                    @endphp
+                                    <span class="{{ $isVencida ? 'text-danger fw-bold' : '' }}">
+                                        {{ $vencimento->format('d/m/Y') }}
                                     </span>
+                                </td>
+                                <td><span class="fw-bold text-dark">R$ {{ number_format($multa->valor, 2, ',', '.') }}</span></td>
+                                <td>
+                                    @php
+                                        $badgeColor = match($multa->status) {
+                                            'pendente' => 'bg-danger',
+                                            'recurso' => 'bg-warning',
+                                            'pago' => 'bg-success',
+                                            default => 'bg-secondary'
+                                        };
+                                    @endphp
+                                    <span class="badge {{ $badgeColor }}">{{ strtoupper($multa->status) }}</span>
+                                </td>
+                                <td class="text-end">
+                                    <a href="{{ route('multas.index') }}" class="btn btn-sm btn-soft-info" title="Ver no gerenciador">
+                                        <i class="mdi mdi-arrow-right font-16"></i>
+                                    </a>
                                 </td>
                             </tr>
                             @empty
                             <tr>
-                                <td colspan="4" class="text-center text-muted">Nenhuma multa crítica no momento.</td>
+                                <td colspan="6" class="text-center p-4 text-muted">Nenhuma multa crítica encontrada.</td>
                             </tr>
                             @endforelse
                         </tbody>
                     </table>
-                </div>
-            </div>
-        </div>
-    </div>
+                </div> {{-- Fim table-custom-container --}}
+            </div> 
+        </div> 
+    </div> 
 </div>
 
-        <!-- Para Mobile -->
-        <div class="card ribbon-box d-block d-md-none">
-          <div class="card-body">
-              <div class="ribbon ribbon-success float-end"><i class="mdi mdi-access-point me-1"></i> 05.03.2025</div>
-              <h5 class="text-success float-start mt-0">Novidades no App!</h5>
-              <div class="ribbon-content">
-                  <ul>
-                    <li>Página assinaturas adicionada ao menu do perfil</li>
-                    <li>Adicionada a página ajuda</li>
-                    <li>Agora é possível gerenciar pastas de documentos na página <a href="{{ route('perfil.index') }}">Perfil</a> do usuário.</li>
-                  </ul>
-              </div>
-          </div> <!-- end card-body -->
-      </div> <!-- end card-->
+        
       
-      
-{{-- @can('access-lojista')
-
-@endcan --}}
-
-<!-- Bootstrap -->
 
 @endsection

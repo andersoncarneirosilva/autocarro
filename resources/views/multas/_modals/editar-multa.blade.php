@@ -106,26 +106,31 @@ document.addEventListener('submit', function (e) {
 
 <script>
 function editarMulta(multa) {
-    // 1. Define a URL de destino do formulário dinamicamente
     const form = document.getElementById('formEditarMulta');
     form.action = `/multas/${multa.id}`;
 
-    // 2. Preenche os campos de texto e IDs
     document.getElementById('edit_veiculo_nome').value = `${multa.veiculo.placa} - ${multa.veiculo.marca} ${multa.veiculo.modelo}`;
     document.getElementById('edit_veiculo_id').value = multa.veiculo_id;
     document.getElementById('edit_descricao').value = multa.descricao;
     document.getElementById('edit_codigo_infracao').value = multa.codigo_infracao || '';
     document.getElementById('edit_data_infracao').value = multa.data_infracao;
     document.getElementById('edit_data_vencimento').value = multa.data_vencimento || '';
-    document.getElementById('edit_valor').value = multa.valor;
+    
+    // --- AJUSTE AQUI ---
+    const inputValor = document.getElementById('edit_valor');
+    // Multiplica por 100 para transformar 190.00 em 19000 (o que a máscara espera)
+    let valorFormatado = (multa.valor * 100).toFixed(0);
+    inputValor.value = valorFormatado;
+    
+    // Dispara o evento de input para a máscara formatar visualmente para "190,00"
+    inputValor.dispatchEvent(new Event('input'));
+    // -------------------
 
-    // 3. Seleciona o Status no SELECT
     const selectStatus = document.getElementById('edit_status');
     if (selectStatus) {
         selectStatus.value = multa.status;
     }
 
-    // 4. Abre o modal
     const modalEdit = new bootstrap.Modal(document.getElementById('modalEditarMulta'));
     modalEdit.show();
 }

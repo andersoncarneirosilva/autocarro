@@ -55,24 +55,19 @@ class MultaController extends Controller
 
 public function update(Request $request, $id)
 {
+    // 1. Limpa o valor APENAS UMA VEZ usando o método auxiliar
     $this->limparValor($request);
-    // 1. Localiza a multa ou retorna 404
+
     $userId = auth()->id();
-$multa = Multa::whereHas('veiculo', function($q) use ($userId) {
-    $q->where('user_id', $userId);
-})->findOrFail($id);
+    $multa = Multa::whereHas('veiculo', function($q) use ($userId) {
+        $q->where('user_id', $userId);
+    })->findOrFail($id);
 
-    // 2. Tratamento para o valor (converte padrão BR para americano se necessário)
-    if ($request->has('valor')) {
-        $valorLimpo = str_replace(',', '.', str_replace('.', '', $request->valor));
-        $request->merge(['valor' => $valorLimpo]);
-    }
-
-    // 3. Validação dos dados
+    // 2. Validação (O valor já chega aqui como 190.00)
     $data = $request->validate([
         'veiculo_id'      => 'required|exists:veiculos,id',
         'descricao'       => 'required|string|max:255',
-        'valor'           => 'required|numeric',
+        'valor'           => 'required|numeric', // Agora passa sem erro
         'data_infracao'   => 'required|date',
         'codigo_infracao' => 'nullable|string|max:50',
         'data_vencimento' => 'nullable|date',
@@ -81,19 +76,12 @@ $multa = Multa::whereHas('veiculo', function($q) use ($userId) {
         'observacoes'     => 'nullable|string',
     ]);
 
-    // 4. Atualiza os dados no banco
     $multa->update($data);
 
-    // 5. Retorna com mensagem de sucesso
     return redirect()->route('multas.index')->with('success', 'Multa atualizada com sucesso!');
 }
 
-    public function updateStatus(Request $request, $id)
-    {
-        $multa = Multa::findOrFail($id);
-        $multa->update(['status' => $request->status]);
-        return redirect()->back()->with('success', 'Status da multa atualizado!');
-    }
+    
 
    private function limparValor(Request $request)
 {
@@ -110,7 +98,12 @@ $multa = Multa::whereHas('veiculo', function($q) use ($userId) {
         $request->merge(['valor' => (float) $valor]);
     }
 }
-
+public function updateStatus(Request $request, $id)
+    {
+        $multa = Multa::findOrFail($id);
+        $multa->update(['status' => $request->status]);
+        return redirect()->back()->with('success', 'Status da multa atualizado!');
+    }
 public function marcarComoPago($id)
 {
     $multa = Multa::whereHas('veiculo', function($q) {
