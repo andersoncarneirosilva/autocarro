@@ -26,28 +26,20 @@ class MultaController extends Controller
 
     public function store(Request $request)
 {
+    // 1. Limpa o valor usando APENAS a sua função auxiliar
     $this->limparValor($request);
-    if ($request->has('valor')) {
-        $request->merge([
-            'valor' => str_replace(',', '.', str_replace('.', '', $request->valor))
-        ]);
-    }
 
-    // Adicionamos todos os campos do modal na validação
+    // 2. Validação (O valor já estará no formato 145.90 aqui)
     $data = $request->validate([
         'veiculo_id'      => 'required|exists:veiculos,id',
         'descricao'       => 'required|string|max:255',
         'valor'           => 'required|numeric',
         'data_infracao'   => 'required|date',
-        // Campos opcionais (nullable) que estavam faltando:
         'codigo_infracao' => 'nullable|string|max:50',
         'data_vencimento' => 'nullable|date',
-        'orgao_emissor'   => 'nullable|string|max:100',
         'status'          => 'required|in:pendente,pago,recurso',
-        'observacoes'     => 'nullable|string',
     ]);
 
-    // Agora o $data contém todos os índices, e o Multa::create vai salvar tudo
     Multa::create($data);
 
     return redirect()->back()->with('success', 'Multa cadastrada com sucesso!');

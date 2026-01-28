@@ -26,10 +26,10 @@
                 <ol class="breadcrumb m-0">
                     <li class="breadcrumb-item"><a href="{{ route('dashboard.index') }}">Dashboard</a></li>
                     <li class="breadcrumb-item"><a href="{{ route('veiculos.index') }}">Veículos</a></li>
-                    <li class="breadcrumb-item active">Arquivados</li>
+                    <li class="breadcrumb-item active">Veículos vendidos</li>
                 </ol>
             </div>
-            <h3 class="page-title">Veículos Arquivados</h3>
+            <h3 class="page-title">Veículos vendidos</h3>
         </div>
     </div>
 </div>
@@ -39,7 +39,7 @@
 
         <div class="row align-items-center mb-4">
             <div class="col-md-4">
-                <h4 class="header-title mb-1 text-dark fw-bold">Veículos Arquivados</h4>
+                <h4 class="header-title mb-1 text-dark fw-bold">Veículos vendidos</h4>
                 <p class="text-muted font-13 mb-0">Gerencie as informações dos veículos.</p>
             </div>
             

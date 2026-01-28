@@ -97,20 +97,24 @@
     </div>
 
     <div class="col-xxl-3 col-lg-6">
-        <div class="card widget-flat">
-            <div class="card-body">
-                <div class="float-end">
-                    <i class="mdi mdi-archive-outline widget-icon bg-warning-lighten text-warning"></i>
-                </div>
-                <h5 class="text-muted fw-normal mt-0" title="Veículos arquivados">Arquivados</h5>
-                <h3 class="mt-3 mb-3">{{ $totalArquivados }}</h3>
-                <p class="mb-0 text-muted">
-                    <span class="text-warning me-2"><i class="mdi mdi-history"></i> Histórico</span>
-                    {{-- <span class="text-nowrap">Fora de estoque</span> --}}
-                </p>
+    <div class="card widget-flat">
+        <div class="card-body">
+            <div class="float-end">
+                {{-- Ícone de carrinho ou dinheiro para simbolizar venda --}}
+                <i class="mdi mdi-cart-check widget-icon bg-warning-lighten text-warning"></i>
             </div>
+            <h5 class="text-muted fw-normal mt-0" title="Total de veículos vendidos">Veículos Vendidos</h5>
+            <h3 class="mt-3 mb-3">{{ $totalVendidos }}</h3>
+            <p class="mb-0 text-muted">
+                <span class="text-warning me-2">
+                    <i class="mdi mdi-currency-usd"></i> 
+                    R$ {{ number_format($receitaVendas, 2, ',', '.') }}
+                </span>
+                <span class="text-nowrap font-12">em receita</span>
+            </p>
         </div>
     </div>
+</div>
 
     <div class="col-xxl-3 col-lg-6">
         <div class="card widget-flat">
@@ -165,7 +169,7 @@
                                 <th>Veículo</th>
                                 <th>Placa</th>
                                 <th>Combustível</th>
-                                <th>Ano</th>
+                                <th>Ano/Modelo</th>
                                 <th>Valor</th>
                                 <th>Status</th>
                                 <th style="width: 80px;" class="text-center">Ações</th>
@@ -202,7 +206,7 @@
                                     </div>
                                 </td>
                                 <td>
-                                    <span class="badge badge-outline-secondary font-10 tracking-wider">{{ $veiculo->placa }}</span>
+                                    <span class="badge badge-outline-secondary font-12 tracking-wider">{{ $veiculo->placa }}</span>
                                 </td>
                                 <td>
                                     @php
@@ -215,7 +219,7 @@
                                     @endphp
                                     <span class="badge {{ $badgeColor }}">{{ strtoupper($veiculo->combustivel ?? 'N/A') }}</span>
                                 </td>
-                                <td>{{ $veiculo->ano }}</td>
+                                <td>{{ $veiculo->ano_fabricacao }}/{{ $veiculo->ano_modelo }}</td>
                                 <td class="align-middle">
                                     @if($veiculo->valor_oferta > 0)
                                         <small class="text-muted d-block" style="text-decoration: line-through; font-size: 0.75rem;">

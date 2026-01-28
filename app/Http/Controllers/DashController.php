@@ -27,8 +27,13 @@ class DashController extends Controller
 {
     $userId = auth()->id();
 
-    // Veículos e Clientes
+    // Veículos
     $totalAtivos = Veiculo::where('user_id', $userId)->where('status', 'Ativo')->count();
+
+    // NOVO: Contagem de Vendidos e Total de Receita
+    $totalVendidos = Veiculo::where('user_id', $userId)->where('status', 'Vendido')->count();
+    $receitaVendas = Veiculo::where('user_id', $userId)->where('status', 'Vendido')->sum('valor_venda');
+
     $totalArquivados = Veiculo::where('user_id', $userId)->where('status', 'Arquivado')->count();
     $totalClientes = Cliente::where('user_id', $userId)->count();
     $valorEstoque = Veiculo::where('user_id', $userId)->where('status', 'Ativo')->sum('valor');
@@ -57,6 +62,8 @@ class DashController extends Controller
     // Retornando tudo solto no compact (mais simples)
     return view('dashboard.index', compact(
         'totalAtivos', 
+        'totalVendidos', // Adicionado
+        'receitaVendas', // Adicionado
         'totalArquivados', 
         'totalClientes', 
         'valorEstoque',
