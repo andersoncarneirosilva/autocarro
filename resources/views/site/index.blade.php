@@ -345,6 +345,94 @@
     
 </section>
     
+
+<section id="planos" class="pricing_area mt-80 pt-75 pb-80">
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-lg-6">
+                <div class="section_title text-center pb-25">
+                    <h4 class="title">Planos e Preços</h4>
+                    <p>Escolha a licença ideal para o seu negócio. Gestão profissional de estoque, multas e documentos para todos os tamanhos de revendas.</p>
+                </div>
+            </div>
+        </div> 
+        
+        <div class="row justify-content-center">
+            
+            <div class="col-lg-4 col-md-8 col-sm-10">
+                <div class="single_pricing text-center mt-30 wow fadeInUp" data-wow-duration="1.3s" data-wow-delay="0.2s">
+                    <div class="pricing_top_bar">
+                        <h5 class="pricing_title">Plano Start</h5>
+                        <i class="lni lni-user"></i> <span class="price">R$ 19,90</span>
+                        <p class="mt-2">Ideal para autônomos</p>
+                    </div>
+                    <div class="pricing_list">
+                        <ul>
+                            <li><strong>1 Usuário (Administrador)</strong></li>
+                            <li>Gestão de Veículos</li>
+                            <li>Emissão de Procurações</li>
+                            <li style="text-decoration: line-through; color: #aaa;">Emissão de Solicitações ATPVe</li>
+                            <li>Suporte Técnico</li>
+                        </ul>
+                    </div>
+                    <div class="pricing_btn">
+                        <a href="https://wa.me/555199047299?text=Olá!%20Gostaria%20de%20testar%20o%20Plano%20Start." target="_blank" class="main-btn main-btn-2">Solicitar teste</a>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-lg-4 col-md-8 col-sm-10">
+                <div class="single_pricing text-center pricing_active pricing_color_1 mt-30 wow fadeInUp" data-wow-duration="1.3s" data-wow-delay="0.4s">
+                    <div class="pricing_top_bar">
+                        <h5 class="pricing_title">Plano Standard</h5>
+                        <i class="lni lni-layers"></i> <span class="price">R$ 39,90</span>
+                        <p class="mt-2">Ideal para revendas</p>
+                    </div>
+                    <div class="pricing_list">
+                        <ul>
+                            <li><strong>Até 2 Vendedores</strong></li>
+                            <li>Gestão de Veículos</li>
+                            <li>Emissão de Procurações</li>
+                            <li>Emissão de Solicitações ATPVe</li>
+                            <li>Suporte via WhatsApp</li>
+                        </ul>
+                    </div>
+                    <div class="pricing_btn">
+                        <a href="https://wa.me/555199047299?text=Olá!%20Gostaria%20de%20testar%20o%20Plano%20Standard%20(Equipe)." target="_blank" class="main-btn main-btn-2">Solicitar teste</a>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-lg-4 col-md-8 col-sm-10">
+                <div class="single_pricing text-center pricing_active pricing_color_2 mt-30 wow fadeInUp" data-wow-duration="1.3s" data-wow-delay="0.6s">
+                    <div class="pricing_top_bar">
+                        <h5 class="pricing_title">Plano Pro</h5>
+                        <i class="lni lni-crown"></i>
+                        <span class="price">R$ 59,90</span>
+                        <p class="mt-2">Ideal para revendas</p>
+                    </div>
+                    <div class="pricing_list">
+                        <ul>
+                            <li><strong>Vendedores Ilimitados</strong></li>
+                            <li>Gestão de Veículos</li>
+                            <li>Gestão de Multas</li>
+                            <li>Tabela FIPE Integrada</li>
+                            <li>Emissão de Procurações</li>
+                            <li>Emissão de Solicitações ATPVe</li>
+                            <li>Solicitações de Atualização</li>
+                            <li><strong>Backup Diário dos Dados</strong></li>
+                            <li>Suporte Prioritário</li>
+                        </ul>
+                    </div>
+                    <div class="pricing_btn">
+                        <a href="https://wa.me/555199047299?text=Olá!%20Gostaria%20de%20testar%20o%20Plano%20Pro." target="_blank" class="main-btn main-btn-2">Solicitar teste</a>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div> 
+</section>
     <!--====== PRICNG PART START ======-->
 <section id="planos" class="pricing_area mt-80 pt-75 pb-80">
     <div class="container">
