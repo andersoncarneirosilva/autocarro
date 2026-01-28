@@ -100,10 +100,28 @@
             
             <li class="side-nav-item">
                 <a href="{{ route('multas.index') }}" class="side-nav-link">
-                    <i class="uil-file-alt"></i>
+                    <i class="uil-clipboard-blank"></i>
                     <span> Multas </span>
                 </a>
-            </li>   
+            </li> 
+            
+            <li class="side-nav-item">
+                <a data-bs-toggle="collapse" href="#modelos" aria-expanded="false" aria-controls="sidebarLayouts" class="side-nav-link">
+                    <i class="uil-file-edit-alt"></i>
+                    <span> Modelos </span>
+                    <span class="menu-arrow"></span>
+                </a>
+                <div class="collapse" id="modelos">
+                    <ul class="side-nav-second-level">
+                        <li>
+                            <a href="{{ route('configuracoes.index') }}">Procuração</a>
+                        </li>
+                        <li>
+                            <a href="{{ route('configuracoes.solicitacao.indexAtpve') }}">Solicitação ATPVe</a>
+                        </li>
+                    </ul>
+                </div>
+            </li>
 
             <li class="side-nav-item">
                 <a data-bs-toggle="collapse" href="#configuracao" aria-expanded="false" aria-controls="sidebarLayouts" class="side-nav-link">
@@ -117,13 +135,10 @@
                             <a href="{{ route('outorgados.index') }}">Outorgados</a>
                         </li>
                         <li>
-                            <a href="{{ route('configuracoes.index') }}">Procuração</a>
-                        </li>
-                        <li>
-                            <a href="{{ route('configuracoes.solicitacao.indexAtpve') }}">Solicitação ATPVe</a>
-                        </li>
-                        <li>
                             <a href="{{ route('vendedores.index') }}">Vendedores</a>
+                        </li>
+                        <li>
+                            <a href="{{ route('perfil.index') }}">Perfil</a>
                         </li>
                         @can('access-admin') 
                         <li>
