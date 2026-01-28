@@ -78,11 +78,6 @@ class VeiculoController extends Controller
 
     public function indexArquivados(Request $request)
 {
-    // Configuração de alertas de exclusão
-    $title = 'Excluir!';
-    $text = 'Deseja excluir esse veículo?';
-    confirmDelete($title, $text);
-
     $userId = Auth::id();
     $search = $request->search;
 
@@ -120,6 +115,54 @@ class VeiculoController extends Controller
     
 
     return view('veiculos.arquivados', compact([
+        'clientes',
+        'outorgados',
+        'veiculos',
+        'modeloProc',
+        'quantidadePaginaAtual',
+        'quantidadeTotal'
+    ]));
+}
+
+public function indexVendidos(Request $request)
+{
+    $userId = Auth::id();
+    $search = $request->search;
+
+    // 1. Inicia a Query filtrando por Usuário e Status Arquivado
+    $query = $this->model->where('user_id', $userId)
+                         ->where('status', 'Vendido');
+
+    // 2. Aplica o filtro de busca se houver um termo pesquisado
+    if ($search) {
+        $query->where(function ($q) use ($search) {
+            $q->where('placa', 'LIKE', "%{$search}%")
+              ->orWhere('renavam', 'LIKE', "%{$search}%")
+              ->orWhere('marca', 'LIKE', "%{$search}%")
+              ->orWhere('modelo', 'LIKE', "%{$search}%");
+        });
+    }
+
+    // 3. Executa a paginação mantendo os filtros na URL (importante para funcionar a troca de página)
+    $veiculos = $query->orderBy('updated_at', 'desc')
+                      ->paginate(20)
+                      ->appends($request->all());
+
+    // 4. Define os contadores baseados no resultado da query
+    $quantidadePaginaAtual = $veiculos->count();
+    $quantidadeTotal = $veiculos->total(); // Total real considerando a busca
+
+    // 5. Dados auxiliares para o modal e visualização
+    $outorgados = Outorgado::where('user_id', $userId)->get();
+    $clientes = Cliente::where('user_id', $userId)->get();
+    $modeloProc = ModeloProcuracoes::exists();
+
+    // 6. Lógica de cálculo de espaço em disco
+    $path = storage_path('app/public/documentos/usuario_' . $userId);
+    
+    
+
+    return view('veiculos.vendidos', compact([
         'clientes',
         'outorgados',
         'veiculos',
@@ -458,7 +501,7 @@ class VeiculoController extends Controller
     $marca = $this->model->extrairMarca($textoPagina);
     $chassi = $this->model->extrairChassi($textoPagina);
     $cor = $this->model->extrairCor($textoPagina);
-    $anoModelo = $this->model->extrairAnoModelo($textoPagina);
+    $anoExtraido = $this->model->extrairAnoModelo($textoPagina);
     $renavam = $this->model->extrairRevanam($textoPagina);
     $nome = $this->model->extrairNome($textoPagina);
     $cpf = $this->model->extrairCpf($textoPagina);
@@ -481,6 +524,14 @@ class VeiculoController extends Controller
         $modeloReal = $partes[1] ?? '';
     }
 
+    // Divide a string pela barra
+    $partesAno = explode('/', $anoExtraido);
+
+    // Limpa e converte para inteiro
+    // Se o PDF falhar e não vier a barra, usamos o mesmo ano para ambos
+    $anoFabricacao = isset($partesAno[0]) ? (int) preg_replace('/\D/', '', $partesAno[0]) : null;
+    $anoModelo     = isset($partesAno[1]) ? (int) preg_replace('/\D/', '', $partesAno[1]) : $anoFabricacao;
+
     // Normalização de marcas
     $marcaReal = trim(strtoupper($marcaReal));
     //dd($marcaReal);
@@ -498,7 +549,8 @@ class VeiculoController extends Controller
         'placa' => $placa,
         'chassi' => strtoupper($chassi),
         'cor' => strtoupper($cor),
-        'ano' => $anoModelo,
+        'ano_fabricacao' => $anoFabricacao,
+        'ano_modelo'     => $anoModelo,
         'renavam' => $renavam,
         'crv' => $crv,
         'placaAnterior' => $placaAnterior,
@@ -592,24 +644,27 @@ class VeiculoController extends Controller
     }
 
     public function desarquivar($id)
-    {
-        $userId = Auth::id(); // Obtém o ID do usuário autenticado
+{
+    $userId = Auth::id();
 
-        // Busca o registro garantindo que pertença ao usuário logado
-        $veiculo = $this->model->where('id', $id)
-            ->where('user_id', $userId)
-            ->first();
+    $veiculo = $this->model->where('id', $id)
+        ->where('user_id', $userId)
+        ->first();
 
-        // Verifica se o veículo foi encontrado
-        if (! $veiculo) {
-            return back()->with('error', 'Erro ao restaurar o veículo!');
-        }
-
-        // Atualiza o status para "Arquivado"
-        $veiculo->update(['status' => 'Ativo']);
-
-        return back()->with('success', 'Veículo restaurado com sucesso!');
+    if (!$veiculo) {
+        return back()->with('error', 'Erro ao restaurar o veículo!');
     }
+
+    // Atualiza para Disponível e LIMPA os dados da venda anterior
+    $veiculo->update([
+        'status'      => 'Ativo', // Ou 'Ativo', conforme seu padrão
+        'valor_venda' => null,
+        'data_venda'  => null,
+        'cliente_id'  => null,
+    ]);
+
+    return back()->with('success', 'Veículo restaurado para o estoque e dados de venda limpos!');
+}
 
     public function destroy($id)
     {
@@ -1447,21 +1502,33 @@ class VeiculoController extends Controller
 {
     $userId = Auth::id();
     
-    // 1. Buscamos o veículo com seus documentos
+    // 1. Buscamos o veículo
     $veiculo = $this->model->with('documentos')->where('user_id', $userId)->find($id);
 
     if (!$veiculo) return redirect()->route('veiculos.index');
 
-    // 2. Buscamos as multas relacionadas a este veículo
-    // Certifique-se de que o Model Multa existe ou use DB::table('multas')
+    // 2. Buscamos os dados para os Modais de Venda e Documentos
+    $clientes = \App\Models\Cliente::where('user_id', $userId)->orderBy('nome')->get();
+    
+    // Buscamos os usuários que são vendedores (ajuste o critério conforme sua tabela users)
+    $vendedores = \App\Models\User::where('nivel_acesso', 'Vendedor')
+                                  ->orWhere('id', $userId) // Inclui o próprio admin como opção
+                                  ->orderBy('name')
+                                  ->get();
+
+    $outorgados = \App\Models\Outorgado::where('user_id', $userId)->get();
     $multas = \App\Models\Multa::where('veiculo_id', $id)->get();
+    $dadosFipe = null; // Caso você processe a FIPE depois
 
-    $dadosFipe = null;
-    $clientes = Cliente::where('user_id', $userId)->get();
-    $outorgados = Outorgado::where('user_id', $userId)->get();
-
-    // 3. Adicione 'multas' ao compact
-    return view('veiculos.show', compact('veiculo', 'outorgados', 'clientes', 'dadosFipe', 'multas'));
+    // 3. Importante: Adicionar 'vendedores' ao compact
+    return view('veiculos.show', compact(
+        'veiculo', 
+        'outorgados', 
+        'clientes', 
+        'vendedores', // <--- Faltava este cara!
+        'dadosFipe', 
+        'multas'
+    ));
 }
 
     public function edit($id)
@@ -2045,6 +2112,41 @@ public function deleteFoto($id, $index)
     }
 
     return response()->json(['success' => false], 404);
+}
+
+public function vender(Request $request, $id)
+{
+    $request->validate([
+        'vendedor_id' => 'required|exists:users,id',
+        'cliente_id'  => 'required|exists:clientes,id',
+        'valor_venda' => 'required',
+        'data_venda'  => 'required|date',
+    ]);
+
+    $veiculo = Veiculo::findOrFail($id);
+
+    $valorRaw = $request->valor_venda;
+
+    // VERIFICAÇÃO INTELIGENTE:
+    // Se tiver vírgula, tratamos como padrão BR (17.900,00)
+    if (str_contains($valorRaw, ',')) {
+        $valorSemMilhar = str_replace('.', '', $valorRaw); // Remove ponto de milhar
+        $valorFinal = str_replace(',', '.', $valorSemMilhar); // Troca vírgula por ponto decimal
+    } else {
+        // Se não tiver vírgula, o valor já está limpo (17900.00) ou é inteiro
+        $valorFinal = $valorRaw;
+    }
+
+    $veiculo->update([
+        'status'      => 'Vendido',
+        'vendedor_id' => $request->vendedor_id,
+        'cliente_id'  => $request->cliente_id,
+        'valor_venda' => $valorFinal,
+        'data_venda'  => $request->data_venda,
+    ]);
+
+    return redirect()->route('veiculos.show', $id)
+                     ->with('success', 'Venda registrada com sucesso!');
 }
 
 }

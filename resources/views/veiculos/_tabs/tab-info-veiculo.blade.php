@@ -20,7 +20,7 @@
         
         <div class="d-flex gap-2 mt-3">
             <span class="badge bg-primary-lighten text-primary px-2 py-1">
-                <i class="mdi mdi-calendar me-1"></i>{{ $veiculo->ano }}
+                <i class="mdi mdi-calendar me-1"></i>{{ $veiculo->ano_fabricacao }}/{{ $veiculo->ano_modelo }}
             </span>
             <span class="badge bg-light text-secondary px-2 py-1 border">
                 <i class="mdi mdi-gas-station me-1"></i>{{ $veiculo->combustivel }}

@@ -21,7 +21,8 @@ return new class extends Migration
         $table->string('placa', 10)->nullable(); // Definido tamanho sugerido
         $table->string('chassi')->nullable();
         $table->string('cor');
-        $table->integer('ano'); // Alterado para integer para cálculos/filtros
+        $table->integer('ano_fabricacao');
+        $table->integer('ano_modelo');
         $table->string('renavam')->nullable();
         $table->string('nome')->nullable(); // Nome do proprietário atual/anterior?
         $table->string('cpf')->nullable();
@@ -66,6 +67,9 @@ return new class extends Migration
         $table->string('fipe_modelo_id')->nullable();
         $table->string('fipe_versao_id')->nullable();
 
+        $table->foreignId('cliente_id')->nullable()->constrained('clientes')->onDelete('set null')->after('user_id');
+        $table->decimal('valor_venda', 15, 2)->nullable();
+        $table->date('data_venda')->nullable();
         // RELACIONAMENTOS
         // Vendedor (Usuário do sistema)
         $table->foreignId('vendedor_id')->nullable()->constrained('users')->onDelete('set null');

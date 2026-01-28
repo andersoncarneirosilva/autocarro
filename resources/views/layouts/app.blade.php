@@ -58,6 +58,14 @@
 <script src="https://cdn.ckeditor.com/ckeditor5/41.0.0/super-build/ckeditor.js"></script>
     {{-- <script src="{{ url('backend/js/pagamento.js') }}?v={{ time() }}"></script> --}}
 
+
+{{-- <script>
+    window.AppConfig = {
+        fipeToken: "{{ config('services.fipe.token') ?? env('FIPE_TOKEN') }}"
+    };
+</script> --}}
+
+
   <!-- Google tag (gtag.js) -->
 <script async src="https://www.googletagmanager.com/gtag/js?id=G-02FMMXT79W"></script>
 <script>

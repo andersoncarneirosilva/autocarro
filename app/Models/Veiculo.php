@@ -6,7 +6,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
-
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 class Veiculo extends Model
 {
     use HasApiTokens, HasFactory, Notifiable;
@@ -17,68 +17,60 @@ class Veiculo extends Model
      * @var array<int, string>
      */
     protected $fillable = [
-        'nome',
-        'cpf',
-        'endereco',
-        'marca',
-        'modelo',
-        'versao',
-        'placa',
-        'chassi',
-        'cor',
-        'ano',
-        'renavam',
-        'cidade',
-        'crv',
-        'placaAnterior',
-        'categoria',
-        'motor',
-        'combustivel',
-        'infos',
-        'tipo',
-        'arquivo_doc',
-        'size_doc',
-        'images',
-        'status',
-        'especiais',
-        'user_id',
+        // Identificação e Documentos
+        'nome', 'cpf', 'endereco', 'marca', 'modelo', 'versao', 'placa', 
+        'chassi', 'cor', 'ano_fabricacao', 'ano_modelo', 'renavam', 
+        'cidade', 'crv', 'placaAnterior', 'categoria', 'motor', 
+        'combustivel', 'infos', 'tipo', 'arquivo_doc', 'size_doc',
 
-        'kilometragem',
-        'visitas',
-        'portas',
-        'cambio',
-        'valor',
-        'valor_oferta',
-        'entrada',
-        'qtd_parcelas',
-        'taxa_juros',
-        'valor_parcela',
-        'exibir_parcelamento',
-        'observacoes',
-        'adicionais',
-        'opcionais',
-        'modificacoes',
-        'descricao',
-        'images'     => 'array',
+        // Características e Preços
+        'kilometragem', 'visitas', 'portas', 'cambio', 'valor', 
+        'valor_oferta', 'entrada', 'qtd_parcelas', 'taxa_juros', 
+        'valor_parcela', 'exibir_parcelamento', 'observacoes', 
+        'especiais', 'status',
 
-        'fipe_marca_id', 
-        'fipe_modelo_id', 
-        'fipe_versao_id',
+        // Conteúdo Rico (JSON/Text)
+        'adicionais', 'opcionais', 'modificacoes', 'descricao', 'images',
 
+        // Integração FIPE
+        'fipe_marca_id', 'fipe_modelo_id', 'fipe_versao_id',
+
+        // Relacionamentos e Multitenancy
+        'user_id',      // Dono da conta
+        'vendedor_id',  // Vendedor que captou ou vendeu
+        'cliente_id',   // Comprador (vínculo com tabela clientes)
+
+        // Dados da Venda (Novos Campos)
+        'valor_venda',
+        'data_venda',
     ];
 
     protected $casts = [
-        'adicionais' => 'array',
-        'opcionais' => 'array',
-        'modificacoes' => 'array',
+        'images'              => 'array',
+        'adicionais'          => 'array',
+        'opcionais'           => 'array',
+        'modificacoes'        => 'array',
+        'exibir_parcelamento' => 'boolean',
+        'data_venda'          => 'date',
+        'valor'               => 'decimal:2',
+        'valor_venda'         => 'decimal:2',
     ];
 
-    public function vendedor() {
-        return $this->belongsTo(Vendedor::class, 'vendedor_id');
+    public function cliente(): BelongsTo // Agora o PHP reconhecerá o tipo importado acima
+    {
+        return $this->belongsTo(Cliente::class, 'cliente_id');
+    }
+
+    /**
+     * Relacionamento com Vendedor
+     */
+    public function vendedor(): BelongsTo
+    {
+        return $this->belongsTo(User::class, 'vendedor_id');
     }
 
     // Relacionamento com o usuário
-    public function user()
+    public function user(): BelongsTo
     {
         return $this->belongsTo(User::class);
     }

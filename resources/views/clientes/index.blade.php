@@ -42,7 +42,7 @@
 </div>
 
 <div class="card border-0 shadow-sm rounded-3">
-    <div class="card-body p-4">
+    <div class="card-body p-2">
         {{-- Cabeçalho idêntico ao de Outorgados --}}
         <div class="row align-items-center mb-4">
             <div class="col-md-4">

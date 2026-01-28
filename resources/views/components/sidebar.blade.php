@@ -79,8 +79,14 @@
             <li class="side-nav-item">
                 <a href="{{ route('veiculos.arquivados') }}/" class="side-nav-link">
                     <i class="uil-car-slash"></i>
-                    
-                    <span> Veículos Arquivados </span>
+                    <span> Veículos arquivados </span>
+                </a>
+            </li>
+
+            <li class="side-nav-item">
+                <a href="{{ route('veiculos.vendidos') }}/" class="side-nav-link">
+                    <i class="uil-shopping-cart-alt"></i>
+                    <span> Veículos vendidos </span>
                 </a>
             </li>
 

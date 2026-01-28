@@ -256,6 +256,7 @@ Route::prefix('configuracoes')->group(function () {
     // Rota para processar o envio do formulário (POST)
     Route::post('/veiculos/cadastro-manual/store', [VeiculoController::class, 'storeManual'])->name('veiculos.store-manual');
 
+    Route::get('/veiculos/vendidos', [VeiculoController::class, 'indexVendidos'])->name('veiculos.vendidos');
     Route::get('/veiculos/arquivados', [VeiculoController::class, 'indexArquivados'])->name('veiculos.arquivados');
     Route::get('/veiculos/create', [VeiculoController::class, 'create'])->name('veiculos.create');
     Route::post('/veiculos', [VeiculoController::class, 'store'])->name('veiculos.store');
@@ -303,6 +304,7 @@ Route::prefix('configuracoes')->group(function () {
     // Rota específica para atualização de status (Pendente/Pago/Recurso)
     Route::patch('multas/{id}/status', [MultaController::class, 'updateStatus'])->name('multas.updateStatus');
 
+    Route::post('/veiculos/{id}/vender', [VeiculoController::class, 'vender'])->name('veiculos.vender');
     // Rota para listar multas de um veículo específico (útil para a aba do veículo)
     Route::get('veiculos/{veiculo}/multas', [MultaController::class, 'porVeiculo'])->name('multas.veiculo');
 

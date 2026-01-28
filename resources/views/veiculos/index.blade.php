@@ -150,7 +150,7 @@ document.addEventListener('DOMContentLoaded', function () {
                                     <span class="fw-bold d-block">{{ $veiculo->placa }}</span>
                                 </div>
                             </td>
-                            <td>{{ $veiculo->ano }}</td>
+                            <td>{{ $veiculo->ano_fabricacao }}/{{ $veiculo->ano_modelo }}</td>
                             <td>{{ $veiculo->cor }}</td>
                             <td>{{ $veiculo->kilometragem ?? 'Não consta' }}</td>
                             <td>

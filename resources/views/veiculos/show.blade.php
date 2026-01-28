@@ -22,6 +22,8 @@
 
 @include('veiculos._modals.gerar-documentos')
 
+@include('veiculos._modals.vender-veiculo')
+
 {{-- Toasts de sessão --}}
 @if (session('success') || session('error'))
 <script>
@@ -102,6 +104,12 @@ document.addEventListener('DOMContentLoaded', function () {
             <span class="d-none d-md-inline-block">Multas</span>
         </a>
     </li>
+    <li class="nav-item">
+        <a href="#venda" data-bs-toggle="tab" aria-expanded="false" class="nav-link">
+            <i class="mdi mdi-cash-register me-1"></i>
+            <span class="d-none d-md-inline-block">Venda / Checkout</span>
+        </a>
+    </li>
 </ul>
 </div>
 
@@ -127,7 +135,11 @@ document.addEventListener('DOMContentLoaded', function () {
                         @include('veiculos._tabs.tab-multas')
                     </div>
 
-                </div> 
+                    <div class="tab-pane" id="venda">
+                        @include('veiculos._tabs.tab-venda')
+                    </div>
+
+                </div>
             
                         <div class="row">
     <div class="col-md-4">
@@ -261,7 +273,7 @@ document.addEventListener('DOMContentLoaded', function() {
     const selectCombustivel = document.querySelector('select[name="combustivel"]');
 
     const BASE_URL = 'https://parallelum.com.br/fipe/api/v1';
-    const TOKEN = process.env.FIPE_TOKEN;
+    const TOKEN = window.AppConfig.fipeToken;
 
     // Objeto de configuração para os headers (centralizado)
     const requestOptions = {
