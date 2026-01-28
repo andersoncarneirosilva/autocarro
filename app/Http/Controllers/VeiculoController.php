@@ -1446,17 +1446,22 @@ class VeiculoController extends Controller
    public function show($id)
 {
     $userId = Auth::id();
+    
+    // 1. Buscamos o veículo com seus documentos
     $veiculo = $this->model->with('documentos')->where('user_id', $userId)->find($id);
 
     if (!$veiculo) return redirect()->route('veiculos.index');
 
-    // Definimos como null para o Blade saber que não há carregamento prévio via PHP
-    $dadosFipe = null;
+    // 2. Buscamos as multas relacionadas a este veículo
+    // Certifique-se de que o Model Multa existe ou use DB::table('multas')
+    $multas = \App\Models\Multa::where('veiculo_id', $id)->get();
 
+    $dadosFipe = null;
     $clientes = Cliente::where('user_id', $userId)->get();
     $outorgados = Outorgado::where('user_id', $userId)->get();
 
-    return view('veiculos.show', compact('veiculo', 'outorgados', 'clientes', 'dadosFipe'));
+    // 3. Adicione 'multas' ao compact
+    return view('veiculos.show', compact('veiculo', 'outorgados', 'clientes', 'dadosFipe', 'multas'));
 }
 
     public function edit($id)

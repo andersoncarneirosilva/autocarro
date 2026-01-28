@@ -96,6 +96,12 @@ document.addEventListener('DOMContentLoaded', function () {
             <span class="d-none d-md-inline-block">Documentos</span>
         </a>
     </li>
+    <li class="nav-item">
+        <a href="#multas" data-bs-toggle="tab" aria-expanded="false" class="nav-link">
+            <i class="mdi mdi-file-document-outline me-1"></i>
+            <span class="d-none d-md-inline-block">Multas</span>
+        </a>
+    </li>
 </ul>
 </div>
 
@@ -115,6 +121,10 @@ document.addEventListener('DOMContentLoaded', function () {
 
                     <div class="tab-pane" id="documentos">
                         @include('veiculos._tabs.tab-documentos')
+                    </div>
+
+                    <div class="tab-pane" id="multas">
+                        @include('veiculos._tabs.tab-multas')
                     </div>
 
                 </div> 
