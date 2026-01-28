@@ -58,16 +58,12 @@ class User extends Authenticatable
         'password_changed_at' => 'datetime',
     ];
 
-public function revenda()
+    public function scopeVendedores($query)
 {
-    // O segundo parâmetro 'user_id' é a chave estrangeira na tabela revendas
-    return $this->hasOne(Revenda::class, 'user_id');
+    return $query->where('nivel_acesso', 'Vendedor');
 }
 
-public function particular()
-    {
-        return $this->hasOne(Particular::class);
-    }
+
     public function assinaturas()
     {
         return $this->hasMany(Assinatura::class, 'user_id');

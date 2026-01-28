@@ -36,6 +36,7 @@ use App\Http\Controllers\ModeloProcuracaoController;
 use App\Http\Controllers\PartiularController;
 use App\Http\Controllers\MultaController;
 use App\Http\Controllers\SolicitacaoController;
+use App\Http\Controllers\VendedorController;
 
 use Illuminate\Support\Facades\Route;
 use Livewire\Livewire;
@@ -304,6 +305,8 @@ Route::prefix('configuracoes')->group(function () {
 
     // Rota para listar multas de um veículo específico (útil para a aba do veículo)
     Route::get('veiculos/{veiculo}/multas', [MultaController::class, 'porVeiculo'])->name('multas.veiculo');
+
+    Route::resource('vendedores', VendedorController::class);
 
 });
 

@@ -49,6 +49,7 @@ class Veiculo extends Model
         'cambio',
         'valor',
         'valor_oferta',
+        'entrada',
         'qtd_parcelas',
         'taxa_juros',
         'valor_parcela',
@@ -71,6 +72,10 @@ class Veiculo extends Model
         'opcionais' => 'array',
         'modificacoes' => 'array',
     ];
+
+    public function vendedor() {
+        return $this->belongsTo(Vendedor::class, 'vendedor_id');
+    }
 
     // Relacionamento com o usuário
     public function user()
