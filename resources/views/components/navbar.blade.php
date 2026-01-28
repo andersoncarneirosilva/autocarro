@@ -215,11 +215,10 @@ observer.observe(document.body, { childList: true, subtree: true });
                 <a class="nav-link dropdown-toggle arrow-none nav-user px-2" data-bs-toggle="dropdown" href="#"
                     role="button" aria-haspopup="false" aria-expanded="false">
                     <span class="account-user-avatar">
-                        @if(auth()->user()->image)
-                            {{-- Usa a classe avatar-img do seu stack para manter o estilo --}}
-                            <img src="{{ asset('storage/' . auth()->user()->image) }}" alt="user-image" width="32" height="32" class="avatar-img rounded-circle" style="margin-left:0;">
+                        @if(auth()->user()->image && \Storage::disk('public')->exists(auth()->user()->image))
+                            <img src="{{ asset('storage/' . auth()->user()->image) }}" alt="user-image" 
+                                class="rounded-circle" width="32" height="32" style="object-fit: cover;">
                         @else
-                            {{-- Novo elemento com a inicial --}}
                             <div class="avatar-text">
                                 {{ strtoupper(substr(auth()->user()->name, 0, 1)) }}
                             </div>

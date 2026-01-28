@@ -44,177 +44,142 @@ document.addEventListener('DOMContentLoaded', function () {
             </div>
         </div>
     </div>
-
-    {{-- HEADER ESTILO HYPER --}}
-    <div class="row">
-        <div class="col-sm-12">
-            <div class="card bg-primary">
-                <div class="card-body profile-user-box">
-                    <div class="row">
-                        <div class="col-sm-8">
-                            <div class="row align-items-center">
-                                <div class="col-auto">
-                                    <div class="avatar-lg">
-                                        @if(auth()->user()->image)
-                                            <img src="{{ asset('storage/' . auth()->user()->image) }}" alt="user-image" class="rounded-circle img-thumbnail w-100 h-100" style="object-fit: cover;">
-                                        @else
-                                            <div class="rounded-circle img-thumbnail bg-dark d-flex align-items-center justify-content-center w-100 h-100 text-white fw-bold fs-2">
-                                                {{ strtoupper(substr(auth()->user()->name, 0, 1)) }}
-                                            </div>
-                                        @endif
-                                    </div>
-                                </div>
-                                <div class="col">
-                                    <div>
-                                        <h4 class="mt-1 mb-1 text-white">{{ auth()->user()->name }}</h4>
-                                        <p class="font-13 text-white-50 mb-0"><i class="bi bi-envelope me-1"></i> {{ auth()->user()->email }}</p>
-                                        <p class="text-white-50 mb-0"><i class="bi bi-person-badge me-1"></i> {{ auth()->user()->nivel_acesso }}</p>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="col-sm-4">
-                            <div class="text-center mt-sm-0 mt-3 text-sm-end">
-                                @if(auth()->user()->nivel_acesso == 'Revenda' && isset($revenda))
-                                    <a href="{{ url('/loja/' . $revenda->slug) }}" target="_blank" class="btn btn-light">
-                                        <i class="mdi mdi-link-variant me-1"></i> Ver loja
-                                    </a>
-                                @endif
-                            </div>
-                        </div>
-                    </div>
-                </div> 
-            </div>
-        </div>
-    </div>
-
-    {{-- ABAS E CONTEÚDO --}}
+<div class="container-fluid">
+    {{-- HEADER MODERNO --}}
     <div class="row">
         <div class="col-12">
-            <div class="card">
-                <div class="card-body">
-                    <ul class="nav nav-pills bg-nav-pills nav-justified mb-3">
-                        <li class="nav-item">
-                            <a href="#pessoal" data-bs-toggle="tab" aria-expanded="true" class="nav-link rounded-0 active">
-                                <i class="mdi mdi-account-settings-outline d-md-none d-block"></i>
-                                <span class="d-none d-md-block">Dados de Acesso</span>
-                            </a>
-                        </li>
-                        @if(auth()->user()->nivel_acesso == 'Revenda')
-                        <li class="nav-item">
-                            <a href="#empresa" data-bs-toggle="tab" aria-expanded="false" class="nav-link rounded-0">
-                                <i class="mdi mdi-store d-md-none d-block"></i>
-                                <span class="d-none d-md-block">Dados da Revenda</span>
-                            </a>
-                        </li>
-                        @endif
-                    </ul>
-
-                    <div class="tab-content">
-                        {{-- ABA SEGURANÇA --}}
-                        <div class="tab-pane show active" id="pessoal">
-                            <form action="{{ route('perfil.update', auth()->user()->id) }}" method="POST" enctype="multipart/form-data">
-                                @csrf @method('PUT')
-                                <h5 class="mb-4 text-uppercase"><i class="mdi mdi-lock me-1"></i> Alterar Segurança</h5>
-                                <div class="row">
-                                    <div class="col-md-6 mb-3">
-                                        <label class="form-label">Nova Senha</label>
-                                        <input type="password" name="password" class="form-control" placeholder="Preencha apenas se quiser trocar">
-                                    </div>
-                                    <div class="col-md-6 mb-3">
-                                        <label class="form-label">Confirmar Senha</label>
-                                        <input type="password" name="password_confirm" class="form-control">
-                                    </div>
-                                    <div class="col-12 mb-3">
-                                        <label class="form-label">Trocar Foto de Perfil</label>
-                                        <input type="file" name="image" class="form-control">
-                                    </div>
-                                </div>
-                                <div class="text-end">
-                                    <button type="submit" class="btn btn-success"><i class="mdi mdi-content-save me-1"></i> Salvar Alterações</button>
-                                </div>
-                            </form>
+            <div class="card cta-box bg-primary text-white rounded-4 shadow-sm border-0 mb-4">
+                <div class="card-body p-4">
+                    <div class="d-flex align-items-center">
+                        <div class="avatar-xl me-4">
+    @if(auth()->user()->image && Storage::disk('public')->exists(auth()->user()->image))
+        <img src="{{ asset('storage/' . auth()->user()->image) }}" 
+             alt="user-image" 
+             class="rounded-circle img-thumbnail shadow-sm" 
+             style="width: 100px; height: 100px; object-fit: cover;"
+             onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
+        {{-- O div abaixo só aparece se a imagem der erro de carregamento (onerror) --}}
+        <div class="rounded-circle img-thumbnail bg-danger d-none align-items-center justify-content-center text-white fw-bold shadow-sm" 
+             style="width: 100px; height: 100px; font-size: 2.5rem;">
+            !
+        </div>
+    @else
+        <div class="rounded-circle img-thumbnail bg-soft-light d-flex align-items-center justify-content-center text-white fw-bold shadow-sm" 
+             style="width: 100px; height: 100px; font-size: 2.5rem; border: none; background: rgba(255,255,255,0.2);">
+            {{ strtoupper(substr(auth()->user()->name, 0, 1)) }}
+        </div>
+    @endif
+</div>
+                        <div>
+                            <h3 class="m-0 fw-bold">{{ auth()->user()->name }}</h3>
+                            <p class="text-white-50 m-0 fs-5">{{ auth()->user()->email }}</p>
+                            <span class="badge bg-soft-light text-white mt-2 px-3 py-2 rounded-pill">
+                                <i class="mdi mdi-shield-check-outline me-1"></i> {{ auth()->user()->nivel_acesso }}
+                            </span>
                         </div>
-
-                        {{-- ABA REVENDA --}}
-                        @if(auth()->user()->nivel_acesso == 'Revenda')
-                        <div class="tab-pane" id="empresa">
-                            <form action="{{ route('perfil.revenda.update') }}" method="POST" enctype="multipart/form-data">
-                                @csrf @method('PUT')
-                                <h5 class="mb-4 text-uppercase"><i class="mdi mdi-office-building me-1"></i> Informações da Loja</h5>
-                                <div class="row">
-                                    {{-- NOVO CAMPO DE BACKGROUND --}}
-            <div class="col-12 mb-3">
-                <label class="form-label">Capa da Loja (Background)</label>
-                @if(isset($revenda->background))
-                    <div class="mb-2">
-                        <img src="{{ asset('storage/' . $revenda->background) }}" class="img-fluid rounded" style="max-height: 150px; width: 100%; object-fit: cover;">
-                    </div>
-                @endif
-                <input type="file" name="background" class="form-control">
-                <small class="text-muted">Recomendado: 1200x300px (JPG ou PNG)</small>
-            </div>
-                                    <div class="col-md-6 mb-3">
-                                        <label class="form-label">Nome da Revenda</label>
-                                        <input type="text" name="nome" class="form-control" value="{{ $revenda->nome ?? '' }}" required>
-                                    </div>
-                                    <div class="col-md-6 mb-3">
-                                        <label class="form-label">CNPJ</label>
-                                        <input type="text" name="cnpj" id="cnpj" class="form-control" value="{{ $revenda->CPNJ ?? ($revenda->cnpj ?? '') }}">
-                                    </div>
-                                    <div class="col-md-6 mb-3">
-                                        <label class="form-label">WhatsApp de Vendas</label>
-                                        @php 
-                                            $whatsapp = '';
-                                            if (isset($revenda->fones)) {
-                                                $fones = is_array($revenda->fones) ? $revenda->fones : json_decode($revenda->fones, true);
-                                                $whatsapp = $fones['whatsapp'] ?? '';
-                                            }
-                                        @endphp
-                                        <input type="text" name="whatsapp" id="whatsapp"  class="form-control" value="{{ $whatsapp }}">
-                                    </div>
-                                    <div class="col-md-6 mb-3">
-                                        <label class="form-label">URL da Loja (Slug)</label>
-                                        <input type="text" class="form-control bg-light" value="{{ $revenda->slug ?? '' }}" readonly>
-                                    </div>
-                                </div>
-
-                                <h5 class="mb-4 text-uppercase mt-3"><i class="mdi mdi-map-marker me-1"></i> Endereço</h5>
-                                <div class="row">
-                                    <div class="col-md-9 mb-3">
-                                        <label class="form-label">Logradouro</label>
-                                        <input type="text" name="rua" class="form-control" value="{{ $revenda->rua ?? '' }}">
-                                    </div>
-                                    <div class="col-md-3 mb-3">
-                                        <label class="form-label">Número</label>
-                                        <input type="text" name="numero" class="form-control" value="{{ $revenda->numero ?? '' }}">
-                                    </div>
-                                    <div class="col-md-5 mb-3">
-                                        <label class="form-label">Cidade</label>
-                                        <input type="text" name="cidade" class="form-control" value="{{ $revenda->cidade ?? '' }}">
-                                    </div>
-                                    <div class="col-md-2 mb-3">
-                                        <label class="form-label">UF</label>
-                                        <input type="text" name="estado" class="form-control" value="{{ $revenda->estado ?? '' }}">
-                                    </div>
-                                    <div class="col-md-5 mb-3">
-                                        <label class="form-label">CEP</label>
-                                        <input type="text" name="cep" class="form-control" value="{{ $revenda->cep ?? '' }}">
-                                    </div>
-                                </div>
-                                <div class="text-end">
-                                    <button type="submit" class="btn btn-primary"><i class="mdi mdi-content-save me-1"></i> Atualizar Revenda</button>
-                                </div>
-                            </form>
-                        </div>
-                        @endif
                     </div>
                 </div>
             </div>
         </div>
     </div>
+
+    <div class="row">
+        {{-- COLUNA DA ESQUERDA: DADOS PESSOAIS --}}
+        <div class="col-xl-5 col-lg-6">
+            <div class="card shadow-sm border-0 rounded-4">
+                <div class="card-body p-4">
+                    <h5 class="header-title mb-4 text-dark fw-bold">
+                        <i class="mdi mdi-account-circle-outline me-1 text-primary"></i> Informações Pessoais
+                    </h5>
+                    
+                    <form action="{{ route('perfil.update', auth()->user()->id) }}" method="POST" enctype="multipart/form-data">
+                        @csrf @method('PUT')
+                        
+                        <div class="mb-3">
+                            <label class="form-label fw-semibold text-muted">Nome Completo</label>
+                            <input type="text" name="name" class="form-control bg-light border-0 py-2" value="{{ auth()->user()->name }}" required>
+                        </div>
+
+                        <div class="mb-3">
+                            <label class="form-label fw-semibold text-muted">E-mail</label>
+                            <input type="email" class="form-control bg-light border-0 py-2" value="{{ auth()->user()->email }}" readonly>
+                            <small class="text-muted">O e-mail não pode ser alterado.</small>
+                        </div>
+
+                        <div class="mb-4">
+                            <label class="form-label fw-semibold text-muted">Foto de Perfil</label>
+                            <div class="input-group">
+                                <input type="file" name="image" class="form-control border-dashed p-3 text-center">
+                            </div>
+                        </div>
+
+                        <button type="submit" class="btn btn-primary w-100 py-2 rounded-3 shadow-sm">
+                            <i class="mdi mdi-content-save-outline me-1"></i> Salvar Alterações
+                        </button>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+        {{-- COLUNA DA DIREITA: SEGURANÇA --}}
+        <div class="col-xl-7 col-lg-6">
+            <div class="card shadow-sm border-0 rounded-4">
+                <div class="card-body p-4">
+                    <h5 class="header-title mb-4 text-dark fw-bold">
+                        <i class="mdi mdi-lock-reset me-1 text-danger"></i> Segurança da Conta
+                    </h5>
+                    
+                    <p class="text-muted mb-4">Mantenha sua conta protegida alterando sua senha regularmente.</p>
+
+                    <form action="{{ route('perfil.update', auth()->user()->id) }}" method="POST">
+                        @csrf @method('PUT')
+                        
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label fw-semibold text-muted">Nova Senha</label>
+                                <div class="input-group input-group-merge">
+                                    <input type="password" name="password" class="form-control bg-light border-0 py-2" placeholder="Digite a nova senha">
+                                </div>
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label fw-semibold text-muted">Confirmar Senha</label>
+                                <div class="input-group input-group-merge">
+                                    <input type="password" name="password_confirm" class="form-control bg-light border-0 py-2" placeholder="Repita a nova senha">
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="alert alert-info bg-soft-info border-0 text-info font-13" role="alert">
+                            <i class="mdi mdi-information-outline me-2"></i>
+                            Deixe os campos em branco caso <strong>não queira</strong> alterar sua senha atual.
+                        </div>
+
+                        <div class="text-end mt-4">
+                            <button type="submit" class="btn btn-outline-danger px-4 py-2 rounded-3">
+                                <i class="mdi mdi-shield-lock-outline me-1"></i> Atualizar Senha
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
 </div>
+
+<style>
+    /* Estilos Customizados para Modernizar */
+    .avatar-xl { height: 100px; width: 100px; }
+    .bg-soft-light { background-color: rgba(255, 255, 255, 0.15); }
+    .border-dashed { border: 2px dashed #dee2e6 !important; }
+    .rounded-4 { border-radius: 1rem !important; }
+    .cta-box {
+        background: linear-gradient(135deg, #727cf5 0%, #4a54d4 100%) !important;
+    }
+    .form-control:focus {
+        background-color: #fff !important;
+        box-shadow: 0 0 0 0.2rem rgba(114, 124, 245, 0.1);
+    }
+</style>
 
 <script>
 document.addEventListener('DOMContentLoaded', function () {
