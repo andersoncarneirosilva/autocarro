@@ -29,5 +29,6 @@ class Configuracao extends Model
         'renavam',
         'arquivo_doc',
         'arquivo_proc',
+        'empresa_id'
     ];
 }

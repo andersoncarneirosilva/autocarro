@@ -20,6 +20,6 @@ class Vendedor extends Model
     }
 
     protected $fillable = [
-        'name', 'email', 'cpf', 'telefone', 'nivel_acesso', 'password', 'status'
+        'name', 'email', 'cpf', 'telefone', 'nivel_acesso', 'password', 'status', 'empresa_id'
     ];
 }

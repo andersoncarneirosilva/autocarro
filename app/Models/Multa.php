@@ -9,7 +9,7 @@ class Multa extends Model
     protected $fillable = [
         'veiculo_id', 'codigo_infracao', 'descricao', 
         'valor', 'data_infracao', 'data_vencimento', 
-        'status', 'orgao_emissor', 'observacoes'
+        'status', 'orgao_emissor', 'observacoes','empresa_id'
     ];
 
     // Relacionamento: Uma multa pertence a um veículo

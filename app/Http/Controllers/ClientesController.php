@@ -18,19 +18,15 @@ class ClientesController extends Controller
 
     public function index(Request $request)
     {
+        confirmDelete('Atenção', 'Deseja excluir esse cliente?');
 
-        $title = 'Atenção';
-        $text = 'Deseja excluir esse cliente?';
-        confirmDelete($title, $text);
+        $user = Auth::user();
+        $empresaId = $user->empresa_id ?? $user->id;
 
-        // Obtendo o ID do usuário logado
-        $userId = Auth::id();
-        $user = User::find($userId);
+        // Ajuste no Model: getClientes agora deve receber o empresaId
+        // Se o seu model ainda usa userId lá dentro, mude para empresaId
+        $clientes = $this->model->getClientes($request->search, $empresaId);
 
-        // Filtrando os clientes do usuário logado e realizando a pesquisa
-        $clientes = $this->model->getClientes($request->search, $userId);
-
-        // dd($docs);
         return view('clientes.index', compact('clientes'));
     }
 
@@ -41,11 +37,10 @@ class ClientesController extends Controller
 
     public function store(Request $request)
     {
-        $userId = Auth::id(); // Obtendo o ID do usuário logado
-        $data = $request->all(); // Obtendo todos os dados da requisição
+        $user = Auth::user();
+        $empresaId = $user->empresa_id ?? $user->id;
 
         try {
-            // Validação dos dados do cliente
             $validatedData = $request->validate([
                 'nome' => 'required|string|max:255',
                 'cpf' => 'required|string|max:255',
@@ -57,24 +52,21 @@ class ClientesController extends Controller
                 'bairro' => 'required|string|max:255',
                 'cidade' => 'required|string|max:255',
                 'estado' => 'required|string|max:255',
-                'complemento' => 'nullable|string|max:255', // Complemento é opcional
+                'complemento' => 'nullable|string|max:255',
             ]);
-
         } catch (\Illuminate\Validation\ValidationException $e) {
             alert()->error('Todos os campos são obrigatórios!');
-
             return redirect()->route('clientes.create');
         }
 
-        // Adicionando o user_id ao array de dados
-        $validatedData['user_id'] = $userId;
+        // LÓGICA ALCECAR: Salva quem criou e a qual empresa pertence
+        $validatedData['user_id'] = $user->id;
+        $validatedData['empresa_id'] = $empresaId;
 
-        // Criação do cliente no banco de dados
         $cliente = $this->model->create($validatedData);
 
         if ($cliente) {
             return redirect()->route('clientes.index')->with('success', 'Cliente cadastrado com sucesso!');
-
         }
 
         return redirect()->route('clientes.index')->with('error', 'Erro ao cadastrar cliente!');
@@ -82,8 +74,14 @@ class ClientesController extends Controller
 
     public function buscarClientes(Request $request)
     {
+        $user = Auth::user();
+        $empresaId = $user->empresa_id ?? $user->id;
         $search = $request->get('term');
-        $clientes = Cliente::where('nome', 'like', "%$search%")->get();
+
+        // Busca apenas clientes da mesma EMPRESA
+        $clientes = Cliente::where('empresa_id', $empresaId)
+            ->where('nome', 'like', "%$search%")
+            ->get();
 
         return response()->json($clientes->map(function ($cliente) {
             return ['id' => $cliente->id, 'text' => $cliente->nome];
@@ -92,18 +90,28 @@ class ClientesController extends Controller
 
     public function edit($id)
     {
+        $empresaId = Auth::user()->empresa_id ?? Auth::id();
 
-        if (! $cliente = $this->model->find($id)) {
-            return redirect()->route('clientes.index');
+        // Garante que só edita clientes da própria empresa
+        $cliente = $this->model->where('empresa_id', $empresaId)->find($id);
+
+        if (!$cliente) {
+            return redirect()->route('clientes.index')->with('error', 'Cliente não encontrado.');
         }
-        // dd($cliente);
 
         return view('clientes.edit', compact('cliente'));
     }
 
     public function update(Request $request, $id)
     {
-        // Validação dos dados
+        $empresaId = Auth::user()->empresa_id ?? Auth::id();
+        $cliente = $this->model->where('empresa_id', $empresaId)->find($id);
+
+        if (!$cliente) {
+            alert()->error('Erro: Cliente não encontrado!');
+            return redirect()->route('clientes.index');
+        }
+
         $validatedData = $request->validate([
             'nome' => 'required|string|max:255',
             'cpf' => 'required|string|max:255',
@@ -115,43 +123,25 @@ class ClientesController extends Controller
             'bairro' => 'required|string|max:255',
             'cidade' => 'required|string|max:255',
             'estado' => 'required|string|max:255',
-            'complemento' => 'nullable|string|max:255', // Complemento é opcional
+            'complemento' => 'nullable|string|max:255',
         ]);
 
-        // Busca o cliente pelo ID
-        $cliente = $this->model->find($id);
-
-        // Verifica se o cliente existe
-        if (! $cliente) {
-            alert()->error('Erro: Cliente não encontrado!');
-
-            return redirect()->route('clientes.index');
-        }
-
-        // Atualiza o cliente com os dados validados
         $cliente->update($validatedData);
 
-        // Mensagem de sucesso
         return redirect()->route('clientes.index')->with('success', 'Cliente atualizado com sucesso!');
     }
 
     public function destroy($id)
     {
-        // Procura o cliente pelo ID
-        $cli = $this->model->find($id);
+        $empresaId = Auth::user()->empresa_id ?? Auth::id();
+        $cli = $this->model->where('empresa_id', $empresaId)->find($id);
 
-        // Verifica se o cliente existe
-        if (! $cli) {
+        if (!$cli) {
             alert()->error('Erro ao excluir: Cliente não encontrado!');
-
             return redirect()->route('clientes.index');
         }
 
-        // Exclui o cliente
         $cli->delete();
-
-        // Retorna com mensagem de sucesso
-        // alert()->success('Cliente excluído com sucesso!');
         return back()->with('success', 'Cliente excluído com sucesso!');
     }
 }

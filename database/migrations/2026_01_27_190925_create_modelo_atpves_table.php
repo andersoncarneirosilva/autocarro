@@ -16,6 +16,7 @@ return new class extends Migration
         $table->foreignId('user_id')->constrained()->onDelete('cascade');
         $table->longText('conteudo'); // HTML do CKEditor
         $table->string('cidade')->nullable();
+        $table->foreignId('empresa_id')->nullable()->constrained('users')->onDelete('cascade');
         $table->timestamps();
     });
 }

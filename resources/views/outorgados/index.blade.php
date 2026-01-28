@@ -48,7 +48,7 @@
 
 
 <div class="card border-0 shadow-sm rounded-3">
-    <div class="card-body p-4">
+    <div class="card-body p-2">
         <div class="row align-items-center mb-4">
             <div class="col-md-4">
                 <h4 class="header-title mb-1 text-dark fw-bold">Outorgados Cadastrados</h4>
@@ -70,7 +70,7 @@
                     {{-- Ajustei o data-bs-target para o modal de Outorgados --}}
                     <button type="button" class="btn btn-primary  btn-sm px-3" 
                             data-bs-toggle="modal" data-bs-target="#modalCadastroOut">
-                        <i class="uil uil-plus me-1"></i> Novo Outorgado
+                        <i class="uil uil-plus me-1"></i> Cadastrar
                     </button>
                 </div>
             </div>

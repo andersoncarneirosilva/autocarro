@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Anuncio;
+use App\Models\Veiculo;
 use Illuminate\Http\Request;
 use Parsedown;
 use Illuminate\Support\Facades\DB;
@@ -10,7 +10,7 @@ class LojaController extends Controller
 {
     protected $model;
 
-    public function __construct(Anuncio $veiculos)
+    public function __construct(Veiculo $veiculos)
     {
         $this->model = $veiculos;
     }
@@ -22,12 +22,12 @@ return view('site.index');
     
     //dd($request);
     // Inicia a query filtrando apenas anúncios publicados
-    $query = Anuncio::with(['user.revenda', 'user.particular'])->where('status_anuncio', 'Publicado');
+    $query = Veiculo::with(['user.revenda', 'user.particular'])->where('status_Veiculo', 'Publicado');
 
     // Executa a paginação após aplicar o filtro
     $veiculos = $query->paginate(10);
 
-    $dadosAgrupados = Anuncio::where('status', 'Ativo')
+    $dadosAgrupados = Veiculo::where('status', 'Ativo')
         ->select('marca_real', 'modelo_real')
         ->get()
         ->groupBy('marca_real')
@@ -101,11 +101,11 @@ public function searchVeiculosUsados(Request $request)
 
 private function processarBusca(Request $request, $estado = 'Novo')
 {
-    $query = Anuncio::with('user.revenda');
+    $query = Veiculo::with('user.revenda');
 
     // 1. REGRAS GLOBAIS
     $query->where('status', 'Ativo')
-          ->where('status_anuncio', 'Publicado')
+          ->where('status_Veiculo', 'Publicado')
           ->where('estado', $estado);
 
     $veiculos = $query->orderBy('created_at', 'desc')->paginate(12);
@@ -152,7 +152,7 @@ elseif ($request->filled('ano')) {
     $query->when($request->max_price, fn($q, $max) => $q->where('valor', '<=', (float)$max));
 
     // Busca os anos disponíveis para o filtro lateral (para enviar para a view)
-    $anosDisponiveis = Anuncio::where('status', 'Ativo')
+    $anosDisponiveis = Veiculo::where('status', 'Ativo')
         ->where('estado', $estado)
         ->selectRaw('DISTINCT SUBSTRING_INDEX(ano, "/", 1) as ano_simples')
         ->orderBy('ano_simples', 'desc')
@@ -197,10 +197,10 @@ public function show($slug_loja, $slug_veiculo)
 {
     
     // 1. Busca pelo slug do veículo
-    $veiculo = Anuncio::where('slug', $slug_veiculo)->firstOrFail();
+    $veiculo = Veiculo::where('slug', $slug_veiculo)->firstOrFail();
     
     // Busca outros 4 veículos, excluindo o atual
-    $outrosVeiculos = Anuncio::where('id', '!=', $veiculo->id)
+    $outrosVeiculos = Veiculo::where('id', '!=', $veiculo->id)
                              ->where('status', 'ATIVO')
                              ->limit(4)
                              ->get();
@@ -255,9 +255,9 @@ public function buscarSugestoes(Request $request)
     }
 
     // Buscamos apenas os dados necessários para a sugestão
-    $sugestoes = \App\Models\Anuncio::query()
+    $sugestoes = \App\Models\Veiculo::query()
         ->where('status', 'Ativo')
-        ->where('status_anuncio', 'Publicado')
+        ->where('status_Veiculo', 'Publicado')
         ->where(function($q) use ($termo) {
             $q->where('marca_real', 'LIKE', "%{$termo}%")
               ->orWhere('modelo_real', 'LIKE', "%{$termo}%");
@@ -273,22 +273,22 @@ public function buscarSugestoes(Request $request)
 
 public function searchGeral(Request $request)
 {
-    $query = Anuncio::query();
+    $query = Veiculo::query();
 
     // 1. Filtro Global: Apenas anúncios PUBLICADOS e veículos ATIVOS
-    $query->where('status_anuncio', 'Publicado')
+    $query->where('status_Veiculo', 'Publicado')
           ->where('status', 'Ativo');
 
     // 2. Dados dinâmicos para preencher os filtros da View
     // Buscamos apenas o que está publicado para não mostrar marcas de carros offline
-    $dadosAgrupados = Anuncio::where('status_anuncio', 'Publicado')
+    $dadosAgrupados = Veiculo::where('status_Veiculo', 'Publicado')
         ->where('status', 'Ativo')
         ->select('marca_real', 'modelo_real')
         ->get()
         ->groupBy('marca_real')
         ->map(fn($itens) => $itens->pluck('modelo_real')->unique()->values());
 
-    $anosDisponiveis = Anuncio::where('status_anuncio', 'Publicado')
+    $anosDisponiveis = Veiculo::where('status_Veiculo', 'Publicado')
         ->whereNotNull('ano')
         ->selectRaw('DISTINCT LEFT(ano, 4) as ano_fabricacao')
         ->orderBy('ano_fabricacao', 'desc')

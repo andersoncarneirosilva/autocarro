@@ -6,6 +6,7 @@ use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\Auth;
 
 class PerfilController extends Controller
 {
@@ -18,56 +19,60 @@ class PerfilController extends Controller
 
     public function index()
     {
-        return view('perfil.index', ['user' => auth()->user()]);
+        $user = Auth::user();
+        
+        // LÓGICA ALCECAR: Se for vendedor, buscamos quem é o administrador dele
+        $gestor = null;
+        if ($user->empresa_id) {
+            $gestor = User::find($user->empresa_id);
+        }
+
+        return view('perfil.index', compact('user', 'gestor'));
     }
 
     public function update(Request $request, $id)
     {
-        // 1. Segurança: Garante que o usuário só edite a si próprio
-        if (auth()->id() != $id) {
+        // 1. Segurança Máxima: O usuário logado só pode editar o PRÓPRIO ID
+        if (Auth::id() != $id) {
             return redirect()->route('perfil.index')->with('error', 'Acesso não autorizado!');
         }
 
         $user = $this->model->findOrFail($id);
 
-        // 2. Atualizar Nome
-        if ($request->filled('name')) {
-            $user->name = $request->name;
-        }
+        // 2. Validação de dados básicos
+        $request->validate([
+            'name' => 'required|string|max:255',
+            'email' => 'required|email|unique:users,email,' . $user->id,
+        ]);
 
-        // 3. Atualizar Senha (com validação de confirmação)
+        $user->name = $request->name;
+        $user->email = $request->email;
+
+        // 3. Atualizar Senha
         if ($request->filled('password')) {
-            if ($request->password !== $request->password_confirm) {
-                return redirect()->back()->with('error', 'As senhas não coincidem!');
-            }
-            
-            if (strlen($request->password) < 6) {
-                return redirect()->back()->with('error', 'A senha deve ter pelo menos 6 caracteres.');
-            }
+            $request->validate([
+                'password' => 'min:6',
+                'password_confirm' => 'same:password'
+            ], [
+                'password_confirm.same' => 'As senhas não coincidem!'
+            ]);
 
             $user->password = Hash::make($request->password);
         }
 
-        // 4. Atualizar Imagem na pasta usuarios/{id}
+        // 4. Atualizar Imagem (Mantendo a organização por pasta de usuário)
         if ($request->hasFile('image') && $request->file('image')->isValid()) {
-            
-            // Deleta a foto anterior se existir para economizar espaço
             if ($user->image) {
                 Storage::disk('public')->delete($user->image);
             }
 
-            // Define a pasta baseada no ID do usuário
             $userFolder = "usuarios/usuario_{$user->id}";
-            
-            // Salva e recupera o caminho
             $imagePath = $request->file('image')->store($userFolder, 'public');
-
             $user->image = $imagePath;
         }
 
         $user->save();
 
-        // Retorna com a sessão 'success' que dispara o seu Toast
         return redirect()->route('perfil.index')->with('success', 'Perfil atualizado com sucesso!');
     }
 }

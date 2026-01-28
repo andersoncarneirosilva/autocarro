@@ -26,7 +26,7 @@ return new class extends Migration
             $table->string('complemento')->nullable();
 
             $table->foreignId('user_id')->constrained()->onDelete('cascade');
-
+            $table->foreignId('empresa_id')->nullable()->constrained('users')->onDelete('cascade');
             $table->timestamps();
         });
     }

@@ -22,16 +22,12 @@ class Outorgado extends Model
         'end_outorgado',
         'email_outorgado',
         'user_id',
+        'empresa_id'
     ];
 
-    public function getSearch(?string $search, $userId)
-    {
-        return $this->where('user_id', $userId) // Filtro pelo usuário logado
-            ->when($search, function ($query) use ($search) {
-                // Se houver pesquisa, filtra por renavam ou placa
-                $query->where('nome', 'LIKE', "%{$search}%")
-                    ->orWhere('cpf', 'LIKE', "%{$search}%");
-            })
-            ->paginate(10); // Retorna os resultados paginados
-    }
+    public function getSearch($search, $empresaId) {
+    return $this->where('empresa_id', $empresaId)
+                ->where('nome_outorgado', 'LIKE', "%{$search}%")
+                ->paginate(10);
+}
 }

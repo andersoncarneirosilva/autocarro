@@ -9,6 +9,7 @@ class ModeloAtpve extends Model
     protected $fillable = [
         'user_id',
         'conteudo',
-        'cidade'
+        'cidade',
+        'empresa_id'
     ];
 }

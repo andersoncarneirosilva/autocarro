@@ -87,13 +87,17 @@ document.addEventListener('DOMContentLoaded', function () {
                 </div>
 
                 <div class="row g-3 mb-4">
-                    <div class="col-md-3">
+                    <div class="col-md-2">
                         <label class="form-label fw-bold">Placa</label>
                         <input type="text" name="placa" class="form-control" placeholder="ABC1D23" style="text-transform: uppercase;">
                     </div>
-                    <div class="col-md-3">
-                        <label class="form-label fw-bold">Ano (Fab/Mod)</label>
-                        <input type="text" name="ano" id="input-ano" class="form-control" placeholder="2020/2021" maxlength="9">
+                    <div class="col-md-2">
+                        <label class="form-label fw-bold">Ano (Fabricação)</label>
+                        <input type="text" name="ano_fabricacao" class="form-control" placeholder="2020" maxlength="9">
+                    </div>
+                    <div class="col-md-2">
+                        <label class="form-label fw-bold">Ano (Modelo)</label>
+                        <input type="text" name="ano_modelo" class="form-control" placeholder="2021" maxlength="9">
                     </div>
                     <div class="col-md-3">
                         <label class="form-label fw-bold">Cor</label>
@@ -202,11 +206,6 @@ document.addEventListener('DOMContentLoaded', function () {
                     </div>
                 </div>
 
-                <div class="col-md-12 mb-4">
-                    <label class="form-label fw-bold">Descrição do Anúncio</label>
-                    <textarea class="form-control" name="descricao" rows="5" placeholder="Detalhe o estado do veículo, revisões, etc..."></textarea>
-                </div>
-
                 <div class="row g-3 p-3 bg-light rounded-3 mb-4">
                     <div class="col-md-6">
                         <label class="form-label fw-bold">Valor de Venda (R$)</label>
@@ -220,8 +219,8 @@ document.addEventListener('DOMContentLoaded', function () {
 
                 <div class="d-flex justify-content-end gap-2 mt-5">
                     <a href="{{ url()->previous() }}" class="btn btn-light px-4">Cancelar</a>
-                    <button type="submit" class="btn btn-primary px-5 shadow-sm" style="background-color: #ff4a17; border: none; font-weight: bold;">
-                        PUBLICAR ANÚNCIO
+                    <button type="submit" class="btn btn-primary px-5 shadow-sm">
+                        Cadastrar
                     </button>
                 </div>
             </form>
@@ -234,20 +233,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
 
 <script>
-    // 1. Função Autonoma para carregar bibliotecas e aplicar máscaras
-    (function verificarBibliotecas() {
-        if (typeof jQuery !== 'undefined' && typeof $.fn.mask !== 'undefined') {
-            // Aplica a máscara em todos os campos monetários
-            $('.money').mask('#.##0,00', {reverse: true});
-            $('#input-ano').mask('0000/0000');
-            $('input[name="placa"]').mask('AAAAAAA', {
-                translation: {'A': { pattern: /[A-Za-z0-9]/ }},
-                onKeyPress: function (v, e) { e.currentTarget.value = v.toUpperCase(); }
-            });
-        } else {
-            setTimeout(verificarBibliotecas, 100);
-        }
-    })();
+
 
     // 2. Comportamentos do Formulário
     document.addEventListener('DOMContentLoaded', function() {
@@ -284,7 +270,6 @@ document.addEventListener('DOMContentLoaded', function() {
     const selectMarca = document.getElementById('marca');
     const selectModelo = document.getElementById('modelo_carro');
     const selectVersao = document.getElementById('versao');
-    const inputAno = document.getElementById('input-ano');
     const selectCombustivel = document.querySelector('select[name="combustivel"]');
 
     // Função auxiliar para definir a rota da API com base no seu HTML
@@ -399,8 +384,6 @@ selectVersao.addEventListener('change', function() {
         fetch(`${BASE_URL}/${tipo}/marcas/${marcaId}/modelos/${modeloId}/anos/${anoId}`)
             .then(response => response.json())
             .then(veiculo => {
-                // Preenche o Ano (Ex: 2023/2023)
-                if(inputAno) inputAno.value = `${veiculo.AnoModelo}/${veiculo.AnoModelo}`;
 
                 // Tenta selecionar o combustível automaticamente
                 if(selectCombustivel) {

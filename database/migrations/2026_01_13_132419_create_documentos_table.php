@@ -30,7 +30,7 @@ return new class extends Migration
         // Campos de tamanho do PDF gerado
         $table->string('size_proc_pdf')->nullable();
         $table->string('size_atpve_pdf')->nullable();
-
+        $table->foreignId('empresa_id')->nullable()->constrained('users')->onDelete('cascade');
         $table->timestamps();
     });
 }

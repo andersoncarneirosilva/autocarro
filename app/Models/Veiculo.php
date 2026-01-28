@@ -43,6 +43,7 @@ class Veiculo extends Model
         // Dados da Venda (Novos Campos)
         'valor_venda',
         'data_venda',
+        'empresa_id'
     ];
 
     protected $casts = [

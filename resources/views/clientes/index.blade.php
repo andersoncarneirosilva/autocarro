@@ -70,7 +70,7 @@
                     </div>
 
                     <a href="{{ route('clientes.create')}}" class="btn btn-primary btn-sm px-3">
-                        <i class="mdi mdi-plus me-1"></i> Novo Cliente
+                        <i class="mdi mdi-plus me-1"></i> Cadastrar
                     </a>
                 </div>
             </div>

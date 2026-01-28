@@ -12,7 +12,8 @@ class ModeloProcuracao extends Model
     'user_id',
     'outorgados',
     'conteudo',
-    'cidade'
+    'cidade',
+    'empresa_id'
 ];
 
     // Converte automaticamente o JSON de IDs em Array e vice-versa

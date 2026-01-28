@@ -17,6 +17,7 @@ return new class extends Migration
         $table->json('outorgados'); 
         $table->longText('conteudo'); // Campo único para todo o PDF
         $table->string('cidade');
+        $table->foreignId('empresa_id')->nullable()->constrained('users')->onDelete('cascade');
         $table->timestamps();
     });
 }

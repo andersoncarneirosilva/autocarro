@@ -19,7 +19,7 @@ return new class extends Migration
             $table->string('email_outorgado', 255);
 
             $table->foreignId('user_id')->constrained()->onDelete('cascade'); // Chave estrangeira para o usuário
-
+            $table->foreignId('empresa_id')->nullable()->constrained('users')->onDelete('cascade');
             $table->timestamps();
         });
     }

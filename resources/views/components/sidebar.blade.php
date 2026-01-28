@@ -43,31 +43,6 @@
                     <span> Dashboard </span>
                 </a>
             </li>
-
-            {{-- <li class="side-nav-item">
-                <a href="{{ route('veiculos.index') }}" class="side-nav-link">
-                    <i class="mdi mdi-help-circle-outline"></i>
-                    <span> veiculos </span>
-                </a>
-            </li> --}}
-
-            {{-- <li class="side-nav-item">
-                <a data-bs-toggle="collapse" href="#configuracao" aria-expanded="false" aria-controls="sidebarLayouts" class="side-nav-link">
-                    <i class="uil-car"></i>
-                    <span> veiculos </span>
-                    <span class="menu-arrow"></span>
-                </a>
-                <div class="collapse" id="configuracao">
-                    <ul class="side-nav-second-level">
-                        <li>
-                            <a href="{{ route('veiculos.index') }}">Ativos</a>
-                        </li>
-                        <li>
-                            <a href="{{ route('veiculos.arquivados') }}">Arquivados</a>
-                        </li>
-                    </ul>
-                </div>
-            </li> --}}
             
             <li class="side-nav-item">
                 <a href="{{ route('veiculos.index') }}" class="side-nav-link">
@@ -89,14 +64,6 @@
                     <span> Veículos vendidos </span>
                 </a>
             </li>
-
-
-            <li class="side-nav-item">
-                <a href="{{ route('clientes.index') }}" class="side-nav-link">
-                    <i class="uil-users-alt"></i>
-                    <span> Clientes </span>
-                </a>
-            </li>   
             
             <li class="side-nav-item">
                 <a href="{{ route('multas.index') }}" class="side-nav-link">
@@ -104,6 +71,27 @@
                     <span> Multas </span>
                 </a>
             </li> 
+
+            <li class="side-nav-item">
+                <a data-bs-toggle="collapse" href="#cadastros" aria-expanded="false" aria-controls="sidebarLayouts" class="side-nav-link">
+                    <i class="uil-database"></i>
+                    <span> Cadastros </span>
+                    <span class="menu-arrow"></span>
+                </a>
+                <div class="collapse" id="cadastros">
+                    <ul class="side-nav-second-level">
+                        <li>
+                            <a href="{{ route('clientes.index') }}">Clientes</a>
+                        </li>
+                        <li>
+                            <a href="{{ route('outorgados.index') }}">Outorgados</a>
+                        </li>
+                        <li>
+                            <a href="{{ route('vendedores.index') }}">Vendedores</a>
+                        </li>
+                    </ul>
+                </div>
+            </li>
             
             <li class="side-nav-item">
                 <a data-bs-toggle="collapse" href="#modelos" aria-expanded="false" aria-controls="sidebarLayouts" class="side-nav-link">
@@ -131,12 +119,6 @@
                 </a>
                 <div class="collapse" id="configuracao">
                     <ul class="side-nav-second-level">
-                        <li>
-                            <a href="{{ route('outorgados.index') }}">Outorgados</a>
-                        </li>
-                        <li>
-                            <a href="{{ route('vendedores.index') }}">Vendedores</a>
-                        </li>
                         <li>
                             <a href="{{ route('perfil.index') }}">Perfil</a>
                         </li>

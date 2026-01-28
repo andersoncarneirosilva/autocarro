@@ -6,38 +6,37 @@ use App\Models\Cliente;
 use App\Models\Ordem;
 use App\Models\User;
 use App\Models\Veiculo;
-use Barryvdh\DomPDF\Facade as PDF;
+use App\Models\Procuracao; // Certifique-se de que o Model existe
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
 class RelatoriosController extends Controller
 {
+    // Método auxiliar para centralizar a lógica de Empresa
+    private function getEmpresaId()
+    {
+        return Auth::user()->empresa_id ?? Auth::id();
+    }
+
     public function index(Request $request)
     {
-
-        $userId = Auth::id();
-        $user = User::find($userId);
-
+        $user = Auth::user();
         $assinatura = $user->assinaturas()->latest()->first();
 
+        // Lógica de assinatura (Mantida conforme original)
         if ($user->plano == 'Padrão' || $user->plano == 'Pro') {
-            if (! $assinatura || now()->gt($assinatura->data_fim) || $assinatura->status == 'pending') {
+            if (!$assinatura || now()->gt($assinatura->data_fim) || $assinatura->status == 'pending') {
                 return redirect()->route('assinatura.expirada')->with('error', 'Sua assinatura expirou.');
             }
         }
-
-        $title = 'Excluir!';
-        $text = 'Deseja excluir esse veículo?';
-        confirmDelete($title, $text);
 
         return view('relatorios.index');
     }
 
     public function gerarRelatoriosSelect(Request $request)
     {
-        $userId = Auth::id();
+        $empresaId = $this->getEmpresaId();
 
-        // Validação dos campos
         $validated = $request->validate([
             'tipo-relatorio' => 'required|string',
             'data-inicial' => 'required|date',
@@ -48,30 +47,20 @@ class RelatoriosController extends Controller
         $dataInicial = $validated['data-inicial'];
         $dataFinal = $validated['data-final'];
 
-        // Lógica para gerar o relatório com base no tipo e intervalo de datas
+        $intervalo = [$dataInicial . ' 00:00:00', $dataFinal . ' 23:59:59'];
+
         switch ($tipo) {
             case 'Clientes':
-                // Filtra os clientes do usuário logado
-                $dados = Cliente::where('user_id', $userId)
-                    ->whereBetween('created_at', [
-                        $dataInicial.' 00:00:00',
-                        $dataFinal.' 23:59:59',
-                    ])
+                $dados = Cliente::where('empresa_id', $empresaId)
+                    ->whereBetween('created_at', $intervalo)
                     ->get();
-
                 return view('relatorios.resultado-clientes', compact('dados', 'tipo', 'dataInicial', 'dataFinal'));
-                break;
 
             case 'Veículos':
-                // Adiciona a restrição para o usuário logado, se necessário
-                $dados = Veiculo::where('user_id', auth()->id())
-                    ->whereBetween('created_at', [
-                        $dataInicial.' 00:00:00',
-                        $dataFinal.' 23:59:59',
-                    ])->get();
-
+                $dados = Veiculo::where('empresa_id', $empresaId)
+                    ->whereBetween('created_at', $intervalo)
+                    ->get();
                 return view('relatorios.resultado-veiculos', compact('dados', 'tipo', 'dataInicial', 'dataFinal'));
-                break;
 
             default:
                 return back()->withErrors(['tipo-relatorio' => 'Tipo de relatório inválido.']);
@@ -80,161 +69,51 @@ class RelatoriosController extends Controller
 
     public function gerarPdfClientes(Request $request)
     {
-
-        $userId = Auth::id();
-
-        $data = $request->all();
-        // dd($data);
+        $empresaId = $this->getEmpresaId();
         $dataI = $request['dataInicial'];
         $dataF = $request['dataFinal'];
 
-        $dados = Cliente::whereBetween('created_at', [
-            $dataI.' 00:00:00',
-            $dataF.' 23:59:59',
-        ])->get();
+        $dados = Cliente::where('empresa_id', $empresaId)
+            ->whereBetween('created_at', [$dataI . ' 00:00:00', $dataF . ' 23:59:59'])
+            ->get();
 
-        $view = view('relatorios.rel-clientes', compact('dados', 'dataI', 'dataF'))->render();
-        $pdf = app('dompdf.wrapper');
-        $pdf->loadHTML($view)
-            ->setPaper('a4', 'landscape');
-
-        // Retorna o PDF para download
-        return $pdf->stream('relatorio_clientes.pdf');
-    }
-
-    public function gerarPdfProcs(Request $request)
-    {
-
-        $data = $request->all();
-        // dd($data);
-        $dataI = $request['dataInicial'];
-        $dataF = $request['dataFinal'];
-
-        $procs = Procuracao::whereBetween('created_at', [
-            $dataI.' 00:00:00',
-            $dataF.' 23:59:59',
-        ])->get();
-
-        $view = view('relatorios.procuracoes', compact('procs'))->render();
-        $pdf = app('dompdf.wrapper');
-        $pdf->loadHTML($view)
-            ->setPaper('a4', 'landscape');
-
-        // Retorna o PDF para download
-        return $pdf->stream('relatorio_procuracoes.pdf');
-    }
-
-    public function gerarPdfOrdens(Request $request)
-    {
-
-        $data = $request->all();
-        // dd($data);
-        $dataI = $request['dataInicial'];
-        $dataF = $request['dataFinal'];
-
-        $ordem = Ordem::whereBetween('created_at', [
-            $dataI.' 00:00:00',
-            $dataF.' 23:59:59',
-        ])->get();
-
-        $view = view('relatorios.ordens', compact('ordem'))->render();
-        $pdf = app('dompdf.wrapper');
-        $pdf->loadHTML($view)
-            ->setPaper('a4', 'landscape');
-
-        // Retorna o PDF para download
-        return $pdf->stream('relatorio_ordens_de_servico.pdf');
+        return $this->gerarPdf('relatorios.rel-clientes', compact('dados', 'dataI', 'dataF'), 'relatorio_clientes.pdf');
     }
 
     public function gerarPdfVeiculos(Request $request)
     {
+        $empresaId = $this->getEmpresaId();
         $dataInicial = $request->input('dataInicial');
         $dataFinal = $request->input('dataFinal');
 
-        // Obtém apenas os veículos do usuário autenticado com paginação
-        $dados = Veiculo::where('user_id', auth()->id())
-            ->whereBetween('created_at', [
-                $dataInicial.' 00:00:00',
-                $dataFinal.' 23:59:59',
-            ])
-            ->get(); // Paginação com 10 itens por página
+        $dados = Veiculo::where('empresa_id', $empresaId)
+            ->whereBetween('created_at', [$dataInicial . ' 00:00:00', $dataFinal . ' 23:59:59'])
+            ->get();
 
-        // Renderiza a view com os dados filtrados
-        $view = view('relatorios.veiculos', compact('dados', 'dataInicial', 'dataFinal'))->render();
-
-        // Gera o PDF com DomPDF
-        $pdf = app('dompdf.wrapper');
-        $pdf->loadHTML($view)->setPaper('a4', 'landscape');
-
-        // Retorna o PDF para o navegador
-        return $pdf->stream('relatorio_veiculos.pdf');
+        return $this->gerarPdf('relatorios.veiculos', compact('dados', 'dataInicial', 'dataFinal'), 'relatorio_veiculos.pdf');
     }
 
+    // Métodos sem filtro de data também precisam de trava de segurança (empresa_id)
     public function gerarRelatorioClientes()
     {
-        // Obtém os dados dos clientes do banco de dados
-        $dados = Cliente::all();
-
-        // Renderiza a view com os dados
-        // $pdf = PDF::loadView('relatorios.clientes', compact('clientes'));
-
-        $view = view('relatorios.clientes', compact('dados'))->render();
-        $pdf = app('dompdf.wrapper');
-        $pdf->loadHTML($view)
-            ->setPaper('a4', 'landscape');
-
-        // Retorna o PDF para download
-        return $pdf->stream('relatorio_clientes.pdf');
-    }
-
-    public function gerarRelatorioOrdens()
-    {
-        // Obtém os dados dos clientes do banco de dados
-        // $dados = Ordem::all();
-        $dados = Ordem::with('cliente')->paginate(10);
-        // Renderiza a view com os dados
-        // $pdf = PDF::loadView('relatorios.clientes', compact('clientes'));
-
-        $view = view('relatorios.ordens', compact('dados'))->render();
-        $pdf = app('dompdf.wrapper');
-        $pdf->loadHTML($view)
-            ->setPaper('a4', 'landscape');
-
-        // Retorna o PDF para download
-        return $pdf->stream('relatorio_orden_de_servico.pdf');
+        $dados = Cliente::where('empresa_id', $this->getEmpresaId())->get();
+        return $this->gerarPdf('relatorios.clientes', compact('dados'), 'relatorio_clientes.pdf');
     }
 
     public function gerarRelatorioVeiculos()
     {
-        // Obtém os dados dos clientes do banco de dados
-        $dados = Veiculo::all();
-
-        // Renderiza a view com os dados
-        // $pdf = PDF::loadView('relatorios.clientes', compact('clientes'));
-
-        $view = view('relatorios.veiculos', compact('dados'))->render();
-        $pdf = app('dompdf.wrapper');
-        $pdf->loadHTML($view)
-            ->setPaper('a4', 'landscape');
-
-        // Retorna o PDF para download
-        return $pdf->stream('relatorio_veiculos.pdf');
+        $dados = Veiculo::where('empresa_id', $this->getEmpresaId())->get();
+        return $this->gerarPdf('relatorios.veiculos', compact('dados'), 'relatorio_veiculos.pdf');
     }
 
-    public function gerarRelatorioProc()
+    /**
+     * Helper para evitar repetição de código DomPDF
+     */
+    private function gerarPdf($viewPath, $data, $filename)
     {
-        // Obtém os dados dos clientes do banco de dados
-        $procs = Procuracao::all();
-
-        // Renderiza a view com os dados
-        // $pdf = PDF::loadView('relatorios.clientes', compact('clientes'));
-
-        $view = view('relatorios.procuracoes', compact('procs'))->render();
+        $view = view($viewPath, $data)->render();
         $pdf = app('dompdf.wrapper');
-        $pdf->loadHTML($view)
-            ->setPaper('a4', 'landscape');
-
-        // Retorna o PDF para download
-        return $pdf->stream('relatorio_procuracoes.pdf');
+        $pdf->loadHTML($view)->setPaper('a4', 'landscape');
+        return $pdf->stream($filename);
     }
 }

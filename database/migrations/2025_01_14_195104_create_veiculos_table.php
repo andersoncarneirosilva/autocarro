@@ -73,7 +73,7 @@ return new class extends Migration
         // RELACIONAMENTOS
         // Vendedor (Usuário do sistema)
         $table->foreignId('vendedor_id')->nullable()->constrained('users')->onDelete('set null');
-        // Dono da conta (Multitenancy do Alcecar)
+        $table->foreignId('empresa_id')->nullable()->constrained('users')->onDelete('cascade');
         $table->foreignId('user_id')->constrained()->onDelete('cascade');
 
         $table->timestamps();

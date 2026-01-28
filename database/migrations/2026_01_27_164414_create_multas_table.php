@@ -18,6 +18,7 @@ return new class extends Migration {
             $col->enum('status', ['pendente', 'pago', 'recurso'])->default('pendente');
             $col->string('orgao_emissor')->nullable();
             $col->text('observacoes')->nullable();
+            $col->foreignId('empresa_id')->nullable()->constrained('users')->onDelete('cascade');
             $col->timestamps();
         });
     }

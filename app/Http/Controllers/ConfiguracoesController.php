@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\ModeloProcuracao;
+use App\Models\ModeloAtpve;
 use App\Models\Outorgado;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -12,117 +13,116 @@ class ConfiguracoesController extends Controller
 {
     public function index()
     {
-        $userId = Auth::id();
+        $user = Auth::user();
+        $empresaId = $user->empresa_id ?? $user->id;
         
-        // Dados para a View
-        $modeloProc = ModeloProcuracao::where('user_id', $userId)->get();
-        $outorgados = Outorgado::where('user_id', $userId)->get();
+        // Dados para a View filtrados pela EMPRESA
+        $modeloProc = ModeloProcuracao::where('empresa_id', $empresaId)->get();
+        $outorgados = Outorgado::where('empresa_id', $empresaId)->get();
 
         return view('configuracoes.index', compact('modeloProc', 'outorgados'));
     }
 
-   public function indexAtpve()
-{
-    $modeloAtpve = \App\Models\ModeloAtpve::where('user_id', auth()->id())->first();
-    $outorgados = \App\Models\Outorgado::where('user_id', auth()->id())->get();
-    
-    // Certifique-se de que o caminho da view está correto
-    return view('configuracoes.solicitacoes', compact('modeloAtpve', 'outorgados'));
-}
+    public function indexAtpve()
+    {
+        $user = Auth::user();
+        $empresaId = $user->empresa_id ?? $user->id;
 
-    /**
-     * Salva ou Atualiza o modelo (Create/Update)
-     */
-    public function saveProcuracao(Request $request)
-{
-    try {
-        $request->validate([
-            'conteudo' => 'required|string',
-            'cidade' => 'required|string',
-            'outorgados' => 'required|array|min:1|max:3',
-            'outorgados.*' => 'exists:outorgados,id',
-        ]);
-
-        $modelo = ModeloProcuracao::updateOrCreate(
-            ['user_id' => Auth::id()], 
-            [
-                'conteudo'   => $request->conteudo,
-                'cidade'     => $request->cidade,
-                'outorgados' => $request->outorgados,
-            ]
-        );
-
-        // Retorna com a chave 'success' para ativar o seu script de Toast
-        return redirect()->route('configuracoes.index')
-            ->with('success', 'Configuração salva com sucesso!');
-
-    } catch (\Exception $e) {
-        Log::error('Erro ao salvar configuração Alcecar:', ['error' => $e->getMessage()]);
+        $modeloAtpve = ModeloAtpve::where('empresa_id', $empresaId)->first();
+        $outorgados = Outorgado::where('empresa_id', $empresaId)->get();
         
-        // Retorna com a chave 'error' para o Toast
-        return redirect()->back()
-            ->with('error', 'Não foi possível salvar as alterações.');
+        return view('configuracoes.solicitacoes', compact('modeloAtpve', 'outorgados'));
     }
-}
 
-    /**
-     * Retorna os dados para o Modal (Read)
-     */
+    public function saveProcuracao(Request $request)
+    {
+        try {
+            $user = Auth::user();
+            $empresaId = $user->empresa_id ?? $user->id;
+
+            $request->validate([
+                'conteudo' => 'required|string',
+                'cidade' => 'required|string',
+                'outorgados' => 'required|array|min:1|max:3',
+                'outorgados.*' => 'exists:outorgados,id',
+            ]);
+
+            // LÓGICA ALCECAR: A busca do updateOrCreate agora é por EMPRESA_ID
+            $modelo = ModeloProcuracao::updateOrCreate(
+                ['empresa_id' => $empresaId], 
+                [
+                    'user_id'    => $user->id, // Quem salvou por último
+                    'conteudo'   => $request->conteudo,
+                    'cidade'     => $request->cidade,
+                    'outorgados' => $request->outorgados,
+                ]
+            );
+
+            return redirect()->route('configuracoes.index')
+                ->with('success', 'Configuração salva com sucesso!');
+
+        } catch (\Exception $e) {
+            Log::error('Erro ao salvar configuração Alcecar:', ['error' => $e->getMessage()]);
+            return redirect()->back()->with('error', 'Não foi possível salvar as alterações.');
+        }
+    }
+
     public function showProcuracao($id)
-{
-    $modelo = ModeloProcuracao::where('user_id', Auth::id())->findOrFail($id);
-    
-    // Se o cast estiver no model, $modelo->outorgados já é um array.
-    // Se não estiver, fazemos a checagem manual:
-    $ids = is_array($modelo->outorgados) 
-           ? $modelo->outorgados 
-           : json_decode($modelo->outorgados, true) ?? [];
+    {
+        $empresaId = Auth::user()->empresa_id ?? Auth::id();
 
-    $detalhesOutorgados = Outorgado::whereIn('id', $ids)->get();
+        // Garante que só visualiza modelos da própria empresa
+        $modelo = ModeloProcuracao::where('empresa_id', $empresaId)->findOrFail($id);
+        
+        $ids = is_array($modelo->outorgados) 
+               ? $modelo->outorgados 
+               : json_decode($modelo->outorgados, true) ?? [];
 
-    return response()->json([
-        'success' => true,
-        'data' => [
-            'conteudo' => $modelo->conteudo,
-            'cidade' => $modelo->cidade,
-            'outorgados' => $detalhesOutorgados
-        ]
-    ]);
-}
+        $detalhesOutorgados = Outorgado::whereIn('id', $ids)->get();
 
-    /**
-     * Exclui o modelo (Delete)
-     */
+        return response()->json([
+            'success' => true,
+            'data' => [
+                'conteudo' => $modelo->conteudo,
+                'cidade' => $modelo->cidade,
+                'outorgados' => $detalhesOutorgados
+            ]
+        ]);
+    }
+
     public function deleteProcuracao($id)
     {
         try {
-            $modelo = ModeloProcuracao::where('user_id', Auth::id())->findOrFail($id);
+            $empresaId = Auth::user()->empresa_id ?? Auth::id();
+            $modelo = ModeloProcuracao::where('empresa_id', $empresaId)->findOrFail($id);
             $modelo->delete();
 
-            alert()->success('Excluído!', 'O modelo foi removido.');
-            return redirect()->route('configuracoes.index');
+            return redirect()->route('configuracoes.index')->with('success', 'O modelo foi removido.');
         } catch (\Exception $e) {
             return redirect()->back()->with('error', 'Erro ao excluir.');
         }
     }
 
     public function saveAtpve(Request $request)
-{
-    // Validação básica
-    $request->validate([
-        'conteudo' => 'required',
-        'cidade' => 'required'
-    ]);
+    {
+        $user = Auth::user();
+        $empresaId = $user->empresa_id ?? $user->id;
 
-    // Salva ou atualiza o modelo do usuário logado
-    \App\Models\ModeloAtpve::updateOrCreate(
-        ['user_id' => auth()->id()],
-        [
-            'conteudo' => $request->conteudo,
-            'cidade' => $request->cidade
-        ]
-    );
+        $request->validate([
+            'conteudo' => 'required',
+            'cidade' => 'required'
+        ]);
 
-    return back()->with('success', 'Modelo de Solicitação ATPVe atualizado com sucesso!');
-}
+        // Salva ou atualiza o modelo da EMPRESA
+        ModeloAtpve::updateOrCreate(
+            ['empresa_id' => $empresaId],
+            [
+                'user_id' => $user->id,
+                'conteudo' => $request->conteudo,
+                'cidade' => $request->cidade
+            ]
+        );
+
+        return back()->with('success', 'Modelo de Solicitação ATPVe atualizado com sucesso!');
+    }
 }

@@ -29,21 +29,27 @@ class Cliente extends Model
         'estado',
         'complemento',
         'user_id',
+        'empresa_id'
     ];
 
-    public function getClientes(?string $search, $userId)
-    {
-        return $this->where('user_id', $userId) // Filtro pelo usuário logado
-            ->when($search, function ($query) use ($search) {
-                // Se houver pesquisa, filtra por nome ou CPF
-                $query->where('nome', 'LIKE', "%{$search}%")
-                    ->orWhere('cpf', 'LIKE', "%{$search}%");
-            })
-            ->paginate(10); // Retorna os resultados paginados
-    }
+    public function getClientes(string $search = null, $empresaId) 
+{
+    $clientes = $this->where(function ($query) use ($search, $empresaId) {
+        // MUDANÇA AQUI: Filtra pela empresa
+        $query->where('empresa_id', $empresaId);
 
-    public function ordens()
-    {
-        return $this->hasMany(Ordem::class);
-    }
+        if ($search) {
+            $query->where(function ($q) use ($search) {
+                $q->where('nome', 'LIKE', "%{$search}%")
+                  ->orWhere('cpf', 'LIKE', "%{$search}%")
+                  ->orWhere('email', 'LIKE', "%{$search}%");
+            });
+        }
+    })
+    ->orderBy('nome', 'asc')
+    ->paginate(10);
+
+    return $clientes;
+}
+
 }

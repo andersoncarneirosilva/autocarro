@@ -24,6 +24,7 @@ return new class extends Migration
             $table->timestamp('last_login_at')->nullable();
             $table->timestamp('password_changed_at')->nullable();
             $table->timestamp('email_verified_at')->nullable();
+            $table->foreignId('empresa_id')->nullable()->constrained('users')->onDelete('cascade');
             $table->rememberToken();
             $table->timestamps();
         });

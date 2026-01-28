@@ -22,13 +22,13 @@ class RegisteredUserController extends Controller
 
     public function store(Request $request): RedirectResponse
     {
-        // 1. Limpa CPF e WhatsApp (Remove máscaras para salvar apenas números)
+        // 1. Limpa CPF e WhatsApp
         $request->merge([
             'cpf'      => $request->cpf ? preg_replace('/\D/', '', $request->cpf) : null,
             'whatsapp' => $request->whatsapp ? preg_replace('/\D/', '', $request->whatsapp) : null,
         ]);
 
-        // 2. Pool de frases para duplicidade (Padrão Alcecar)
+        // 2. Pool de frases (Estilo Alcecar)
         $frasesDuplicado = [
             'Epa! Este CPF já possui um cadastro ativo no Alcecar.',
             'Opa, cadastro duplicado! Este CPF já está na nossa garagem.',
@@ -36,7 +36,7 @@ class RegisteredUserController extends Controller
         ];
         $mensagemDuplicado = $frasesDuplicado[array_rand($frasesDuplicado)];
 
-        // 3. Validação baseada na tabela 'users'
+        // 3. Validação
         $request->validate([
             'name'     => ['required', 'string', 'max:255'],
             'email'    => ['required', 'string', 'email', 'max:255', 'unique:users,email'],
@@ -50,23 +50,28 @@ class RegisteredUserController extends Controller
         ]);
 
         try {
-            // 4. Criação simplificada na tabela única
+            // 4. Criação do Usuário
             $user = User::create([
                 'name'         => $request->name,
                 'email'        => $request->email,
                 'cpf'          => $request->cpf,
                 'telefone'     => $request->whatsapp,
-                'nivel_acesso' => 'Particular',
+                'nivel_acesso' => 'Administrador', // Alterado para Administrador (ele manda na empresa dele)
                 'status'       => 'Ativo',
                 'password'     => Hash::make($request->password),
+            ]);
+
+            // LÓGICA ALCECAR: O primeiro cadastro define a si mesmo como a empresa
+            // Isso faz com que $user->empresa_id seja igual ao $user->id
+            $user->update([
+                'empresa_id' => $user->id
             ]);
 
             event(new Registered($user));
             Auth::login($user);
 
-            // Redireciona para a home ou dashboard após o login automático
-            // Redireciona com a mensagem de sucesso que o SweetAlert vai capturar
-return redirect()->route('dashboard.index')->with('success', 'Bem-vindo ao Alcecar! Seu cadastro foi realizado com sucesso.');
+            return redirect()->route('dashboard.index')
+                ->with('success', 'Bem-vindo ao Alcecar! Sua garagem está pronta.');
 
         } catch (\Exception $e) {
             \Log::error("Erro no cadastro Alcecar: " . $e->getMessage());

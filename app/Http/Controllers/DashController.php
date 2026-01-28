@@ -25,45 +25,47 @@ class DashController extends Controller
 
     public function index()
 {
-    $userId = auth()->id();
+    $user = Auth::user();
+    // LÓGICA ALCECAR: Define qual empresa estamos filtrando
+    $empresaId = $user->empresa_id ?? $user->id;
+    
+    // 1. Veículos (Filtrando por empresa_id)
+    $totalAtivos = Veiculo::where('empresa_id', $empresaId)->where('status', 'Ativo')->count();
 
-    // Veículos
-    $totalAtivos = Veiculo::where('user_id', $userId)->where('status', 'Ativo')->count();
+    // 2. Vendidos e Receita (Filtrando por empresa_id)
+    $totalVendidos = Veiculo::where('empresa_id', $empresaId)->where('status', 'Vendido')->count();
+    $receitaVendas = Veiculo::where('empresa_id', $empresaId)->where('status', 'Vendido')->sum('valor_venda');
 
-    // NOVO: Contagem de Vendidos e Total de Receita
-    $totalVendidos = Veiculo::where('user_id', $userId)->where('status', 'Vendido')->count();
-    $receitaVendas = Veiculo::where('user_id', $userId)->where('status', 'Vendido')->sum('valor_venda');
+    // 3. Outros Totais (Filtrando por empresa_id)
+    $totalArquivados = Veiculo::where('empresa_id', $empresaId)->where('status', 'Arquivado')->count();
+    $totalClientes = Cliente::where('empresa_id', $empresaId)->count();
+    $valorEstoque = Veiculo::where('empresa_id', $empresaId)->where('status', 'Ativo')->sum('valor');
+    $ultimosVeiculos = Veiculo::where('empresa_id', $empresaId)->latest()->take(5)->get();
 
-    $totalArquivados = Veiculo::where('user_id', $userId)->where('status', 'Arquivado')->count();
-    $totalClientes = Cliente::where('user_id', $userId)->count();
-    $valorEstoque = Veiculo::where('user_id', $userId)->where('status', 'Ativo')->sum('valor');
-    $ultimosVeiculos = Veiculo::where('user_id', $userId)->latest()->take(5)->get();
-
-    // Multas - Ajustado para pegar apenas multas dos veículos do usuário logado
-    $totalMultasPendente = Multa::whereHas('veiculo', function($q) use ($userId) {
-            $q->where('user_id', $userId);
+    // 4. Multas (Ajustado para empresa_id dentro do relacionamento com veículo)
+    $totalMultasPendente = Multa::whereHas('veiculo', function($q) use ($empresaId) {
+            $q->where('empresa_id', $empresaId); // Alterado de user_id para empresa_id
         })->where('status', '!=', 'pago')->sum('valor');
 
-    $qtdMultasVencidas = Multa::whereHas('veiculo', function($q) use ($userId) {
-            $q->where('user_id', $userId);
+    $qtdMultasVencidas = Multa::whereHas('veiculo', function($q) use ($empresaId) {
+            $q->where('empresa_id', $empresaId); // Alterado de user_id para empresa_id
         })->where('status', '!=', 'pago')
           ->where('data_vencimento', '<', now())
           ->count();
     
     $multasCriticas = Multa::with('veiculo')
-        ->whereHas('veiculo', function($q) use ($userId) {
-            $q->where('user_id', $userId);
+        ->whereHas('veiculo', function($q) use ($empresaId) {
+            $q->where('empresa_id', $empresaId); // Alterado de user_id para empresa_id
         })
         ->where('status', '!=', 'pago')
         ->orderBy('data_vencimento', 'asc')
         ->take(5)
         ->get();
 
-    // Retornando tudo solto no compact (mais simples)
     return view('dashboard.index', compact(
         'totalAtivos', 
-        'totalVendidos', // Adicionado
-        'receitaVendas', // Adicionado
+        'totalVendidos',
+        'receitaVendas',
         'totalArquivados', 
         'totalClientes', 
         'valorEstoque',

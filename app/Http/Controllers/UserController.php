@@ -19,120 +19,107 @@ class UserController extends Controller
     }
 
     public function index(Request $request)
-{
-    $search = $request->query('search');
-
-    $users = User::when($search, function ($query, $search) {
-        return $query->where('name', 'LIKE', "%{$search}%")
-                     ->orWhere('email', 'LIKE', "%{$search}%")
-                     ->orWhere('telefone', 'LIKE', "%{$search}%");
-    })
-    ->paginate(10);
-
-    return view('users.index', compact('users'));
-}
-
-    public function show($id)
     {
-        if (! $user = $this->model->find($id)) {
-            return redirect()->route('users.index');
-        }
+        $userLogado = Auth::user();
+        $empresaId = $userLogado->empresa_id ?? $userLogado->id;
+        $search = $request->query('search');
 
-        $title = 'Excluir!';
-        $text = 'Deseja excluir esse usuário?';
-        confirmDelete($title, $text);
+        // LÓGICA ALCECAR: Filtra apenas usuários da mesma empresa
+        $users = User::where('empresa_id', $empresaId)
+            ->when($search, function ($query, $search) {
+                return $query->where(function($q) use ($search) {
+                    $q->where('name', 'LIKE', "%{$search}%")
+                      ->orWhere('email', 'LIKE', "%{$search}%")
+                      ->orWhere('telefone', 'LIKE', "%{$search}%");
+                });
+            })
+            ->paginate(10);
 
-        return view('users.show', compact('user'));
+        return view('users.index', compact('users'));
     }
 
-
-    // metodo para cadastrar o usuario no banco
     public function store(Request $request)
-{
-    try {
-        // 1. Validação
-        $validatedData = $request->validate([
-            'name'         => 'required|string|max:255',
-            'email'        => 'required|email|unique:users,email',
-            'telefone'     => 'required|string',
-            'nivel_acesso' => 'required|string',
-            'password'     => 'required|string|min:8|confirmed',
-            'image'        => 'nullable|image|max:2048',
-            // Removido o status da validação pois vamos forçar o valor abaixo
-        ]);
+    {
+        $userLogado = Auth::user();
+        $empresaId = $userLogado->empresa_id ?? $userLogado->id;
 
-        $data = $request->all();
-        $data['password'] = Hash::make($request->password);
-        
-        // FORÇANDO O STATUS COMO ATIVO
-        $data['status'] = 'Ativo';
+        try {
+            $validatedData = $request->validate([
+                'name'         => 'required|string|max:255',
+                'email'        => 'required|email|unique:users,email',
+                'telefone'     => 'required|string',
+                'nivel_acesso' => 'required|string',
+                'password'     => 'required|string|min:8|confirmed',
+                'image'        => 'nullable|image|max:2048',
+            ]);
 
-        // 2. Upload da Imagem
-        if ($request->hasFile('image')) {
-            $nameSlug = Str::slug($request->name);
-            $extension = $request->image->getClientOriginalExtension();
-            $fileName = $nameSlug . "_" . time() . "." . $extension;
-            $data['image'] = $request->image->storeAs("usuarios/{$nameSlug}", $fileName, 'public');
-        }
-
-        // 3. Criação
-        User::create($data);
-
-        return redirect()->route('users.index')->with('success', 'Usuário cadastrado com sucesso!');
-
-    } catch (ValidationException $e) {
-        $firstError = $e->validator->errors()->first();
-        
-        return redirect()->back()
-            ->with('error', $firstError)
-            ->withErrors($e->validator)
-            ->withInput();
+            $data = $request->all();
+            $data['password'] = Hash::make($request->password);
+            $data['status'] = 'Ativo';
             
-    } catch (\Exception $e) {
-        return redirect()->back()
-            ->with('error', 'Erro ao cadastrar: ' . $e->getMessage())
-            ->withInput();
-    }
-}
+            // LÓGICA ALCECAR: Vincula o novo usuário à empresa do gestor
+            $data['empresa_id'] = $empresaId;
 
+            if ($request->hasFile('image')) {
+                $nameSlug = Str::slug($request->name);
+                $fileName = $nameSlug . "_" . time() . "." . $request->image->getClientOriginalExtension();
+                // Organiza fotos por empresa/usuario para não virar bagunça
+                $data['image'] = $request->image->storeAs("usuarios/empresa_{$empresaId}", $fileName, 'public');
+            }
+
+            User::create($data);
+
+            return redirect()->route('users.index')->with('success', 'Vendedor cadastrado com sucesso!');
+
+        } catch (ValidationException $e) {
+            return redirect()->back()->with('error', $e->validator->errors()->first())->withInput();
+        } catch (\Exception $e) {
+            return redirect()->back()->with('error', 'Erro ao cadastrar: ' . $e->getMessage())->withInput();
+        }
+    }
 
     public function update(Request $request, $id)
-{
-    $user = User::findOrFail($id);
+    {
+        $empresaId = Auth::user()->empresa_id ?? Auth::id();
+        
+        // Garante que o Admin só edite alguém da própria equipe
+        $user = User::where('empresa_id', $empresaId)->findOrFail($id);
 
-    $request->validate([
-        'name'     => 'required|string|max:255',
-        'email'    => 'required|email|unique:users,email,' . $id, // Ignora o próprio usuário
-        'telefone' => 'required',
-        'password' => 'nullable|string|min:6|confirmed', // Senha não é mais obrigatória
-    ]);
+        $request->validate([
+            'name'     => 'required|string|max:255',
+            'email'    => 'required|email|unique:users,email,' . $id,
+            'telefone' => 'required',
+            'password' => 'nullable|string|min:6|confirmed',
+        ]);
 
-    $data = $request->only(['name', 'email', 'telefone', 'nivel_acesso', 'status']);
+        $data = $request->only(['name', 'email', 'telefone', 'nivel_acesso', 'status']);
 
-    if ($request->filled('password')) {
-        $data['password'] = Hash::make($request->password);
+        if ($request->filled('password')) {
+            $data['password'] = Hash::make($request->password);
+        }
+
+        $user->update($data);
+
+        return redirect()->route('users.index')->with('success', 'Dados do usuário atualizados!');
     }
-
-    // Lógica da imagem...
-    
-    $user->update($data);
-
-    return redirect()->route('users.index')->with('success', 'Usuário atualizado!');
-}
 
     public function destroy($id)
     {
-        // dd($id);
-        if (Auth::user()->id === (int) $id) {
+        $userLogado = Auth::user();
+        $empresaId = $userLogado->empresa_id ?? $userLogado->id;
+
+        if ($userLogado->id === (int) $id) {
             return redirect()->route('users.index')->with('error', 'Você não pode se excluir!');
         }
 
-        if (! $user = $this->model->find($id)) {
-            return redirect()->route('users.index')->with('error', 'Usuário não encontrado!');
+        // Busca o usuário garantindo que ele pertence à mesma empresa
+        $user = User::where('empresa_id', $empresaId)->find($id);
+
+        if (!$user) {
+            return redirect()->route('users.index')->with('error', 'Usuário não encontrado na sua equipe!');
         }
 
-        if ($user->delete()) {
-            return redirect()->route('users.index')->with('success', 'Usuário excluído com sucesso!');
-        }
+        $user->delete();
+        return redirect()->route('users.index')->with('success', 'Membro da equipe removido!');
     }
 }
