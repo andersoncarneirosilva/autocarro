@@ -1803,8 +1803,6 @@ public function updateInfo(Request $request, $id)
 {
     $Veiculo = Veiculo::findOrFail($id);
 
-    // Mapeamos os nomes que vêm dos inputs ocultos do buscador FIPE
-    // para as colunas corretas do banco de dados.
     $data = [
         'placa'         => strtoupper($request->placa),
         'placaAnterior' => strtoupper($request->placaAnterior),
@@ -1814,16 +1812,21 @@ public function updateInfo(Request $request, $id)
         'renavam'       => $request->renavam,
         'ano'           => $request->ano,
         'crv'           => $request->crv,
-        // Usamos os nomes capturados pelo JS (marca_nome, modelo_nome, versao_nome)
-        'marca'         => $request->marca_nome ?? $Veiculo->marca,
-        'modelo'        => $request->modelo_nome ?? $Veiculo->modelo,
-        'versao'        => $request->versao_nome ?? $Veiculo->versao,
+        
+        // Se o marca_nome vier vazio, mantém o que já estava no banco
+        'marca'         => $request->marca_nome ?: $Veiculo->marca,
+        'modelo'        => $request->modelo_nome ?: $Veiculo->modelo,
+        'versao'        => $request->versao_nome ?: $Veiculo->versao,
     ];
 
-    // Se você criou a coluna codigo_fipe, adicione ela aqui também:
-    if($request->has('versao')) {
-        $data['codigo_fipe'] = $request->versao; // O value do select versão é o código/ID
+    // Salva o código FIPE se você tiver essa coluna (opcional)
+    if($request->filled('versao')) {
+        $data['codigo_fipe'] = $request->versao; 
     }
+    
+    $data['fipe_marca_id']  = $request->marca;  // O value do select é o ID da marca
+    $data['fipe_modelo_id'] = $request->modelo; // O value do select é o ID do modelo
+    $data['fipe_versao_id'] = $request->versao; // O value do select é o ID da versão
 
     $Veiculo->update($data);
 

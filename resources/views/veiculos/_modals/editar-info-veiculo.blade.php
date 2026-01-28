@@ -85,6 +85,10 @@
     </select>
 </div>
 
+<input type="hidden" id="db_fipe_marca_id" value="{{ $veiculo->fipe_marca_id }}">
+<input type="hidden" id="db_fipe_modelo_id" value="{{ $veiculo->fipe_modelo_id }}">
+<input type="hidden" id="db_fipe_versao_id" value="{{ $veiculo->fipe_versao_id }}">
+
 <input type="hidden" name="marca_nome" id="marca_nome" value="{{ $veiculo->marca }}">
 <input type="hidden" name="modelo_nome" id="modelo_nome" value="{{ $veiculo->modelo }}">
 <input type="hidden" name="versao_nome" id="versao_nome" value="{{ $veiculo->versao }}">

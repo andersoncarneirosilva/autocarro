@@ -60,6 +60,10 @@ class Veiculo extends Model
         'descricao',
         'images'     => 'array',
 
+        'fipe_marca_id', 
+        'fipe_modelo_id', 
+        'fipe_versao_id',
+
     ];
 
     protected $casts = [

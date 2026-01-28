@@ -85,12 +85,6 @@ document.addEventListener('DOMContentLoaded', function () {
         </a>
     </li>
     <li class="nav-item">
-        <a href="#valores" data-bs-toggle="tab" aria-expanded="false" class="nav-link">
-            <i class="mdi mdi-currency-usd me-1"></i>
-            <span class="d-none d-md-inline-block">Valores</span>
-        </a>
-    </li>
-    <li class="nav-item">
         <a href="#descricao" data-bs-toggle="tab" aria-expanded="true" class="nav-link">
             <i class="mdi mdi-text-box-outline me-1"></i>
             <span class="d-none d-md-inline-block">Descrição</span>
@@ -117,10 +111,6 @@ document.addEventListener('DOMContentLoaded', function () {
 
                     <div class="tab-pane" id="opcionais">
                         @include('veiculos._tabs.tab-opcionais')
-                    </div>
-
-                    <div class="tab-pane" id="valores">
-                        @include('veiculos._tabs.tab-valores')
                     </div>
 
                     <div class="tab-pane" id="documentos">
@@ -250,9 +240,9 @@ document.addEventListener('DOMContentLoaded', function () {
 
 </div> </div>
 
-<script>
 
-    document.addEventListener('DOMContentLoaded', function() {
+<script>
+document.addEventListener('DOMContentLoaded', function() {
     const inputTipo = document.getElementById('veiculo_tipo');
     const selectMarca = document.getElementById('marca');
     const selectModelo = document.getElementById('modelo_carro');
@@ -261,95 +251,155 @@ document.addEventListener('DOMContentLoaded', function () {
     const selectCombustivel = document.querySelector('select[name="combustivel"]');
 
     const BASE_URL = 'https://parallelum.com.br/fipe/api/v1';
+    const TOKEN = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI4N2NjMzI1Zi1hZDVmLTQ3NzUtODllYi1hY2MxMTcyYTc4MzkiLCJlbWFpbCI6ImFuZGVyc29ucWlwb2FAZ21haWwuY29tIiwiaWF0IjoxNzY5NTU5NTExfQ.-CL3A3XQK_HQ6-Lh9gh_V0-wFtlVaCNIfCdb_qL3smY';
 
+    // Objeto de configuração para os headers (centralizado)
+    const requestOptions = {
+        method: 'GET',
+        headers: {
+            'X-Subscription-Token': TOKEN,
+            'Accept': 'application/json'
+        }
+    };
+
+    const tipoRota = getTipoRota();
+    const marcaSalva = "{{ $veiculo->marca }}";
+    const modeloSalvo = "{{ $veiculo->modelo }}";
+    const versaoSalva = "{{ $veiculo->versao }}";
+
+    // 1. DECLARE AS VARIÁVEIS APENAS UMA VEZ NO TOPO
+    const dbMarcaId = document.getElementById('db_fipe_marca_id')?.value;
+    const dbModeloId = document.getElementById('db_fipe_modelo_id')?.value;
+    const dbVersaoId = document.getElementById('db_fipe_versao_id')?.value;
+
+    // 2. Defina a função ANTES de usá-la
     function getTipoRota() {
         const valor = inputTipo ? inputTipo.value.toUpperCase() : 'AUTOMOVEL';
         if (valor === 'MOTOCICLETA' || valor === 'MOTO') return 'motos';
         if (valor === 'CAMINHAO' || valor === 'CAMINHÃO') return 'caminhoes';
         return 'carros';
     }
-
-    const tipoRota = getTipoRota();
-    const marcaSalva = "{{ $veiculo->marca }}";
-    const modeloSalvo = "{{ $veiculo->modelo }}";
-    const versaoSalva = "{{ $veiculo->versao }}"; // Importante para o auto-load
-
-    // --- CARREGAMENTO INICIAL ---
-    fetch(`${BASE_URL}/${tipoRota}/marcas`)
-        .then(response => response.json())
+    
+    // --- CARREGAMENTO INICIAL DE MARCAS ---
+    // Removi a linha duplicada que estava causando o erro de Syntax
+    fetch(`${BASE_URL}/${tipoRota}/marcas`, requestOptions)
+        .then(response => {
+            if (!response.ok) throw new Error('Erro na API');
+            return response.json();
+        })
         .then(marcas => {
+            if (!Array.isArray(marcas)) return;
+
             selectMarca.innerHTML = '<option value="">Selecione a Marca</option>';
+            
             marcas.forEach(marca => {
                 const opt = document.createElement('option');
                 opt.value = marca.codigo;
                 opt.textContent = marca.nome;
                 
-                // Comparação flexível: se um nome está contido no outro
-                if (marca.nome.toUpperCase().includes(marcaSalva.toUpperCase()) || 
-                    marcaSalva.toUpperCase().includes(marca.nome.toUpperCase())) {
+                // Comparação com o ID vindo do banco
+                if (dbMarcaId && marca.codigo == dbMarcaId) {
+                    opt.selected = true;
+                } else if (!dbMarcaId && marcaSalva && marca.nome.toUpperCase().includes(marcaSalva.toUpperCase())) {
                     opt.selected = true;
                 }
+                
                 selectMarca.appendChild(opt);
             });
 
             if (selectMarca.value) {
-                carregarModelos(selectMarca.value, modeloSalvo);
+                // Atualiza o hidden name="marca_nome"
+                const inputMarcaNome = document.getElementById('marca_nome');
+                if (inputMarcaNome) inputMarcaNome.value = selectMarca.options[selectMarca.selectedIndex].text;
+                
+                // Passa o ID do modelo salvo para a próxima função
+                carregarModelos(selectMarca.value, dbModeloId);
+            }
+        })
+        .catch(error => console.error('Erro ao carregar marcas:', error));
+
+    function carregarModelos(marcaId, modeloIdParaSelecionar) {
+    // Limpa o select e desativa para evitar seleção errada enquanto carrega
+    selectModelo.innerHTML = '<option value="">Carregando...</option>';
+    selectModelo.disabled = true;
+    
+    fetch(`${BASE_URL}/${tipoRota}/marcas/${marcaId}/modelos`, requestOptions)
+        .then(res => res.json())
+        .then(data => {
+            selectModelo.innerHTML = '<option value="">Selecione o Modelo</option>';
+            
+            if (data.modelos && Array.isArray(data.modelos)) {
+                data.modelos.forEach(m => {
+                    const opt = new Option(m.nome, m.codigo);
+                    
+                    // PRIORIDADE MÁXIMA: Comparação por ID numérico
+                    if (modeloIdParaSelecionar && String(m.codigo) === String(modeloIdParaSelecionar)) {
+                        opt.selected = true;
+                    } 
+                    // SEGUNDA OPÇÃO: Se não tiver ID no banco, tenta o nome exato
+                    else if (!modeloIdParaSelecionar && modeloSalvo && m.nome.toUpperCase() === modeloSalvo.toUpperCase()) {
+                        opt.selected = true;
+                    }
+                    
+                    selectModelo.add(opt);
+                });
+            }
+
+            selectModelo.disabled = false;
+
+            if (selectModelo.value) {
+                // Atualiza o nome real para o input hidden
+                const inputModNome = document.getElementById('modelo_nome');
+                if (inputModNome) inputModNome.value = selectModelo.options[selectModelo.selectedIndex].text;
+                
+                // Dispara o carregamento da versão usando o ID do banco
+                carregarVersoes(marcaId, selectModelo.value, dbVersaoId);
             }
         });
+}
 
-    function carregarModelos(marcaId, modeloParaSelecionar = null) {
-        selectModelo.innerHTML = '<option value="">Carregando...</option>';
-        fetch(`${BASE_URL}/${tipoRota}/marcas/${marcaId}/modelos`)
-            .then(response => response.json())
-            .then(data => {
-                selectModelo.innerHTML = '<option value="">Selecione o Modelo</option>';
-                data.modelos.forEach(modelo => {
-                    const opt = document.createElement('option');
-                    opt.value = modelo.codigo;
-                    opt.textContent = modelo.nome;
-                    
-                    // Comparação flexível para modelos (ex: Voyage 1.0 vs VOYAGE 1.0 Flex)
-                    if (modeloParaSelecionar && (
-                        modelo.nome.toUpperCase().includes(modeloParaSelecionar.toUpperCase()) ||
-                        modeloParaSelecionar.toUpperCase().includes(modelo.nome.toUpperCase())
-                    )) {
-                        opt.selected = true;
-                    }
-                    selectModelo.appendChild(opt);
-                });
-                selectModelo.disabled = false;
-                
-                // Se temos modelo selecionado, carrega versões automaticamente
-                if (selectModelo.value) {
-                    carregarVersoes(marcaId, selectModelo.value, versaoSalva);
-                }
-            });
-    }
+    function carregarVersoes(marcaId, modeloId, versaoIdParaSelecionar) {
+    selectVersao.innerHTML = '<option value="">Carregando...</option>';
+    
+    // Limpamos o ID de espaços para evitar erros de comparação
+    const idBusca = versaoIdParaSelecionar ? String(versaoIdParaSelecionar).trim() : null;
 
-    function carregarVersoes(marcaId, modeloId, versaoParaSelecionar = null) {
-        selectVersao.innerHTML = '<option value="">Carregando...</option>';
-        fetch(`${BASE_URL}/${tipoRota}/marcas/${marcaId}/modelos/${modeloId}/anos`)
-            .then(response => response.json())
-            .then(anos => {
-                selectVersao.innerHTML = '<option value="">Selecione a Versão/Ano</option>';
-                anos.forEach(ano => {
-                    const opt = document.createElement('option');
-                    opt.value = ano.codigo;
-                    opt.textContent = ano.nome;
-                    // Tenta selecionar pela versão salva ou pelo ano
-                    if (versaoParaSelecionar && (ano.nome.includes(versaoParaSelecionar) || ano.codigo.includes(versaoParaSelecionar))) {
-                        opt.selected = true;
-                    }
-                    selectVersao.appendChild(opt);
-                });
-                selectVersao.disabled = false;
+    fetch(`${BASE_URL}/${tipoRota}/marcas/${marcaId}/modelos/${modeloId}/anos`, requestOptions)
+        .then(res => res.json())
+        .then(anos => {
+            selectVersao.innerHTML = '<option value="">Selecione a Versão</option>';
+            
+            anos.forEach(a => {
+                const opt = new Option(a.nome, a.codigo);
                 
-                // DISPARA BUSCA FIPE AUTOMÁTICA SE TUDO ESTIVER SELECIONADO
-                if (selectVersao.value) {
-                    selectVersao.dispatchEvent(new Event('change'));
+                // PRIORIDADE: ID salvo no banco (2015-1)
+                if (idBusca && a.codigo == idBusca) {
+                    opt.selected = true;
+                } 
+                // FALLBACK: Caso o ID falhe, tenta pelo Ano salvo na variável versaoSalva
+                else if (!idBusca && versaoSalva && a.nome.includes(versaoSalva)) {
+                    opt.selected = true;
                 }
+                
+                selectVersao.add(opt);
             });
-    }
+
+            // Se selecionou algo, atualiza o nome e dispara o card da FIPE
+            if (selectVersao.value) {
+                const inputVerNome = document.getElementById('versao_nome');
+                if (inputVerNome) {
+                    inputVerNome.value = selectVersao.options[selectVersao.selectedIndex].text;
+                }
+                
+                // Isso vai fazer o card da FIPE aparecer automaticamente
+                selectVersao.dispatchEvent(new Event('change'));
+            }
+        })
+        .catch(err => {
+            console.error("Erro ao carregar versões:", err);
+            selectVersao.innerHTML = '<option value="">Erro ao carregar</option>';
+        });
+}
 
     // --- EVENTOS ---
 
@@ -371,74 +421,80 @@ document.addEventListener('DOMContentLoaded', function () {
     const marcaId = selectMarca.value;
     const modeloId = selectModelo.value;
     const anoId = this.value;
-    
-    if (document.getElementById('versao_nome')) {
-        document.getElementById('versao_nome').value = this.options[this.selectedIndex].text;
-    }
 
+    // CAPTURA O TEXTO DA VERSÃO (O que o usuário lê no select)
+    if (this.selectedIndex !== -1) {
+        const nomeVersao = this.options[this.selectedIndex].text;
+        document.getElementById('versao_nome').value = nomeVersao;
+        //console.log("📝 Nome da versão definido para:", nomeVersao);
+    }
+    
     if (marcaId && modeloId && anoId) {
-        console.log("🚀 Alcecar: Iniciando busca FIPE...", {marcaId, modeloId, anoId});
+        //console.log("🚀 Alcecar: Iniciando busca de valores...");
+        //console.log(`Parâmetros: Marca ${marcaId}, Modelo ${modeloId}, Ano ${anoId}`);
 
         const elPrice = document.getElementById('fipe-price');
         if(elPrice) elPrice.innerText = "Consultando...";
 
-        fetch(`${BASE_URL}/${tipoRota}/marcas/${marcaId}/modelos/${modeloId}/anos/${anoId}`)
-            .then(response => response.json())
-            .then(veiculo => {
-                // LOG DOS DADOS RECEBIDOS
-                console.log("✅ Dados recebidos da API:");
-                console.table(veiculo);
+        fetch(`${BASE_URL}/${tipoRota}/marcas/${marcaId}/modelos/${modeloId}/anos/${anoId}`, requestOptions)
+    .then(response => {
+        //console.log("Status da Resposta:", response.status);
+        return response.json();
+    })
+    .then(veiculo => {
+        // EXIBE OS DADOS NO CONSOLE EM FORMATO DE TABELA
+        //console.log("✅ Dados FIPE recebidos:");
+        //console.table(veiculo);
 
-                // 1. Atualiza o Preço
-                if (elPrice) {
-                    elPrice.innerText = veiculo.Valor;
-                    console.log(`Injetando Valor: ${veiculo.Valor} no elemento #fipe-price`);
-                } else {
-                    console.error("❌ Erro: Elemento #fipe-price não encontrado no DOM!");
-                }
+        // BUSCA OS ELEMENTOS NOVAMENTE PARA GARANTIR A INJEÇÃO NO CARD
+        const cardPrice = document.getElementById('fipe-price');
+        const cardInfo = document.getElementById('fipe-info');
+        const cardComparison = document.getElementById('fipe-comparison');
 
-                // 2. Atualiza a Referência
-                const elInfo = document.getElementById('fipe-info');
-                if (elInfo) {
-                    elInfo.innerText = `Ref: ${veiculo.MesReferencia}`;
-                }
+        if (cardPrice) {
+            cardPrice.innerText = veiculo.Valor;
+            //console.log("Injetado no card -> Valor:", veiculo.Valor);
+        } else {
+            //console.error("❌ Erro: Elemento #fipe-price não encontrado no DOM!");
+        }
 
-                // 3. Cálculo de Comparação
-                const elComparison = document.getElementById('fipe-comparison');
-                if (elComparison) {
-                    const valorVendaRaw = "{{ $veiculo->valor_oferta > 0 ? $veiculo->valor_oferta : $veiculo->valor }}";
-                    const valorVenda = parseFloat(valorVendaRaw);
-                    const valorFipe = parseFloat(veiculo.Valor.replace(/[R$\s.]/g, '').replace(',', '.'));
+        if (cardInfo) {
+            cardInfo.innerText = `Ref: ${veiculo.MesReferencia}`;
+            //console.log("Injetado no card -> Referência:", veiculo.MesReferencia);
+        }
 
-                    console.log("📊 Analise de Preço:", {
-                        valorVenda: valorVenda,
-                        valorFipe: valorFipe,
-                        diferenca: (valorVenda - valorFipe).toFixed(2)
-                    });
+        if (cardComparison) {
+            const valorVendaRaw = "{{ $veiculo->valor_oferta > 0 ? $veiculo->valor_oferta : $veiculo->valor }}";
+            const valorVenda = parseFloat(valorVendaRaw);
+            // Tratamento do valor FIPE (remove R$, pontos e troca vírgula por ponto)
+            const valorFipe = parseFloat(veiculo.Valor.replace(/[R$\s.]/g, '').replace(',', '.'));
 
-                    if (!isNaN(valorFipe) && valorFipe > 0) {
-                        const diff = valorVenda - valorFipe;
-                        const percent = ((diff / valorFipe) * 100).toFixed(1);
-                        
-                        elComparison.className = (diff > 0 ? 'text-danger' : 'text-success') + ' me-2';
-                        elComparison.innerHTML = `
-                            <i class="mdi ${diff > 0 ? 'mdi-arrow-up' : 'mdi-arrow-down'}"></i> 
-                            ${Math.abs(percent)}% vs FIPE
-                        `;
-                    }
-                } else {
-                    console.warn("⚠️ Aviso: Elemento #fipe-comparison não encontrado.");
-                }
-            })
-            .catch(err => {
-                if(elPrice) elPrice.innerText = "Erro ao buscar";
-                console.error("❌ Erro na requisição FIPE:", err);
-            });
+            //console.log("📊 Comparativo de Preços:");
+            //console.log(`Valor Venda: R$ ${valorVenda}`);
+            //console.log(`Valor FIPE: R$ ${valorFipe}`);
+
+            if (!isNaN(valorFipe) && valorFipe > 0) {
+                const diff = valorVenda - valorFipe;
+                const percent = ((diff / valorFipe) * 100).toFixed(1);
+                
+                //console.log(`Diferença: ${diff.toFixed(2)} (${percent}%)`);
+
+                cardComparison.className = (diff > 0 ? 'text-danger' : 'text-success') + ' me-2 fw-bold';
+                cardComparison.innerHTML = `
+                    <i class="mdi ${diff > 0 ? 'mdi-arrow-up' : 'mdi-arrow-down'}"></i> 
+                    ${Math.abs(percent)}% vs FIPE
+                `;
+            }
+        }
+    })
+    .catch(err => {
+        console.error("❌ Erro na consulta FIPE:", err);
+        const errorPrice = document.getElementById('fipe-price');
+        if(errorPrice) errorPrice.innerText = "Erro ao buscar";
+    });
     }
 });
 });
-
-
 </script>
 
 @endsection
