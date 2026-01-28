@@ -469,6 +469,7 @@ public function indexVendidos(Request $request)
     // LÓGICA ALCECAR: Identifica o ID da empresa (Dono)
     $empresaId = $user->empresa_id ?? $userId;
 
+
     // 1. Validação do Arquivo
     $request->validate([
         'arquivo_doc' => 'required|mimes:pdf|max:10240',

@@ -58,6 +58,7 @@ class RegisteredUserController extends Controller
                 'telefone'     => $request->whatsapp,
                 'nivel_acesso' => 'Administrador', // Alterado para Administrador (ele manda na empresa dele)
                 'status'       => 'Ativo',
+                'plano'       => 'Teste',
                 'password'     => Hash::make($request->password),
             ]);
 

@@ -154,12 +154,34 @@
             <i class="mdi mdi-restore font-18"></i>
         </a>
 
-        <a href="javascript:void(0);" 
-           onclick="confirmDelete({{ $veiculo->id }});" 
-           class="btn btn-sm btn-soft-danger" 
-           title="Excluir Permanentemente">
-            <i class="mdi mdi-trash-can-outline font-18"></i>
-        </a>
+        @php
+    $userLogged = auth()->user();
+    $isTeste = ($userLogged->plano === 'Teste');
+@endphp
+
+@if($isTeste)
+    {{-- Botão de Excluir Permanente bloqueado no Teste --}}
+    <button type="button" 
+            class="btn btn-sm btn-soft-secondary" 
+            style="cursor: not-allowed;"
+            onclick="Swal.fire({
+                title: 'Ação Restrita',
+                text: 'No plano Teste não é permitido excluir veículos. Faça o upgrade para ter controle total sobre seus registros!.',
+                icon: 'info',
+                confirmButtonColor: '#727cf5'
+            })" 
+            title="Exclusão permanente bloqueada">
+        <i class="mdi mdi-trash-can-outline font-18"></i>
+    </button>
+@else
+    {{-- Botão Normal para planos pagos --}}
+    <a href="javascript:void(0);" 
+       onclick="confirmDelete({{ $veiculo->id }});" 
+       class="btn btn-sm btn-soft-danger" 
+       title="Excluir Permanentemente">
+        <i class="mdi mdi-trash-can-outline font-18"></i>
+    </a>
+@endif
     </div>
 
     {{-- Formulários Ocultos --}}

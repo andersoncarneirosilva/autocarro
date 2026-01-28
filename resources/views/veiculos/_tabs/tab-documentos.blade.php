@@ -3,9 +3,42 @@
             <div class="d-flex justify-content-between align-items-center mb-3">
                 <h5 class="text-primary mb-0"><i class="mdi mdi-file me-1"></i> Documentos</h5>
                 
-                <button type="button" class="btn btn-outline-primary btn-xs " data-bs-toggle="modal" data-bs-target="#modalGerarDocs">
-                    <i class="mdi mdi-pencil"></i> Gerar documentos
-                </button>
+                @php
+    $userLogged = auth()->user();
+    $empresaId = $userLogged->empresa_id ?? $userLogged->id;
+    $limiteDocsAtingido = false;
+
+    if ($userLogged->plano === 'Teste') {
+        // Conta quantas procurações já foram geradas (arquivo_proc)
+        $totalProcuracoes = \App\Models\Documento::where(function($q) use ($userLogged, $empresaId) {
+                $q->where('user_id', $userLogged->id)
+                  ->orWhere('empresa_id', $empresaId);
+            })
+            ->whereNotNull('arquivo_proc')
+            ->count();
+
+        // Bloqueia se já tiver 2 ou mais
+        if ($totalProcuracoes >= 2) {
+            $limiteDocsAtingido = true;
+        }
+    }
+@endphp
+
+@if($limiteDocsAtingido)
+    <button type="button" class="btn btn-outline-warning btn-xs" 
+            onclick="Swal.fire({
+                title: 'Limite de Teste Atingido',
+                text: 'No plano Teste do Alcecar, o limite é de 2 procurações. Faça o upgrade para emissões ilimitadas!',
+                icon: 'warning',
+                confirmButtonColor: '#727cf5'
+            })">
+        <i class="mdi mdi-lock"></i> Gerar documentos
+    </button>
+@else
+    <button type="button" class="btn btn-outline-primary btn-xs" data-bs-toggle="modal" data-bs-target="#modalGerarDocs">
+        <i class="mdi mdi-pencil"></i> Gerar documentos
+    </button>
+@endif
             </div>
             
             <ul class="list-group list-group-flush border rounded bg-light-lighten">

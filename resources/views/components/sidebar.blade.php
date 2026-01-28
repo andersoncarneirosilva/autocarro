@@ -86,9 +86,6 @@
                         <li>
                             <a href="{{ route('outorgados.index') }}">Outorgados</a>
                         </li>
-                        <li>
-                            <a href="{{ route('vendedores.index') }}">Vendedores</a>
-                        </li>
                     </ul>
                 </div>
             </li>

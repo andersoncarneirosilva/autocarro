@@ -16,7 +16,7 @@ Route::post('/process-payment', [PaymentController::class, 'processPayment'])->m
 // Rota para criar pagamento PIX, deve ser protegida por autenticação
 
 // Route::middleware('auth:sanctum')->post('/create-pix-payment', [PaymentController::class, 'createPixPayment']);
-Route::post('/create-pix-payment', [PaymentController::class, 'createPixPayment']);
+//Route::post('/create-pix-payment', [PaymentController::class, 'createPixPayment']);
 
 // Rota para receber notificações de webhook
 Route::post('/webhook-payment', [PaymentController::class, 'handleWebhook']);

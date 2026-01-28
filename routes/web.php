@@ -36,7 +36,6 @@ use App\Http\Controllers\ModeloProcuracaoController;
 use App\Http\Controllers\PartiularController;
 use App\Http\Controllers\MultaController;
 use App\Http\Controllers\SolicitacaoController;
-use App\Http\Controllers\VendedorController;
 
 use Illuminate\Support\Facades\Route;
 use Livewire\Livewire;
@@ -46,7 +45,7 @@ use App\Models\Message;
 use App\Events\NewMessage;
 use Illuminate\Support\Facades\Broadcast;
 
-Route::middleware(['auth'])->group(function () {
+Route::middleware(['auth', 'trial'])->group(function () {
 
     Broadcast::routes(['middleware' => ['auth:sanctum']]);
 
@@ -80,6 +79,8 @@ Route::post('/chat/mark-as-read', [ChatController::class, 'markAsRead']);
         return view('assinatura.expirada');
     })->name('assinatura.expirada');
 
+    Route::post('/create-pix-payment', [PaymentController::class, 'createPixPayment']);
+    
     Route::get('/check-payment-status', function (Request $request) {
         $user = Auth::user();
 
@@ -307,8 +308,6 @@ Route::prefix('configuracoes')->group(function () {
     Route::post('/veiculos/{id}/vender', [VeiculoController::class, 'vender'])->name('veiculos.vender');
     // Rota para listar multas de um veículo específico (útil para a aba do veículo)
     Route::get('veiculos/{veiculo}/multas', [MultaController::class, 'porVeiculo'])->name('multas.veiculo');
-
-    Route::resource('vendedores', VendedorController::class);
 
 });
 

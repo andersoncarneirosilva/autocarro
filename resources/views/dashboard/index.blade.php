@@ -50,7 +50,39 @@
     </div>
 </div>
 
+@php
+    $userLogado = auth()->user();
+    // Buscamos o dono da conta para garantir que o tempo de teste seja baseado na criação da empresa
+    $dono = $userLogado->empresa_id ? \App\Models\User::find($userLogado->empresa_id) : $userLogado;
+    
+    $exibirAvisoTeste = false;
+    $diasRestantes = 0;
 
+    // A lógica de teste só roda se o plano do dono for exatamente 'Teste'
+    if ($dono && $dono->plano === 'Teste') {
+        $diasBrutos = now()->diffInDays($dono->created_at->addDays(7), false);
+        $diasRestantes = ceil($diasBrutos);
+        $exibirAvisoTeste = true;
+    }
+@endphp
+
+@if($exibirAvisoTeste)
+    @if($diasRestantes > 0)
+        <div class="alert alert-info border-0 shadow-sm d-flex align-items-center">
+            <i class="uil uil-clock-three me-2 fs-4"></i> 
+            <div>
+                Período de Experiência: Você tem mais <strong>{{ $diasRestantes }} {{ $diasRestantes > 1 ? 'dias' : 'dia' }}</strong> de teste gratuito.
+            </div>
+        </div>
+    @else
+        <div class="alert alert-danger border-0 shadow-sm d-flex align-items-center">
+            <i class="uil uil-exclamation-octagon me-2 fs-4"></i> 
+            <div>
+                Seu período de teste no Alcecar expirou. <strong>Contrate um plano para continuar!</strong>
+            </div>
+        </div>
+    @endif
+@endif
 <!-- Para Mobile -->
 <div class="card ribbon-box d-block d-md-none">
     <div class="card-body">

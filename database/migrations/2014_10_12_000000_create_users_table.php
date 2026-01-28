@@ -21,6 +21,7 @@ return new class extends Migration
             $table->string('password');
             $table->string('image')->nullable();
             $table->string('status')->nullable();
+            $table->string('plano')->nullable();
             $table->timestamp('last_login_at')->nullable();
             $table->timestamp('password_changed_at')->nullable();
             $table->timestamp('email_verified_at')->nullable();

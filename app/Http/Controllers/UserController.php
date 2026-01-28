@@ -39,69 +39,101 @@ class UserController extends Controller
     }
 
     public function store(Request $request)
-    {
-        $userLogado = Auth::user();
-        $empresaId = $userLogado->empresa_id ?? $userLogado->id;
+{
+    $userLogado = Auth::user();
+    // No Alcecar, a empresa_id do dono é o seu próprio ID
+    $empresaId = $userLogado->empresa_id ?? $userLogado->id;
 
-        try {
-            $validatedData = $request->validate([
-                'name'         => 'required|string|max:255',
-                'email'        => 'required|email|unique:users,email',
-                'telefone'     => 'required|string',
-                'nivel_acesso' => 'required|string',
-                'password'     => 'required|string|min:8|confirmed',
-                'image'        => 'nullable|image|max:2048',
-            ]);
+    // 1. Definição dos limites (Dono + Vendedores)
+    $limites = [
+        'Start'    => 1, // Só o dono
+        'Standard' => 6, // Dono + 5 vendedores
+        'Pro'      => 999 // Ilimitado
+    ];
 
-            $data = $request->all();
-            $data['password'] = Hash::make($request->password);
-            $data['status'] = 'Ativo';
+    // Buscamos o plano do DONO da empresa para validar o limite
+    $dono = User::find($empresaId);
+    $planoAtual = $dono->plano ?? 'Start';
+    $limiteMaximo = $limites[$planoAtual] ?? 1;
+
+    // Conta quantos usuários já existem nessa empresa
+    $totalNaEmpresa = User::where('empresa_id', $empresaId)->count();
+
+    // TRAVA DE LIMITE: Verifica se pode adicionar mais um
+    if ($totalNaEmpresa >= $limiteMaximo) {
+        $msg = $planoAtual == 'Start' 
+            ? "Seu plano Start não permite vendedores adicionais." 
+            : "Limite atingido! Seu plano {$planoAtual} permite no máximo " . ($limiteMaximo - 1) . " vendedores.";
             
-            // LÓGICA ALCECAR: Vincula o novo usuário à empresa do gestor
-            $data['empresa_id'] = $empresaId;
-
-            if ($request->hasFile('image')) {
-                $nameSlug = Str::slug($request->name);
-                $fileName = $nameSlug . "_" . time() . "." . $request->image->getClientOriginalExtension();
-                // Organiza fotos por empresa/usuario para não virar bagunça
-                $data['image'] = $request->image->storeAs("usuarios/empresa_{$empresaId}", $fileName, 'public');
-            }
-
-            User::create($data);
-
-            return redirect()->route('users.index')->with('success', 'Vendedor cadastrado com sucesso!');
-
-        } catch (ValidationException $e) {
-            return redirect()->back()->with('error', $e->validator->errors()->first())->withInput();
-        } catch (\Exception $e) {
-            return redirect()->back()->with('error', 'Erro ao cadastrar: ' . $e->getMessage())->withInput();
-        }
+        return redirect()->back()->with('error', $msg)->withInput();
     }
 
-    public function update(Request $request, $id)
-    {
-        $empresaId = Auth::user()->empresa_id ?? Auth::id();
-        
-        // Garante que o Admin só edite alguém da própria equipe
-        $user = User::where('empresa_id', $empresaId)->findOrFail($id);
+    // 2. Limpa o CPF (remove pontos e traço) antes da validação
+    if ($request->has('cpf')) {
+        $request->merge([
+            'cpf' => preg_replace('/\D/', '', $request->cpf),
+        ]);
+    }
 
+    try {
+        // 3. Validação detalhada
         $request->validate([
             'name'     => 'required|string|max:255',
-            'email'    => 'required|email|unique:users,email,' . $id,
-            'telefone' => 'required',
-            'password' => 'nullable|string|min:6|confirmed',
+            'email'    => 'required|email|unique:users,email',
+            'cpf'      => 'required|string|unique:users,cpf',
+            'telefone' => 'required|string',
+            'password' => 'required|string|min:8',
+        ], [
+            'email.unique' => 'Este e-mail já está em uso.',
+            'cpf.unique'   => 'Este CPF já está cadastrado no Alcecar.',
+            'password.min' => 'A senha deve ter pelo menos 8 caracteres.'
         ]);
 
-        $data = $request->only(['name', 'email', 'telefone', 'nivel_acesso', 'status']);
+        // 4. Preparação e Criação
+        $data = $request->all();
+        $data['password']     = Hash::make($request->password);
+        $data['status']       = 'Ativo';
+        $data['nivel_acesso'] = 'Vendedor';
+        $data['empresa_id']   = $empresaId;
+        $data['plano']        = $planoAtual; // Herda o plano do dono para consistência
 
-        if ($request->filled('password')) {
-            $data['password'] = Hash::make($request->password);
-        }
+        User::create($data);
 
-        $user->update($data);
+        return redirect()->route('users.index')->with('success', 'Vendedor cadastrado com sucesso!');
 
-        return redirect()->route('users.index')->with('success', 'Dados do usuário atualizados!');
+    } catch (\Illuminate\Validation\ValidationException $e) {
+        $errors = $e->validator->errors()->all();
+        return redirect()->back()->with('error', $errors[0])->withInput();
+        
+    } catch (\Exception $e) {
+        return redirect()->back()->with('error', 'Erro interno: ' . $e->getMessage())->withInput();
     }
+}
+
+    public function update(Request $request, $id)
+{
+    $empresaId = Auth::user()->empresa_id ?? Auth::id();
+    $user = User::where('empresa_id', $empresaId)->findOrFail($id);
+
+    $request->validate([
+        'name'     => 'required|string|max:255',
+        'email'    => 'required|email|unique:users,email,' . $id,
+        'telefone' => 'nullable|string',
+        'password' => 'nullable|string|min:8',
+        'status'   => 'required|in:Ativo,Inativo',
+    ]);
+
+    $data = $request->only(['name', 'email', 'telefone', 'status']);
+
+    // Só atualiza a senha se o campo for preenchido
+    if ($request->filled('password')) {
+        $data['password'] = Hash::make($request->password);
+    }
+
+    $user->update($data);
+
+    return redirect()->route('users.index')->with('success', 'Vendedor atualizado com sucesso!');
+}
 
     public function destroy($id)
     {

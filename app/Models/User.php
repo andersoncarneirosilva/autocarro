@@ -35,6 +35,7 @@ class User extends Authenticatable
         'password',
         'image',
         'status',
+        'plano',
         'last_login_at',
     ];
 

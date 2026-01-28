@@ -14,6 +14,9 @@ return Application::configure(basePath: dirname(__DIR__))
         // Se você usa o Sanctum (como está no seu composer), 
         // o Laravel 11 já o configura automaticamente, mas se 
         // tiver middlewares manuais, registre-os aqui.
+        $middleware->alias([
+        'trial' => \App\Http\Middleware\CheckTrial::class,
+    ]);
     })
     ->withExceptions(function (Exceptions $exceptions) {
         //

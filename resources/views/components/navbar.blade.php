@@ -241,10 +241,10 @@ observer.observe(document.body, { childList: true, subtree: true });
                         <span>Perfil</span>
                     </a>
 
-                    {{-- <a href="{{ route('assinatura.index') }}" class="dropdown-item">
+                    <a href="{{ route('assinatura.index') }}" class="dropdown-item">
                         <i class="mdi mdi-file-sign me-1"></i>
                         <span>Assinatura</span>
-                    </a> --}}
+                    </a>
 
                     <!-- item-->
                     {{-- <a href="javascript:void(0);" class="dropdown-item">

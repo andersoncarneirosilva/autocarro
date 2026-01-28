@@ -105,80 +105,74 @@ class PaymentController extends Controller
     }
 
     public function createPixPayment(Request $request)
-    {
+{
+    Log::info('Entrou na : createPixPayment');
 
-        Log::info('Entrou na : createPixPayment');
-        // Obtém o usuário autenticado
-        $token = $request->bearerToken();
+    // 1. REMOVA a verificação de $request->bearerToken(). 
+    // No Alcecar Web, usamos o Auth padrão.
+    $user = Auth::user();
 
-        if (! $token) {
-            Log::error('Token de autenticação não encontrado.');
+    if (!$user) {
+        Log::error('Usuário não autenticado via sessão.');
+        return response()->json(['error' => 'Usuário não autenticado'], 401);
+    }
 
-            return response()->json(['error' => 'Token de autenticação não encontrado'], 401);
+    try {
+        $accessToken = env('MERCADO_PAGO_ACCESS_TOKEN');
+
+        if (!$accessToken) {
+            Log::error('Mercado Pago: Access Token não encontrado no .env.');
+            return response()->json(['error' => 'Erro na configuração do servidor'], 500);
         }
 
-        // Tente obter o usuário com o token
-        $user = Auth::user();
+        $url = 'https://api.mercadopago.com/v1/payments';
 
-        if (! $user) {
-            Log::error('Usuário não autenticado.');
-
-            return response()->json(['error' => 'Usuário não autenticado'], 401);
-        }
-
-        try {
-            $accessToken = env('MERCADO_PAGO_ACCESS_TOKEN');
-
-            if (! $accessToken) {
-                Log::error('Mercado Pago: Access Token não encontrado.');
-
-                return response()->json(['error' => 'Erro na configuração do Mercado Pago'], 500);
-            }
-
-            $url = 'https://api.mercadopago.com/v1/payments';
-
-            // Envia a solicitação de pagamento para o Mercado Pago
-            $response = Http::withToken($accessToken)->post($url, [
+        // 2. Adicione o cabeçalho X-Idempotency-Key para evitar o erro 400
+        $response = Http::withToken($accessToken)
+            ->withHeaders([
+                'X-Idempotency-Key' => uniqid('pix_', true)
+            ])
+            ->post($url, [
                 'transaction_amount' => floatval($request->amount),
-                'payment_method_id' => 'pix',
+                'payment_method_id'  => 'pix',
+                'description'        => "Plano " . ($request->plano ?? 'Alcecar'),
                 'payer' => [
                     'email' => $request->payer_email,
                 ],
-                'external_reference' => $user->id ?? 'pedido_'.time(), // Defina uma referência única
+                'external_reference' => 'user_' . $user->id . '_' . time(),
             ]);
 
-            // Salvar o pedido no banco de dados
-            $pedido = new Assinatura;
-            $pedido->valor = $request->amount;
-            $pedido->status = 'pending';
-            $pedido->class_status = 'badge badge-outline-warning';
-            $pedido->user_id = $user->id;
-            $pedido->external_reference = $response->json()['id'];
-            $pedido->data_inicio = now(); // Define a data de início como a data atual
-            $pedido->data_fim = now()->addDays(30); // Define a data de fim para daqui a 30 dias
-            $pedido->plano = $request->plano ?? 'Padrão'; // Defina um valor padrão ou pegue do request
-            $pedido->save();
+        $paymentData = $response->json();
 
-            if ($response->failed()) {
-                Log::error('Erro ao criar pagamento PIX: '.$response->body());
-
-                return response()->json(['error' => 'Erro ao criar pagamento PIX', 'details' => $response->json()], 500);
-            }
-
-            $paymentData = $response->json();
-
-            return response()->json([
-                'qr_code' => $paymentData['point_of_interaction']['transaction_data']['qr_code'] ?? null,
-                'qr_code_base64' => $paymentData['point_of_interaction']['transaction_data']['qr_code_base64'] ?? null,
-                'ticket_url' => $paymentData['point_of_interaction']['transaction_data']['ticket_url'] ?? null,
-            ]);
-
-        } catch (\Exception $e) {
-            Log::error('Exceção ao criar pagamento PIX: '.$e->getMessage());
-
-            return response()->json(['error' => 'Erro interno ao processar o pagamento'], 500);
+        // 3. Verifique se o Mercado Pago aceitou antes de tentar salvar no banco
+        if ($response->failed()) {
+            Log::error('Erro ao criar pagamento PIX no MP: ' . $response->body());
+            return response()->json(['error' => 'Erro ao criar pagamento PIX', 'details' => $paymentData], 500);
         }
+
+        // 4. Salvar o pedido no banco de dados (Tabela Assinaturas)
+        $pedido = new Assinatura;
+        $pedido->valor = $request->amount;
+        $pedido->status = 'pending';
+        $pedido->class_status = 'badge badge-outline-warning';
+        $pedido->user_id = $user->id;
+        $pedido->external_reference = $paymentData['id']; // ID real do Mercado Pago
+        $pedido->data_inicio = now();
+        $pedido->data_fim = now()->addDays(30);
+        $pedido->plano = $request->plano ?? 'Padrão';
+        $pedido->save();
+
+        return response()->json([
+            'qr_code' => $paymentData['point_of_interaction']['transaction_data']['qr_code'] ?? null,
+            'qr_code_base64' => $paymentData['point_of_interaction']['transaction_data']['qr_code_base64'] ?? null,
+            'ticket_url' => $paymentData['point_of_interaction']['transaction_data']['ticket_url'] ?? null,
+        ]);
+
+    } catch (\Exception $e) {
+        Log::error('Exceção ao criar pagamento PIX: ' . $e->getMessage());
+        return response()->json(['error' => 'Erro interno ao processar o pagamento'], 500);
     }
+}
 
     private function getPaymentDetails($paymentId)
     {
@@ -212,67 +206,34 @@ class PaymentController extends Controller
     }
 
     private function updatePaymentStatus($payment)
-    {
-        Log::info("Entrou na função updatePaymentStatus para pagamento ID {$payment['id']} com status {$payment['status']}");
+{
+    Log::info("Atualizando status do pagamento ID {$payment['id']} para {$payment['status']}");
 
-        if (! isset($payment['status'])) {
-            Log::error("Pagamento ID {$payment['id']} não contém status válido.");
+    // Busca a assinatura pelo ID do Mercado Pago (external_reference)
+    $pedido = \App\Models\Assinatura::where('external_reference', $payment['id'])->first();
 
-            return;
-        }
-
-        // Verificar se o external_reference existe e não está vazio
-        if (empty($payment['id'])) {
-            Log::error("Pagamento ID {$payment['id']} não contém external_reference válido.");
-
-            return;
-        }
-
-        // Buscar o pedido pelo external_reference
-        $pedido = \App\Models\Assinatura::where('external_reference', $payment['id'])->first();
-
-        if (! $pedido) {
-            Log::error("updatePaymentStatus - Pedido não encontrado para external_reference {$payment['id']}.");
-
-            return;
-        }
-
-        // Buscar o usuário associado ao pedido
-        $user = \App\Models\Assinatura::find($pedido->user_id);
-
-        if (! $user) {
-            Log::error("updatePaymentStatus - Usuário não encontrado para pedido ID {$pedido->id}.");
-
-            return;
-        }
-
-        // Se for pagamento PIX pendente
-        if ($payment['status'] === 'pending' && $payment['payment_method_id'] === 'pix') {
-            Log::info("Pagamento PIX pendente para pedido ID {$pedido->id}. Aguardando confirmação.");
-
-            return;
-        }
-
-        // ✅ Novo tratamento para pagamento aprovado
-        if ($payment['status'] === 'approved') {
-            Log::info("Pagamento aprovado para pedido ID {$pedido->id}. Atualizando status...");
-
-            // Atualiza o status do pedido
-            $pedido->class_status = 'badge badge-outline-success';
-            $pedido->status = 'paid';
-            $pedido->save();
-
-            // Adiciona crédito ao usuário referente ao valor do pedido
-            $user->payment_status = 'paid';
-            $user->credito += $payment['transaction_amount'];
-            $user->save();
-
-            Log::info("Status do pedido atualizado para 'paid' e crédito adicionado ao usuário ID {$user->id}.");
-
-            return;
-        }
-
-        // Se status não for tratado, logamos para análise
-        Log::warning("Status não tratado para pagamento ID {$payment['id']}: {$payment['status']}");
+    if (!$pedido) {
+        Log::error("Pedido não encontrado para o ID {$payment['id']}");
+        return;
     }
+
+    if ($payment['status'] === 'approved') {
+        // 1. Atualiza a Assinatura
+        $pedido->class_status = 'badge badge-outline-success';
+        $pedido->status = 'approved'; // ou 'paid', conforme seu JS espera
+        $pedido->save();
+
+        // 2. Atualiza o Usuário (Importante: usar o Model User)
+        $user = \App\Models\User::find($pedido->user_id);
+        if ($user) {
+            $user->plano = $pedido->plano; // Define o novo plano (Start, Standard, Pro)
+            // Se você usa validade de plano:
+            // $user->plano_expira_em = now()->addDays(30); 
+            $user->save();
+            Log::info("Plano do usuário ID {$user->id} atualizado para {$pedido->plano}");
+        }
+
+        return;
+    }
+}
 }

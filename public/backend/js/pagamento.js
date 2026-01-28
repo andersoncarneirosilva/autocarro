@@ -23,7 +23,7 @@ document.addEventListener("DOMContentLoaded", () => {
             document.getElementById("pixPaymentButton").style.display = "none";
             document.getElementById("divGerarPix").style.display = "none";
 
-            const pixResponse = await fetch('/api/create-pix-payment', {
+            const pixResponse = await fetch('/create-pix-payment', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',

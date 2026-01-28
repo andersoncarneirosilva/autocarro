@@ -81,15 +81,44 @@ document.addEventListener('DOMContentLoaded', function () {
                 </form>
                     </div>
 
-                    <div class="dropdown btn-group">
-                    <button class="btn btn-primary dropdown-toggle" type="button" data-bs-toggle="dropdown">
-                        <i class="mdi mdi-plus me-1"></i>Cadastrar
-                    </button>
-                    <div class="dropdown-menu dropdown-menu-animated dropdown-menu-end">
-                        <a href="#" data-bs-toggle="modal" data-bs-target="#cadastro-rapido" class="dropdown-item">Cadastro rápido</a>
-                        <a href="{{ route('veiculos.cadastro-manual') }}" class="dropdown-item">Cadastro manual</a>
-                    </div>
-                </div>
+                    @php
+                        $userLogged = auth()->user();
+                        $empresaId = $userLogged->empresa_id ?? $userLogged->id;
+                        
+                        // Definição de limites por plano para veículos
+                        $limitesVeiculos = [
+                            'Teste'    => 1
+                        ];
+
+                        $limiteMaximo = $limitesVeiculos[$userLogged->plano] ?? 1;
+                        $totalVeiculos = \App\Models\Veiculo::where('empresa_id', $empresaId)->count();
+                        $limiteAtingido = $totalVeiculos >= $limiteMaximo;
+                    @endphp
+
+                    @if($limiteAtingido)
+                        {{-- Alerta de limite atingido no padrão do botão de usuários --}}
+                        <div class="alert alert-warning py-1 px-2 mb-0 font-13 shadow-sm border-warning d-flex align-items-center">
+                            <i class="mdi mdi-lock me-1"></i>
+                            <span>Limite atingido: <strong>{{ $totalVeiculos }}</strong> veíc.</span>
+                            <a href="{{ route('planos.index') }}" class="ms-2 fw-bold">Upgrade?</a>
+                        </div>
+                    @else
+                        {{-- Dropdown Normal de Cadastro --}}
+                        <div class="dropdown btn-group">
+                            <button class="btn btn-primary dropdown-toggle shadow-sm" type="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                <i class="mdi mdi-plus me-1"></i> Cadastrar
+                            </button>
+                            <div class="dropdown-menu dropdown-menu-animated dropdown-menu-end shadow-lg border-0">
+                                <a href="#" data-bs-toggle="modal" data-bs-target="#cadastro-rapido" class="dropdown-item">
+                                    <i class="mdi mdi-flash-outline me-1 text-primary"></i> Cadastro rápido
+                                </a>
+                                <div class="dropdown-divider"></div>
+                                <a href="{{ route('veiculos.cadastro-manual') }}" class="dropdown-item">
+                                    <i class="mdi mdi-hand-back-right-outline me-1 text-primary"></i> Cadastro manual
+                                </a>
+                            </div>
+                        </div>
+                    @endif
                 </div>
             </div>
         </div>
@@ -190,12 +219,30 @@ document.addEventListener('DOMContentLoaded', function () {
                                         <i class="mdi mdi-archive-arrow-down-outline font-18"></i>
                                     </a>
 
-                                    <a href="javascript:void(0);" 
-                                    onclick="confirmDelete({{ $veiculo->id }})" 
-                                    class="btn btn-sm btn-soft-danger" 
-                                    title="Excluir Veículo">
-                                        <i class="mdi mdi-trash-can-outline font-18"></i>
-                                    </a>
+                                    @php
+                                        $userLogged = auth()->user();
+                                        // Verifica se o usuário é do plano Teste
+                                        $isTeste = ($userLogged->plano === 'Teste');
+                                    @endphp
+
+                                    @if($isTeste)
+                                        {{-- Botão Desabilitado para o Plano Teste --}}
+                                        <button type="button" 
+                                                class="btn btn-sm btn-soft-secondary" 
+                                                style="cursor: not-allowed;"
+                                                onclick="Swal.fire('Ação Bloqueada', 'No plano Teste não é permitido excluir veículos. Faça o upgrade para ter controle total sobre seus registros!', 'info')"
+                                                title="Exclusão não permitida no plano Teste">
+                                            <i class="mdi mdi-trash-can-outline font-18"></i>
+                                        </button>
+                                    @else
+                                        {{-- Botão Normal para planos pagos --}}
+                                        <a href="javascript:void(0);" 
+                                        onclick="confirmDelete({{ $veiculo->id }})" 
+                                        class="btn btn-sm btn-soft-danger" 
+                                        title="Excluir Veículo">
+                                            <i class="mdi mdi-trash-can-outline font-18"></i>
+                                        </a>
+                                    @endif
                                 </div>
 
                                 {{-- Formulários Ocultos --}}

@@ -10,15 +10,13 @@ class Assinatura extends Model
     use HasFactory;
 
     protected $fillable = [
-        'plano',
-        'valor',
-        'class_status',
-        'status',
-        'external_reference',
-
-        'data_inicio',
-        'data_fim',
-
-        'user_id',
+        'plano', 
+        'valor', 
+        'class_status', 
+        'status', 
+        'data_inicio', 
+        'data_fim', 
+        'external_reference', 
+        'user_id'
     ];
 }

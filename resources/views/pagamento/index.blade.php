@@ -179,6 +179,7 @@ function processPixPayment() {
 
 // Lógica de pagamento PIX (enviar requisição)
 const csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
+
 document.getElementById("pixPaymentButton").addEventListener("click", async () => {
     try {
         // Exibe o spinner e esconde o conteúdo
@@ -191,19 +192,20 @@ document.getElementById("pixPaymentButton").addEventListener("click", async () =
         document.getElementById('pixPaymentContainer').style.display = 'none';
 
         // Faz a requisição para gerar o pagamento PIX
-        const pixResponse = await fetch('/api/create-pix-payment', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-                'X-CSRF-TOKEN': csrfToken,
-                'Authorization': 'Bearer APP_USR-46c2384a-3f32-4ff9-9b96-b4497129462b' // Token Mercado Pago
-            },
-            body: JSON.stringify({
-                amount: {{ $preco }},
-                payer_email: @json($userEmail),
-                plano: @json($plano) 
-            })
-        });
+        // No seu arquivo JS:
+const pixResponse = await fetch('/create-pix-payment', {
+    method: 'POST',
+    headers: {
+        'Content-Type': 'application/json',
+        'X-CSRF-TOKEN': csrfToken,
+        'Accept': 'application/json'
+    },
+    body: JSON.stringify({
+        amount: {{ $preco }},
+        payer_email: @json($userEmail),
+        plano: @json($plano) 
+    })
+});
 
         const pixData = await pixResponse.json();
         
@@ -259,18 +261,29 @@ document.getElementById("btCopiar").addEventListener("click", function () {
 
 
 <script>
-    setInterval(async function() {
+    let statusInterval; // Variável global para controlar o intervalo
+
+function iniciarVerificacaoStatus() {
+    // Evita duplicar o intervalo se clicar duas vezes
+    if (statusInterval) clearInterval(statusInterval);
+
+    statusInterval = setInterval(async function() {
         try {
             let response = await fetch('/check-payment-status');
+            
+            if (!response.ok) return;
+
             let data = await response.json();
 
-            if (data.status === 'paid') {
-                window.location.href = "{{ route('pagamento.confirmado') }}"; // Usa a rota Laravel
+            if (data.status === 'approved' || data.status === 'paid') {
+                clearInterval(statusInterval);
+                window.location.href = "{{ route('pagamento.confirmado') }}"; 
             }
         } catch (error) {
-            console.error("Erro ao verificar pagamento:", error);
+            console.error("Erro ao verificar status:", error);
         }
-    }, 2000);
+    }, 5000); // 5 segundos é o ideal para não sobrecarregar o log
+}
 </script>
 
 

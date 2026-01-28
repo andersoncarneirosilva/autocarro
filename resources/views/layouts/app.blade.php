@@ -12,27 +12,20 @@
     <meta name="description"
         content="Gerenciamento de documentação de veículos. Procuração, CRLV, solicitação de ATPVe e muito mais.">
 
-
-    <!-- App favicon -->
     <meta name="csrf-token" content="{{ csrf_token() }}">
 
     <link rel="shortcut icon" href="{{ url('frontend/images/favicon/favicon.ico') }}">
-    {{-- <script src="{{ url('backend/js/notificacoes.js') }}?v={{ time() }}"></script> --}}
-    <!-- Daterangepicker css -->
+
     <link href="{{ url('backend/vendor/select2/css/select2.min.css') }}" rel="stylesheet" type="text/css" />
     <link rel="stylesheet" href="{{ url('backend/vendor/daterangepicker/daterangepicker.css') }}">
 
-    <!-- Vector Map css -->
+
     <link rel="stylesheet"
         href="{{ url('backend/vendor/admin-resources/jquery.vectormap/jquery-jvectormap-1.2.2.css') }}">
-    <!-- Theme Config Js -->
+
     <script src="{{ url('backend/js/hyper-config.js') }}"></script>
     <link href="https://cdn.jsdelivr.net/npm/fullcalendar@5.11.0/main.min.css" rel="stylesheet">
 
-    {{-- <link href="https://cdn.jsdelivr.net/npm/choices.js/public/backend/styles/choices.min.css" rel="stylesheet" />
-    <script src="https://cdn.jsdelivr.net/npm/choices.js/public/backend/scripts/choices.min.js"></script> --}}
-
-    <!-- App css -->
 
     <link rel="stylesheet" href="{{ url('backend/css/app-saas.css') }}?v={{ time() }}" type="text/css" id="app-style">
 
@@ -56,8 +49,25 @@
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.inputmask/5.0.9/jquery.inputmask.min.js" integrity="sha512-F5Ul1uuyFlGnIT1dk2c4kB4DBdi5wnBJjVhL7gQlGh46Xn0VhvD8kgxLtjdZ5YN83gybk/aASUAlpdoWUjRR3g==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 <script src="https://cdn.ckeditor.com/ckeditor5/41.0.0/super-build/ckeditor.js"></script>
-    {{-- <script src="{{ url('backend/js/pagamento.js') }}?v={{ time() }}"></script> --}}
 
+     <script src="https://sdk.mercadopago.com/js/v2"></script>
+    <script>
+        $(document).ready(function() {
+            $('.datepicker').datepicker({
+                format: 'dd/mm/yyyy', // Formato de data brasileiro
+                language: 'pt-BR', // Define o idioma como Português Brasil
+                autoclose: true, // Fecha automaticamente ao selecionar a data
+                todayHighlight: true // Destaca a data atual
+            });
+
+            // Para calendários inline
+            $('.calendar-widget').datepicker({
+                format: 'dd/mm/yyyy',
+                language: 'pt-BR',
+                todayHighlight: true
+            });
+        });
+    </script>
 
 {{-- <script>
     window.AppConfig = {

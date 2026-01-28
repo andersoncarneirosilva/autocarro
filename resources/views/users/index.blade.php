@@ -4,9 +4,10 @@
 
 @section('content')
 
+{{-- Modal de Cadastro (Único) --}}
 @include('users._partials.cadastrar-usuario')
 
-{{-- Script do Toast permanece igual --}}
+{{-- Scripts de Alerta (Toast) --}}
 @if (session('success') || session('error'))
 <script>
 document.addEventListener('DOMContentLoaded', function () {
@@ -16,17 +17,9 @@ document.addEventListener('DOMContentLoaded', function () {
         showConfirmButton: false,
         timer: 4000,
         timerProgressBar: true,
-        background: '#fff',
-        color: '#313a46',
     });
-
-    @if (session('success'))
-        Toast.fire({ icon: 'success', title: '{{ session('success') }}' });
-    @endif
-
-    @if (session('error'))
-        Toast.fire({ icon: 'error', title: '{{ session('error') }}' });
-    @endif
+    @if (session('success')) Toast.fire({ icon: 'success', title: '{{ session('success') }}' }); @endif
+    @if (session('error')) Toast.fire({ icon: 'error', title: '{{ session('error') }}' }); @endif
 });
 </script>
 @endif
@@ -34,261 +27,178 @@ document.addEventListener('DOMContentLoaded', function () {
 <div class="row">
     <div class="col-12">
         <div class="page-title-box">
-            <div class="page-title-right">
-                <ol class="breadcrumb m-0">
-                    <li class="breadcrumb-item"><a href="{{ route('dashboard.index') }}">Dashboard</a></li>
-                    <li class="breadcrumb-item active">Usuários</li>
-                </ol>
-            </div>
             <h3 class="page-title">Usuários</h3>
         </div>
     </div>
 </div>
 
-<style>
-/* Container que envolve a tabela */
-.table-responsive-custom {
-    max-height: 500px; /* Defina a altura máxima que desejar */
-    overflow-y: auto;  /* Scroll vertical */
-    overflow-x: auto;  /* Scroll horizontal para mobile */
-    border: 1px solid #dee2e6;
-    border-radius: 8px;
-}
-
-/* Deixa o cabeçalho da tabela fixo no topo enquanto você rola */
-.table-responsive-custom thead th {
-    position: sticky;
-    top: 0;
-    z-index: 10;
-    background-color: #343a40 !important; /* Cor de fundo do cabeçalho */
-}
-
-/* Estilização da barra de rolagem para ficar mais elegante */
-.table-responsive-custom::-webkit-scrollbar {
-    width: 6px;
-    height: 6px;
-}
-.table-responsive-custom::-webkit-scrollbar-thumb {
-    background: #ccc;
-    border-radius: 10px;
-}
-.table-responsive-custom::-webkit-scrollbar-track {
-    background: #f1f1f1;
-}
-</style>
-
 <div class="card border-0 shadow-sm rounded-3">
-    <div class="card-body p-4"> <div class="row align-items-center mb-4">
+    <div class="card-body p-2"> 
+        <div class="row align-items-center mb-4 p-2">
             <div class="col-md-4">
                 <h4 class="header-title mb-1 text-dark fw-bold">Usuários Cadastrados</h4>
-                <p class="text-muted font-13 mb-0">Gerencie permissões e dados dos usuários.</p>
+                <p class="text-muted font-13 mb-0">Gerencie a equipe do Alcecar.</p>
             </div>
             
             <div class="col-md-8">
                 <div class="d-flex flex-wrap align-items-center justify-content-sm-end gap-3">
                     <div class="search-box">
                         <div class="input-group input-group-sm">
-                            <span class="input-group-text bg-light border-0">
-                                <i class="uil uil-search text-muted"></i>
-                            </span>
-                            <input type="text" id="searchInput" class="form-control bg-light border-0 ps-0" 
-                                   placeholder="Filtrar por nome, email ou telefone...">
+                            <span class="input-group-text bg-light border-0"><i class="uil uil-search text-muted"></i></span>
+                            <input type="text" id="searchInput" class="form-control bg-light border-0 ps-0" placeholder="Filtrar equipe...">
                         </div>
                     </div>
 
-                    @can('access-admin') 
-                        <button type="button" class="btn btn-primary btn-sm rounded-pill shadow-sm px-3" 
-                                data-bs-toggle="modal" data-bs-target="#modalCadastrarUsuario">
-                            <i class="uil uil-plus me-1"></i> Novo Usuário
+                    @php
+                        $userLogged = auth()->user();
+                        $limites = ['Teste' => 1];
+                        $totalUsers = \App\Models\User::where('empresa_id', $userLogged->empresa_id ?? $userLogged->id)->count();
+                        $limiteAtingido = $totalUsers >= ($limites[$userLogged->plano] ?? 1);
+                    @endphp
+
+                    @if($limiteAtingido)
+                        <div class="alert alert-warning py-1 px-2 mb-0 font-13">
+                            Limite atingido. <a href="{{ route('planos.index') }}" class="fw-bold">Upgrade?</a>
+                        </div>
+                    @else
+                        <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#modalCadastrarUsuario">
+                            <i class="uil-plus"></i> Cadastrar
                         </button>
-                    @endcan
+                    @endif
                 </div>
             </div>
         </div>
 
         <div class="table-custom-container">
             <table class="table table-custom table-nowrap table-hover mb-0" id="userTable">
-                <thead>
-                    <tr class="bg-dark">
-                        <th class="py-3 text-white fw-semibold border-0">Usuário</th>
-                        <th class="py-3 text-white fw-semibold border-0">Telefone</th>
-                        <th class="py-3 text-white fw-semibold border-0">Acesso</th>
-                        <th class="py-3 text-white fw-semibold border-0">Status</th>
-                        <th class="py-3 text-white fw-semibold border-0">Último acesso</th>
-                        <th class="py-3 text-center text-white fw-semibold border-0">Ações</th>
+                <thead class="bg-dark">
+                    <tr>
+                        <th class="text-white border-0">Usuário</th>
+                        <th class="text-white border-0">Telefone</th>
+                        <th class="text-white border-0">Acesso</th>
+                        <th class="text-white border-0">Status</th>
+                        <th class="text-white border-0">Ações</th>
                     </tr>
                 </thead>
                 <tbody id="table-body">
                     @forelse ($users as $user)
                     <tr class="align-middle user-row">
-                        <td class="table-user">
+                        <td>
                             <div class="d-flex align-items-center">
-    @if($user->image)
-        <img src="{{ url("storage/{$user->image}") }}" 
-             class="rounded-circle me-3 border shadow-sm" 
-             style="width: 38px; height: 38px; object-fit: cover;">
-    @else
-        <div class="rounded-circle me-3 d-flex align-items-center justify-content-center shadow-sm border text-white fw-bold" 
-             style="width: 38px; height: 38px; background-color: #727cf5; font-size: 16px;">
-            {{ strtoupper(substr($user->name, 0, 1)) }}
-        </div>
-    @endif
-    
-    <div>
-        <span class="d-block fw-semibold text-dark user-name">{{ $user->name }}</span>
-        <small class="text-muted user-email">{{ $user->email }}</small>
-    </div>
-</div>
+                                <div class="rounded-circle me-2 d-flex align-items-center justify-content-center bg-primary text-white fw-bold" style="width: 35px; height: 35px;">
+                                    {{ strtoupper(substr($user->name, 0, 1)) }}
+                                </div>
+                                <div>
+                                    <span class="d-block fw-semibold text-dark user-name">{{ $user->name }}</span>
+                                    <small class="text-muted user-email">{{ $user->email }}</small>
+                                </div>
+                            </div>
                         </td>
                         <td>
-                            <?php 
-                        $fone = $user->telefone;
-                        // Formatar o telefone
-                        $fone_formatado = preg_replace('/(\d{2})(\d{5})(\d{4})/', '($1) $2.$3', $fone);
-                        // Gerar o link com o número sem formatação
-                        $link_whatsapp = "https://wa.me/+55" . preg_replace('/\D/', '', $fone); 
-                        ?>
-                        <a href="<?= $link_whatsapp ?>" target="_blank" style="color: #0b8638;">
-                                        <i class="uil uil-whatsapp"></i> <?= $fone_formatado ?>
-                                    </a></td>
+                            <a href="https://wa.me/55{{ preg_replace('/\D/', '', $user->telefone) }}" target="_blank" class="text-success">
+                                <i class="uil uil-whatsapp"></i> {{ $user->telefone }}
+                            </a>
+                        </td>
+                        <td><span class="badge badge-outline-info rounded-pill">{{ $user->nivel_acesso }}</span></td>
                         <td>
-                            <span class="badge {{ $user->nivel_acesso == 'Administrador' ? 'badge-outline-danger text-danger' : 'badge-outline-info text-info' }} rounded-pill px-2">
-                                {{ ucfirst($user->nivel_acesso) }}
+                            <span class="badge bg-{{ $user->status == 'Ativo' ? 'success' : 'secondary' }}-lighten text-{{ $user->status == 'Ativo' ? 'success' : 'secondary' }} rounded-pill">
+                                {{ $user->status }}
                             </span>
                         </td>
-                        <td>
-                            @php
-                                $statusClass = str_contains($user->classe, 'success') || $user->status == 'Ativo' ? 'success' : 'secondary';
-                            @endphp
-                            <span class="badge bg-{{ $statusClass }}-lighten text-{{ $statusClass }} border border-{{ $statusClass }} px-2 rounded-pill">
-                                <i class="mdi mdi-circle me-1 small"></i>{{ $user->status }}
-                            </span>
-                        </td>
-                        <td>
-    @if($user->last_login_at)
-        <span class="text-nowrap">
-            <i class="mdi mdi-clock-outline me-1 text-muted"></i> 
-            {{ $user->last_login_at->format('d/m/Y H:i') }}
-        </span>
-    @else
-        Nunca acessou
-    @endif
-</td>
                         <td class="text-center">
-    <div class="d-flex justify-content-center gap-2">
-        <button type="button" 
-                class="btn-action edit" 
-                data-bs-toggle="modal" 
-                data-bs-target="#modalEditarUsuario{{ $user->id }}" 
-                title="Editar Usuário">
-            <i class="uil uil-pen"></i>
-        </button>
-        
-        <form action="{{ route('users.destroy', $user->id) }}" method="POST" class="d-inline form-delete">
-            @csrf
-            @method('DELETE')
-            <button type="button" 
-                    class="btn-action delete btn-delete" 
-                    title="Excluir Usuário">
-                <i class="mdi mdi-delete"></i>
-            </button>
-        </form>
-    </div>
-</td>
+                            <div class="d-flex justify-content-center gap-2">
+                                {{-- Botão Editar --}}
+                                <button type="button" class="btn-action edit" data-bs-toggle="modal" data-bs-target="#modalEditarUsuario{{ $user->id }}">
+                                    <i class="uil uil-pen"></i>
+                                </button>
+                                
+                                {{-- Botão Excluir --}}
+                                <form action="{{ route('users.destroy', $user->id) }}" method="POST" class="d-inline">
+                                    @csrf @method('DELETE')
+                                    <button type="button" class="btn-action delete btn-delete-confirm">
+                                        <i class="mdi mdi-delete"></i>
+                                    </button>
+                                </form>
+                            </div>
+                        </td>
                     </tr>
-                    @include('users._partials.editar-usuario') 
+
+                    {{-- INCLUSÃO DO MODAL DE EDIÇÃO DENTRO DO LOOP --}}
+                    @include('users._partials.editar-usuario', ['user' => $user])
+
                     @empty
-                    <tr id="no-results" style="display: none;">
-                        <td colspan="6" class="text-center py-5 text-muted">Nenhum usuário encontrado.</td>
-                    </tr>
+                    <tr><td colspan="5" class="text-center py-4">Nenhum usuário encontrado.</td></tr>
                     @endforelse
-                    <tr id="no-results-found" style="display: none;">
-        <td colspan="6" class="text-center py-5">
-            <div class="text-center">
-                <i class="uil uil-search-alt text-muted h1"></i>
-                <h5 class="text-muted mt-2">Nenhum usuário corresponde à sua pesquisa</h5>
-                <p class="text-muted small">Verifique a ortografia ou tente termos diferentes.</p>
-            </div>
-        </td>
-    </tr>
                 </tbody>
             </table>
         </div>
     </div>
 </div>
 
-<script>
-document.addEventListener('DOMContentLoaded', function() {
-    const searchInput = document.getElementById('searchInput');
-    const tableRows = document.querySelectorAll('.user-row');
-    const noResultsRow = document.getElementById('no-results-found');
-
-    if (!searchInput) return; // Segurança caso o input não exista na página
-
-    searchInput.addEventListener('input', function() {
-        const searchTerm = this.value.toLowerCase().trim();
-        let visibleCount = 0;
-
-        tableRows.forEach(row => {
-            // Selecionamos os elementos com segurança usando opcional chaining ou check
-            const nameEl = row.querySelector('.user-name');
-            const emailEl = row.querySelector('.user-email');
-            const phoneEl = row.querySelector('.user-phone');
-
-            // Extraímos o texto apenas se o elemento existir, senão usamos string vazia
-            const name = nameEl ? nameEl.textContent.toLowerCase() : '';
-            const email = emailEl ? emailEl.textContent.toLowerCase() : '';
-            const phone = phoneEl ? phoneEl.textContent.toLowerCase() : '';
-
-            // Lógica de filtro
-            if (name.includes(searchTerm) || 
-                email.includes(searchTerm) || 
-                phone.includes(searchTerm)) {
-                row.style.display = '';
-                visibleCount++;
-            } else {
-                row.style.display = 'none';
-            }
-        });
-
-        // Mostra ou esconde a linha de "Nenhum usuário encontrado"
-        if (noResultsRow) {
-            noResultsRow.style.display = (visibleCount === 0 && searchTerm !== "") ? '' : 'none';
-        }
-    });
-});
-</script>
-
+{{-- SCRIPTS UNIFICADOS --}}
 <script>
 document.addEventListener('DOMContentLoaded', function () {
-    // Captura todos os botões de excluir
-    const deleteButtons = document.querySelectorAll('.btn-delete');
+    
+    // 1. MÁSCARAS GLOBAIS (Funcionam em todos os modais novos e velhos)
+    document.addEventListener('input', function (e) {
+        if (e.target.classList.contains('tel-mask')) {
+            let v = e.target.value.replace(/\D/g, '');
+            if (v.length > 11) v = v.slice(0, 11);
+            if (v.length > 10) v = v.replace(/^(\d{2})(\d{5})(\d{4})/, "($1) $2-$3");
+            else v = v.replace(/^(\d{2})(\d{4})(\d{0,4})/, "($1) $2-$3");
+            e.target.value = v;
+        }
+        if (e.target.classList.contains('cpf-mask')) {
+            let v = e.target.value.replace(/\D/g, '');
+            v = v.replace(/(\d{3})(\d)/, '$1.$2').replace(/(\d{3})(\d)/, '$1.$2').replace(/(\d{3})(\d{1,2})$/, '$1-$2');
+            e.target.value = v;
+        }
+    });
 
-    deleteButtons.forEach(button => {
-        button.addEventListener('click', function (e) {
-            e.preventDefault(); // Impede o envio imediato do form
+    // 2. LOADING NOS BOTÕES (CADASTRO E EDIÇÃO)
+    document.addEventListener('submit', function (e) {
+        const form = e.target;
+        if (form.classList.contains('form-editar-usuario') || form.id === 'formUsuario') {
+            if (form.checkValidity()) {
+                const submitBtn = form.querySelector('button[type="submit"]');
+                const loadingBtn = form.querySelector('.btn-loading-edit') || form.querySelector('#btnLoadingUser');
+                
+                if (submitBtn && loadingBtn) {
+                    submitBtn.style.setProperty('display', 'none', 'important');
+                    loadingBtn.style.setProperty('display', 'inline-block', 'important');
+                }
+            }
+        }
+    });
 
-            const form = this.closest('form'); // Pega o formulário pai
-
+    // 3. CONFIRMAÇÃO DE EXCLUSÃO (SWAL)
+    document.addEventListener('click', function (e) {
+        if (e.target.closest('.btn-delete-confirm')) {
+            const btn = e.target.closest('.btn-delete-confirm');
+            const form = btn.closest('form');
             Swal.fire({
-                title: 'Tem certeza?',
-                text: "Esta ação não poderá ser revertida!",
+                title: 'Excluir usuário?',
+                text: "Esta ação é irreversível!",
                 icon: 'warning',
                 showCancelButton: true,
-                confirmButtonColor: '#fa5c7c', // Cor de perigo (danger)
-                cancelButtonColor: '#6c757d',
-                confirmButtonText: 'Sim, excluir!',
-                cancelButtonText: 'Cancelar',
-                reverseButtons: true,
-                background: '#fff', // Se quiser dark, mude para #1a1d21
-                color: '#313a46'
-            }).then((result) => {
-                if (result.isConfirmed) {
-                    form.submit(); // Envia o formulário se confirmado
-                }
+                confirmButtonColor: '#fa5c7c',
+                confirmButtonText: 'Sim, excluir',
+                cancelButtonText: 'Cancelar'
+            }).then((result) => { if (result.isConfirmed) form.submit(); });
+        }
+    });
+
+    // 4. FILTRO DE BUSCA
+    const searchInput = document.getElementById('searchInput');
+    if (searchInput) {
+        searchInput.addEventListener('input', function() {
+            const term = this.value.toLowerCase();
+            document.querySelectorAll('.user-row').forEach(row => {
+                const text = row.innerText.toLowerCase();
+                row.style.display = text.includes(term) ? '' : 'none';
             });
         });
-    });
+    }
 });
 </script>
 

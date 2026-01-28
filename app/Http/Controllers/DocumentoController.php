@@ -36,7 +36,7 @@ class DocumentoController extends Controller
     $modelo = ModeloProcuracao::where('user_id', $userId)->first();
 
     if (!$modelo) {
-        return redirect()->back()->with('error', 'Modelo de procuração não encontrado. Cadastre um modelo um modelo.');
+        return redirect()->back()->with('error', 'Modelo de procuração não encontrado. Cadastre um modelo.');
     }
 
     $tipoDoc = $request->input('tipo_documento');
@@ -169,7 +169,7 @@ class DocumentoController extends Controller
     // 2. CAMINHOS: Padronizando conforme sua estrutura documentos/ID_VEICULO/
     $placaLimpa = str_replace([' ', '-'], '', strtoupper($veiculo->placa));
     $nomeArquivo = "atpve_{$placaLimpa}.pdf";
-    $pastaRelativa = "documentos/usuario_{$userId}/veiculo_{$veiculo->id}/";; // Estrutura simplificada
+    $pastaRelativa = "documentos/{$veiculo->id}/"; // Estrutura simplificada
     $diretorioCompleto = storage_path('app/public/' . $pastaRelativa);
 
     if (!file_exists($diretorioCompleto)) {
