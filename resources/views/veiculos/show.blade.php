@@ -251,7 +251,7 @@ document.addEventListener('DOMContentLoaded', function() {
     const selectCombustivel = document.querySelector('select[name="combustivel"]');
 
     const BASE_URL = 'https://parallelum.com.br/fipe/api/v1';
-    const TOKEN = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI4N2NjMzI1Zi1hZDVmLTQ3NzUtODllYi1hY2MxMTcyYTc4MzkiLCJlbWFpbCI6ImFuZGVyc29ucWlwb2FAZ21haWwuY29tIiwiaWF0IjoxNzY5NTU5NTExfQ.-CL3A3XQK_HQ6-Lh9gh_V0-wFtlVaCNIfCdb_qL3smY';
+    const TOKEN = process.env.FIPE_TOKEN;
 
     // Objeto de configuração para os headers (centralizado)
     const requestOptions = {
