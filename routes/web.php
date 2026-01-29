@@ -70,13 +70,19 @@ Route::get('/teste-email', function () {
 });
 
 Route::get('/teste-final', function () {
-    $user = \App\Models\User::first();
+    // Força o SMTP igual na rota que funciona
+    config(['mail.mailers.smtp.host' => 'smtp.zoho.com']);
+    config(['mail.mailers.smtp.port' => 587]);
+    config(['mail.mailers.smtp.encryption' => 'tls']);
+    config(['mail.mailers.smtp.username' => 'suporte@alcecar.com.br']);
+    config(['mail.mailers.smtp.password' => '@Sup70p34C']);
+
     $url = "https://alcecar.com.br/reset-password/teste";
     
-    // Isso vai forçar o envio e mostrar o erro real na tela se falhar
+    // O segredo está aqui: se a classe usar "ShouldQueue", ela ignora o config acima e vai pro Redis
     Mail::to('andersonqipoa@gmail.com')->send(new \App\Mail\CustomResetPasswordMail($url));
     
-    return "Se chegou aqui e não deu erro na tela, o problema é cache de configuração.";
+    return "Se o config forçado resolveu, o problema é 100% cache no seu .env";
 });
 
 Route::middleware(['auth', 'trial'])->group(function () {

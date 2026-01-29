@@ -18,13 +18,12 @@ class CustomResetPasswordMail extends Mailable
     }
 
     public function build()
-    {
-        // Forçamos o remetente exatamente como configurado no SMTP do Zoho
-        return $this->from(config('mail.from.address'), config('mail.from.name'))
-            ->view('emails.custom-reset-password')
-            ->subject('Redefina sua senha - Alcecar')
-            ->with([
-                'url' => $this->url,
-            ]);
-    }
+{
+    return $this->from('suporte@alcecar.com.br', 'Alcecar') // Força o remetente do Zoho
+                ->view('emails.custom-reset-password')
+                ->subject('Redefina sua senha - Alcecar')
+                ->with([
+                    'url' => $this->url,
+                ]);
+}
 }
