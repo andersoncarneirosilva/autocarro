@@ -105,76 +105,80 @@ class PaymentController extends Controller
     }
 
     public function createPixPayment(Request $request)
-    {
+{
+    Log::info('Entrou na createPixPayment');
 
-        Log::info('Entrou na : createPixPayment');
+    $user = Auth::user();
+    if (! $user) {
+        return response()->json(['error' => 'Usuário não autenticado'], 401);
+    }
 
-        // Tente obter o usuário com o token
-        $user = Auth::user();
-        
-        
-        if (! $user) {
-            Log::error('Usuário não autenticado.');
-            
-            return response()->json(['error' => 'Usuário não autenticado'], 401);
-            }
-            
-        Log::info('Usuário autenticado', ['user_id' => $user->id]);
+    Log::info('Usuário autenticado', ['user_id' => $user->id]);
 
-        try {
-            $accessToken = env('MERCADO_PAGO_ACCESS_TOKEN');
+    try {
+        $accessToken = env('MERCADO_PAGO_ACCESS_TOKEN');
+        if (! $accessToken) {
+            throw new \Exception('Access Token Mercado Pago não configurado');
+        }
 
-            if (! $accessToken) {
-                Log::error('Mercado Pago: Access Token não encontrado.');
+        // 1️⃣ CRIA A ASSINATURA PRIMEIRO
+        $pedido = new Assinatura;
+        $pedido->valor = $request->amount;
+        $pedido->status = 'pending';
+        $pedido->class_status = 'badge badge-outline-warning';
+        $pedido->user_id = $user->id;
+        $pedido->plano = $request->plano ?? 'Padrão';
+        $pedido->data_inicio = now();
+        $pedido->data_fim = now()->addDays(30);
+        $pedido->save(); // 🔥 agora $pedido->id existe
 
-                return response()->json(['error' => 'Erro na configuração do Mercado Pago'], 500);
-            }
+        // 2️⃣ DEFINE O external_reference CORRETO
+        $pedido->external_reference = 'assinatura_'.$pedido->id;
+        $pedido->save();
 
-            $url = 'https://api.mercadopago.com/v1/payments';
-
-            // Envia a solicitação de pagamento para o Mercado Pago
-            $response = Http::withToken($accessToken)->post($url, [
-                'transaction_amount' => floatval($request->amount),
+        // 3️⃣ CRIA O PAGAMENTO NO MERCADO PAGO
+        $response = Http::withToken($accessToken)->post(
+            'https://api.mercadopago.com/v1/payments',
+            [
+                'transaction_amount' => (float) $request->amount,
                 'payment_method_id' => 'pix',
                 'payer' => [
                     'email' => $request->payer_email,
                 ],
                 'external_reference' => $pedido->external_reference,
-                'notification_url' => route('webhook.payment'),
+                'notification_url' => url('/webhook-payment'),
+            ]
+        );
+
+        if ($response->failed()) {
+            Log::error('Erro Mercado Pago', [
+                'status' => $response->status(),
+                'body' => $response->body()
             ]);
 
-            // Salvar o pedido no banco de dados
-            $pedido = new Assinatura;
-            $pedido->valor = $request->amount;
-            $pedido->status = 'pending';
-            $pedido->class_status = 'badge badge-outline-warning';
-            $pedido->user_id = $user->id;
-            $pedido->external_reference = 'assinatura_'.$pedido->id;
-            $pedido->data_inicio = now(); // Define a data de início como a data atual
-            $pedido->data_fim = now()->addDays(30); // Define a data de fim para daqui a 30 dias
-            $pedido->plano = $request->plano ?? 'Padrão'; // Defina um valor padrão ou pegue do request
-            $pedido->save();
-
-            if ($response->failed()) {
-                Log::error('Erro ao criar pagamento PIX: '.$response->body());
-
-                return response()->json(['error' => 'Erro ao criar pagamento PIX', 'details' => $response->json()], 500);
-            }
-
-            $paymentData = $response->json();
-
-            return response()->json([
-                'qr_code' => $paymentData['point_of_interaction']['transaction_data']['qr_code'] ?? null,
-                'qr_code_base64' => $paymentData['point_of_interaction']['transaction_data']['qr_code_base64'] ?? null,
-                'ticket_url' => $paymentData['point_of_interaction']['transaction_data']['ticket_url'] ?? null,
-            ]);
-
-        } catch (\Exception $e) {
-            Log::error('Exceção ao criar pagamento PIX: '.$e->getMessage());
-
-            return response()->json(['error' => 'Erro interno ao processar o pagamento'], 500);
+            return response()->json(['error' => 'Erro ao criar pagamento PIX'], 500);
         }
+
+        $paymentData = $response->json();
+
+        Log::info('Pagamento PIX criado', [
+            'pedido_id' => $pedido->id,
+            'payment_id' => $paymentData['id'] ?? null
+        ]);
+
+        return response()->json([
+            'qr_code' => $paymentData['point_of_interaction']['transaction_data']['qr_code'] ?? null,
+            'qr_code_base64' => $paymentData['point_of_interaction']['transaction_data']['qr_code_base64'] ?? null,
+            'ticket_url' => $paymentData['point_of_interaction']['transaction_data']['ticket_url'] ?? null,
+        ]);
+
+    } catch (\Exception $e) {
+        Log::error('Exceção ao criar pagamento PIX: ' . $e->getMessage());
+
+        return response()->json(['error' => 'Erro interno ao processar o pagamento'], 500);
     }
+}
+
 
     private function getPaymentDetails($paymentId)
     {
