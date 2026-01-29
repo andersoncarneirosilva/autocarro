@@ -69,11 +69,11 @@
         });
     </script>
 
-{{-- <script>
+<script>
     window.AppConfig = {
-        fipeToken: "{{ config('services.fipe.token') ?? env('FIPE_TOKEN') }}"
+        fipeToken: "{{ config('services.fipe.token') ?? env('VITE_FIPE_TOKEN') }}"
     };
-</script> --}}
+</script>
 
 
   <!-- Google tag (gtag.js) -->
