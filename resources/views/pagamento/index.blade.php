@@ -207,6 +207,8 @@ const pixResponse = await fetch('/create-pix-payment', {
     })
 });
 
+
+
         const pixData = await pixResponse.json();
         
         // Inicia o timer de 5 minutos
