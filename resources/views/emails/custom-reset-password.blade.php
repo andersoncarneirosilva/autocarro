@@ -23,7 +23,7 @@
     <div class="container">
         <div class="header">
             <a href="https://alcecar.com.br">
-                <img src="{{ asset('assets/images/logo-dark.png') }}" alt="Alcecar" class="logo">
+                <img src="https://alcecar.com.br/frontend/images/logo_texto.png" alt="Alcecar" class="logo">
             </a>
         </div>
 
