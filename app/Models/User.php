@@ -28,16 +28,16 @@ class User extends Authenticatable
         'email',
         'cpf',
         'telefone',
-        'cidade',
-        'estado',
         'nivel_acesso',
-        'empresa_id',
         'password',
         'image',
         'status',
         'plano',
+        'payment_status',
+        'credito',
         'last_login_at',
-    ];
+        'empresa_id',
+        ];
 
     /**
      * The attributes that should be hidden for serialization.
