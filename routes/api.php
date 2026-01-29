@@ -1,19 +1,38 @@
 <?php
 
 use App\Http\Controllers\PaymentController;
+use App\Http\Controllers\WebhookController;
 use App\Http\Controllers\MessageController;
 use Illuminate\Http\Request;
 use App\Http\Controllers\ChatController;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Log;
 use App\Models\User;
-// Rota para criar preferência
-Route::post('/create-preference', [PaymentController::class, 'createPreference'])->middleware('auth:sanctum');
 
-// Rota para processar pagamentos
-Route::post('/process-payment', [PaymentController::class, 'processPayment'])->middleware('auth:sanctum');
+/*
+|--------------------------------------------------------------------------
+| PAGAMENTOS (Ações iniciadas pelo usuário)
+|--------------------------------------------------------------------------
+*/
+Route::middleware('auth:sanctum')->group(function () {
 
-Route::post('/webhook-payment', [PaymentController::class, 'handleWebhook']);
+    // Criar pagamento PIX
+    Route::post('/create-pix-payment', [PaymentController::class, 'createPixPayment']);
+
+    // (se existir)
+    Route::post('/create-preference', [PaymentController::class, 'createPreference']);
+
+    // (se existir)
+    Route::post('/process-payment', [PaymentController::class, 'processPayment']);
+});
+/*
+|--------------------------------------------------------------------------
+| WEBHOOK MERCADO PAGO (Chamado pelo Mercado Pago)
+|--------------------------------------------------------------------------
+*/
+Route::post('/webhook-payment', [WebhookController::class, 'paymentUpdated']);
+
+
 
 // Rota para retornar usuário autenticado (semelhante ao exemplo)
 Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
@@ -28,13 +47,3 @@ Route::get('/chat/last-message', [ChatController::class, 'lastMessage']);
 Route::post('/chat/get-chat', [ChatController::class, 'getChat'])->middleware('auth');
 
 Route::post('/chat/send-message', [ChatController::class, 'sendMessage'])->name('chat.sendMessage');
-
-
-// Rotas para buscar dados dinamicamente
-Route::get('/api/modelos/{marca_id}', function($marca_id) {
-    return App\Models\Modelo::where('marca_id', $marca_id)->get();
-});
-
-Route::get('/api/versoes/{modelo_id}', function($modelo_id) {
-    return App\Models\Versao::where('modelo_id', $modelo_id)->get();
-});

@@ -22,6 +22,8 @@ return new class extends Migration
             $table->string('image')->nullable();
             $table->string('status')->nullable();
             $table->string('plano')->nullable();
+            $table->string('payment_status')->nullable();
+            $table->decimal('credito', 10, 2)->default(0.00);
             $table->timestamp('last_login_at')->nullable();
             $table->timestamp('password_changed_at')->nullable();
             $table->timestamp('email_verified_at')->nullable();
@@ -30,7 +32,6 @@ return new class extends Migration
             $table->timestamps();
         });
     }
-
     /**
      * Reverse the migrations.
      */
