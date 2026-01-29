@@ -277,11 +277,10 @@ function iniciarVerificacaoStatus() {
 
             let data = await response.json();
 
-            if (data.status === 'approved') {
+            if (data.status === 'approved' || data.status === 'paid') {
                 clearInterval(statusInterval);
-                window.location.href = "{{ route('pagamento.confirmado') }}";
+                window.location.href = "{{ route('pagamento.confirmado') }}"; 
             }
-
         } catch (error) {
             console.error("Erro ao verificar status:", error);
         }
