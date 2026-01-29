@@ -47,12 +47,16 @@ use Illuminate\Support\Facades\Broadcast;
 use Illuminate\Support\Facades\Mail;
 
 Route::get('/teste-email', function () {
-    Mail::raw('Teste de envio Zoho SMTP', function ($message) {
-        $message->to('andersonqipoa@gmail.com')
-                ->subject('Teste SMTP Zoho');
-    });
-
-    return 'E-mail enviado!';
+    try {
+        Mail::raw('Teste de configuração SMTP Zoho Alcecar', function ($message) {
+            $message->from('suporte@alcecar.com.br', 'Alcecar') // TEM QUE SER O MESMO DO .ENV
+                    ->to('seu-email-pessoal@gmail.com') // Coloque seu Gmail aqui
+                    ->subject('Teste de Conexão');
+        });
+        return "E-mail enviado!";
+    } catch (\Exception $e) {
+        return "Erro ao enviar: " . $e->getMessage();
+    }
 });
 
 Route::middleware(['auth', 'trial'])->group(function () {
