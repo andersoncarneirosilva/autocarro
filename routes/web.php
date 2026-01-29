@@ -48,14 +48,24 @@ use Illuminate\Support\Facades\Mail;
 
 Route::get('/teste-email', function () {
     try {
-        Mail::raw('Teste de configuração SMTP Zoho Alcecar', function ($message) {
-            $message->from('suporte@alcecar.com.br', 'Alcecar') // TEM QUE SER O MESMO DO .ENV
-                    ->to('andersonqipoa@gmail.com') // Coloque seu Gmail aqui
-                    ->subject('Teste de Conexão');
+        // Força a configuração em tempo real para garantir que não é cache
+        config(['mail.mailers.smtp.host' => 'smtp.zoho.com']);
+        config(['mail.mailers.smtp.port' => 587]);
+        config(['mail.mailers.smtp.encryption' => 'tls']);
+        config(['mail.mailers.smtp.username' => 'suporte@alcecar.com.br']);
+        config(['mail.mailers.smtp.password' => '@Sup70p34C']);
+
+        Mail::raw('Teste Real Alcecar ' . now(), function ($message) {
+            $message->from('suporte@alcecar.com.br', 'Alcecar')
+                    ->to('andersonqipoa@gmail.com')
+                    ->subject('Teste de Conexão Direta');
         });
-        return "E-mail enviado alcecar teste 2!";
+
+        return "O Laravel diz que enviou. Verifique o Spam e o painel do Zoho.";
     } catch (\Exception $e) {
-        return "Erro ao enviar: " . $e->getMessage();
+        // Se cair aqui, o log VAI registrar
+        Log::error("ERRO NO TESTE DE EMAIL: " . $e->getMessage());
+        return "Erro capturado: " . $e->getMessage();
     }
 });
 
