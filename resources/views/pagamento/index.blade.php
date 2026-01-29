@@ -213,7 +213,7 @@ const pixResponse = await fetch('/create-pix-payment', {
         
         // Inicia o timer de 5 minutos
         startTimer();
-
+        iniciarVerificacaoStatus();
         // Esconde o spinner
         document.getElementById('pixPaymentContainer').style.display = 'block';
         document.getElementById("pixPaymentButtonLoading").style.display = "none";
@@ -277,10 +277,11 @@ function iniciarVerificacaoStatus() {
 
             let data = await response.json();
 
-            if (data.status === 'approved' || data.status === 'paid') {
+            if (data.status === 'approved') {
                 clearInterval(statusInterval);
-                window.location.href = "{{ route('pagamento.confirmado') }}"; 
+                window.location.href = "{{ route('pagamento.confirmado') }}";
             }
+
         } catch (error) {
             console.error("Erro ao verificar status:", error);
         }

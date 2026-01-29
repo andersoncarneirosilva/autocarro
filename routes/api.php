@@ -13,12 +13,6 @@ Route::post('/create-preference', [PaymentController::class, 'createPreference']
 // Rota para processar pagamentos
 Route::post('/process-payment', [PaymentController::class, 'processPayment'])->middleware('auth:sanctum');
 
-// Rota para criar pagamento PIX, deve ser protegida por autenticação
-
-// Route::middleware('auth:sanctum')->post('/create-pix-payment', [PaymentController::class, 'createPixPayment']);
-//Route::post('/create-pix-payment', [PaymentController::class, 'createPixPayment']);
-
-// Rota para receber notificações de webhook
 Route::post('/webhook-payment', [PaymentController::class, 'handleWebhook']);
 
 // Rota para retornar usuário autenticado (semelhante ao exemplo)
