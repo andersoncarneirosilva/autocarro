@@ -83,6 +83,54 @@
         </div>
     @endif
 @endif
+@php
+    $userLogado = auth()->user();
+    $dono = $userLogado->empresa_id ? \App\Models\User::find($userLogado->empresa_id) : $userLogado;
+    
+    $exibirAvisoVencimento = false;
+    $diasParaVencer = 0;
+
+    // Buscamos a assinatura ativa (status paid) do dono
+    // Se você tiver um relacionamento no Model User, pode usar $dono->assinaturas()->...
+    $assinaturaAtiva = \DB::table('assinaturas')
+        ->where('user_id', $dono->id)
+        ->where('status', 'paid')
+        ->orderBy('data_fim', 'desc')
+        ->first();
+
+    if ($assinaturaAtiva) {
+        $dataFim = \Carbon\Carbon::parse($assinaturaAtiva->data_fim);
+        $diasParaVencer = now()->diffInDays($dataFim, false);
+        
+        // Exibir aviso apenas se faltar 7 dias ou menos
+        if ($diasParaVencer <= 7) {
+            $exibirAvisoVencimento = true;
+        }
+    }
+@endphp
+
+{{-- Alerta de Assinatura Próxima do Vencimento --}}
+@if($exibirAvisoVencimento)
+    @if($diasParaVencer > 0)
+        <div class="alert alert-warning border-0 shadow-sm d-flex align-items-center">
+            <i class="mdi mdi-alert-outline me-2 fs-4"></i> 
+            <div>
+                Sua assinatura do plano <strong>{{ $assinaturaAtiva->plano }}</strong> vence em 
+                <strong>{{ ceil($diasParaVencer) }} {{ ceil($diasParaVencer) > 1 ? 'dias' : 'dia' }}</strong>. 
+                Garanta a continuidade dos seus serviços!
+            </div>
+            <a href="{{ route('planos.index') }}" class="btn btn-warning btn-sm ms-auto rounded-pill">Renovar agora</a>
+        </div>
+    @elseif($diasParaVencer <= 0)
+        <div class="alert alert-danger border-0 shadow-sm d-flex align-items-center">
+            <i class="mdi mdi-alert-octagon-outline me-2 fs-4"></i> 
+            <div>
+                Sua assinatura <strong>vence hoje!</strong> Evite o bloqueio das funcionalidades do sistema.
+            </div>
+            <a href="{{ route('planos.index') }}" class="btn btn-danger btn-sm ms-auto rounded-pill">Pagar Assinatura</a>
+        </div>
+    @endif
+@endif
 <!-- Para Mobile -->
 <div class="card ribbon-box d-block d-md-none">
     <div class="card-body">
