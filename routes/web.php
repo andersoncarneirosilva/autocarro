@@ -44,6 +44,16 @@ use Illuminate\Http\Request;
 use App\Models\Message;
 use App\Events\NewMessage;
 use Illuminate\Support\Facades\Broadcast;
+use Illuminate\Support\Facades\Mail;
+
+Route::get('/teste-email', function () {
+    Mail::raw('Teste de envio Zoho SMTP', function ($message) {
+        $message->to('andersonqipoa@gmail.com')
+                ->subject('Teste SMTP Zoho');
+    });
+
+    return 'E-mail enviado!';
+});
 
 Route::middleware(['auth', 'trial'])->group(function () {
 
