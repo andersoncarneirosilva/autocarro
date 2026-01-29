@@ -87,7 +87,10 @@ document.addEventListener('DOMContentLoaded', function () {
                         
                         // Definição de limites por plano para veículos
                         $limitesVeiculos = [
-                            'Teste'    => 1
+                            'Teste'    => 2,
+                            'Start'    => 999999,
+                            'Standard'    => 999999,
+                            'Pro'    => 999999,
                         ];
 
                         $limiteMaximo = $limitesVeiculos[$userLogged->plano] ?? 1;
@@ -110,11 +113,10 @@ document.addEventListener('DOMContentLoaded', function () {
                             </button>
                             <div class="dropdown-menu dropdown-menu-animated dropdown-menu-end shadow-lg border-0">
                                 <a href="#" data-bs-toggle="modal" data-bs-target="#cadastro-rapido" class="dropdown-item">
-                                    <i class="mdi mdi-flash-outline me-1 text-primary"></i> Cadastro rápido
+                                    Cadastro rápido
                                 </a>
-                                <div class="dropdown-divider"></div>
                                 <a href="{{ route('veiculos.cadastro-manual') }}" class="dropdown-item">
-                                    <i class="mdi mdi-hand-back-right-outline me-1 text-primary"></i> Cadastro manual
+                                    Cadastro manual
                                 </a>
                             </div>
                         </div>

@@ -50,21 +50,46 @@ document.addEventListener('DOMContentLoaded', function () {
                     </div>
 
                     @php
-                        $userLogged = auth()->user();
-                        $limites = ['Teste' => 1];
-                        $totalUsers = \App\Models\User::where('empresa_id', $userLogged->empresa_id ?? $userLogged->id)->count();
-                        $limiteAtingido = $totalUsers >= ($limites[$userLogged->plano] ?? 1);
-                    @endphp
+    $userLogged = auth()->user();
+    // No Alcecar, o ID da empresa é o ID do dono se ele não tiver empresa_id
+    $empresaId = $userLogged->empresa_id ?? $userLogged->id;
+    
+    // Limites seguindo a lógica do seu Controller
+    $limites = [
+        'Teste'    => 1,
+        'Start'    => 1,
+        'Standard' => 6,
+        'Pro'      => 999
+    ];
 
-                    @if($limiteAtingido)
-                        <div class="alert alert-warning py-1 px-2 mb-0 font-13">
-                            Limite atingido. <a href="{{ route('planos.index') }}" class="fw-bold">Upgrade?</a>
-                        </div>
-                    @else
-                        <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#modalCadastrarUsuario">
-                            <i class="uil-plus"></i> Cadastrar
-                        </button>
-                    @endif
+    $planoAtual = $userLogged->plano ?? 'Start';
+    $limitePermitido = $limites[$planoAtual] ?? 1;
+    
+    // Conta quantos usuários existem na empresa
+    $totalCadastrado = \App\Models\User::where('empresa_id', $empresaId)
+                        ->orWhere('id', $empresaId)
+                        ->count();
+
+    $limiteAtingido = $totalCadastrado >= $limitePermitido;
+@endphp
+
+@if($limiteAtingido)
+    <div class="alert alert-warning py-2 px-3 mb-0 font-13 shadow-sm border-warning d-flex align-items-center">
+        <i class="mdi mdi-alert-circle-outline me-2 fs-16"></i>
+        <div>
+            @if($planoAtual == 'Start' || $planoAtual == 'Teste')
+                <span>O plano <strong>{{ $planoAtual }}</strong> não permite vendedores adicionais.</span>
+            @else
+                <span>Limite de <strong>{{ $limitePermitido - 1 }}</strong> vendedores atingido no plano {{ $planoAtual }}.</span>
+            @endif
+            <a href="{{ route('planos.index') }}" class="ms-2 fw-bold text-dark text-decoration-underline">Fazer Upgrade</a>
+        </div>
+    </div>
+@else
+    <button class="btn btn-primary shadow-sm" data-bs-toggle="modal" data-bs-target="#modalCadastrarUsuario">
+        <i class="uil-plus me-1"></i> Cadastrar Vendedor
+    </button>
+@endif
                 </div>
             </div>
         </div>
