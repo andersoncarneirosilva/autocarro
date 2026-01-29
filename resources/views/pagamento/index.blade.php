@@ -2,116 +2,124 @@
 
 @section('content')
 
-<!-- Toast Bootstrap no canto superior direito -->
-<div class="position-fixed top-0 end-0 p-3" style="z-index: 1050; margin-top: 70px;">
-    <div id="toastPix" class="toast align-items-center text-bg-success border-0" role="alert" aria-live="assertive" aria-atomic="true">
+<div class="position-fixed top-0 end-0 p-3" style="z-index: 1060; margin-top: 70px;">
+    <div id="toastPix" class="toast align-items-center text-white bg-success border-0" role="alert" aria-live="assertive" aria-atomic="true">
         <div class="d-flex">
             <div class="toast-body">
-                Código PIX copiado com sucesso!
+                <i class="mdi mdi-check-circle-outline me-2"></i> Código PIX copiado com sucesso!
             </div>
             <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast" aria-label="Close"></button>
         </div>
     </div>
 </div>
 
-
 <div class="row">
     <div class="col-12">
         <div class="page-title-box">
             <div class="page-title-right">
                 <ol class="breadcrumb m-0">
-                    <li class="breadcrumb-item active">Dashboard</li>
+                    <li class="breadcrumb-item"><a href="javascript: void(0);">Checkout</a></li>
+                    <li class="breadcrumb-item active">Pagamento PIX</li>
                 </ol>
             </div>
-            <h3 class="page-title">Adicionar créditos</h3>
+            <h4 class="page-title">Finalizar Pagamento</h4>
         </div>
     </div>
 </div>
-<br>
-<div class="row">
-  <div class="col-lg-12">
-    
-</div>
-</div>
-<div class="row">
-  <div class="col-12">
-    <div class="card">
-      <div class="card-body">
-        <div class="row">
-            <!-- Coluna para o resumo do pedido -->
-            <div class="col-lg-4">
-                <div class="border p-3 rounded">
-                    <h4 class="header-title mb-3 text-center">Resumo do Pedido</h4>
-                    <div class="d-flex justify-content-between align-items-center">
-                        <div>
-                            <span>Plano {{ $plano }}</span>
-                            <br>
-                            <span>20 documentos</span>
-                        </div>
-                        <div class="text-end">
-                            <span>Total: R$ {{ number_format($preco, 2, ',', '.') }}</span>
-                        </div>
+
+<div class="row justify-content-center">
+    <div class="col-lg-4">
+        <div class="card shadow-sm border-0">
+            <div class="card-body">
+                <h4 class="header-title mb-3">Resumo do Plano</h4>
+                <div class="bg-light p-3 rounded">
+                    <div class="d-flex justify-content-between mb-2">
+                        <span class="fw-bold">Plano:</span>
+                        <span class="badge bg-primary-lighten text-primary">{{ $plano }}</span>
+                    </div>
+                    <div class="d-flex justify-content-between">
+                        <span class="fw-bold">Total a pagar:</span>
+                        <h4 class="m-0 text-success">R$ {{ number_format($preco, 2, ',', '.') }}</h4>
                     </div>
                 </div>
-            </div>
-        
-            <!-- Coluna para o pagamento via PIX -->
-            <div class="col-lg-8">
-                <div class="border p-3 rounded" id="divGerarPix">
-                    <div class="row align-items-center">
-                        <div class="col-9">
-                            <div class="form-check">
-                                <!-- Botão para gerar o QR Code (inicialmente visível) -->
-                                <button id="pixPaymentButton" class="btn btn-success" style="display: block;" onclick="processPixPayment()">Gerar QR Code</button>
-        
-                                <!-- Botão de "Loading..." (inicialmente oculto) -->
-                                <button class="btn btn-success" id="pixPaymentButtonLoading" type="button" disabled style="display: none;">
-                                    <span class="spinner-border spinner-border-sm me-1" role="status" aria-hidden="true"></span>
-                                    Gerando QR Code...
-                                </button>
-                            </div>
-                        </div>
-                        <div class="col-3 text-end">
-                            <img src="assets/images/payments/pix.png" class="img-fluid" alt="PIX-img" width="75px">
-                        </div>
-                    </div>
-                </div>
-        
-                <div id="pixPaymentContainer" class="border p-3 rounded" style="display: none;">
-                    <!-- Container para exibir o QR Code PIX -->
-                    <div id="pixContainer" style="display: none;">
-                        <h4 class="header-title mb-3">Escaneie o QR Code para pagar com PIX:</h4>
-                        <img id="pixQrCode" src="" alt="QR Code PIX" style="width: 250px;">
-                        <a id="pixTicketUrl" href="#" target="_blank"></a>
-                    </div>
-        
-                    <!-- Input para Copia e Cola -->
-                    <input type="hidden" id="pixCopiaCola" class="form-control" readonly style="display: none;">
-                    <button class="btn btn-outline-secondary" id="btCopiar" type="button" style="display: none;">Copiar</button>
-        
-                    <!-- Timer de 5 minutos -->
-                    <div id="timer" style="display: none; margin-top: 10px;">
-                        <h5>Tempo restante:</h5>
-                        <span id="timerDisplay">05:00</span>
-                    </div>
-        
-                    <div class="col-6">
-                        <a href="{{ route('planos.index') }}" id="linkPlanos" style="display: none;" class="btn btn-info btn-sm mt-2">
-                            <i class="mdi mdi-view-dashboard-outline me-1"></i> Escolha o plano novamente
-                        </a>
-                    </div>
-        
-                    <!-- Mensagem de erro (oculta por padrão) -->
-                    <p id="pixErrorMessage" style="color: red; display: none;">Erro ao processar pagamento PIX.</p>
+                <div class="mt-3 text-muted">
+                    <small><i class="mdi mdi-shield-check-outline me-1"></i> Pagamento processado de forma segura.</small>
                 </div>
             </div>
         </div>
-        
-      </div> <!-- card-body -->
-    </div> <!-- card -->
-  </div> <!-- col-12 -->
+    </div>
+
+    <div class="col-lg-6">
+        <div class="card shadow-sm border-0">
+            <div class="card-body text-center">
+                
+                <div id="divGerarPix" class="py-4">
+                    <img src="frontend/images/pix.png" class="mb-3" alt="PIX" width="100">
+                    <h4 class="mb-3">Pagamento via PIX</h4>
+                    <p class="text-muted mb-4">O QR Code será gerado para pagamento imediato.</p>
+                    
+                    <button id="pixPaymentButton" class="btn btn-success btn-lg rounded-pill px-4" onclick="processPixPayment()">
+                        <i class="mdi mdi-qrcode me-1"></i> Gerar QR Code para Pagar
+                    </button>
+
+                    <button class="btn btn-success btn-lg rounded-pill px-4" id="pixPaymentButtonLoading" type="button" disabled style="display: none;">
+                        <span class="spinner-border spinner-border-sm me-1" role="status" aria-hidden="true"></span>
+                        Gerando...
+                    </button>
+                </div>
+
+                <div id="pixPaymentContainer" style="display: none;">
+                    <div class="alert alert-info border-0 mb-4" role="alert">
+                        <i class="mdi mdi-information-outline me-1"></i> Escaneie o código abaixo ou copie a chave PIX.
+                    </div>
+
+                    <div id="pixContainer" class="mb-4">
+                        <div class="bg-white p-2 d-inline-block border rounded shadow-sm">
+                            <img id="pixQrCode" src="" alt="QR Code PIX" style="width: 220px; height: 220px;">
+                        </div>
+                    </div>
+
+                    <div class="px-md-5 mb-4">
+                        <label class="form-label text-muted">Pix Copia e Cola</label>
+                        <div class="input-group">
+                            <input type="text" id="pixCopiaCola" class="form-control bg-light" readonly>
+                            <button class="btn btn-dark" id="btCopiar" type="button">
+                                <i class="mdi mdi-content-copy me-1"></i> Copiar
+                            </button>
+                        </div>
+                    </div>
+
+                    <div id="timer" class="mb-3">
+                        <p class="mb-1 text-muted">Este código expira em:</p>
+                        <div class="d-flex justify-content-center align-items-center">
+                            <i class="mdi mdi-clock-outline me-1 text-danger"></i>
+                            <h3 id="timerDisplay" class="m-0 text-danger fw-bold">05:00</h3>
+                        </div>
+                    </div>
+
+                    <div id="linkPlanos" style="display: none;" class="mt-3">
+                        <a href="{{ route('planos.index') }}" class="btn btn-outline-secondary btn-sm">
+                            <i class="mdi mdi-arrow-left me-1"></i> Tempo expirado. Tente novamente.
+                        </a>
+                    </div>
+                </div>
+
+                <p id="pixErrorMessage" class="text-danger mt-3" style="display: none;">
+                    <i class="mdi mdi-alert-circle-outline me-1"></i> Erro ao processar pagamento. Tente novamente.
+                </p>
+            </div>
+        </div>
+    </div>
 </div>
-<!-- Toast Bootstrap -->
+
+<style>
+    /* Estilos para modernizar no Hyper */
+    .bg-primary-lighten { background-color: rgba(114, 124, 245, 0.15); }
+    #pixQrCode { transition: transform 0.3s ease; }
+    #pixQrCode:hover { transform: scale(1.02); }
+    .card { border-radius: 12px; }
+    .btn-lg { font-weight: 600; }
+</style>
 
 <script>
     let timerInterval;
