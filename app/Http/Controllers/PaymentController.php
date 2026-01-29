@@ -68,13 +68,13 @@ class PaymentController extends Controller
                 Log::info('handleWebhook - Resposta do Mercado Pago: '.json_encode($paymentData));
 
                 // Verificar se existe external_reference
-                if (empty($paymentData['id'])) {
-                    Log::error("Pagamento ID {$paymentData['id']} não contém external_reference.");
-
+                if (empty($paymentData['external_reference'])) {
+                    Log::error("Pagamento {$paymentData['id']} não contém external_reference.");
                     return response()->json(['message' => 'Pagamento sem external_reference'], 200);
                 }
 
-                $externalReference = $paymentData['id'];
+                $externalReference = $paymentData['external_reference'];
+
                 Log::info("handleWebhook - Pagamento external_reference: {$externalReference}");
 
                 // Buscar o pedido na tabela pedidos
@@ -139,7 +139,8 @@ class PaymentController extends Controller
                 'payer' => [
                     'email' => $request->payer_email,
                 ],
-                'external_reference' => $user->id ?? 'pedido_'.time(), // Defina uma referência única
+                'external_reference' => $pedido->external_reference,
+                'notification_url' => route('webhook.payment'),
             ]);
 
             // Salvar o pedido no banco de dados
@@ -148,7 +149,7 @@ class PaymentController extends Controller
             $pedido->status = 'pending';
             $pedido->class_status = 'badge badge-outline-warning';
             $pedido->user_id = $user->id;
-            $pedido->external_reference = $response->json()['id'];
+            $pedido->external_reference = 'assinatura_'.$pedido->id;
             $pedido->data_inicio = now(); // Define a data de início como a data atual
             $pedido->data_fim = now()->addDays(30); // Define a data de fim para daqui a 30 dias
             $pedido->plano = $request->plano ?? 'Padrão'; // Defina um valor padrão ou pegue do request
