@@ -69,6 +69,16 @@ Route::get('/teste-email', function () {
     }
 });
 
+Route::get('/teste-final', function () {
+    $user = \App\Models\User::first();
+    $url = "https://alcecar.com.br/reset-password/teste";
+    
+    // Isso vai forçar o envio e mostrar o erro real na tela se falhar
+    Mail::to('andersonqipoa@gmail.com')->send(new \App\Mail\CustomResetPasswordMail($url));
+    
+    return "Se chegou aqui e não deu erro na tela, o problema é cache de configuração.";
+});
+
 Route::middleware(['auth', 'trial'])->group(function () {
 
     Broadcast::routes(['middleware' => ['auth:sanctum']]);
