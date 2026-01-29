@@ -53,7 +53,7 @@ Route::get('/teste-email', function () {
                     ->to('andersonqipoa@gmail.com') // Coloque seu Gmail aqui
                     ->subject('Teste de Conexão');
         });
-        return "E-mail enviado alcecar!";
+        return "E-mail enviado alcecar teste 2!";
     } catch (\Exception $e) {
         return "Erro ao enviar: " . $e->getMessage();
     }
