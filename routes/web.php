@@ -50,10 +50,10 @@ Route::get('/teste-email', function () {
     try {
         Mail::raw('Teste de configuração SMTP Zoho Alcecar', function ($message) {
             $message->from('suporte@alcecar.com.br', 'Alcecar') // TEM QUE SER O MESMO DO .ENV
-                    ->to('seu-email-pessoal@gmail.com') // Coloque seu Gmail aqui
+                    ->to('andersonqipoa@gmail.com') // Coloque seu Gmail aqui
                     ->subject('Teste de Conexão');
         });
-        return "E-mail enviado!";
+        return "E-mail enviado alcecar!";
     } catch (\Exception $e) {
         return "Erro ao enviar: " . $e->getMessage();
     }
