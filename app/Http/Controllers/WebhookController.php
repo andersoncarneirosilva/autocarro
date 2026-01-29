@@ -11,7 +11,7 @@ class WebhookController extends Controller
     {
         // Verificar a assinatura secreta
         //dd($request);
-        $secret = '3d02871d3906a49505606e52310ee70618ff1c666a3b22b25fdfd63ecbb172a3';
+        $secret = 'e43ce5c0e39755009f7c04f83627ba0040a9bc03c13f60ba15599a343d0e2725';
         $signature = $request->header('X-MercadoPago-Signature');
 
         if ($signature !== $secret) {
