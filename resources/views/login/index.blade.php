@@ -80,7 +80,7 @@
 
         <div class="form-group d-flex justify-content-between mt-4">
             <div class="w-100 text-center">
-                {{-- <a href="{{ route('password.request') }}" style="font-size: 13px;">Esqueceu sua senha?</a> --}}
+                <a href="{{ route('password.request') }}" style="font-size: 13px;">Esqueceu sua senha?</a>
             </div>
         </div>
     </form>
