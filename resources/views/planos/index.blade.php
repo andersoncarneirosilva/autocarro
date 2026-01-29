@@ -31,7 +31,7 @@
                         <form action="{{ route('checkout') }}" method="POST">
                             @csrf
                             <input type="hidden" name="plano" value="Start">
-                            <input type="hidden" name="preco" value="1">
+                            <input type="hidden" name="preco" value="0,10">
                             <button type="submit" class="btn btn-primary mt-4 mb-2 rounded-pill w-100">Escolher Start</button>
                         </form>
                     </div>
@@ -55,7 +55,7 @@
                         <form action="{{ route('checkout') }}" method="POST">
                             @csrf
                             <input type="hidden" name="plano" value="Standard">
-                            <input type="hidden" name="preco" value="2">
+                            <input type="hidden" name="preco" value="0,20">
                             <button type="submit" class="btn btn-primary mt-4 mb-2 rounded-pill w-100">Escolher Standard</button>
                         </form>
                     </div>
@@ -79,7 +79,7 @@
                         <form action="{{ route('checkout') }}" method="POST">
                             @csrf
                             <input type="hidden" name="plano" value="Pro">
-                            <input type="hidden" name="preco" value="3">
+                            <input type="hidden" name="preco" value="0,30">
                             <button type="submit" class="btn btn-dark mt-4 mb-2 rounded-pill w-100">Escolher Pro</button>
                         </form>
                     </div>
