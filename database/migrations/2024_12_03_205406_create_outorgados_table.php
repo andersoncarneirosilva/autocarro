@@ -15,7 +15,9 @@ return new class extends Migration
             $table->id();
             $table->string('nome_outorgado');
             $table->string('cpf_outorgado');
+            $table->string('rg_outorgado');
             $table->string('end_outorgado');
+            $table->string('telefone_outorgado');
             $table->string('email_outorgado', 255);
 
             $table->foreignId('user_id')->constrained()->onDelete('cascade'); // Chave estrangeira para o usuário

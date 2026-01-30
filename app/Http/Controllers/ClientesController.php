@@ -44,6 +44,7 @@ class ClientesController extends Controller
             $validatedData = $request->validate([
                 'nome' => 'required|string|max:255',
                 'cpf' => 'required|string|max:255',
+                'rg' => 'required|string|max:255',
                 'fone' => 'required|string|max:255',
                 'email' => 'required|email|max:255',
                 'cep' => 'required|string|max:255',
@@ -115,6 +116,7 @@ class ClientesController extends Controller
         $validatedData = $request->validate([
             'nome' => 'required|string|max:255',
             'cpf' => 'required|string|max:255',
+            'rg' => 'required|string|max:255',
             'fone' => 'required|string|max:255',
             'email' => 'required|email|max:255',
             'cep' => 'required|string|max:255',

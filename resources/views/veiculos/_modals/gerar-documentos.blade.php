@@ -32,6 +32,7 @@
             <label class="form-label fw-bold">Tipo de Documento</label>
             <select class="form-select font-13" name="tipo_documento" id="tipo_documento" required onchange="toggleValorCampo()">
                 <option value="">Selecione...</option>
+                <option value="comunicação">Comunicação de venda</option>
                 <option value="procuracao">Procuração</option>
                 <option value="atpve">Solicitação ATPV-e</option>
             </select>

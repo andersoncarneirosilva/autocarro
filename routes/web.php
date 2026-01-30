@@ -280,7 +280,9 @@ Route::prefix('configuracoes')->group(function () {
     // --- MÓDULO: SOLICITAÇÃO ATPVe ---
     // Designer / Index da Solicitação
     Route::get('/solicitacao', [ConfiguracoesController::class, 'indexAtpve'])->name('configuracoes.solicitacao');
+    Route::get('/comunicacao', [ConfiguracoesController::class, 'indexComunicacao'])->name('configuracoes.comunicacao');
     // Salvar o conteúdo do Designer
+    Route::post('/comunicacao/salvar', [ConfiguracoesController::class, 'saveComunicacao'])->name('configuracoes.comunicacao.save');
     Route::post('/solicitacao/salvar', [ConfiguracoesController::class, 'saveAtpve'])->name('configuracoes.solicitacao.save');
 });
 

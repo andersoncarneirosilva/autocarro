@@ -16,8 +16,9 @@ class DatabaseSeeder extends Seeder
         // User::factory(60)->create();
 
         $this->call([
-            UserSeeder::class, // Substitua pelo nome real do seeder
+            UserSeeder::class,
             ClienteSeeder::class,
+            OutorgadoSeeder::class,
         ]);
 
     }

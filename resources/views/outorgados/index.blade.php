@@ -82,6 +82,7 @@
                 <thead>
                     <tr class="bg-dark">
                         <th class="py-3 text-white fw-semibold border-0">Nome</th>
+                        <th class="py-3 text-white fw-semibold border-0">RG</th>
                         <th class="py-3 text-white fw-semibold border-0">CPF</th>
                         <th class="py-3 text-white fw-semibold border-0">Email</th>
                         <th class="py-3 text-center text-white fw-semibold border-0">Ações</th>
@@ -99,6 +100,7 @@
                                 <span class="fw-semibold text-dark">{{ $out->nome_outorgado }}</span>
                             </div>
                         </td>
+                        <td class="text-muted">{{ $out->rg_outorgado }}</td>
                         <td class="text-muted">{{ $out->cpf_outorgado }}</td>
                         <td>
                             @php
@@ -144,17 +146,6 @@
         </div>
     </div>
 </div>
-
-@if ($errors->any())
-    <script>
-        Swal.fire({
-            icon: 'error',
-            title: 'Erro no cadastro!',
-            html: '{!! implode("<br>", $errors->all()) !!}',
-            confirmButtonColor: '#730000'
-        });
-    </script>
-@endif
 
 
 

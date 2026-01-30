@@ -19,7 +19,9 @@ class Outorgado extends Model
     protected $fillable = [
         'nome_outorgado',
         'cpf_outorgado',
+        'rg_outorgado',
         'end_outorgado',
+        'telefone_outorgado',
         'email_outorgado',
         'user_id',
         'empresa_id'

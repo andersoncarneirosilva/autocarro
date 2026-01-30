@@ -7,6 +7,7 @@ use App\Models\Cliente;
 use App\Models\Outorgado;
 use App\Models\Documento;
 use App\Models\ModeloProcuracao;
+use App\Models\ModeloComunicacao;
 use App\Models\ModeloAtpve;
 use Illuminate\Http\Request;
 use Carbon\Carbon;
@@ -48,6 +49,14 @@ class DocumentoController extends Controller
         
         return redirect()->route('veiculos.show', $veiculoId)
                 ->with('success', 'Solicitação ATPV-e gerada com sucesso!');
+    }
+
+    if ($tipoDoc === 'comunicação') {
+        // Agora $veiculoId existe aqui!
+        $this->gerarPdfComunicacao($request, $veiculoId);
+        
+        return redirect()->route('veiculos.show', $veiculoId)
+                ->with('success', 'Comunicação de venda gerada com sucesso!');
     }
 
     // --- LÓGICA DA PROCURAÇÃO ---
@@ -169,7 +178,8 @@ class DocumentoController extends Controller
     // 2. CAMINHOS: Padronizando conforme sua estrutura documentos/ID_VEICULO/
     $placaLimpa = str_replace([' ', '-'], '', strtoupper($veiculo->placa));
     $nomeArquivo = "atpve_{$placaLimpa}.pdf";
-    $pastaRelativa = "documentos/{$veiculo->id}/"; // Estrutura simplificada
+//    $pastaRelativa = "documentos/{$veiculo->id}/";
+    $pastaRelativa = "documentos/usuario_{$userId}/veiculo_{$veiculo->id}/";
     $diretorioCompleto = storage_path('app/public/' . $pastaRelativa);
 
     if (!file_exists($diretorioCompleto)) {
@@ -191,6 +201,99 @@ class DocumentoController extends Controller
             'arquivo_atpve'  => $pastaRelativa . $nomeArquivo,
             'size_atpve'     => $sizeBytes,
             'size_atpve_pdf' => $this->formatSizeUnits($sizeBytes),
+        ]
+    );
+
+    return true; 
+}
+
+
+private function gerarPdfComunicacao(Request $request, $veiculoId)
+{
+    $user = Auth::user();
+    $empresaId = $user->empresa_id ?? $user->id;
+    
+    $veiculo = Veiculo::findOrFail($veiculoId);
+    $cliente = Cliente::findOrFail($request->cliente_id); 
+    
+    $modelo = ModeloComunicacao::where('empresa_id', $empresaId)->first();
+    
+    if (!$modelo) {
+        return redirect()->back()->with('error', 'Modelo de Comunicação não encontrado.');
+    }
+    
+    // 1. Pega o primeiro outorgado vinculado ao modelo
+    $outorgadosIds = $modelo->outorgados ?? [];
+    $vendedor = Outorgado::whereIn('id', (array)$outorgadosIds)->first();
+    
+    $hoje = \Carbon\Carbon::now();
+    $html = $modelo->conteudo;
+
+    // 2. Remove as tags de repetidor (caso existam no texto) para não sujarem o PDF
+    $html = str_replace(['{INICIO_OUTORGADOS}', '{FIM_OUTORGADOS}'], '', $html);
+
+    // 3. Monta o array de substituição único
+    $substituicoes = [
+        // Dados do Vendedor (Outorgado)
+        '{NOME_OUTORGADO}'   => $vendedor ? strtoupper($vendedor->nome_outorgado) : '__________',
+        '{CPF_OUTORGADO}'    => $vendedor ? $vendedor->cpf_outorgado : '__________',
+        '{RG_OUTORGADO}'     => $vendedor ? $vendedor->rg_outorgado : '__________',
+        '{EMAIL_OUTORGADO}'  => $vendedor ? $vendedor->email_outorgado : '__________',
+        '{TELEFONE_OUTORGADO}' => $vendedor ? ($vendedor->telefone_outorgado ?? $vendedor->celular_outorgado ?? '__________') : '__________',
+
+        // Dados do Veículo
+        '{PLACA}'            => strtoupper($veiculo->placa),
+        '{CHASSI}'           => strtoupper($veiculo->chassi),
+        '{RENAVAM}'          => $veiculo->renavam,
+        '{CRV}'              => $veiculo->crv ?? $veiculo->numero_crv ?? '__________',
+        '{MARCA_MODELO}'     => strtoupper($veiculo->marca . ' / ' . $veiculo->modelo),
+        '{COR}'              => strtoupper($veiculo->cor),
+        '{ANO}'              => $veiculo->ano_fabricacao . '/' . $veiculo->ano_modelo,
+        
+        // Dados do Comprador (Cliente)
+        '{NOME_CLIENTE}'     => strtoupper($cliente->nome),
+        '{CPF_CLIENTE}'      => $cliente->cpf,
+        '{RG_CLIENTE}'       => $cliente->rg ?? '__________',
+        '{EMAIL_CLIENTE}'    => $cliente->email ?? 'NÃO INFORMADO',
+        '{TELEFONE_CLIENTE}' => $cliente->telefone ?? $cliente->celular ?? $cliente->fone ?? '__________',
+        '{CEP_CLIENTE}'      => $cliente->cep,
+        '{ENDERECO_CLIENTE}' => strtoupper($cliente->endereco),
+        '{NUMERO_CLIENTE}'   => $cliente->numero,
+        '{BAIRRO_CLIENTE}'   => strtoupper($cliente->bairro),
+        '{CIDADE_CLIENTE}'   => strtoupper($cliente->cidade),
+        '{ESTADO_CLIENTE}'   => strtoupper($cliente->estado),
+        
+        // Datas e Localização
+        '{CIDADE}'           => strtoupper($modelo->cidade ?? '__________'),
+        '{DATA_EXTENSO}'     => $hoje->translatedFormat('d \d\e F \d\e Y'),
+        '{DIA_ATUAL}'        => $hoje->format('d'), 
+        '{MES_ATUAL}'        => $hoje->translatedFormat('F'), 
+        '{ANO_ATUAL}'        => $hoje->format('Y'),
+    ];
+
+    // 4. Aplica todas as substituições de uma vez
+    $html = str_replace(array_keys($substituicoes), array_values($substituicoes), $html);
+
+    // --- GERAÇÃO E SALVAMENTO ---
+    $placaLimpa = str_replace([' ', '-'], '', strtoupper($veiculo->placa));
+    $nomeArquivo = "comunicacao_{$placaLimpa}.pdf";
+    //$pasta = "documentos/{$veiculo->id}/";
+    $pasta = "documentos/usuario_{$user->id}/veiculo_{$veiculo->id}/";
+    $caminhoAbsoluto = storage_path('app/public/' . $pasta);
+
+    if (!file_exists($caminhoAbsoluto)) {
+        mkdir($caminhoAbsoluto, 0755, true);
+    }
+
+    \Pdf::loadView('pdfs.comunicacao', ['corpo' => $html])->save($caminhoAbsoluto . $nomeArquivo);
+
+    Documento::updateOrCreate(
+        ['veiculo_id' => $veiculo->id],
+        [
+            'user_id' => $user->id,
+            'cliente_id' => $cliente->id,
+            'arquivo_comunicacao' => $pasta . $nomeArquivo,
+            'size_comunicacao' => filesize($caminhoAbsoluto . $nomeArquivo),
         ]
     );
 

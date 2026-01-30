@@ -95,6 +95,7 @@
                 <div class="collapse" id="modelos">
                     <ul class="side-nav-second-level">
                         <li><a href="{{ route('configuracoes.index') }}">Procuração</a></li>
+                        <li><a href="{{ route('configuracoes.comunicacao') }}">Comunicação de venda</a></li>
                         <li><a href="{{ route('configuracoes.solicitacao') }}">Solicitação ATPVe</a></li>
                     </ul>
                 </div>

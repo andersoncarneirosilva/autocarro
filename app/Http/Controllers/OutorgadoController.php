@@ -31,62 +31,97 @@ class OutorgadoController extends Controller
     }
 
     public function store(Request $request)
-    {
-        $user = Auth::user();
-        $empresaId = $user->empresa_id ?? $user->id;
+{
+    $user = Auth::user();
+    $empresaId = $user->empresa_id ?? $user->id;
 
-        $request->validate([
-            'nome_outorgado' => 'required|string|max:255',
-            'end_outorgado'  => 'required|string|max:255',
-            'email_outorgado' => [
-                'required', 'email', 'max:255',
-                // Valida unicidade apenas dentro da mesma empresa
-                Rule::unique('outorgados', 'email_outorgado')->where('empresa_id', $empresaId),
-            ],
-            'cpf_outorgado' => [
-                'required', 'string', 'max:14',
-                // Valida unicidade apenas dentro da mesma empresa
-                Rule::unique('outorgados', 'cpf_outorgado')->where('empresa_id', $empresaId),
-            ],
-        ], [
-            'email_outorgado.unique' => 'Este e-mail já está cadastrado nesta empresa.',
-            'cpf_outorgado.unique'   => 'Este CPF já está cadastrado nesta empresa.',
-        ]);
+    // 1. Validação básica de presença e formato
+    $request->validate([
+        'nome_outorgado'  => 'required|string|max:255',
+        'end_outorgado'   => 'required|string|max:255',
+        'email_outorgado' => 'required|email|max:255',
+        'cpf_outorgado'   => 'required|string|max:14',
+        'rg_outorgado'    => 'required|string|max:20',
+    ]);
 
-        $data = $request->all();
-        $data['user_id']    = $user->id;
-        $data['empresa_id'] = $empresaId;
+    // 2. Verificação Manual de Unicidade dentro da Empresa
 
-        $this->model->create($data);
-
-        return redirect()->route('outorgados.index')->with('success', 'Outorgado cadastrado com sucesso!');
+    // Verificar E-mail
+    if ($this->model->where('empresa_id', $empresaId)->where('email_outorgado', $request->email_outorgado)->exists()) {
+        return redirect()->back()->withInput()->with('error', 'Este e-mail já está cadastrado nesta empresa.');
     }
+
+    // Verificar CPF
+    if ($this->model->where('empresa_id', $empresaId)->where('cpf_outorgado', $request->cpf_outorgado)->exists()) {
+        return redirect()->back()->withInput()->with('error', 'Este CPF já está cadastrado nesta empresa.');
+    }
+
+    // Verificar RG
+    if ($this->model->where('empresa_id', $empresaId)->where('rg_outorgado', $request->rg_outorgado)->exists()) {
+        return redirect()->back()->withInput()->with('error', 'Este RG já está cadastrado nesta empresa.');
+    }
+
+    // 3. Preparação dos dados e criação
+    $data = $request->all();
+    $data['user_id']    = $user->id;
+    $data['empresa_id'] = $empresaId;
+
+    $this->model->create($data);
+
+    return redirect()->route('outorgados.index')->with('success', 'Outorgado cadastrado com sucesso!');
+}
 
     public function update(Request $request, $id)
-    {
-        $user = Auth::user();
-        $empresaId = $user->empresa_id ?? $user->id;
+{
+    $user = Auth::user();
+    $empresaId = $user->empresa_id ?? $user->id;
 
-        // Busca o outorgado garantindo que pertence à empresa
-        $outorgado = $this->model->where('empresa_id', $empresaId)->findOrFail($id);
+    // 1. Busca o registro ou falha
+    $outorgado = $this->model->where('empresa_id', $empresaId)->findOrFail($id);
 
-        $validated = $request->validate([
-            'nome_outorgado' => 'required|string|max:255',
-            'cpf_outorgado'  => [
-                'required', 'string', 'max:14',
-                Rule::unique('outorgados', 'cpf_outorgado')->ignore($id)->where('empresa_id', $empresaId)
-            ],
-            'end_outorgado'  => 'required|string|max:255',
-            'email_outorgado' => [
-                'required', 'email', 'max:255',
-                Rule::unique('outorgados', 'email_outorgado')->ignore($id)->where('empresa_id', $empresaId)
-            ],
-        ]);
+    // 2. Validação básica de campos obrigatórios e formatos
+    $request->validate([
+        'nome_outorgado'  => 'required|string|max:255',
+        'cpf_outorgado'   => 'required|string|max:14',
+        'rg_outorgado'    => 'required|string|max:20',
+        'end_outorgado'   => 'required|string|max:255',
+        'email_outorgado' => 'required|email|max:255',
+    ]);
 
-        $outorgado->update($validated);
-
-        return redirect()->route('outorgados.index')->with('success', 'Outorgado atualizado com sucesso!');
+    // 3. Verificação Manual de Unicidade (Ignorando o próprio ID e filtrando por empresa)
+    
+    // Verificar CPF
+    $cpfExiste = $this->model->where('empresa_id', $empresaId)
+        ->where('cpf_outorgado', $request->cpf_outorgado)
+        ->where('id', '!=', $id)
+        ->exists();
+    if ($cpfExiste) {
+        return redirect()->back()->withInput()->with('error', 'Este CPF já está cadastrado para outro outorgado.');
     }
+
+    // Verificar RG
+    $rgExiste = $this->model->where('empresa_id', $empresaId)
+        ->where('rg_outorgado', $request->rg_outorgado)
+        ->where('id', '!=', $id)
+        ->exists();
+    if ($rgExiste) {
+        return redirect()->back()->withInput()->with('error', 'Este RG já está cadastrado para outro outorgado.');
+    }
+
+    // Verificar E-mail
+    $emailExiste = $this->model->where('empresa_id', $empresaId)
+        ->where('email_outorgado', $request->email_outorgado)
+        ->where('id', '!=', $id)
+        ->exists();
+    if ($emailExiste) {
+        return redirect()->back()->withInput()->with('error', 'Este E-mail já está em uso na sua empresa.');
+    }
+
+    // 4. Se passou em tudo, atualiza
+    $outorgado->update($request->all());
+
+    return redirect()->route('outorgados.index')->with('success', 'Outorgado atualizado com sucesso!');
+}
 
     public function show($id)
     {

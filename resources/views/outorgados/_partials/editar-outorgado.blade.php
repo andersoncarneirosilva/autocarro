@@ -14,11 +14,18 @@
                 
                 <div class="modal-body">
                     <div class="row">
-                        <div class="col-md-12 mb-3">
+                        <div class="col-md-6 mb-3">
                             <label class="form-label fw-bold">
                                 <i class="mdi mdi-account me-1"></i> Nome Completo
                             </label>
                             <input type="text" class="form-control uppercase-field" id="edit_nome_outorgado" name="nome_outorgado" required>
+                        </div>
+
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label fw-bold">
+                                <i class="mdi mdi-card-account-details me-1"></i> RG
+                            </label>
+                            <input type="text" class="form-control" id="edit_rg_outorgado" name="rg_outorgado" required>
                         </div>
 
                         <div class="col-md-6 mb-3">
@@ -116,6 +123,7 @@ function openEditModalOutorgado(event) {
         method: 'GET',
         success: function(response) {
             $('#edit_nome_outorgado').val(response.nome_outorgado);
+            $('#edit_rg_outorgado').val(response.rg_outorgado);
             $('#edit_cpf_outorgado').val(response.cpf_outorgado);
             $('#edit_end_outorgado').val(response.end_outorgado);
             $('#edit_email_outorgado').val(response.email_outorgado);

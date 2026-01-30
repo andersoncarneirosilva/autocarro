@@ -36,12 +36,18 @@
                                 <input type="text" class="form-control" name="nome" value="{{ $cliente->nome ?? old('nome') }}">
                             </div>
                         </div>
-                        <div class="col-md-6">
+                        <div class="col-md-3">
+                            <div class="mb-3">
+                                <label class="form-label">RG</label>
+                                <input type="text" class="form-control" name="rg" id="rg" value="{{ $cliente->rg ?? old('rg') }}">
+                            </div>
+                        </div>
+                        <div class="col-md-3">
                             <div class="mb-3">
                                 <label class="form-label">CPF</label>
                                 <input type="text" class="form-control" name="cpf" id="cpf" value="{{ $cliente->cpf ?? old('cpf') }}">
                             </div>
-                        </div> <!-- end col -->
+                        </div>
                     </div> <!-- end row -->
 
                     <div class="row">

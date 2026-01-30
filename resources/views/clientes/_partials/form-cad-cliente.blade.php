@@ -152,13 +152,19 @@
                                 <input type="text" class="form-control" name="nome" id="nome_cliente" required>
                             </div>
                         </div>
-                        <div class="col-md-6">
+                        <div class="col-md-3">
+                            <div class="mb-3">
+                                <label class="form-label">RG: <span style="color: red;">*</span></label>
+                                <input type="text" class="form-control" name="rg" id="rg" maxlength="10" required>
+                            </div>
+                        </div>
+                        <div class="col-md-3">
                             <div class="mb-3">
                                 <label class="form-label">CPF: <span style="color: red;">*</span></label>
                                 <input type="text" class="form-control" name="cpf" id="cpf" maxlength="14" required>
                             </div>
-                        </div> <!-- end col -->
-                    </div> <!-- end row -->
+                        </div>
+                    </div>
 
                     <div class="row">
                         <div class="col-md-6">

@@ -17,6 +17,7 @@ class UserSeeder extends Seeder
             'name'          => 'Anderson',
             'email'         => 'andersonqipoa@gmail.com',
             'cpf'           => '013.887.090-07',
+            'rg'           => '1080692153',
             'telefone'      => '(51)9.99137.7276',
             'nivel_acesso'  => 'Administrador',
             'password' => bcrypt('12345678'),
@@ -32,6 +33,7 @@ class UserSeeder extends Seeder
             'name'           => 'AutoVip',
             'email'          => 'lojautovip@gmail.com',
             'cpf'            => '04311267609',
+            'rg'            => '9999999999',
             'telefone'       => '47988552396',
             'nivel_acesso'   => 'Administrador',
             'password' => bcrypt('12345678'),
@@ -39,7 +41,7 @@ class UserSeeder extends Seeder
             'plano'          => 'Teste',
             'credito'        => 0.00,
             'empresa_id'     => 2,
-            'last_login_at'  => '2026-01-01 00:00:25',
+            'last_login_at'  => '2026-01-01 01:01:01',
         ]);
 
 

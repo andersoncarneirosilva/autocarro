@@ -82,6 +82,7 @@
                 <thead>
                     <tr class="bg-dark">
                         <th class="py-3 text-white fw-semibold border-0">Cliente</th>
+                        <th class="py-3 text-white fw-semibold border-0">RG</th>
                         <th class="py-3 text-white fw-semibold border-0">CPF</th>
                         <th class="py-3 text-white fw-semibold border-0">Contato</th>
                         <th class="py-3 text-white fw-semibold border-0">Localização</th>
@@ -106,6 +107,7 @@
                                     <span class="fw-semibold text-dark">{{ $cli->nome }}</span>
                                 </div>
                             </td>
+                            <td class="text-muted">{{ $cli->rg }}</td>
                             <td class="text-muted">{{ $cli->cpf }}</td>
                             <td>
                                 <a href="{{ $link_whatsapp }}" target="_blank" class="text-success fw-bold">

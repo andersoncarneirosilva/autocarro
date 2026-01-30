@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\ModeloProcuracao;
 use App\Models\ModeloAtpve;
+use App\Models\ModeloComunicacao;
 use App\Models\Outorgado;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -33,6 +34,20 @@ class ConfiguracoesController extends Controller
         
         return view('configuracoes.solicitacoes', compact('modeloAtpve', 'outorgados'));
     }
+
+    public function indexComunicacao()
+{
+    $user = Auth::user();
+    $empresaId = $user->empresa_id ?? $user->id;
+
+    // Busca o modelo de comunicação específico da empresa
+    $modeloComunicacao = ModeloComunicacao::where('empresa_id', $empresaId)->first();
+    
+    // Busca os outorgados para preencher o select/checks na view
+    $outorgados = Outorgado::where('empresa_id', $empresaId)->get();
+    
+    return view('configuracoes.comunicacoes', compact('modeloComunicacao', 'outorgados'));
+}
 
     public function saveProcuracao(Request $request)
     {
@@ -127,4 +142,41 @@ class ConfiguracoesController extends Controller
         return redirect()->route('configuracoes.solicitacao')
                 ->with('success', 'Modelo atualizado com sucesso!');
     }
+
+    public function saveComunicacao(Request $request)
+{
+    try {
+        $user = Auth::user();
+        $empresaId = $user->empresa_id ?? $user->id;
+
+        $request->validate([
+            'conteudo' => 'required|string',
+            'cidade' => 'required|string',
+            'outorgados' => 'required|array|min:1|max:3',
+            'outorgados.*' => 'exists:outorgados,id',
+        ]);
+
+        // LÓGICA ALCECAR: Salvando ou atualizando o Modelo de Comunicação por empresa
+        $modelo = ModeloComunicacao::updateOrCreate(
+            ['empresa_id' => $empresaId], 
+            [
+                'user_id'    => $user->id,
+                'conteudo'   => $request->conteudo,
+                'cidade'     => $request->cidade,
+                'outorgados' => $request->outorgados,
+            ]
+        );
+
+        return redirect()->back()
+            ->with('success', 'Modelo de comunicação atualizado com sucesso!');
+
+    } catch (\Exception $e) {
+        \Log::error('Erro ao salvar comunicação Alcecar:', ['error' => $e->getMessage()]);
+        
+        // Retornamos a mensagem de erro direto para o seu Toast
+        return redirect()->back()
+            ->withInput()
+            ->with('error', 'Não foi possível salvar o modelo de comunicação.');
+    }
+}
 }

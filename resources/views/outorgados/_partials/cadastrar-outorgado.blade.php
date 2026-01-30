@@ -24,11 +24,18 @@
                     </div>
 
                     <div class="row">
-                        <div class="col-md-12 mb-3">
+                        <div class="col-md-6 mb-3">
                             <label class="form-label fw-bold">
                                 <i class="mdi mdi-account me-1"></i> Nome Completo <span class="text-danger">*</span>
                             </label>
                             <input type="text" class="form-control uppercase-field" name="nome_outorgado" id="nome_outorgado" placeholder="NOME COMPLETO" required>
+                        </div>
+
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label fw-bold">
+                                <i class="mdi mdi-card-account-details me-1"></i> RG <span class="text-danger">*</span>
+                            </label>
+                            <input type="text" class="form-control" name="rg_outorgado" id="rg_outorgado" required>
                         </div>
 
                         <div class="col-md-6 mb-3">

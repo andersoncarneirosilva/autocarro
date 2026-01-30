@@ -15,6 +15,7 @@ class ClienteSeeder extends Seeder
         Cliente::create([
             'nome' => 'MARILENE PRATES CARNEIRO DA SILVA',
             'cpf' => '455.969.210-68',
+            'rg' => '9999999999',
             'fone' => '(51)99669.8989',
             'email' => 'mari@gmail.com',
             'cep' => '92.035-580',
@@ -24,6 +25,7 @@ class ClienteSeeder extends Seeder
             'cidade' => 'Canoas',
             'estado' => 'RS',
             'user_id' => '1',
+            'empresa_id' => '1',
         ]);
     }
 }

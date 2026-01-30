@@ -586,19 +586,27 @@ public function indexVendidos(Request $request)
     $novoVeiculo = $this->model->create($data);
 
     if ($novoVeiculo) {
-        // 5. Salvamento do Arquivo na nova estrutura unificada: documentos/{veiculo_id}/
+        // CORREÇÃO: Pegando o ID do veículo recém-criado
         $veiculoId = $novoVeiculo->id;
-        $pastaRelativa = "documentos/{$veiculoId}/"; 
+
+        // 1. Definição da nova estrutura: documentos/usuario_X/veiculo_Y/
+        // LÓGICA ALCECAR: Centralizando documentos por usuário e veículo
+        $pastaRelativa = "documentos/usuario_{$userId}/veiculo_{$veiculoId}/"; 
         $pastaDestino = storage_path('app/public/' . $pastaRelativa);
 
+        // 2. Criação da pasta com permissões corretas
         if (!file_exists($pastaDestino)) {
             mkdir($pastaDestino, 0755, true);
         }
 
-        $nomeFinalArquivo = "crlv_{$placa}.pdf";
+        // 3. Nome do arquivo padronizado (Placa limpa sem espaços ou traços)
+        $placaLimpa = str_replace(['-', ' '], '', $placa);
+        $nomeFinalArquivo = "crlv_{$placaLimpa}.pdf";
+        
+        // 4. Move o arquivo para a nova pasta
         $arquivo->move($pastaDestino, $nomeFinalArquivo);
 
-        // Atualiza o registro
+        // 5. Atualiza o banco com o caminho relativo
         $novoVeiculo->update([
             'arquivo_doc' => $pastaRelativa . $nomeFinalArquivo
         ]);
@@ -606,9 +614,9 @@ public function indexVendidos(Request $request)
         return redirect()->route('veiculos.index')
             ->with('success', 'Veículo importado e cadastrado com sucesso!');
     }
-
-    return redirect()->route('veiculos.index')
-        ->with('error', 'Falha ao salvar os dados no sistema.');
+    
+    // Fallback caso falhe a criação
+    return redirect()->back()->with('error', 'Erro ao salvar os dados do veículo.');
 }
 
 

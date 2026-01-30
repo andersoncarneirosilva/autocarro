@@ -171,6 +171,51 @@
         </div>
     @endif
 </li>
+
+
+<li class="list-group-item bg-transparent py-3">
+    <div class="d-flex align-items-center mb-2">
+        <i class="mdi mdi-file-send-outline me-2 font-18 text-muted"></i>
+        <div>
+            <span class="fw-medium d-block">Comunicação de venda</span>
+            <small class="text-muted">Intenção de venda e transferência</small>
+        </div>
+    </div>
+
+    @if($veiculo->documentos && $veiculo->documentos->arquivo_comunicacao)
+        <div class="shadow-none border rounded p-2 bg-white">
+            <div class="row align-items-center">
+                <div class="col-auto">
+                    <div class="avatar-sm">
+                        <span class="avatar-title bg-light bg-soft-danger text-danger rounded">
+                            <i class="mdi mdi-file-pdf-box font-24"></i>
+                        </span>
+                    </div>
+                </div>
+                <div class="col ps-0 text-start">
+                    <a href="{{ asset('storage/' . $veiculo->documentos->arquivo_comunicacao) }}" target="_blank" class="text-muted fw-bold d-block text-truncate font-13" title="{{ basename($veiculo->documentos->arquivo_atpve) }}">
+                        {{ basename($veiculo->documentos->arquivo_comunicacao) }}
+                    </a>
+                    <p class="mb-0 font-12 text-muted">
+                        {{ number_format($veiculo->documentos->size_comunicacao / 1024, 2, ',', '.') }} KB
+                    </p>
+                </div>
+                <div class="col-auto">
+                    <a href="{{ asset('storage/' . $veiculo->documentos->arquivo_comunicacao ) }}" download class="btn btn-link btn-sm text-muted">
+                        <i class="mdi mdi-download font-18"></i>
+                    </a>
+                </div>
+            </div>
+        </div>
+    @else
+        <div class="d-flex justify-content-between align-items-center bg-light-lighten border border-dashed rounded p-2">
+            <span class="text-muted font-12 italic">Documento não gerado</span>
+            <span class="badge bg-soft-secondary text-secondary border border-secondary">N/A</span>
+        </div>
+    @endif
+</li>
+
+
 </ul>
         </div>
     </div>

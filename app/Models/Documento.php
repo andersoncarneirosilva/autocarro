@@ -13,7 +13,8 @@ class Documento extends Model
         'user_id', 'veiculo_id', 'cliente_id',
         'arquivo_proc', 'size_proc', 'arquivo_proc_assinado',
         'arquivo_atpve', 'size_atpve', 'arquivo_atpve_assinado',
-        'size_proc_pdf', 'size_atpve_pdf','empresa_id'
+        'arquivo_comunicacao', 'size_comunicacao', 'arquivo_comunicacao_assinado',
+        'size_proc_pdf', 'size_atpve_pdf', 'size_comunicacao_pdf' ,'empresa_id'
     ];
 
     public function anuncio()
