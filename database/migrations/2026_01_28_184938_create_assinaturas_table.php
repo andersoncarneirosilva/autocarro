@@ -20,6 +20,7 @@ return new class extends Migration
             $table->date('data_inicio');
             $table->date('data_fim');
             $table->string('external_reference')->nullable();
+            $table->unsignedBigInteger('empresa_id')->nullable();
             $table->foreignId('user_id')->constrained()->onDelete('cascade');
             $table->timestamps();
         });

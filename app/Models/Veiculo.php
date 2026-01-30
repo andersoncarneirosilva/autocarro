@@ -7,10 +7,11 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use App\Traits\MultiTenantModelTrait;
+
 class Veiculo extends Model
 {
-    use HasApiTokens, HasFactory, Notifiable;
-
+    use HasApiTokens, HasFactory, Notifiable, MultiTenantModelTrait;
     /**
      * The attributes that are mass assignable.
      *

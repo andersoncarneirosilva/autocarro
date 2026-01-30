@@ -3,9 +3,12 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use App\Traits\MultiTenantModelTrait;
 
 class ModeloProcuracao extends Model
 {
+    use MultiTenantModelTrait;
+
     protected $table = 'modelo_procuracoes';
 
     protected $fillable = [

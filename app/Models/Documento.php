@@ -4,10 +4,11 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use App\Traits\MultiTenantModelTrait;
 
 class Documento extends Model
 {
-    use HasFactory;
+    use HasFactory, MultiTenantModelTrait;
 
     protected $fillable = [
         'user_id', 'veiculo_id', 'cliente_id',

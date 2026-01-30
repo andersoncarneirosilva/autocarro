@@ -3,9 +3,12 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use App\Traits\MultiTenantModelTrait;
 
 class Multa extends Model
 {
+    use MultiTenantModelTrait;
+    
     protected $fillable = [
         'veiculo_id', 'codigo_infracao', 'descricao', 
         'valor', 'data_infracao', 'data_vencimento', 

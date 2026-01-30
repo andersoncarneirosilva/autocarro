@@ -4,9 +4,11 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Builder;
+use App\Traits\MultiTenantModelTrait;
 
 class Vendedor extends Model
 {
+    use MultiTenantModelTrait;
     // 1. Aponta para a tabela de usuários
     protected $table = 'users';
 

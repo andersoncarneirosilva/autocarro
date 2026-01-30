@@ -256,7 +256,7 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
 
-    <script src="https://sdk.mercadopago.com/js/v2"></script>
+    {{-- <script src="https://sdk.mercadopago.com/js/v2"></script>
     <script>
         $(document).ready(function() {
             $('.datepicker').datepicker({
@@ -273,7 +273,7 @@
                 todayHighlight: true
             });
         });
-    </script>
+    </script> --}}
 
 
 
