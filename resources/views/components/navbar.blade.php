@@ -197,12 +197,12 @@ observer.observe(document.body, { childList: true, subtree: true });
                 </div>
             </li>
             
-            <li class="d-none d-sm-inline-block">
+            {{-- <li class="d-none d-sm-inline-block">
                 <div class="nav-link" id="light-dark-mode" data-bs-toggle="tooltip" data-bs-placement="left"
                     title="Tema escuro">
                     <i class="ri-moon-line font-22"></i>
                 </div>
-            </li>
+            </li> --}}
 
 
             <li class="d-none d-md-inline-block">

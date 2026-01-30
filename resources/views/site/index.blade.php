@@ -133,9 +133,9 @@
                                     <li class="nav-item">
                                         <a class="page-scroll" href="#sobre">Sobre</a>
                                     </li>
-                                    <li class="nav-item">
+                                    {{-- <li class="nav-item">
                                         <a class="page-scroll" href="#loja">Loja virtual</a>
-                                    </li>
+                                    </li> --}}
                                     <li class="nav-item">
                                         <a class="page-scroll" href="#planos">Planos</a>
                                     </li>                                    
@@ -275,7 +275,7 @@
       </div> 
       </section>
 
-
+{{-- 
     <section id="loja" class="about_area pt-30 pb-80">
     <div class="container">
         <div class="row align-items-center">
@@ -311,7 +311,7 @@
             </div>
         </div>
     </div> 
-</section>
+</section> --}}
 
     
 
