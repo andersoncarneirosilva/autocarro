@@ -162,8 +162,8 @@
                 <div class="row align-items-center">
                     <div class="col-lg-6">
                         <div class="header_hero_content mt-45">
-                            <h2 class="header_title wow fadeInLeftBig" data-wow-duration="1.3s" data-wow-delay="0.2s">Loja virtual e Gestão de veículos</h2>
-                            <p class="wow fadeInLeftBig" data-wow-duration="1.3s" data-wow-delay="0.6s">Integre todas as informações de desempenho dos seus veículos e melhore a produtividade da sua frota em um só lugar.</p>
+                            <h2 class="header_title wow fadeInLeftBig" data-wow-duration="1.3s" data-wow-delay="0.2s">Inteligência de Dados e Gestão de Veículos</h2>
+<p class="wow fadeInLeftBig" data-wow-duration="1.3s" data-wow-delay="0.6s">Centralize a documentação, o desempenho e o controle técnico da sua frota com automação e precisão em um só lugar.</p>
                             <ul>
                                 <li><a class="main-btn wow fadeInUp" data-wow-duration="1.3s" data-wow-delay="1s" href="{{ route('login') }}">Teste agora</a></li>
                                 <li>
@@ -178,17 +178,17 @@
 </li>
 
                             </ul>
-                        </div> <!-- header hero content -->
+                        </div>
                     </div>
-                </div> <!-- row -->
-            </div> <!-- container -->
+                </div>
+            </div>
             <div class="header_image d-flex align-items-end">
                 <div class="image wow fadeInRightBig" data-wow-duration="1.3s" data-wow-delay="1.8s">
                     <img src="{{ url('layout_site/images/header_app.png') }}" alt="header App">
                     <img src="{{ url('layout_site/images/dots.svg') }}" alt="dots" class="dots">
-                </div> <!-- image -->
-            </div> <!-- header image -->
-        </div> <!-- header hero -->
+                </div>
+            </div>
+        </div>
 
        
     </section>
@@ -227,11 +227,10 @@
             <div class="col-lg-3 col-md-6 col-sm-8">
                 <div class="single_features mt-30 features_3 text-center wow fadeInUp" data-wow-duration="1.3s" data-wow-delay="0.6s">
                     <div class="features_icon">
-                        <i class="lni lni-files"></i>
-                    </div>
+                        <i class="lni lni-search"></i> </div>
                     <div class="features_content">
-                        <h4 class="features_title">Loja Virtual</h4>
-                        <p>Plataforma para venda e gerenciamento dos seus veículos.</p>
+                        <h4 class="features_title">Extração de Dados</h4>
+                        <p>Leitura inteligente de documentos em PDF.</p>
                     </div>
                 </div>
             </div>
@@ -433,68 +432,6 @@
         </div>
     </div> 
 </section>
-    <!--====== PRICNG PART START ======-->
-<section id="planos" class="pricing_area mt-80 pt-75 pb-80">
-    <div class="container">
-        <div class="row justify-content-center">
-            <div class="col-lg-6">
-                <div class="section_title text-center pb-25">
-                    <h4 class="title">Planos e Preços</h4>
-                    <p>Escolha a licença ideal para o seu negócio. Gestão simplificada para lojistas e frotistas.</p>
-                </div>
-            </div>
-        </div> 
-        
-        <div class="row justify-content-center">
-            <div class="col-lg-5 col-md-8 col-sm-10">
-                <div class="single_pricing text-center pricing_active pricing_color_1 mt-30 wow fadeInUp" data-wow-duration="1.3s" data-wow-delay="0.2s">
-                    <div class="pricing_top_bar">
-                        <h5 class="pricing_title">Plano Standard</h5>
-                        <i class="lni lni-cog"></i> <span class="price">R$ 500</span>
-                    </div>
-                    <div class="pricing_list">
-                        <ul>
-                            <li>Sem limite de usuários</li>
-                            <li>Gestão de Veículos</li>
-                            <li>Emissão de Procurações</li>
-                            <li style="text-decoration: line-through; color: #aaa;">Website e Loja Virtual</li>
-                            <li><strong>Domínio incluso</strong></li>
-                            <li><strong>Email personalizado</strong></li>
-                            <li>Suporte Técnico</li>
-                        </ul>
-                    </div>
-                    <div class="pricing_btn">
-                        <a href="https://wa.me/555199047299?text=Olá!%20Gostaria%20de%20testar%20o%20Plano%20Standard%20(Gestão)." target="_blank" class="main-btn main-btn-2">Solicitar teste</a>
-                    </div>
-                </div>
-            </div>
-
-            <div class="col-lg-5 col-md-8 col-sm-10">
-                <div class="single_pricing text-center pricing_active pricing_color_2 mt-30 wow fadeInUp" data-wow-duration="1.3s" data-wow-delay="0.5s">
-                    <div class="pricing_top_bar">
-                        <h5 class="pricing_title">Plano Full</h5>
-                        <i class="lni lni-crown"></i>
-                        <span class="price">R$ 1500</span>
-                    </div>
-                    <div class="pricing_list">
-                        <ul>
-                            <li>Sem limite de usuários</li>
-                            <li>Gestão de Veículos</li>
-                            <li>Emissão de Procurações</li>
-                            <li><strong>Website e Loja Virtual Inclusos</strong></li>
-                            <li><strong>Domínio incluso</strong></li>
-                            <li><strong>Email personalizado</strong></li>
-                            <li>Suporte Técnico VIP 24/7</li>
-                        </ul>
-                    </div>
-                    <div class="pricing_btn">
-                        <a href="https://wa.me/555199047299?text=Olá!%20Gostaria%20de%20testar%20o%20Plano%20Full%20(Sistema%20+%20Loja)." target="_blank" class="main-btn main-btn-2">Solicitar teste</a>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div> 
-</section>
 
 <style>
     @media (min-width: 992px) {
@@ -595,7 +532,87 @@
 </section>
 
 
-    
+<section class="section pt-80 pb-80 bg-light" id="processos">
+    <div class="container">
+        <div class="row mb-5">
+            <div class="col-md-8 text-center mx-auto">
+                <span class="text-primary text-uppercase fw-bold mb-3 d-block wow fadeInUp" data-wow-delay="0.1s">Agilidade Inteligente</span>
+                <h2 class="title wow fadeInUp" data-wow-delay="0.2s">Como funciona o Cadastro Automático</h2>
+                <p class="text-muted wow fadeInUp" data-wow-delay="0.3s">
+                    Esqueça o preenchimento manual demorado. Nossa tecnologia de leitura inteligente faz o trabalho pesado para você em três etapas simples:
+                </p>
+            </div>
+        </div>
+
+        <div class="row g-md-5 justify-content-center">
+            <div class="col-md-6 col-lg-4">
+                <div class="step-card text-center h-100 d-flex flex-column justify-content-start position-relative wow fadeInUp" data-wow-delay="0.2s">
+                    <span class="step-number rounded-circle text-center fw-bold mb-4 mx-auto">1</span>
+                    <div>
+                        <h3 class="fs-5 mb-3">Upload do PDF</h3>
+                        <p class="text-muted">Você envia o documento do veículo (CRV/ATPV-e) em formato PDF diretamente na nossa plataforma.</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-6 col-lg-4">
+                <div class="step-card text-center h-100 d-flex flex-column justify-content-start position-relative wow fadeInUp" data-wow-delay="0.5s">
+                    <span class="step-number rounded-circle text-center fw-bold mb-4 mx-auto">2</span>
+                    <h3 class="fs-5 mb-3">Processamento</h3>
+                    <p class="text-muted">Aguarde alguns segundos enquanto nossa inteligência extrai Renavam, Placa, Chassi e todos os dados técnicos sem erros.</p>
+                </div>
+            </div>
+
+            <div class="col-md-6 col-lg-4">
+                <div class="step-card last text-center h-100 d-flex flex-column justify-content-start position-relative wow fadeInUp" data-wow-delay="0.8s">
+                    <span class="step-number rounded-circle text-center fw-bold mb-4 mx-auto">3</span>
+                    <div>
+                        <h3 class="fs-5 mb-3">Pronto!</h3>
+                        <p class="text-muted">O cadastro é concluído instantaneamente. Dados validados, organizados e prontos para gerar suas procurações.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<style>
+    .step-number {
+        width: 50px;
+        height: 50px;
+        line-height: 50px;
+        background-color: #727cf5; /* Cor primária do Alcecar */
+        color: #fff;
+        font-size: 20px;
+        display: block;
+        box-shadow: 0 4px 10px rgba(114, 124, 245, 0.3);
+    }
+    .step-card {
+        padding: 20px;
+        border-radius: 15px;
+        transition: transform 0.3s ease;
+    }
+    .step-card:hover {
+        transform: translateY(-5px);
+    }
+    .step-card p {
+        font-size: 14px;
+        line-height: 1.6;
+    }
+    /* Estilo para as linhas conectoras (opcional se não tiver o SVG) */
+    @media (min-width: 992px) {
+        .step-card:not(.last):after {
+            content: "→";
+            position: absolute;
+            right: -10%;
+            top: 45px;
+            font-size: 30px;
+            color: #727cf5;
+            opacity: 0.3;
+        }
+    }
+</style>
+
 <section id="contato" class="blog_area pt-80 pb-80">
     <div class="container">
         <div class="row justify-content-center">
@@ -687,6 +704,8 @@
         font-size: 12px;
     }
 </style>
+
+
 <section id="footer" class="footer_area pt-75 pb-80">
     <div class="container">
         <div class="row justify-content-center">

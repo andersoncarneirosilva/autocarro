@@ -497,18 +497,21 @@ document.addEventListener('DOMContentLoaded', function() {
             //console.log(`Valor Venda: R$ ${valorVenda}`);
             //console.log(`Valor FIPE: R$ ${valorFipe}`);
 
-            if (!isNaN(valorFipe) && valorFipe > 0) {
-                const diff = valorVenda - valorFipe;
-                const percent = ((diff / valorFipe) * 100).toFixed(1);
-                
-                //console.log(`Diferença: ${diff.toFixed(2)} (${percent}%)`);
-
-                cardComparison.className = (diff > 0 ? 'text-danger' : 'text-success') + ' me-2 fw-bold';
-                cardComparison.innerHTML = `
-                    <i class="mdi ${diff > 0 ? 'mdi-arrow-up' : 'mdi-arrow-down'}"></i> 
-                    ${Math.abs(percent)}% vs FIPE
-                `;
-            }
+            // Verifica se ambos os valores são números válidos e maiores que zero
+if (!isNaN(valorFipe) && valorFipe > 0 && !isNaN(valorVenda) && valorVenda > 0) {
+    const diff = valorVenda - valorFipe;
+    const percent = ((diff / valorFipe) * 100).toFixed(1);
+    
+    cardComparison.className = (diff > 0 ? 'text-danger' : 'text-success') + ' me-2 fw-bold';
+    cardComparison.innerHTML = `
+        <i class="mdi ${diff > 0 ? 'mdi-arrow-up' : 'mdi-arrow-down'}"></i> 
+        ${Math.abs(percent)}% vs FIPE
+    `;
+} else {
+    // Caso o valor de venda seja 0 ou não exista, limpamos o comparativo ou exibimos algo neutro
+    cardComparison.innerHTML = `<span class="text-muted small">Aguardando valor</span>`;
+    cardComparison.className = 'me-2 fw-bold';
+}
         }
     })
     .catch(err => {
