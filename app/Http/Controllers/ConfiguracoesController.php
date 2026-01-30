@@ -13,16 +13,16 @@ use Illuminate\Support\Facades\Log;
 class ConfiguracoesController extends Controller
 {
     public function index()
-    {
-        $user = Auth::user();
-        $empresaId = $user->empresa_id ?? $user->id;
-        
-        // Dados para a View filtrados pela EMPRESA
-        $modeloProc = ModeloProcuracao::where('empresa_id', $empresaId)->get();
-        $outorgados = Outorgado::where('empresa_id', $empresaId)->get();
+{
+    $user = Auth::user();
+    $empresaId = $user->empresa_id ?? $user->id;
+    
+    // CORREÇÃO: Trocar get() por first() para retornar um objeto ou null
+    $modeloProc = ModeloProcuracao::where('empresa_id', $empresaId)->first();
+    $outorgados = Outorgado::where('empresa_id', $empresaId)->get();
 
-        return view('configuracoes.index', compact('modeloProc', 'outorgados'));
-    }
+    return view('configuracoes.index', compact('modeloProc', 'outorgados'));
+}
 
     public function indexAtpve()
     {

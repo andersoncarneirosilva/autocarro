@@ -70,6 +70,7 @@ class DocumentoController extends Controller
         '{ENDERECO_CLIENTE}' => strtoupper($cliente->endereco . ', ' . $cliente->cidade),
         '{PLACA}'            => strtoupper($veiculo->placa),
         '{CHASSI}'           => strtoupper($veiculo->chassi),
+        '{ANO_MODELO}'           => strtoupper($veiculo->ano_fabricacao . '/' . $veiculo->ano_modelo),
         '{RENAVAM}'          => $veiculo->renavam,
         '{MARCA_MODELO}'     => strtoupper($veiculo->marca . ' / ' . $veiculo->modelo),
         '{COR}'              => strtoupper($veiculo->cor),

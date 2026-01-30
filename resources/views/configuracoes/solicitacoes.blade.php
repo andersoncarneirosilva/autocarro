@@ -4,6 +4,12 @@
 
 @section('content')
 
+<style>
+#edit_conteudo {
+    display: none;
+}
+</style>
+
 {{-- Toasts de sessão --}}
 @if (session('success') || session('error'))
 <script>
@@ -102,36 +108,44 @@
                         <input class="form-control" name="cidade" value="{{ $modeloAtpve->cidade ?? '' }}" required placeholder="Ex: Esteio/RS"/>
                     </div>
 
-                    <div class="mb-3">
-                        <label class="form-label fw-bold text-info small uppercase">Dados do Documento</label>
-                        <div class="d-flex flex-wrap gap-1">
-                            <code class="cursor-pointer p-1 border text-info" onclick="copyTag('{DATA_EXTENSO}')">{DATA_EXTENSO}</code>
-                            <code class="cursor-pointer p-1 border text-info" onclick="copyTag('{CIDADE}')">{CIDADE}</code>
-                            <code class="cursor-pointer p-1 border text-dark" onclick="insertSignatureLine()">[ASSINATURA]</code>
-                        </div>
-                    </div>
-
-                    <div class="mb-3">
-                        <label class="form-label fw-bold text-info small uppercase">Tags de Data</label>
-                        <div class="d-flex flex-wrap gap-1">                            
-                            <code class="cursor-pointer p-1 border text-primary" onclick="copyTag('{DIA_ATUAL}')">{DIA_ATUAL}</code>
-                            <code class="cursor-pointer p-1 border text-primary" onclick="copyTag('{MES_ATUAL}')">{MES_ATUAL}</code>
-                            <code class="cursor-pointer p-1 border text-primary" onclick="copyTag('{ANO_ATUAL}')">{ANO_ATUAL}</code>
-                        </div>
-                    </div>
+                    
 
                     <hr class="mb-2">
 
                     <h5 class="header-title mb-2 text-primary">Tags Dinâmicas</h5>
+                    <p class="text-muted small mb-3">Toque na tag para inserir no texto:</p>
                     
                     <div class="accordion accordion-flush" id="accordionTags">
+
+
+                    <div class="accordion-item">
+                            <h2 class="accordion-header">
+                                <button class="accordion-button p-2 small fw-bold" type="button" data-bs-toggle="collapse" data-bs-target="#tagDatas">
+                                    DATAS E ASSINATURA
+                                </button>
+                            </h2>
+                            <div id="tagDatas" class="accordion-collapse collapse show">
+                                <div class="accordion-body p-2">
+                                    <div class="d-flex flex-wrap gap-1">
+                                        <code class="cursor-pointer p-1 border text-primary" onclick="copyTag('{DIA_ATUAL}')">{DIA_ATUAL}</code>
+                            <code class="cursor-pointer p-1 border text-primary" onclick="copyTag('{MES_ATUAL}')">{MES_ATUAL}</code>
+                            <code class="cursor-pointer p-1 border text-primary" onclick="copyTag('{ANO_ATUAL}')">{ANO_ATUAL}</code>
+                            <code class="cursor-pointer p-1 border text-info" onclick="copyTag('{DATA_EXTENSO}')">{DATA_EXTENSO}</code>
+                            <code class="cursor-pointer p-1 border text-info" onclick="copyTag('{CIDADE}')">{CIDADE}</code>
+                            <code class="cursor-pointer p-1 border text-dark" onclick="insertSignatureLine()">[ASSINATURA]</code>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+
                         <div class="accordion-item">
                             <h2 class="accordion-header">
                                 <button class="accordion-button p-2 small fw-bold" type="button" data-bs-toggle="collapse" data-bs-target="#tagAdquirente">
                                     ADQUIRENTE (COMPRADOR)
                                 </button>
                             </h2>
-                            <div id="tagAdquirente" class="accordion-collapse collapse show">
+                            <div id="tagAdquirente" class="accordion-collapse collapse">
                                 <div class="accordion-body p-2">
                                     <div class="d-flex flex-wrap gap-1">
                                         <code class="cursor-pointer p-1 border" onclick="copyTag('{NOME_CLIENTE}')">{NOME_CLIENTE}</code>

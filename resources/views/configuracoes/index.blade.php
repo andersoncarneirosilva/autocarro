@@ -3,7 +3,11 @@
 @section('title', 'Designer de Procuração')
 
 @section('content')
-
+<style>
+#edit_conteudo {
+    display: none;
+}
+</style>
 
 {{-- Toasts de sessão --}}
 @if (session('success') || session('error'))
@@ -62,7 +66,7 @@
 <form method="POST" action="{{ route('configuracoes.procuracao.save') }}" id="outorgadosForm">
     @csrf
     {{-- Input hidden para o ID do modelo (importante para o save) --}}
-    <input type="hidden" name="id" id="modelo_id" value="{{ $modeloProc->first()->id ?? '' }}">
+    <input type="hidden" name="id" id="modelo_id" value="{{ $modeloProc->id ?? '' }}">
 
     <div class="row">
         <div class="col-lg-9">
@@ -123,8 +127,8 @@
                         {{-- Localize o @foreach ou a verificação do Select2 e use assim: --}}
 @php
     $outorgadosSelecionados = [];
-    if (isset($modeloProc->first()->outorgados)) {
-        $data = $modeloProc->first()->outorgados;
+    if (isset($modeloProc->outorgados)) {
+        $data = $modeloProc->outorgados;
         // Se já for array, usa ele. Se for string, decodifica.
         $outorgadosSelecionados = is_array($data) ? $data : json_decode($data, true) ?? [];
     }
@@ -146,78 +150,111 @@
 
                     <div class="mb-3">
                         <label class="form-label fw-bold">Cidade Padrão:</label>
-                        <input class="form-control" name="cidade" value="{{ $modeloProc->first()->cidade ?? '' }}" required placeholder="Ex: Esteio/RS"/>
-                    </div>
-
-                    <div class="mb-3">
-                        <label class="form-label fw-bold text-info small uppercase">Dados do Documento</label>
-                        <div class="d-flex flex-wrap gap-1">
-                            <code class="cursor-pointer p-1 border text-info" onclick="copyTag('{DATA_EXTENSO}')">{DATA_EXTENSO}</code>
-                            <code class="cursor-pointer p-1 border text-info" onclick="copyTag('{CIDADE}')">{CIDADE}</code>
-                            <code class="cursor-pointer p-1 border text-dark" onclick="insertSignatureLine()">[LINHA PARA ASSINATURA]</code>
-                        </div>
+                        <input class="form-control" name="cidade" value="{{ $modeloProc->cidade ?? '' }}" required placeholder="Ex: Esteio/RS"/>
                     </div>
 
                     <hr class="mb-2">
-
+                    
                     <h5 class="header-title mb-2 text-primary">Tags Dinâmicas</h5>
                     <p class="text-muted small mb-3">Toque na tag para inserir no texto:</p>
 
-                    <div class="accordion accordion-flush" id="accordionTags">
-                        <div class="accordion-item">
-                            <h2 class="accordion-header">
-                                <button class="accordion-button p-2 small fw-bold" type="button" data-bs-toggle="collapse" data-bs-target="#tagCliente">
-                                    CLIENTE (OUTORGANTE)
-                                </button>
-                            </h2>
-                            <div id="tagCliente" class="accordion-collapse collapse show">
-                                <div class="accordion-body p-2">
-                                    <div class="d-flex flex-wrap gap-1">
-                                        <code class="cursor-pointer p-1 border" onclick="copyTag('{NOME_CLIENTE}')">{NOME_CLIENTE}</code>
-                                        <code class="cursor-pointer p-1 border" onclick="copyTag('{CPF_CLIENTE}')">{CPF_CLIENTE}</code>
-                                        <code class="cursor-pointer p-1 border" onclick="copyTag('{ENDERECO_CLIENTE}')">{ENDERECO_CLIENTE}</code>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
+                    
+                    <div class="accordion custom-accordion" id="custom-accordion-one">
+    
+    <div class="card mb-0">
+        <div class="card-header" id="headingFour">
+            <h5 class="m-0">
+                <a class="custom-accordion-title d-block text-info"
+                    data-bs-toggle="collapse" href="#collapseFour"
+                    aria-expanded="true" aria-controls="collapseFour">
+                    DATAS E ASSINATURA <i class="mdi mdi-chevron-down accordion-arrow"></i>
+                </a>
+            </h5>
+        </div>
 
-                        <div class="accordion-item">
-                            <h2 class="accordion-header">
-                                <button class="accordion-button p-2 small fw-bold text-danger" type="button" data-bs-toggle="collapse" data-bs-target="#tagOutorgado">
-                                    REPETIDOR OUTORGADOS
-                                </button>
-                            </h2>
-                            <div id="tagOutorgado" class="accordion-collapse collapse">
-                                <div class="accordion-body p-2">
-                                    <div class="d-flex flex-wrap gap-1">
-                                        <code class="cursor-pointer p-1 border text-danger" onclick="copyTag('{INICIO_OUTORGADOS}')">{INICIO_OUTORGADOS}</code>
-                                        <code class="cursor-pointer p-1 border" onclick="copyTag('{NOME_OUTORGADO}')">{NOME_OUTORGADO}</code>
-                                        <code class="cursor-pointer p-1 border" onclick="copyTag('{CPF_OUTORGADO}')">{CPF_OUTORGADO}</code>
-                                        <code class="cursor-pointer p-1 border text-danger" onclick="copyTag('{FIM_OUTORGADOS}')">{FIM_OUTORGADOS}</code>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
+        <div id="collapseFour" class="collapse show" aria-labelledby="headingFour" data-bs-parent="#custom-accordion-one">
+            <div class="card-body">
+                <div class="d-flex flex-wrap gap-1">
+                    <code class="cursor-pointer p-1 border text-info" onclick="copyTag('{DATA_EXTENSO}')">{DATA_EXTENSO}</code>
+                    <code class="cursor-pointer p-1 border text-info" onclick="copyTag('{CIDADE}')">{CIDADE}</code>
+                    <code class="cursor-pointer p-1 border text-primary" onclick="copyTag('{DIA_ATUAL}')">{DIA_ATUAL}</code>
+                    <code class="cursor-pointer p-1 border text-primary" onclick="copyTag('{MES_ATUAL}')">{MES_ATUAL}</code>
+                    <code class="cursor-pointer p-1 border text-primary" onclick="copyTag('{ANO_ATUAL}')">{ANO_ATUAL}</code>
+                    <code class="cursor-pointer p-1 border text-dark" onclick="insertSignatureLine()">[LINHA PARA ASSINATURA]</code>
+                </div>
+            </div>
+        </div>
+    </div>
 
-                        <div class="accordion-item">
-                            <h2 class="accordion-header">
-                                <button class="accordion-button p-2 small fw-bold text-success" type="button" data-bs-toggle="collapse" data-bs-target="#tagVeiculo">
-                                    DADOS DO VEÍCULO
-                                </button>
-                            </h2>
-                            <div id="tagVeiculo" class="accordion-collapse collapse">
-                                <div class="accordion-body p-2">
-                                    <div class="d-flex flex-wrap gap-1">
-                                        <code class="cursor-pointer p-1 border text-success" onclick="copyTag('{PLACA}')">{PLACA}</code>
-                                        <code class="cursor-pointer p-1 border text-success" onclick="copyTag('{CHASSI}')">{CHASSI}</code>
-                                        <code class="cursor-pointer p-1 border text-success" onclick="copyTag('{RENAVAM}')">{RENAVAM}</code>
-                                        <code class="cursor-pointer p-1 border text-success" onclick="copyTag('{MARCA_MODELO}')">{MARCA_MODELO}</code>
-                                        <code class="cursor-pointer p-1 border text-success" onclick="copyTag('{COR}')">{COR}</code>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
+    <div class="card mb-0">
+        <div class="card-header" id="headingFive">
+            <h5 class="m-0">
+                <a class="custom-accordion-title collapsed d-block"
+                    data-bs-toggle="collapse" href="#collapseFive"
+                    aria-expanded="false" aria-controls="collapseFive">
+                    CLIENTE (COMPRADOR) <i class="mdi mdi-chevron-down accordion-arrow"></i>
+                </a>
+            </h5>
+        </div>
+        <div id="collapseFive" class="collapse" aria-labelledby="headingFive" data-bs-parent="#custom-accordion-one">
+            <div class="card-body">
+                <div class="d-flex flex-wrap gap-1">
+                    <code class="cursor-pointer p-1 border" onclick="copyTag('{NOME_CLIENTE}')">{NOME_CLIENTE}</code>
+                    <code class="cursor-pointer p-1 border" onclick="copyTag('{CPF_CLIENTE}')">{CPF_CLIENTE}</code>
+                    <code class="cursor-pointer p-1 border" onclick="copyTag('{RG_CLIENTE}')">{RG_CLIENTE}</code>
+                    <code class="cursor-pointer p-1 border" onclick="copyTag('{ENDERECO_CLIENTE}')">{ENDERECO_CLIENTE}</code>
+                    <code class="cursor-pointer p-1 border" onclick="copyTag('{TELEFONE_CLIENTE}')">{TELEFONE_CLIENTE}</code>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="card mb-0">
+        <div class="card-header" id="headingSix">
+            <h5 class="m-0">
+                <a class="custom-accordion-title collapsed d-block text-danger"
+                    data-bs-toggle="collapse" href="#collapseSix"
+                    aria-expanded="false" aria-controls="collapseSix">
+                    DADOS DO VENDEDOR <i class="mdi mdi-chevron-down accordion-arrow"></i>
+                </a>
+            </h5>
+        </div>
+        <div id="collapseSix" class="collapse" aria-labelledby="headingSix" data-bs-parent="#custom-accordion-one">
+            <div class="card-body">
+                <div class="d-flex flex-wrap gap-1">
+                    <code class="cursor-pointer p-1 border" onclick="copyTag('{NOME_OUTORGADO}')">{NOME_OUTORGADO}</code>
+                    <code class="cursor-pointer p-1 border" onclick="copyTag('{CPF_OUTORGADO}')">{CPF_OUTORGADO}</code>
+                    <code class="cursor-pointer p-1 border" onclick="copyTag('{RG_OUTORGADO}')">{RG_OUTORGADO}</code>
+                    <code class="cursor-pointer p-1 border" onclick="copyTag('{EMAIL_OUTORGADO}')">{EMAIL_OUTORGADO}</code>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="card mb-0">
+        <div class="card-header" id="headingSeven">
+            <h5 class="m-0">
+                <a class="custom-accordion-title collapsed d-block text-success"
+                    data-bs-toggle="collapse" href="#collapseSeven"
+                    aria-expanded="false" aria-controls="collapseSeven">
+                    DADOS DO VEÍCULO <i class="mdi mdi-chevron-down accordion-arrow"></i>
+                </a>
+            </h5>
+        </div>
+        <div id="collapseSeven" class="collapse" aria-labelledby="headingSeven" data-bs-parent="#custom-accordion-one">
+            <div class="card-body">
+                <div class="d-flex flex-wrap gap-1">
+                    <code class="cursor-pointer p-1 border text-success" onclick="copyTag('{PLACA}')">{PLACA}</code>
+                    <code class="cursor-pointer p-1 border text-success" onclick="copyTag('{CHASSI}')">{CHASSI}</code>
+                    <code class="cursor-pointer p-1 border text-success" onclick="copyTag('{RENAVAM}')">{RENAVAM}</code>
+                    <code class="cursor-pointer p-1 border text-success" onclick="copyTag('{MARCA_MODELO}')">{MARCA_MODELO}</code>
+                    <code class="cursor-pointer p-1 border text-success" onclick="copyTag('{COR}')">{COR}</code>
+                    <code class="cursor-pointer p-1 border text-success" onclick="copyTag('{ANO_MODELO}')" title="Exemplo: 2020/2021">{ANO_MODELO}</code>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
 
                 </div>
             </div>
