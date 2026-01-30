@@ -48,7 +48,7 @@ class UserSeeder extends Seeder
             'id'             => 3,
             'name'           => 'Usuario',
             'email'          => 'usuario@gmail.com',
-            'cpf'            => '99999999999',
+            'cpf'            => '99999999990',
             'rg'            => '9999999999',
             'telefone'       => '51999999999',
             'nivel_acesso'   => 'Administrador',
