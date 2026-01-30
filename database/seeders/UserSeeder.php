@@ -44,6 +44,22 @@ class UserSeeder extends Seeder
             'last_login_at'  => '2026-01-01 01:01:01',
         ]);
 
+        User::create([
+            'id'             => 3,
+            'name'           => 'Usuario',
+            'email'          => 'usuario@gmail.com',
+            'cpf'            => '99999999999',
+            'rg'            => '9999999999',
+            'telefone'       => '51999999999',
+            'nivel_acesso'   => 'Administrador',
+            'password' => bcrypt('12345678'),
+            'status'         => 'Ativo',
+            'plano'          => 'Teste',
+            'credito'        => 0.00,
+            'empresa_id'     => 3,
+            'last_login_at'  => '2026-01-01 01:01:01',
+        ]);
+
 
 }
 }
