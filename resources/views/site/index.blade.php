@@ -30,7 +30,14 @@
     <link rel="stylesheet" href="{{ url('layout_site/css/bootstrap.4.5.2.min.css') }}">
     <link rel="stylesheet" href="{{ url('layout_site/css/default.css') }}">
     <link rel="stylesheet" href="{{ url('layout_site/css/style.css') }}">
-    
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-02FMMXT79W"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'G-02FMMXT79W');
+</script>
 </head>
 
 <body>
