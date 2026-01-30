@@ -19,7 +19,7 @@ class UserSeeder extends Seeder
             'cpf'           => '013.887.090-07',
             'telefone'      => '(51)9.99137.7276',
             'nivel_acesso'  => 'Administrador',
-            'password'      => Hash::make('12345678'),
+            'password' => bcrypt('12345678'),
             'status'        => 'Ativo',
             'plano'         => 'Pro',
             'credito'       => 0.00,
@@ -34,12 +34,14 @@ class UserSeeder extends Seeder
             'cpf'            => '04311267609',
             'telefone'       => '47988552396',
             'nivel_acesso'   => 'Administrador',
-            'password'       => '$2y$10$kwDZt8yqARkx5MrNZGaT4u5Qtu5Dq8Fjgo3NKE5B4F/BAjnIdQw0G', // Senha original mantida
+            'password' => bcrypt('12345678'),
             'status'         => 'Ativo',
             'plano'          => 'Teste',
             'credito'        => 0.00,
             'empresa_id'     => 2,
             'last_login_at'  => '2026-01-01 00:00:25',
         ]);
+
+
 }
 }
