@@ -49,7 +49,7 @@ class UserSeeder extends Seeder
             'name'           => 'Usuario',
             'email'          => 'usuario@gmail.com',
             'cpf'            => '99999999990',
-            'rg'            => '9999999999',
+            'rg'            => '9999999997',
             'telefone'       => '51999999999',
             'nivel_acesso'   => 'Administrador',
             'password' => bcrypt('12345678'),
