@@ -47,6 +47,13 @@
                 </ol>
             </div>
             <h3 class="page-title"><i class="mdi mdi-file-document-edit-outline me-2"></i>Modelo de Solicitação ATPVe</h3>
+            @if(empty($modeloAtpve->id))
+    <div class="alert alert-danger border-0 shadow-sm mb-3">
+        <i class="mdi mdi-information-outline me-1"></i>
+        <strong>Atenção:</strong> Você está visualizando um modelo padrão. 
+        Por favor, revise o texto e clique em <strong>"Salvar Alterações"</strong> para ativar este modelo.
+    </div>
+@endif
         </div>
     </div>
 </div>
@@ -61,7 +68,19 @@
             <div class="card shadow-sm">
                 <div class="card-body p-0">
                     <textarea name="conteudo" id="edit_conteudo">
-                        {!! $modeloAtpve->conteudo ?? '<h3>REQUERIMENTO DE PREENCHIMENTO DA ATPV-e</h3><p>Eu, {NOME_OUTORGADO}...</p>' !!}
+                        @if(empty($modeloAtpve->conteudo))
+        <p style="text-align:center;"><strong>POP 2</strong><br><strong>ANEXO 2 - REQUERIMENTO DE PREENCHIMENTO DA ATPV-e</strong></p>
+        <p><br>Eu, {NOME_OUTORGADO} ,<br>CPF/CNPJ: {CPF_OUTORGADO} , requeiro ao DETRAN/RS, o preenchimento da<br>ATPV-e, relativo ao veículo Placa: {PLACA} . Chassi: {CHASSI}<br>Renavam: {RENAVAM} Marca/Modelo {MARCA_MODELO}</p>
+        <p><br><strong>PROPRIETÁRIO VENDEDOR:</strong><br><strong>e-mail: {EMAIL_CLIENTE}</strong></p>
+        <p><br><strong>IDENTIFICAÇÃO DO ADQUIRENTE</strong><br><strong>CPF/CNPJ: {CPF_CLIENTE}</strong><br><strong>Nome: {NOME_CLIENTE}</strong><br><strong>e-mail: {EMAIL_CLIENTE}</strong></p>
+        <p><br><strong>ENDEREÇO DO ADQUIRENTE</strong><br><strong>CEP: {CEP_CLIENTE} UF: {ESTADO_CLIENTE} MUNICÍPIO: {CIDADE_CLIENTE}</strong><br><strong>Logradouro: {ENDERECO_CLIENTE} N. {NUMERO_CLIENTE}</strong><br><strong>Complemento: {COMPLEMENTO_CLIENTE} Bairro: {BAIRRO_CLIENTE}</strong></p>
+        <p><br><strong>Valor: {VALOR_VENDA}</strong></p>
+        <p style="text-align:center;"><br><strong>Declaro que li, estou de acordo e sou responsável pelas informações acima.</strong></p>
+        <p><br>Data: {DIA_ATUAL} / {MES_ATUAL} / {ANO_ATUAL}</p>
+        <p style="text-align:center;"><br><strong>__________________________________________</strong><br><strong>Assinatura do vendedor/representante legal</strong></p>
+    @else
+        {!! $modeloAtpve->conteudo !!}
+    @endif
                     </textarea>
                 </div>
                 <div class="card-footer bg-white d-flex justify-content-between">

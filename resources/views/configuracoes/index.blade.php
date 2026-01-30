@@ -48,6 +48,13 @@
                 </ol>
             </div>
             <h3 class="page-title"><i class="mdi mdi-file-document-edit-outline me-2"></i>Modelo de Procuração</h3>
+            @if(empty($modeloProc->id))
+    <div class="alert alert-danger border-0 shadow-sm mb-3">
+        <i class="mdi mdi-information-outline me-1"></i>
+        <strong>Atenção:</strong> Você está visualizando um modelo padrão. 
+        Por favor, revise o texto e clique em <strong>"Salvar Alterações"</strong> para ativar este modelo.
+    </div>
+@endif
         </div>
     </div>
 </div>
@@ -62,7 +69,39 @@
             <div class="card shadow-sm">
                 <div class="card-body p-0"> {{-- Removido padding para o fundo cinza do editor cobrir tudo --}}
                     <textarea name="conteudo" id="edit_conteudo">
-                        {!! $modeloProc->first()->conteudo ?? '' !!}
+                        @if(empty($modeloProc->conteudo))
+<p style="text-align:center;"><strong>PROCURAÇÃO</strong></p><p><br><strong>OUTORGANTE: {NOME_CLIENTE}</strong><br>
+    <strong>CPF: {CPF_CLIENTE}</strong><br><strong>ENDEREÇO: {ENDERECO_CLIENTE}</strong>
+    <br>______________________________________________________________________________________</p>
+    <p style="text-align:justify;"><strong>{INICIO_OUTORGADOS}</strong><br><strong>OUTORGADO: {NOME_OUTORGADO}</strong>
+    <br><strong>CPF: {CPF_OUTORGADO}</strong><br><strong>ENDEREÇO: {ENDERECO_OUTORGADO}</strong><br><strong>{FIM_OUTORGADOS}</strong>
+    <br>______________________________________________________________________________________<br>FINS E PODERES: O OUTORGANTE confere 
+    ao OUTORGADO amplos e ilimitados poderes para o fim especial de vender a quem quiser, receber valores de venda, transferir para si
+    próprio ou terceiros, em causa própria, locar ou de qualquer forma alienar ou onerar o veículo de sua propriedade com as seguintes 
+    características:</p><figure class="table" style="width:100%;"><table class="ck-table-resized"><colgroup><col style="width:70.94%;">
+    <col style="width:29.06%;"></colgroup><tbody><tr><td><strong>MARCA: {MARCA_MODELO}&nbsp;</strong></td><td><strong>PLACA: &nbsp;{PLACA}
+    </strong></td></tr><tr><td><strong>CHASSI: &nbsp;{CHASSI}&nbsp;</strong></td><td><strong>COR: &nbsp;{COR}</strong></td></tr><tr><td>
+    <strong>ANO/MODELO: {MARCA_MODELO}&nbsp;</strong></td><td><strong>RENAVAM: {RENAVAM}</strong></td></tr></tbody></table></figure>
+    <p style="text-align:justify;">______________________________________________________________________________________<br>
+    Assinar requerimentos, com poderes também para requerer, junto aos CRVAS/DETRAN-RS, os processos de 2ª vias de CRV/CRLV, Baixa Definitiva
+    do veículo, Alterações de informações do veículo, Solicitar DCPPO e CRLV digital e ATPV-E, fazer declaração de residência, fazer alteração 
+    de informações no veículo, fazer ocorrência policial de perda de documento do veículo, assinar termo de responsabilidade pela não 
+    apresentação de placas e lacre, fazer troca de município, receber valores por indenização de Seguradoras, assinar contratos de inclusão 
+    e instrumentos de liberação de Alienação e Reserva de Domínio para si próprio ou terceiros, endossar documentos, usar o veículo em apreço, 
+    manejando o mesmo em qualquer parte do território nacional ou estrangeiro, ficando cível e criminalmente responsável por qualquer acidente 
+    ou ocorrência, pagar taxas, multas e impostos, liberar e retirar o veículo de depósitos do DETRAN, CRD e DELEGACIAS DE POLÍCIA CIVIL, EPTC,
+     PRF, POLÍCIA FEDERAL, BRIGADA MILITAR, POLÍCIA RODOVIÁRIA ESTADUAL, assinar termos de liberação, dar declarações e finalmente, usar e 
+     gozar do veículo como coisa sua e sem interferência ou autorização de outros, podendo ainda requerer perante autoridade alfandegária 
+     ou aduaneira de país estrangeiro licença ou permissão de turismo pelo tempo que julgar conveniente, podendo substabelecer a presente 
+     no todo ou em parte. O outorgante pelo presente instrumento declara-se responsável pelo pagamento de multas e impostos do veículo acima 
+     descrito e caracterizado, até a data da outorga do presente mandato. ESTA PROCURAÇÃO É OUTORGADA EM CARÁTER IRREVOGÁVEL E IRRETRATÁVEL, 
+     SEM QUALQUER PRESTAÇÃO DE CONTAS AO PROPRIETÁRIO, HERDEIROS OU TERCEIROS, VISTO TER SIDO QUITADO O PREÇO DO VALOR DE VENDA DA TABELA FIPE 
+     NESTA DATA AO PROPRIETÁRIO.</p><p style="text-align:right;"><br>{CIDADE},{DATA_EXTENSO}</p>
+     <p style="text-align:center;">______________________________________________________________________</p><p style="text-align:center;">
+    <strong>{NOME_CLIENTE}</strong></p><p>&nbsp;</p>
+    @else
+        {!! $modeloProc->conteudo !!}
+    @endif
                     </textarea>
                 </div>
                 <div class="card-footer bg-white d-flex justify-content-between">

@@ -48,6 +48,13 @@
                 </ol>
             </div>
             <h3 class="page-title"><i class="mdi mdi-file-document-edit-outline me-2"></i>Modelo de Procuração</h3>
+            @if(empty($modeloComunicacao->id))
+    <div class="alert alert-danger border-0 shadow-sm mb-3">
+        <i class="mdi mdi-information-outline me-1"></i>
+        <strong>Atenção:</strong> Você está visualizando um modelo padrão. 
+        Por favor, revise o texto e clique em <strong>"Salvar Alterações"</strong> para ativar este modelo.
+    </div>
+@endif
         </div>
     </div>
 </div>
@@ -61,7 +68,21 @@
             <div class="card shadow-sm">
                 <div class="card-body p-0">
                     <textarea name="conteudo" id="edit_conteudo">
-                        {!! $modeloComunicacao->conteudo ?? '' !!}
+                        @if(empty($modeloComunicacao->conteudo))
+                            <p style="text-align:center;"><strong>COMUNICAÇÃO DE VENDA DE VEÍCULO</strong></p><p><br>
+                                Eu, {INICIO_OUTORGADOS}{NOME_OUTORGADO}{FIM_OUTORGADOS}<br>&nbsp;</p><p><strong>Dados do vendedor:
+                                    </strong><br>{INICIO_OUTORGADOS}<br>Nome: {NOME_OUTORGADO}</p><p>CPF: {CPF_OUTORGADO}<br>RG: 
+                                        {RG_OUTORGADO}</p><p>E-mail:&nbsp;{EMAIL_OUTORGADO}<br>Telefones:&nbsp;{TELEFONE_OUTORGADO}<br>
+                                            {FIM_OUTORGADOS}<br>&nbsp;</p><p>Comunico a este DETRAN/RS, nos termos do artigo 134 do 
+                                                Código de Trânsito Brasileiro, que o veículo:<br>&nbsp;</p><p><strong>Dados do veículo:
+                                                    </strong><br>Placa:&nbsp;{PLACA} Nº do CRV: {CRV}</p><p>Marca/Modelo:&nbsp;{MARCA_MODELO}
+                                                         Cor: {COR}</p><p>Chassi:&nbsp; {CHASSI} Ano: {ANO}<br>&nbsp;</p><p><strong>foi
+                                                             por mim vendido a(o) Sr(a):</strong><br>&nbsp;</p><p><strong>Dados do 
+                                                                comprador:</strong><br><br>Nome: {NOME_CLIENTE}</p><p>CPF:&nbsp;{CPF_CLIENTE} 
+                                                                    RG: {RG_CLIENTE}</p><p>E-mail:&nbsp;{EMAIL_CLIENTE} Telefones: {TELEFONE_CLIENTE}</p><p style="text-align:justify;">em (data da venda do veículo)&nbsp; {DIA_ATUAL} de {MES_ATUAL}&nbsp;de {ANO_ATUAL}, conforme fotocópia autenticada da Autorização para Transferência de Propriedade de Veículo – ATPV (CRV) em anexo, devidamente preenchida e com as firmas do vendedor e comprador reconhecidas.<br>&nbsp;</p><p><strong>Por ser verdade, firmo e assino o presente Comunicado de Venda.</strong></p><p style="text-align:center;">{CIDADE}, {DIA_ATUAL} de {MES_ATUAL} de {ANO_ATUAL}<br>&nbsp;</p><p style="text-align:center;">______________________________________________________________________</p><p style="text-align:center;">{NOME_CLIENTE}</p><p style="text-align:center;">&nbsp;</p>
+                        @else
+                          {!! $modeloComunicacao->conteudo !!}
+                        @endif
                     </textarea>
                 </div>
                 <div class="card-footer bg-white d-flex justify-content-between">

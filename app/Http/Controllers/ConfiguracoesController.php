@@ -31,7 +31,7 @@ class ConfiguracoesController extends Controller
 
         $modeloAtpve = ModeloAtpve::where('empresa_id', $empresaId)->first();
         $outorgados = Outorgado::where('empresa_id', $empresaId)->get();
-        
+        //dd($modeloAtpve);
         return view('configuracoes.solicitacoes', compact('modeloAtpve', 'outorgados'));
     }
 
