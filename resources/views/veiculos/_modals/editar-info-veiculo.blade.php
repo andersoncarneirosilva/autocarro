@@ -1,9 +1,9 @@
 <div class="modal fade" id="modalEditarInfoVeiculo" tabindex="-1" aria-labelledby="modalEditarInfoVeiculoLabel" aria-hidden="true">
     <div class="modal-dialog modal-lg">
-        <div class="modal-content">
+        <div class="modal-content border-0">
             <div class="modal-header bg-dark text-white">
-                <h5 class="modal-title" id="modalEditarInfoVeiculoLabel text-white">
-                    <i class="mdi mdi-pencil me-2"></i>Editar Dados do Veículo
+                <h5 class="modal-title" id="modalEditarInfoVeiculoLabel">
+                    <i class="mdi mdi-pencil-box-outline me-2"></i>Editar Dados do Veículo
                 </h5>
                 <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
@@ -11,107 +11,107 @@
                 @csrf
                 @method('PUT')
                 <div class="modal-body p-4">
-                    <div class="row g-3">
-                        <div class="col-md-4">
-                            <label class="form-label fw-bold">Placa</label>
-                            <input type="text" name="placa" class="form-control mask-placa" 
-                                value="{{ $veiculo->placa }}" 
-                                placeholder="ABC1D23"
-                                maxlength="7"
-                                style="text-transform: uppercase;">
+                    
+                    <div class="mb-3">
+                        <h6 class="text-primary text-uppercase fw-bold font-12 mb-3 border-bottom pb-1">
+                            <i class="mdi mdi-car-search me-1"></i> Identificação e Modelo
+                        </h6>
+                        <div class="row g-2">
+                            <div class="col-md-4">
+                                <label class="form-label font-12 fw-bold text-muted">Marca</label>
+                                <select name="marca" id="marca" class="form-select border-primary" required>
+                                    <option value="">Selecione a Marca</option>
+                                </select>
+                            </div>
+                            <div class="col-md-4">
+                                <label class="form-label font-12 fw-bold text-muted">Modelo</label>
+                                <select name="modelo" id="modelo_carro" class="form-select" required>
+                                    <option value="{{ $veiculo->modelo }}" selected>{{ $veiculo->modelo }}</option>
+                                </select>
+                            </div>
+                            <div class="col-md-4">
+                                <label class="form-label font-12 fw-bold text-muted">Versão</label>
+                                <select name="versao" id="versao" class="form-select" required>
+                                    <option value="{{ $veiculo->versao }}" selected>{{ $veiculo->versao }}</option>
+                                </select>
+                            </div>
                         </div>
-                        <div class="col-md-4">
-                            <label class="form-label fw-bold">Placa Anterior</label>
-                            <input type="text" name="placaAnterior" class="form-control mask-placa" 
-                                value="{{ $veiculo->placaAnterior }}" 
-                                placeholder="ABC1234"
-                                maxlength="8"
-                                style="text-transform: uppercase;">
-                        </div>
-                        <div class="col-md-4">
-                            <label class="form-label fw-bold">Ano (Fab/Mod)</label>
-                            <input type="text" name="ano" id="edit-ano" class="form-control mask-ano" 
-                                value="{{ $veiculo->ano }}" 
-                                placeholder="2020/2021"
-                                maxlength="9">
-                        </div>
+                    </div>
 
-                        <div class="col-md-4">
-                            <label class="form-label fw-bold">Cor</label>
-                            <input type="text" name="cor" class="form-control" value="{{ $veiculo->cor }}">
+                    <div class="mb-3 mt-4">
+                        <h6 class="text-primary text-uppercase fw-bold font-12 mb-3 border-bottom pb-1">
+                            <i class="mdi mdi-speedometer me-1"></i> Especificações e Uso
+                        </h6>
+                        <div class="row g-3">
+                            <div class="col-md-3">
+                                <label for="cambio" class="form-label font-12 fw-bold text-muted">Câmbio</label>
+                                <select class="form-select" name="cambio" id="cambio" required>
+                                    <option value="" disabled {{ !isset($veiculo->cambio) ? 'selected' : '' }}>Selecione</option>
+                                    <option value="Manual" {{ $veiculo->cambio == 'Manual' ? 'selected' : '' }}>Manual</option>
+                                    <option value="Automático" {{ $veiculo->cambio == 'Automático' ? 'selected' : '' }}>Automático</option>
+                                    <option value="CVT" {{ $veiculo->cambio == 'CVT' ? 'selected' : '' }}>CVT</option>
+                                </select>
+                            </div>
+                            <div class="col-md-3">
+                                <label for="kilometragem" class="form-label font-12 fw-bold text-muted">Quilometragem</label>
+                                <div class="input-group">
+                                    <input type="number" class="form-control" name="kilometragem" value="{{ $veiculo->kilometragem }}" required>
+                                    <span class="input-group-text font-11">KM</span>
+                                </div>
+                            </div>
+                            <div class="col-md-3">
+                                <label for="portas" class="form-label font-12 fw-bold text-muted">Portas</label>
+                                <select class="form-select" name="portas" id="portas" {{ strtoupper($veiculo->tipo) == 'MOTOCICLETA' ? 'disabled' : '' }}>
+                                    <option value="2" {{ $veiculo->portas == 2 ? 'selected' : '' }}>2 Portas</option>
+                                    <option value="3" {{ $veiculo->portas == 3 ? 'selected' : '' }}>3 Portas</option>
+                                    <option value="4" {{ $veiculo->portas == 4 ? 'selected' : '' }}>4 Portas</option>
+                                    <option value="5" {{ $veiculo->portas == 5 ? 'selected' : '' }}>5 Portas</option>
+                                </select>
+                            </div>
+                            <div class="col-md-3">
+                                <label for="especiais" class="form-label font-12 fw-bold text-muted">Categoria</label>
+                                <select class="form-select" name="especiais" id="especiais">
+                                    <option value="" selected>Padrão</option>
+                                    <option value="Clássico" {{ $veiculo->especiais == 'Clássico' ? 'selected' : '' }}>Clássico</option>
+                                    <option value="Esportivo" {{ $veiculo->especiais == 'Esportivo' ? 'selected' : '' }}>Esportivo</option>
+                                    <option value="Modificado" {{ $veiculo->especiais == 'Modificado' ? 'selected' : '' }}>Modificado</option>
+                                </select>
+                            </div>
                         </div>
-                        <div class="col-md-4">
-                            <label class="form-label fw-bold">Combustível</label>
-                            <select name="combustivel" class="form-select">
-                                @foreach(['GASOLINA', 'ETANOL', 'FLEX', 'DIESEL', 'GNV', 'ELETRICO', 'HIBRIDO'] as $comb)
-                                    <option value="{{ $comb }}" {{ $veiculo->combustivel == $comb ? 'selected' : '' }}>{{ $comb }}</option>
-                                @endforeach
-                            </select>
-                        </div>
-                        <div class="col-md-4">
-                            <label class="form-label fw-bold">Motor</label>
-                            <input type="text" name="motor" class="form-control" value="{{ $veiculo->motor }}">
-                        </div>
-
-                        <div class="col-md-6">
-                            <label class="form-label fw-bold">Renavam</label>
-                            <input type="text" name="renavam" class="form-control" value="{{ $veiculo->renavam }}">
-                        </div>
-                        <div class="col-md-6">
-                            <label class="form-label fw-bold">Número do CRV</label>
-                            <input type="text" name="crv" class="form-control" value="{{ $veiculo->crv }}">
-                        </div>
+                    </div>
 
                     <input type="hidden" id="veiculo_tipo" value="{{ $veiculo->tipo }}">
-
-                    <div class="col-md-4">
-    <label class="form-label fw-bold">Marca</label>
-    <select name="marca" id="marca" class="form-control" required>
-    <option value="">Selecione a Marca</option>
-</select>
-</div>
-
-<div class="col-md-4">
-    <label class="form-label fw-bold">Modelo</label>
-    <select name="modelo" id="modelo_carro" class="form-control" required>
-        <option value="{{ $veiculo->modelo }}" selected>{{ $veiculo->modelo }}</option>
-    </select>
-</div>
-
-<div class="col-md-4">
-    <label class="form-label fw-bold">Versão</label>
-    <select name="versao" id="versao" class="form-control" required>
-        <option value="{{ $veiculo->versao }}" selected>{{ $veiculo->versao }}</option>
-    </select>
-</div>
-
-<input type="hidden" id="db_fipe_marca_id" value="{{ $veiculo->fipe_marca_id }}">
-<input type="hidden" id="db_fipe_modelo_id" value="{{ $veiculo->fipe_modelo_id }}">
-<input type="hidden" id="db_fipe_versao_id" value="{{ $veiculo->fipe_versao_id }}">
-
-<input type="hidden" name="marca_nome" id="marca_nome" value="{{ $veiculo->marca }}">
-<input type="hidden" name="modelo_nome" id="modelo_nome" value="{{ $veiculo->modelo }}">
-<input type="hidden" name="versao_nome" id="versao_nome" value="{{ $veiculo->versao }}">
-
-
-                    </div>
+                    <input type="hidden" id="db_fipe_marca_id" value="{{ $veiculo->fipe_marca_id }}">
+                    <input type="hidden" id="db_fipe_modelo_id" value="{{ $veiculo->fipe_modelo_id }}">
+                    <input type="hidden" id="db_fipe_versao_id" value="{{ $veiculo->fipe_versao_id }}">
+                    <input type="hidden" name="marca_nome" id="marca_nome" value="{{ $veiculo->marca }}">
+                    <input type="hidden" name="modelo_nome" id="modelo_nome" value="{{ $veiculo->modelo }}">
+                    <input type="hidden" name="versao_nome" id="versao_nome" value="{{ $veiculo->versao }}">
+                    @if(strtoupper($veiculo->tipo) == 'MOTOCICLETA')
+                        <input type="hidden" name="portas" value="0">
+                    @endif
                 </div>
-                <div class="modal-footer bg-light">
-                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
-                            <i class="fas fa-times me-1"></i> Fechar
-                        </button>
-                        <button type="submit" class="btn btn-primary" id="submitButton">
-                            <i class="fas fa-check me-1"></i> Salvar
-                        </button>
-                        <button class="btn btn-primary" id="loadingButton" type="button" disabled style="display: none;">
-                            <span class="spinner-border spinner-border-sm me-1" role="status" aria-hidden="true"></span>
-                            Salvando...
-                        </button>
-                    </div>
+
+                <div class="modal-footer bg-light border-top-0">
+                    <button type="button" class="btn btn-secondary btn-sm" data-bs-dismiss="modal">Cancelar</button>
+                    <button type="submit" class="btn btn-primary btn-sm" id="submitButton">
+                        <i class="mdi mdi-content-save me-1"></i> Salvar Alterações
+                    </button>
+                    <button class="btn btn-primary btn-sm" id="loadingButton" type="button" disabled style="display: none;">
+                        <span class="spinner-border spinner-border-sm me-1" role="status"></span> Salvando...
+                    </button>
+                </div>
             </form>
         </div>
     </div>
 </div>
+
+<style>
+    .font-12 { font-size: 12px; }
+    .font-11 { font-size: 11px; }
+    .form-label { margin-bottom: 0.3rem; }
+    .border-bottom { border-bottom: 1px solid #f1f3fa !important; }
+</style>
 
 <script>
 document.addEventListener('input', function (e) {

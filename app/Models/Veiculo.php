@@ -19,9 +19,9 @@ class Veiculo extends Model
     protected $fillable = [
         // Identificação e Documentos
         'nome', 'cpf', 'endereco', 'marca', 'modelo', 'versao', 'placa', 
-        'chassi', 'cor', 'ano_fabricacao', 'ano_modelo', 'renavam', 
-        'cidade', 'crv', 'placaAnterior', 'categoria', 'motor', 
-        'combustivel', 'infos', 'tipo', 'arquivo_doc', 'size_doc',
+        'chassi', 'cor', 'ano_fabricacao', 'ano_modelo', 'renavam', 'carroceria',
+        'cidade', 'crv', 'placaAnterior', 'categoria', 'motor', 'potencia', 'peso_bruto', 'cilindrada',
+        'combustivel', 'infos', 'tipo', 'arquivo_doc', 'size_doc', 'exercicio',
 
         // Características e Preços
         'kilometragem', 'visitas', 'portas', 'cambio', 'valor', 
@@ -131,7 +131,7 @@ class Veiculo extends Model
     {
 
         $linhas = explode("\n", $textoPagina);
-
+        
         // Verifique se o índice 53 existe no array
         if (isset($linhas[3])) {
             // Se o índice existir, divida a linha
@@ -149,18 +149,104 @@ class Veiculo extends Model
 
     public function extrairNome($textoPagina)
     {
-        // Suposição: O nome do usuário está precedido pela palavra "Nome:" ou "Nome do usuário:"
-
         $linhas = explode("\n", $textoPagina);
-        // dd($linhas);
+
         $nome = explode("\t", $linhas[62]);
-        // dd($colunas);
         $outorgante = implode(', ', $nome);
+
+        return $outorgante;
+    }
+
+    public function extrairCarroceria($textoPagina)
+    {
+        // Suposição: O nome do usuário está precedido pela palavra "Nome:" ou "Nome do usuário:"
+        $linhas = explode("\n", $textoPagina);
+        //dd($linhas);
+     //dd($linhas);
+        $nome = explode("\t", $linhas[61]);
+        $carroceria = implode(', ', $nome);
+        //dd($linhas);
         // dd($outorgante);
 
         // Caso nenhum nome de usuário seja encontrado
-        return $outorgante;
+        return $carroceria;
     }
+
+    public function extrairExercicio($textoPagina)
+{
+    $linhas = explode("\n", $textoPagina);
+    
+    if (!isset($linhas[64])) {
+        return null;
+    }
+
+    $partesTabulacao = explode("\t", $linhas[64]);
+    
+    // De acordo com seu último teste, a data já está pura aqui no índice [1]
+    $conteudoColuna = $partesTabulacao[1] ?? '';
+
+    // Se a string já for a data (ex: "24/02/2025"), retornamos direto
+    if (!empty($conteudoColuna)) {
+        
+        // Se por acaso ainda vier com vírgula (ex: "CIDADE, 24/02/2025")
+        if (str_contains($conteudoColuna, ',')) {
+            $partesData = explode(',', $conteudoColuna);
+            return trim($partesData[1] ?? null);
+        }
+
+        // Se não tem vírgula, retorna o valor limpo
+        return trim($conteudoColuna);
+    }
+
+    return null;
+}
+
+
+    public function extrairPotencia($textoPagina)
+{
+    $linhas = explode("\n", $textoPagina);
+    if (!isset($linhas[59])) return null;
+
+    $partes = explode("\t", $linhas[59]);
+    // Pega a primeira parte antes da vírgula (ex: 15CV/162)
+    $dadosBrutos = explode(",", $partes[0] ?? '');
+    $potenciaCilindrada = $dadosBrutos[0] ?? '';
+
+    // Separa pela barra e pega apenas o que vem antes (15CV)
+    $soPotencia = explode('/', $potenciaCilindrada);
+    
+    return trim($soPotencia[0] ?? null);
+}
+
+public function extrairPesoBruto($textoPagina)
+{
+    $linhas = explode("\n", $textoPagina);
+    if (!isset($linhas[59])) return null;
+
+    // Conforme seu dd, $partes já vem como [0 => "13CV/149", 1 => "0.31"]
+    $partes = explode("\t", $linhas[59]);
+    //dd($partes);
+    // Retornamos diretamente o índice 1, limpando espaços se houver
+    return isset($partes[1]) ? trim($partes[1]) : null;
+}
+
+public function extrairCilindrada($textoPagina)
+{
+    $linhas = explode("\n", $textoPagina);
+    if (!isset($linhas[59])) return null;
+
+    $partes = explode("\t", $linhas[59]);
+    $dadosBrutos = explode(",", $partes[0] ?? '');
+    $potenciaCilindrada = $dadosBrutos[0] ?? '';
+
+    // Separa pela barra e pega apenas o que vem depois (162)
+    if (str_contains($potenciaCilindrada, '/')) {
+        $soCilindrada = explode('/', $potenciaCilindrada);
+        return trim($soCilindrada[1] ?? null);
+    }
+    
+    return null;
+}
 
     public function extrairCpf($textoPagina)
     {

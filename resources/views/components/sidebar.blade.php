@@ -102,7 +102,7 @@
                             <a href="{{ route('configuracoes.index') }}">Procuração</a>
                         </li>
                         <li>
-                            <a href="{{ route('configuracoes.solicitacao.indexAtpve') }}">Solicitação ATPVe</a>
+                            <a href="{{ route('configuracoes.solicitacao') }}">Solicitação ATPVe</a>
                         </li>
                     </ul>
                 </div>

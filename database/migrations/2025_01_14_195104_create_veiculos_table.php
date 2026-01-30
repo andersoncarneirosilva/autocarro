@@ -34,6 +34,12 @@ return new class extends Migration
         $table->string('combustivel')->nullable();
         $table->string('infos')->nullable();
         $table->string('tipo')->nullable();
+        $table->string('potencia')->nullable();
+        $table->string('peso_bruto')->nullable();
+        $table->string('cilindrada')->nullable();
+        $table->string('carroceria')->nullable();
+        $table->string('exercicio')->nullable();
+
 
         // FINANCEIRO / COMERCIAL
         $table->string('cambio')->nullable();

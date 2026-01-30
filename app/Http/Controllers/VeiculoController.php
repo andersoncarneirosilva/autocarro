@@ -509,7 +509,7 @@ public function indexVendidos(Request $request)
             ->with('error', "A placa $placa já consta na base de dados da sua empresa.");
     }
 
-    // ... (Mantém suas extrações de marca, chassi, cor, etc.) ...
+
     $marca = $this->model->extrairMarca($textoPagina);
     $chassi = $this->model->extrairChassi($textoPagina);
     $cor = $this->model->extrairCor($textoPagina);
@@ -525,7 +525,14 @@ public function indexVendidos(Request $request)
     $combustivel = $this->model->extrairCombustivel($textoPagina);
     $infos = $this->model->extrairInfos($textoPagina);
     $tipo = $this->model->extrairEspecie($textoPagina);
+    $potencia = $this->model->extrairPotencia($textoPagina);
+    $peso_bruto = $this->model->extrairPesoBruto($textoPagina);
+    $cilindrada = $this->model->extrairCilindrada($textoPagina);
+    $carroceria = $this->model->extrairCarroceria($textoPagina);
+    $exercicio = $this->model->extrairExercicio($textoPagina);
 
+    //dd($exercicio);
+//dd($peso_bruto);
     // Lógica de Marca/Modelo
     $textoLimpo = str_starts_with($marca, 'I/') ? substr($marca, 2) : $marca;
     if (str_contains($textoLimpo, '/')) {
@@ -564,6 +571,11 @@ public function indexVendidos(Request $request)
         'combustivel' => $combustivel,
         'tipo' => $tipo,
         'infos' => $infos,
+        'potencia' => $potencia,
+        'cilindrada' => $cilindrada,
+        'peso_bruto' => $peso_bruto,
+        'carroceria' => $carroceria,
+        'exercicio' => $exercicio,
         'status' => 'Ativo',
         'status_Veiculo' => 'Aguardando',
         'size_doc' => $size_doc,
@@ -868,65 +880,63 @@ public function removerFoto(Request $request, $id)
 
 public function updateInfo(Request $request, $id)
 {
-    $Veiculo = Veiculo::findOrFail($id);
-
-    $data = [
-        'placa'         => strtoupper($request->placa),
-        'placaAnterior' => strtoupper($request->placaAnterior),
-        'cor'           => strtoupper($request->cor),
-        'motor'         => $request->motor,
-        'combustivel'   => $request->combustivel,
-        'renavam'       => $request->renavam,
-        'ano'           => $request->ano,
-        'crv'           => $request->crv,
-        
-        // Se o marca_nome vier vazio, mantém o que já estava no banco
-        'marca'         => $request->marca_nome ?: $Veiculo->marca,
-        'modelo'        => $request->modelo_nome ?: $Veiculo->modelo,
-        'versao'        => $request->versao_nome ?: $Veiculo->versao,
-    ];
-
-    // Salva o código FIPE se você tiver essa coluna (opcional)
-    if($request->filled('versao')) {
-        $data['codigo_fipe'] = $request->versao; 
-    }
-    
-    $data['fipe_marca_id']  = $request->marca;  // O value do select é o ID da marca
-    $data['fipe_modelo_id'] = $request->modelo; // O value do select é o ID do modelo
-    $data['fipe_versao_id'] = $request->versao; // O value do select é o ID da versão
-
-    $Veiculo->update($data);
-
-    return redirect()->back()->with('success', 'Dados do veículo atualizados com sucesso!');
-}
-
-   public function updateInfoBasica(Request $request, $id)
-{
-    //dd($request);
     $veiculo = Veiculo::findOrFail($id);
-    $tipoVeiculo = strtoupper($veiculo->tipo);
 
-    // Se for motocicleta, injetamos portas 0 antes da validação
-    if ($tipoVeiculo === 'MOTOCICLETA') {
-        Log::debug("Veículo é uma MOTOCICLETA. Forçando portas para 0.");
-        $request->merge(['portas' => 0]);
-    }
-
+    // Validação básica para garantir integridade
     $request->validate([
-        'especiais' => 'nullable|string|in:Clássico,Esportivo,Modificado',
-        'cambio'             => 'required|string',
-        'portas'             => $tipoVeiculo === 'MOTOCICLETA' ? 'nullable' : 'required|integer|min:2|max:5',
-        'kilometragem'       => 'required|numeric|min:0',
-    ], [
-        'portas.required'         => 'Informe a quantidade de portas.',
-        'kilometragem.min'        => 'A kilometragem não pode ser negativa.'
+        'kilometragem' => 'required|numeric|min:0',
+        'cambio'       => 'required',
     ]);
 
-    // O update(all()) funcionará se os campos estiverem no $fillable do Model Veiculo
-    $veiculo->update($request->all());
+    $data = [
+        // Campos de Uso e Especificações
+        'cambio'        => $request->cambio,
+        'kilometragem'  => $request->kilometragem,
+        'portas'        => $request->portas,
+        'especiais'     => $request->especiais,
 
-    return redirect()->route('veiculos.show', $id)
-                     ->with('success', 'Informações atualizadas com sucesso!');
+        // Campos de Identificação (Marca/Modelo/Versão)
+        // Usamos o nome vindo do hidden ou mantemos o original se estiver vazio
+        'marca'         => $request->marca_nome ?: $veiculo->marca,
+        'modelo'        => $request->modelo_nome ?: $veiculo->modelo,
+        'versao'        => $request->versao_nome ?: $veiculo->versao,
+
+        // IDs de Referência FIPE
+        'fipe_marca_id'  => $request->marca,  // ID vindo do select
+        'fipe_modelo_id' => $request->modelo, // ID vindo do select
+        'fipe_versao_id' => $request->versao, // ID vindo do select
+    ];
+
+    // Se o tipo for Motocicleta, garantimos que portas seja 0 independente do input
+    if (strtoupper($veiculo->tipo) == 'MOTOCICLETA') {
+        $data['portas'] = 0;
+    }
+
+    $veiculo->update($data);
+
+    return redirect()->back()->with('success', 'Informações atualizadas com sucesso!');
+}
+
+   public function updateCrv(Request $request, $id)
+{
+    // Localiza o veículo
+    $veiculo = Veiculo::findOrFail($id);
+
+    // Valida apenas o CRV, já que é o único dado enviado
+    $request->validate([
+        'crv' => 'required|string|max:255',
+    ], [
+        'crv.required' => 'O número do CRV é obrigatório para esta atualização.'
+    ]);
+
+    // Atualiza apenas o campo CRV
+    $veiculo->update([
+        'crv' => $request->crv
+    ]);
+
+    // Retorna para a página anterior (show) com sucesso
+    return redirect()->back()
+                     ->with('success', 'Número do CRV atualizado com sucesso!');
 }
 
 public function updatePrecos(Request $request, $id)
@@ -1116,36 +1126,48 @@ public function deleteFoto($id, $index)
 public function vender(Request $request, $id)
 {
     $request->validate([
-        'vendedor_id' => 'required|exists:users,id',
-        'cliente_id'  => 'required|exists:clientes,id',
-        'valor_venda' => 'required',
-        'data_venda'  => 'required|date',
+        'vendedor_id'   => 'required|exists:users,id',
+        'cliente_id'    => 'required|exists:clientes,id',
+        'valor_venda'   => 'required',
+        'data_venda'    => 'required|date',
+        // Novos campos (opcionais, dependendo do toggle de parcelamento)
+        'entrada'       => 'nullable',
+        'qtd_parcelas'  => 'nullable|integer|min:1',
+        'taxa_juros'    => 'nullable|numeric',
+        'valor_parcela' => 'nullable',
     ]);
 
     $veiculo = Veiculo::findOrFail($id);
 
-    $valorRaw = $request->valor_venda;
+    // Função auxiliar para converter "1.250,50" em "1250.50"
+    $limparMoeda = function($valor) {
+        if (empty($valor)) return 0;
+        $valorSemMilhar = str_replace('.', '', $valor);
+        return str_replace(',', '.', $valorSemMilhar);
+    };
 
-    // VERIFICAÇÃO INTELIGENTE:
-    // Se tiver vírgula, tratamos como padrão BR (17.900,00)
-    if (str_contains($valorRaw, ',')) {
-        $valorSemMilhar = str_replace('.', '', $valorRaw); // Remove ponto de milhar
-        $valorFinal = str_replace(',', '.', $valorSemMilhar); // Troca vírgula por ponto decimal
-    } else {
-        // Se não tiver vírgula, o valor já está limpo (17900.00) ou é inteiro
-        $valorFinal = $valorRaw;
-    }
+    // Processamento dos valores financeiros
+    $valorVenda   = $limparMoeda($request->valor_venda);
+    $valorEntrada = $limparMoeda($request->entrada);
+    $valorParcela = $limparMoeda($request->valor_parcela);
 
     $veiculo->update([
-        'status'      => 'Vendido',
-        'vendedor_id' => $request->vendedor_id,
-        'cliente_id'  => $request->cliente_id,
-        'valor_venda' => $valorFinal,
-        'data_venda'  => $request->data_venda,
+        'status'               => 'Vendido',
+        'vendedor_id'          => $request->vendedor_id,
+        'cliente_id'           => $request->cliente_id,
+        'valor_venda'          => $valorVenda,
+        'data_venda'           => $request->data_venda,
+        
+        // Novos campos financeiros no banco
+        'entrada'              => $valorEntrada,
+        'qtd_parcelas'         => $request->qtd_parcelas ?? 1,
+        'taxa_juros'           => $request->taxa_juros ?? 0,
+        'valor_parcela'        => $valorParcela,
+        'exibir_parcelamento'  => $request->has('exibir_parcelamento') ? 1 : 0,
     ]);
 
     return redirect()->route('veiculos.show', $id)
-                     ->with('success', 'Venda registrada com sucesso!');
+                     ->with('success', 'Venda registrada com sucesso no sistema Alcecar!');
 }
 
 

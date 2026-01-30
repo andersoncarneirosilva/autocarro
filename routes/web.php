@@ -279,7 +279,7 @@ Route::prefix('configuracoes')->group(function () {
 
     // --- MÓDULO: SOLICITAÇÃO ATPVe ---
     // Designer / Index da Solicitação
-    Route::get('/solicitacao', [ConfiguracoesController::class, 'indexAtpve'])->name('configuracoes.solicitacao.indexAtpve');
+    Route::get('/solicitacao', [ConfiguracoesController::class, 'indexAtpve'])->name('configuracoes.solicitacao');
     // Salvar o conteúdo do Designer
     Route::post('/solicitacao/salvar', [ConfiguracoesController::class, 'saveAtpve'])->name('configuracoes.solicitacao.save');
 });
@@ -319,7 +319,7 @@ Route::prefix('configuracoes')->group(function () {
     Route::put('/veiculos/{id}/update-modificacoes', [VeiculoController::class, 'updateModificacoes'])->name('veiculos.updateModificacoes');
     Route::put('/veiculos/{id}/update-opcionais', [VeiculoController::class, 'updateOpcionais'])->name('veiculos.updateOpcionais');
     Route::put('/veiculos/{id}/update-precos', [VeiculoController::class, 'updatePrecos'])->name('veiculos.updatePrecos');
-    Route::put('/veiculos/{id}/update-info-basica', [VeiculoController::class, 'updateInfoBasica'])->name('veiculos.updateInfoBasica');
+    Route::put('/veiculos/{id}/update-crv', [VeiculoController::class, 'updateCrv'])->name('veiculos.updateCrv');
 
 
     Route::get('/veiculos', [VeiculoController::class, 'index'])->name('veiculos.index');

@@ -6,7 +6,7 @@
 
 @include('veiculos._modals.editar-info-veiculo')
 
-@include('veiculos._modals.editar-info-basicas')
+@include('veiculos._modals.editar-info-registro')
 
 @include('veiculos._modals.editar-precos')
 
@@ -64,7 +64,91 @@ document.addEventListener('DOMContentLoaded', function () {
         </div>
     </div>
 
+<div class="row mb-3">
+    <div class="col-md-4">
+    <div class="card border-0 shadow-sm mb-0 h-100">
+        <div class="card-body">
+            <div class="d-flex align-items-center justify-content-between mb-2">
+                <h5 class="text-muted fw-bold mt-0 small text-uppercase">Valor de Venda</h5>
+                <i class="mdi mdi-currency-usd font-22 text-primary"></i>
+            </div>
+            
+            <div class="d-flex align-items-baseline mb-2">
+                <h3 class="my-0">R$ {{ number_format($veiculo->valor, 2, ',', '.') }}</h3>
+            </div>
 
+            @if($veiculo->exibir_parcelamento == '1' && $veiculo->valor_parcela > 0)
+                <div class="p-2 bg-primary-lighten rounded-pill border-primary border border-opacity-10 d-flex align-items-center justify-content-between px-3">
+                    <p class="m-0 text-primary font-12 fw-bold">
+                        <i class="mdi mdi-finance me-1"></i>
+                        {{ $veiculo->qtd_parcelas }}x de R$ {{ number_format($veiculo->valor_parcela, 2, ',', '.') }}
+                    </p>
+                    <button type="button" class="btn btn-sm btn-link text-primary p-0 text-decoration-none fw-bold font-12" data-bs-toggle="modal" data-bs-target="#modalEditarPrecos">
+                        <i class="mdi mdi-pencil me-1"></i>EDITAR VALOR
+                    </button>
+                </div>
+            @else
+                <div class="d-flex align-items-center justify-content-between mt-2 pt-1">
+                    <p class="text-muted font-12 mb-0 italic">Sem parcelamento ativo</p>
+                    <button type="button" class="btn btn-sm btn-link text-primary p-0 text-decoration-none fw-bold font-12" data-bs-toggle="modal" data-bs-target="#modalEditarPrecos">
+                        <i class="mdi mdi-pencil me-1"></i>EDITAR VALOR
+                    </button>
+                </div>
+            @endif
+        </div>
+    </div>
+</div>
+
+    <div class="col-md-4">
+        <div class="card border-0 shadow-sm mb-0 h-100">
+            <div class="card-body">
+                <div class="d-flex align-items-center justify-content-between mb-2">
+                    <h5 class="text-muted fw-bold mt-0 small text-uppercase">Valor de Oferta</h5>
+                    <i class="mdi mdi-tag-outline font-22 text-warning"></i>
+                </div>
+                <h3 class="my-0 text-warning">
+                    {{ $veiculo->valor_oferta > 0 ? 'R$ ' . number_format($veiculo->valor_oferta, 2, ',', '.') : '---' }}
+                </h3>
+                <div class="mt-2">
+                    @if($veiculo->valor_oferta > 0)
+                        <span class="badge bg-soft-danger text-danger px-2 py-1">
+                            <i class="mdi mdi-trending-down"></i> Econ. R$ {{ number_format($veiculo->valor - $veiculo->valor_oferta, 2, ',', '.') }}
+                        </span>
+                    @else
+                        <span class="text-muted font-12">Sem oferta ativa</span>
+                    @endif
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-4">
+        <div class="card border-0 shadow-sm mb-0 h-100">
+            <div class="card-body">
+                <div class="d-flex align-items-center justify-content-between mb-2">
+                    <h5 class="text-muted fw-bold mt-0 small text-uppercase">Tabela FIPE</h5>
+                    <i class="mdi mdi-calculator font-22 text-success"></i>
+                </div>
+                <h3 class="my-0 text-success" id="fipe-price">---</h3>
+                <div class="mt-2 text-truncate">
+                    <span id="fipe-comparison"></span>
+                    <small class="text-muted d-block" id="fipe-info">Carregando...</small>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+<style>
+    .bg-primary-lighten { background-color: rgba(114, 124, 245, 0.12); }
+    .bg-soft-danger { background-color: rgba(250, 92, 124, 0.12); }
+    .font-12 { font-size: 12px; }
+    .italic { font-style: italic; }
+    .nav-tabs .nav-link { color: #6c757d; border: none; padding: 10px 20px; font-weight: 500; }
+    .nav-tabs .nav-link.active { color: #727cf5; border-bottom: 2px solid #727cf5; }
+</style>
 
 <div class="row">
     <div class="col-12">
@@ -78,6 +162,12 @@ document.addEventListener('DOMContentLoaded', function () {
         <a href="#info-geral" data-bs-toggle="tab" aria-expanded="false" class="nav-link active">
             <i class="mdi mdi-car-info me-1"></i>
             <span class="d-none d-md-inline-block">Dados do Veículo</span>
+        </a>
+    </li>
+    <li class="nav-item">
+        <a href="#info-registro" data-bs-toggle="tab" aria-expanded="false" class="nav-link">
+            <i class="mdi mdi-car-cog me-1"></i>
+            <span class="d-none d-md-inline-block">Informações de Registro</span>
         </a>
     </li>
     <li class="nav-item">
@@ -119,6 +209,10 @@ document.addEventListener('DOMContentLoaded', function () {
                         @include('veiculos._tabs.tab-info-veiculo')
                     </div>
 
+                    <div class="tab-pane" id="info-registro">
+                        @include('veiculos._tabs.tab-info-registro')
+                    </div>
+
                     <div class="tab-pane" id="descricao">
                         @include('veiculos._tabs.tab-descricao')
                     </div>
@@ -141,105 +235,17 @@ document.addEventListener('DOMContentLoaded', function () {
 
                 </div>
             
-                        <div class="row">
-    <div class="col-md-4">
-    <div class="card widget-flat border-primary border">
-        <div class="card-body">
-            <div class="float-end">
-                <i class="mdi mdi-currency-usd widget-icon bg-primary-lighten text-primary"></i>
-            </div>
-            
-            <h5 class="text-muted fw-normal mt-0" title="Preço base de venda">Valor de Venda</h5>
-            <h3 class="mt-3 mb-2">R$ {{ number_format($veiculo->valor, 2, ',', '.') }}</h3>
-            
-            @if($veiculo->exibir_parcelamento == '1' && $veiculo->valor_parcela > 0)
-                <div class="bg-primary-lighten rounded p-2 mb-2 border border-primary border-opacity-10">
-                    <div class="d-flex align-items-center">
-                        <i class="mdi mdi-finance text-primary me-2 font-18"></i>
-                        <div>
-                            <p class="m-0 text-muted font-11 fw-bold text-uppercase">Entrada + Parcelas</p>
-                            <h5 class="m-0 text-primary font-14">
-                                {{ $veiculo->qtd_parcelas }}x de R$ {{ number_format($veiculo->valor_parcela, 2, ',', '.') }}
-                            </h5>
-                        </div>
-                    </div>
-                </div>
-            @else
-                <div style="height: 48px;" class="d-flex align-items-center">
-                    <p class="text-muted font-12 mb-0 italic">Sem parcelamento ativo</p>
-                </div>
-            @endif
-            <div class="d-flex justify-content-between align-items-center mt-2">
-                <p class="mb-0 text-muted">
-                    <span class="text-nowrap font-12">Preço de vitrine</span>
-                </p>
-                <button type="button" class="btn btn-link btn-sm text-primary p-0 text-decoration-none fw-bold font-12" data-bs-toggle="modal" data-bs-target="#modalEditarPrecos">
-                    <i class="mdi mdi-pencil"></i> EDITAR
-                </button>
-            </div>
-        </div>
-    </div>
-</div>
+                       
 
-<style>
-    .bg-primary-lighten { background-color: rgba(114, 124, 245, 0.1); }
-    .font-11 { font-size: 11px; }
-    .font-12 { font-size: 12px; }
-    .font-14 { font-size: 14px; }
-    .italic { font-style: italic; }
-</style>
 
-    <div class="col-md-4">
-        <div class="card widget-flat border-warning border">
-            <div class="card-body">
-                <div class="float-end">
-                    <i class="mdi mdi-tag-outline widget-icon bg-warning-lighten text-warning"></i>
-                </div>
-                <h5 class="text-muted fw-normal mt-0" title="Preço promocional">Valor de Oferta</h5>
-                <h3 class="mt-3 mb-2 text-warning">
-                    {{ $veiculo->valor_oferta > 0 ? 'R$ ' . number_format($veiculo->valor_oferta, 2, ',', '.') : '---' }}
-                </h3>
-                <p class="mb-0 text-muted">
-                    @if($veiculo->valor_oferta > 0)
-                        <span class="text-danger me-2"><i class="mdi mdi-trending-down"></i> Econ. R$ {{ number_format($veiculo->valor - $veiculo->valor_oferta, 2, ',', '.') }}</span>
-                    @else
-                        <span class="text-nowrap">Sem oferta ativa</span>
-                    @endif
-                </p>
-            </div>
-        </div>
-    </div>
 
-    <div class="col-md-4">
-    <div class="card widget-flat border-success border">
-        <div class="card-body">
-            <div class="float-end">
-                <i class="mdi mdi-calculator widget-icon bg-success-lighten text-success"></i>
-            </div>
-            <h5 class="text-muted fw-normal mt-0">Tabela FIPE</h5>
-            <h3 class="mt-3 mb-2 text-success" id="fipe-price">---</h3>
-            <p class="mb-0 text-muted">
-                <span id="fipe-comparison"></span>
-                <small class="d-block text-truncate" id="fipe-info">Carregando...</small>
-            </p>
-        </div>
-    </div>
-</div>
-</div>
-
-@if($dadosFipe)
-<div class="row">
-    <div class="col-12">
-        <div class="alert alert-light border-0 py-1 px-2 font-12 text-muted">
-            <i class="mdi mdi-information-outline"></i> 
-            <b>Referência FIPE:</b> {{ $dadosFipe['model'] }} ({{ $dadosFipe['codeFipe'] }}) - {{ $dadosFipe['referenceMonth'] }}
-        </div>
-    </div>
-</div>
-@endif
             </div> 
             
             </div> 
+
+            
+
+</div> </div>
                 <style>
     /* Define uma altura mínima para evitar que o card "encolha" demais */
     .tab-veiculo-container {
@@ -258,10 +264,6 @@ document.addEventListener('DOMContentLoaded', function () {
         to { opacity: 1; transform: translateY(0); }
     }
 </style>
-            
-
-</div> </div>
-
 
 <script>
 document.addEventListener('DOMContentLoaded', function() {

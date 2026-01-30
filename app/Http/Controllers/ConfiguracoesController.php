@@ -59,7 +59,7 @@ class ConfiguracoesController extends Controller
             );
 
             return redirect()->route('configuracoes.index')
-                ->with('success', 'Configuração salva com sucesso!');
+                ->with('success', 'Modelo atualizado com sucesso!');
 
         } catch (\Exception $e) {
             Log::error('Erro ao salvar configuração Alcecar:', ['error' => $e->getMessage()]);
@@ -105,6 +105,7 @@ class ConfiguracoesController extends Controller
 
     public function saveAtpve(Request $request)
     {
+        
         $user = Auth::user();
         $empresaId = $user->empresa_id ?? $user->id;
 
@@ -123,6 +124,7 @@ class ConfiguracoesController extends Controller
             ]
         );
 
-        return back()->with('success', 'Modelo de Solicitação ATPVe atualizado com sucesso!');
+        return redirect()->route('configuracoes.solicitacao')
+                ->with('success', 'Modelo atualizado com sucesso!');
     }
 }

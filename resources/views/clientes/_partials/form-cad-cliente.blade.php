@@ -1,42 +1,144 @@
 <script>
+    // Função para consulta de CEP (ViaCEP)
+    function pesquisacep(valor) {
+        var cep = valor.replace(/\D/g, '');
+        if (cep != "") {
+            // CORREÇÃO: Removida a flag 'B' inválida
+            var validacep = /^[0-9]{8}$/; 
+            
+            if(validacep.test(cep)) {
+                document.getElementById('rua').value = "...";
+                document.getElementById('bairro').value = "...";
+                document.getElementById('cidade').value = "...";
+                document.getElementById('uf').value = "...";
+
+                fetch(`https://viacep.com.br/ws/${cep}/json/`)
+                    .then(response => response.json())
+                    .then(dados => {
+                        if (!("erro" in dados)) {
+                            document.getElementById('rua').value = dados.logradouro.toUpperCase();
+                            document.getElementById('bairro').value = dados.bairro.toUpperCase();
+                            document.getElementById('cidade').value = dados.localidade.toUpperCase();
+                            document.getElementById('uf').value = dados.uf.toUpperCase();
+                            document.getElementById('numero').focus();
+                        } else {
+                            alert("CEP não encontrado.");
+                            limpa_formulário_cep();
+                        }
+                    })
+                    .catch(() => alert("Erro ao consultar o CEP."));
+            }
+        }
+    }
+
+    function limpa_formulário_cep() {
+        document.getElementById('rua').value = "";
+        document.getElementById('bairro').value = "";
+        document.getElementById('cidade').value = "";
+        document.getElementById('uf').value = "";
+    }
+
+    // Função para Máscara de Telefone
+    function handlePhone(event) {
+        let input = event.target;
+        input.value = phoneMask(input.value);
+    }
+
+    function phoneMask(value) {
+    if (!value) return "";
+    
+    // 1. Remove tudo o que não for número
+    value = value.replace(/\D/g, '');
+    
+    // 2. Limita a 11 dígitos (DDD + 9 dígitos)
+    if (value.length > 11) {
+        value = value.slice(0, 11);
+    }
+
+    // 3. Aplica a formatação dinamicamente
+    if (value.length > 10) {
+        // Formato Celular: (00) 00000-0000
+        value = value.replace(/^(\d{2})(\d{5})(\d{4})/, "($1) $2-$3");
+    } else if (value.length > 5) {
+        // Formato Fixo: (00) 0000-0000
+        value = value.replace(/^(\d{2})(\d{4})(\d{0,4})/, "($1) $2-$3");
+    } else if (value.length > 2) {
+        // Formato apenas com DDD: (00) 000...
+        value = value.replace(/^(\d{2})(\d{0,5})/, "($1) $2");
+    } else {
+        // Apenas os primeiros dígitos
+        value = value.replace(/^(\d*)/, "$1");
+    }
+    
+    return value;
+}
+
     document.addEventListener('DOMContentLoaded', function () {
+        // Máscara CPF
         document.getElementById('cpf').addEventListener('input', function (e) {
-            let value = e.target.value.replace(/\D/g, ''); // Remove caracteres não numéricos
-            if (value.length > 11) value = value.slice(0, 11); // Limita ao tamanho máximo do CPF
-            value = value.replace(/(\d{3})(\d)/, '$1.$2'); // Adiciona o primeiro ponto
-            value = value.replace(/(\d{3})(\d)/, '$1.$2'); // Adiciona o segundo ponto
-            value = value.replace(/(\d{3})(\d{1,2})$/, '$1-$2'); // Adiciona o hífen
+            let value = e.target.value.replace(/\D/g, '');
+            if (value.length > 11) value = value.slice(0, 11);
+            value = value.replace(/(\d{3})(\d)/, '$1.$2');
+            value = value.replace(/(\d{3})(\d)/, '$1.$2');
+            value = value.replace(/(\d{3})(\d{1,2})$/, '$1-$2');
             e.target.value = value;
         });
-    });
-</script>
-<script>
-    document.addEventListener('DOMContentLoaded', function () {
+
+        // Máscara CEP
         document.getElementById('cep').addEventListener('input', function (e) {
-            let value = e.target.value.replace(/\D/g, ''); // Remove caracteres não numéricos
-            if (value.length > 8) value = value.slice(0, 8); // Limita ao tamanho do CEP
-
-            // Adiciona o ponto e o hífen no formato 00.000-000
-            value = value.replace(/(\d{2})(\d)/, '$1.$2');
-            value = value.replace(/(\d{3})(\d{1,3})$/, '$1-$2');
-
+            let value = e.target.value.replace(/\D/g, '');
+            if (value.length > 8) value = value.slice(0, 8);
+            value = value.replace(/^(\d{5})(\d)/, '$1-$2');
             e.target.value = value;
         });
-    });
-</script>
-<script>
-    document.addEventListener('DOMContentLoaded', () => {
-        // Seleciona todos os campos de entrada no formulário
-        const campos = document.querySelectorAll('#nome_cliente');
 
-        // Adiciona um ouvinte de evento em cada campo
-        campos.forEach(campo => {
-            campo.addEventListener('input', (event) => {
-                // Força o valor para maiúsculas
-                event.target.value = event.target.value.toUpperCase();
-            });
+        // Forçar Maiúsculas
+        document.addEventListener('input', function (e) {
+            const idsParaMaiusculo = ['nome_cliente', 'rua', 'bairro', 'cidade', 'uf', 'complemento'];
+            if (idsParaMaiusculo.includes(e.target.id)) {
+                e.target.value = e.target.value.toUpperCase();
+            }
         });
+
+        // Validação no Submit (Ajustado para funcionar com o seu form)
+        // Certifique-se de que o <form> tenha id="form-cadastro" ou use o seletor correto
+        const form = document.querySelector('form'); 
+        if(form) {
+            form.addEventListener('submit', function (e) {
+                const cpfInput = document.getElementById('cpf').value;
+                if (!validarCPF(cpfInput)) {
+                    e.preventDefault();
+                    if (typeof Swal !== 'undefined') {
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'CPF Inválido!',
+                            text: 'O CPF informado não é válido.',
+                            timer: 5000,
+                            timerProgressBar: true,
+                        });
+                    } else {
+                        alert("CPF Inválido!");
+                    }
+                }
+            });
+        }
     });
+
+    function validarCPF(cpf) {
+        cpf = cpf.replace(/[^\d]+/g, '');
+        if (cpf.length !== 11 || /^(\d)\1+$/.test(cpf)) return false;
+        let soma = 0, resto;
+        for (let i = 1; i <= 9; i++) soma = soma + parseInt(cpf.substring(i-1, i)) * (11 - i);
+        resto = (soma * 10) % 11;
+        if ((resto == 10) || (resto == 11)) resto = 0;
+        if (resto != parseInt(cpf.substring(9, 10))) return false;
+        soma = 0;
+        for (let i = 1; i <= 10; i++) soma = soma + parseInt(cpf.substring(i-1, i)) * (12 - i);
+        resto = (soma * 10) % 11;
+        if ((resto == 10) || (resto == 11)) resto = 0;
+        if (resto != parseInt(cpf.substring(10, 11))) return false;
+        return true;
+    }
 </script>
 <div class="row">
     <div class="col">
@@ -151,62 +253,3 @@
     </div>
     
 </div>
-
-<script>
-    // Função para validar CPF
-    function validarCPF(cpf) {
-        // Remove caracteres não numéricos
-        cpf = cpf.replace(/[^\d]+/g, '');
-
-        // Verifica se o CPF tem 11 dígitos ou é uma sequência repetida
-        if (cpf.length !== 11 || /^(\d)\1+$/.test(cpf)) {
-            return false;
-        }
-
-        // Função para calcular os dígitos verificadores
-        function calcularDigito(base) {
-            let soma = 0;
-            for (let i = 0; i < base.length; i++) {
-                soma += base[i] * (base.length + 1 - i);
-            }
-            const resto = soma % 11;
-            return resto < 2 ? 0 : 11 - resto;
-        }
-
-        // Calcula o primeiro dígito verificador
-        const primeiroDigito = calcularDigito(cpf.slice(0, 9));
-
-        // Verifica o primeiro dígito
-        if (primeiroDigito !== parseInt(cpf[9], 10)) {
-            return false;
-        }
-
-        // Calcula o segundo dígito verificador
-        const segundoDigito = calcularDigito(cpf.slice(0, 10));
-
-        // Verifica o segundo dígito
-        return segundoDigito === parseInt(cpf[10], 10);
-    }
-
-    // Adiciona evento no envio do formulário
-    document.getElementById('form-cadastro').addEventListener('submit', function (e) {
-        e.preventDefault(); // Impede o envio do formulário para verificar antes
-        const cpfInput = document.getElementById('cpf');
-
-        if (validarCPF(cpfInput.value)) {
-            // CPF válido, aqui você pode prosseguir com o envio do formulário
-            //alert('CPF válido!');
-             e.target.submit(); // Envia o formulário caso o CPF seja válido
-        } else {
-            // Exibe o SweetAlert com erro por 5 segundos
-            Swal.fire({
-                icon: 'error',
-                title: 'CPF Inválido!',
-                text: 'O CPF informado não é válido.',
-                timer: 5000, // Exibe por 5 segundos
-                showConfirmButton: true, // Remove o botão de confirmação
-                timerProgressBar: true,
-            });
-        }
-    });
-</script>
