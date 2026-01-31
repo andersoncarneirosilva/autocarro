@@ -4,7 +4,7 @@
 
 {{-- Modais Unificados --}}
 @include('gastos._modals.cadastro-gasto')
-@include('gastos._modals.cadastro-multa')
+{{-- @include('gastos._modals.cadastro-multa') --}}
 
 @include('components.toast')
 

@@ -536,23 +536,12 @@
     <script src="{{ url('backend/js/app.min.js') }}"></script>
     <script src="{{ url('backend/vendor/bootstrap-datepicker/js/bootstrap-datepicker.min.js') }}"></script>
     <script src="{{ url('backend/vendor/bootstrap-datepicker/locales/bootstrap-datepicker.pt-BR.min.js') }}"></script>
-
-
     <script src="{{ url('backend/vendor/handlebars/handlebars.min.js') }}"></script>
     <script src="{{ url('backend/vendor/typeahead.js/typeahead.bundle.min.js') }}"></script>
-    <!-- Script do Select2 -->
     <script src="{{ url('backend/vendor/jquery-toast-plugin/jquery.toast.min.js') }}"></script>
-    <!-- Toastr Demo js -->
-    {{-- <script src="{{ url('backend/vendor/fullcalendar/index.global.min.js') }}"></script> --}}
     <script src="https://cdn.jsdelivr.net/npm/fullcalendar@5.11.0/main.min.js"></script>
-    <script src="{{ url('backend/js/calendar.js') }}"></script>
+    <script src="{{ url('backend/js_custom/tabela-fipe.js') }}"></script>
     <script src="https://cdn.socket.io/4.0.0/socket.io.min.js"></script>
-    {{-- <script src="{{ mix('js/app.js') }}"></script> --}}
-    
-    <!-- jstree js -->
-    @if(request()->is('perfil'))
-        <script src="{{ asset('backend/vendor/jstree/jstree.min.js') }}"></script>
-    @endif
 
     
 </body>

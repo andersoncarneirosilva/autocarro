@@ -1,121 +1,63 @@
-<div class="row mb-4">
-    <div class="col-md-3">
-        <div class="card border-left-primary shadow h-100 py-2">
-            <div class="card-body">
-                <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">Preço de Compra</div>
-                <div class="h5 mb-0 font-weight-bold text-gray-800">R$ {{ number_format($veiculo->valor_compra, 2, ',', '.') }}</div>
-            </div>
+<div class="alert {{ $veiculo->status == 'Vendido' ? 'alert-success border-success' : 'alert-info border-primary' }} shadow-sm mb-4" role="alert">
+    <div class="d-flex align-items-center">
+        <div class="avatar-sm me-3">
+            <span class="avatar-title bg-white rounded-circle">
+                <i class="mdi {{ $veiculo->status == 'Vendido' ? 'mdi-check-decagram text-success' : 'mdi-car-key text-primary' }} font-24"></i>
+            </span>
         </div>
-    </div>
-    <div class="col-md-3">
-        <div class="card border-left-info shadow h-100 py-2">
-            <div class="card-body">
-                <div class="text-xs font-weight-bold text-info text-uppercase mb-1">(+) Gastos de Preparação</div>
-                <div class="h5 mb-0 font-weight-bold text-gray-800">R$ {{ number_format($veiculo->gastos->sum('valor'), 2, ',', '.') }}</div>
-            </div>
-        </div>
-    </div>
-    <div class="col-md-3">
-        <div class="card border-left-warning shadow h-100 py-2">
-            <div class="card-body">
-                <div class="text-xs font-weight-bold text-warning text-uppercase mb-1">Custo Total Acumulado</div>
-                <div class="h5 mb-0 font-weight-bold text-gray-800">R$ {{ number_format($veiculo->valor_compra + $veiculo->gastos->sum('valor'), 2, ',', '.') }}</div>
-            </div>
-        </div>
-    </div>
-    <div class="col-md-3">
-        <div class="card border-left-success shadow h-100 py-2">
-            <div class="card-body">
-                <div class="text-xs font-weight-bold text-success text-uppercase mb-1">Margem Bruta Est.</div>
-                <div class="h5 mb-0 font-weight-bold text-gray-800">R$ {{ number_format($veiculo->valor - ($veiculo->valor_compra + $veiculo->gastos->sum('valor')), 2, ',', '.') }}</div>
-            </div>
-        </div>
-    </div>
-</div>
-
-<div class="card border-0 shadow-sm">
-    <div class="card-body">
-        <div class="row align-items-center">
-            <div class="col-md-12">
-                <h4 class="mt-0 mb-3">
-                    <i class="mdi mdi-Check-decagram text-success me-1"></i> Status da Unidade
-                </h4>
+        <div class="flex-grow-1">
+            <h5 class="alert-heading fw-bold mb-1">Status: {{ $veiculo->status }}</h5>
+            <p class="mb-0">
                 @if($veiculo->status == 'Vendido')
-                    <div class="alert alert-success border-0 bg-soft-success">
-                        <h4 class="alert-heading fw-bold">Veículo Vendido!</h4>
-                        <p class="mb-0">A negociação foi concluída e o veículo foi removido do estoque ativo.</p>
-                    </div>
+                    Negociação concluída com <strong>{{ $veiculo->cliente->nome ?? 'Cliente Final' }}</strong>.
                 @else
-                    <div class="p-2">
-                        <p class="text-muted">Este veículo encontra-se <strong>Disponível</strong> em seu estoque. Para registrar a saída e os dados financeiros, utilize o botão abaixo.</p>
-                        <button type="button" class="btn btn-success btn-lg" data-bs-toggle="modal" data-bs-target="#modalVenderVeiculo">
-                            <i class="mdi mdi-cart-check me-1"></i> Registrar Venda Agora
-                        </button>
-                    </div>
+                    Veículo disponível no estoque. Preço sugerido de venda: <strong>R$ {{ number_format($veiculo->valor, 2, ',', '.') }}</strong>.
                 @endif
-            </div>
+            </p>
         </div>
-
-        @if($veiculo->status == 'Vendido')
-            <hr class="my-4">
-            
-            <div class="row mb-4">
-                <div class="col-md-4">
-                    <p class="text-muted mb-1 small text-uppercase fw-bold">Cliente / Comprador</p>
-                    <h5 class="mt-0"><i class="mdi mdi-account-circle-outline me-1"></i> {{ $veiculo->cliente->nome ?? 'Não informado' }}</h5>
-                </div>
-                <div class="col-md-4">
-                    <p class="text-muted mb-1 small text-uppercase fw-bold">Vendedor Responsável</p>
-                    <h5 class="mt-0"><i class="mdi mdi-badge-account-horizontal-outline me-1"></i> {{ $veiculo->vendedor->name ?? 'Não informado' }}</h5>
-                </div>
-                <div class="col-md-4">
-                    <p class="text-muted mb-1 small text-uppercase fw-bold">Data da Transação</p>
-                    <h5 class="mt-0"><i class="mdi mdi-calendar-check me-1"></i> {{ \Carbon\Carbon::parse($veiculo->data_venda)->format('d/m/Y') }}</h5>
-                </div>
+        @if($veiculo->status != 'Vendido')
+            <div class="ms-auto">
+                <button type="button" class="btn btn-primary px-4" data-bs-toggle="modal" data-bs-target="#modalVenderVeiculo">
+                    <i class="mdi mdi-cart-check me-1"></i> Registrar Venda
+                </button>
             </div>
-
-            <div class="p-3 rounded bg-light border">
-                <div class="row text-center text-md-start">
-                    <div class="col-md-3 border-end">
-                        <p class="text-muted mb-1 small text-uppercase">Valor Total de Venda</p>
-                        <h4 class="mt-0 text-success fw-bold">R$ {{ number_format($veiculo->valor_venda, 2, ',', '.') }}</h4>
-                    </div>
-                    
-                    <div class="col-md-3 border-end">
-                        <p class="text-muted mb-1 small text-uppercase">Entrada</p>
-                        <h5 class="mt-0 text-dark">R$ {{ number_format($veiculo->entrada, 2, ',', '.') }}</h5>
-                    </div>
-
-                    <div class="col-md-3 border-end">
-                        <p class="text-muted mb-1 small text-uppercase">Condição</p>
-                        @if($veiculo->qtd_parcelas > 1)
-                            <h5 class="mt-0 text-primary">{{ $veiculo->qtd_parcelas }}x Parcelado</h5>
-                        @else
-                            <h5 class="mt-0 text-primary">Pagamento à Vista</h5>
-                        @endif
-                    </div>
-
-                    <div class="col-md-3">
-                        <p class="text-muted mb-1 small text-uppercase">Valor da Parcela</p>
-                        <h5 class="mt-0">
-                            @if($veiculo->qtd_parcelas > 1)
-                                <span class="badge bg-soft-primary text-primary px-2">R$ {{ number_format($veiculo->valor_parcela, 2, ',', '.') }}</span>
-                                <small class="d-block text-muted" style="font-size: 10px;">Taxa: {{ $veiculo->taxa_juros }}% a.m.</small>
-                            @else
-                                <span class="text-muted">N/A</span>
-                            @endif
-                        </h5>
-                    </div>
-                </div>
-            </div>
-
-            @if($veiculo->observacoes_venda)
-                <div class="mt-3">
-                    <p class="text-muted mb-1 small text-uppercase fw-bold">Observações da Venda</p>
-                    <p class="mb-0 text-dark italic">{{ $veiculo->observacoes_venda }}</p>
-                </div>
-            @endif
         @endif
     </div>
 </div>
 
+<div class="card border-0 shadow-sm mb-4">
+    <div class="card-body p-0">
+        <div class="row g-0 text-center">
+            <div class="col-6 col-lg-3 border-end p-4">
+                <p class="text-muted mb-2 small text-uppercase fw-bold">Preço de Compra</p>
+                <h3 class="mb-1 fw-bold text-dark">R$ {{ number_format($veiculo->valor_compra, 2, ',', '.') }}</h3>
+                <small class="text-danger"><i class="mdi mdi-arrow-down"></i> Saída inicial</small>
+            </div>
+
+            <div class="col-6 col-lg-3 border-end p-4">
+                <p class="text-muted mb-2 small text-uppercase fw-bold">Gastos de Preparação</p>
+                <h3 class="mb-1 fw-bold text-info">R$ {{ number_format($veiculo->gastos->sum('valor'), 2, ',', '.') }}</h3>
+                <small class="text-muted"><i class="mdi mdi-wrench"></i> Manutenção/Multas</small>
+            </div>
+
+            <div class="col-6 col-lg-3 border-end p-4 bg-soft-light">
+                <p class="text-muted mb-2 small text-uppercase fw-bold">Custo Total</p>
+                @php $custoTotal = $veiculo->valor_compra + $veiculo->gastos->sum('valor'); @endphp
+                <h3 class="mb-1 fw-bold text-dark">R$ {{ number_format($custoTotal, 2, ',', '.') }}</h3>
+                <small class="text-muted">Investimento no carro</small>
+            </div>
+
+            <div class="col-6 col-lg-3 p-4 {{ ($veiculo->valor - $custoTotal) < 0 ? 'bg-soft-danger' : '' }}">
+                <p class="text-muted mb-2 small text-uppercase fw-bold">Margem Bruta Est.</p>
+                @php $margem = $veiculo->valor - $custoTotal; @endphp
+                <h3 class="mb-1 fw-bold {{ $margem >= 0 ? 'text-success' : 'text-danger' }}">
+                    R$ {{ number_format($margem, 2, ',', '.') }}
+                </h3>
+                <small class="{{ $margem >= 0 ? 'text-success' : 'text-danger' }}">
+                    <i class="mdi {{ $margem >= 0 ? 'mdi-trending-up' : 'mdi-trending-down' }}"></i> 
+                    Baseado no valor de anúncio
+                </small>
+            </div>
+        </div>
+    </div>
+</div>

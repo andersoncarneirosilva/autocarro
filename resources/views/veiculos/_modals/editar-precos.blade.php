@@ -27,19 +27,19 @@
         </div>
     @endif
                     <div class="row">
-                        <div class="col-md-6 mb-3">
+                        <div class="col-md-12 mb-3">
                             <label class="form-label text-muted">Valor de Compra (R$)</label>
                             <input type="text" class="form-control form-control-lg money calc-trigger" name="valor_compra" id="valor_compra" 
                                 value="{{ old('valor_compra', number_format($veiculo->valor_compra, 2, ',', '.')) }}" required>
                         </div>
 
-                        <div class="col-md-6 mb-3">
+                        <div class="col-md-12 mb-3">
                             <label class="form-label text-muted">Valor de Venda (R$)</label>
                             <input type="text" class="form-control form-control-lg money calc-trigger" name="valor" id="valor" 
                                 value="{{ old('valor', number_format($veiculo->valor, 2, ',', '.')) }}" required>
                         </div>
 
-                        <div class="col-md-6 mb-3">
+                        <div class="col-md-12 mb-3">
                             <label class="form-label text-muted">Valor Oferta / À Vista (R$)</label>
                             <input type="text" class="form-control form-control-lg money" name="valor_oferta" id="valor_oferta" 
                                 value="{{ old('valor_oferta', number_format($veiculo->valor_oferta, 2, ',', '.')) }}" required>

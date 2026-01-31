@@ -132,14 +132,6 @@ document.addEventListener('input', function (e) {
     }
 });
 
-// Validação extra ao sair do campo de Ano (Blur)
-document.getElementById('edit-ano').addEventListener('blur', function (e) {
-    const valor = e.target.value;
-    if (valor.length > 0 && valor.length < 9) {
-        alert('Por favor, digite o ano no formato completo: 2020/2021');
-        setTimeout(() => e.target.focus(), 10);
-    }
-});
 </script>
 
 <script>
