@@ -43,6 +43,7 @@ class Veiculo extends Model
 
         // Dados da Venda (Novos Campos)
         'valor_venda',
+        'valor_compra',
         'data_venda',
         'empresa_id'
     ];
@@ -56,6 +57,7 @@ class Veiculo extends Model
         'data_venda'          => 'date',
         'valor'               => 'decimal:2',
         'valor_venda'         => 'decimal:2',
+        'valor_compra'         => 'decimal:2',
     ];
 
     public function cliente(): BelongsTo // Agora o PHP reconhecerá o tipo importado acima
@@ -75,6 +77,11 @@ class Veiculo extends Model
     public function user(): BelongsTo
     {
         return $this->belongsTo(User::class);
+    }
+
+    public function gastos()
+    {
+        return $this->hasMany(VeiculoGasto::class, 'veiculo_id');
     }
 
     public function documentos()

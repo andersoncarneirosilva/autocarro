@@ -16,6 +16,7 @@
         "laravel/tinker": "^2.10",
         "livepixel/mercado-pago": "^1.0",
         "livewire/livewire": "^3.5",
+        "maatwebsite/excel": "^3.1",
         "mckenziearts/laravel-notify": "^2.6",
         "mercadopago/dx-php": "3.0.8",
         "mikehaertl/php-pdftk": "^0.13.0",

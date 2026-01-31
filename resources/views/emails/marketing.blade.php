@@ -1,4 +1,4 @@
-<!-- 🚀 Chega de preencher documentos à mão! Conheça o Alcecar. -->
+<!-- 🚀 Chega de preencher documentos à mão! Conheça o Alcecar -->
 
 <!DOCTYPE html>
 <html>
@@ -25,17 +25,19 @@
         <div class="content">
             <p>Olá,</p>
             <p>Você já parou para calcular quanto tempo sua equipe perde digitando dados de veículos, Renavam, Chassi e Placa para gerar uma simples procuração?</p>
-            
+
             <p>O <strong>Alcecar</strong> chegou para mudar essa realidade. Nós não somos apenas um sistema de gestão; somos o seu novo assistente inteligente.</p>
 
             <div class="feature-box">
                 <h3 style="margin-top: 0;">✨ O que fazemos por você:</h3>
                 <ul style="padding-left: 20px;">
-                    <li><strong>Extração via PDF:</strong> Envie o documento do veículo e o sistema cadastra tudo automaticamente em segundos.</li>
-                    <li><strong>Procurações Instantâneas:</strong> Gere documentos e solicitações de ATPVe sem erros de digitação.</li>
-                    <li><strong>Gestão de Estoque:</strong> Controle total de veículos ativos, vendidos e arquivados.</li>
-                    <li><strong>Monitoramento de Multas:</strong> Tenha o controle das infrações da sua frota em um só lugar.</li>
-                </ul>
+    <li><strong>Extração via PDF:</strong> Envie o documento do veículo e o sistema cadastra tudo automaticamente em segundos.</li>
+    <li><strong>Procurações Instantâneas:</strong> Gere documentos personalizados com os dados da sua revenda e do cliente em um clique.</li>
+    <li><strong>Solicitações ATPVe:</strong> Preencha intenções de venda com rapidez e gere o documento pronto para assinatura.</li>
+    <li><strong>Comunicação de Venda:</strong> Formalize a transferência de responsabilidade sobre o veículo de forma prática e segura.</li>
+    <li><strong>Gestão de Estoque:</strong> Controle total de veículos ativos, vendidos e arquivados com histórico detalhado.</li>
+    <li><strong>Monitoramento de Multas:</strong> Gerencie infrações, vencimentos e valores da sua frota em um painel centralizado.</li>
+</ul>
             </div>
 
             <p><strong>Menos burocracia, mais vendas.</strong> Deixe o trabalho repetitivo com a gente e foque no que realmente importa: fechar negócios.</p>

@@ -36,6 +36,7 @@ use App\Http\Controllers\ModeloProcuracaoController;
 use App\Http\Controllers\PartiularController;
 use App\Http\Controllers\MultaController;
 use App\Http\Controllers\SolicitacaoController;
+use App\Http\Controllers\VeiculoGastoController;
 
 use Illuminate\Support\Facades\Route;
 use Livewire\Livewire;
@@ -45,56 +46,26 @@ use App\Models\Message;
 use App\Events\NewMessage;
 use Illuminate\Support\Facades\Broadcast;
 use Illuminate\Support\Facades\Mail;
-
-Route::get('/teste-email', function () {
-    try {
-        // Força a configuração em tempo real para garantir que não é cache
-        config(['mail.mailers.smtp.host' => 'smtp.zoho.com']);
-        config(['mail.mailers.smtp.port' => 587]);
-        config(['mail.mailers.smtp.encryption' => 'tls']);
-        config(['mail.mailers.smtp.username' => 'suporte@alcecar.com.br']);
-        config(['mail.mailers.smtp.password' => '@Sup70p34C']);
-
-        Mail::raw('Teste Real Alcecar ' . now(), function ($message) {
-            $message->from('suporte@alcecar.com.br', 'Alcecar')
-                    ->to('andersonqipoa@gmail.com')
-                    ->subject('Teste de Conexão Direta');
-        });
-
-        return "O Laravel diz que enviou. Verifique o Spam e o painel do Zoho.";
-    } catch (\Exception $e) {
-        // Se cair aqui, o log VAI registrar
-        Log::error("ERRO NO TESTE DE EMAIL: " . $e->getMessage());
-        return "Erro capturado: " . $e->getMessage();
-    }
-});
-
-Route::get('/teste-final', function () {
-    // Força o SMTP igual na rota que funciona
-    config(['mail.mailers.smtp.host' => 'smtp.zoho.com']);
-    config(['mail.mailers.smtp.port' => 587]);
-    config(['mail.mailers.smtp.encryption' => 'tls']);
-    config(['mail.mailers.smtp.username' => 'suporte@alcecar.com.br']);
-    config(['mail.mailers.smtp.password' => '@Sup70p34C']);
-
-    $url = "https://alcecar.com.br/reset-password/teste";
-    
-    // O segredo está aqui: se a classe usar "ShouldQueue", ela ignora o config acima e vai pro Redis
-    Mail::to('andersonqipoa@gmail.com')->send(new \App\Mail\CustomResetPasswordMail($url));
-    
-    return "Se o config forçado resolveu, o problema é 100% cache no seu .env";
-});
+use App\Models\Infracao;
 
 Route::middleware(['auth', 'trial'])->group(function () {
 
     Broadcast::routes(['middleware' => ['auth:sanctum']]);
 
-    Route::get('/particulares/create', [ParticularController::class, 'create'])->name('particulares.create');
-    Route::post('/particulares/store', [ParticularController::class, 'store'])->name('particulares.store');
-    Route::get('/particulares/dashboard', [ParticularController::class, 'index'])->name('particulares.index');
-    Route::delete('/particulares/destroy/{id}', [ParticularController::class, 'destroy'])->name('particulares.destroy');
+    // routes/web.php
+Route::get('/consultar-infracao/{codigo}', function ($codigo) {
+    // Tenta encontrar o código exatamente como digitado
+    // Ou tenta encontrar removendo qualquer hífen que o usuário tenha esquecido
+    $infracao = App\Models\Infracao::where('codigo', $codigo)
+        ->orWhere('codigo', str_replace('-', '', $codigo)) 
+        ->first();
 
-    // Listagem de todas as revendas
+    if (!$infracao) return response()->json(null, 404);
+
+    return response()->json($infracao);
+});
+
+    Route::get('/gastos', [VeiculoGastoController::class, 'index'])->name('gastos.index');
 
 // routes/web.php
 Route::post('/chat/mark-as-read', [ChatController::class, 'markAsRead']);
@@ -323,6 +294,14 @@ Route::prefix('configuracoes')->group(function () {
     Route::put('/veiculos/{id}/update-precos', [VeiculoController::class, 'updatePrecos'])->name('veiculos.updatePrecos');
     Route::put('/veiculos/{id}/update-crv', [VeiculoController::class, 'updateCrv'])->name('veiculos.updateCrv');
 
+    // Rota para salvar o gasto
+    Route::post('/veiculos/gastos', [VeiculoGastoController::class, 'store'])->name('veiculos.gastos.store');
+    
+    // Rota rápida para marcar como pago/não pago
+    Route::patch('/veiculos/gastos/{id}/alternar-pagamento', [VeiculoGastoController::class, 'alternarPagamento'])->name('veiculos.gastos.alternar');
+    
+    // Rota para deletar
+    Route::delete('/veiculos/gastos/{id}', [VeiculoGastoController::class, 'destroy'])->name('veiculos.gastos.destroy');
 
     Route::get('/veiculos', [VeiculoController::class, 'index'])->name('veiculos.index');
     Route::get('/veiculos/{id}', [VeiculoController::class, 'show'])->name('veiculos.show');
@@ -340,16 +319,8 @@ Route::prefix('configuracoes')->group(function () {
     });
 
 
-    Route::patch('/multas/{id}/pagar', [MultaController::class, 'marcarComoPago'])->name('multas.pagar');
-    // Rota Resource (Index, Create, Store, Show, Edit, Update, Destroy)
-    Route::resource('multas', MultaController::class);
-
-    // Rota específica para atualização de status (Pendente/Pago/Recurso)
-    Route::patch('multas/{id}/status', [MultaController::class, 'updateStatus'])->name('multas.updateStatus');
-
     Route::post('/veiculos/{id}/vender', [VeiculoController::class, 'vender'])->name('veiculos.vender');
-    // Rota para listar multas de um veículo específico (útil para a aba do veículo)
-    Route::get('veiculos/{veiculo}/multas', [MultaController::class, 'porVeiculo'])->name('multas.veiculo');
+
 
 });
 

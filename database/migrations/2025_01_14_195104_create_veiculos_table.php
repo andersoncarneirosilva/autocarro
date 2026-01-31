@@ -46,7 +46,9 @@ return new class extends Migration
         $table->string('portas')->nullable();
         $table->string('estado')->nullable();
         $table->string('especiais')->nullable();
+
         $table->decimal('valor', 15, 2)->nullable();
+        $table->decimal('valor_compra', 15, 2)->nullable();
         $table->decimal('valor_oferta', 15, 2)->nullable();
         $table->decimal('entrada', 15, 2)->nullable();
         $table->integer('qtd_parcelas')->nullable()->default(1);

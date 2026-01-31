@@ -1,3 +1,38 @@
+<div class="row mb-4">
+    <div class="col-md-3">
+        <div class="card border-left-primary shadow h-100 py-2">
+            <div class="card-body">
+                <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">Preço de Compra</div>
+                <div class="h5 mb-0 font-weight-bold text-gray-800">R$ {{ number_format($veiculo->valor_compra, 2, ',', '.') }}</div>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-3">
+        <div class="card border-left-info shadow h-100 py-2">
+            <div class="card-body">
+                <div class="text-xs font-weight-bold text-info text-uppercase mb-1">(+) Gastos de Preparação</div>
+                <div class="h5 mb-0 font-weight-bold text-gray-800">R$ {{ number_format($veiculo->gastos->sum('valor'), 2, ',', '.') }}</div>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-3">
+        <div class="card border-left-warning shadow h-100 py-2">
+            <div class="card-body">
+                <div class="text-xs font-weight-bold text-warning text-uppercase mb-1">Custo Total Acumulado</div>
+                <div class="h5 mb-0 font-weight-bold text-gray-800">R$ {{ number_format($veiculo->valor_compra + $veiculo->gastos->sum('valor'), 2, ',', '.') }}</div>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-3">
+        <div class="card border-left-success shadow h-100 py-2">
+            <div class="card-body">
+                <div class="text-xs font-weight-bold text-success text-uppercase mb-1">Margem Bruta Est.</div>
+                <div class="h5 mb-0 font-weight-bold text-gray-800">R$ {{ number_format($veiculo->valor - ($veiculo->valor_compra + $veiculo->gastos->sum('valor')), 2, ',', '.') }}</div>
+            </div>
+        </div>
+    </div>
+</div>
+
 <div class="card border-0 shadow-sm">
     <div class="card-body">
         <div class="row align-items-center">
@@ -83,3 +118,4 @@
         @endif
     </div>
 </div>
+

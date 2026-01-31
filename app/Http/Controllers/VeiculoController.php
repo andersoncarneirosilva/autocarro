@@ -8,7 +8,6 @@ use App\Models\Cliente;
 use App\Models\ModeloProcuracao;
 use App\Models\Outorgado;
 use App\Models\User;
-use App\Models\Multa;
 use App\Models\Veiculo;
 use Carbon\Carbon;
 use Maatwebsite\Excel\Facades\Excel;
@@ -723,9 +722,11 @@ public function desarquivar($id)
     $empresaId = $user->empresa_id ?? $user->id;
     
     // 1. Buscamos o veículo filtrando pela EMPRESA
-    $veiculo = $this->model->with('documentos')
-        ->where('empresa_id', $empresaId)
-        ->find($id);
+    // No seu Controller, dentro do método show:
+
+$veiculo = $this->model->with(['documentos', 'gastos']) // Adicionado 'gastos' aqui
+    ->where('empresa_id', $empresaId)
+    ->find($id);
 
     if (!$veiculo) {
         return redirect()->route('veiculos.index')->with('error', 'Veículo não encontrado.');
@@ -742,10 +743,10 @@ public function desarquivar($id)
         ->whereIn('nivel_acesso', ['Vendedor', 'Administrador'])
         ->orderBy('name')
         ->get();
+    
 
     // 4. Outros dados da Empresa/Veículo
     $outorgados = Outorgado::where('empresa_id', $empresaId)->get();
-    $multas = Multa::where('veiculo_id', $id)->get();
     $dadosFipe = null; 
 
     return view('veiculos.show', compact(
@@ -753,8 +754,7 @@ public function desarquivar($id)
         'outorgados', 
         'clientes', 
         'vendedores', 
-        'dadosFipe', 
-        'multas'
+        'dadosFipe'
     ));
 }
 
@@ -958,6 +958,7 @@ public function updatePrecos(Request $request, $id)
 
     $input = $request->all();
     $input['valor'] = $limparMoeda($request->valor);
+    $input['valor_compra'] = $limparMoeda($request->valor_compra);
     $input['valor_oferta'] = $limparMoeda($request->valor_oferta);
     $input['valor_parcela'] = $limparMoeda($request->valor_parcela);
     $input['exibir_parcelamento'] = $request->has('exibir_parcelamento') ? 1 : 0;

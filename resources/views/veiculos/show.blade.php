@@ -24,30 +24,7 @@
 
 @include('veiculos._modals.vender-veiculo')
 
-{{-- Toasts de sessão --}}
-@if (session('success') || session('error'))
-<script>
-document.addEventListener('DOMContentLoaded', function () {
-    const Toast = Swal.mixin({
-        toast: true,
-        position: 'top-end',
-        showConfirmButton: false,
-        timer: 4000,
-        timerProgressBar: true,
-        background: '#fff',
-        color: '#313a46',
-    });
-
-    @if (session('success'))
-        Toast.fire({ icon: 'success', title: '{{ session('success') }}' });
-    @endif
-
-    @if (session('error'))
-        Toast.fire({ icon: 'error', title: '{{ session('error') }}' });
-    @endif
-});
-</script>
-@endif
+@include('components.toast')
 
 <div class="row">
         <div class="col-12">
@@ -64,42 +41,58 @@ document.addEventListener('DOMContentLoaded', function () {
         </div>
     </div>
 
-<div class="row mb-3">
-    <div class="col-md-4">
-    <div class="card border-0 shadow-sm mb-0 h-100">
-        <div class="card-body">
-            <div class="d-flex align-items-center justify-content-between mb-2">
-                <h5 class="text-muted fw-bold mt-0 small text-uppercase">Valor de Venda</h5>
-                <i class="mdi mdi-currency-usd font-22 text-primary"></i>
-            </div>
-            
-            <div class="d-flex align-items-baseline mb-2">
-                <h3 class="my-0">R$ {{ number_format($veiculo->valor, 2, ',', '.') }}</h3>
-            </div>
 
-            @if($veiculo->exibir_parcelamento == '1' && $veiculo->valor_parcela > 0)
-                <div class="p-2 bg-primary-lighten rounded-pill border-primary border border-opacity-10 d-flex align-items-center justify-content-between px-3">
-                    <p class="m-0 text-primary font-12 fw-bold">
-                        <i class="mdi mdi-finance me-1"></i>
-                        {{ $veiculo->qtd_parcelas }}x de R$ {{ number_format($veiculo->valor_parcela, 2, ',', '.') }}
-                    </p>
-                    <button type="button" class="btn btn-sm btn-link text-primary p-0 text-decoration-none fw-bold font-12" data-bs-toggle="modal" data-bs-target="#modalEditarPrecos">
-                        <i class="mdi mdi-pencil me-1"></i>EDITAR VALOR
-                    </button>
+<div class="row mb-3">
+    <div class="col-md-3">
+        <div class="card border-0 shadow-sm mb-0 h-100">
+            <div class="card-body">
+                <div class="d-flex align-items-center justify-content-between mb-2">
+                    <h5 class="text-muted fw-bold mt-0 small text-uppercase">Valor de Compra</h5>
+                    <i class="mdi mdi-currency-usd font-22 text-primary"></i>
                 </div>
-            @else
-                <div class="d-flex align-items-center justify-content-between mt-2 pt-1">
-                    <p class="text-muted font-12 mb-0 italic">Sem parcelamento ativo</p>
-                    <button type="button" class="btn btn-sm btn-link text-primary p-0 text-decoration-none fw-bold font-12" data-bs-toggle="modal" data-bs-target="#modalEditarPrecos">
-                        <i class="mdi mdi-pencil me-1"></i>EDITAR VALOR
-                    </button>
+                
+                <div class="d-flex align-items-baseline mb-2">
+                    <h3 class="my-0">R$ {{ number_format($veiculo->valor_compra, 2, ',', '.') }}</h3>
                 </div>
-            @endif
+            </div>
         </div>
     </div>
-</div>
 
-    <div class="col-md-4">
+    <div class="col-md-3">
+        <div class="card border-0 shadow-sm mb-0 h-100">
+            <div class="card-body">
+                <div class="d-flex align-items-center justify-content-between mb-2">
+                    <h5 class="text-muted fw-bold mt-0 small text-uppercase">Valor de Venda</h5>
+                    <i class="mdi mdi-currency-usd font-22 text-primary"></i>
+                </div>
+                
+                <div class="d-flex align-items-baseline mb-2">
+                    <h3 class="my-0">R$ {{ number_format($veiculo->valor, 2, ',', '.') }}</h3>
+                </div>
+
+                @if($veiculo->exibir_parcelamento == '1' && $veiculo->valor_parcela > 0)
+                    <div class="p-2 bg-primary-lighten rounded-pill border-primary border border-opacity-10 d-flex align-items-center justify-content-between px-3">
+                        <p class="m-0 text-primary font-12 fw-bold">
+                            <i class="mdi mdi-finance me-1"></i>
+                            {{ $veiculo->qtd_parcelas }}x de R$ {{ number_format($veiculo->valor_parcela, 2, ',', '.') }}
+                        </p>
+                        <button type="button" class="btn btn-sm btn-link text-primary p-0 text-decoration-none fw-bold font-12" data-bs-toggle="modal" data-bs-target="#modalEditarPrecos">
+                            <i class="mdi mdi-pencil me-1"></i>EDITAR VALOR
+                        </button>
+                    </div>
+                @else
+                    <div class="d-flex align-items-center justify-content-between mt-2 pt-1">
+                        <p class="text-muted font-12 mb-0 italic">Sem parcelamento ativo</p>
+                        <button type="button" class="btn btn-sm btn-link text-primary p-0 text-decoration-none fw-bold font-12" data-bs-toggle="modal" data-bs-target="#modalEditarPrecos">
+                            <i class="mdi mdi-pencil me-1"></i>EDITAR VALOR
+                        </button>
+                    </div>
+                @endif
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-3">
         <div class="card border-0 shadow-sm mb-0 h-100">
             <div class="card-body">
                 <div class="d-flex align-items-center justify-content-between mb-2">
@@ -122,7 +115,7 @@ document.addEventListener('DOMContentLoaded', function () {
         </div>
     </div>
 
-    <div class="col-md-4">
+    <div class="col-md-3">
         <div class="card border-0 shadow-sm mb-0 h-100">
             <div class="card-body">
                 <div class="d-flex align-items-center justify-content-between mb-2">
@@ -189,9 +182,9 @@ document.addEventListener('DOMContentLoaded', function () {
         </a>
     </li>
     <li class="nav-item">
-        <a href="#multas" data-bs-toggle="tab" aria-expanded="false" class="nav-link">
-            <i class="mdi mdi-file-document-outline me-1"></i>
-            <span class="d-none d-md-inline-block">Multas</span>
+        <a href="#gastos" data-bs-toggle="tab" aria-expanded="false" class="nav-link">
+            <i class="mdi mdi-wrench-outline me-1"></i>
+            <span class="d-none d-md-inline-block">Gastos</span>
         </a>
     </li>
     <li class="nav-item">
@@ -225,8 +218,8 @@ document.addEventListener('DOMContentLoaded', function () {
                         @include('veiculos._tabs.tab-documentos')
                     </div>
 
-                    <div class="tab-pane" id="multas">
-                        @include('veiculos._tabs.tab-multas')
+                    <div class="tab-pane" id="gastos">
+                        @include('veiculos._tabs.tab-gastos')
                     </div>
 
                     <div class="tab-pane" id="venda">

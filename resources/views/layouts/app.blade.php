@@ -19,6 +19,7 @@
     <link href="{{ url('backend/vendor/select2/css/select2.min.css') }}" rel="stylesheet" type="text/css" />
     <link rel="stylesheet" href="{{ url('backend/vendor/daterangepicker/daterangepicker.css') }}">
 
+    <link rel="stylesheet" href="{{ url('backend/css_custom/editor.css') }}">
 
     <link rel="stylesheet"
         href="{{ url('backend/vendor/admin-resources/jquery.vectormap/jquery-jvectormap-1.2.2.css') }}">

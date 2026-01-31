@@ -1,0 +1,117 @@
+
+
+    .ck-content hr.linha-tecnica {
+    border: none !important;
+    border-top: 1px solid #000 !important;
+    height: 0 !important;
+    margin: 20px 0 !important;
+    opacity: 1 !important;
+    background: none !important;
+}
+
+    /* Estilo para a linha de assinatura (tabela de 1px) */
+    .ck-content table td[style*="background-color: #000"] {
+        background-color: #000 !important;
+        height: 1px !important;
+        padding: 0 !important;
+        border: none !important;
+    }
+    
+    /* Remove bordas de auxílio do editor para esta tabela */
+    .ck-content table[style*="width: 60%"] {
+        border: none !important;
+    }
+
+
+    /* Estilo geral para tabelas de conteúdo */
+   table {
+        border-collapse: collapse;
+        /* Remova ou comente a linha width: 100% se quiser que o 
+           tamanho definido no JS (90%) seja respeitado fielmente */
+    }
+
+
+
+
+    /* Área cinza de fundo do editor */
+    .ck-editor__main {
+    background-color: #f0f2f5 !important;
+    padding: 40px 0 !important;
+    display: flex;
+    justify-content: center;
+}
+
+    /* Simulação da Folha A4 branca */
+    .ck-editor__editable_inline {
+    min-height: 297mm !important; 
+    width: 210mm !important; /* Largura fixa para parecer papel */
+    margin: 0 auto !important;
+    padding: 2.5cm !important; 
+    background-color: white !important;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.15) !important;
+    border: none !important;
+
+    /* A MÁGICA: Cria uma linha cinza a cada 297mm (altura do A4) */
+    background-image: linear-gradient(to bottom, transparent 296mm, #ced4da 296mm, #ced4da 297mm) !important;
+    background-size: 100% 297mm !important;
+    background-repeat: repeat-y !important;
+}
+
+    .ck-editor__top {
+        position: sticky;
+        top: 70px; /* Ajuste conforme a altura do seu header */
+        z-index: 100;
+    }
+
+    /* Estiliza o placeholder do CKEditor */
+    .ck.ck-editor__editable_inline[data-placeholder]::before {
+        color: #adb5bd !important; /* Cinza suave */
+        font-style: italic !important;
+        font-weight: 400 !important;
+    }
+
+    code { cursor: pointer; transition: 0.2s; }
+    code:hover { background-color: #e9ecef; transform: scale(1.05); display: inline-block; }
+
+
+    /* Estilo para a linha de assinatura no Alcecar */
+    hr {
+        opacity: 1 !important;
+        margin: 0 auto !important;
+    }
+
+
+    /* Limpa qualquer estilo de linha que possa estar vindo de fora */
+    .ck-content div[style*="background-color: #000"] {
+        display: block !important;
+        border: none !important;
+        box-shadow: none !important;
+    }
+
+
+    /* Garante que bordas de parágrafos dentro do editor sejam linhas simples de 1px */
+    .ck-content p[style*="border-bottom"] {
+        border-bottom: 10px solid #000 !important;
+        display: inline-block !important;
+        line-height: 0 !important;
+    }
+
+
+
+    .ck-content p[style*="border-top"] {
+    border-top-width: 1px !important;
+    height: 0 !important;
+    line-height: 0 !important;
+    padding: 0 !important;
+    margin: 20px 0 !important;
+}
+
+
+    /* Remove qualquer padding extra que possa afastar a linha da margem */
+    .ck-content p {
+        margin-bottom: 0;
+    }
+
+    #edit_conteudo {
+    display: none;
+}

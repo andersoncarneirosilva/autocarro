@@ -4,44 +4,7 @@
 
 @section('content')
 
-<style>
-#edit_conteudo {
-    display: none;
-}
-</style>
-
-{{-- Toasts de sessão --}}
-@if (session('success') || session('error'))
-<script>
-    document.addEventListener('DOMContentLoaded', function () {
-        const Toast = Swal.mixin({
-            toast: true,
-            position: 'top-end',
-            showConfirmButton: false,
-            timer: 4000,
-            timerProgressBar: true,
-            didOpen: (toast) => {
-                toast.addEventListener('mouseenter', Swal.stopTimer)
-                toast.addEventListener('mouseleave', Swal.resumeTimer)
-            }
-        });
-
-        @if (session('success'))
-            Toast.fire({ 
-                icon: 'success', 
-                title: '{{ session('success') }}' 
-            });
-        @endif
-
-        @if (session('error'))
-            Toast.fire({ 
-                icon: 'error', 
-                title: '{{ session('error') }}' 
-            });
-        @endif
-    });
-</script>
-@endif
+@include('components.toast')
 
 <div class="row">
     <div class="col-12">
@@ -49,7 +12,7 @@
             <div class="page-title-right">
                 <ol class="breadcrumb m-0">
                     <li class="breadcrumb-item"><a href="{{ route('dashboard.index') }}">Dashboard</a></li>
-                    <li class="breadcrumb-item active">Designer de Solicitação ATPVe</li>
+                    <li class="breadcrumb-item active">Modelo de Solicitação ATPVe</li>
                 </ol>
             </div>
             <h3 class="page-title"><i class="mdi mdi-file-document-edit-outline me-2"></i>Modelo de Solicitação ATPVe</h3>
@@ -204,18 +167,6 @@
         </div>
     </div>
 </form>
-
-{{-- Estilos e Scripts do CKEditor permanecem os mesmos que você já usa no Designer de Procuração --}}
-<style>
-    .ck-editor__main { background-color: #f0f2f5 !important; padding: 40px 10px !important; min-height: 800px; }
-    .ck-editor__editable_inline { 
-        min-height: 1000px !important; width: 100% !important; max-width: 800px !important; 
-        margin: 0 auto !important; padding: 2.5cm !important; background-color: white !important; 
-        box-shadow: 0 4px 20px rgba(0,0,0,0.15) !important; border: none !important; 
-    }
-    code { cursor: pointer; transition: 0.2s; }
-    code:hover { background-color: #e9ecef; transform: scale(1.05); display: inline-block; }
-</style>
 
 
 <script>

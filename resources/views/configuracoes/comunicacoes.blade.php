@@ -4,39 +4,7 @@
 
 @section('content')
 
-
-{{-- Toasts de sessão --}}
-@if (session('success') || session('error'))
-<script>
-    document.addEventListener('DOMContentLoaded', function () {
-        const Toast = Swal.mixin({
-            toast: true,
-            position: 'top-end',
-            showConfirmButton: false,
-            timer: 4000,
-            timerProgressBar: true,
-            didOpen: (toast) => {
-                toast.addEventListener('mouseenter', Swal.stopTimer)
-                toast.addEventListener('mouseleave', Swal.resumeTimer)
-            }
-        });
-
-        @if (session('success'))
-            Toast.fire({ 
-                icon: 'success', 
-                title: '{{ session('success') }}' 
-            });
-        @endif
-
-        @if (session('error'))
-            Toast.fire({ 
-                icon: 'error', 
-                title: '{{ session('error') }}' 
-            });
-        @endif
-    });
-</script>
-@endif
+@include('components.toast')
 
 <div class="row">
     <div class="col-12">
@@ -44,10 +12,10 @@
             <div class="page-title-right">
                 <ol class="breadcrumb m-0">
                     <li class="breadcrumb-item"><a href="{{ route('dashboard.index') }}">Dashboard</a></li>
-                    <li class="breadcrumb-item active">Designer de Procuração</li>
+                    <li class="breadcrumb-item active">Comunicação de Venda</li>
                 </ol>
             </div>
-            <h3 class="page-title"><i class="mdi mdi-file-document-edit-outline me-2"></i>Modelo de Procuração</h3>
+            <h3 class="page-title"><i class="mdi mdi-file-document-edit-outline me-2"></i>Modelo de Comunicação de Venda</h3>
             @if(empty($modeloComunicacao->id))
     <div class="alert alert-danger border-0 shadow-sm mb-3">
         <i class="mdi mdi-information-outline me-1"></i>
@@ -221,118 +189,6 @@
 </form>
 
 
-<style>
-    .ck-content hr.linha-tecnica {
-    border: none !important;
-    border-top: 1px solid #000 !important;
-    height: 0 !important;
-    margin: 20px 0 !important;
-    opacity: 1 !important;
-    background: none !important;
-}
-
-    /* Estilo para a linha de assinatura (tabela de 1px) */
-    .ck-content table td[style*="background-color: #000"] {
-        background-color: #000 !important;
-        height: 1px !important;
-        padding: 0 !important;
-        border: none !important;
-    }
-    
-    /* Remove bordas de auxílio do editor para esta tabela */
-    .ck-content table[style*="width: 60%"] {
-        border: none !important;
-    }
-</style>
-<style>
-    /* Estilo geral para tabelas de conteúdo */
-   table {
-        border-collapse: collapse;
-        /* Remova ou comente a linha width: 100% se quiser que o 
-           tamanho definido no JS (90%) seja respeitado fielmente */
-    }
-
-    /* Estilo para a simulação da folha no Alcecar */
-    .ck-editor__editable_inline {
-        /* ... seus estilos anteriores ... */
-        padding: 2.5cm !important; 
-    }
-</style>
-<style>
-    /* Área cinza de fundo do editor */
-    .ck-editor__main {
-        background-color: #f0f2f5 !important;
-        padding: 40px 10px !important;
-        min-height: 800px;
-    }
-
-    /* Simulação da Folha A4 branca */
-    .ck-editor__editable_inline {
-        min-height: 1000px !important; 
-        width: 100% !important;
-        max-width: 800px !important;
-        margin: 0 auto !important;
-        padding: 2.5cm !important; 
-        background-color: white !important;
-        box-shadow: 0 4px 20px rgba(0,0,0,0.15) !important;
-        border: none !important;
-    }
-
-    .ck-editor__top {
-        position: sticky;
-        top: 70px; /* Ajuste conforme a altura do seu header */
-        z-index: 100;
-    }
-
-    /* Estiliza o placeholder do CKEditor */
-    .ck.ck-editor__editable_inline[data-placeholder]::before {
-        color: #adb5bd !important; /* Cinza suave */
-        font-style: italic !important;
-        font-weight: 400 !important;
-    }
-
-    code { cursor: pointer; transition: 0.2s; }
-    code:hover { background-color: #e9ecef; transform: scale(1.05); display: inline-block; }
-</style>
-<style>
-    /* Estilo para a linha de assinatura no Alcecar */
-    hr {
-        opacity: 1 !important;
-        margin: 0 auto !important;
-    }
-</style>
-<style>
-    /* Limpa qualquer estilo de linha que possa estar vindo de fora */
-    .ck-content div[style*="background-color: #000"] {
-        display: block !important;
-        border: none !important;
-        box-shadow: none !important;
-    }
-</style>
-<style>
-    /* Garante que bordas de parágrafos dentro do editor sejam linhas simples de 1px */
-    .ck-content p[style*="border-bottom"] {
-        border-bottom: 10px solid #000 !important;
-        display: inline-block !important;
-        line-height: 0 !important;
-    }
-</style>
-
-<style>
-    .ck-content p[style*="border-top"] {
-    border-top-width: 1px !important;
-    height: 0 !important;
-    line-height: 0 !important;
-    padding: 0 !important;
-    margin: 20px 0 !important;
-}
-
-
-    /* Remove qualquer padding extra que possa afastar a linha da margem */
-    .ck-content p {
-        margin-bottom: 0;
-    }
-</style>
 
 <script>
 let editorProcuracao;

@@ -63,11 +63,11 @@
                     </ul>
                 </div>
             </li>
-            
+
             <li class="side-nav-item">
-                <a href="{{ route('multas.index') }}" class="side-nav-link">
-                    <i class="uil-exclamation-octagon"></i>
-                    <span> Multas </span>
+                <a href="{{ route('gastos.index') }}" class="side-nav-link">
+                    <i class="uil-usd-square"></i>
+                    <span> Gastos </span>
                 </a>
             </li> 
 
