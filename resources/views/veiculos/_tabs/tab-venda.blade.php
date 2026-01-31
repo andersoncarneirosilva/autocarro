@@ -35,7 +35,7 @@
             </div>
 
             <div class="col-6 col-lg-3 border-end p-4">
-                <p class="text-muted mb-2 small text-uppercase fw-bold">Gastos de Preparação</p>
+                <p class="text-muted mb-2 small text-uppercase fw-bold">Gastos</p>
                 <h3 class="mb-1 fw-bold text-info">R$ {{ number_format($veiculo->gastos->sum('valor'), 2, ',', '.') }}</h3>
                 <small class="text-muted"><i class="mdi mdi-wrench"></i> Manutenção/Multas</small>
             </div>

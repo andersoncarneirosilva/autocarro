@@ -20,7 +20,7 @@
     </div>
 
 
-<div class="row mb-3">
+{{-- <div class="row mb-3">
     <div class="col-md-3">
         <div class="card border-0 shadow-sm mb-0 h-100">
             <div class="card-body">
@@ -108,8 +108,78 @@
             </div>
         </div>
     </div>
-</div>
+</div> --}}
 
+<div class="row mb-3">
+    <div class="col-md-3">
+        <div class="card border-0 shadow-sm mb-0">
+            <div class="card-body p-2 px-3">
+                <div class="d-flex align-items-center justify-content-between mb-1">
+                    <p class="text-muted fw-bold m-0 text-uppercase font-10">Compra</p>
+                    <i class="mdi mdi-cash-register text-primary font-14"></i>
+                </div>
+                <div class="d-flex align-items-center">
+                    <h4 class="m-0 fw-bold">R$ {{ number_format($veiculo->valor_compra, 0, ',', '.') }}</h4>
+                    @if($veiculo->valor > 0 && $veiculo->valor_compra > 0)
+                        @php $margemInicial = (($veiculo->valor - $veiculo->valor_compra) / $veiculo->valor_compra) * 100; @endphp
+                        <span class="ms-1 badge bg-soft-primary text-primary font-10" style="padding: 1px 4px;" title="Margem sobre compra">
+                            +{{ number_format($margemInicial, 0) }}%
+                        </span>
+                    @endif
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-3">
+        <div class="card border-0 shadow-sm mb-0">
+            <div class="card-body p-2 px-3">
+                <div class="d-flex justify-content-between align-items-center mb-1">
+                    <div class="d-flex align-items-center">
+                        <p class="text-muted fw-bold m-0 text-uppercase font-10">Venda</p>
+                        <i class="mdi mdi-tag-text-outline text-success ms-1 font-14"></i>
+                    </div>
+                    <a href="#" class="font-10 fw-bold text-decoration-none" data-bs-toggle="modal" data-bs-target="#modalEditarPrecos">EDITAR</a>
+                </div>
+                <h4 class="m-0 fw-bold">R$ {{ number_format($veiculo->valor, 0, ',', '.') }}</h4>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-3">
+        <div class="card border-0 shadow-sm mb-0">
+            <div class="card-body p-2 px-3">
+                <div class="d-flex align-items-center justify-content-between mb-1">
+                    <p class="text-muted fw-bold m-0 text-uppercase font-10">Oferta</p>
+                    <i class="mdi mdi-fire text-warning font-14"></i>
+                </div>
+                <div class="d-flex align-items-center">
+                    <h4 class="m-0 fw-bold text-warning">R$ {{ $veiculo->valor_oferta > 0 ? number_format($veiculo->valor_oferta, 0, ',', '.') : '---' }}</h4>
+                    @if($veiculo->valor_oferta > 0 && $veiculo->valor > 0)
+                        <span class="ms-1 badge bg-soft-danger text-danger font-10" style="padding: 1px 4px;">
+                            desconto de {{ number_format((($veiculo->valor - $veiculo->valor_oferta) / $veiculo->valor) * 100, 0) }}%
+                        </span>
+                    @endif
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-3">
+        <div class="card border-0 shadow-sm mb-0">
+            <div class="card-body p-2 px-3">
+                <div class="d-flex align-items-center justify-content-between mb-1">
+                    <p class="text-muted fw-bold m-0 text-uppercase font-10">Fipe</p>
+                    <i class="mdi mdi-table-search text-info font-14"></i>
+                </div>
+                <div class="d-flex align-items-center">
+                    <h4 class="m-0 fw-bold text-info" id="fipe-price">---</h4>
+                    <span id="fipe-badge-placeholder"></span> {{-- O JS preencherá aqui o "desconto de X% vs Fipe" --}}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
 
 
 <style>
@@ -205,6 +275,7 @@
                     </div>
 
                 </div>
+
             </div> 
             </div> 
 </div> </div>
