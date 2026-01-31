@@ -40,20 +40,33 @@ class InfracoesImport implements ToCollection
     }
 
     private function converterPontos($g) {
-        $g = mb_strtolower((string)$g);
-        if (str_contains($g, 'gravíss')) return 7;
-        if (str_contains($g, 'grave'))   return 5;
-        if (str_contains($g, 'média'))   return 4;
-        if (str_contains($g, 'leve'))    return 3;
-        return 0;
+    $g = mb_strtolower((string)$g);
+    
+    // Regra do CTB: Infrações que suspendem direto (como recusa de bafômetro)
+    // muitas vezes não somam pontos na CNH, mas o sistema pode registrar 7.
+    if (str_contains($g, 'gravíss')) return 7;
+    if (str_contains($g, 'grave'))   return 5;
+    if (str_contains($g, 'média'))   return 4;
+    if (str_contains($g, 'leve'))    return 3;
+    return 0;
+}
+
+private function definirValor($g) {
+    $g = mb_strtolower((string)$g);
+    $valorBase = 0;
+
+    if (str_contains($g, 'gravíss')) $valorBase = 293.47;
+    elseif (str_contains($g, 'grave'))   $valorBase = 195.23;
+    elseif (str_contains($g, 'média'))   $valorBase = 130.16;
+    elseif (str_contains($g, 'leve'))    $valorBase = 88.38;
+
+    // Lógica para Multiplicadores (Ex: Gravíss 10X)
+    // Procura por um número seguido de 'x' no texto
+    if (preg_match('/(\d+)x/', $g, $matches)) {
+        $multiplicador = (int) $matches[1];
+        return $valorBase * $multiplicador;
     }
 
-    private function definirValor($g) {
-        $g = mb_strtolower((string)$g);
-        if (str_contains($g, 'gravíss')) return 293.47;
-        if (str_contains($g, 'grave'))   return 195.23;
-        if (str_contains($g, 'média'))   return 130.16;
-        if (str_contains($g, 'leve'))    return 88.38;
-        return 0;
-    }
+    return $valorBase;
+}
 }
