@@ -42,6 +42,11 @@ document.addEventListener('DOMContentLoaded', function () {
     </div>
 </div>
 
+<div id="alerta-fipe-erro" class="alert alert-danger alert-dismissible bg-transparent d-none" role="alert">
+     <button type="button" class="btn-close btn-close-white" data-bs-dismiss="alert" aria-label="Close"></button>
+    <i class="ri-error-warning-line me-2"></i>
+    <strong>Atenção!</strong> O serviço da tabela FIPE está instável no momento. Estamos trabalhando no momento.
+</div>
 <div class="container-fluid p-0"> <div class="row g-0"> <div class="col-12">
             
             <div class="card border-0" style="border-radius: 0;"> 
@@ -60,7 +65,7 @@ document.addEventListener('DOMContentLoaded', function () {
                 <div class="row g-3 mb-4">
                     <div class="col-md-3">
                         <label class="form-label fw-bold">Tipo de veículo</label>
-                        <select name="tipo" class="form-control" required>
+                        <select name="tipo" id="veiculo_tipo" class="form-control" required>
                             <option value="">Selecione o tipo</option>
                             <option value="AUTOMOVEL">Carro</option>
                             <option value="MOTOCICLETA">Moto</option>
@@ -263,147 +268,4 @@ document.addEventListener('DOMContentLoaded', function () {
 </script>
 
 
-<script>
-
-document.addEventListener('DOMContentLoaded', function() {
-    const selectTipo = document.querySelector('select[name="tipo"]');
-    const selectMarca = document.getElementById('marca');
-    const selectModelo = document.getElementById('modelo_carro');
-    const selectVersao = document.getElementById('versao');
-    const selectCombustivel = document.querySelector('select[name="combustivel"]');
-
-    // Função auxiliar para definir a rota da API com base no seu HTML
-    function getTipoRota() {
-        const valor = selectTipo.value;
-        if (valor === 'MOTOCICLETA') return 'motos';
-        return 'carros'; // Para AUTOMOVEL e CAMINHONETE
-    }
-
-    const BASE_URL = 'https://parallelum.com.br/fipe/api/v1';
-
-    // 1. Ao mudar o TIPO, carrega as MARCAS
-    selectTipo.addEventListener('change', function() {
-        const tipo = getTipoRota();
-        
-        // Reseta todos os campos subsequentes
-        selectMarca.innerHTML = '<option value="">Carregando...</option>';
-        selectModelo.innerHTML = '<option value="">Selecione a marca</option>';
-        selectVersao.innerHTML = '<option value="">Selecione o modelo</option>';
-        selectModelo.disabled = true;
-        selectVersao.disabled = true;
-
-        if (this.value) {
-            fetch(`${BASE_URL}/${tipo}/marcas`)
-                .then(response => response.json())
-                .then(marcas => {
-                    selectMarca.innerHTML = '<option value="">Selecione a Marca</option>';
-                    marcas.forEach(marca => {
-                        const opt = document.createElement('option');
-                        opt.value = marca.codigo;
-                        opt.textContent = marca.nome;
-                        selectMarca.appendChild(opt);
-                    });
-                })
-                .catch(err => console.error("Erro ao carregar marcas", err));
-        }
-    });
-
-    // 2. Ao mudar a MARCA, carrega os MODELOS
-    
-    // 1. Ao mudar a MARCA
-selectMarca.addEventListener('change', function() {
-    const tipo = getTipoRota();
-    const marcaId = this.value;
-    
-    // Captura o NOME da marca selecionada
-    const marcaNome = this.options[this.selectedIndex].text;
-    document.getElementById('marca_nome').value = marcaNome;
-
-    selectModelo.innerHTML = '<option value="">Carregando...</option>';
-    selectVersao.innerHTML = '<option value="">Selecione o modelo</option>';
-    selectModelo.disabled = true;
-    selectVersao.disabled = true;
-
-    if (marcaId) {
-        fetch(`${BASE_URL}/${tipo}/marcas/${marcaId}/modelos`)
-            .then(response => response.json())
-            .then(data => {
-                selectModelo.innerHTML = '<option value="">Selecione o Modelo</option>';
-                data.modelos.forEach(modelo => {
-                    const opt = document.createElement('option');
-                    opt.value = modelo.codigo;
-                    opt.textContent = modelo.nome;
-                    selectModelo.appendChild(opt);
-                });
-                selectModelo.disabled = false;
-            });
-    }
-});
-
-// 2. Ao mudar o MODELO
-selectModelo.addEventListener('change', function() {
-    const tipo = getTipoRota();
-    const marcaId = selectMarca.value;
-    const modeloId = this.value;
-    
-    // Captura o NOME do modelo selecionado
-    const modeloNome = this.options[this.selectedIndex].text;
-    document.getElementById('modelo_nome').value = modeloNome;
-
-    selectVersao.innerHTML = '<option value="">Carregando...</option>';
-    selectVersao.disabled = true;
-
-    if (modeloId) {
-        fetch(`${BASE_URL}/${tipo}/marcas/${marcaId}/modelos/${modeloId}/anos`)
-            .then(response => response.json())
-            .then(anos => {
-                selectVersao.innerHTML = '<option value="">Selecione a Versão</option>';
-                anos.forEach(ano => {
-                    const opt = document.createElement('option');
-                    opt.value = ano.codigo;
-                    opt.textContent = ano.nome;
-                    selectVersao.appendChild(opt);
-                });
-                selectVersao.disabled = false;
-            });
-    }
-});
-
-// 3. Ao selecionar a VERSÃO
-selectVersao.addEventListener('change', function() {
-    const tipo = getTipoRota();
-    const marcaId = selectMarca.value;
-    const modeloId = selectModelo.value;
-    const anoId = this.value;
-    
-    // Captura o NOME da versão/ano selecionado
-    const versaoNome = this.options[this.selectedIndex].text;
-    document.getElementById('versao_nome').value = versaoNome;
-
-    if (anoId) {
-        fetch(`${BASE_URL}/${tipo}/marcas/${marcaId}/modelos/${modeloId}/anos/${anoId}`)
-            .then(response => response.json())
-            .then(veiculo => {
-
-                // Tenta selecionar o combustível automaticamente
-                if(selectCombustivel) {
-                    const fipeComb = veiculo.Combustivel.toUpperCase();
-                    Array.from(selectCombustivel.options).forEach(opt => {
-                        if (fipeComb.includes(opt.value)) {
-                            opt.selected = true;
-                        }
-                    });
-
-                    // Lógica Extra: Se for Elétrico ou Híbrido, coloca câmbio Automático
-                    const selectCambio = document.getElementById('cambio');
-                    if (fipeComb.includes('ELÉTRICO') || fipeComb.includes('HÍBRIDO')) {
-                        if (selectCambio) selectCambio.value = 'Automático';
-                    }
-                }
-            });
-    }
-});
-});
-
-</script>
 @endsection

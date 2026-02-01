@@ -41,7 +41,7 @@ class VeiculoController extends Controller
 
     // 1. Inicia a busca filtrando pela EMPRESA
     $query = $this->model->where('empresa_id', $empresaId)
-                         ->where('status', 'Ativo');
+                         ->where('status', 'Disponível');
 
     // 2. Aplica o filtro de busca (se houver)
     if ($search) {
@@ -182,284 +182,6 @@ public function indexVendidos(Request $request)
     ]));
 }
 
-    public function create()
-    {
-        return view('veiculos.create');
-    }
-
-    public function createProcManual()
-    {
-        $userId = Auth::id();
-        $user = User::find($userId);
-        $configProc = ModeloProcuracao::where('user_id', $userId)->first();
-
-        // SWEET ALERT
-        if (empty($configProc->outorgados)) {
-            alert()->error('Erro!', 'Por favor, cadastre ao menos um Outorgado antes de prosseguir.')
-                ->persistent(true)
-                ->autoClose(5000) // Fecha automaticamente após 5 segundos
-                ->timerProgressBar();
-
-            return redirect()->route('veiculos.index');
-        }
-
-        return view('veiculos.create-proc-manual');
-    }
-
-    // ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-    // ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-    // ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-    // PROC MANUAL
-
-    // ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-    // ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-    // ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-    public function storeProcManual(Request $request)
-    {
-
-        $userId = Auth::id();
-        $user = User::find($userId);
-        $configProc = ModeloProcuracao::where('user_id', $userId)->first();
-        $dataAtual = Carbon::now();
-
-        $dataPorExtenso = $dataAtual->translatedFormat('d \d\e F \d\e Y');
-
-        // Gerar o PDF com FPDF
-        $pdf = new FPDF;
-        $pdf->SetMargins(10, 10, 10);
-        $pdf->AddPage();  // Adicionar uma página ao PDF
-        // $pdfFpdf->SetFont('Arial', 'B', 16);  // Definir a fonte (Arial, Negrito, tamanho 16)
-        $pdf->SetFont('Arial', 'B', 14);
-
-        $titulo = utf8_decode('PROCURAÇÃO');
-
-        $pdf->Cell(0, 10, $titulo, 0, 1, 'C');
-
-        $larguraTitulo = $pdf->GetStringWidth($titulo);
-        $pdf->Ln(8);
-        $pdf->SetFont('Arial', 'B', 12);
-
-        $enderecoFormatado = $this->forcarAcentosMaiusculos($request->endereco);
-        // dd($enderecoFormatado);
-        $nomeFormatado = $this->forcarAcentosMaiusculos($request['nome']);
-
-        // dd($nomeFormatado);
-
-        $pdf->Cell(0, 0, 'OUTORGANTE: '.strtoupper(iconv('UTF-8', 'ISO-8859-1', $nomeFormatado)), 0, 0, 'L');
-        $pdf->Ln(5);
-        $pdf->Cell(10, 0, 'CPF: '.$request['cpf'], 0, 0, 'L');
-
-        $pdf->Ln(5);
-        $pdf->Cell(0, 0, utf8_decode('ENDEREÇO: '.strtoupper($enderecoFormatado)), 0, 0, 'L');
-
-        $pdf->Ln(5);
-
-        $pdf->SetFont('Arial', '', 11);
-        $pdf->Cell(0, 0, '________________________________________________________________________________________', 0, 0, 'L');
-        $pdf->SetFont('Arial', 'B', 12);
-
-        $pdf->Ln(8);
-
-        // Decodificar o array JSON de outorgados
-        $outorgadosSelecionados = json_decode($configProc->outorgados, true);
-
-        // Buscar dados dos outorgados na tabela
-        $outorgados = Outorgado::whereIn('id', $outorgadosSelecionados)->get();
-
-        // Gerar o PDF com os dados dos outorgados
-        foreach ($outorgados as $outorgado) {
-            // Adicionar informações ao PDF
-            $pdf->Cell(0, 0, utf8_decode("OUTORGADO: {$outorgado->nome_outorgado}"), 0, 0, 'L');
-            $pdf->Ln(5);
-            $pdf->Cell(0, 0, utf8_decode("CPF: {$outorgado->cpf_outorgado}"), 0, 0, 'L');
-            $pdf->Ln(5);
-            $pdf->Cell(0, 0, utf8_decode("ENDEREÇO: {$outorgado->end_outorgado}"), 0, 0, 'L');
-            $pdf->Ln(10); // Espaço extra entre cada outorgado
-        }
-
-        // $pdf->Ln(8);
-
-        $pdf->SetFont('Arial', '', 11);
-        $pdf->Cell(0, 0, '________________________________________________________________________________________', 0, 0, 'L');
-
-        $pdf->Ln(8);
-        // Defina as margens manualmente (em mm)
-        $margem_esquerda = 10; // Margem esquerda
-        $margem_direita = 10;  // Margem direita
-
-        // Texto a ser inserido no PDF
-        $text = $configProc->texto_inicial;
-
-        // Remover quebras de linha manuais, caso existam
-        $text = str_replace("\n", ' ', $text);
-
-        // Calcular a largura disponível para o texto (considerando as margens)
-        $largura_disponivel = $pdf->GetPageWidth() - $margem_esquerda - $margem_direita;
-
-        // Adicionar o texto justificado, utilizando a largura calculada
-        $pdf->MultiCell($largura_disponivel, 5, utf8_decode($text), 0, 'J');
-
-        $pdf->Ln(8);
-        $pdf->SetFont('Arial', 'B', 12);
-        $pdf->Cell(120, 2, 'MARCA: '.strtoupper($request['marca']), 0, 0, 'L');
-        $pdf->Cell(0, 2, 'PLACA: '.strtoupper($request['placa']), 0, 1, 'L');
-        $pdf->Ln(5);
-        $pdf->Cell(120, 2, 'CHASSI: '.strtoupper($request['chassi']), 0, 0, 'L');
-        $pdf->Cell(0, 2, 'COR: '.strtoupper($request['cor']), 0, 1, 'L');
-        $pdf->Ln(5);
-        $pdf->Cell(120, 2, 'ANO/MODELO: '.strtoupper($request['ano_modelo']), 0, 0, 'L');
-        $pdf->Cell(0, 2, 'RENAVAM: '.strtoupper($request['renavam']), 0, 1, 'L');
-
-        $pdf->Ln(8);
-        $pdf->SetFont('Arial', '', 11);
-
-        $text2 = "$configProc->texto_final";
-
-        // Remover quebras de linha manuais, caso existam
-        $text2 = str_replace("\n", ' ', $text2);
-
-        // Calcular a largura disponível para o texto (considerando as margens)
-        $largura_disponivel2 = $pdf->GetPageWidth() - $margem_esquerda - $margem_direita;
-
-        // Adicionar o texto justificado, utilizando a largura calculada
-        $pdf->MultiCell($largura_disponivel2, 5, utf8_decode($text2), 0, 'J');
-        // Adicionando a data por extenso no PDF
-        $pdf->Cell(0, 10, utf8_decode("$configProc->cidade, $dataPorExtenso"), 0, 1, 'R');  // 'R' para alinhamento à direita
-
-        $pdf->Ln(5);
-        $pdf->Cell(0, 10, '_________________________________________________', 0, 1, 'C');
-        $pdf->SetFont('Arial', 'B', 12);
-        $pdf->Cell(0, 5, utf8_decode($request['nome']), 0, 1, 'C');
-
-        // Define o limite de espaço por usuário (em MB)
-        $limiteMb = $user->size_folder;
-        $limiteBytes = $limiteMb * 1024 * 1024; // Converte para bytes
-
-        // Caminho para a pasta de documentos do usuário
-        $pastaUsuario = "documentos/usuario_{$userId}/";
-
-        // Garante que a pasta do usuário exista
-        if (! Storage::disk('public')->exists($pastaUsuario)) {
-            Storage::disk('public')->makeDirectory($pastaUsuario, 0777, true);
-        }
-
-        // Calcula o espaço total usado na pasta do usuário
-
-
-        // Caminho para a pasta de procuracoes
-        $pastaProc = storage_path('app/public/'.$pastaUsuario.'procuracoes_manual/');
-        if (! File::exists($pastaProc)) {
-            File::makeDirectory($pastaProc, 0777, true); // Cria a pasta se não existir
-        }
-
-        $numeroRandom = rand(1000, 9999);
-
-        $caminhoProc = $pastaProc.strtoupper($request['placa']).'_'.$numeroRandom.'.pdf';
-        $urlProc = asset('storage/'.$pastaUsuario.'procuracoes_manual/'.strtoupper($request['placa']).'_'.$numeroRandom.'.pdf');
-
-        // Salvar o PDF
-        $pdf->Output('F', $caminhoProc);
-
-        // Agora que o arquivo foi gerado, podemos calcular o tamanho
-        // $tamanhoNovoArquivo = filesize($caminhoProc); // Calcula o tamanho do arquivo gerado em bytes
-        $sizeProc = filesize($caminhoProc);
-        // Verifica se há espaço suficiente
-
-
-        $input = $request['marca'];
-        // Divide a string pelos espaços e barras
-        $partes = preg_split('/[\s\/]+/', $input);
-
-        // Pega a primeira palavra (marca)
-        $marca = strtoupper($partes[0]);
-        // dd($marca);
-        $modelo = strtoupper($partes[1]);
-        $nomeImagem = 'storage/veiculos/'.strtolower($request['tipo']).'/'.
-                        strtolower(str_replace(['/', ' '], '_', $marca)).'_'.
-                        strtolower(str_replace(['/', ' '], '_', $modelo)).'_'.
-                        strtolower(str_replace(' ', '_', $request['cor'])).'.jpg';
-
-        // Caminho real do arquivo no servidor
-        $caminhoImagem = public_path($nomeImagem);
-
-        // Verifica se a imagem existe, senão define a padrão
-        if (! file_exists($caminhoImagem)) {
-            $nomeImagem = 'storage/veiculos/default.jpg'; // Caminho da imagem padrão
-        }
-        // DATA PROC MANUAL
-        $data = [
-            'nome' => strtoupper($nomeFormatado),
-            'endereco' => strtoupper($enderecoFormatado),  // Endereço em maiúsculas
-            'cpf' => $request['cpf'],
-            'cidade' => strtoupper($request['cidade']),
-
-            'marca' => strtoupper($request['marca']),
-            'placa' => strtoupper($request['placa']),
-            'chassi' => strtoupper($request['chassi']),
-            'cor' => strtoupper($request['cor']),
-            'ano' => $request['ano_modelo'],
-            'renavam' => $request['renavam'],
-            'crv' => $request['tipo_doc'],
-            'cidade' => 'Não consta',
-            'placaAnterior' => 'Não consta',
-            'categoria' => 'Não consta',
-            'motor' => 'Não consta',
-            'combustivel' => 'Não consta',
-            'infos' => 'Não consta',
-            'tipo' => $request['tipo'],
-            'image' => $nomeImagem,
-
-            'arquivo_doc' => 0,
-            'size_doc' => 0,
-
-            'arquivo_proc' => $urlProc,
-            'size_proc' => $sizeProc,
-
-            'arquivo_atpve' => 0,
-            'size_atpve' => 0,
-
-            'arquivo_proc_assinado' => 0,
-            'size_proc_pdf' => 0,
-
-            'arquivo_proc_assinado' => 0,
-            'size_atpve_pdf' => 0,
-            'status' => 'Disponível',
-            'user_id' => $userId,
-        ];
-
-        // dd($data);
-
-        if ($user->plano == 'Premium') {
-            // Mail::to($user->email)->send(new SendEmailProc($data, $caminhoProc));
-        }
-        // Criar o registro no banco
-        if ($this->model->create($data)) {
-            // SAVE PROC MANUAL
-            if ($user && ($user->plano == 'Padrão' || $user->plano == 'Pro' || $user->plano == 'Teste')) {
-                $user->decrement('credito', 5);
-            }
-
-            return redirect()->route('veiculos.index')->with('success', 'Veículo cadastrado com sucesso!');
-        } else {
-            return back()->with(['error' => 'Erro ao cadastrar a procuração.']);
-        }
-
-    }
-
-    
-
-    // ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-    // ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-    // ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-    // PROC STORE
-
-    // ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-    // ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-    // ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-    
 
    public function cadastroRapido(Request $request)
 {
@@ -576,7 +298,7 @@ public function indexVendidos(Request $request)
         'peso_bruto' => $peso_bruto,
         'carroceria' => $carroceria,
         'exercicio' => $exercicio,
-        'status' => 'Ativo',
+        'status' => 'Disponível',
         'status_Veiculo' => 'Aguardando',
         'size_doc' => $size_doc,
         'user_id' => $userId,      // Quem fez o upload
@@ -606,7 +328,6 @@ public function indexVendidos(Request $request)
         // 4. Move o arquivo para a nova pasta
         $arquivo->move($pastaDestino, $nomeFinalArquivo);
 
-        // 5. Atualiza o banco com o caminho relativo
         $novoVeiculo->update([
             'arquivo_doc' => $pastaRelativa . $nomeFinalArquivo
         ]);
@@ -653,9 +374,8 @@ public function desarquivar($id)
         return back()->with('error', 'Erro ao restaurar o veículo!');
     }
 
-    // Atualiza para Ativo e LIMPA os dados da venda anterior
     $veiculo->update([
-        'status'      => 'Ativo',
+        'status'      => 'Disponível',
         'valor_venda' => null,
         'data_venda'  => null,
         'cliente_id'  => null,
@@ -750,6 +470,8 @@ $veiculo = $this->model->with(['documentos', 'gastos']) // Adicionado 'gastos' a
     $outorgados = Outorgado::where('empresa_id', $empresaId)->get();
     $dadosFipe = null; 
 
+    //dd($veiculo->tipo);
+
     return view('veiculos.show', compact(
         'veiculo', 
         'outorgados', 
@@ -759,15 +481,6 @@ $veiculo = $this->model->with(['documentos', 'gastos']) // Adicionado 'gastos' a
     ));
 }
 
-    public function edit($id)
-    {
-
-        if (! $veiculo = $this->model->find($id)) {
-            return redirect()->route('veiculos.index');
-        }
-
-        return view('veiculos.edit', compact('veiculo'));
-    }
 
     public function cadastroManual()
     {    
@@ -818,7 +531,7 @@ public function storeManual(Request $request)
     }, $request->input('opcionais', [])), JSON_UNESCAPED_UNICODE);
 
     // 7. Campos Fixos
-    $data['status'] = 'ATIVO';
+    $data['status'] = 'Disponível';
     $data['categoria'] = 'PARTICULAR';
     $data['placa'] = strtoupper($request->placa);
 
@@ -1248,7 +961,6 @@ public function forcarAcentosMaiusculos($texto)
             // 6. Move o arquivo para a pasta final
             $arquivo->move($pastaDestino, $nomeFinalArquivo);
 
-            // 7. Atualiza o banco com o caminho relativo para o asset() funcionar
             $veiculo->update([
                 'arquivo_doc' => $pastaRelativa . $nomeFinalArquivo
             ]);

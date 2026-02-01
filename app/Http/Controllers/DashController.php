@@ -30,7 +30,7 @@ class DashController extends Controller
     $empresaId = $user->empresa_id ?? $user->id;
     
     // 1. Veículos (Filtrando por empresa_id)
-    $totalAtivos = Veiculo::where('empresa_id', $empresaId)->where('status', 'Ativo')->count();
+    $totalAtivos = Veiculo::where('empresa_id', $empresaId)->where('status', 'Disponível')->count();
 
     // 2. Vendidos e Receita (Filtrando por empresa_id)
     $totalVendidos = Veiculo::where('empresa_id', $empresaId)->where('status', 'Vendido')->count();
@@ -39,7 +39,7 @@ class DashController extends Controller
     // 3. Outros Totais (Filtrando por empresa_id)
     $totalArquivados = Veiculo::where('empresa_id', $empresaId)->where('status', 'Arquivado')->count();
     $totalClientes = Cliente::where('empresa_id', $empresaId)->count();
-    $valorEstoque = Veiculo::where('empresa_id', $empresaId)->where('status', 'Ativo')->sum('valor');
+    $valorEstoque = Veiculo::where('empresa_id', $empresaId)->where('status', 'Disponível')->sum('valor');
     $ultimosVeiculos = Veiculo::where('empresa_id', $empresaId)->latest()->take(5)->get();
 
     $totalGastos = VeiculoGasto::sum('valor');

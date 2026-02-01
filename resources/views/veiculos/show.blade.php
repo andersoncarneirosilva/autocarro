@@ -19,96 +19,11 @@
         </div>
     </div>
 
-
-{{-- <div class="row mb-3">
-    <div class="col-md-3">
-        <div class="card border-0 shadow-sm mb-0 h-100">
-            <div class="card-body">
-                <div class="d-flex align-items-center justify-content-between mb-2">
-                    <h5 class="text-muted fw-bold mt-0 small text-uppercase">Valor de Compra</h5>
-                    <i class="mdi mdi-currency-usd font-22 text-primary"></i>
-                </div>
-                
-                <div class="d-flex align-items-baseline mb-2">
-                    <h3 class="my-0">R$ {{ number_format($veiculo->valor_compra, 2, ',', '.') }}</h3>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <div class="col-md-3">
-        <div class="card border-0 shadow-sm mb-0 h-100">
-            <div class="card-body">
-                <div class="d-flex align-items-center justify-content-between mb-2">
-                    <h5 class="text-muted fw-bold mt-0 small text-uppercase">Valor de Venda</h5>
-                    <i class="mdi mdi-currency-usd font-22 text-primary"></i>
-                </div>
-                
-                <div class="d-flex align-items-baseline mb-2">
-                    <h3 class="my-0">R$ {{ number_format($veiculo->valor, 2, ',', '.') }}</h3>
-                </div>
-
-                @if($veiculo->exibir_parcelamento == '1' && $veiculo->valor_parcela > 0)
-                    <div class="p-2 bg-primary-lighten rounded-pill border-primary border border-opacity-10 d-flex align-items-center justify-content-between px-3">
-                        <p class="m-0 text-primary font-12 fw-bold">
-                            <i class="mdi mdi-finance me-1"></i>
-                            {{ $veiculo->qtd_parcelas }}x de R$ {{ number_format($veiculo->valor_parcela, 2, ',', '.') }}
-                        </p>
-                        <button type="button" class="btn btn-sm btn-link text-primary p-0 text-decoration-none fw-bold font-12" data-bs-toggle="modal" data-bs-target="#modalEditarPrecos">
-                            <i class="mdi mdi-pencil me-1"></i>EDITAR VALOR
-                        </button>
-                    </div>
-                @else
-                    <div class="d-flex align-items-center justify-content-between mt-2 pt-1">
-                        <p class="text-muted font-12 mb-0 italic">Sem parcelamento ativo</p>
-                        <button type="button" class="btn btn-sm btn-link text-primary p-0 text-decoration-none fw-bold font-12" data-bs-toggle="modal" data-bs-target="#modalEditarPrecos">
-                            <i class="mdi mdi-pencil me-1"></i>EDITAR VALOR
-                        </button>
-                    </div>
-                @endif
-            </div>
-        </div>
-    </div>
-
-    <div class="col-md-3">
-        <div class="card border-0 shadow-sm mb-0 h-100">
-            <div class="card-body">
-                <div class="d-flex align-items-center justify-content-between mb-2">
-                    <h5 class="text-muted fw-bold mt-0 small text-uppercase">Valor de Oferta</h5>
-                    <i class="mdi mdi-tag-outline font-22 text-warning"></i>
-                </div>
-                <h3 class="my-0 text-warning">
-                    {{ $veiculo->valor_oferta > 0 ? 'R$ ' . number_format($veiculo->valor_oferta, 2, ',', '.') : '---' }}
-                </h3>
-                <div class="mt-2">
-                    @if($veiculo->valor_oferta > 0)
-                        <span class="badge bg-soft-danger text-danger px-2 py-1">
-                            <i class="mdi mdi-trending-down"></i> Econ. R$ {{ number_format($veiculo->valor - $veiculo->valor_oferta, 2, ',', '.') }}
-                        </span>
-                    @else
-                        <span class="text-muted font-12">Sem oferta ativa</span>
-                    @endif
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <div class="col-md-3">
-        <div class="card border-0 shadow-sm mb-0 h-100">
-            <div class="card-body">
-                <div class="d-flex align-items-center justify-content-between mb-2">
-                    <h5 class="text-muted fw-bold mt-0 small text-uppercase">Tabela FIPE</h5>
-                    <i class="mdi mdi-calculator font-22 text-success"></i>
-                </div>
-                <h3 class="my-0 text-success" id="fipe-price">---</h3>
-                <div class="mt-2 text-truncate">
-                    <span id="fipe-comparison"></span>
-                    <small class="text-muted d-block" id="fipe-info">Carregando...</small>
-                </div>
-            </div>
-        </div>
-    </div>
-</div> --}}
+<div id="alerta-fipe-erro" class="alert alert-danger alert-dismissible bg-transparent d-none" role="alert">
+     <button type="button" class="btn-close btn-close-white" data-bs-dismiss="alert" aria-label="Close"></button>
+    <i class="ri-error-warning-line me-2"></i>
+    <strong>Atenção!</strong> O serviço da tabela FIPE está instável no momento. Estamos trabalhando no momento.
+</div>
 
 <div class="row mb-3">
     <div class="col-md-3">
@@ -174,7 +89,7 @@
                 </div>
                 <div class="d-flex align-items-center">
                     <h4 class="m-0 fw-bold text-info" id="fipe-price">---</h4>
-                    <span id="fipe-badge-placeholder"></span> {{-- O JS preencherá aqui o "desconto de X% vs Fipe" --}}
+                    <span id="fipe-badge-placeholder"></span>
                 </div>
             </div>
         </div>
@@ -326,5 +241,6 @@
 @include('veiculos._modals.cadastro-gasto')
 
 @include('veiculos._modals.upload-crlv')
+
 
 @endsection

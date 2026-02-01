@@ -540,9 +540,10 @@
     <script src="{{ url('backend/vendor/typeahead.js/typeahead.bundle.min.js') }}"></script>
     <script src="{{ url('backend/vendor/jquery-toast-plugin/jquery.toast.min.js') }}"></script>
     <script src="https://cdn.jsdelivr.net/npm/fullcalendar@5.11.0/main.min.js"></script>
-    <script src="{{ url('backend/js_custom/tabela-fipe.js') }}"></script>
-    <script src="https://cdn.socket.io/4.0.0/socket.io.min.js"></script>
 
+    <script src="https://cdn.socket.io/4.0.0/socket.io.min.js"></script>
+    
+    <script src="{{ url('backend/js_custom/tabela-fipe.js') }}"></script>
     
 </body>
 

@@ -169,7 +169,7 @@
                 <h5 class="text-muted fw-normal mt-0" title="Veículos disponíveis">Estoque Ativo</h5>
                 <h3 class="mt-3 mb-3">{{ $totalAtivos }}</h3>
                 <p class="mb-0 text-muted">
-                    <span class="text-success me-2"><i class="mdi mdi-check-circle-outline"></i> Ativo</span>
+                    <span class="text-success me-2"><i class="mdi mdi-check-circle-outline"></i> Disponível</span>
                     {{-- <span class="text-nowrap">Disponíveis</span> --}}
                 </p>
             </div>
@@ -200,7 +200,7 @@
     <div class="card widget-flat">
         <div class="card-body">
             <div class="float-end">
-                <i class="mdi {{ $contasAPagar > 0 ? 'mdi-cash-clock text-danger' : 'mdi-cash-check text-success' }} widget-icon {{ $contasAPagar > 0 ? 'bg-danger-lighten' : 'bg-success-lighten' }}"></i>
+                <i class="mdi mdi-cash-multiple widget-icon bg-danger-lighten text-danger"></i>
             </div>
             
             <h5 class="text-muted fw-normal mt-0" title="Total que ainda precisa ser pago">Contas a Pagar</h5>
@@ -327,8 +327,8 @@
                                     @endif
                                 </td>
                                 <td>
-                                    @if($veiculo->status == 'Ativo')
-                                        <span class="badge bg-success-lighten text-success"><i class="mdi mdi-circle font-10"></i> Ativo</span>
+                                    @if($veiculo->status == 'Disponível')
+                                        <span class="badge bg-success-lighten text-success">Disponível</span>
                                     @else
                                         <span class="badge bg-secondary-lighten text-secondary">Arquivado</span>
                                     @endif

@@ -1,10 +1,11 @@
 document.addEventListener('DOMContentLoaded', function() {
-
+    //console.log("tabela fipe");
     const selectMarca = document.getElementById('marca');
     if (!selectMarca) {
         return;
     }
 
+    
 
     const inputTipo = document.getElementById('veiculo_tipo');
     //const selectMarca = document.getElementById('marca');
@@ -33,6 +34,8 @@ document.addEventListener('DOMContentLoaded', function() {
     const dbModeloId = document.getElementById('db_fipe_modelo_id')?.value;
     const dbVersaoId = document.getElementById('db_fipe_versao_id')?.value;
 
+    const alertaErro = document.getElementById('alerta-fipe-erro');
+    
     function getTipoRota() {
         const valor = inputTipo ? inputTipo.value.toUpperCase() : 'AUTOMOVEL';
         if (valor === 'MOTOCICLETA' || valor === 'MOTO') return 'motos';
@@ -42,8 +45,19 @@ document.addEventListener('DOMContentLoaded', function() {
     
     fetch(`${BASE_URL}/${tipoRota}/marcas`, requestOptions)
         .then(response => {
-            if (!response.ok) throw new Error('Erro na API');
-            return response.json();
+            if (response.ok) {
+            alertaErro.classList.add('d-none');
+        }
+
+        if (!response.ok) {
+            // Se for erro 500 e a rota for motos, exibe o alerta do Hyper
+            if (response.status === 500) {
+                alertaErro.classList.remove('d-none');
+            }
+            throw new Error('Erro na API');
+        }
+        
+        return response.json();
         })
         .then(marcas => {
             if (!Array.isArray(marcas)) return;
