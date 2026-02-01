@@ -325,4 +325,6 @@
 
 @include('veiculos._modals.cadastro-gasto')
 
+@include('veiculos._modals.upload-crlv')
+
 @endsection

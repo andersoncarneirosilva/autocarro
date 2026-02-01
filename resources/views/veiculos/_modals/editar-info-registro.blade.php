@@ -3,7 +3,7 @@
         <div class="modal-content">
             <div class="modal-header bg-dark text-white">
                 <h5 class="modal-title" id="modalEditarInfoBasicaLabel">
-                    <i class="mdi mdi-car-info me-1"></i> Atualizar Informações Básicas
+                    <i class="mdi mdi-car-info me-1"></i> Atualizar CRV
                 </h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
@@ -18,7 +18,7 @@
             
 
             <div class="col-md-12 mb-3">
-                <label for="kilometragem" class="form-label text-muted">Némuro CRV</label>
+                <label for="kilometragem" class="form-label text-muted">Número CRV</label>
                 <input type="text" 
                     class="form-control" 
                     name="crv"

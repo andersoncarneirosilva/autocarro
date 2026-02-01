@@ -45,13 +45,16 @@
             <ul class="list-group list-group-flush border rounded bg-light-lighten">
 
 
-    <li class="list-group-item bg-transparent py-3">
+   <li class="list-group-item bg-transparent py-3">
     <div class="d-flex align-items-center mb-2">
         <i class="mdi mdi-file-document-outline me-2 font-18 text-muted"></i>
-        <div>
+        <div class="flex-grow-1">
             <span class="fw-medium d-block">CRLV</span>
             <small class="text-muted">Certificado de Registro e Licenciamento de Veículo</small>
         </div>
+        <button type="button" class="btn btn-sm btn-outline-primary" data-bs-toggle="modal" data-bs-target="#modalUploadCrlv">
+            <i class="mdi mdi-upload me-1"></i> {{ $veiculo->arquivo_doc ? 'Substituir' : 'Anexar' }}
+        </button>
     </div>
 
     @if($veiculo->arquivo_doc)
@@ -65,29 +68,25 @@
                     </div>
                 </div>
                 <div class="col ps-0 text-start">
-                    {{-- O link usa o campo direto do veículo --}}
-                    <a href="{{ asset('storage/' . $veiculo->arquivo_doc) }}" target="_blank" class="text-muted fw-bold d-block text-truncate font-13" title="{{ basename($veiculo->arquivo_doc) }}">
+                    <a href="{{ asset('storage/' . $veiculo->arquivo_doc) }}" target="_blank" class="text-muted fw-bold d-block text-truncate font-13">
                         {{ basename($veiculo->arquivo_doc) }}
                     </a>
-                    <p class="mb-0 font-12 text-muted">
-                        {{-- Caso você tenha o tamanho salvo no banco, senão pode exibir 'Documento PDF' --}}
-                        {{ isset($veiculo->size_doc) ? number_format($veiculo->size_doc / 1024, 2, ',', '.') . ' KB' : 'Documento Digital' }}
-                    </p>
+                    <p class="mb-0 font-12 text-muted">Arquivo pronto para visualização</p>
                 </div>
                 <div class="col-auto">
-                    <a href="{{ $veiculo->arquivo_doc }}" download class="btn btn-link btn-sm text-muted">
+                    <a href="{{ asset('storage/' . $veiculo->arquivo_doc) }}" download class="btn btn-link btn-sm text-muted">
                         <i class="mdi mdi-download font-18"></i>
                     </a>
                 </div>
             </div>
         </div>
     @else
-        <div class="d-flex justify-content-between align-items-center bg-light-lighten border border-dashed rounded p-2">
-            <span class="text-muted font-12 italic">Documento não anexado</span>
-            <span class="badge bg-soft-warning text-warning border border-warning">Pendente</span>
+        <div class="d-flex justify-content-between align-items-center bg-light-lighten border border-dashed rounded p-2 text-muted">
+            <span class="font-12">Nenhum documento anexado.</span>
         </div>
     @endif
 </li>
+
 
     <li class="list-group-item bg-transparent py-3">
     <div class="d-flex align-items-center mb-2">

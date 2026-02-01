@@ -1209,4 +1209,54 @@ public function forcarAcentosMaiusculos($texto)
     }
 
     
+    public function uploadCrlv(Request $request, $id)
+{
+    // 1. Validação (apenas PDF conforme solicitado)
+    $request->validate([
+        'arquivo_doc' => 'required|file|mimes:pdf|max:5120',
+    ]);
+
+    try {
+        $veiculo = Veiculo::findOrFail($id);
+        $userId = auth()->id(); // ID do usuário logado
+
+        if ($request->hasFile('arquivo_doc')) {
+            $arquivo = $request->file('arquivo_doc');
+
+            // 2. Definição da estrutura: documentos/usuario_X/veiculo_Y/
+            $pastaRelativa = "documentos/usuario_{$userId}/veiculo_{$veiculo->id}/";
+            $pastaDestino = storage_path('app/public/' . $pastaRelativa);
+
+            // 3. Criação da pasta se não existir
+            if (!file_exists($pastaDestino)) {
+                mkdir($pastaDestino, 0755, true);
+            }
+
+            // 4. Se já existir um arquivo antigo no banco, deletamos o arquivo físico antes
+            if ($veiculo->arquivo_doc) {
+                $caminhoAntigo = storage_path('app/public/' . $veiculo->arquivo_doc);
+                if (file_exists($caminhoAntigo)) {
+                    unlink($caminhoAntigo);
+                }
+            }
+
+            // 5. Padronização do nome do arquivo (CRLV + Placa Limpa)
+            $placaLimpa = str_replace(['-', ' '], '', $veiculo->placa);
+            $nomeFinalArquivo = "crlv_{$placaLimpa}.pdf";
+
+            // 6. Move o arquivo para a pasta final
+            $arquivo->move($pastaDestino, $nomeFinalArquivo);
+
+            // 7. Atualiza o banco com o caminho relativo para o asset() funcionar
+            $veiculo->update([
+                'arquivo_doc' => $pastaRelativa . $nomeFinalArquivo
+            ]);
+
+            return back()->with('success', 'Documento salvo com sucesso na pasta do veículo!');
+        }
+    } catch (\Exception $e) {
+        return back()->with('error', 'Erro ao salvar documento: ' . $e->getMessage());
+    }
+}
+
 }

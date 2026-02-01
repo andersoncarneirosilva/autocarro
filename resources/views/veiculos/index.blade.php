@@ -200,7 +200,7 @@ document.addEventListener('DOMContentLoaded', function () {
                             </td>
 
                             <td>
-                                    @if($veiculo->crv === "***")
+                                    @if($veiculo->crv === "***" || $veiculo->crv == NULL)
                                         <span class="badge badge-outline-danger">FÍSICO</span>
                                     @else
                                         <span class="badge badge-outline-success">DIGITAL</span>

@@ -293,6 +293,7 @@ Route::prefix('configuracoes')->group(function () {
     Route::put('/veiculos/{id}/update-opcionais', [VeiculoController::class, 'updateOpcionais'])->name('veiculos.updateOpcionais');
     Route::put('/veiculos/{id}/update-precos', [VeiculoController::class, 'updatePrecos'])->name('veiculos.updatePrecos');
     Route::put('/veiculos/{id}/update-crv', [VeiculoController::class, 'updateCrv'])->name('veiculos.updateCrv');
+    Route::post('/veiculos/{id}/upload-crlv', [VeiculoController::class, 'uploadCrlv'])->name('veiculos.upload-crlv');
 
     // Rota para salvar o gasto
     Route::post('/veiculos/gastos', [VeiculoGastoController::class, 'store'])->name('veiculos.gastos.store');
