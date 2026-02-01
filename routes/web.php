@@ -47,10 +47,14 @@ use App\Events\NewMessage;
 use Illuminate\Support\Facades\Broadcast;
 use Illuminate\Support\Facades\Mail;
 use App\Models\Infracao;
+use App\Http\Controllers\OcrTesteController;
 
 Route::middleware(['auth', 'trial'])->group(function () {
 
     Broadcast::routes(['middleware' => ['auth:sanctum']]);
+
+    Route::get('/ocr-teste', [OcrTesteController::class, 'index']);
+Route::post('/ocr-processar', [OcrTesteController::class, 'processar'])->name('ocr.processar');
 
     // routes/web.php
 Route::get('/consultar-infracao/{codigo}', function ($codigo) {

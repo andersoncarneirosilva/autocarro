@@ -485,6 +485,7 @@ public function indexVendidos(Request $request)
         $parser = new \Smalot\PdfParser\Parser();
         $pdf = $parser->parseFile($arquivo->getPathname());
         $textoPagina = $pdf->getPages()[0]->getText();
+        //dd($textoPagina);
         $linhas = explode("\n", $textoPagina);
 
         if (!isset($linhas[3]) || trim($linhas[3]) != 'SECRETARIA NACIONAL DE TRÂNSITO - SENATRAN') {
