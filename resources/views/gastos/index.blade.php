@@ -157,4 +157,31 @@
     </div>
 </div>
 
+<script>
+    document.addEventListener('click', function (e) {
+    // Procura se o clique foi no botão de excluir ou no ícone dentro dele
+    const btn = e.target.closest('.btn-delete-gasto');
+    
+    if (btn) {
+        e.preventDefault();
+        const form = btn.closest('form');
+
+        // Se você usa SweetAlert2
+        Swal.fire({
+            title: 'Excluir registro?',
+            text: "Esta ação não poderá ser revertida!",
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#d33',
+            cancelButtonColor: '#3085d6',
+            confirmButtonText: 'Sim, excluir!',
+            cancelButtonText: 'Cancelar'
+        }).then((result) => {
+            if (result.isConfirmed) {
+                form.submit();
+            }
+        });
+    }
+});
+</script>
 @endsection

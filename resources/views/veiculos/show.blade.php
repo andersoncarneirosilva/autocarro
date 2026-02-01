@@ -282,7 +282,7 @@
                 <style>
     /* Define uma altura mínima para evitar que o card "encolha" demais */
     .tab-veiculo-container {
-        min-height: 650px; /* Ajuste este valor conforme a sua maior aba */
+        min-height: 550px; /* Ajuste este valor conforme a sua maior aba */
         transition: min-height 0.3s ease; /* Transição suave opcional */
         padding: 15px 0;
     }

@@ -7,7 +7,7 @@ use App\Models\DashModel;
 use App\Models\Event;
 use App\Models\User;
 use App\Models\Veiculo;
-use App\Models\Multa;
+use App\Models\VeiculoGasto;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -42,25 +42,13 @@ class DashController extends Controller
     $valorEstoque = Veiculo::where('empresa_id', $empresaId)->where('status', 'Ativo')->sum('valor');
     $ultimosVeiculos = Veiculo::where('empresa_id', $empresaId)->latest()->take(5)->get();
 
-    // 4. Multas (Ajustado para empresa_id dentro do relacionamento com veículo)
-    $totalMultasPendente = Multa::whereHas('veiculo', function($q) use ($empresaId) {
-            $q->where('empresa_id', $empresaId); // Alterado de user_id para empresa_id
-        })->where('status', '!=', 'pago')->sum('valor');
+    $totalGastos = VeiculoGasto::sum('valor');
+$quantidadeGastos = VeiculoGasto::count();
 
-    $qtdMultasVencidas = Multa::whereHas('veiculo', function($q) use ($empresaId) {
-            $q->where('empresa_id', $empresaId); // Alterado de user_id para empresa_id
-        })->where('status', '!=', 'pago')
-          ->where('data_vencimento', '<', now())
-          ->count();
-    
-    $multasCriticas = Multa::with('veiculo')
-        ->whereHas('veiculo', function($q) use ($empresaId) {
-            $q->where('empresa_id', $empresaId); // Alterado de user_id para empresa_id
-        })
-        ->where('status', '!=', 'pago')
-        ->orderBy('data_vencimento', 'asc')
-        ->take(5)
-        ->get();
+// Apenas o que ainda não foi pago (pago = 0 ou '0')
+$contasAPagar = VeiculoGasto::where('pago', '0')->sum('valor');
+$quantidadePendente = VeiculoGasto::where('pago', '0')->count();
+
 
     return view('dashboard.index', compact(
         'totalAtivos', 
@@ -69,10 +57,7 @@ class DashController extends Controller
         'totalArquivados', 
         'totalClientes', 
         'valorEstoque',
-        'ultimosVeiculos',
-        'totalMultasPendente',
-        'qtdMultasVencidas',
-        'multasCriticas'
+        'ultimosVeiculos','totalGastos', 'quantidadeGastos','contasAPagar','quantidadePendente'
     ));
 }
 }

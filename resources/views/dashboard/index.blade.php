@@ -152,7 +152,7 @@
             </li>
             </ul>
             <div class="text-center mt-2">
-        <a href="{{ route('multas.index') }}" class="btn btn-sm btn-soft-success">Conferir Multas</a>
+        <a href="#" class="btn btn-sm btn-soft-success">Conferir Multas</a>
     </div>
         </div>
     </div>
@@ -197,19 +197,31 @@
 </div>
 
     <div class="col-xxl-3 col-lg-6">
-        <div class="card widget-flat">
-            <div class="card-body">
-                <div class="float-end">
-                    <i class="mdi mdi-alert-decagram widget-icon bg-danger-lighten text-danger"></i>
-                </div>
-                <h5 class="text-muted fw-normal mt-0" title="Multas pendentes ou em recurso">Multas em Aberto</h5>
-                <h3 class="mt-3 mb-3 text-danger">R$ {{ number_format($totalMultasPendente, 2, ',', '.') }}</h3>
-                <p class="mb-0 text-muted">
-                    <span class="text-danger me-2"><i class="mdi mdi-bell-ring"></i> {{ $qtdMultasVencidas }} vencidas</span>
-                </p>
+    <div class="card widget-flat">
+        <div class="card-body">
+            <div class="float-end">
+                <i class="mdi {{ $contasAPagar > 0 ? 'mdi-cash-clock text-danger' : 'mdi-cash-check text-success' }} widget-icon {{ $contasAPagar > 0 ? 'bg-danger-lighten' : 'bg-success-lighten' }}"></i>
             </div>
+            
+            <h5 class="text-muted fw-normal mt-0" title="Total que ainda precisa ser pago">Contas a Pagar</h5>
+            
+            <h3 class="mt-3 mb-3 {{ $contasAPagar > 0 ? 'text-danger' : 'text-dark' }}">
+                R$ {{ number_format($contasAPagar, 2, ',', '.') }}
+            </h3>
+            
+            <p class="mb-0 text-muted">
+
+                <small>
+                    @if($contasAPagar > 0)
+                        <i class="mdi mdi-information-outline"></i> {{ $quantidadePendente }} lançamento(s) pendente(s)
+                    @else
+                        <i class="mdi mdi-check-all text-success"></i> Fluxo em dia
+                    @endif
+                </small>
+            </p>
         </div>
     </div>
+</div>
 
     
 
@@ -347,95 +359,7 @@
     .bg-primary-lighten { background-color: rgba(114, 124, 245, 0.15) !important; }
     .font-10 { font-size: 10px; }
 </style>
-<div class="row">
-    <div class="col-xl-12">
-        <div class="card">
-            <div class="card-body p-2"> {{-- Mantendo o padding p-2 igual ao seu --}}
-                
-                <div class="row align-items-center mb-3 p-2">
-                    <div class="col-md-6">
-                        <h4 class="header-title mb-1 text-dark fw-bold">
-                            <i class="mdi mdi-gavel me-1 text-danger"></i> Multas Críticas
-                        </h4>
-                        <p class="text-muted font-13 mb-0">Multas vencidas ou próximas do vencimento.</p>
-                    </div>
-                    <div class="col-md-6 text-end">
-                        <a href="{{ route('multas.index') }}" class="btn btn-sm btn-primary">
-                            <i class="mdi mdi-format-list-bulleted me-1"></i> Ver todas
-                        </a>
-                    </div>
-                </div>
 
-                <div class="table-custom-container">
-                    <table class="table table-custom table-nowrap table-hover mb-0">
-                        <thead class="table-dark"> {{-- Usando table-dark como na sua de veículos --}}
-                            <tr>
-                                <th>Veículo</th>
-                                <th>Infração</th>
-                                <th>Vencimento</th>
-                                <th>Valor</th>
-                                <th>Status</th>
-                                <th class="text-end">Ação</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            @forelse($multasCriticas as $multa)
-                            <tr>
-                                <td class="d-flex align-items-center">
-                                    {{-- Mini Avatar da Placa --}}
-                                    <div class="rounded-circle d-flex align-items-center justify-content-center bg-danger-lighten text-danger fw-bold border" 
-                                         style="width: 35px; height: 35px; min-width: 35px; font-size: 11px;">
-                                        {{ substr($multa->veiculo->placa, 0, 1) }}
-                                    </div>
-                                    <div class="ms-2">
-                                        <span class="fw-bold d-block">{{ $multa->veiculo->placa }}</span>
-                                        <small class="text-muted">{{ $multa->veiculo->modelo }}</small>
-                                    </div>
-                                </td>
-                                <td>
-                                    <span class="text-truncate d-inline-block" style="max-width: 150px;" title="{{ $multa->descricao }}">
-                                        {{ $multa->descricao }}
-                                    </span>
-                                </td>
-                                <td>
-                                    @php
-                                        $vencimento = \Carbon\Carbon::parse($multa->data_vencimento);
-                                        $isVencida = $vencimento->isPast() && $multa->status != 'pago';
-                                    @endphp
-                                    <span class="{{ $isVencida ? 'text-danger fw-bold' : '' }}">
-                                        {{ $vencimento->format('d/m/Y') }}
-                                    </span>
-                                </td>
-                                <td><span class="fw-bold text-dark">R$ {{ number_format($multa->valor, 2, ',', '.') }}</span></td>
-                                <td>
-                                    @php
-                                        $badgeColor = match($multa->status) {
-                                            'pendente' => 'bg-danger',
-                                            'recurso' => 'bg-warning',
-                                            'pago' => 'bg-success',
-                                            default => 'bg-secondary'
-                                        };
-                                    @endphp
-                                    <span class="badge {{ $badgeColor }}">{{ strtoupper($multa->status) }}</span>
-                                </td>
-                                <td class="text-end">
-                                    <a href="{{ route('multas.index') }}" class="btn btn-sm btn-soft-info" title="Ver no gerenciador">
-                                        <i class="mdi mdi-arrow-right font-16"></i>
-                                    </a>
-                                </td>
-                            </tr>
-                            @empty
-                            <tr>
-                                <td colspan="6" class="text-center p-4 text-muted">Nenhuma multa crítica encontrada.</td>
-                            </tr>
-                            @endforelse
-                        </tbody>
-                    </table>
-                </div> {{-- Fim table-custom-container --}}
-            </div> 
-        </div> 
-    </div> 
-</div>
 
         
       
