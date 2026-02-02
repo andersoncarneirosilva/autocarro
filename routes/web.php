@@ -1,41 +1,22 @@
 <?php
 
 use App\Http\Controllers\AssinaturaController;
-use App\Http\Controllers\CalendarController;
-use App\Http\Controllers\CidadeController;
 use App\Http\Controllers\ClientesController;
 use App\Http\Controllers\ConfiguracoesController;
 use App\Http\Controllers\ContatoController;
 use App\Http\Controllers\DashController;
-// use App\Http\Controllers\DocumentosController;
-use App\Http\Controllers\EstoqueController;
 use App\Http\Controllers\ModeloProcuracoesController;
 use App\Http\Controllers\NotificationController;
-use App\Http\Controllers\OrdemController;
 use App\Http\Controllers\OutorgadoController;
 use App\Http\Controllers\PasswordResetController;
 use App\Http\Controllers\PaymentController;
 use App\Http\Controllers\PerfilController;
-use App\Http\Controllers\ProcuracaoController;
 use App\Http\Controllers\RelatoriosController;
-use App\Http\Controllers\ServicosController;
-use App\Http\Controllers\TextoInicioController;
-use App\Http\Controllers\TextoPoderesController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\VeiculoController;
-use App\Http\Controllers\ChatController;
-use App\Http\Controllers\ItemController;
-use App\Http\Controllers\AnuncioController;
 use App\Http\Controllers\DocumentoController;
-use App\Http\Controllers\PixController;
 use App\Http\Controllers\LojaController;
-use App\Http\Controllers\SiteController;
-use App\Http\Controllers\RevendaController;
-use App\Http\Controllers\RevendaPublicaController;
 use App\Http\Controllers\ModeloProcuracaoController;
-use App\Http\Controllers\PartiularController;
-use App\Http\Controllers\MultaController;
-use App\Http\Controllers\SolicitacaoController;
 use App\Http\Controllers\VeiculoGastoController;
 
 use Illuminate\Support\Facades\Route;
