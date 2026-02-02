@@ -71,20 +71,6 @@ Route::get('/consultar-infracao/{codigo}', function ($codigo) {
 
     Route::get('/gastos', [VeiculoGastoController::class, 'index'])->name('gastos.index');
 
-// routes/web.php
-Route::post('/chat/mark-as-read', [ChatController::class, 'markAsRead']);
-
-    Route::post('/chat', [ChatController::class, 'createOrGetChat'])->middleware('auth:sanctum');
-    Route::post('/chat/get-chat', [ChatController::class, 'createOrGetChat']);
-    
-
-    Route::get('/chat/{user}/messages', [ChatController::class, 'getMessages']);
-    Route::get('/chat/messages/{chatId}', [ChatController::class, 'getMessages']);
-
-    Route::get('/chat', [ChatController::class, 'index'])->name('chat.index');
-    
-    Route::get('/chat/{recipientId}', [ChatController::class, 'getChat']);
-
 
     Route::post('/perfil/excluir', [PerfilController::class, 'deleteFiles']);
     Route::post('/perfil/excluir-pasta', [PerfilController::class, 'deleteFolders']);
@@ -123,8 +109,6 @@ Route::post('/chat/mark-as-read', [ChatController::class, 'markAsRead']);
 
     Route::get('/assinatura', [AssinaturaController::class, 'index'])->name('assinatura.index');
 
-    Route::get('/produtos', [ItemController::class, 'index'])->name('produtos.index');
-    Route::post('/produtos', [ItemController::class, 'store'])->name('produtos.store');
 
     Route::get('/planos', [PaymentController::class, 'index'])->name('planos.index');
 
@@ -151,9 +135,6 @@ Route::post('/chat/mark-as-read', [ChatController::class, 'markAsRead']);
     Route::post('/users', [UserController::class, 'store'])->name('users.store');
     Route::get('/users/{id}', [UserController::class, 'show'])->name('users.show');
 
-
-    Route::post('/upload/temp', [AnuncioController::class, 'temp'])->name('upload.temp');
-
     // DASHBOARD
     Route::get('/dashboard', [DashController::class, 'index'])->name('dashboard.index');
 
@@ -164,17 +145,6 @@ Route::post('/chat/mark-as-read', [ChatController::class, 'markAsRead']);
     Route::get('/perfil', [PerfilController::class, 'index'])->name('perfil.index');
 
 
-    Route::put('/calendar/update/{id}', [CalendarController::class, 'update']);
-    Route::put('/calendar/move/{id}', [CalendarController::class, 'update']);
-    Route::delete('/calendar/delete/{id}', [CalendarController::class, 'destroy'])->name('calendar.destroy');
-    Route::get('/calendar', [CalendarController::class, 'index'])->name('calendar.index');
-    Route::get('/calendar/events', [CalendarController::class, 'getEvents']);
-    Route::post('/calendar', [CalendarController::class, 'store']);
-
-    Route::delete('/procuracoes/{id}', [ProcuracaoController::class, 'destroy'])->name('procuracoes.destroy');
-    Route::get('/procuracoes/create', [ProcuracaoController::class, 'create'])->name('procuracoes.create');
-    Route::get('/procuracoes', [ProcuracaoController::class, 'index'])->name('procuracoes.index');
-    Route::post('/procuracoes', [ProcuracaoController::class, 'store'])->name('procuracoes.store');
 
     Route::post('/outorgados/store-or-update', [ConfiguracoesController::class, 'storeOrUpdate'])->name('outorgados.storeOrUpdate');
     
@@ -185,15 +155,6 @@ Route::post('/chat/mark-as-read', [ChatController::class, 'markAsRead']);
     Route::post('/outorgados', [OutorgadoController::class, 'store'])->name('outorgados.store');
     Route::get('/outorgados', [OutorgadoController::class, 'index'])->name('outorgados.index');
 
-    Route::get('/poderes/{id}', [TextoPoderesController::class, 'show'])->name('poderes.show');
-    Route::delete('/poderes/{id}', [TextoPoderesController::class, 'destroy'])->name('poderes.destroy');
-    Route::put('/poderes/{id}', [TextoPoderesController::class, 'update'])->name('poderes.update');
-    Route::post('/poderes', [TextoPoderesController::class, 'store'])->name('poderes.store');
-
-    Route::get('/textoinicial/{id}', [TextoInicioController::class, 'show'])->name('textoinicial.show');
-    Route::delete('/textoinicial/{id}', [TextoInicioController::class, 'destroy'])->name('textoinicial.destroy');
-    Route::put('/textoinicial/{id}', [TextoInicioController::class, 'update'])->name('textoinicial.update');
-    Route::post('/textoinicial', [TextoInicioController::class, 'store'])->name('textoinicial.store');
 
     Route::put('/clientes/{id}', [ClientesController::class, 'update'])->name('clientes.update');
     Route::delete('/clientes/{id}', [ClientesController::class, 'destroy'])->name('clientes.destroy');
@@ -204,9 +165,6 @@ Route::post('/chat/mark-as-read', [ChatController::class, 'markAsRead']);
     Route::get('/buscar-clientes', [ClientesController::class, 'buscarClientes']);
     Route::get('/clientes/{id}', [ClientesController::class, 'show'])->name('clientes.show');
 
-    Route::delete('/servicos/{id}', [ServicosController::class, 'destroy'])->name('servicos.destroy');
-    Route::post('/servicos', [ServicosController::class, 'store'])->name('servicos.store');
-    Route::get('/servicos', [ServicosController::class, 'index'])->name('servicos.index');
 
     Route::POST('/rel-procs', [RelatoriosController::class, 'gerarPdfProcs'])->name('rel-procs');
     Route::POST('/rel-clientes', [RelatoriosController::class, 'gerarPdfClientes'])->name('rel-clientes');
@@ -221,12 +179,6 @@ Route::post('/chat/mark-as-read', [ChatController::class, 'markAsRead']);
     Route::get('/relatorio-clientes', [RelatoriosController::class, 'gerarRelatorioClientes'])->name('relatorio-clientes');
     Route::get('/relatorio-veiculos', [RelatoriosController::class, 'gerarRelatorioVeiculos'])->name('relatorio-veiculos');
     Route::get('/relatorio-procuracoes', [RelatoriosController::class, 'gerarRelatorioProc'])->name('relatorio-procuracoes');
-
-    Route::get('/cidades/{id}', [CidadeController::class, 'show'])->name('cidades.show');
-    Route::put('/cidades/{id}', [CidadeController::class, 'update'])->name('cidades.update');
-    Route::delete('/cidades/{id}', [CidadeController::class, 'destroy'])->name('cidades.destroy');
-    Route::post('/cidades', [CidadeController::class, 'store'])->name('cidades.store');
-    Route::get('/cidades', [CidadeController::class, 'index'])->name('cidades.index');
 
 
     Route::get('/modeloprocs/{id}', [ModeloProcuracoesController::class, 'show'])->name('modeloprocs.show');

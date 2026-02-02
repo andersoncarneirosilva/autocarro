@@ -385,53 +385,35 @@ public function desarquivar($id)
 }
 
     public function destroy($id)
-    {
-        $userId = Auth::id(); // Obtém o ID do usuário autenticado
-        $user = User::find($userId); // Localiza o usuário logado
-
-        // Tenta localizar o documento no banco de dados
-        if (! $doc = $this->model->find($id)) {
-            return back()->with('error', 'Erro ao excluir a procuração!');
-
-            return redirect()->route('veiculos.index');
-        }
-
-        // Recupera o veículo associado ao documento
-        $veiculo = \App\Models\Veiculo::where('id', $id)->first();
-        if (! $veiculo) {
-            return back()->with('error', 'Erro ao excluir a procuração!');
-
-            return redirect()->route('veiculos.index');
-        }
-
-        // Caminho base para os arquivos do usuário
-        $pastaUsuario = "documentos/usuario_{$userId}/";
-
-        // Nomes e caminhos dos arquivos a serem excluídos
-        $arquivosParaExcluir = [
-            $pastaUsuario.'crlv/'.basename($doc->arquivo_doc),
-            $pastaUsuario.'procuracoes/'.basename($doc->arquivo_proc),
-            $pastaUsuario.'atpves/'.basename($doc->arquivo_atpve),
-            $pastaUsuario.'atpves_assinadas/'.basename($doc->arquivo_atpve_assinado),
-            $pastaUsuario.'procuracoes_assinadas/'.basename($doc->arquivo_proc_assinado),
-        ];
-
-        // Verifica e exclui os arquivos
-        foreach ($arquivosParaExcluir as $arquivo) {
-            if (Storage::disk('public')->exists($arquivo)) {
-                Storage::disk('public')->delete($arquivo);
-            }
-        }
-
-        // Exclui o registro do banco de dados
-        if ($doc->delete()) {
-            return back()->with('success', 'Veículo excluído com sucesso!');
-        } else {
-            return back()->with('error', 'Erro ao excluir o veículo!');
-        }
-
-        return redirect()->route('veiculos.index');
+{
+    $userId = Auth::id();
+    
+    // 1. Localiza o veículo/documento
+    if (! $doc = $this->model->find($id)) {
+        return redirect()->route('veiculos.index')->with('error', 'Registro não encontrado!');
     }
+
+    // 2. Define o caminho da pasta do VEÍCULO específico
+    // Ajustei para incluir o ID do veículo, garantindo que apague só a pasta dele
+    $caminhoPastaVeiculo = "documentos/usuario_{$userId}/veiculo_{$id}";
+
+    try {
+        // 3. Verifica se a pasta existe e deleta ela inteira (arquivos e subpastas)
+        if (Storage::disk('public')->exists($caminhoPastaVeiculo)) {
+            Storage::disk('public')->deleteDirectory($caminhoPastaVeiculo);
+        }
+
+        // 4. Exclui o registro do banco de dados
+        if ($doc->delete()) {
+            return redirect()->route('veiculos.index')->with('success', 'Veículo e arquivos excluídos com sucesso!');
+        }
+        
+        return redirect()->route('veiculos.index')->with('error', 'Erro ao excluir o registro no banco.');
+
+    } catch (\Exception $e) {
+        return redirect()->route('veiculos.index')->with('error', 'Erro técnico ao excluir: ' . $e->getMessage());
+    }
+}
 
    
 
@@ -784,6 +766,8 @@ public function updateDescricao(Request $request, $id)
 
 public function uploadFotos(Request $request, $id)
 {
+    $userId = Auth::id();
+
     $request->validate([
         'images.*' => 'image|mimes:jpeg,png,jpg,gif,webp|max:2048'
     ]);
@@ -796,7 +780,7 @@ public function uploadFotos(Request $request, $id)
 
         if ($request->hasFile('images')) {
             // Define o caminho dinâmico: documentos/ID_DO_VEICULO/fotos
-            $diretorioDestino = "documentos/veiculo_{$veiculo->id}/fotos";
+            $diretorioDestino = "documentos/usuario_{$userId}/veiculo_{$veiculo->id}/fotos";
 
             foreach ($request->file('images') as $image) {
                 // O Laravel cria as pastas automaticamente se não existirem
