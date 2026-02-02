@@ -208,6 +208,7 @@ Route::prefix('configuracoes')->group(function () {
     Route::post('/veiculos/cadastro-manual/store', [VeiculoController::class, 'storeManual'])->name('veiculos.store-manual');
 
     Route::get('/veiculos/vendidos', [VeiculoController::class, 'indexVendidos'])->name('veiculos.vendidos');
+    Route::get('/veiculos/manutencao', [VeiculoController::class, 'indexManutencao'])->name('veiculos.manutencao');
     Route::get('/veiculos/arquivados', [VeiculoController::class, 'indexArquivados'])->name('veiculos.arquivados');
     Route::get('/veiculos/create', [VeiculoController::class, 'create'])->name('veiculos.create');
     Route::post('/veiculos', [VeiculoController::class, 'store'])->name('veiculos.store');
@@ -231,7 +232,7 @@ Route::prefix('configuracoes')->group(function () {
     Route::put('/veiculos/{id}/update-precos', [VeiculoController::class, 'updatePrecos'])->name('veiculos.updatePrecos');
     Route::put('/veiculos/{id}/update-crv', [VeiculoController::class, 'updateCrv'])->name('veiculos.updateCrv');
     Route::post('/veiculos/{id}/upload-crlv', [VeiculoController::class, 'uploadCrlv'])->name('veiculos.upload-crlv');
-
+    Route::patch('/veiculos/{id}/status', [VeiculoController::class, 'atualizarStatus'])->name('veiculos.status.update');
     // Rota para salvar o gasto
     Route::post('/veiculos/gastos', [VeiculoGastoController::class, 'store'])->name('veiculos.gastos.store');
     

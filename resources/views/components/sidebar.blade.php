@@ -49,6 +49,23 @@
                     <span> Estoque </span>
                 </a>
             </li>
+            <li class="side-nav-item">
+                <a href="{{ route('veiculos.manutencao') }}" class="side-nav-link">
+                    <i class="mdi mdi-car-wrench"></i>
+                    @php
+                        // Busca a contagem de veículos com status Manutenção para a empresa do usuário
+                        $contagemManutencao = \App\Models\Veiculo::where('empresa_id', auth()->user()->empresa_id ?? auth()->user()->id)
+                            ->where('status', 'Manutenção')
+                            ->count();
+                    @endphp
+                    
+                    @if($contagemManutencao > 0)
+                        <span class="badge bg-warning text-white float-end">{{ $contagemManutencao }}</span>
+                    @endif
+                    
+                    <span> Em Manutenção </span>
+                </a>
+            </li>
 
             <li class="side-nav-item">
                 <a data-bs-toggle="collapse" href="#sidebarHistorico" aria-expanded="false" aria-controls="sidebarHistorico" class="side-nav-link">

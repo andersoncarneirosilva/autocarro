@@ -61,8 +61,8 @@ document.addEventListener('DOMContentLoaded', function () {
 
     <div class="row align-items-center mb-4">
             <div class="col-md-4">
-                <h4 class="header-title mb-1 text-dark fw-bold">Veículos Cadastrados</h4>
-                <p class="text-muted font-13 mb-0">Gerencie as informações dos veículos.</p>
+                <h4 class="header-title mb-1 text-dark fw-bold">Veículos em manutenção</h4>
+                <p class="text-muted font-13 mb-0">Gerencie as veículos em manutenção.</p>
             </div>
             
             <div class="col-md-8">
@@ -207,20 +207,10 @@ document.addEventListener('DOMContentLoaded', function () {
                                     @endif
                                 </td> --}}
                                 <td class="align-middle">
-    @php
-        $bgClass = 'bg-success'; // Padrão: Disponível
-        
-        if($veiculo->status == 'Manutenção') {
-            $bgClass = 'bg-warning text-dark';
-        } elseif($veiculo->status == 'Vendido') {
-            $bgClass = 'bg-danger';
-        }
-    @endphp
-
-    <span class="badge {{ $bgClass }} text-uppercase px-2 py-1">
-        {{ $veiculo->status ?? 'Disponível' }}
-    </span>
-</td>
+                                    <span class="badge badge-warning-lighten text-uppercase px-2 py-1">
+                                        <i class="mdi mdi-wrench-outline me-1"></i>Manutenção
+                                    </span>
+                                </td>
                             <td class="text-end">
                                 <div class="d-flex justify-content-end gap-2">
                                     <a href="{{ route('veiculos.show', $veiculo->id) }}" 
@@ -230,10 +220,10 @@ document.addEventListener('DOMContentLoaded', function () {
                                     </a>
 
                                     <a href="javascript:void(0);" 
-                                    onclick="confirmArchive({{ $veiculo->id }});" 
+                                    onclick="confirmStatus({{ $veiculo->id }});" 
                                     class="btn btn-sm btn-soft-warning" 
-                                    title="Arquivar Veículo">
-                                        <i class="mdi mdi-archive-arrow-down-outline font-18"></i>
+                                    title="Mudar para Disponível">
+                                        <i class="mdi mdi mdi-check-bold font-18"></i>
                                     </a>
 
                                     @php
@@ -261,11 +251,12 @@ document.addEventListener('DOMContentLoaded', function () {
                                         </a>
                                     @endif
                                 </div>
-
-                                {{-- Formulários Ocultos --}}
-                                <form action="{{ route('veiculos.arquivar', $veiculo->id) }}" method="POST" id="form-arquivar-{{ $veiculo->id }}" style="display: none;">
+                                {{-- Formulário para Mudar Status para Disponível --}}
+                                <form action="{{ route('veiculos.status.update', $veiculo->id) }}" method="POST" id="form-status-{{ $veiculo->id }}" style="display: none;">
                                     @csrf
-                                    @method('PUT')
+                                    @method('PATCH')
+                                    {{-- Aqui definimos para qual status o veículo vai ao clicar no botão --}}
+                                    <input type="hidden" name="status" value="Disponível">
                                 </form>
 
                                 <form action="{{ route('veiculos.destroy', $veiculo->id) }}" method="POST" id="form-delete-{{ $veiculo->id }}" style="display: none;">
@@ -300,17 +291,25 @@ document.addEventListener('DOMContentLoaded', function () {
 </div>
 
 <script>
-    function confirmArchive(id) {
+    function confirmStatus(id) {
         Swal.fire({
-            title: "Arquivar Veículo",
-            text: "Tem certeza que deseja arquivar este veículo?",
-            icon: "warning",
+            title: "Disponibilizar veículo?",
+            text: "O veículo sairá da manutenção e voltará para o estoque disponível.",
+            icon: "question",
             showCancelButton: true,
-            confirmButtonText: "Sim, arquivar!",
-            cancelButtonText: "Cancelar"
+            confirmButtonColor: "#0acf97", // Verde do Hyper
+            confirmButtonText: "Sim, disponibilizar!",
+            cancelButtonText: "Cancelar",
+            reverseButtons: true
         }).then((result) => {
             if (result.isConfirmed) {
-                document.getElementById('form-arquivar-' + id).submit();
+                // Feedback visual de carregamento
+                Swal.fire({
+                    title: 'Processando...',
+                    allowOutsideClick: false,
+                    didOpen: () => { Swal.showLoading(); }
+                });
+                document.getElementById('form-status-' + id).submit();
             }
         });
     }

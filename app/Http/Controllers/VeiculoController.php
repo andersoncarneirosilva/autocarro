@@ -131,6 +131,56 @@ class VeiculoController extends Controller
     ]));
 }
 
+public function indexManutencao(Request $request)
+{
+    $user = Auth::user();
+    // LÓGICA ALCECAR: Define qual empresa estamos filtrando
+    $empresaId = $user->empresa_id ?? $user->id;
+    $search = $request->search;
+
+    // 1. Inicia a Query filtrando por Usuário e Status Arquivado
+    $query = $this->model->where('user_id', $empresaId)
+                         ->where('status', 'Manutenção');
+
+    // 2. Aplica o filtro de busca se houver um termo pesquisado
+    if ($search) {
+        $query->where(function ($q) use ($search) {
+            $q->where('placa', 'LIKE', "%{$search}%")
+              ->orWhere('renavam', 'LIKE', "%{$search}%")
+              ->orWhere('marca', 'LIKE', "%{$search}%")
+              ->orWhere('modelo', 'LIKE', "%{$search}%");
+        });
+    }
+
+    // 3. Executa a paginação mantendo os filtros na URL (importante para funcionar a troca de página)
+    $veiculos = $query->orderBy('updated_at', 'desc')
+                      ->paginate(20)
+                      ->appends($request->all());
+
+    // 4. Define os contadores baseados no resultado da query
+    $quantidadePaginaAtual = $veiculos->count();
+    $quantidadeTotal = $veiculos->total(); // Total real considerando a busca
+
+    // 5. Dados auxiliares para o modal e visualização
+    $outorgados = Outorgado::where('user_id', $empresaId)->get();
+    $clientes = Cliente::where('user_id', $empresaId)->get();
+    $modeloProc = ModeloProcuracao::exists();
+
+    // 6. Lógica de cálculo de espaço em disco
+    $path = storage_path('app/public/documentos/usuario_' . $empresaId);
+    
+    
+
+    return view('veiculos.manutencao', compact([
+        'clientes',
+        'outorgados',
+        'veiculos',
+        'modeloProc',
+        'quantidadePaginaAtual',
+        'quantidadeTotal'
+    ]));
+}
+
 public function indexVendidos(Request $request)
 {
     $user = Auth::user();
@@ -954,6 +1004,26 @@ public function forcarAcentosMaiusculos($texto)
     } catch (\Exception $e) {
         return back()->with('error', 'Erro ao salvar documento: ' . $e->getMessage());
     }
+}
+
+public function atualizarStatus(Request $request, $id)
+{
+    // 1. Validação dos status permitidos
+    $request->validate([
+        'status' => 'required|in:Disponível,Manutenção,Vendido,Preparação'
+    ]);
+
+    // 2. Localiza o veículo
+    $veiculo = \App\Models\Veiculo::findOrFail($id);
+
+    // 3. Atualiza e salva
+    $veiculo->status = $request->status;
+    
+    if ($veiculo->save()) {
+        return back()->with('success', 'Status do veículo alterado para ' . $request->status);
+    }
+
+    return back()->with('error', 'Erro ao atualizar status.');
 }
 
 }

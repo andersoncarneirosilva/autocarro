@@ -1,13 +1,38 @@
 <div class="row">
     <div class="col-md-8 px-md-3">
-        <div class="d-flex justify-content-between align-items-center mb-3 pb-2 border-bottom">
-            <h4 class="header-title text-primary mb-0">
-                <i class="mdi mdi-car-info me-1"></i> Ficha do Veículo
-            </h4>
-            <button type="button" class="btn btn-outline-primary btn-sm shadow-sm" data-bs-toggle="modal" data-bs-target="#modalEditarInfoVeiculo">
-                <i class="mdi mdi-sync me-1"></i> Atualizar Dados
+        <div class="d-flex align-items-center justify-content-between mb-3 pb-2 border-bottom flex-wrap gap-2">
+    <h4 class="header-title text-primary mb-0">
+        <i class="mdi mdi-car-info me-1"></i> Ficha do Veículo
+    </h4>
+
+    <div class="d-flex align-items-center gap-2">
+        <div class="dropdown">
+            <button class="btn btn-soft-secondary dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
+                Status Atual: 
+                <span class="badge {{ $veiculo->status == 'Manutenção' ? 'bg-warning' : ($veiculo->status == 'Vendido' ? 'bg-danger' : 'bg-success') }}">
+                    {{ $veiculo->status ?? 'Disponível' }}
+                </span>
             </button>
+            
+            <div class="dropdown-menu dropdown-menu-end shadow"> <h6 class="dropdown-header">Alterar para:</h6>
+                @foreach(['Disponível', 'Manutenção', 'Vendido', 'Preparação'] as $status)
+                    <form action="{{ route('veiculos.status.update', $veiculo->id) }}" method="POST">
+                        @csrf
+                        @method('PATCH')
+                        <input type="hidden" name="status" value="{{ $status }}">
+                        <button type="submit" class="dropdown-item {{ $veiculo->status == $status ? 'active' : '' }}">
+                            <i class="mdi mdi-circle-small me-1"></i> {{ $status }}
+                        </button>
+                    </form>
+                @endforeach
+            </div>
         </div>
+
+        <button type="button" class="btn btn-primary shadow-sm" data-bs-toggle="modal" data-bs-target="#modalEditarInfoVeiculo">
+            <i class="mdi mdi-pencil me-1"></i> Editar Dados
+        </button>
+    </div>
+</div>
 
                 <div class="bg-light p-3 rounded d-flex align-items-center justify-content-between mb-3">
                     <div>

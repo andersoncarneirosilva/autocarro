@@ -45,6 +45,7 @@ document.addEventListener('DOMContentLoaded', function() {
     
     fetch(`${BASE_URL}/${tipoRota}/marcas`, requestOptions)
         .then(response => {
+            //console.log(`Status: ${response.status} | Tipo: ${tipoRota}`);
             if (response.ok) {
             alertaErro.classList.add('d-none');
         }
