@@ -18,7 +18,7 @@
                             </div>
                             <div>
                                 <h5 class="alert-heading h6 fw-bold">Informações do Representante</h5>
-                                <p class="mb-0 small">Certifique-se de que o <strong>CPF</strong> e o <strong>E-mail</strong> estejam corretos para a emissão das procurações.</p>
+                                <p class="mb-0 small">Certifique-se de que o <strong>RG</strong>, <strong>CPF</strong> e o <strong>E-mail</strong> estejam corretos para a emissão das procurações.</p>
                             </div>
                         </div>
                     </div>
@@ -45,6 +45,8 @@
                             <input type="text" class="form-control" name="cpf_outorgado" id="cpf_outorgado" placeholder="000.000.000-00" required>
                         </div>
 
+                        
+
                         <div class="col-md-6 mb-3">
                             <label class="form-label fw-bold">
                                 <i class="mdi mdi-email me-1"></i> E-mail <span class="text-danger">*</span>
@@ -52,7 +54,19 @@
                             <input type="email" class="form-control" name="email_outorgado" placeholder="email@exemplo.com" required>
                         </div>
 
-                        <div class="col-md-12 mb-1">
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label fw-bold">
+                                <i class="mdi mdi-phone me-1"></i> Telefone <span class="text-danger">*</span>
+                            </label>
+                            <input type="text" 
+                                id="telefone_outorgado" 
+                                class="form-control telefone-mask" 
+                                name="telefone_outorgado" 
+                                placeholder="(00) 00000-0000" 
+                                required>
+                        </div>
+
+                        <div class="col-md-6 mb-1">
                             <label class="form-label fw-bold">
                                 <i class="mdi mdi-map-marker me-1"></i> Endereço Completo <span class="text-danger">*</span>
                             </label>
@@ -119,5 +133,20 @@ document.addEventListener('DOMContentLoaded', function () {
             e.target.value = e.target.value.toUpperCase();
         });
     });
+});
+</script>
+
+<script>
+    $(document).ready(function() {
+    var behavior = function (val) {
+        return val.replace(/\D/g, '').length === 11 ? '(00) 00000-0000' : '(00) 0000-00009';
+    },
+    options = {
+        onKeyPress: function (val, e, field, options) {
+            field.mask(behavior.apply({}, arguments), options);
+        }
+    };
+
+    $('.telefone-mask').mask(behavior, options);
 });
 </script>

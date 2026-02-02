@@ -12,41 +12,60 @@
                 @csrf
                 @method('PUT')
                 
-                <div class="modal-body">
+                <div class="modal-body p-4">
+                    <div class="alert alert-info border-0 shadow-sm mb-4">
+                        <div class="d-flex">
+                            <div class="me-3">
+                                <i class="mdi mdi-information-outline font-24"></i>
+                            </div>
+                            <div>
+                                <h5 class="alert-heading h6 fw-bold">Informações do Representante</h5>
+                                <p class="mb-0 small">Certifique-se de que o <strong>RG</strong>, <strong>CPF</strong> e o <strong>E-mail</strong> estejam corretos para a emissão das procurações.</p>
+                            </div>
+                        </div>
+                    </div>
+
                     <div class="row">
                         <div class="col-md-6 mb-3">
                             <label class="form-label fw-bold">
-                                <i class="mdi mdi-account me-1"></i> Nome Completo
+                                <i class="mdi mdi-account me-1"></i> Nome Completo <span class="text-danger">*</span>
                             </label>
-                            <input type="text" class="form-control uppercase-field" id="edit_nome_outorgado" name="nome_outorgado" required>
+                            <input type="text" class="form-control uppercase-field" id="edit_nome_outorgado" name="nome_outorgado" placeholder="NOME COMPLETO" required>
                         </div>
 
                         <div class="col-md-6 mb-3">
                             <label class="form-label fw-bold">
-                                <i class="mdi mdi-card-account-details me-1"></i> RG
+                                <i class="mdi mdi-card-account-details me-1"></i> RG <span class="text-danger">*</span>
                             </label>
                             <input type="text" class="form-control" id="edit_rg_outorgado" name="rg_outorgado" required>
                         </div>
 
                         <div class="col-md-6 mb-3">
                             <label class="form-label fw-bold">
-                                <i class="mdi mdi-card-account-details me-1"></i> CPF
+                                <i class="mdi mdi-card-account-details me-1"></i> CPF <span class="text-danger">*</span>
                             </label>
-                            <input type="text" class="form-control" id="edit_cpf_outorgado" name="cpf_outorgado" required>
+                            <input type="text" class="form-control" id="edit_cpf_outorgado" name="cpf_outorgado" placeholder="000.000.000-00" required>
                         </div>
 
                         <div class="col-md-6 mb-3">
                             <label class="form-label fw-bold">
-                                <i class="mdi mdi-email me-1"></i> E-mail
+                                <i class="mdi mdi-email me-1"></i> E-mail <span class="text-danger">*</span>
                             </label>
-                            <input type="email" class="form-control" id="edit_email_outorgado" name="email_outorgado" required>
+                            <input type="email" class="form-control" id="edit_email_outorgado" name="email_outorgado" placeholder="email@exemplo.com" required>
                         </div>
 
-                        <div class="col-md-12 mb-1">
+                        <div class="col-md-6 mb-3">
                             <label class="form-label fw-bold">
-                                <i class="mdi mdi-map-marker me-1"></i> Endereço completo
+                                <i class="mdi mdi-phone me-1"></i> Telefone <span class="text-danger">*</span>
                             </label>
-                            <input type="text" class="form-control uppercase-field" id="edit_end_outorgado" name="end_outorgado" required>
+                            <input type="text" id="edit_telefone_outorgado" class="form-control telefone-mask" name="telefone_outorgado" placeholder="(00) 00000-0000" required>
+                        </div>
+
+                        <div class="col-md-6 mb-1">
+                            <label class="form-label fw-bold">
+                                <i class="mdi mdi-map-marker me-1"></i> Endereço Completo <span class="text-danger">*</span>
+                            </label>
+                            <input type="text" class="form-control uppercase-field" id="edit_end_outorgado" name="end_outorgado" placeholder="RUA, NÚMERO, BAIRRO, CIDADE-UF" required>
                             <div class="form-text">
                                 Verifique se o endereço está completo para constar na procuração.
                             </div>
@@ -74,7 +93,7 @@
 </div>
 
 <script>
-// Função para aplicar máscara de CPF
+// Mantive suas funções globais de máscara e carregamento
 function maskCPF(value) {
     return value
         .replace(/\D/g, '')
@@ -89,11 +108,9 @@ document.addEventListener('DOMContentLoaded', function () {
     const submitBtnEdit = document.getElementById('btnSubmitEdit');
     const loadingBtnEdit = document.getElementById('btnLoadingEdit');
 
-    // Lógica de Submissão e Loading
     if (formEdit) {
         formEdit.addEventListener('submit', function (e) {
             if (!formEdit.checkValidity()) return;
-
             submitBtnEdit.disabled = true;
             submitBtnEdit.style.display = 'none';
             loadingBtnEdit.style.display = 'inline-block';
@@ -101,16 +118,17 @@ document.addEventListener('DOMContentLoaded', function () {
     }
 });
 
+// Listener único para inputs (CPF e Uppercase)
 document.addEventListener('input', function (e) {
     if (e.target.id === 'cpf_outorgado' || e.target.id === 'edit_cpf_outorgado') {
         e.target.value = maskCPF(e.target.value);
     }
-
     if (e.target.classList.contains('uppercase-field')) {
         e.target.value = e.target.value.toUpperCase();
     }
 });
 
+// Ajax de carregamento
 function openEditModalOutorgado(event) {
     event.preventDefault();
     const button = event.target.closest('[data-id]');
@@ -127,6 +145,7 @@ function openEditModalOutorgado(event) {
             $('#edit_cpf_outorgado').val(response.cpf_outorgado);
             $('#edit_end_outorgado').val(response.end_outorgado);
             $('#edit_email_outorgado').val(response.email_outorgado);
+            $('#edit_telefone_outorgado').val(response.telefone_outorgado); // Carrega telefone
             
             $('#edit-form-cad').attr('action', `/outorgados/${docId}`);
             $('#editInfoModal').modal('show');
@@ -136,4 +155,17 @@ function openEditModalOutorgado(event) {
         }
     });
 }
+
+// Máscara Jquery (aplica em ambos os modais pela classe)
+$(document).ready(function() {
+    var behavior = function (val) {
+        return val.replace(/\D/g, '').length === 11 ? '(00) 00000-0000' : '(00) 0000-00009';
+    },
+    options = {
+        onKeyPress: function (val, e, field, options) {
+            field.mask(behavior.apply({}, arguments), options);
+        }
+    };
+    $('.telefone-mask').mask(behavior, options);
+});
 </script>
