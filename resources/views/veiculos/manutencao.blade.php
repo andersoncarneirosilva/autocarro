@@ -4,41 +4,7 @@
 
 @include('veiculos._modals.cadastro-rapido')
 
-{{-- Toasts de sessão --}}
-@if (session('success') || session('error'))
-<script>
-document.addEventListener('DOMContentLoaded', function () {
-    const Toast = Swal.mixin({
-        toast: true,
-        position: 'top-end',
-        showConfirmButton: false,
-        timer: 6000, // Aumentei um pouco o tempo para dar tempo de ler a mensagem longa
-        timerProgressBar: true,
-        background: '#fff',
-        color: '#313a46',
-        didOpen: (toast) => {
-            toast.addEventListener('mouseenter', Swal.stopTimer)
-            toast.addEventListener('mouseleave', Swal.resumeTimer)
-        }
-    });
-
-    @if (session('success'))
-        Toast.fire({ 
-            icon: 'success', 
-            title: '{{ session('success') }}' 
-        });
-    @endif
-
-    @if (session('error'))
-        Toast.fire({ 
-            icon: 'error', 
-            title: '{{ session('error_title') ?? "Ops!" }}', // Título em negrito
-            text: '{{ session('error') }}' // Mensagem detalhada em baixo
-        });
-    @endif
-});
-</script>
-@endif
+@include('components.toast')
 
 <div class="row">
     <div class="col-12">

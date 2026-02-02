@@ -2,22 +2,7 @@
 
 @section('content')
 
-{{-- Toasts de sessão --}}
-@if (session('success'))
-<script>
-    document.addEventListener('DOMContentLoaded', function () {
-        Swal.fire({
-            toast: true,
-            position: 'top-end',
-            icon: 'success',
-            title: '{{ session('success') }}',
-            showConfirmButton: false,
-            timer: 3000,
-            timerProgressBar: true
-        });
-    });
-</script>
-@endif
+@include('components.toast')
 
 <div class="row">
     <div class="col-12">
@@ -225,7 +210,8 @@
             showCancelButton: true,
             confirmButtonColor: "#10c469",
             confirmButtonText: "Sim, restaurar!",
-            cancelButtonText: "Cancelar"
+            cancelButtonText: "Cancelar",
+            reverseButtons: true
         }).then((result) => {
             if (result.isConfirmed) {
                 document.getElementById('form-desarquivar-' + id).submit();
@@ -241,7 +227,8 @@
             showCancelButton: true,
             confirmButtonColor: "#ff5b5b",
             confirmButtonText: "Sim, excluir!",
-            cancelButtonText: "Cancelar"
+            cancelButtonText: "Cancelar",
+            reverseButtons: true // <--- ISSO coloca o Sim na DIREITA
         }).then((result) => {
             if (result.isConfirmed) {
                 document.getElementById('form-delete-' + id).submit();
