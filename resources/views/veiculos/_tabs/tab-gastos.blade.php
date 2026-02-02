@@ -20,8 +20,8 @@
             </div>
         </div>
 
-        <div class="table-responsive">
-            <table class="table table-hover mb-0">
+        <div class="table-custom-container">
+                    <table class="table table-custom table-nowrap table-hover mb-0">
                 <thead class="thead-light">
                     <tr>
                         <th>Data</th>
