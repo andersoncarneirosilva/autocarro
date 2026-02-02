@@ -43,7 +43,24 @@ Route::get('/users/{id}', function ($id) {
     return User::find($id);
 });
 
-Route::get('/chat/last-message', [ChatController::class, 'lastMessage']);
-Route::post('/chat/get-chat', [ChatController::class, 'getChat'])->middleware('auth');
 
-Route::post('/chat/send-message', [ChatController::class, 'sendMessage'])->name('chat.sendMessage');
+// LOGIN APP
+Route::post('/login', function (Request $request) {
+    $request->validate([
+        'email' => 'required|email',
+        'password' => 'required'
+    ]);
+
+    $user = User::where('email', $request->email)->first();
+
+    if (!$user || !Hash::check($request->password, $user->password)) {
+        return response()->json(['message' => 'Credenciais inválidas'], 401);
+    }
+
+    $token = $user->createToken('app-token')->plainTextToken;
+
+    return response()->json([
+        'user' => $user,
+        'token' => $token,
+    ]);
+});
