@@ -8,6 +8,7 @@ use App\Http\Controllers\ChatController;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Log;
 use App\Models\User;
+use App\Http\Controllers\Api\ApiDashController;
 
 /*
 |--------------------------------------------------------------------------
@@ -63,4 +64,8 @@ Route::post('/login', function (Request $request) {
         'user' => $user,
         'token' => $token,
     ]);
+});
+
+Route::middleware('auth:sanctum')->group(function () {
+    Route::get('/dashboard', [ApiDashController::class, 'getDashboardData']);
 });
