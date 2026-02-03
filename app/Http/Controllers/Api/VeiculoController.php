@@ -46,14 +46,13 @@ class VeiculoController extends Controller
         return response()->json(['message' => 'Veículo não encontrado'], 404);
     }
 
-    // Validação básica (opcional, mas recomendada)
     $validated = $request->validate([
-        'valor' => 'required|numeric',
-        'valor_compra' => 'nullable|numeric',
-        'valor_oferta' => 'nullable|numeric',
-        'exibir_parcelamento' => 'boolean',
-        'qtd_parcelas' => 'integer|min:1',
-        'taxa_juros' => 'numeric',
+        'valor'               => 'required|numeric',
+        'valor_compra'        => 'nullable|numeric',
+        'valor_oferta'        => 'nullable|numeric',
+        'exibir_parcelamento' => 'required', // Remova 'boolean' temporariamente se der erro
+        'qtd_parcelas'        => 'required|integer',
+        'taxa_juros'          => 'required|numeric',
     ]);
 
     try {
