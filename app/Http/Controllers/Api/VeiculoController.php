@@ -2,20 +2,25 @@
 
 namespace App\Http\Controllers\Api;
 
+// O segredo está nesta linha abaixo: apontar para a pasta correta do Controller base
+use App\Http\Controllers\Controller; 
 use App\Models\Veiculo;
 use App\Http\Resources\VeiculoResource;
+use Illuminate\Http\Request;
 
 class VeiculoController extends Controller
 {
     public function index()
     {
-        // Usamos try-catch para ver o erro no Logcat se algo falhar no banco
         try {
-            // O Trait MultiTenant cuidará do filtro automaticamente
+            // O Trait MultiTenant filtrará automaticamente por empresa_id
             $veiculos = Veiculo::all();
             return VeiculoResource::collection($veiculos);
         } catch (\Exception $e) {
-            return response()->json(['error' => $e->getMessage()], 500);
+            return response()->json([
+                'error' => 'Erro ao listar veículos',
+                'details' => $e->getMessage()
+            ], 500);
         }
     }
 
