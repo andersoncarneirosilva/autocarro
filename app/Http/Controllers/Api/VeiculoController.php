@@ -36,4 +36,44 @@ class VeiculoController extends Controller
             return response()->json(['error' => $e->getMessage()], 500);
         }
     }
+
+    public function updatePrecos(Request $request, $id)
+{
+    // Busca o veículo (usando withoutGlobalScopes se necessário, como no seu Dashboard)
+    $veiculo = Veiculo::withoutGlobalScopes()->find($id);
+
+    if (!$veiculo) {
+        return response()->json(['message' => 'Veículo não encontrado'], 404);
+    }
+
+    // Validação básica (opcional, mas recomendada)
+    $validated = $request->validate([
+        'valor' => 'required|numeric',
+        'valor_compra' => 'nullable|numeric',
+        'valor_oferta' => 'nullable|numeric',
+        'exibir_parcelamento' => 'boolean',
+        'qtd_parcelas' => 'integer|min:1',
+        'taxa_juros' => 'numeric',
+    ]);
+
+    try {
+        // Atualiza os dados no banco
+        $veiculo->update([
+            'valor'               => $request->valor,
+            'valor_compra'        => $request->valor_compra,
+            'valor_oferta'        => $request->valor_oferta,
+            'exibir_parcelamento' => $request->exibir_parcelamento,
+            'qtd_parcelas'        => $request->qtd_parcelas,
+            'taxa_juros'          => $request->taxa_juros,
+            // Se você quiser salvar o valor da parcela calculado:
+            'valor_parcela'       => $request->valor_parcela, 
+        ]);
+
+        return response()->json(['message' => 'Preços atualizados com sucesso!'], 200);
+
+    } catch (\Exception $e) {
+        return response()->json(['message' => 'Erro ao salvar: ' . $e->getMessage()], 500);
+    }
+}
+
 }
