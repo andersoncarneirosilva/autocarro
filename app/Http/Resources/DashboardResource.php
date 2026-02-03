@@ -22,7 +22,8 @@ class DashboardResource extends JsonResource
                 return [
                     'modelo' => $v->modelo,
                     'placa'  => $v->placa,
-                    'valor'  => (float) $v->valor
+                    'valor'  => (float) $v->valor,
+                    'valor_oferta'  => (float) $v->valor_oferta
                 ];
             })->values()->all() : [],
         ];
