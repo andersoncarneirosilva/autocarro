@@ -7,10 +7,8 @@ use App\Http\Resources\VeiculoResource;
 
 public function index()
 {
-    // Retorna todos os veículos da empresa do usuário logado
-    $veiculos = Veiculo::where('empresa_id', auth()->user()->empresa_id)
-                       ->orderBy('created_at', 'desc')
-                       ->get();
+    // O Laravel aplicará o Global Scope do Trait automaticamente aqui!
+    $veiculos = Veiculo::orderBy('created_at', 'desc')->get();
 
     return VeiculoResource::collection($veiculos);
 }
