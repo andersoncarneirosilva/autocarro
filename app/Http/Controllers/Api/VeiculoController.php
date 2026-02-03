@@ -95,4 +95,44 @@ public function updateRegistro(Request $request, $id)
     ]);
 }
 
+public function updateInfoBasica(Request $request, $id)
+{
+    $veiculo = Veiculo::findOrFail($id);
+
+    $request->validate([
+        'kilometragem' => 'required|numeric|min:0',
+        'cambio'       => 'required',
+    ]);
+
+    $data = [
+        'cambio'        => $request->cambio,
+        'kilometragem'  => $request->kilometragem,
+        'portas'        => $request->portas,
+        'especiais'     => $request->especiais,
+        'marca'         => $request->marca_nome ?: $veiculo->marca,
+        'modelo'        => $request->modelo_nome ?: $veiculo->modelo,
+        'versao'        => $request->versao_nome ?: $veiculo->versao,
+        'fipe_marca_id'  => $request->marca,
+        'fipe_modelo_id' => $request->modelo,
+        'fipe_versao_id' => $request->versao,
+    ];
+
+    if (strtoupper($veiculo->tipo) == 'MOTOCICLETA') {
+        $data['portas'] = 0;
+    }
+
+    $veiculo->update($data);
+
+    // AJUSTE: Se a requisição vier do App (JSON), retorne JSON. Se vier da Web, redirecione.
+    if ($request->wantsJson() || $request->header('Accept') == 'application/json') {
+        return response()->json([
+            'status' => 'success',
+            'message' => 'Informações atualizadas!',
+            'data' => $veiculo
+        ]);
+    }
+
+    return redirect()->back()->with('success', 'Informações atualizadas com sucesso!');
+}
+
 }

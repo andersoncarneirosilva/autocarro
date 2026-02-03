@@ -13,6 +13,7 @@ use App\Http\Controllers\Api\ApiDashController;
 
 Route::middleware('auth:sanctum')->group(function () {
 
+Route::put('veiculos/{id}/update-info-basica', [VeiculoController::class, 'updateInfoBasica']);
 Route::put('veiculos/{id}/update-registro', [VeiculoController::class, 'updateRegistro']);
 Route::put('veiculos/{id}/update-precos', [VeiculoController::class, 'updatePrecos']);
 
