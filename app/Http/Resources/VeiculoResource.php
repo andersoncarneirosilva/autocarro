@@ -38,6 +38,11 @@ class VeiculoResource extends JsonResource
             'cilindrada' => $this->cilindrada,
             'peso_bruto' => $this->peso_bruto,
             'carroceria' => $this->carroceria,
+            'infos' => $this->infos,
+
+            'nome' => $this->nome,
+            'cpf' => $this->cpf,
+            'cidade' => $this->cidade,
             // ---------------------------------------------------------
 
             // Decodifica as imagens se for um JSON string no banco
