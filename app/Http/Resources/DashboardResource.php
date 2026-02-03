@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Resources\Api; // <-- Verifique se esta linha está exatamente assim
+namespace App\Http\Resources; // <-- Verifique se esta linha está exatamente assim
 
 use Illuminate\Http\Resources\Json\JsonResource;
 
