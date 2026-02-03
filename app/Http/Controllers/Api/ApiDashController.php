@@ -27,37 +27,21 @@ class ApiDashController extends Controller
 
     public function getDashboardData()
 {
-    // Usamos o status que está no seu banco: 'Ativo' e 'Disponível'
+    // Log interno no Laravel (storage/logs/laravel.log)
+    \Log::info('Buscando dados para o Android. Total no banco: ' . \App\Models\Veiculo::count());
+
+    $ativos = Veiculo::withoutGlobalScopes()
+        ->whereIn('status', ['Ativo', 'Disponível', 'disponível']) // Note o 'd' minúsculo também
+        ->get();
+
     $data = [
-        // Conta tanto 'Ativo' quanto 'Disponível'
-        'totalAtivos' => Veiculo::withoutGlobalScopes()
-            ->whereIn('status', ['Ativo', 'Disponível'])
-            ->count(),
-            
-        'totalVendidos' => Veiculo::withoutGlobalScopes()
-            ->where('status', 'Vendido')
-            ->count(),
-            
-        'receitaVendas' => (float) Veiculo::withoutGlobalScopes()
-            ->where('status', 'Vendido')
-            ->sum('valor_venda'),
-            
-        'valorEstoque' => (float) Veiculo::withoutGlobalScopes()
-            ->whereIn('status', ['Ativo', 'Disponível'])
-            ->sum('valor'),
-            
-        'ultimosVeiculos' => Veiculo::withoutGlobalScopes()
-            ->latest()
-            ->take(5)
-            ->get(),
-            
-        'contasAPagar' => (float) VeiculoGasto::withoutGlobalScopes()
-            ->where('pago', '0')
-            ->sum('valor'),
-            
-        'quantidadePendente' => (int) VeiculoGasto::withoutGlobalScopes()
-            ->where('pago', '0')
-            ->count(),
+        'totalAtivos'        => $ativos->count(),
+        'totalVendidos'      => Veiculo::withoutGlobalScopes()->where('status', 'Vendido')->count(),
+        'receitaVendas'      => (float) Veiculo::withoutGlobalScopes()->where('status', 'Vendido')->sum('valor_venda'),
+        'valorEstoque'       => (float) $ativos->sum('valor'),
+        'ultimosVeiculos'    => Veiculo::withoutGlobalScopes()->latest()->take(5)->get(),
+        'contasAPagar'       => (float) VeiculoGasto::withoutGlobalScopes()->where('pago', '0')->sum('valor'),
+        'quantidadePendente' => (int) VeiculoGasto::withoutGlobalScopes()->where('pago', '0')->count(),
     ];
 
     return new DashboardResource($data);
