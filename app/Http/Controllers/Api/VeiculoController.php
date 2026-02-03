@@ -135,4 +135,39 @@ public function updateInfoBasica(Request $request, $id)
     return redirect()->back()->with('success', 'Informações atualizadas com sucesso!');
 }
 
+public function importarPdf(Request $request)
+{
+    $request->validate([
+        'arquivo' => 'required|mimes:pdf|max:10240', // Máx 10MB
+    ]);
+
+    try {
+        if ($request->hasFile('arquivo')) {
+            $file = $request->file('arquivo');
+            $nomeArquivo = 'crlv_' . time() . '.' . $file->getClientOriginalExtension();
+            
+            // Salva na pasta storage/app/public/documentos
+            $caminho = $file->storeAs('documentos', $nomeArquivo, 'public');
+
+            // Aqui você criaria o veículo. 
+            // Dica: Você pode usar bibliotecas como 'smalot/pdfparser' para ler o PDF aqui
+            $veiculo = Veiculo::create([
+                'status' => 'Disponível',
+                'arquivo_doc' => $caminho,
+                'modelo' => 'Importado via PDF', // Placeholder até o parser ler o texto
+                'user_id' => auth()->id() ?? 1,
+                'empresa_id' => auth()->user()->empresa_id ?? 1
+            ]);
+
+            return response()->json([
+                'message' => 'Arquivo recebido e veículo pré-cadastrado!',
+                'veiculo_id' => $veiculo->id,
+                'path' => $caminho
+            ], 201);
+        }
+    } catch (\Exception $e) {
+        return response()->json(['error' => $e->getMessage()], 500);
+    }
+}
+
 }
