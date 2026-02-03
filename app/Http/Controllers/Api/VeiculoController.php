@@ -135,39 +135,167 @@ public function updateInfoBasica(Request $request, $id)
     return redirect()->back()->with('success', 'Informações atualizadas com sucesso!');
 }
 
-public function importarPdf(Request $request)
+public function cadastroRapido(Request $request)
 {
+    $user = Auth::user();
+    $userId = $user->id;
+    // LÓGICA ALCECAR: Identifica o ID da empresa (Dono)
+    $empresaId = $user->empresa_id ?? $userId;
+
+
+    // 1. Validação do Arquivo
     $request->validate([
-        'arquivo' => 'required|mimes:pdf|max:10240', // Máx 10MB
+        'arquivo' => 'required|mimes:pdf|max:10240', 
     ]);
 
+    $arquivo = $request->file('arquivo');
+    $size_doc = $arquivo->getSize();
+
+    // 2. Leitura do PDF
     try {
-        if ($request->hasFile('arquivo')) {
-            $file = $request->file('arquivo');
-            $nomeArquivo = 'crlv_' . time() . '.' . $file->getClientOriginalExtension();
-            
-            // Salva na pasta storage/app/public/documentos
-            $caminho = $file->storeAs('documentos', $nomeArquivo, 'public');
+        $parser = new \Smalot\PdfParser\Parser();
+        $pdf = $parser->parseFile($arquivo->getPathname());
+        $textoPagina = $pdf->getPages()[0]->getText();
+        //dd($textoPagina);
+        $linhas = explode("\n", $textoPagina);
 
-            // Aqui você criaria o veículo. 
-            // Dica: Você pode usar bibliotecas como 'smalot/pdfparser' para ler o PDF aqui
-            $veiculo = Veiculo::create([
-                'status' => 'Disponível',
-                'arquivo_doc' => $caminho,
-                'modelo' => 'Importado via PDF', // Placeholder até o parser ler o texto
-                'user_id' => auth()->id() ?? 1,
-                'empresa_id' => auth()->user()->empresa_id ?? 1
-            ]);
-
-            return response()->json([
-                'message' => 'Arquivo recebido e veículo pré-cadastrado!',
-                'veiculo_id' => $veiculo->id,
-                'path' => $caminho
-            ], 201);
+        if (!isset($linhas[3]) || trim($linhas[3]) != 'SECRETARIA NACIONAL DE TRÂNSITO - SENATRAN') {
+            return redirect()->route('veiculos.index')
+                ->with('error_title', 'Documento Inválido')
+                ->with('error', 'O sistema Alcecar aceita apenas CRLV Digital (PDF) oficial emitido a partir de 2024.');
         }
     } catch (\Exception $e) {
-        return response()->json(['error' => $e->getMessage()], 500);
+        return redirect()->route('veiculos.index')
+            ->with('error_title', 'Erro na leitura')
+            ->with('error', 'Não foi possível ler os dados do PDF.');
     }
+
+    // 3. Extração de Dados
+    $placa = strtoupper($this->model->extrairPlaca($textoPagina));
+    
+    // VERIFICAÇÃO MULTI-TENANT: Verifica se a placa já existe NA EMPRESA
+    if (Veiculo::where('placa', $placa)->where('empresa_id', $empresaId)->exists()) {
+        return redirect()->route('veiculos.index')
+            ->with('error_title', 'Veículo já cadastrado')
+            ->with('error', "A placa $placa já consta na base de dados da sua empresa.");
+    }
+
+
+    $marca = $this->model->extrairMarca($textoPagina);
+    $chassi = $this->model->extrairChassi($textoPagina);
+    $cor = $this->model->extrairCor($textoPagina);
+    $anoExtraido = $this->model->extrairAnoModelo($textoPagina);
+    $renavam = $this->model->extrairRevanam($textoPagina);
+    $nome = $this->model->extrairNome($textoPagina);
+    $cpf = $this->model->extrairCpf($textoPagina);
+    $cidade = $this->model->extrairCidade($textoPagina);
+    $crv = $this->model->extrairCrv($textoPagina);
+    $placaAnterior = $this->model->extrairPlacaAnterior($textoPagina);
+    $categoria = $this->model->extrairCategoria($textoPagina);
+    $motor = $this->model->extrairMotor($textoPagina);
+    $combustivel = $this->model->extrairCombustivel($textoPagina);
+    $infos = $this->model->extrairInfos($textoPagina);
+    $tipo = $this->model->extrairEspecie($textoPagina);
+    $potencia = $this->model->extrairPotencia($textoPagina);
+    $peso_bruto = $this->model->extrairPesoBruto($textoPagina);
+    $cilindrada = $this->model->extrairCilindrada($textoPagina);
+    $carroceria = $this->model->extrairCarroceria($textoPagina);
+    $exercicio = $this->model->extrairExercicio($textoPagina);
+
+    //dd($exercicio);
+//dd($peso_bruto);
+    // Lógica de Marca/Modelo
+    $textoLimpo = str_starts_with($marca, 'I/') ? substr($marca, 2) : $marca;
+    if (str_contains($textoLimpo, '/')) {
+        [$marcaReal, $modeloReal] = explode('/', $textoLimpo, 2);
+    } else {
+        $partes = explode(' ', $textoLimpo, 2);
+        $marcaReal = $partes[0] ?? '';
+        $modeloReal = $partes[1] ?? '';
+    }
+
+    $partesAno = explode('/', $anoExtraido);
+    $anoFabricacao = isset($partesAno[0]) ? (int) preg_replace('/\D/', '', $partesAno[0]) : null;
+    $anoModelo     = isset($partesAno[1]) ? (int) preg_replace('/\D/', '', $partesAno[1]) : $anoFabricacao;
+
+    $marcaReal = trim(strtoupper($marcaReal));
+    if ($marcaReal === 'VW') $marcaReal = 'VOLKSWAGEN';
+    if ($marcaReal === 'GM') $marcaReal = 'CHEVROLET';
+
+    // 4. Criação do Registro no Banco
+    $data = [
+        'nome' => strtoupper($this->forcarAcentosMaiusculos($nome)),
+        'cpf' => $cpf,
+        'cidade' => $cidade,
+        'marca' => $marcaReal,
+        'modelo' => trim(strtoupper($modeloReal)),
+        'placa' => $placa,
+        'chassi' => strtoupper($chassi),
+        'cor' => strtoupper($cor),
+        'ano_fabricacao' => $anoFabricacao,
+        'ano_modelo'     => $anoModelo,
+        'renavam' => $renavam,
+        'crv' => $crv,
+        'placaAnterior' => $placaAnterior,
+        'categoria' => $categoria,
+        'motor' => $motor,
+        'combustivel' => $combustivel,
+        'tipo' => $tipo,
+        'infos' => $infos,
+        'potencia' => $potencia,
+        'cilindrada' => $cilindrada,
+        'peso_bruto' => $peso_bruto,
+        'carroceria' => $carroceria,
+        'exercicio' => $exercicio,
+        'status' => 'Disponível',
+        'status_Veiculo' => 'Aguardando',
+        'size_doc' => $size_doc,
+        'user_id' => $userId,      // Quem fez o upload
+        'empresa_id' => $empresaId // A qual empresa pertence
+    ];
+
+    $novoVeiculo = $this->model->create($data);
+
+    if ($novoVeiculo) {
+        // CORREÇÃO: Pegando o ID do veículo recém-criado
+        $veiculoId = $novoVeiculo->id;
+
+        // 1. Definição da nova estrutura: documentos/usuario_X/veiculo_Y/
+        // LÓGICA ALCECAR: Centralizando documentos por usuário e veículo
+        $pastaRelativa = "documentos/usuario_{$userId}/veiculo_{$veiculoId}/"; 
+        $pastaDestino = storage_path('app/public/' . $pastaRelativa);
+
+        // 2. Criação da pasta com permissões corretas
+        if (!file_exists($pastaDestino)) {
+            mkdir($pastaDestino, 0755, true);
+        }
+
+        // 3. Nome do arquivo padronizado (Placa limpa sem espaços ou traços)
+        $placaLimpa = str_replace(['-', ' '], '', $placa);
+        $nomeFinalArquivo = "crlv_{$placaLimpa}.pdf";
+        
+        // 4. Move o arquivo para a nova pasta
+        $arquivo->move($pastaDestino, $nomeFinalArquivo);
+
+        $novoVeiculo->update([
+            'arquivo_doc' => $pastaRelativa . $nomeFinalArquivo
+        ]);
+
+        if ($request->wantsJson() || $request->header('Accept') == 'application/json') {
+            return response()->json([
+                'message' => 'Veículo importado com sucesso!',
+                'veiculo' => $novoVeiculo
+            ], 201);
+        }
+
+        return redirect()->route('veiculos.index')
+            ->with('success', 'Veículo importado e cadastrado com sucesso!');
+    }
+    
+    if ($request->wantsJson()) {
+        return response()->json(['error' => 'Erro ao salvar dados'], 500);
+    }
+    return redirect()->back()->with('error', 'Erro ao salvar os dados do veículo.');
 }
 
 }
