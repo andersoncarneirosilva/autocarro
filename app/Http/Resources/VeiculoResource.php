@@ -29,6 +29,11 @@ class VeiculoResource extends JsonResource
             'renavam' => $this->renavam,
             'chassi' => $this->chassi,
             'motor' => $this->motor,
+
+            'fipe_marca_id'  => $this->fipe_marca_id,
+            'fipe_modelo_id' => $this->fipe_modelo_id,
+            'fipe_versao_id' => $this->fipe_versao_id,
+
             'crv' => $this->crv,
             'placa_anterior' => $this->placaAnterior, // Laravel costuma usar camelCase, mas o App espera placa_anterior
             'tipo' => $this->tipo,
