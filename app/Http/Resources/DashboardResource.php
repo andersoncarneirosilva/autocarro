@@ -1,10 +1,10 @@
 <?php
 
-namespace App\Http\Resources\Api;
+namespace App\Http\Resources\Api; // <-- Verifique se esta linha está exatamente assim
 
 use Illuminate\Http\Resources\Json\JsonResource;
 
-class DashboardResource extends JsonResource
+class DashboardResource extends JsonResource // <-- O nome deve ser exatamente este
 {
     public function toArray($request)
     {
@@ -15,14 +15,7 @@ class DashboardResource extends JsonResource
             'valor_estoque' => (float) $this['valorEstoque'],
             'contas_a_pagar' => (float) $this['contasAPagar'],
             'quantidade_pendente' => $this['quantidadePendente'],
-            'ultimos_veiculos' => $this['ultimosVeiculos']->map(function($veiculo) {
-                return [
-                    'id' => $veiculo->id,
-                    'modelo' => $veiculo->modelo,
-                    'placa' => $veiculo->placa,
-                    'valor' => (float) $veiculo->valor,
-                ];
-            }),
+            'ultimos_veiculos' => $this['ultimosVeiculos']
         ];
     }
 }
