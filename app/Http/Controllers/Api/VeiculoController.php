@@ -163,7 +163,7 @@ public function cadastroRapido(Request $request)
 
     $arquivo = $request->file('arquivo');
     $size_doc = $arquivo->getSize();
-
+    $veiculoModel = new \App\Models\Veiculo();
     // 2. Leitura do PDF
     try {
         $parser = new \Smalot\PdfParser\Parser();
@@ -184,7 +184,7 @@ public function cadastroRapido(Request $request)
     }
 
     // 3. Extração de Dados
-    $placa = strtoupper($this->model->extrairPlaca($textoPagina));
+    $placa = strtoupper($veiculoModel->extrairPlaca($textoPagina));
     
     // VERIFICAÇÃO MULTI-TENANT: Verifica se a placa já existe NA EMPRESA
     if (Veiculo::where('placa', $placa)->where('empresa_id', $empresaId)->exists()) {
@@ -194,26 +194,26 @@ public function cadastroRapido(Request $request)
     }
 
 
-    $marca = $this->model->extrairMarca($textoPagina);
-    $chassi = $this->model->extrairChassi($textoPagina);
-    $cor = $this->model->extrairCor($textoPagina);
-    $anoExtraido = $this->model->extrairAnoModelo($textoPagina);
-    $renavam = $this->model->extrairRevanam($textoPagina);
-    $nome = $this->model->extrairNome($textoPagina);
-    $cpf = $this->model->extrairCpf($textoPagina);
-    $cidade = $this->model->extrairCidade($textoPagina);
-    $crv = $this->model->extrairCrv($textoPagina);
-    $placaAnterior = $this->model->extrairPlacaAnterior($textoPagina);
-    $categoria = $this->model->extrairCategoria($textoPagina);
-    $motor = $this->model->extrairMotor($textoPagina);
-    $combustivel = $this->model->extrairCombustivel($textoPagina);
-    $infos = $this->model->extrairInfos($textoPagina);
-    $tipo = $this->model->extrairEspecie($textoPagina);
-    $potencia = $this->model->extrairPotencia($textoPagina);
-    $peso_bruto = $this->model->extrairPesoBruto($textoPagina);
-    $cilindrada = $this->model->extrairCilindrada($textoPagina);
-    $carroceria = $this->model->extrairCarroceria($textoPagina);
-    $exercicio = $this->model->extrairExercicio($textoPagina);
+    $marca = $veiculoModel->extrairMarca($textoPagina);
+    $chassi = $veiculoModel->extrairChassi($textoPagina);
+    $cor = $veiculoModel->extrairCor($textoPagina);
+    $anoExtraido = $veiculoModel->extrairAnoModelo($textoPagina);
+    $renavam = $veiculoModel->extrairRevanam($textoPagina);
+    $nome = $veiculoModel->extrairNome($textoPagina);
+    $cpf = $veiculoModel->extrairCpf($textoPagina);
+    $cidade = $veiculoModel->extrairCidade($textoPagina);
+    $crv = $veiculoModel->extrairCrv($textoPagina);
+    $placaAnterior = $veiculoModel->extrairPlacaAnterior($textoPagina);
+    $categoria = $veiculoModel->extrairCategoria($textoPagina);
+    $motor = $veiculoModel->extrairMotor($textoPagina);
+    $combustivel = $veiculoModel->extrairCombustivel($textoPagina);
+    $infos = $veiculoModel->extrairInfos($textoPagina);
+    $tipo = $veiculoModel->extrairEspecie($textoPagina);
+    $potencia = $veiculoModel->extrairPotencia($textoPagina);
+    $peso_bruto = $veiculoModel->extrairPesoBruto($textoPagina);
+    $cilindrada = $veiculoModel->extrairCilindrada($textoPagina);
+    $carroceria = $veiculoModel->extrairCarroceria($textoPagina);
+    $exercicio = $veiculoModel->extrairExercicio($textoPagina);
 
     //dd($exercicio);
 //dd($peso_bruto);
@@ -267,7 +267,7 @@ public function cadastroRapido(Request $request)
         'empresa_id' => $empresaId // A qual empresa pertence
     ];
 
-    $novoVeiculo = $this->model->create($data);
+    $novoVeiculo = $veiculoModel->create($data);
 
     if ($novoVeiculo) {
         // CORREÇÃO: Pegando o ID do veículo recém-criado
