@@ -188,10 +188,11 @@ public function cadastroRapido(Request $request)
     
     // VERIFICAÇÃO MULTI-TENANT: Verifica se a placa já existe NA EMPRESA
     if (Veiculo::where('placa', $placa)->where('empresa_id', $empresaId)->exists()) {
-        return redirect()->route('veiculos.index')
-            ->with('error_title', 'Veículo já cadastrado')
-            ->with('error', "A placa $placa já consta na base de dados da sua empresa.");
-    }
+    // Forçamos a resposta JSON imediatamente para evitar redirecionamentos do middleware
+    return response()->json([
+        'error' => "A placa $placa já consta na base de dados da sua empresa."
+    ], 422); 
+}
 
 
     $marca = $veiculoModel->extrairMarca($textoPagina);
