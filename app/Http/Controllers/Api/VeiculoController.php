@@ -311,4 +311,32 @@ public function cadastroRapido(Request $request)
     return redirect()->back()->with('error', 'Erro ao salvar os dados do veículo.');
 }
 
+public function forcarAcentosMaiusculos($texto)
+    {
+        // Mapeia as letras acentuadas minúsculas para suas versões maiúsculas
+        $mapaAcentos = [
+            'á' => 'Á', 'à' => 'À', 'ã' => 'Ã', 'â' => 'Â', 'é' => 'É',
+            'è' => 'È', 'ê' => 'Ê', 'í' => 'Í', 'ó' => 'Ó', 'ò' => 'Ò',
+            'õ' => 'Õ', 'ô' => 'Ô', 'ú' => 'Ú', 'ù' => 'Ù', 'ç' => 'Ç',
+        ];
+
+        // Substitui as letras minúsculas acentuadas pelas versões maiúsculas
+        $texto = strtr($texto, $mapaAcentos);
+
+        // Substituições de caracteres "estranhos" causados por problemas de codificação
+        $substituicoesCodificacao = [
+            'Ã‘' => 'Ñ',   // Para corrigir "Ã‘" que deveria ser "Ñ"
+            'Ã©' => 'é',   // Para corrigir "Ã©" que deveria ser "é"
+            'Ã´' => 'ô',   // Para corrigir "Ã´" que deveria ser "ô"
+            'Ã•' => 'Á',
+            // Adicione outras substituições conforme necessário
+        ];
+
+        // Realiza as substituições
+        $texto = strtr($texto, $substituicoesCodificacao);
+
+        // Retorna o texto já com as letras acentuadas forçadas para maiúsculas e a correção de codificação
+        return $texto;
+    }
+    
 }
