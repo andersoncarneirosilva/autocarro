@@ -53,6 +53,7 @@ class VeiculoController extends Controller
         'exibir_parcelamento' => 'required', // Remova 'boolean' temporariamente se der erro
         'qtd_parcelas'        => 'required|integer',
         'taxa_juros'          => 'required|numeric',
+        'valor_parcela'       => 'nullable|numeric',
     ]);
 
     try {
