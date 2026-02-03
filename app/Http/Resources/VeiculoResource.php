@@ -22,6 +22,7 @@ class VeiculoResource extends JsonResource
             'kilometragem' => (int) $this->kilometragem,
             'valor' => (double) $this->valor,
             'valor_oferta' => (double) $this->valor_oferta,
+            'valor_compra' => (double) $this->valor_compra,
             'status' => $this->status,
             
             // Decodifica as imagens se for um JSON string no banco
