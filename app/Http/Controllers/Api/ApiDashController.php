@@ -4,10 +4,7 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Resources\DashboardResource;
 use App\Http\Controllers\Controller;
-use App\Models\Cliente;
 use App\Models\DashModel;
-use App\Models\Event;
-use App\Models\User;
 use App\Models\Veiculo;
 use App\Models\VeiculoGasto;
 use Carbon\Carbon;
@@ -15,6 +12,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use App\Jobs\SendNotificationStorageJob;
+use App\Http\Resources\VeiculoResource;
 
 class ApiDashController extends Controller
 {
@@ -27,11 +25,8 @@ class ApiDashController extends Controller
 
     public function getDashboardData()
 {
-    // Log interno no Laravel (storage/logs/laravel.log)
-    \Log::info('Buscando dados para o Android. Total no banco: ' . \App\Models\Veiculo::count());
-
     $ativos = Veiculo::withoutGlobalScopes()
-        ->whereIn('status', ['Ativo', 'Disponível', 'disponível']) // Note o 'd' minúsculo também
+        ->whereIn('status', ['Ativo', 'Disponível', 'disponível'])
         ->get();
 
     $data = [
@@ -39,7 +34,8 @@ class ApiDashController extends Controller
         'totalVendidos'      => Veiculo::withoutGlobalScopes()->where('status', 'Vendido')->count(),
         'receitaVendas'      => (float) Veiculo::withoutGlobalScopes()->where('status', 'Vendido')->sum('valor_venda'),
         'valorEstoque'       => (float) $ativos->sum('valor'),
-        'ultimosVeiculos'    => Veiculo::withoutGlobalScopes()->latest()->take(5)->get(),
+        // AQUI ESTÁ O AJUSTE:
+        'ultimosVeiculos'    => VeiculoResource::collection(Veiculo::withoutGlobalScopes()->latest()->take(5)->get()),
         'contasAPagar'       => (float) VeiculoGasto::withoutGlobalScopes()->where('pago', '0')->sum('valor'),
         'quantidadePendente' => (int) VeiculoGasto::withoutGlobalScopes()->where('pago', '0')->count(),
     ];
