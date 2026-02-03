@@ -215,6 +215,18 @@ public function cadastroRapido(Request $request)
     $carroceria = $veiculoModel->extrairCarroceria($textoPagina);
     $exercicio = $veiculoModel->extrairExercicio($textoPagina);
 
+    if (Veiculo::where('placa', $placa)->where('empresa_id', $empresaId)->exists()) {
+    // IMPORTANTE: Se for requisição da API (Android), retorne JSON
+    if ($request->wantsJson() || $request->header('Accept') == 'application/json') {
+        return response()->json([
+            'error' => "A placa $placa já consta na base de dados da sua empresa."
+        ], 422); 
+    }
+
+    return redirect()->route('veiculos.index')
+        ->with('error', "A placa $placa já consta na base de dados.");
+}
+
     //dd($exercicio);
 //dd($peso_bruto);
     // Lógica de Marca/Modelo
@@ -338,5 +350,5 @@ public function forcarAcentosMaiusculos($texto)
         // Retorna o texto já com as letras acentuadas forçadas para maiúsculas e a correção de codificação
         return $texto;
     }
-    
+
 }
