@@ -7,6 +7,20 @@ use App\Http\Controllers\Controller;
 use App\Models\Veiculo;
 use App\Http\Resources\VeiculoResource;
 use Illuminate\Http\Request;
+use App\Mail\SendEmailAtpve;
+use App\Mail\SendEmailProc;
+use App\Models\Cliente;
+use App\Models\ModeloProcuracao;
+use App\Models\Outorgado;
+use App\Models\User;
+use App\Models\Veiculo;
+use Carbon\Carbon;
+use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Str;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\File;
+use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\Http;
 
 class VeiculoController extends Controller
 {
