@@ -7,17 +7,17 @@ use Illuminate\Database\Eloquent\Builder;
 trait MultiTenantModelTrait 
 {
     public static function bootMultiTenantModelTrait()
-{
-    // Verifique se existe um usuário autenticado ANTES de aplicar o escopo
-    if (auth()->check() && auth()->user()->empresa_id) {
-        
-        static::creating(function ($model) {
-            $model->empresa_id = auth()->user()->empresa_id;
-        });
+    {
+        if (auth()->check()) {
+            // 1. Antes de criar, injeta o empresa_id do usuário logado
+            static::creating(function ($model) {
+                $model->empresa_id = auth()->user()->empresa_id;
+            });
 
-        static::addGlobalScope('empresa_id', function (Builder $builder) {
-            $builder->where('empresa_id', auth()->user()->empresa_id);
-        });
+            // 2. Em qualquer consulta (Select), filtra pela empresa do usuário
+            static::addGlobalScope('empresa_id', function (Builder $builder) {
+                $builder->where('empresa_id', auth()->user()->empresa_id);
+            });
+        }
     }
-}
 }
