@@ -11,6 +11,15 @@ use Illuminate\Support\Facades\Log;
 use App\Models\User;
 use App\Http\Controllers\Api\ApiDashController;
 
+Route::middleware('auth:sanctum')->group(function () {
+    Route::get('/dashboard', [ApiDashController::class, 'getDashboardData']);
+    // Rota para listar todos os veículos (GET /api/veiculos)
+    Route::get('/veiculos', [VeiculoController::class, 'index']);
+    
+    // Opcional: Rota para ver detalhes de um veículo específico (GET /api/veiculos/2)
+    Route::get('/veiculos/{id}', [VeiculoController::class, 'show']);
+});
+
 /*
 |--------------------------------------------------------------------------
 | PAGAMENTOS (Ações iniciadas pelo usuário)
@@ -67,11 +76,3 @@ Route::post('/login', function (Request $request) {
     ]);
 });
 
-Route::middleware('auth:sanctum')->group(function () {
-    Route::get('/dashboard', [ApiDashController::class, 'getDashboardData']);
-    // Rota para listar todos os veículos (GET /api/veiculos)
-    Route::get('/veiculos', [VeiculoController::class, 'index']);
-    
-    // Opcional: Rota para ver detalhes de um veículo específico (GET /api/veiculos/2)
-    Route::get('/veiculos/{id}', [VeiculoController::class, 'show']);
-});

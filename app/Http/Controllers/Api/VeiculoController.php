@@ -5,10 +5,30 @@ namespace App\Http\Controllers\Api;
 use App\Models\Veiculo;
 use App\Http\Resources\VeiculoResource;
 
-public function index()
+class VeiculoController extends Controller
 {
-    // O Laravel aplicará o Global Scope do Trait automaticamente aqui!
-    $veiculos = Veiculo::orderBy('created_at', 'desc')->get();
+    public function index()
+    {
+        // Usamos try-catch para ver o erro no Logcat se algo falhar no banco
+        try {
+            // O Trait MultiTenant cuidará do filtro automaticamente
+            $veiculos = Veiculo::all();
+            return VeiculoResource::collection($veiculos);
+        } catch (\Exception $e) {
+            return response()->json(['error' => $e->getMessage()], 500);
+        }
+    }
 
-    return VeiculoResource::collection($veiculos);
+    public function show($id)
+    {
+        try {
+            $veiculo = Veiculo::find($id);
+            if (!$veiculo) {
+                return response()->json(['message' => 'Veículo não encontrado'], 404);
+            }
+            return new VeiculoResource($veiculo);
+        } catch (\Exception $e) {
+            return response()->json(['error' => $e->getMessage()], 500);
+        }
+    }
 }
