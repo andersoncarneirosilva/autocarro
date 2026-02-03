@@ -50,7 +50,7 @@ class VeiculoController extends Controller
         'valor'               => 'required|numeric',
         'valor_compra'        => 'nullable|numeric',
         'valor_oferta'        => 'nullable|numeric',
-        'exibir_parcelamento' => 'required', // Remova 'boolean' temporariamente se der erro
+        'exibir_parcelamento' => 'required',
         'qtd_parcelas'        => 'required|integer',
         'taxa_juros'          => 'required|numeric',
         'valor_parcela'       => 'nullable|numeric',
@@ -73,6 +73,26 @@ class VeiculoController extends Controller
     } catch (\Exception $e) {
         return response()->json(['message' => 'Erro ao salvar: ' . $e->getMessage()], 500);
     }
+}
+
+public function updateRegistro(Request $request, $id)
+{
+    $veiculo = Veiculo::findOrFail($id);
+
+    // Validação básica
+    $dados = $request->validate([
+        'crv'    => 'nullable|string|max:50',
+        'renavam'=> 'nullable|string',
+        'chassi' => 'nullable|string',
+        // Adicione outros campos de registro se quiser que a mesma rota sirva para todos
+    ]);
+
+    $veiculo->update($dados);
+
+    return response()->json([
+        'message' => 'Dados de registro atualizados com sucesso!',
+        'veiculo' => new VeiculoResource($veiculo)
+    ]);
 }
 
 }
