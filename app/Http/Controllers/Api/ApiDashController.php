@@ -27,15 +27,37 @@ class ApiDashController extends Controller
 
     public function getDashboardData()
 {
-    // O Global Scope da Trait já vai aplicar o where('empresa_id', ...) automaticamente!
+    // Usamos o status que está no seu banco: 'Ativo' e 'Disponível'
     $data = [
-        'totalAtivos' => Veiculo::where('status', 'Disponível')->count(),
-        'totalVendidos' => Veiculo::where('status', 'Vendido')->count(),
-        'receitaVendas' => (float) Veiculo::where('status', 'Vendido')->sum('valor_venda'),
-        'valorEstoque' => (float) Veiculo::where('status', 'Disponível')->sum('valor'),
-        'ultimosVeiculos' => Veiculo::latest()->take(5)->get(),
-        'contasAPagar' => (float) VeiculoGasto::where('pago', '0')->sum('valor'),
-        'quantidadePendente' => (int) VeiculoGasto::where('pago', '0')->count(),
+        // Conta tanto 'Ativo' quanto 'Disponível'
+        'totalAtivos' => Veiculo::withoutGlobalScopes()
+            ->whereIn('status', ['Ativo', 'Disponível'])
+            ->count(),
+            
+        'totalVendidos' => Veiculo::withoutGlobalScopes()
+            ->where('status', 'Vendido')
+            ->count(),
+            
+        'receitaVendas' => (float) Veiculo::withoutGlobalScopes()
+            ->where('status', 'Vendido')
+            ->sum('valor_venda'),
+            
+        'valorEstoque' => (float) Veiculo::withoutGlobalScopes()
+            ->whereIn('status', ['Ativo', 'Disponível'])
+            ->sum('valor'),
+            
+        'ultimosVeiculos' => Veiculo::withoutGlobalScopes()
+            ->latest()
+            ->take(5)
+            ->get(),
+            
+        'contasAPagar' => (float) VeiculoGasto::withoutGlobalScopes()
+            ->where('pago', '0')
+            ->sum('valor'),
+            
+        'quantidadePendente' => (int) VeiculoGasto::withoutGlobalScopes()
+            ->where('pago', '0')
+            ->count(),
     ];
 
     return new DashboardResource($data);
