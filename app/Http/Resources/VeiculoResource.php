@@ -25,10 +25,25 @@ class VeiculoResource extends JsonResource
             'valor_compra' => (double) $this->valor_compra,
             'status' => $this->status,
             
+            // --- NOVOS CAMPOS DE REGISTRO (SINCRONIZADOS COM O APP) ---
+            'renavam' => $this->renavam,
+            'chassi' => $this->chassi,
+            'motor' => $this->motor,
+            'crv' => $this->crv,
+            'placa_anterior' => $this->placaAnterior, // Laravel costuma usar camelCase, mas o App espera placa_anterior
+            'tipo' => $this->tipo,
+            'categoria' => $this->categoria,
+            'combustivel' => $this->combustivel,
+            'potencia' => $this->potencia,
+            'cilindrada' => $this->cilindrada,
+            'peso_bruto' => $this->peso_bruto,
+            'carroceria' => $this->carroceria,
+            // ---------------------------------------------------------
+
             // Decodifica as imagens se for um JSON string no banco
             'images' => is_string($this->images) ? json_decode($this->images) : $this->images,
             
-            // Informações adicionais úteis para o app
+            // Mantendo o objeto detalhes para compatibilidade
             'detalhes' => [
                 'combustivel' => $this->combustivel,
                 'potencia' => $this->potencia,
@@ -36,8 +51,7 @@ class VeiculoResource extends JsonResource
                 'cilindrada' => $this->cilindrada,
             ],
             
-            // Datas formatadas
-            'data_cadastro' => $this->created_at->format('d/m/Y'),
+            'data_cadastro' => $this->created_at ? $this->created_at->format('d/m/Y') : null,
         ];
     }
 }

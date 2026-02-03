@@ -65,7 +65,6 @@ class VeiculoController extends Controller
             'exibir_parcelamento' => $request->exibir_parcelamento,
             'qtd_parcelas'        => $request->qtd_parcelas,
             'taxa_juros'          => $request->taxa_juros,
-            // Se você quiser salvar o valor da parcela calculado:
             'valor_parcela'       => $request->valor_parcela, 
         ]);
 
