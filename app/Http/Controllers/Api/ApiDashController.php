@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Api;
 
+use App\Http\Resources\Api\DashboardResource;
 use App\Http\Controllers\Controller;
 use App\Models\Cliente;
 use App\Models\DashModel;
