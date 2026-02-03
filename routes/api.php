@@ -25,7 +25,7 @@ Route::put('veiculos/{id}/update-precos', [VeiculoController::class, 'updatePrec
     // Opcional: Rota para ver detalhes de um veículo específico (GET /api/veiculos/2)
     Route::get('/veiculos/{id}', [VeiculoController::class, 'show']);
 
-    Route::post('/veiculos/importar-pdf', [VeiculoController::class, 'importarPdf']);
+    Route::post('/veiculos/cadastro-rapido', [VeiculoController::class, 'cadastroRapido']);
 });
 
 /*
