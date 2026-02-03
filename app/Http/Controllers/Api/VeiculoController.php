@@ -13,7 +13,6 @@ use App\Models\Cliente;
 use App\Models\ModeloProcuracao;
 use App\Models\Outorgado;
 use App\Models\User;
-use App\Models\Veiculo;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Str;
