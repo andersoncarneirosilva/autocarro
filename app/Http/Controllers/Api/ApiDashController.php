@@ -27,17 +27,15 @@ class ApiDashController extends Controller
 
     public function getDashboardData()
 {
-    $user = Auth::user();
-    $empresaId = $user->empresa_id ?? $user->id;
-    
+    // O Global Scope da Trait já vai aplicar o where('empresa_id', ...) automaticamente!
     $data = [
-        'totalAtivos' => Veiculo::where('empresa_id', $empresaId)->where('status', 'Disponível')->count(),
-        'totalVendidos' => Veiculo::where('empresa_id', $empresaId)->where('status', 'Vendido')->count(),
-        'receitaVendas' => Veiculo::where('empresa_id', $empresaId)->where('status', 'Vendido')->sum('valor_venda'),
-        'valorEstoque' => Veiculo::where('empresa_id', $empresaId)->where('status', 'Disponível')->sum('valor'),
-        'ultimosVeiculos' => Veiculo::where('empresa_id', $empresaId)->latest()->take(5)->get(),
-        'contasAPagar' => VeiculoGasto::where('pago', '0')->sum('valor'),
-        'quantidadePendente' => VeiculoGasto::where('pago', '0')->count(),
+        'totalAtivos' => Veiculo::where('status', 'Disponível')->count(),
+        'totalVendidos' => Veiculo::where('status', 'Vendido')->count(),
+        'receitaVendas' => (float) Veiculo::where('status', 'Vendido')->sum('valor_venda'),
+        'valorEstoque' => (float) Veiculo::where('status', 'Disponível')->sum('valor'),
+        'ultimosVeiculos' => Veiculo::latest()->take(5)->get(),
+        'contasAPagar' => (float) VeiculoGasto::where('pago', '0')->sum('valor'),
+        'quantidadePendente' => (int) VeiculoGasto::where('pago', '0')->count(),
     ];
 
     return new DashboardResource($data);
