@@ -50,24 +50,17 @@ class VeiculoController extends Controller
         }
     }
 
-    public function showDocumentos($id)
+    // No Laravel - VeiculoController.php
+public function showDocumentos($id)
 {
-    $veiculo = Veiculo::with(['documentos', 'detalhes'])->findOrFail($id);
-
-    // Se o veículo tem documentos, forçamos a visibilidade neles também
-    if ($veiculo->documentos) {
-        $veiculo->documentos->makeVisible([
-            'arquivo_proc', 
-            'arquivo_atpve', 
-            'arquivo_comunicacao',
-            'size_proc_pdf',
-            'size_atpve_pdf'
-        ]);
-    }
-
+    $veiculo = Veiculo::with('documentos')->findOrFail($id);
+    
+    // Teste de ouro: Se isso retornar null no seu navegador, 
+    // o problema é que o registro não existe na tabela 'documentos'
     return response()->json([
         'status' => 'success',
-        'data' => $veiculo
+        'data' => $veiculo,
+        'debug_documento_puro' => $veiculo->documentos // Adicione isso para ver no log do Android
     ]);
 }
 
