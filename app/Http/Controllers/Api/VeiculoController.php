@@ -88,25 +88,7 @@ class VeiculoController extends Controller
     }
 }
 
-public function updateRegistro(Request $request, $id)
-{
-    $veiculo = Veiculo::findOrFail($id);
 
-    // Validação básica
-    $dados = $request->validate([
-        'crv'    => 'nullable|string|max:50',
-        'renavam'=> 'nullable|string',
-        'chassi' => 'nullable|string',
-        // Adicione outros campos de registro se quiser que a mesma rota sirva para todos
-    ]);
-
-    $veiculo->update($dados);
-
-    return response()->json([
-        'message' => 'Dados de registro atualizados com sucesso!',
-        'veiculo' => new VeiculoResource($veiculo)
-    ]);
-}
 
 public function updateInfoBasica(Request $request, $id)
 {
