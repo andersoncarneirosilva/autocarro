@@ -53,11 +53,9 @@ class VeiculoController extends Controller
     public function showDocumentos($id)
 {
     $veiculo = Veiculo::with(['documentos', 'detalhes'])->findOrFail($id);
-
     return response()->json([
         'status' => 'success',
-        // O collect()->values() garante que o JSON seja [ {...} ]
-        'data' => collect([$veiculo])->values()->all() 
+        'data' => $veiculo // Sem os colchetes
     ]);
 }
 
