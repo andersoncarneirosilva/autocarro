@@ -53,10 +53,22 @@ class VeiculoController extends Controller
     public function showDocumentos($id)
 {
     $veiculo = Veiculo::with(['documentos', 'detalhes'])->findOrFail($id);
+
+    // Se o veículo tem documentos, forçamos a visibilidade neles também
+    if ($veiculo->documentos) {
+        $veiculo->documentos->makeVisible([
+            'arquivo_proc', 
+            'arquivo_atpve', 
+            'arquivo_comunicacao',
+            'size_proc_pdf',
+            'size_atpve_pdf'
+        ]);
+    }
+
     return response()->json([
-    'status' => 'success',
-    'data' => $veiculo->makeVisible(['arquivo_proc', 'arquivo_atpve']) // Força a exibição
-]);
+        'status' => 'success',
+        'data' => $veiculo
+    ]);
 }
 
     public function updatePrecos(Request $request, $id)
