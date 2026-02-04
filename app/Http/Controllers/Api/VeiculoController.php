@@ -110,24 +110,26 @@ public function updateRegistro(Request $request, $id)
 
 public function updateInfoBasica(Request $request, $id)
 {
-    // No seu Controller Laravel, adicione este log no início para ver o que o PHP recebe:
-\Log::info($request->all());
-
     $veiculo = Veiculo::findOrFail($id);
 
     $request->validate([
         'kilometragem' => 'required|numeric|min:0',
         'cambio'       => 'required',
+        // Adicione validação para placa se desejar
     ]);
 
     $data = [
-        'cambio'        => $request->cambio,
-        'kilometragem'  => $request->kilometragem,
-        'portas'        => $request->portas,
-        'especiais'     => $request->especiais,
-        'marca'         => $request->marca_nome ?: $veiculo->marca,
-        'modelo'        => $request->modelo_nome ?: $veiculo->modelo,
-        'versao'        => $request->versao_nome ?: $veiculo->versao,
+        'cambio'         => $request->cambio,
+        'kilometragem'   => $request->kilometragem,
+        'placa'          => $request->placa,          // ADICIONE ESTA LINHA
+        'cor'            => $request->cor,            // ADICIONE ESTA LINHA
+        'ano_fabricacao' => $request->ano_fabricacao, // ADICIONE ESTA LINHA
+        'ano_modelo'     => $request->ano_modelo,     // ADICIONE ESTA LINHA
+        'portas'         => $request->portas,
+        'especiais'      => $request->especiais,
+        'marca'          => $request->marca_nome ?: $veiculo->marca,
+        'modelo'         => $request->modelo_nome ?: $veiculo->modelo,
+        'versao'         => $request->versao_nome ?: $veiculo->versao,
         'fipe_marca_id'  => $request->marca,
         'fipe_modelo_id' => $request->modelo,
         'fipe_versao_id' => $request->versao,
@@ -139,12 +141,11 @@ public function updateInfoBasica(Request $request, $id)
 
     $veiculo->update($data);
 
-    // AJUSTE: Se a requisição vier do App (JSON), retorne JSON. Se vier da Web, redirecione.
     if ($request->wantsJson() || $request->header('Accept') == 'application/json') {
         return response()->json([
             'status' => 'success',
             'message' => 'Informações atualizadas!',
-            'data' => $veiculo
+            'data' => $veiculo->refresh() // refresh() garante que o retorno venha do banco atualizado
         ]);
     }
 
