@@ -110,6 +110,9 @@ public function updateRegistro(Request $request, $id)
 
 public function updateInfoBasica(Request $request, $id)
 {
+    // No seu Controller Laravel, adicione este log no início para ver o que o PHP recebe:
+\Log::info($request->all());
+
     $veiculo = Veiculo::findOrFail($id);
 
     $request->validate([
