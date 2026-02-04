@@ -38,33 +38,27 @@ class VeiculoController extends Controller
     }
 
     public function show($id)
-    {
-        try {
-            $veiculo = Veiculo::find($id);
-            if (!$veiculo) {
-                return response()->json(['message' => 'Veículo não encontrado'], 404);
-            }
-            return new VeiculoResource($veiculo);
-        } catch (\Exception $e) {
-            return response()->json(['error' => $e->getMessage()], 500);
-        }
-    }
-
-    // No Laravel - VeiculoController.php
-public function showDocumentos($id)
 {
-    $veiculo = Veiculo::with('documentos')->findOrFail($id);
-    
-    // Esse log aparecerá no seu arquivo storage/logs/laravel.log
-    \Log::info("Documentos do Veiculo $id:", [$veiculo->documentos ? $veiculo->documentos->toArray() : 'Nulo']);
+    try {
+        // Usamos with() para trazer os documentos e detalhes
+        $veiculo = Veiculo::with(['documentos', 'detalhes'])->find($id);
 
-    return response()->json([
-        'status' => 'success',
-        'data' => $veiculo,
-        // Forçamos o objeto documento a ir separado para teste
-        'check' => $veiculo->documentos 
-    ]);
+        if (!$veiculo) {
+            return response()->json(['message' => 'Veículo não encontrado'], 404);
+        }
+
+        // Retornamos o JSON puro no padrão que o seu Android espera
+        return response()->json([
+            'status' => 'success',
+            'data' => $veiculo
+        ]);
+
+    } catch (\Exception $e) {
+        return response()->json(['error' => $e->getMessage()], 500);
+    }
 }
+
+
 
     public function updatePrecos(Request $request, $id)
 {
