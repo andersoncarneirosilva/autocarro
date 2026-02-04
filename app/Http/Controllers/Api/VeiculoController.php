@@ -152,7 +152,7 @@ public function updateRegistro(Request $request, $id)
     return response()->json([
         'status' => 'success',
         'message' => 'Dados de registro atualizados!',
-        'data' => $veiculo
+        'data' => [$veiculo]
     ]);
 }
 
