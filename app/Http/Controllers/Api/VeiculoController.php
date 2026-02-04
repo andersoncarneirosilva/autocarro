@@ -348,16 +348,15 @@ public function forcarAcentosMaiusculos($texto)
         return $texto;
     }
 
-    public function storeManual(Request $request)
+   public function storeManual(Request $request)
 {
     try {
-        // 1. Validação dos dados
         $validatedData = $request->validate([
             'tipo'           => 'required|string',
             'marca'          => 'required|string',
             'modelo'         => 'required|string',
             'versao'         => 'nullable|string',
-            'placa'          => 'required|string|unique:veiculos,placa', // Evita duplicados
+            'placa'          => 'required|string|unique:veiculos,placa',
             'ano_fabricacao' => 'required|string',
             'ano_modelo'     => 'required|string',
             'cor'            => 'nullable|string',
@@ -366,14 +365,16 @@ public function forcarAcentosMaiusculos($texto)
             'kilometragem'   => 'required|integer',
             'portas'         => 'nullable|string',
             'preco_fipe'     => 'nullable|string',
-            // IDs da FIPE para referências futuras
             'fipe_marca_id'  => 'nullable|string',
             'fipe_modelo_id' => 'nullable|string',
             'fipe_versao_id' => 'nullable|string',
         ]);
 
-        // 2. Criar o registro no banco
-        // O Alcecar usa o modelo Veiculo que aponta para sua tabela 'veiculos'
+        // O Trait cuida do empresa_id no boot, 
+        // mas o user_id geralmente precisa ser definido manualmente:
+        $validatedData['user_id'] = auth()->id();
+
+        // Criar o registro
         $veiculo = Veiculo::create($validatedData);
 
         return response()->json([
@@ -381,11 +382,6 @@ public function forcarAcentosMaiusculos($texto)
             'data'    => $veiculo
         ], 201);
 
-    } catch (\Illuminate\Validation\ValidationException $e) {
-        return response()->json([
-            'message' => 'Erro de validação',
-            'errors'  => $e->errors()
-        ], 422);
     } catch (\Exception $e) {
         return response()->json([
             'message' => 'Erro interno ao salvar veículo',
