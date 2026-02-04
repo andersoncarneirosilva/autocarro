@@ -39,23 +39,11 @@ class VeiculoController extends Controller
 
     public function show($id)
 {
-    try {
-        // Usamos with() para trazer os documentos e detalhes
-        $veiculo = Veiculo::with(['documentos', 'detalhes'])->find($id);
-
-        if (!$veiculo) {
-            return response()->json(['message' => 'Veículo não encontrado'], 404);
-        }
-
-        // Retornamos o JSON puro no padrão que o seu Android espera
-        return response()->json([
-            'status' => 'success',
-            'data' => $veiculo
-        ]);
-
-    } catch (\Exception $e) {
-        return response()->json(['error' => $e->getMessage()], 500);
-    }
+    // Carrega o veículo com a relação
+    $veiculo = Veiculo::with(['documentos'])->findOrFail($id);
+    
+    // Retorna o Resource que acabamos de ajustar
+    return new VeiculoResource($veiculo);
 }
 
 

@@ -25,7 +25,11 @@ class VeiculoResource extends JsonResource
             'valor_compra' => (double) $this->valor_compra,
             'status' => $this->status,
             
-            // --- NOVOS CAMPOS DE REGISTRO (SINCRONIZADOS COM O APP) ---
+            // --- DOCUMENTOS (A peça que faltava!) ---
+            // Isso envia o objeto documentos para o App se ele estiver carregado
+            'documentos' => $this->documentos, 
+
+            // --- CAMPOS DE REGISTRO ---
             'renavam' => $this->renavam,
             'chassi' => $this->chassi,
             'motor' => $this->motor,
@@ -35,7 +39,7 @@ class VeiculoResource extends JsonResource
             'fipe_versao_id' => $this->fipe_versao_id,
 
             'crv' => $this->crv,
-            'placa_anterior' => $this->placaAnterior, // Laravel costuma usar camelCase, mas o App espera placa_anterior
+            'placa_anterior' => $this->placa_anterior ?? $this->placaAnterior, 
             'tipo' => $this->tipo,
             'categoria' => $this->categoria,
             'combustivel' => $this->combustivel,
@@ -48,12 +52,10 @@ class VeiculoResource extends JsonResource
             'nome' => $this->nome,
             'cpf' => $this->cpf,
             'cidade' => $this->cidade,
-            // ---------------------------------------------------------
 
-            // Decodifica as imagens se for um JSON string no banco
+            // Decodifica as imagens
             'images' => is_string($this->images) ? json_decode($this->images) : $this->images,
             
-            // Mantendo o objeto detalhes para compatibilidade
             'detalhes' => [
                 'combustivel' => $this->combustivel,
                 'potencia' => $this->potencia,
