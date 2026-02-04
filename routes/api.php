@@ -26,6 +26,8 @@ Route::put('veiculos/{id}/update-precos', [VeiculoController::class, 'updatePrec
     Route::get('/veiculos/{id}', [VeiculoController::class, 'show']);
 Route::post('/veiculos/manual', [VeiculoController::class, 'storeManual']);
     Route::post('/veiculos/cadastro-rapido', [VeiculoController::class, 'cadastroRapido']);
+    // routes/api.php
+Route::put('veiculos/{id}/update-registro', [VeiculoController::class, 'updateRegistro']);
 });
 
 /*

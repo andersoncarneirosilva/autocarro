@@ -152,6 +152,28 @@ public function updateInfoBasica(Request $request, $id)
     return redirect()->back()->with('success', 'Informações atualizadas com sucesso!');
 }
 
+public function updateRegistro(Request $request, $id)
+{
+    $veiculo = Veiculo::findOrFail($id);
+    
+    // Lista dos campos que o Android está enviando
+    $campos = [
+        'renavam', 'chassi', 'motor', 'crv', 'placa_anterior', 
+        'categoria', 'combustivel', 'potencia', 'cilindrada', 
+        'peso_bruto', 'carroceria', 'infos', 'cpf', 'cidade', 'nome'
+    ];
+
+    $data = $request->only($campos);
+    
+    $veiculo->update($data);
+
+    return response()->json([
+        'status' => 'success',
+        'message' => 'Dados de registro atualizados!',
+        'data' => $veiculo
+    ]);
+}
+
 public function cadastroRapido(Request $request)
 {
     $user = Auth::user();
