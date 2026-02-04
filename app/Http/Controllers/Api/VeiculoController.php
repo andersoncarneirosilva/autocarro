@@ -55,12 +55,14 @@ public function showDocumentos($id)
 {
     $veiculo = Veiculo::with('documentos')->findOrFail($id);
     
-    // Teste de ouro: Se isso retornar null no seu navegador, 
-    // o problema é que o registro não existe na tabela 'documentos'
+    // Esse log aparecerá no seu arquivo storage/logs/laravel.log
+    \Log::info("Documentos do Veiculo $id:", [$veiculo->documentos ? $veiculo->documentos->toArray() : 'Nulo']);
+
     return response()->json([
         'status' => 'success',
         'data' => $veiculo,
-        'debug_documento_puro' => $veiculo->documentos // Adicione isso para ver no log do Android
+        // Forçamos o objeto documento a ir separado para teste
+        'check' => $veiculo->documentos 
     ]);
 }
 
