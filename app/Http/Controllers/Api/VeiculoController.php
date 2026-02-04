@@ -136,24 +136,40 @@ public function updateInfoBasica(Request $request, $id)
 
 public function updateRegistro(Request $request, $id)
 {
-    $veiculo = Veiculo::findOrFail($id);
-    
-    // Lista dos campos que o Android está enviando
-    $campos = [
-        'renavam', 'chassi', 'motor', 'crv', 'placa_anterior', 
-        'categoria', 'combustivel', 'potencia', 'cilindrada', 
-        'peso_bruto', 'carroceria', 'infos', 'cpf', 'cidade', 'nome'
-    ];
+    try {
+        $veiculo = Veiculo::findOrFail($id);
+        
+        // Lista exata dos campos permitidos
+        $campos = [
+            'renavam', 'chassi', 'motor', 'crv', 'placa_anterior', 
+            'categoria', 'combustivel', 'potencia', 'cilindrada', 
+            'peso_bruto', 'carroceria', 'infos', 'cpf', 'cidade', 'nome'
+        ];
 
-    $data = $request->only($campos);
-    
-    $veiculo->update($data);
+        // Coleta apenas o que foi enviado
+        $data = $request->only($campos);
 
-    return response()->json([
-        'status' => 'success',
-        'message' => 'Dados de registro atualizados!',
-        'data' => [$veiculo]
-    ]);
+        // Opcional: Limpeza rápida de strings (trim) para evitar espaços em branco acidentais
+        $data = array_map(function($value) {
+            return is_string($value) ? trim($value) : $value;
+        }, $data);
+        
+        // Executa o update
+        $veiculo->update($data);
+
+        // Retorna como Array para satisfazer o VeiculoResponse do Android (BEGIN_ARRAY)
+        return response()->json([
+            'status' => 'success',
+            'message' => 'Dados de registro atualizados com sucesso!',
+            'data' => [$veiculo->fresh()] // fresh() garante que mandamos o dado recém-salvo
+        ], 200);
+
+    } catch (\Exception $e) {
+        return response()->json([
+            'status' => 'error',
+            'message' => 'Falha ao atualizar: ' . $e.getMessage()
+        ], 500);
+    }
 }
 
 public function cadastroRapido(Request $request)
