@@ -18,7 +18,7 @@ Route::put('veiculos/{id}/update-registro', [VeiculoController::class, 'updateRe
 Route::put('veiculos/{id}/update-precos', [VeiculoController::class, 'updatePrecos']);
 
     Route::get('/dashboard', [ApiDashController::class, 'getDashboardData']);
-
+Route::get('veiculos/{id}', [VeiculoController::class, 'showDocumentos']);
     // Rota para listar todos os veículos (GET /api/veiculos)
     Route::get('/veiculos', [VeiculoController::class, 'index']);
     
