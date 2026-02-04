@@ -52,12 +52,14 @@ class VeiculoController extends Controller
 
     public function showDocumentos($id)
 {
-    // O 'with' garante que o objeto 'documentos' seja incluído no JSON
     $veiculo = Veiculo::with(['documentos', 'detalhes'])->findOrFail($id);
 
     return response()->json([
         'status' => 'success',
-        'data' => [$veiculo] // Mantendo o padrão de Array que seu Android espera
+        // Certifique-se de que isso é um array []
+        'data' => [
+            $veiculo
+        ]
     ]);
 }
 
