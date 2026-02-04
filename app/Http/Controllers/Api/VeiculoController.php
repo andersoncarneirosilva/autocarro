@@ -54,9 +54,9 @@ class VeiculoController extends Controller
 {
     $veiculo = Veiculo::with(['documentos', 'detalhes'])->findOrFail($id);
     return response()->json([
-        'status' => 'success',
-        'data' => $veiculo // Sem os colchetes
-    ]);
+    'status' => 'success',
+    'data' => $veiculo->makeVisible(['arquivo_proc', 'arquivo_atpve']) // Força a exibição
+]);
 }
 
     public function updatePrecos(Request $request, $id)
