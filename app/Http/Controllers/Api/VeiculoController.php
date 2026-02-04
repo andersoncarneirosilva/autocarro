@@ -177,13 +177,13 @@ public function cadastroRapido(Request $request)
             if (request()->expectsJson()) {
                 return response()->json([
                     'error_title' => 'Documento Inválido',
-                    'message' => 'O sistema Alcecar aceita apenas CRLV Digital (PDF) oficial emitido a partir de 2024.'
+                    'message' => 'O sistema aceita apenas CRLV emitido a partir de 2023.'
                 ], 422);
             }
 
             return redirect()->route('veiculos.index')
                 ->with('error_title', 'Documento Inválido')
-                ->with('error', 'O sistema Alcecar aceita apenas CRLV Digital (PDF) oficial emitido a partir de 2024.');
+                ->with('error', 'O sistema aceita apenas CRLV emitido a partir de 2023.');
         }
     } catch (\Exception $e) {
         return redirect()->route('veiculos.index')
