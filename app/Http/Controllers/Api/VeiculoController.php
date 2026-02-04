@@ -56,10 +56,8 @@ class VeiculoController extends Controller
 
     return response()->json([
         'status' => 'success',
-        // Certifique-se de que isso é um array []
-        'data' => [
-            $veiculo
-        ]
+        // O collect()->values() garante que o JSON seja [ {...} ]
+        'data' => collect([$veiculo])->values()->all() 
     ]);
 }
 
