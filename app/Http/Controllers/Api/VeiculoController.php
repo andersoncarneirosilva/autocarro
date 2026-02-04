@@ -173,6 +173,14 @@ public function cadastroRapido(Request $request)
         $linhas = explode("\n", $textoPagina);
 
         if (!isset($linhas[3]) || trim($linhas[3]) != 'SECRETARIA NACIONAL DE TRÂNSITO - SENATRAN') {
+
+            if (request()->expectsJson()) {
+                return response()->json([
+                    'error_title' => 'Documento Inválido',
+                    'message' => 'O sistema Alcecar aceita apenas CRLV Digital (PDF) oficial emitido a partir de 2024.'
+                ], 422);
+            }
+
             return redirect()->route('veiculos.index')
                 ->with('error_title', 'Documento Inválido')
                 ->with('error', 'O sistema Alcecar aceita apenas CRLV Digital (PDF) oficial emitido a partir de 2024.');
@@ -190,7 +198,7 @@ public function cadastroRapido(Request $request)
     if (Veiculo::where('placa', $placa)->where('empresa_id', $empresaId)->exists()) {
     // Forçamos a resposta JSON imediatamente para evitar redirecionamentos do middleware
     return response()->json([
-        'error' => "A placa $placa já consta na base de dados da sua empresa."
+        'error' => "A placa $placa já consta na sua base de dados."
     ], 422); 
 }
 
