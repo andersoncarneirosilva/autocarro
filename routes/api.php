@@ -14,6 +14,7 @@ use App\Http\Controllers\Api\ApiDashController;
 Route::middleware('auth:sanctum')->group(function () {
 
 // Rota para pegar TUDO
+Route::put('gastos/{id}/status', [GastoController::class, 'updateStatus']);
 Route::get('/gastos', [GastoController::class, 'index']);
 
 Route::put('veiculos/{id}/update-info-basica', [VeiculoController::class, 'updateInfoBasica']);

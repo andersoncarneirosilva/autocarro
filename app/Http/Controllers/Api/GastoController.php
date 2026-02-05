@@ -33,5 +33,32 @@ public function index()
     }
 }
 
+public function updateStatus(Request $request, $id)
+    {
+        // 1. Validação dos dados recebidos
+        $request->validate([
+            'pago' => 'required|integer|in:0,1',
+        ]);
+
+        // 2. Busca o gasto ou retorna 404
+        $gasto = VeiculoGasto::findOrFail($id);
+
+        // 3. Atualiza apenas o campo pago
+        $gasto->pago = $request->pago;
+        
+        // Opcional: registrar a data do pagamento se houver essa coluna
+        if ($request->pago == 1) {
+            $gasto->data_pagamento = now();
+        }
+
+        $gasto->save();
+
+        // 4. Retorna o objeto atualizado e status 200
+        return response()->json([
+            'message' => 'Status do gasto atualizado com sucesso!',
+            'gasto' => $gasto
+        ], 200);
+    }
+
 
 }
