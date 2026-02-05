@@ -519,4 +519,9 @@ public function restore($id)
     }
 }
 
+public function gastos($id) {
+    $gastos = Gasto::where('veiculo_id', $id)->orderBy('data_gasto', 'desc')->get();
+    return response()->json($gastos); // Lembra do withoutWrapping no AppServiceProvider
+}
+
 }
