@@ -207,20 +207,10 @@ document.addEventListener('DOMContentLoaded', function () {
                                     @endif
                                 </td> --}}
                                 <td class="align-middle">
-    @php
-        $bgClass = 'bg-success'; // Padrão: Disponível
-        
-        if($veiculo->status == 'Manutenção') {
-            $bgClass = 'bg-warning text-dark';
-        } elseif($veiculo->status == 'Vendido') {
-            $bgClass = 'bg-danger';
-        }
-    @endphp
-
-    <span class="badge {{ $bgClass }} text-uppercase px-2 py-1">
-        {{ $veiculo->status ?? 'Disponível' }}
-    </span>
-</td>
+                                    @if($veiculo->status === "Disponível")
+                                        <span class="badge badge-outline-success">Disponível</span>
+                                    @endif
+                                </td>
                             <td class="text-end">
                                 <div class="d-flex justify-content-end gap-2">
                                     <a href="{{ route('veiculos.show', $veiculo->id) }}" 

@@ -60,6 +60,7 @@
                                 <th>KM</th>
                                 <th>Valor</th>
                                 <th>Doc</th>
+                                <th>Status</th>
                                 <th class="text-end">Ações</th>
                             </tr>
                         </thead>
@@ -105,7 +106,7 @@
                                     <span class="fw-bold d-block">{{ $veiculo->placa }}</span>
                                 </div>
                             </td>
-                            <td>{{ $veiculo->ano }}</td>
+                            <td>{{ $veiculo->ano_fabricacao }}//{{ $veiculo->ano_modelo }}</td>
                             <td>{{ $veiculo->cor }}</td>
                             <td>{{ $veiculo->kilometragem ?? 'Não consta' }}</td>
                             <td>
@@ -128,6 +129,11 @@
                                         <span class="badge badge-outline-danger">FÍSICO</span>
                                     @else
                                         <span class="badge badge-outline-success">DIGITAL</span>
+                                    @endif
+                                </td>
+                                <td>
+                                    @if($veiculo->status === "Arquivado")
+                                        <span class="badge badge-outline-secondary">ARQUIVADO</span>
                                     @endif
                                 </td>
                                 <td class="text-end">
