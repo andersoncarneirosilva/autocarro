@@ -25,8 +25,11 @@ class ApiDashController extends Controller
 
     public function getDashboardData()
 {
+    // Definimos os status que consideramos "em estoque"
+    $statusAtivos = ['Ativo', 'Disponível', 'disponível'];
+
     $ativos = Veiculo::withoutGlobalScopes()
-        ->whereIn('status', ['Ativo', 'Disponível', 'disponível'])
+        ->whereIn('status', $statusAtivos)
         ->get();
 
     $data = [
@@ -34,8 +37,16 @@ class ApiDashController extends Controller
         'totalVendidos'      => Veiculo::withoutGlobalScopes()->where('status', 'Vendido')->count(),
         'receitaVendas'      => (float) Veiculo::withoutGlobalScopes()->where('status', 'Vendido')->sum('valor_venda'),
         'valorEstoque'       => (float) $ativos->sum('valor'),
-        // AQUI ESTÁ O AJUSTE:
-        'ultimosVeiculos'    => VeiculoResource::collection(Veiculo::withoutGlobalScopes()->latest()->take(5)->get()),
+        
+        // Agora filtrando apenas os ativos para a lista recente:
+        'ultimosVeiculos'    => VeiculoResource::collection(
+            Veiculo::withoutGlobalScopes()
+                ->whereIn('status', $statusAtivos) // Filtro adicionado aqui
+                ->latest()
+                ->take(5)
+                ->get()
+        ),
+        
         'contasAPagar'       => (float) VeiculoGasto::withoutGlobalScopes()->where('pago', '0')->sum('valor'),
         'quantidadePendente' => (int) VeiculoGasto::withoutGlobalScopes()->where('pago', '0')->count(),
     ];
