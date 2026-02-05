@@ -525,17 +525,23 @@ public function gastos($id) {
 }
 
 public function getManutencao()
-    {
-        // O MultiTenantModelTrait já filtrará automaticamente pela empresa_id do usuário logado
-        $veiculos = Veiculo::where('status', 'manutencao')
-            ->select('id', 'placa', 'modelo', 'marca', 'status') // Seleciona apenas o necessário para o VeiculoResumo
-            ->get();
+{
+    $veiculos = Veiculo::where('status', 'manutencao')
+        ->select(
+            'id', 
+            'placa', 
+            'modelo', 
+            'marca', 
+            'status', 
+            'ano_modelo', 
+            'cor', 
+            'valor',         // Essencial para o card
+            'valor_oferta',  // Essencial para o card
+            'images'         // Essencial para a foto aparecer
+        )
+        ->get();
 
-        if ($veiculos->isEmpty()) {
-            return response()->json([], 200); // Retorna lista vazia se não houver nenhum
-        }
-
-        return response()->json($veiculos, 200);
-    }
+    return response()->json($veiculos, 200);
+}
 
 }
