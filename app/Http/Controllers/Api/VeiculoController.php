@@ -479,4 +479,31 @@ public function destroy($id)
     }
 }
 
+public function arquivados()
+{
+    try {
+        // O MultiTenant (se usado) filtrará por empresa automaticamente
+        $veiculos = Veiculo::where('status', 'Arquivado')
+            ->orderBy('updated_at', 'desc')
+            ->get();
+
+        return VeiculoResource::collection($veiculos);
+    } catch (\Exception $e) {
+        return response()->json(['error' => 'Erro ao buscar arquivados'], 500);
+    }
+}
+
+public function vendidos()
+{
+    try {
+        $veiculos = Veiculo::where('status', 'Vendido')
+            ->orderBy('updated_at', 'desc')
+            ->get();
+
+        return VeiculoResource::collection($veiculos);
+    } catch (\Exception $e) {
+        return response()->json(['error' => 'Erro ao buscar veículos vendidos'], 500);
+    }
+}
+
 }
