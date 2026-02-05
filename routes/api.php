@@ -17,6 +17,9 @@ Route::put('veiculos/{id}/update-info-basica', [VeiculoController::class, 'updat
 Route::put('veiculos/{id}/update-registro', [VeiculoController::class, 'updateRegistro']);
 Route::put('veiculos/{id}/update-precos', [VeiculoController::class, 'updatePrecos']);
 
+Route::put('veiculos/{id}/archive', [VeiculoController::class, 'archive']);
+Route::delete('veiculos/{id}', [VeiculoController::class, 'destroy']);
+
     Route::get('/dashboard', [ApiDashController::class, 'getDashboardData']);
 
     // Rota para listar todos os veículos (GET /api/veiculos)
