@@ -526,22 +526,22 @@ public function gastos($id) {
 
 public function getManutencao()
 {
-    $veiculos = Veiculo::where('status', 'manutencao')
-        ->select(
-            'id', 
-            'placa', 
-            'modelo', 
-            'marca', 
-            'status', 
-            'ano_modelo', 
-            'cor', 
-            'valor',         // Essencial para o card
-            'valor_oferta',  // Essencial para o card
-            'images'         // Essencial para a foto aparecer
-        )
-        ->get();
+    try {
+        // Buscamos apenas os veículos em manutenção
+        // O MultiTenantModelTrait continua agindo automaticamente
+        $veiculos = Veiculo::where('status', 'manutencao')
+            ->orderBy('created_at', 'desc')
+            ->get();
 
-    return response()->json($veiculos, 200);
+        // IMPORTANTE: Retornar usando o Resource para garantir o mesmo formato de dados
+        return VeiculoResource::collection($veiculos);
+        
+    } catch (\Exception $e) {
+        return response()->json([
+            'error' => 'Erro ao listar veículos em manutenção',
+            'details' => $e->getMessage()
+        ], 500);
+    }
 }
 
 }
