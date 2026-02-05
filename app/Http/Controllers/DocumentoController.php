@@ -280,13 +280,18 @@ private function gerarPdfComunicacao(Request $request, $veiculoId)
     $nomeArquivo = "comunicacao_{$placaLimpa}.pdf";
     //$pasta = "documentos/{$veiculo->id}/";
     $pasta = "documentos/usuario_{$user->id}/veiculo_{$veiculo->id}/";
-    $caminhoAbsoluto = storage_path('app/public/' . $pasta);
+    $diretorioCompleto = storage_path('app/public/' . $pasta);
 
-    if (!file_exists($caminhoAbsoluto)) {
-        mkdir($caminhoAbsoluto, 0755, true);
+
+
+    if (!file_exists($diretorioCompleto)) {
+        mkdir($diretorioCompleto, 0755, true);
     }
 
-    \Pdf::loadView('pdfs.comunicacao', ['corpo' => $html])->save($caminhoAbsoluto . $nomeArquivo);
+    $caminhoFisico = $diretorioCompleto . $nomeArquivo;
+
+    $sizeBytes = filesize($caminhoFisico);
+    \Pdf::loadView('pdfs.comunicacao', ['corpo' => $html])->save($diretorioCompleto . $nomeArquivo);
 
     Documento::updateOrCreate(
     [
@@ -296,7 +301,7 @@ private function gerarPdfComunicacao(Request $request, $veiculoId)
     [
         'cliente_id'          => $cliente->id,
         'arquivo_comunicacao' => $pasta . $nomeArquivo,
-        'size_comunicacao'    => filesize($caminhoAbsoluto . $nomeArquivo),
+        'size_comunicacao'    => filesize($diretorioCompleto . $nomeArquivo),
         'size_comunicacao_pdf' => $this->formatSizeUnits($sizeBytes),
     ]
 );
