@@ -297,6 +297,7 @@ private function gerarPdfComunicacao(Request $request, $veiculoId)
         'cliente_id'          => $cliente->id,
         'arquivo_comunicacao' => $pasta . $nomeArquivo,
         'size_comunicacao'    => filesize($caminhoAbsoluto . $nomeArquivo),
+        'size_comunicacao_pdf' => $this->formatSizeUnits($sizeBytes),
     ]
 );
 
