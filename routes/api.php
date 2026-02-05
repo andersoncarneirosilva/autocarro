@@ -24,6 +24,7 @@ Route::put('veiculos/{id}/restore', [VeiculoController::class, 'restore']);
 Route::put('veiculos/{id}/archive', [VeiculoController::class, 'archive']);
 Route::delete('veiculos/{id}', [VeiculoController::class, 'destroy']);
 
+    Route::get('veiculos/manutencao', [VeiculoController::class, 'getManutencao']);
     Route::get('/dashboard', [ApiDashController::class, 'getDashboardData']);
     Route::get('veiculos/arquivados', [VeiculoController::class, 'arquivados']);
     Route::get('veiculos/vendidos', [VeiculoController::class, 'vendidos']);
