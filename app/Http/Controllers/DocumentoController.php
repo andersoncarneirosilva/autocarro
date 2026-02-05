@@ -289,14 +289,17 @@ private function gerarPdfComunicacao(Request $request, $veiculoId)
     \Pdf::loadView('pdfs.comunicacao', ['corpo' => $html])->save($caminhoAbsoluto . $nomeArquivo);
 
     Documento::updateOrCreate(
-        ['veiculo_id' => $veiculo->id],
-        [
-            'user_id' => $user->id,
-            'cliente_id' => $cliente->id,
-            'arquivo_comunicacao' => $pasta . $nomeArquivo,
-            'size_comunicacao' => filesize($caminhoAbsoluto . $nomeArquivo),
-        ]
-    );
+    [
+        'user_id'    => $user->id,
+        'veiculo_id' => $veiculo->id,
+    ],
+    [
+        'cliente_id'          => $cliente->id,
+        'arquivo_comunicacao' => $pasta . $nomeArquivo,
+        'size_comunicacao'    => filesize($caminhoAbsoluto . $nomeArquivo),
+    ]
+);
+
 
     return true; 
 }
