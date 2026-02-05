@@ -16,7 +16,7 @@ Route::middleware('auth:sanctum')->group(function () {
 // Rota para pegar TUDO
 Route::put('gastos/{id}/status', [GastoController::class, 'updateStatus']);
 Route::get('/gastos', [GastoController::class, 'index']);
-
+Route::patch('veiculos/{id}/status', [VeiculoController::class, 'updateStatus']);
 Route::put('veiculos/{id}/update-info-basica', [VeiculoController::class, 'updateInfoBasica']);
 Route::put('veiculos/{id}/update-registro', [VeiculoController::class, 'updateRegistro']);
 Route::put('veiculos/{id}/update-precos', [VeiculoController::class, 'updatePrecos']);

@@ -544,4 +544,20 @@ public function getManutencao()
     }
 }
 
+public function updateStatus(Request $request, $id)
+{
+    try {
+        $veiculo = Veiculo::findOrFail($id);
+        
+        // O MultiTenantModelTrait garante que o usuário só altere carros da própria empresa
+        $veiculo->update([
+            'status' => $request->status
+        ]);
+
+        return response()->json(['message' => 'Status atualizado com sucesso'], 200);
+    } catch (\Exception $e) {
+        return response()->json(['error' => 'Erro ao atualizar status'], 500);
+    }
+}
+
 }
