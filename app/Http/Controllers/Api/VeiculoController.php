@@ -24,20 +24,18 @@ use Illuminate\Support\Facades\Http;
 class VeiculoController extends Controller
 {
     public function index()
-{
-    try {
-        // O Trait filtra a empresa_id. 
-        // Agora adicionamos o filtro para trazer apenas os 'Ativo'.
-        $veiculos = Veiculo::where('status', 'Ativo')->get();
-        
-        return VeiculoResource::collection($veiculos);
-    } catch (\Exception $e) {
-        return response()->json([
-            'error' => 'Erro ao listar veículos ativos no Alcecar',
-            'details' => $e->getMessage()
-        ], 500);
+    {
+        try {
+            // O Trait MultiTenant filtrará automaticamente por empresa_id
+            $veiculos = Veiculo::all();
+            return VeiculoResource::collection($veiculos);
+        } catch (\Exception $e) {
+            return response()->json([
+                'error' => 'Erro ao listar veículos',
+                'details' => $e->getMessage()
+            ], 500);
+        }
     }
-}
 
     public function show($id)
 {
