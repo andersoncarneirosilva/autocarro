@@ -418,7 +418,7 @@ public function archive($id)
         $veiculo = Veiculo::findOrFail($id);
 
         // Atualiza o status
-        $veiculo->status = 'arquivado';
+        $veiculo->status = 'Arquivado';
         $veiculo->save();
 
         return response()->json([
