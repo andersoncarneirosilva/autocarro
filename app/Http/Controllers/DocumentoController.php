@@ -332,22 +332,5 @@ private function gerarPdfComunicacao(Request $request, $veiculoId)
 
     // VeiculoController.php
 
-// 1. ARQUIVAR (Muda o status)
-public function archive($id)
-{
-    $veiculo = Veiculo::findOrFail($id);
-    $veiculo->status = 'arquivado'; // Ou o nome do seu status de arquivo
-    $veiculo->save();
 
-    return response()->json(['status' => 'success', 'message' => 'Veículo arquivado com sucesso']);
-}
-
-// 2. EXCLUIR (Remove do banco)
-public function destroy($id)
-{
-    $veiculo = Veiculo::findOrFail($id);
-    $veiculo->delete();
-
-    return response()->json(['status' => 'success', 'message' => 'Veículo removido permanentemente']);
-}
 }

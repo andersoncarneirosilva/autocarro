@@ -412,4 +412,65 @@ public function forcarAcentosMaiusculos($texto)
     }
 }
 
+public function archive($id)
+{
+    try {
+        $veiculo = Veiculo::findOrFail($id);
+
+        // Atualiza o status
+        $veiculo->status = 'arquivado';
+        $veiculo->save();
+
+        return response()->json([
+            'status' => 'success',
+            'message' => 'Veículo ' . $veiculo->modelo . ' arquivado com sucesso no Alcecar.'
+        ], 200);
+
+    } catch (\Illuminate\Database\Eloquent\ModelNotFoundException $e) {
+        return response()->json([
+            'status' => 'error',
+            'message' => 'Veículo não encontrado para arquivamento.'
+        ], 404);
+    } catch (\Exception $e) {
+        return response()->json([
+            'status' => 'error',
+            'message' => 'Erro ao arquivar: ' . $e->getMessage()
+        ], 500);
+    }
+}
+
+// 2. EXCLUIR (Remove do banco)
+// App\Http\Controllers\Api\VeiculoController.php
+
+public function destroy($id)
+{
+    try {
+        $veiculo = Veiculo::findOrFail($id);
+
+        // Opcional: Se você quiser deletar os documentos físicos antes de apagar do banco
+        if ($veiculo->documentos) {
+            // Lógica para deletar arquivos do storage se necessário
+            $veiculo->documentos()->delete(); 
+        }
+
+        $veiculo->delete();
+
+        return response()->json([
+            'status' => 'success',
+            'message' => 'Veículo removido com sucesso do sistema Alcecar.'
+        ], 200);
+
+    } catch (\Illuminate\Database\Eloquent\ModelNotFoundException $e) {
+        return response()->json([
+            'status' => 'error',
+            'message' => 'Veículo não encontrado.'
+        ], 404);
+    } catch (\Exception $e) {
+        return response()->json([
+            'status' => 'error',
+            'message' => 'Erro interno: ' . $e->getMessage()
+        ], 500);
+    }
+}
+
 }
