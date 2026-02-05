@@ -24,18 +24,24 @@ use Illuminate\Support\Facades\Http;
 class VeiculoController extends Controller
 {
     public function index()
-    {
-        try {
-            // O Trait MultiTenant filtrará automaticamente por empresa_id
-            $veiculos = Veiculo::all();
-            return VeiculoResource::collection($veiculos);
-        } catch (\Exception $e) {
-            return response()->json([
-                'error' => 'Erro ao listar veículos',
-                'details' => $e->getMessage()
-            ], 500);
-        }
+{
+    try {
+        // Definimos o que é considerado "Estoque"
+        $statusEstoque = ['Ativo', 'Disponível', 'disponível'];
+
+        // O Trait MultiTenant continua agindo, mas agora filtramos o status
+        $veiculos = Veiculo::whereIn('status', $statusEstoque)
+            ->orderBy('created_at', 'desc') // Opcional: mostrar os mais novos primeiro
+            ->get();
+
+        return VeiculoResource::collection($veiculos);
+    } catch (\Exception $e) {
+        return response()->json([
+            'error' => 'Erro ao listar veículos em estoque',
+            'details' => $e->getMessage()
+        ], 500);
     }
+}
 
     public function show($id)
 {
