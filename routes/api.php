@@ -16,7 +16,7 @@ Route::middleware('auth:sanctum')->group(function () {
 Route::put('veiculos/{id}/update-info-basica', [VeiculoController::class, 'updateInfoBasica']);
 Route::put('veiculos/{id}/update-registro', [VeiculoController::class, 'updateRegistro']);
 Route::put('veiculos/{id}/update-precos', [VeiculoController::class, 'updatePrecos']);
-
+Route::put('veiculos/{id}/restore', [VeiculoController::class, 'restore']);
 Route::put('veiculos/{id}/archive', [VeiculoController::class, 'archive']);
 Route::delete('veiculos/{id}', [VeiculoController::class, 'destroy']);
 

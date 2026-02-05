@@ -506,4 +506,17 @@ public function vendidos()
     }
 }
 
+public function restore($id)
+{
+    try {
+        $veiculo = Veiculo::findOrFail($id);
+        $veiculo->status = 'Disponível'; // Ou 'Ativo', conforme seu sistema
+        $veiculo->save();
+
+        return response()->json(['message' => 'Veículo restaurado com sucesso!']);
+    } catch (\Exception $e) {
+        return response()->json(['error' => 'Erro ao restaurar'], 500);
+    }
+}
+
 }
