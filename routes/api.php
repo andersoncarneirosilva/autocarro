@@ -5,7 +5,7 @@ use App\Http\Controllers\WebhookController;
 use App\Http\Controllers\MessageController;
 use App\Http\Controllers\Api\VeiculoController;
 use Illuminate\Http\Request;
-use App\Http\Controllers\ChatController;
+use App\Http\Controllers\Api\GastoController;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Log;
 use App\Models\User;
