@@ -84,15 +84,13 @@ class VeiculoController extends Controller
     public function indexArquivados(Request $request)
 {
     $user = Auth::user();
-    // LÓGICA ALCECAR: Define qual empresa estamos filtrando
     $empresaId = $user->empresa_id ?? $user->id;
     $search = $request->search;
 
-    // 1. Inicia a Query filtrando por Usuário e Status Arquivado
-    $query = $this->model->where('user_id', $empresaId)
-                         ->where('status', 'Arquivado');
+    $query = $this->model
+        ->where('empresa_id', $empresaId)
+        ->where('status', 'Arquivado');
 
-    // 2. Aplica o filtro de busca se houver um termo pesquisado
     if ($search) {
         $query->where(function ($q) use ($search) {
             $q->where('placa', 'LIKE', "%{$search}%")
@@ -102,34 +100,27 @@ class VeiculoController extends Controller
         });
     }
 
-    // 3. Executa a paginação mantendo os filtros na URL (importante para funcionar a troca de página)
     $veiculos = $query->orderBy('updated_at', 'desc')
                       ->paginate(20)
                       ->appends($request->all());
 
-    // 4. Define os contadores baseados no resultado da query
     $quantidadePaginaAtual = $veiculos->count();
-    $quantidadeTotal = $veiculos->total(); // Total real considerando a busca
+    $quantidadeTotal = $veiculos->total();
 
-    // 5. Dados auxiliares para o modal e visualização
-    $outorgados = Outorgado::where('user_id', $empresaId)->get();
-    $clientes = Cliente::where('user_id', $empresaId)->get();
-    $modeloProc = ModeloProcuracao::exists();
+    $outorgados = Outorgado::where('empresa_id', $empresaId)->get();
+    $clientes = Cliente::where('empresa_id', $empresaId)->get();
+    $modeloProc = ModeloProcuracao::where('empresa_id', $empresaId)->exists();
 
-    // 6. Lógica de cálculo de espaço em disco
-    $path = storage_path('app/public/documentos/usuario_' . $empresaId);
-    
-    
-
-    return view('veiculos.arquivados', compact([
+    return view('veiculos.arquivados', compact(
         'clientes',
         'outorgados',
         'veiculos',
         'modeloProc',
         'quantidadePaginaAtual',
         'quantidadeTotal'
-    ]));
+    ));
 }
+
 
 public function indexManutencao(Request $request)
 {
