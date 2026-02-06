@@ -14,6 +14,8 @@ use App\Http\Controllers\Api\ApiDashController;
 Route::middleware('auth:sanctum')->group(function () {
 
 // Rota para pegar TUDO
+// Rota específica para gastos de um veículo
+Route::get('veiculos/{id}/gastos', [GastoController::class, 'getGastosPorVeiculo']);
 Route::put('gastos/{id}/status', [GastoController::class, 'updateStatus']);
 Route::get('/gastos', [GastoController::class, 'index']);
 Route::patch('veiculos/{id}/status', [VeiculoController::class, 'updateStatus']);

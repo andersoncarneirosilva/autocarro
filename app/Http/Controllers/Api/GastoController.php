@@ -52,6 +52,23 @@ public function updateStatus(Request $request, $id)
         'gasto' => $gasto
     ], 200);
 }
+public function getGastosPorVeiculo($id)
+{
+    try {
+        // Verifica se o veículo existe
+        $veiculo = Veiculo::find($id);
+        if (!$veiculo) {
+            return response()->json(['message' => 'Veículo não encontrado'], 404);
+        }
 
+        $gastos = VeiculoGasto::where('veiculo_id', $id)
+            ->orderBy('data_gasto', 'desc')
+            ->get();
+
+        return response()->json($gastos);
+    } catch (\Throwable $e) {
+        return response()->json(['error' => $e->getMessage()], 500);
+    }
+}
 
 }
