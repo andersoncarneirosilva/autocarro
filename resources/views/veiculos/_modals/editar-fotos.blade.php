@@ -1,176 +1,206 @@
 <div class="modal fade" id="modalUploadFotos" tabindex="-1" aria-hidden="true">
     <div class="modal-dialog modal-lg modal-dialog-centered">
         <div class="modal-content">
-            <div class="modal-header bg-dark text-white">
-                <h5 class="modal-title"><i class="mdi mdi-camera-plus-outline me-1"></i> Gerenciar Fotos</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            <div class="modal-header bg-primary text-white">
+                <h5 class="modal-title"><i class="mdi mdi-camera-plus me-1"></i> Gerenciador de Fotos</h5>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             
             <div class="modal-body">
-                <form action="{{ route('veiculos.uploadFotos', $veiculo->id) }}" method="POST" enctype="multipart/form-data">
+                <form action="{{ route('veiculos.uploadFotos', $veiculo->id) }}" method="POST" enctype="multipart/form-data" id="uploadForm">
                     @csrf
                     @method('PUT')
-                    <div class="mb-3">
-                        <label class="form-label fw-bold">Adicionar Novas Fotos</label>
-                        <input type="file" name="images[]" id="inputFotos" class="form-control font-13" multiple accept="image/*">
+                    
+                    <div class="upload-zone border-dashed rounded-3 p-4 mb-3 text-center bg-light" id="dropzone" style="cursor: pointer; border: 2px dashed #dee2e6;">
+                        <input type="file" name="images[]" id="inputFotos" hidden multiple accept="image/*">
+                        <i class="mdi mdi-cloud-upload text-primary" style="font-size: 40px;"></i>
+                        <h5 class="mt-2">Clique ou arraste as fotos aqui</h5>
+                        <p class="text-muted small">Você pode selecionar várias fotos de uma vez.</p>
+                        <button type="button" class="btn btn-primary btn-sm rounded-pill px-4" onclick="document.getElementById('inputFotos').click()">
+                            Selecionar Arquivos
+                        </button>
                     </div>
+
                     <div id="previewContainer" class="row g-2 mb-3"></div>
-                    <button type="submit" class="btn btn-primary btn-sm mb-3" id="btnSalvarFotos" style="display: none;">
-                        <i class="mdi mdi-cloud-upload me-1"></i> Iniciar Upload
-                    </button>
+
+                    <div class="d-grid shadow-sm" id="btnSalvarFotos" style="display: none !important;">
+                        <button type="submit" class="btn btn-success">
+                            <i class="mdi mdi-check-all me-1"></i> Confirmar Envio das Fotos
+                        </button>
+                    </div>
                 </form>
 
-                <hr>
+                <div class="d-flex align-items-center my-4">
+                    <hr class="flex-grow-1">
+                    <span class="mx-3 text-muted small fw-bold">FOTOS JÁ CADASTRADAS</span>
+                    <hr class="flex-grow-1">
+                </div>
 
-                <label class="form-label text-muted small uppercase fw-bold mb-2">Fotos Cadastradas</label>
                 <div class="row g-2" id="galeria-fotos">
-    @php $imagensNoBanco = json_decode($veiculo->images) ?? []; @endphp
+                    @php $imagensNoBanco = json_decode($veiculo->images) ?? []; @endphp
 
-    @forelse($imagensNoBanco as $index => $img)
-        <div class="col-4 col-md-3 col-lg-2" id="foto-container-{{ $index }}">
-            <div class="position-relative border rounded shadow-sm overflow-hidden {{ $index == 0 ? 'border-warning border-2' : '' }}" style="height: 100px;">
-                <img src="{{ asset('storage/' . $img) }}" class="w-100 h-100" style="object-fit: cover;">
-                
-                <button type="button" 
-                        class="btn btn-danger btn-xs position-absolute top-0 end-0 m-1 shadow-sm btn-delete-foto" 
-                        data-url="{{ route('veiculos.deleteFoto', [$veiculo->id, $index]) }}"
-                        data-index="{{ $index }}"
-                        style="width: 22px; height: 22px; padding: 0; z-index: 10;">
-                    <i class="mdi mdi-trash-can-outline"></i>
-                </button>
+                    @forelse($imagensNoBanco as $index => $img)
+                        <div class="col-4 col-md-3 col-lg-2 mb-2" id="foto-container-{{ $index }}">
+                            <div class="card h-100 m-0 border shadow-none overflow-hidden group-hover">
+                                <div class="position-relative">
+                                    <img src="{{ asset('storage/' . $img) }}" class="card-img-top" style="height: 100px; object-fit: cover;">
+                                    
+                                    <div class="position-absolute top-0 end-0 p-1">
+                                        <button type="button" class="btn btn-danger btn-sm rounded-circle p-0 btn-delete-foto shadow" 
+                                                data-url="{{ route('veiculos.deleteFoto', [$veiculo->id, $index]) }}" 
+                                                style="width: 24px; height: 24px;">
+                                            <i class="mdi mdi-close"></i>
+                                        </button>
+                                    </div>
 
-                <button type="button" 
-                        class="btn {{ $index == 0 ? 'btn-warning' : 'btn-light' }} btn-xs position-absolute top-0 start-0 m-1 shadow-sm btn-set-main" 
-                        data-url="{{ route('veiculos.setMainFoto', [$veiculo->id, $index]) }}"
-                        {{ $index == 0 ? 'disabled' : '' }}
-                        style="width: 22px; height: 22px; padding: 0; z-index: 10;">
-                    <i class="mdi {{ $index == 0 ? 'mdi-star' : 'mdi-star-outline' }}"></i>
-                </button>
-
-                @if($index == 0)
-                    <span class="position-absolute bottom-0 start-0 w-100 bg-warning text-dark text-center font-10 fw-bold py-0">
-                        PRINCIPAL
-                    </span>
-                @endif
+                                    @if($index != 0)
+                                    <div class="position-absolute top-0 start-0 p-1">
+                                        <button type="button" class="btn btn-light btn-sm rounded-circle p-0 btn-set-main shadow" 
+                                                data-url="{{ route('veiculos.setMainFoto', [$veiculo->id, $index]) }}"
+                                                title="Definir como principal"
+                                                style="width: 24px; height: 24px;">
+                                            <i class="mdi mdi-star-outline text-warning"></i>
+                                        </button>
+                                    </div>
+                                    @endif
+                                </div>
+                                
+                                @if($index == 0)
+                                    <div class="card-footer p-0 border-0">
+                                        <div class="bg-warning text-dark text-center fw-bold small py-1" style="font-size: 10px;">
+                                            FOTO DE CAPA
+                                        </div>
+                                    </div>
+                                @endif
+                            </div>
+                        </div>
+                    @empty
+                        <div class="col-12 text-center py-4 bg-light rounded shadow-sm border" id="no-photos-msg">
+                            <i class="mdi mdi-image-multiple-outline d-block font-24 text-muted"></i>
+                            <span class="text-muted">Ainda não há fotos para este veículo.</span>
+                        </div>
+                    @endforelse
+                </div>
             </div>
-        </div>
-    @empty
-        <div class="col-12 text-center py-3 text-muted" id="no-photos-msg">Nenhuma foto cadastrada.</div>
-    @endforelse
-</div>
-            </div>
-            <div class="modal-footer bg-light">
-                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fechar</button>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-light" data-bs-dismiss="modal">Fechar</button>
             </div>
         </div>
     </div>
 </div>
 
-<script>
-document.addEventListener('click', function(e) {
-    const btn = e.target.closest('.btn-set-main');
-    if (!btn || btn.disabled) return;
-
-    const url = btn.getAttribute('data-url');
-    
-    // Feedback visual de carregamento
-    btn.innerHTML = '<span class="spinner-border spinner-border-sm" style="width: 10px; height: 10px;"></span>';
-    btn.disabled = true;
-
-    fetch(url, {
-        method: 'POST',
-        headers: {
-            'X-CSRF-TOKEN': '{{ csrf_token() }}',
-            'Content-Type': 'application/json',
-            'Accept': 'application/json'
-        }
-    })
-    .then(response => response.json())
-    .then(data => {
-        if (data.success) {
-            // Recarrega a página para atualizar o carrossel e a ordem das fotos
-            window.location.reload(); 
-        } else {
-            alert('Erro: ' + data.message);
-            window.location.reload();
-        }
-    })
-    .catch(error => {
-        console.error('Erro:', error);
-        window.location.reload();
-    });
-});
-</script>
-<script>
-// --- Script de Preview (Mantido) ---
-document.getElementById('inputFotos').addEventListener('change', function(event) {
-    const container = document.getElementById('previewContainer');
-    const btnSalvar = document.getElementById('btnSalvarFotos');
-    container.innerHTML = ''; 
-
-    if (this.files && this.files.length > 0) {
-        btnSalvar.style.display = 'inline-block';
-        Array.from(this.files).forEach(file => {
-            const reader = new FileReader();
-            reader.onload = function(e) {
-                const div = document.createElement('div');
-                div.className = 'col-4 col-md-3 col-lg-2 mb-2';
-                div.innerHTML = `<div class="position-relative border-primary border rounded shadow-sm bg-white p-1" style="height: 100px;">
-                    <img src="${e.target.result}" class="w-100 h-100 rounded" style="object-fit: cover;">
-                    <span class="position-absolute top-0 start-0 badge bg-success font-10 m-1">PREVIEW</span>
-                </div>`;
-                container.appendChild(div);
-            }
-            reader.readAsDataURL(file);
-        });
-    } else {
-        btnSalvar.style.display = 'none';
+<style>
+    /* Estilo Hyper Dashboard */
+    .upload-zone:hover {
+        background-color: #f1f3fa !important;
+        border-color: #3b5de7 !important;
+        transition: 0.3s;
     }
-});
+    .border-dashed { border-style: dashed !important; }
+    .btn-xs { padding: 1px 5px; font-size: 10px; }
+    .group-hover:hover { transform: translateY(-2px); transition: 0.2s; box-shadow: 0 5px 10px rgba(0,0,0,0.1) !important; }
+</style>
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+    // Seleção de elementos (IDs do seu modal)
+    const dropzone = document.getElementById('dropzone');
+    const inputFotos = document.getElementById('inputFotos');
+    const previewContainer = document.getElementById('previewContainer');
+    const btnSalvar = document.getElementById('btnSalvarFotos');
 
-// --- Script de Exclusão Corrigido ---
-document.addEventListener('click', function(e) {
-    // Verifica se o clique foi no botão de delete ou em um ícone dentro dele
-    const btn = e.target.closest('.btn-delete-foto');
-    if (!btn) return;
-
-    const url = btn.getAttribute('data-url');
-    const index = btn.getAttribute('data-index');
-    const container = document.getElementById(`foto-container-${index}`);
-
-    // Feedback visual imediato
-    container.style.opacity = '0.3';
-    container.style.pointerEvents = 'none';
-
-    fetch(url, {
-        method: 'DELETE',
-        headers: {
-            'X-CSRF-TOKEN': '{{ csrf_token() }}',
-            'Content-Type': 'application/json',
-            'Accept': 'application/json'
-        }
-    })
-    .then(response => {
-        if (response.ok) {
-            container.remove();
+    // --- FUNÇÃO DE RENDERIZAÇÃO (Unificada para evitar duplicados) ---
+    function renderPreview(files) {
+        if (!previewContainer) return;
+        previewContainer.innerHTML = ''; 
+        
+        if (files.length > 0) {
+            if(btnSalvar) btnSalvar.style.setProperty('display', 'block', 'important');
             
-            // Verifica se ainda existem fotos na galeria
-            const fotosRestantes = document.querySelectorAll('.btn-delete-foto');
-            const msgVazio = document.getElementById('no-photos-msg');
-            
-            if (fotosRestantes.length === 0 && msgVazio) {
-                msgVazio.classList.remove('d-none');
-            }
+            Array.from(files).forEach(file => {
+                if (!file.type.startsWith('image/')) return;
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    const div = document.createElement('div');
+                    div.className = 'col-3 col-md-2 mb-2';
+                    div.innerHTML = `<img src="${e.target.result}" class="img-thumbnail shadow-sm" style="height: 65px; width: 100%; object-fit: cover;">`;
+                    previewContainer.appendChild(div);
+                }
+                reader.readAsDataURL(file);
+            });
         } else {
-            alert('Erro ao excluir foto.');
-            container.style.opacity = '1';
-            container.style.pointerEvents = 'auto';
+            if(btnSalvar) btnSalvar.style.setProperty('display', 'none', 'important');
         }
-    })
-    .catch(error => {
-        console.error('Erro:', error);
-        container.style.opacity = '1';
-        container.style.pointerEvents = 'auto';
+    }
+
+    // --- DRAG AND DROP ---
+    if (dropzone && inputFotos) {
+        ['dragenter', 'dragover', 'dragleave', 'drop'].forEach(eventName => {
+            dropzone.addEventListener(eventName, e => { e.preventDefault(); e.stopPropagation(); }, false);
+        });
+
+        dropzone.addEventListener('dragover', () => {
+            dropzone.style.backgroundColor = "#f1f3fa";
+            dropzone.style.borderColor = "#727cf5";
+        });
+
+        dropzone.addEventListener('dragleave', () => {
+            dropzone.style.backgroundColor = "";
+            dropzone.style.borderColor = "#dee2e6";
+        });
+
+        dropzone.addEventListener('drop', (e) => {
+            const files = e.dataTransfer.files;
+            inputFotos.files = files; // Sincroniza o input
+            renderPreview(files);
+        });
+
+        inputFotos.addEventListener('change', function() {
+            renderPreview(this.files);
+        });
+    }
+
+    // --- DELEÇÃO E FOTO PRINCIPAL (Event Delegation) ---
+    document.addEventListener('click', function(e) {
+        // Botão FOTO PRINCIPAL
+        const btnMain = e.target.closest('.btn-set-main');
+        if (btnMain && !btnMain.disabled) {
+            btnMain.innerHTML = '<span class="spinner-border spinner-border-sm"></span>';
+            btnMain.disabled = true;
+            executarAcao(btnMain.getAttribute('data-url'), 'POST');
+        }
+
+        // Botão DELETAR
+        const btnDel = e.target.closest('.btn-delete-foto');
+        if (btnDel) {
+            const index = btnDel.getAttribute('data-index');
+            const container = document.getElementById(`foto-container-${index}`);
+            if (container) {
+                container.style.opacity = '0.3';
+                container.style.pointerEvents = 'none';
+            }
+            executarAcao(btnDel.getAttribute('data-url'), 'DELETE');
+        }
     });
+
+    // Função auxiliar para fetch
+    function executarAcao(url, metodo) {
+        fetch(url, {
+            method: metodo,
+            headers: {
+                'X-CSRF-TOKEN': '{{ csrf_token() }}',
+                'Content-Type': 'application/json',
+                'Accept': 'application/json'
+            }
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.success || data.message) window.location.reload();
+            else window.location.reload();
+        })
+        .catch(err => {
+            console.error(err);
+            window.location.reload();
+        });
+    }
 });
 </script>
