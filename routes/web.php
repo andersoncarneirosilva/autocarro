@@ -220,7 +220,8 @@ Route::prefix('configuracoes')->group(function () {
     // 2. AGORA coloque a sua rota (específica por ter o sufixo /update-info-basica)
     // Adicione esta linha junto com as outras rotas de anúncios
     Route::put('/veiculos/update-info/{id}', [VeiculoController::class, 'updateInfo'])->name('veiculos.update-info');
-    Route::post('/veiculos/{id}/foto-principal/{index}', [VeiculoController::class, 'setMainFoto'])->name('veiculos.setMainFoto');
+    Route::post('/veiculos/{id}/set-main/{index}', [VeiculoController::class, 'setMainFoto'])->name('veiculos.setMainFoto');
+    //Route::post('/veiculos/{id}/foto-principal/{index}', [VeiculoController::class, 'setMainFoto'])->name('veiculos.setMainFoto');
     Route::patch('/veiculos/{id}/remover-publicacao', [VeiculoController::class, 'removerPublicacao'])->name('veiculos.remover');
     Route::patch('/veiculos/{id}/publicar', [VeiculoController::class, 'publicar'])->name('veiculos.publicar');
     Route::put('/veiculos/{id}/upload-fotos', [VeiculoController::class, 'uploadFotos'])->name('veiculos.uploadFotos');

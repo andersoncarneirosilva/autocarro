@@ -1017,4 +1017,42 @@ public function atualizarStatus(Request $request, $id)
     return back()->with('error', 'Erro ao atualizar status.');
 }
 
+public function setMainFoto($id, $index)
+{
+    try {
+        $veiculo = Veiculo::findOrFail($id);
+        $imagens = json_decode($veiculo->images, true);
+
+        if (!isset($imagens[$index])) {
+            return response()->json(['success' => false, 'message' => 'Foto não encontrada.'], 404);
+        }
+
+        // 1. Remove a foto da posição atual
+        $fotoPrincipal = $imagens[$index];
+        unset($imagens[$index]);
+
+        // 2. Reindexa o array para evitar buracos nas chaves
+        $imagens = array_values($imagens);
+
+        // 3. Coloca a foto escolhida no início (posição 0)
+        array_unshift($imagens, $fotoPrincipal);
+
+        // 4. Salva de volta no banco
+        $veiculo->update([
+            'images' => json_encode($imagens)
+        ]);
+
+        return response()->json([
+            'success' => true, 
+            'message' => 'Foto principal atualizada com sucesso!'
+        ]);
+
+    } catch (\Exception $e) {
+        return response()->json([
+            'success' => false, 
+            'message' => 'Erro ao processar: ' . $e->getMessage()
+        ], 500);
+    }
+}
+
 }

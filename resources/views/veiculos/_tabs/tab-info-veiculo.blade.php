@@ -15,7 +15,7 @@
             </button>
             
             <div class="dropdown-menu dropdown-menu-end shadow"> <h6 class="dropdown-header">Alterar para:</h6>
-                @foreach(['Disponível', 'Manutenção', 'Vendido', 'Preparação'] as $status)
+                @foreach(['Disponível', 'Manutenção', 'Vendido'] as $status)
                     <form action="{{ route('veiculos.status.update', $veiculo->id) }}" method="POST">
                         @csrf
                         @method('PATCH')

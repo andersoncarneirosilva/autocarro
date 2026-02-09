@@ -67,15 +67,15 @@
 </div>
 
 <script>
-    // --- Script para Definir Foto Principal ---
 document.addEventListener('click', function(e) {
     const btn = e.target.closest('.btn-set-main');
     if (!btn || btn.disabled) return;
 
     const url = btn.getAttribute('data-url');
     
-    // Bloqueia a tela momentaneamente
-    btn.innerHTML = '<span class="spinner-border spinner-border-sm"></span>';
+    // Feedback visual de carregamento
+    btn.innerHTML = '<span class="spinner-border spinner-border-sm" style="width: 10px; height: 10px;"></span>';
+    btn.disabled = true;
 
     fetch(url, {
         method: 'POST',
@@ -85,16 +85,20 @@ document.addEventListener('click', function(e) {
             'Accept': 'application/json'
         }
     })
-    .then(response => {
-        if (response.ok) {
-            // Recarrega a página ou a galeria para refletir a nova ordem
-            location.reload(); 
+    .then(response => response.json())
+    .then(data => {
+        if (data.success) {
+            // Recarrega a página para atualizar o carrossel e a ordem das fotos
+            window.location.reload(); 
         } else {
-            alert('Erro ao definir foto principal.');
-            location.reload();
+            alert('Erro: ' + data.message);
+            window.location.reload();
         }
     })
-    .catch(error => console.error('Erro:', error));
+    .catch(error => {
+        console.error('Erro:', error);
+        window.location.reload();
+    });
 });
 </script>
 <script>
