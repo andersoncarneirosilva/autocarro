@@ -384,7 +384,7 @@
                         </ul>
                     </div>
                     <div class="pricing_btn">
-                        <a href="https://wa.me/555199047299?text=Olá!%20Gostaria%20de%20testar%20o%20Plano%20Start." target="_blank" class="main-btn main-btn-2">Solicitar teste</a>
+                        <a href="{{ route('register') }}" target="_blank" class="main-btn main-btn-2">Teste grátis</a>
                     </div>
                 </div>
             </div>
@@ -403,11 +403,12 @@
                             <li>Emissão de Procurações</li>
                             <li>Emissão de Solicitações ATPVe</li>
                             <li>Emissão de Comunicação de venda</li>
+                            <li style="text-decoration: line-through; color: #aaa;">Tabela FIPE Integrada</li>
                             <li>Suporte via WhatsApp</li>
                         </ul>
                     </div>
                     <div class="pricing_btn">
-                        <a href="https://wa.me/555199047299?text=Olá!%20Gostaria%20de%20testar%20o%20Plano%20Standard%20(Equipe)." target="_blank" class="main-btn main-btn-2">Solicitar teste</a>
+                        <a href="{{ route('register') }}" class="main-btn main-btn-2">Teste grátis</a>
                     </div>
                 </div>
             </div>
@@ -424,7 +425,6 @@
                         <ul>
                             <li><strong>Vendedores Ilimitados</strong></li>
                             <li>Gestão de Veículos</li>
-                            <li>Gestão de Multas</li>
                             <li>Emissão de Procurações</li>
                             <li>Emissão de Solicitações ATPVe</li>
                             <li>Emissão de Comunicação de venda</li>
@@ -433,7 +433,7 @@
                         </ul>
                     </div>
                     <div class="pricing_btn">
-                        <a href="https://wa.me/555199047299?text=Olá!%20Gostaria%20de%20testar%20o%20Plano%20Pro." target="_blank" class="main-btn main-btn-2">Solicitar teste</a>
+                        <a href="{{ route('register') }}" class="main-btn main-btn-2">Teste grátis</a>
                     </div>
                 </div>
             </div>

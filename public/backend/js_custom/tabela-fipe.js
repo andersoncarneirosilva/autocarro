@@ -1,5 +1,8 @@
 document.addEventListener('DOMContentLoaded', function() {
     //console.log("tabela fipe");
+    // Adicione isso logo no início do DOMContentLoaded
+    // Usamos aspas simples ao redor do Blade para o JS entender como String primeiro
+const userIsPro = "{{ auth()->user()->plano === 'Pro' ? 'true' : 'false' }}" === 'true';
     const selectMarca = document.getElementById('marca');
     if (!selectMarca) {
         return;
@@ -184,6 +187,10 @@ document.addEventListener('DOMContentLoaded', function() {
         const nomeVersao = this.options[this.selectedIndex].text;
         document.getElementById('versao_nome').value = nomeVersao;
        
+    }
+
+    if (!userIsPro) {
+        return; // Interrompe aqui
     }
     
     if (marcaId && modeloId && anoId) {

@@ -80,20 +80,43 @@
         </div>
     </div>
 
-    <div class="col-md-3">
-        <div class="card border-0 shadow-sm mb-0">
-            <div class="card-body p-2 px-3">
-                <div class="d-flex align-items-center justify-content-between mb-1">
-                    <p class="text-muted fw-bold m-0 text-uppercase font-10">Fipe</p>
-                    <i class="mdi mdi-table-search text-info font-14"></i>
-                </div>
-                <div class="d-flex align-items-center">
+   @php
+    $userLogged = auth()->user();
+    // Bloqueia a visualização se o plano do usuário for qualquer um diferente de 'Pro'
+    $bloquearFipe = ($userLogged->plano !== 'Pro');
+@endphp
+
+<div class="col-md-3">
+    <div class="card border-0 shadow-sm mb-0 position-relative overflow-hidden">
+        <div class="card-body p-2 px-3">
+            <div class="d-flex align-items-center justify-content-between mb-1">
+                <p class="text-muted fw-bold m-0 text-uppercase font-10">Fipe</p>
+                <i class="mdi mdi-table-search text-info font-14"></i>
+            </div>
+            
+            <div class="d-flex align-items-center">
+                @if($bloquearFipe)
+                    {{-- Layout Bloqueado para todos exceto Pro --}}
+                    <h4 class="m-0 fw-bold text-muted blur-text" style="filter: blur(4px); pointer-events: none;">
+                        R$ 00.000
+                    </h4>
+                    
+                @else
+                    {{-- Layout Liberado (Apenas Plano Pro) --}}
                     <h4 class="m-0 fw-bold text-info" id="fipe-price">---</h4>
                     <span id="fipe-badge-placeholder"></span>
-                </div>
+                @endif
             </div>
         </div>
+        
+        @if($bloquearFipe)
+            {{-- Overlay para reforçar o bloqueio visual --}}
+            <div class="position-absolute top-0 start-0 w-100 h-100 d-flex align-items-center justify-content-center bg-white-50" 
+                 style="background: rgba(255,255,255,0.2); z-index: 1;">
+            </div>
+        @endif
     </div>
+</div>
 </div>
 
 
