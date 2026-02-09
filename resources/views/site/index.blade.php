@@ -369,7 +369,7 @@
                 <div class="single_pricing text-center mt-30 wow fadeInUp" data-wow-duration="1.3s" data-wow-delay="0.2s">
                     <div class="pricing_top_bar">
                         <h5 class="pricing_title">Plano Start</h5>
-                        <i class="lni lni-user"></i> <span class="price">R$ 19,90</span>
+                        <i class="lni lni-user"></i> <span class="price">R$ 29,90</span>
                         <p class="mt-2">Ideal para autônomos</p>
                     </div>
                     <div class="pricing_list">
@@ -378,7 +378,9 @@
                             <li>Gestão de Veículos</li>
                             <li>Emissão de Procurações</li>
                             <li style="text-decoration: line-through; color: #aaa;">Emissão de Solicitações ATPVe</li>
-                            <li>Suporte Técnico</li>
+                            <li style="text-decoration: line-through; color: #aaa;">Emissão de Comunicação de venda</li>
+                            <li style="text-decoration: line-through; color: #aaa;">Tabela FIPE Integrada</li>
+                            <li>Suporte via WhatsApp</li>
                         </ul>
                     </div>
                     <div class="pricing_btn">
@@ -391,7 +393,7 @@
                 <div class="single_pricing text-center pricing_active pricing_color_1 mt-30 wow fadeInUp" data-wow-duration="1.3s" data-wow-delay="0.4s">
                     <div class="pricing_top_bar">
                         <h5 class="pricing_title">Plano Standard</h5>
-                        <i class="lni lni-layers"></i> <span class="price">R$ 39,90</span>
+                        <i class="lni lni-layers"></i> <span class="price">R$ 49,90</span>
                         <p class="mt-2">Ideal para revendas</p>
                     </div>
                     <div class="pricing_list">
@@ -400,6 +402,7 @@
                             <li>Gestão de Veículos</li>
                             <li>Emissão de Procurações</li>
                             <li>Emissão de Solicitações ATPVe</li>
+                            <li>Emissão de Comunicação de venda</li>
                             <li>Suporte via WhatsApp</li>
                         </ul>
                     </div>
@@ -414,7 +417,7 @@
                     <div class="pricing_top_bar">
                         <h5 class="pricing_title">Plano Pro</h5>
                         <i class="lni lni-crown"></i>
-                        <span class="price">R$ 59,90</span>
+                        <span class="price">R$ 69,90</span>
                         <p class="mt-2">Ideal para revendas</p>
                     </div>
                     <div class="pricing_list">
@@ -422,11 +425,10 @@
                             <li><strong>Vendedores Ilimitados</strong></li>
                             <li>Gestão de Veículos</li>
                             <li>Gestão de Multas</li>
-                            <li>Tabela FIPE Integrada</li>
                             <li>Emissão de Procurações</li>
                             <li>Emissão de Solicitações ATPVe</li>
-                            <li>Solicitações de Atualização</li>
-                            <li><strong>Backup Diário dos Dados</strong></li>
+                            <li>Emissão de Comunicação de venda</li>
+                            <li>Tabela FIPE Integrada</li>
                             <li>Suporte Prioritário</li>
                         </ul>
                     </div>
