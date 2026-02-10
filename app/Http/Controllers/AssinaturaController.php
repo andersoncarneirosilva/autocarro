@@ -13,6 +13,7 @@ class AssinaturaController extends Controller
      */
     public function index()
     {
+        //abort(404);
         // Obtemos o ID do usuário logado
         $userId = Auth::id();
 
@@ -21,7 +22,7 @@ class AssinaturaController extends Controller
             ->orderBy('created_at', 'desc') // Ordena pelo mais recente
             ->paginate(20); // Retorna os resultados paginados
 
-        // DD($assinaturas);
+        //dd($assinaturas);
         // Retorna a view com os dados
         return view('assinatura.index', compact('userId', 'assinaturas'));
     }

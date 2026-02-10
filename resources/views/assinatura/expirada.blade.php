@@ -12,7 +12,7 @@
                 Renovar Assinatura
             </a>
         </div>
-    </div><!-- end col -->
+    </div>
 </div>
 
 

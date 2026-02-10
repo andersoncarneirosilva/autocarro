@@ -28,13 +28,18 @@ class CheckTrial
                 
                 // 4. Permite apenas rotas essenciais (Logout, Perfil e a página de Aviso)
                 // Evita o loop infinito permitindo a própria rota 'assinatura-expirada'
-                if (!$request->is('logout') && 
-                    !$request->is('perfil*') && 
-                    !$request->is('assinatura-expirada*')) {
-                    
-                    return redirect()->route('assinatura.expirada')
-                        ->with('error', 'Seu período de teste de ' . $diasDeTeste . ' dias acabou!');
-                }
+                // 4. Permite apenas rotas essenciais para que o usuário consiga renovar
+if (!$request->is('logout') && 
+    !$request->is('perfil*') && 
+    !$request->is('assinatura-expirada*') && 
+    !$request->is('pagamento*') && 
+    !$request->is('pagamentos*') && 
+    !$request->is('planos*') && // ADICIONE ESTA LINHA (permite /planos e sub-rotas)
+    !$request->is('checkout*')) { // Sugestão: adicione também a rota de checkout/pagamento
+    
+    return redirect()->route('assinatura.expirada')
+        ->with('error', 'Seu período de teste de ' . $diasDeTeste . ' dias acabou!');
+}
             }
         }
     }

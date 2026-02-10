@@ -49,49 +49,20 @@
         </div>
     </div>
 </div>
-
 @php
     $userLogado = auth()->user();
-    // Buscamos o dono da conta para garantir que o tempo de teste seja baseado na criação da empresa
     $dono = $userLogado->empresa_id ? \App\Models\User::find($userLogado->empresa_id) : $userLogado;
     
+    // --- LÓGICA 1: PERÍODO DE TESTE ---
     $exibirAvisoTeste = false;
-    $diasRestantes = 0;
-
-    // A lógica de teste só roda se o plano do dono for exatamente 'Teste'
     if ($dono && $dono->plano === 'Teste') {
-        $diasBrutos = now()->diffInDays($dono->created_at->addDays(7), false);
-        $diasRestantes = ceil($diasBrutos);
+        $dataExpiracaoTeste = $dono->created_at->addDays(7);
+        $diasRestantesTeste = ceil(now()->diffInDays($dataExpiracaoTeste, false));
         $exibirAvisoTeste = true;
     }
-@endphp
 
-@if($exibirAvisoTeste)
-    @if($diasRestantes > 0)
-        <div class="alert alert-info border-0 shadow-sm d-flex align-items-center">
-            <i class="uil uil-clock-three me-2 fs-4"></i> 
-            <div>
-                Período de Experiência: Você tem mais <strong>{{ $diasRestantes }} {{ $diasRestantes > 1 ? 'dias' : 'dia' }}</strong> de teste gratuito.
-            </div>
-        </div>
-    @else
-        <div class="alert alert-danger border-0 shadow-sm d-flex align-items-center">
-            <i class="uil uil-exclamation-octagon me-2 fs-4"></i> 
-            <div>
-                Seu período de teste no Alcecar expirou. <strong>Contrate um plano para continuar!</strong>
-            </div>
-        </div>
-    @endif
-@endif
-@php
-    $userLogado = auth()->user();
-    $dono = $userLogado->empresa_id ? \App\Models\User::find($userLogado->empresa_id) : $userLogado;
-    
+    // --- LÓGICA 2: ASSINATURA PAGA ---
     $exibirAvisoVencimento = false;
-    $diasParaVencer = 0;
-
-    // Buscamos a assinatura ativa (status paid) do dono
-    // Se você tiver um relacionamento no Model User, pode usar $dono->assinaturas()->...
     $assinaturaAtiva = \DB::table('assinaturas')
         ->where('user_id', $dono->id)
         ->where('status', 'paid')
@@ -100,36 +71,49 @@
 
     if ($assinaturaAtiva) {
         $dataFim = \Carbon\Carbon::parse($assinaturaAtiva->data_fim);
-        $diasParaVencer = now()->diffInDays($dataFim, false);
+        $diasParaVencer = ceil(now()->diffInDays($dataFim, false));
+
+        // REGRA: Se menor que zero (Vencido), redireciona imediatamente
+        if ($diasParaVencer < 0) {
+            header("Location: " . route('assinatura.expirada'));
+            exit;
+        }
         
-        // Exibir aviso apenas se faltar 7 dias ou menos
+        // REGRA: Mostrar aviso se faltar 7 dias ou menos
         if ($diasParaVencer <= 7) {
             $exibirAvisoVencimento = true;
+            $exibirAvisoTeste = false; 
         }
     }
 @endphp
 
-{{-- Alerta de Assinatura Próxima do Vencimento --}}
+{{-- Aviso de Teste --}}
+@if($exibirAvisoTeste && $diasRestantesTeste >= 0)
+    <div class="alert alert-info border-0 shadow-sm d-flex align-items-center">
+        <i class="uil uil-clock-three me-2 fs-4"></i> 
+        <div class="flex-grow-1">
+            Você tem mais <strong>{{ $diasRestantesTeste }} dias</strong> de teste gratuito.
+        </div>
+        <a href="{{ route('planos.index') }}" class="btn btn-info btn-sm ms-auto rounded-pill">Assinar Agora</a>
+    </div>
+@endif
+
+{{-- Aviso de Vencimento (Pago) --}}
 @if($exibirAvisoVencimento)
-    @if($diasParaVencer > 0)
-        <div class="alert alert-warning border-0 shadow-sm d-flex align-items-center">
-            <i class="mdi mdi-alert-outline me-2 fs-4"></i> 
-            <div>
-                Sua assinatura do plano <strong>{{ $assinaturaAtiva->plano }}</strong> vence em 
-                <strong>{{ ceil($diasParaVencer) }} {{ ceil($diasParaVencer) > 1 ? 'dias' : 'dia' }}</strong>. 
-                Garanta a continuidade dos seus serviços!
-            </div>
-            <a href="{{ route('planos.index') }}" class="btn btn-warning btn-sm ms-auto rounded-pill">Renovar agora</a>
+    <div class="alert {{ $diasParaVencer == 0 ? 'alert-danger shadow' : 'alert-warning' }} border-0 shadow-sm d-flex align-items-center">
+        <i class="mdi {{ $diasParaVencer == 0 ? 'mdi-alert-octagon' : 'mdi-alert-outline' }} me-2 fs-4"></i> 
+        <div class="flex-grow-1">
+            @if($diasParaVencer > 0)
+                Sua assinatura vence em <strong>{{ $diasParaVencer }} {{ $diasParaVencer > 1 ? 'dias' : 'dia' }}</strong>.
+            @else
+                {{-- REGRA: Se igual a 0 --}}
+                <span class="fw-bold">Sua assinatura vencerá hoje!</span> Regularize para evitar o bloqueio amanhã.
+            @endif
         </div>
-    @elseif($diasParaVencer <= 0)
-        <div class="alert alert-danger border-0 shadow-sm d-flex align-items-center">
-            <i class="mdi mdi-alert-octagon-outline me-2 fs-4"></i> 
-            <div>
-                Sua assinatura <strong>vence hoje!</strong> Evite o bloqueio das funcionalidades do sistema.
-            </div>
-            <a href="{{ route('planos.index') }}" class="btn btn-danger btn-sm ms-auto rounded-pill">Pagar Assinatura</a>
-        </div>
-    @endif
+        <a href="{{ route('planos.index') }}" class="btn {{ $diasParaVencer == 0 ? 'btn-danger' : 'btn-warning' }} btn-sm ms-auto rounded-pill shadow-sm">
+            {{ $diasParaVencer == 0 ? 'Pagar Hoje' : 'Renovar' }}
+        </a>
+    </div>
 @endif
 <!-- Para Mobile -->
 <div class="card ribbon-box d-block d-md-none">
