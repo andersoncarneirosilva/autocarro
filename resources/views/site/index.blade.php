@@ -1,5 +1,5 @@
 <!doctype html>
-<html class="no-js" lang="en">
+<html class="no-js" lang="pt-BR">
 
 <head>
     <meta charset="utf-8">
@@ -200,10 +200,6 @@
        
     </section>
 
-    <!--====== HEADER PART ENDS ======-->
-    
-    <!--====== FEATURES PART START ======-->
-
     <section id="sobre" class="features_area pt-35 pb-80">
     <div class="container">
         <div class="row justify-content-center">
@@ -225,8 +221,8 @@
                         <i class="lni lni-write"></i>
                     </div>
                     <div class="features_content">
-                        <h4 class="features_title">Procurações</h4>
-                        <p>Geração automatizada de procurações com agilidade e sem erros.</p>
+                        <h4 class="features_title">Documentação</h4>
+                        <p>Faça a emissão de procurações, solicitações ATPVe e Comunicação de venda.</p>
                     </div>
                 </div>
             </div>
@@ -242,44 +238,8 @@
                 </div>
             </div>
         </div> 
+    </div>
 
-        <div class="row justify-content-center">
-    <div class="col-lg-4 col-md-6 col-sm-8">
-        <div class="single_features mt-30 features_1 text-center wow fadeInUp" data-wow-duration="1.3s" data-wow-delay="0.2s">
-            <div class="features_icon">
-                <i class="lni lni-write"></i> </div>
-            <div class="features_content">
-                <h4 class="features_title">Procurações Automatizadas</h4>
-                <p>Evite erros na geração de procurações com processos automatizados.</p>
-            </div>
-        </div>
-    </div>
-    
-    <div class="col-lg-4 col-md-6 col-sm-8">
-        <div class="single_features mt-30 features_2 text-center wow fadeInUp" data-wow-duration="1.3s" data-wow-delay="0.4s">
-            <div class="features_icon">
-                <i class="lni lni-users"></i> </div>
-            <div class="features_content">
-                <h4 class="features_title">Gestão de Cadastros</h4>
-                <p>Cadastros simples de clientes e veículos, facilitando o gerenciamento completo de todas as suas procurações.</p>
-            </div>
-        </div>
-    </div>
-    
-    <div class="col-lg-4 col-md-6 col-sm-8">
-    <div class="single_features mt-30 features_3 text-center wow fadeInUp" data-wow-duration="1.3s" data-wow-delay="0.6s">
-        <div class="features_icon">
-            <i class="lni lni-save"></i> 
-        </div>
-        <div class="features_content">
-            <h4 class="features_title">Relatórios em PDF</h4>
-            <p>O sistema gera arquivos e relatórios em PDF personalizados para facilitar o manuseio, arquivamento e impressão.</p>
-        </div>
-    </div>
-</div>
-</div>
-
-      </div> 
       </section>
 
 {{-- 
@@ -342,7 +302,7 @@
                     </p>
                     <br>
                     <div class="wow fadeInUp" data-wow-delay="0.6s">
-                        <a href="#cadastro" class="main-btn">Começar Agora Gratuitamente</a>
+                        <a href="{{ route('register') }}" class="main-btn">Começar Agora Gratuitamente</a>
                     </div>
                 </div> </div>
         </div> </div> </section>
@@ -491,8 +451,8 @@
                 <h3 class="download_title">Documentos em PDF</h3>
 
 <p>
-    O <strong>sistema</strong> permite criar, personalizar e gerar
-    <strong>procurações em PDF</strong> de forma rápida e segura.
+    O <strong>Alcecar</strong> permite criar, personalizar e gerar
+    <strong>procurações</strong>,<strong>solicitações ATPVe</strong> e <strong>comunicações de venda</strong> de forma rápida e segura.
     O sistema automatiza o preenchimento dos dados, reduz erros manuais
     e garante documentos padronizados, prontos para impressão ou envio digital.
 </p>
@@ -521,7 +481,7 @@
                                 <i class="lni lni-whatsapp"></i>
                             </span>
                             <span class="content">
-                                <h6 class="title">Solicitar Demonstração</h6>
+                                <h6 class="title">Para dúvivas</h6>
                                 <p>Fale conosco pelo WhatsApp</p>
                             </span>
                         </a>
