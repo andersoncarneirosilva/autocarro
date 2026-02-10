@@ -49,6 +49,7 @@
         </div>
     </div>
 </div>
+
 @php
     $userLogado = auth()->user();
     $dono = $userLogado->empresa_id ? \App\Models\User::find($userLogado->empresa_id) : $userLogado;
@@ -57,7 +58,7 @@
     $exibirAvisoTeste = false;
     if ($dono && $dono->plano === 'Teste') {
         $dataExpiracaoTeste = $dono->created_at->addDays(7);
-        $diasRestantesTeste = ceil(now()->diffInDays($dataExpiracaoTeste, false));
+        $diasRestantesTeste = (int) ceil(now()->diffInDays($dataExpiracaoTeste, false));
         $exibirAvisoTeste = true;
     }
 
@@ -71,15 +72,13 @@
 
     if ($assinaturaAtiva) {
         $dataFim = \Carbon\Carbon::parse($assinaturaAtiva->data_fim);
-        $diasParaVencer = ceil(now()->diffInDays($dataFim, false));
+        $diasParaVencer = (int) ceil(now()->diffInDays($dataFim, false));
 
-        // REGRA: Se menor que zero (Vencido), redireciona imediatamente
         if ($diasParaVencer < 0) {
             header("Location: " . route('assinatura.expirada'));
             exit;
         }
         
-        // REGRA: Mostrar aviso se faltar 7 dias ou menos
         if ($diasParaVencer <= 7) {
             $exibirAvisoVencimento = true;
             $exibirAvisoTeste = false; 
@@ -92,7 +91,7 @@
     <div class="alert alert-info border-0 shadow-sm d-flex align-items-center">
         <i class="uil uil-clock-three me-2 fs-4"></i> 
         <div class="flex-grow-1">
-            Você tem mais <strong>{{ $diasRestantesTeste }} dias</strong> de teste gratuito.
+            Você tem mais <strong>{{ $diasRestantesTeste }} {{ $diasRestantesTeste > 1 ? 'dias' : 'dia' }}</strong> de teste gratuito.
         </div>
         <a href="{{ route('planos.index') }}" class="btn btn-info btn-sm ms-auto rounded-pill">Assinar Agora</a>
     </div>
@@ -106,8 +105,7 @@
             @if($diasParaVencer > 0)
                 Sua assinatura vence em <strong>{{ $diasParaVencer }} {{ $diasParaVencer > 1 ? 'dias' : 'dia' }}</strong>.
             @else
-                {{-- REGRA: Se igual a 0 --}}
-                <span class="fw-bold">Sua assinatura vencerá hoje!</span> Regularize para evitar o bloqueio amanhã.
+                <span class="fw-bold">Sua assinatura vence hoje!</span> Regularize para evitar o bloqueio amanhã.
             @endif
         </div>
         <a href="{{ route('planos.index') }}" class="btn {{ $diasParaVencer == 0 ? 'btn-danger' : 'btn-warning' }} btn-sm ms-auto rounded-pill shadow-sm">
@@ -115,6 +113,7 @@
         </a>
     </div>
 @endif
+
 <!-- Para Mobile -->
 <div class="card ribbon-box d-block d-md-none">
     <div class="card-body">
