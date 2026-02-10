@@ -10,10 +10,8 @@ document.addEventListener("DOMContentLoaded", () => {
 
     pixButton.addEventListener("click", async () => {
         try {
-            const amount = parseFloat(pixButton.getAttribute("data-preco"));
             const payerEmail = pixButton.getAttribute("data-user-email");
 
-            // Exibe o spinner e esconde o conteúdo
             document.getElementById("pixLoading").style.display = "block";
             document.getElementById("pixContainer").style.display = "none";
             document.getElementById("pixCopiaCola").style.display = "none";

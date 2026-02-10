@@ -70,40 +70,36 @@ class WebhookController extends Controller
         /*
         | 4️⃣ Pagamento aprovado
         */
-        if ($payment['status'] === 'approved') {
-
-            // Evita duplicação
+        if (
+            $payment['status'] === 'approved' &&
+            (float)$payment['transaction_amount'] === (float)$assinatura->valor &&
+            $payment['payment_method_id'] === 'pix'
+        ) {
             if ($assinatura->status === 'paid') {
-                Log::info("Pagamento já processado", ['assinatura_id' => $assinatura->id]);
                 return response()->json(['message' => 'Já processado'], 200);
             }
 
             $assinatura->update([
                 'status'       => 'paid',
+                'payment_id'   => $payment['id'],
                 'class_status' => 'badge badge-outline-success',
             ]);
 
-            /*
-            | 5️⃣ Atualizar usuário
-            */
             $user = User::find($assinatura->user_id);
 
             if ($user) {
                 $user->update([
                     'plano'          => $assinatura->plano,
                     'payment_status' => 'paid',
-                    'credito'        => $user->credito + $payment['transaction_amount'],
                 ]);
             }
 
-            Log::info('Pagamento aprovado e usuário atualizado', [
-                'user_id'       => $user->id ?? null,
+            Log::info('Pagamento validado com sucesso', [
                 'assinatura_id' => $assinatura->id,
-                'valor'         => $payment['transaction_amount']
+                'valor' => $payment['transaction_amount'],
             ]);
-
-            return response()->json(['message' => 'Pagamento confirmado']);
         }
+
 
         /*
         | 6️⃣ Outros status
