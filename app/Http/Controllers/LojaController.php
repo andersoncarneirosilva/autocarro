@@ -18,7 +18,7 @@ class LojaController extends Controller
     public function index(Request $request)
 {
 
-return view('site.index');
+    return view('site.index');
     
     //dd($request);
     // Inicia a query filtrando apenas anúncios publicados
@@ -65,7 +65,9 @@ return view('site.index');
 
     return view('loja.index', compact('veiculos','dadosAgrupados'));
 }
-
+public function planos(){
+    return view('site.planos');
+}
 
     public function indexVeiculosNovos(Request $request)
 {

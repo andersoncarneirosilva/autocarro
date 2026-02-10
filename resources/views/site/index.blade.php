@@ -132,23 +132,11 @@
                             <div class="collapse navbar-collapse sub-menu-bar" id="navbarSupportedContent">
                                 <ul id="nav" class="navbar-nav ml-auto">
                                     <li class="nav-item active">
-                                        <a class="page-scroll" href="#home">Página Inicial</a>
+                                        <a class="page-scroll" href="{{ route('site.index') }}">Página Inicial</a>
                                     </li>
-                                    {{-- <li class="nav-item">
-                                        <a class="page-scroll" href="#features">Feature</a>
-                                    </li> --}}
-                                    <li class="nav-item">
-                                        <a class="page-scroll" href="#sobre">Sobre</a>
-                                    </li>
-                                    {{-- <li class="nav-item">
-                                        <a class="page-scroll" href="#loja">Loja virtual</a>
-                                    </li> --}}
-                                    <li class="nav-item">
-                                        <a class="page-scroll" href="#planos">Planos</a>
+                                    <li class="nav-item ">
+                                        <a class="page-scroll" href="{{ route('site.planos') }}">Planos</a>
                                     </li>                                    
-                                    <li class="nav-item">
-                                        <a class="page-scroll" href="#contato">Contato</a>
-                                    </li>
                                     <li class="nav-item">
                                         <a class="page-scroll" href="{{ route('login') }}">Login</a>
                                     </li>
@@ -242,49 +230,6 @@
 
       </section>
 
-{{-- 
-    <section id="loja" class="about_area pt-30 pb-80">
-    <div class="container">
-        <div class="row align-items-center">
-            <div class="col-lg-6 col-md-9">
-                <div class="about_image mt-50 wow fadeInRightBig" data-wow-duration="1.3s" data-wow-delay="0.5s">
-                    <img class="image" src="{{ url('layout_site/images/header_app_2.png') }}">
-                    <img class="dots" src="{{ url('layout_site/images/dots.svg') }}" alt="dots">
-                </div>
-            </div>
-
-            <div class="col-lg-6">
-                <div class="about_content mt-45 wow fadeInLeftBig" data-wow-duration="1.3s" data-wow-delay="0.5s">
-                    <div class="section_title">
-                        <h4 class="title">Tenha sua Loja Virtual e Venda Mais</h4>
-
-                        <p>
-                            Com o <strong>Alcecar</strong>, você pode criar sua
-                            <strong>loja virtual</strong> e dar mais visibilidade aos seus produtos
-                            e serviços. O sistema foi desenvolvido para aumentar sua
-                            <strong>exposição online</strong> e facilitar a conexão com novos clientes.
-                        </p>
-
-                        <p>
-                            Além disso, você conta com ferramentas para
-                            <strong>gestão de anúncios</strong>, controle de campanhas,
-                            acompanhamento de resultados e otimização do desempenho,
-                            tudo em um único lugar, de forma simples e eficiente.
-                        </p>
-                    </div>
-
-                    <a class="main-btn" href="#contato">Saiba Mais</a>
-                </div>
-            </div>
-        </div>
-    </div> 
-</section> --}}
-
-    
-
-    <section id="app_features">
-
-    </section>
 
     <!--====== APP FEATURES PART ENDS ======-->
     
@@ -312,130 +257,6 @@
 </section>
     
 
-<section id="planos" class="pricing_area mt-80 pt-75 pb-80">
-    <div class="container">
-        <div class="row justify-content-center">
-            <div class="col-lg-6">
-                <div class="section_title text-center pb-25">
-                    <h4 class="title">Planos e Preços</h4>
-                    <p>Escolha a licença ideal para o seu negócio. Gestão profissional de estoque, multas e documentos para todos os tamanhos de revendas.</p>
-                </div>
-            </div>
-        </div> 
-        
-        <div class="row justify-content-center">
-            
-            <div class="col-lg-4 col-md-8 col-sm-10">
-                <div class="single_pricing text-center mt-30 wow fadeInUp" data-wow-duration="1.3s" data-wow-delay="0.2s">
-                    <div class="pricing_top_bar">
-                        <h5 class="pricing_title">Plano Start</h5>
-                        <i class="lni lni-user"></i> <span class="price">R$ 29,90</span>
-                        <p class="mt-2">Ideal para autônomos</p>
-                    </div>
-                    <div class="pricing_list">
-                        <ul>
-                            <li><strong>1 Usuário (Administrador)</strong></li>
-                            <li>Gestão de Veículos</li>
-                            <li>Emissão de Procurações</li>
-                            <li style="text-decoration: line-through; color: #aaa;">Emissão de Solicitações ATPVe</li>
-                            <li style="text-decoration: line-through; color: #aaa;">Emissão de Comunicação de venda</li>
-                            <li style="text-decoration: line-through; color: #aaa;">Tabela FIPE Integrada</li>
-                            <li>Suporte via WhatsApp</li>
-                        </ul>
-                    </div>
-                    <div class="pricing_btn">
-                        <a href="{{ route('register') }}" target="_blank" class="main-btn main-btn-2">Teste grátis</a>
-                    </div>
-                </div>
-            </div>
-
-            <div class="col-lg-4 col-md-8 col-sm-10">
-                <div class="single_pricing text-center pricing_active pricing_color_1 mt-30 wow fadeInUp" data-wow-duration="1.3s" data-wow-delay="0.4s">
-                    <div class="pricing_top_bar">
-                        <h5 class="pricing_title">Plano Standard</h5>
-                        <i class="lni lni-layers"></i> <span class="price">R$ 49,90</span>
-                        <p class="mt-2">Ideal para revendas</p>
-                    </div>
-                    <div class="pricing_list">
-                        <ul>
-                            <li><strong>Até 2 Vendedores</strong></li>
-                            <li>Gestão de Veículos</li>
-                            <li>Emissão de Procurações</li>
-                            <li>Emissão de Solicitações ATPVe</li>
-                            <li>Emissão de Comunicação de venda</li>
-                            <li style="text-decoration: line-through; color: #aaa;">Tabela FIPE Integrada</li>
-                            <li>Suporte via WhatsApp</li>
-                        </ul>
-                    </div>
-                    <div class="pricing_btn">
-                        <a href="{{ route('register') }}" class="main-btn main-btn-2">Teste grátis</a>
-                    </div>
-                </div>
-            </div>
-
-            <div class="col-lg-4 col-md-8 col-sm-10">
-                <div class="single_pricing text-center pricing_active pricing_color_2 mt-30 wow fadeInUp" data-wow-duration="1.3s" data-wow-delay="0.6s">
-                    <div class="pricing_top_bar">
-                        <h5 class="pricing_title">Plano Pro</h5>
-                        <i class="lni lni-crown"></i>
-                        <span class="price">R$ 69,90</span>
-                        <p class="mt-2">Ideal para revendas</p>
-                    </div>
-                    <div class="pricing_list">
-                        <ul>
-                            <li><strong>Vendedores Ilimitados</strong></li>
-                            <li>Gestão de Veículos</li>
-                            <li>Emissão de Procurações</li>
-                            <li>Emissão de Solicitações ATPVe</li>
-                            <li>Emissão de Comunicação de venda</li>
-                            <li>Tabela FIPE Integrada</li>
-                            <li>Suporte Prioritário</li>
-                        </ul>
-                    </div>
-                    <div class="pricing_btn">
-                        <a href="{{ route('register') }}" class="main-btn main-btn-2">Teste grátis</a>
-                    </div>
-                </div>
-            </div>
-
-        </div>
-    </div> 
-</section>
-
-<style>
-    @media (min-width: 992px) {
-        .col-lg-5 {
-            flex: 0 0 40%;
-            max-width: 40%;
-        }
-    }
-    
-    .pricing_top_bar .price {
-        font-size: 40px;
-        display: block;
-        margin-top: 10px;
-        font-weight: 700;
-    }
-
-    /* Estilo para destacar o item de Loja Virtual no plano Full */
-    .pricing_active .pricing_list ul li strong {
-        color: #ff9f43; /* Ou a cor de destaque do seu tema */
-    }
-</style>
-
-<style>
-    /* Pequeno ajuste para a duração do preço não ficar colada */
-    .duration {
-        font-size: 14px;
-        color: #666;
-        display: inline-block;
-        margin-left: 2px;
-    }
-</style>
-
-    <!--====== PRICNG PART ENDS ======-->
-    
-    <!--====== DOWNLOAD APP PART START ======-->
 
     <section id="download" class="download_app_area pt-80 mb-80">
     <div class="container">

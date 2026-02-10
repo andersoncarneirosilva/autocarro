@@ -270,5 +270,6 @@ Route::post('/reset-password', [PasswordResetController::class, 'reset'])->name(
 Route::post('/enviar-contato', [ContatoController::class, 'enviarEmail'])->name('contato.enviar');
 
 Route::get('/', [LojaController::class, 'index'])->name('site.index');
+Route::get('/planos', [LojaController::class, 'planos'])->name('site.planos');
 
 require __DIR__.'/auth.php';

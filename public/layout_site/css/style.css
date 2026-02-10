@@ -452,6 +452,7 @@ p {
 /*===== NAVBAR =====*/
 .header_navbar {
   position: absolute;
+  background-color: #5722ad;
   top: 0;
   left: 0;
   width: 100%;
