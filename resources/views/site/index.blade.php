@@ -59,16 +59,12 @@
         </div>
     </div>
 
-    <!--====== PRELOADER PART ENDS ======-->
     <style>
-   /* Estilo para dar respiro aos textos sem mudar o HTML */
 .hero_text_center {
     text-align: center;
     position: relative;
     z-index: 5;
-    /* Adiciona padding horizontal para o texto não colar nas laterais */
     padding: 0 15px; 
-    /* Cria o distanciamento vertical em relação à imagem abaixo */
     margin-top: 180px; 
 }
 
@@ -84,12 +80,10 @@
     color: rgba(255,255,255,0.9);
     font-size: 20px;
     line-height: 1.6;
-    /* Limita a largura máxima do texto para ele não ficar esticado e "colado" */
     max-width: 850px; 
-    margin: 0 auto; /* Centraliza o bloco de texto horizontalmente */
+    margin: 0 auto; 
 }
 
-/* Garante que a imagem tenha um limite visual e não suba no texto */
 .hero_image_main {
     margin-top: 20px;
     text-align: center;
@@ -101,7 +95,6 @@
     filter: drop-shadow(0px 20px 40px rgba(0,0,0,0.3));
 }
 
-/* Ajuste para telas de celular */
 @media (max-width: 767px) {
     .main_hero_custom, .header_hero {
         padding-top: 120px;
@@ -141,12 +134,12 @@
                                         <a class="page-scroll" href="{{ route('login') }}">Login</a>
                                     </li>
                                 </ul>
-                            </div> <!-- navbar collapse -->
-                        </nav> <!-- navbar -->
+                            </div>
+                        </nav>
                     </div>
-                </div> <!-- row -->
-            </div> <!-- container -->
-        </div> <!-- header navbar -->
+                </div>
+            </div>
+        </div>
 
         <div id="home" class="header_hero d-lg-flex align-items-center">
             <img class="shape shape-1" src="{{ url('layout_site/images/shape-1.svg') }}" alt="shape">
@@ -230,11 +223,6 @@
 
       </section>
 
-
-    <!--====== APP FEATURES PART ENDS ======-->
-    
-    <!--====== VIDEO PART START ======-->
-
     <section id="video" class="video_area pt-80 pb-80" style="background-color: #f4f7f9;">
     <div class="container">
         <div class="row justify-content-center">
@@ -279,7 +267,6 @@
 </p>
 
 
-                <!-- BOTÕES LADO A LADO -->
                 <ul class="d-flex gap-3 flex-wrap">
                     <li>
                         <a class="d-flex align-items-center" href="{{ route('login') }}">
@@ -309,7 +296,7 @@
                     </li>
 
                 </ul>
-                <!-- /BOTÕES -->
+              
             </div>
         </div>
     </div>
@@ -371,7 +358,7 @@
         width: 50px;
         height: 50px;
         line-height: 50px;
-        background-color: #727cf5; /* Cor primária do Alcecar */
+        background-color: #727cf5;
         color: #fff;
         font-size: 20px;
         display: block;
@@ -389,7 +376,6 @@
         font-size: 14px;
         line-height: 1.6;
     }
-    /* Estilo para as linhas conectoras (opcional se não tiver o SVG) */
     @media (min-width: 992px) {
         .step-card:not(.last):after {
             content: "→";
@@ -427,7 +413,7 @@
                         </div>
                         <h4 class="blog_title"><a href="#">Seus dados e documentos protegidos com criptografia de ponta.</a></h4>
                         <p class="text">Garantimos a integridade de todas as procurações e cadastros realizados no sistema.</p>
-                        {{-- <a href="#" class="main-btn">Saiba Mais</a> --}}
+                        
                     </div>
                 </div>
             </div>
@@ -471,7 +457,6 @@
 </section>
 
 <style>
-    /* Ajuste para que as imagens do blog fiquem padronizadas */
     .blog_image img {
         width: 100%;
         height: 200px;
@@ -540,7 +525,6 @@
 </section>
 
 <style>
-    /* Resetando conflitos do template */
     .custom_whatsapp_form {
         position: relative;
         max-width: 700px;
@@ -557,10 +541,9 @@
         outline: none !important;
         background: white !important;
         color: #333 !important;
-        position: relative !important; /* Força sair do absolute se houver */
+        position: relative !important;
     }
 
-    /* Estilo do Botão */
     .btn-whatsapp {
         background-color: #25D366 !important;
         border-color: #25D366 !important;
@@ -578,7 +561,6 @@
         transform: translateY(-3px);
     }
 
-    /* Redes Sociais */
     .footer_social ul {
         display: flex;
         justify-content: center;
@@ -589,7 +571,7 @@
     
     .footer_social ul li a {
         font-size: 24px;
-        color: #fff; /* Ajustado para branco para aparecer no fundo roxo */
+        color: #fff;
         opacity: 0.8;
     }
 
@@ -607,7 +589,7 @@
 <script>
 function sendToWhatsApp(event) {
     event.preventDefault();
-    const phoneNumber = "555199047299"; // COLOQUE SEU NÚMERO AQUI
+    const phoneNumber = "555199047299";
     const name = document.getElementById('name').value;
     const subject = document.getElementById('subject').value;
     const message = `Olá! Meu nome é ${name}. Gostaria de falar sobre: ${subject}.`;

@@ -59,16 +59,12 @@
         </div>
     </div>
 
-    <!--====== PRELOADER PART ENDS ======-->
     <style>
-   /* Estilo para dar respiro aos textos sem mudar o HTML */
 .hero_text_center {
     text-align: center;
     position: relative;
     z-index: 5;
-    /* Adiciona padding horizontal para o texto não colar nas laterais */
     padding: 0 15px; 
-    /* Cria o distanciamento vertical em relação à imagem abaixo */
     margin-top: 180px; 
 }
 
@@ -84,12 +80,10 @@
     color: rgba(255,255,255,0.9);
     font-size: 20px;
     line-height: 1.6;
-    /* Limita a largura máxima do texto para ele não ficar esticado e "colado" */
     max-width: 850px; 
-    margin: 0 auto; /* Centraliza o bloco de texto horizontalmente */
+    margin: 0 auto;
 }
 
-/* Garante que a imagem tenha um limite visual e não suba no texto */
 .hero_image_main {
     margin-top: 20px;
     text-align: center;
@@ -101,7 +95,6 @@
     filter: drop-shadow(0px 20px 40px rgba(0,0,0,0.3));
 }
 
-/* Ajuste para telas de celular */
 @media (max-width: 767px) {
     .main_hero_custom, .header_hero {
         padding-top: 120px;
@@ -142,12 +135,12 @@
                                         <a class="page-scroll" href="{{ route('login') }}">Login</a>
                                     </li>
                                 </ul>
-                            </div> <!-- navbar collapse -->
-                        </nav> <!-- navbar -->
+                            </div>
+                        </nav>
                     </div>
-                </div> <!-- row -->
-            </div> <!-- container -->
-        </div> <!-- header navbar -->
+                </div>
+            </div> 
+        </div> 
 
         
 
@@ -183,14 +176,12 @@
         font-weight: 700;
     }
 
-    /* Estilo para destacar o item de Loja Virtual no plano Full */
     .pricing_active .pricing_list ul li strong {
-        color: #ff9f43; /* Ou a cor de destaque do seu tema */
+        color: #ff9f43;
     }
 </style>
 
 <style>
-    /* Pequeno ajuste para a duração do preço não ficar colada */
     .duration {
         font-size: 14px;
         color: #666;
@@ -285,7 +276,6 @@
 </section>
 
 <style>
-    /* Ajuste para que as imagens do blog fiquem padronizadas */
     .blog_image img {
         width: 100%;
         height: 200px;
@@ -371,10 +361,8 @@
         outline: none !important;
         background: white !important;
         color: #333 !important;
-        position: relative !important; /* Força sair do absolute se houver */
+        position: relative !important;
     }
-
-    /* Estilo do Botão */
     .btn-whatsapp {
         background-color: #25D366 !important;
         border-color: #25D366 !important;
@@ -403,7 +391,7 @@
     
     .footer_social ul li a {
         font-size: 24px;
-        color: #fff; /* Ajustado para branco para aparecer no fundo roxo */
+        color: #fff;
         opacity: 0.8;
     }
 
@@ -421,7 +409,7 @@
 <script>
 function sendToWhatsApp(event) {
     event.preventDefault();
-    const phoneNumber = "555199047299"; // COLOQUE SEU NÚMERO AQUI
+    const phoneNumber = "555199047299";
     const name = document.getElementById('name').value;
     const subject = document.getElementById('subject').value;
     const message = `Olá! Meu nome é ${name}. Gostaria de falar sobre: ${subject}.`;
