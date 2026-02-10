@@ -623,7 +623,7 @@
                             </div>
                         </div>
                         <h4 class="blog_title"><a href="#">Design focado na experiência do usuário e agilidade no dia a dia.</a></h4>
-                        <p class="text">Interface limpa e intuitiva para que você gere documentos em poucos cliques.</p>
+                        <p class="text">Interface limpa e intuitiva para que você gere documentos em poucos cliques e em qualquer dispositivo.</p>
                         
                     </div>
                 </div>
@@ -637,12 +637,11 @@
                     <div class="blog_content">
                         <div class="blog_meta d-flex justify-content-between">
                             <div class="meta_date">
-                                <span>Tecnologia em Nuvem</span>
+                                <span>Criação de modelos</span>
                             </div>
                         </div>
-                        <h4 class="blog_title"><a href="#">Acesse sua gestão de qualquer lugar, a qualquer momento.</a></h4>
-                        <p class="text">Mobilidade total para acessar relatórios e emitir ATPVe direto do seu dispositivo.</p>
-                        
+                        <h4 class="blog_title"><a href="#">Crie o modelo de documento uma única vez.</a></h4>
+                        <p class="text">Padronize seus contratos e formulários para gerar documentos automaticamente em poucos segundos.</p>
                     </div>
                 </div>
             </div> 
