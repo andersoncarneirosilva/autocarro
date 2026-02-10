@@ -55,6 +55,70 @@ document.addEventListener('DOMContentLoaded', function () {
 </div>
 
 
+@php
+    $userLogado = auth()->user();
+    $dono = $userLogado->empresa_id ? \App\Models\User::find($userLogado->empresa_id) : $userLogado;
+    
+    // --- LÓGICA 1: PERÍODO DE TESTE ---
+    $exibirAvisoTeste = false;
+    if ($dono && $dono->plano === 'Teste') {
+        $dataExpiracaoTeste = $dono->created_at->addDays(7);
+        $diasRestantesTeste = (int) ceil(now()->diffInDays($dataExpiracaoTeste, false));
+        $exibirAvisoTeste = true;
+    }
+
+    // --- LÓGICA 2: ASSINATURA PAGA ---
+    $exibirAvisoVencimento = false;
+    $assinaturaAtiva = \DB::table('assinaturas')
+        ->where('user_id', $dono->id)
+        ->where('status', 'paid')
+        ->orderBy('data_fim', 'desc')
+        ->first();
+
+    if ($assinaturaAtiva) {
+        $dataFim = \Carbon\Carbon::parse($assinaturaAtiva->data_fim);
+        $diasParaVencer = (int) ceil(now()->diffInDays($dataFim, false));
+
+        if ($diasParaVencer < 0) {
+            header("Location: " . route('assinatura.expirada'));
+            exit;
+        }
+        
+        if ($diasParaVencer <= 7) {
+            $exibirAvisoVencimento = true;
+            $exibirAvisoTeste = false; 
+        }
+    }
+@endphp
+
+{{-- Aviso de Teste --}}
+@if($exibirAvisoTeste && $diasRestantesTeste >= 0)
+    <div class="alert alert-info border-0 shadow-sm d-flex align-items-center">
+        <i class="uil uil-clock-three me-2 fs-4"></i> 
+        <div class="flex-grow-1">
+            Você tem mais <strong>{{ $diasRestantesTeste }} {{ $diasRestantesTeste > 1 ? 'dias' : 'dia' }}</strong> de teste gratuito.
+        </div>
+        <a href="{{ route('planos.index') }}" class="btn btn-info btn-sm ms-auto rounded-pill">Assinar Agora</a>
+    </div>
+@endif
+
+{{-- Aviso de Vencimento (Pago) --}}
+@if($exibirAvisoVencimento)
+    <div class="alert {{ $diasParaVencer == 0 ? 'alert-danger shadow' : 'alert-warning' }} border-0 shadow-sm d-flex align-items-center">
+        <i class="mdi {{ $diasParaVencer == 0 ? 'mdi-alert-octagon' : 'mdi-alert-outline' }} me-2 fs-4"></i> 
+        <div class="flex-grow-1">
+            @if($diasParaVencer > 0)
+                Sua assinatura vence em <strong>{{ $diasParaVencer }} {{ $diasParaVencer > 1 ? 'dias' : 'dia' }}</strong>.
+            @else
+                <span class="fw-bold">Sua assinatura vence hoje!</span> Regularize para evitar o bloqueio amanhã.
+            @endif
+        </div>
+        <a href="{{ route('planos.index') }}" class="btn {{ $diasParaVencer == 0 ? 'btn-danger' : 'btn-warning' }} btn-sm ms-auto rounded-pill shadow-sm">
+            {{ $diasParaVencer == 0 ? 'Pagar Hoje' : 'Renovar' }}
+        </a>
+    </div>
+@endif
+
 <div class="card">
     <div class="card-body p-2">
 
