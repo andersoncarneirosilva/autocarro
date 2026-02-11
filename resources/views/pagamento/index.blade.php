@@ -58,9 +58,12 @@
                     <h4 class="mb-3">Pagamento via PIX</h4>
                     <p class="text-muted mb-4">O QR Code será gerado para pagamento imediato.</p>
                     
-                    <button id="pixPaymentButton" class="btn btn-success btn-lg rounded-pill px-4" onclick="processPixPayment()">
-                        <i class="mdi mdi-qrcode me-1"></i> Gerar QR Code para Pagar
-                    </button>
+                    <button id="pixPaymentButton" 
+        class="btn btn-success btn-lg rounded-pill px-4"
+        data-plano="{{ $plano }}" 
+        data-user-email="{{ $userEmail }}">
+    <i class="mdi mdi-qrcode me-1"></i> Gerar QR Code para Pagar
+</button>
 
                     <button class="btn btn-success btn-lg rounded-pill px-4" id="pixPaymentButtonLoading" type="button" disabled style="display: none;">
                         <span class="spinner-border spinner-border-sm me-1" role="status" aria-hidden="true"></span>
@@ -123,106 +126,137 @@
 
 
 <script>
+    // 1. Variáveis Globais e Configurações
     const csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
     let timerInterval;
     let statusInterval;
-    let remainingTime = 300;
+    let remainingTime = 300; // 5 minutos
 
+    // 2. Função para o Timer de Expiração
     function startTimer() {
-        document.getElementById('timer').style.display = 'block';
+        const timerDiv = document.getElementById('timer');
+        const timerDisplay = document.getElementById('timerDisplay');
+        const linkPlanos = document.getElementById('linkPlanos');
+
+        if (timerDiv) timerDiv.style.display = 'block';
+        
         timerInterval = setInterval(() => {
             const minutes = Math.floor(remainingTime / 60);
             const seconds = remainingTime % 60;
-            document.getElementById('timerDisplay').textContent = `${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')}`;
             
-            if (remainingTime > 0) {
-                remainingTime--;
-            } else {
+            if (timerDisplay) {
+                timerDisplay.textContent = `${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')}`;
+            }
+            
+            if (remainingTime <= 0) {
                 clearInterval(timerInterval);
-                document.getElementById('linkPlanos').style.display = 'block';
+                clearInterval(statusInterval); // Para de verificar se expirou
+                if (linkPlanos) linkPlanos.style.display = 'block';
+                alert("O tempo para pagamento expirou. Por favor, gere um novo QR Code.");
+            } else {
+                remainingTime--;
             }
         }, 1000);
     }
 
+    // 3. Função para Verificar Status no Banco de Dados
     function iniciarVerificacaoStatus() {
         if (statusInterval) clearInterval(statusInterval);
+        
         statusInterval = setInterval(async function() {
             try {
-                let response = await fetch('/check-payment-status');
+                let response = await fetch("{{ url('/check-payment-status') }}");
                 if (!response.ok) return;
+                
                 let data = await response.json();
+                console.log("Status Alcecar:", data.status);
+
                 if (data.status === 'approved' || data.status === 'paid') {
                     clearInterval(statusInterval);
+                    clearInterval(timerInterval);
                     window.location.href = "{{ route('pagamento.confirmado') }}"; 
                 }
             } catch (error) {
                 console.error("Erro ao verificar status:", error);
             }
-        }, 5000);
+        }, 5000); // 5 em 5 segundos
     }
 
-    // EVENTO ÚNICO PARA GERAR O PIX
-    document.getElementById("pixPaymentButton").addEventListener("click", async () => {
-        const btnGerar = document.getElementById("pixPaymentButton");
-        const btnLoading = document.getElementById("pixPaymentButtonLoading");
-        const errorMsg = document.getElementById("pixErrorMessage");
+    // 4. Evento de Clique para Gerar PIX
+    const pixBtn = document.getElementById("pixPaymentButton");
+    if (pixBtn) {
+        pixBtn.addEventListener("click", async () => {
+            const btnGerar = document.getElementById("pixPaymentButton");
+            const btnLoading = document.getElementById("pixPaymentButtonLoading");
+            const errorMsg = document.getElementById("pixErrorMessage");
 
-        try {
-            // UI Feedback
+            // Feedback Visual
             btnGerar.style.display = "none";
-            btnLoading.style.display = "inline-block";
-            errorMsg.style.display = "none";
+            if (btnLoading) btnLoading.style.display = "inline-block";
+            if (errorMsg) errorMsg.style.display = "none";
 
-            const pixResponse = await fetch('/create-pix-payment', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                    'X-CSRF-TOKEN': csrfToken,
-                    'Accept': 'application/json'
-                },
-                body: JSON.stringify({
-                    amount: {{ $preco }},
-                    payer_email: @json($userEmail),
-                    plano: @json($plano) 
-                })
-            });
+            try {
+                const pixResponse = await fetch("{{ url('/create-pix-payment') }}", {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-CSRF-TOKEN': csrfToken,
+                        'Accept': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        plano: @json($plano) 
+                    })
+                });
 
-            if (!pixResponse.ok) throw new Error("Falha na requisição");
+                if (!pixResponse.ok) throw new Error("Erro no servidor");
 
-            const pixData = await pixResponse.json();
-            
-            // Sucesso: Esconde área de geração e mostra o QR Code
-            document.getElementById("divGerarPix").style.display = "none";
-            document.getElementById('pixPaymentContainer').style.display = 'block';
+                const pixData = await pixResponse.json();
+                
+                // Mostrar Container do QR Code e esconder botão de gerar
+                document.getElementById("divGerarPix").style.display = "none";
+                document.getElementById('pixPaymentContainer').style.display = 'block';
 
-            if (pixData.qr_code_base64) {
-                document.getElementById("pixQrCode").src = "data:image/png;base64," + pixData.qr_code_base64;
+                if (pixData.qr_code_base64) {
+                    document.getElementById("pixQrCode").src = "data:image/png;base64," + pixData.qr_code_base64;
+                }
+                if (pixData.qr_code) {
+                    document.getElementById("pixCopiaCola").value = pixData.qr_code;
+                }
+
+                // Inicia os processos automáticos
+                startTimer();
+                iniciarVerificacaoStatus();
+
+            } catch (error) {
+                console.error("Erro ao criar pagamento PIX:", error);
+                btnGerar.style.display = "inline-block";
+                if (errorMsg) errorMsg.style.display = "block";
+            } finally {
+                if (btnLoading) btnLoading.style.display = "none";
             }
-            if (pixData.qr_code) {
-                document.getElementById("pixCopiaCola").value = pixData.qr_code;
-            }
-
-            startTimer();
-            iniciarVerificacaoStatus();
-
-        } catch (error) {
-            console.error("Erro ao criar pagamento PIX:", error);
-            btnGerar.style.display = "inline-block";
-            errorMsg.style.display = "block";
-        } finally {
-            btnLoading.style.display = "none";
-        }
-    });
-
-    // Copiar código
-    document.getElementById("btCopiar").addEventListener("click", function () {
-        const pixCodeInput = document.getElementById("pixCopiaCola");
-        navigator.clipboard.writeText(pixCodeInput.value).then(() => {
-            let toastElement = new bootstrap.Toast(document.getElementById("toastPix"));
-            toastElement.show();
         });
-    });
+    }
+
+    // 5. Função de Copiar Código
+    const btnCopiar = document.getElementById("btCopiar");
+    if (btnCopiar) {
+        btnCopiar.addEventListener("click", function () {
+            const pixCodeInput = document.getElementById("pixCopiaCola");
+            if (pixCodeInput && pixCodeInput.value) {
+                navigator.clipboard.writeText(pixCodeInput.value).then(() => {
+                    const toastEl = document.getElementById("toastPix");
+                    if (toastEl) {
+                        let toast = new bootstrap.Toast(toastEl);
+                        toast.show();
+                    } else {
+                        alert("Código copiado!");
+                    }
+                });
+            }
+        });
+    }
 </script>
+
 
 
 @endsection
