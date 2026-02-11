@@ -151,7 +151,10 @@ observer.observe(document.body, { childList: true, subtree: true });
 
             {{-- Notificações --- HABILITAR notificaçoes.js --}}
             {{-- Notificações --- HABILITAR script logo acima nessa pagina --}}
-            
+            <li class="d-none d-md-inline-block">
+                <span class="badge bg-primary">Plano: {{ auth()->user()->plano ?? 'Gratuito' }}</span>
+                
+            </li>
             <li class="dropdown notification-list">
                 <a class="nav-link dropdown-toggle arrow-none" data-bs-toggle="dropdown" href="#" role="button" aria-haspopup="false" aria-expanded="false">
                     <i class="ri-notification-3-line font-22"></i>

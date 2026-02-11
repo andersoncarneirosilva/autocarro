@@ -25,11 +25,24 @@ class PaymentController extends Controller
 
     public function selecionarPlano(Request $request)
     {
+        // Criamos uma lista de preços oficial dentro do código
+        $tabelaPrecos = [
+            'Standard' => 00.04,
+        'Pro'      => 00.06,
+        ];
+
+        $nomeDoPlano = $request->plano;
+        $valorDoPlano = $tabelaPrecos[$nomeDoPlano] ?? null;
+
+        if (!$valorDoPlano) {
+            return redirect()->back()->with('error', 'Plano inválido.');
+        }
+
         return redirect()
             ->route('pagamento.index')
             ->with([
-                'plano' => $request->plano,
-                'preco' => $request->preco,
+                'plano' => $nomeDoPlano,
+                'preco' => $valorDoPlano, // O preço é salvo na sessão aqui!
             ]);
     }
 
@@ -67,9 +80,8 @@ class PaymentController extends Controller
     // 1️⃣ TABELA DE PREÇOS (O Servidor é o único dono da verdade)
     // Se você tiver esses valores no banco, substitua por uma query.
     $planosDisponiveis = [
-        'Start'    => 49.90,
-        'Standard' => 89.90,
-        'Pro'      => 149.90,
+        'Standard' => 00.04,
+        'Pro'      => 00.06,
     ];
 
     // Pegamos o nome do plano enviado pelo JS

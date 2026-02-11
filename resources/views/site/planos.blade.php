@@ -199,30 +199,6 @@
         <div class="row justify-content-center">
             
             <div class="col-lg-4 col-md-8 col-sm-10">
-                <div class="single_pricing text-center mt-30 wow fadeInUp" data-wow-duration="1.3s" data-wow-delay="0.2s">
-                    <div class="pricing_top_bar">
-                        <h5 class="pricing_title">Plano Start</h5>
-                        <i class="lni lni-user"></i> <span class="price">R$ 29,90</span>
-                        <p class="mt-2">Ideal para autônomos</p>
-                    </div>
-                    <div class="pricing_list">
-                        <ul>
-                            <li><strong>1 Usuário (Administrador)</strong></li>
-                            <li>Gestão de Veículos</li>
-                            <li>Emissão de Procurações</li>
-                            <li style="text-decoration: line-through; color: #aaa;">Emissão de Solicitações ATPVe</li>
-                            <li style="text-decoration: line-through; color: #aaa;">Emissão de Comunicação de venda</li>
-                            <li style="text-decoration: line-through; color: #aaa;">Tabela FIPE Integrada</li>
-                            <li>Suporte via WhatsApp</li>
-                        </ul>
-                    </div>
-                    <div class="pricing_btn">
-                        <a href="{{ route('register') }}" target="_blank" class="main-btn main-btn-2">Teste grátis</a>
-                    </div>
-                </div>
-            </div>
-
-            <div class="col-lg-4 col-md-8 col-sm-10">
                 <div class="single_pricing text-center pricing_active pricing_color_1 mt-30 wow fadeInUp" data-wow-duration="1.3s" data-wow-delay="0.4s">
                     <div class="pricing_top_bar">
                         <h5 class="pricing_title">Plano Standard</h5>

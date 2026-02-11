@@ -14,35 +14,10 @@
         </div>
 
         <div class="row mt-sm-5 mt-3 mb-3 justify-content-center">
-            
-            <div class="col-md-4">
-                <div class="card card-pricing shadow-sm border-0">
-                    <div class="card-body text-center">
-                        <p class="card-pricing-plan-name fw-bold text-uppercase text-primary">Plano Start</p>
-                        <i class="card-pricing-icon mdi mdi-account-circle text-primary" style="font-size: 48px;"></i>
-                        <h2 class="card-pricing-price">R$ 29,90 <span>/ mês</span></h2>
-                        <ul class="card-pricing-features text-start ps-4">
-                            <li><i class="mdi mdi-check-circle-outline text-success"></i> 1 Usuário (Administrador)</li>
-                            <li><i class="mdi mdi-check-circle-outline text-success"></i> Gestão de Veículos</li>
-                            <li><i class="mdi mdi-check-circle-outline text-success"></i> Emissão de Procurações</li>
-                            <li class="text-muted text-decoration-line-through"><i class="mdi mdi-close-circle-outline text-danger"></i> Solicitações ATPVe</li>
-                            <li class="text-muted text-decoration-line-through"><i class="mdi mdi-close-circle-outline text-danger"></i> Emissão de Comunicação de venda</li>
-                            <li class="text-muted text-decoration-line-through"><i class="mdi mdi-close-circle-outline text-danger"></i> Tabela FIPE Integrada</li>
-                            <li><i class="mdi mdi-check-circle-outline text-success"></i> Suporte Técnico</li>
-                        </ul>
-                        <form action="{{ route('checkout') }}" method="POST">
-                            @csrf
-                            <input type="hidden" name="plano" value="Start">
-                            <button type="submit" class="btn btn-primary mt-4 mb-2 rounded-pill w-100">Escolher Start</button>
-                        </form>
-                    </div>
-                </div>
-            </div>
-        
+                    
             <div class="col-md-4">
                 <div class="card card-pricing card-pricing-recommended border-primary shadow-lg" style="transform: scale(1.05);">
                     <div class="card-body text-center">
-                        <div class="badge bg-primary rounded-pill px-3 py-1 mb-2 text-white">MAIS POPULAR</div>
                         <p class="card-pricing-plan-name fw-bold text-uppercase text-primary">Plano Standard</p>
                         <i class="card-pricing-icon mdi mdi-storefront text-primary" style="font-size: 48px;"></i>
                         <h2 class="card-pricing-price text-primary">R$ 49,90 <span>/ mês</span></h2>
