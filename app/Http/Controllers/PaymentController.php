@@ -27,8 +27,8 @@ class PaymentController extends Controller
     {
         // Criamos uma lista de preços oficial dentro do código
         $tabelaPrecos = [
-            'Standard' => 00.04,
-        'Pro'      => 00.06,
+            'Standard' => 49.99,
+            'Pro'      => 69.99,
         ];
 
         $nomeDoPlano = $request->plano;
@@ -80,8 +80,8 @@ class PaymentController extends Controller
     // 1️⃣ TABELA DE PREÇOS (O Servidor é o único dono da verdade)
     // Se você tiver esses valores no banco, substitua por uma query.
     $planosDisponiveis = [
-        'Standard' => 00.04,
-        'Pro'      => 00.06,
+        'Standard' => 49.99,
+        'Pro'      => 69.99,
     ];
 
     // Pegamos o nome do plano enviado pelo JS
