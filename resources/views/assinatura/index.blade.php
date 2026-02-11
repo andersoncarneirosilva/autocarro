@@ -63,9 +63,11 @@
                             @foreach ($assinaturas as $assinatura)
                             <tr>
                                 <td>{{ $assinatura->plano }}</td>
-                                <td>R${{ $assinatura->valor }},00</td>
+                                <td>R$ {{ number_format($assinatura->valor, 2, ',', '.') }}</td>
+                                
                                 <td>{{ \Carbon\Carbon::parse($assinatura->data_inicio)->format('d/m/Y') }}</td>
                                 <td>{{ \Carbon\Carbon::parse($assinatura->data_fim)->format('d/m/Y') }}</td>
+                                
                                 @php
                                     $statusTraduzido = [
                                         'paid' => 'Aprovado',
@@ -84,7 +86,6 @@
                                         {{ $statusTraduzido[$assinatura->status] ?? $assinatura->status }}
                                     </span>
                                 </td>
-
                             </tr>
                             @endforeach
                         </tbody>
