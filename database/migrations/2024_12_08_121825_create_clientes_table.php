@@ -14,17 +14,17 @@ return new class extends Migration
         Schema::create('clientes', function (Blueprint $table) {
             $table->id();
             $table->string('nome');
-            $table->string('cpf');
-            $table->string('rg');
             $table->string('fone');
-            $table->string('email');
-            $table->string('cep');
-            $table->string('endereco');
-            $table->string('numero');
-            $table->string('bairro');
-            $table->string('cidade');
-            $table->string('estado');
-            $table->string('complemento')->nullable();
+            $table->string('email')->nullable();
+            $table->string('genero')->nullable();
+            $table->date('data_nascimento')->nullable();
+            $table->string('cep')->nullable();
+            $table->string('endereco')->nullable();
+            $table->string('numero')->nullable();
+            $table->string('bairro')->nullable();
+            $table->string('cidade')->nullable();
+            $table->string('estado')->nullable();
+            $table->string('complemtento')->nullable();
 
             $table->foreignId('user_id')->constrained()->onDelete('cascade');
             $table->foreignId('empresa_id')->nullable()->constrained('users')->onDelete('cascade');

@@ -11,17 +11,19 @@ class Kernel extends ConsoleKernel
      * Define the application's command schedule.
      */
     protected $commands = [
-        Commands\VerificarParcelaVencida::class,
+        \App\Console\Commands\SendWhatsappReminders::class,
     ];
 
     protected function schedule(Schedule $schedule): void
-    {
-        // $schedule->command('inspire')->hourly();
-        // $schedule->command('VerificarParcelaVencida:verificar')->hourly();
-        // $schedule->command('VerificarParcelaVencida:verificar')->dailyAt('14:48');
-        // $schedule->command('VerificarParcelaVencida:verificar')->everyMinute();
-        $schedule->command('events:notify-upcoming')->everyMinute(); // Executa a cada minuto
-    }
+{
+    $schedule->command('whatsapp:send-reminders')
+             ->everyMinute()
+             ->timezone('America/Sao_Paulo'); // Adicione isso
+             
+    $schedule->command('events:notify-upcoming')
+             ->everyMinute()
+             ->timezone('America/Sao_Paulo'); // Adicione isso
+}
 
     /**
      * Register the commands for the application.

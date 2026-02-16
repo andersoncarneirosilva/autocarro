@@ -18,14 +18,10 @@ class ClientesController extends Controller
 
     public function index(Request $request)
     {
-        confirmDelete('Atenção', 'Deseja excluir esse cliente?');
-
         $user = Auth::user();
         $empresaId = $user->empresa_id ?? $user->id;
 
-        // Ajuste no Model: getClientes agora deve receber o empresaId
-        // Se o seu model ainda usa userId lá dentro, mude para empresaId
-        $clientes = $this->model->getClientes($request->search, $empresaId);
+        $clientes = Cliente::paginate(10);
 
         return view('clientes.index', compact('clientes'));
     }
@@ -36,42 +32,42 @@ class ClientesController extends Controller
     }
 
     public function store(Request $request)
-    {
-        $user = Auth::user();
-        $empresaId = $user->empresa_id ?? $user->id;
+{
+    $user = Auth::user();
+    $empresaId = $user->empresa_id ?? $user->id;
 
-        try {
-            $validatedData = $request->validate([
-                'nome' => 'required|string|max:255',
-                'cpf' => 'required|string|max:255',
-                'rg' => 'required|string|max:255',
-                'fone' => 'required|string|max:255',
-                'email' => 'required|email|max:255',
-                'cep' => 'required|string|max:255',
-                'endereco' => 'required|string|max:255',
-                'numero' => 'required|string|max:255',
-                'bairro' => 'required|string|max:255',
-                'cidade' => 'required|string|max:255',
-                'estado' => 'required|string|max:255',
-                'complemento' => 'nullable|string|max:255',
-            ]);
-        } catch (\Illuminate\Validation\ValidationException $e) {
-            alert()->error('Todos os campos são obrigatórios!');
-            return redirect()->route('clientes.create');
-        }
-
-        // LÓGICA ALCECAR: Salva quem criou e a qual empresa pertence
-        $validatedData['user_id'] = $user->id;
-        $validatedData['empresa_id'] = $empresaId;
-
-        $cliente = $this->model->create($validatedData);
-
-        if ($cliente) {
-            return redirect()->route('clientes.index')->with('success', 'Cliente cadastrado com sucesso!');
-        }
-
-        return redirect()->route('clientes.index')->with('error', 'Erro ao cadastrar cliente!');
+    try {
+        $validatedData = $request->validate([
+            'nome'            => 'required|string|max:255',
+            'fone'            => 'required|string|max:255',
+            'email'           => 'nullable|email|max:255',
+            'data_nascimento' => 'nullable|date', // Adicionado
+            'genero'          => 'nullable|string|max:255', // Corrigido de 'email' para 'string'
+            'cep'             => 'nullable|string|max:255',
+            'endereco'        => 'nullable|string|max:255',
+            'numero'          => 'nullable|string|max:255',
+            'bairro'          => 'nullable|string|max:255',
+            'cidade'          => 'nullable|string|max:255',
+            'estado'          => 'nullable|string|max:255',
+            'complemento'     => 'nullable|string|max:255',
+        ]);
+    } catch (\Illuminate\Validation\ValidationException $e) {
+        // Dica: use $e->errors() se quiser ver exatamente qual campo falhou durante o desenvolvimento
+        alert()->error('Erro na validação!', 'Verifique os dados informados.');
+        return redirect()->back()->withErrors($e->validator)->withInput();
     }
+
+    $validatedData['user_id'] = $user->id;
+    $validatedData['empresa_id'] = $empresaId;
+
+    $cliente = $this->model->create($validatedData);
+
+    if ($cliente) {
+        return redirect()->route('clientes.index')->with('success', 'Cliente cadastrado com sucesso!');
+    }
+
+    return redirect()->route('clientes.index')->with('error', 'Erro ao cadastrar cliente!');
+}
 
     public function buscarClientes(Request $request)
     {
@@ -104,34 +100,46 @@ class ClientesController extends Controller
     }
 
     public function update(Request $request, $id)
-    {
-        $empresaId = Auth::user()->empresa_id ?? Auth::id();
-        $cliente = $this->model->where('empresa_id', $empresaId)->find($id);
+{
+    $user = Auth::user();
+    $empresaId = $user->empresa_id ?? $user->id;
+    
+    // Busca o cliente garantindo que pertence à empresa do usuário logado
+    $cliente = $this->model->where('empresa_id', $empresaId)->find($id);
 
-        if (!$cliente) {
-            alert()->error('Erro: Cliente não encontrado!');
-            return redirect()->route('clientes.index');
-        }
+    if (!$cliente) {
+        alert()->error('Erro: Cliente não encontrado!');
+        return redirect()->route('clientes.index');
+    }
 
+    try {
         $validatedData = $request->validate([
-            'nome' => 'required|string|max:255',
-            'cpf' => 'required|string|max:255',
-            'rg' => 'required|string|max:255',
-            'fone' => 'required|string|max:255',
-            'email' => 'required|email|max:255',
-            'cep' => 'required|string|max:255',
-            'endereco' => 'required|string|max:255',
-            'numero' => 'required|string|max:255',
-            'bairro' => 'required|string|max:255',
-            'cidade' => 'required|string|max:255',
-            'estado' => 'required|string|max:255',
-            'complemento' => 'nullable|string|max:255',
+            'nome'            => 'required|string|max:255',
+            'fone'            => 'required|string|max:255',
+            'email'           => 'nullable|email|max:255',
+            'data_nascimento' => 'nullable|date',
+            'genero'          => 'nullable|string|max:255',
+            'cep'             => 'required|string|max:255',
+            'endereco'        => 'required|string|max:255',
+            'numero'          => 'required|string|max:255',
+            'bairro'          => 'required|string|max:255',
+            'cidade'          => 'required|string|max:255',
+            'estado'          => 'required|string|max:255',
+            'complemento'     => 'nullable|string|max:255',
         ]);
 
         $cliente->update($validatedData);
 
         return redirect()->route('clientes.index')->with('success', 'Cliente atualizado com sucesso!');
+
+    } catch (\Illuminate\Validation\ValidationException $e) {
+        // Captura o primeiro erro para exibir no alerta do Alcecar
+        $mensagem = collect($e->errors())->flatten()->first();
+        alert()->error('Erro na validação!', $mensagem);
+        
+        return redirect()->back()->withErrors($e->validator)->withInput();
     }
+}
 
     public function destroy($id)
     {

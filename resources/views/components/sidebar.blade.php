@@ -40,55 +40,50 @@
                 </a>
             </li>
 
-            <li class="side-nav-title">Gestão de Veículos</li>
+            {{-- <li class="side-nav-title">Gestão de Veículos</li> --}}
             
             <li class="side-nav-item">
-                <a href="{{ route('veiculos.index') }}" class="side-nav-link">
-                    <i class="uil-car"></i>
-                    <span class="badge bg-primary float-end">Ativos</span>
+                <a href="{{ route('agenda.index') }}" class="side-nav-link">
+                    <i class="uil-calendar-alt"></i>
+                    <span> Agenda </span>
+                </a>
+            </li>
+
+            <li class="side-nav-item">
+                <a href="{{ route('estoque.index') }}" class="side-nav-link">
+                    <i class="uil-image"></i>
                     <span> Estoque </span>
                 </a>
             </li>
-            <li class="side-nav-item">
-                <a href="{{ route('veiculos.manutencao') }}" class="side-nav-link">
-                    <i class="mdi mdi-car-wrench"></i>
-                    @php
-                        // Busca a contagem de veículos com status Manutenção para a empresa do usuário
-                        $contagemManutencao = \App\Models\Veiculo::where('empresa_id', auth()->user()->empresa_id ?? auth()->user()->id)
-                            ->where('status', 'Manutenção')
-                            ->count();
-                    @endphp
-                    
-                    @if($contagemManutencao > 0)
-                        <span class="badge bg-warning text-white float-end">{{ $contagemManutencao }}</span>
-                    @endif
-                    
-                    <span> Em Manutenção </span>
-                </a>
-            </li>
 
             <li class="side-nav-item">
-                <a data-bs-toggle="collapse" href="#sidebarHistorico" aria-expanded="false" aria-controls="sidebarHistorico" class="side-nav-link">
-                    <i class="uil-history"></i>
-                    <span> Histórico </span>
+                <a data-bs-toggle="collapse" href="#sidebarFinanceiro" aria-expanded="false" aria-controls="sidebarFinanceiro" class="side-nav-link">
+                    <i class="uil-usd-circle"></i>
+                    <span> Financeiro </span>
                     <span class="menu-arrow"></span>
                 </a>
-                <div class="collapse" id="sidebarHistorico">
+                <div class="collapse" id="sidebarFinanceiro">
                     <ul class="side-nav-second-level">
-                        <li><a href="{{ route('veiculos.vendidos') }}">Vendidos</a></li>
-                        <li><a href="{{ route('veiculos.arquivados') }}">Arquivados</a></li>
+                        <li>
+                            <a href="{{ route('financeiro.index') }}">Resumo Geral</a>
+                        </li>
+                        <li>
+                            <a href="{{ route('financeiro.receber') }}">Contas a Receber</a>
+                        </li>
+                        <li>
+                            <a href="{{ route('financeiro.pagar') }}">Contas a Pagar</a>
+                        </li>
                     </ul>
                 </div>
             </li>
-
             <li class="side-nav-item">
-                <a href="{{ route('gastos.index') }}" class="side-nav-link">
-                    <i class="uil-usd-square"></i>
-                    <span> Gastos </span>
+                <a href="{{ route('empresa.index') }}" class="side-nav-link">
+                    <i class="uil-image"></i>
+                    <span> Perfil da Empresa </span>
                 </a>
-            </li> 
+            </li>
 
-            <li class="side-nav-title">Documentação</li>
+
 
             <li class="side-nav-item">
                 <a data-bs-toggle="collapse" href="#cadastros" aria-expanded="false" aria-controls="cadastros" class="side-nav-link">
@@ -99,22 +94,8 @@
                 <div class="collapse" id="cadastros">
                     <ul class="side-nav-second-level">
                         <li><a href="{{ route('clientes.index') }}">Clientes</a></li>
-                        <li><a href="{{ route('outorgados.index') }}">Outorgados</a></li>
-                    </ul>
-                </div>
-            </li>
-            
-            <li class="side-nav-item">
-                <a data-bs-toggle="collapse" href="#modelos" aria-expanded="false" aria-controls="modelos" class="side-nav-link">
-                    <i class="uil-file-edit-alt"></i>
-                    <span> Modelos </span>
-                    <span class="menu-arrow"></span>
-                </a>
-                <div class="collapse" id="modelos">
-                    <ul class="side-nav-second-level">
-                        <li><a href="{{ route('configuracoes.index') }}">Procuração</a></li>
-                        <li><a href="{{ route('configuracoes.comunicacao') }}">Comunicação de venda</a></li>
-                        <li><a href="{{ route('configuracoes.solicitacao') }}">Solicitação ATPVe</a></li>
+                        <li><a href="{{ route('profissionais.index') }}">Profissionais</a></li>
+                        <li><a href="{{ route('servicos.index') }}">Serviços</a></li>
                     </ul>
                 </div>
             </li>
@@ -129,7 +110,8 @@
                 </a>
                 <div class="collapse" id="configuracao">
                     <ul class="side-nav-second-level">
-                        <li><a href="{{ route('perfil.index') }}">Meu Perfil</a></li>
+                        <li><a href="{{ route('whatsapp.index') }}">Whatsapp</a></li>
+                        <li><a href="{{ route('galeria.index') }}">Galeria de Fotos</a></li>
                         @can('access-admin') 
                         <li><a href="{{ route('users.index') }}">Usuários</a></li>
                         @endcan

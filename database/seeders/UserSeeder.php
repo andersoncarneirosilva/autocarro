@@ -3,7 +3,10 @@
 namespace Database\Seeders;
 
 use App\Models\User;
+use App\Models\Empresa;
 use Illuminate\Database\Seeder;
+use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Str;
 
 class UserSeeder extends Seeder
 {
@@ -11,55 +14,44 @@ class UserSeeder extends Seeder
      * Run the database seeds.
      */
     public function run(): void
-{
-    // Usuário 1: Anderson
-        User::create([
-            'name'          => 'Anderson',
-            'email'         => 'andersonqipoa@gmail.com',
-            'cpf'           => '013.887.090-07',
-            'rg'           => '1080692153',
-            'telefone'      => '(51)9.99137.7276',
-            'nivel_acesso'  => 'Administrador',
-            'password' => bcrypt('12345678'),
-            'status'        => 'Ativo',
-            'plano'         => 'Pro',
-            'credito'       => 0.00,
-            'empresa_id'    => 1, // Ajuste conforme sua tabela de empresas
-        ]);
+    {
+        // 1. Criar a Empresa (O container principal)
+        $empresa = Empresa::updateOrCreate(
+            ['email_corporativo' => 'contato@alcecar.com.br'], // Identificador único
+            [
+                'nome_responsavel'   => 'Anderson Admin',
+                'razao_social'       => 'Alcecar Barbearia e Estética LTDA',
+                'cnpj'               => '00.000.000/0001-00',
+                'slug'               => 'alcecar-matriz',
+                'telefone_comercial' => '(51) 3333-3333',
+                'whatsapp'           => '(51) 99913-7276',
+                'endereco'           => 'Av. Principal, 1000 - Centro',
+                'logo'               => 'logos/default-logo.png',
+                'status'             => true,
+                'configuracoes'      => [
+                    'cor_primaria' => '#727cf5',
+                    'tema'         => 'light',
+                    'abertura'     => '08:00',
+                    'fechamento'   => '19:00'
+                ],
+            ]
+        );
 
-        // Usuário 2: AutoVip
-        User::create([
-            'id'             => 2,
-            'name'           => 'AutoVip',
-            'email'          => 'lojautovip@gmail.com',
-            'cpf'            => '04311267609',
-            'rg'            => '9999999999',
-            'telefone'       => '47988552396',
-            'nivel_acesso'   => 'Administrador',
-            'password' => bcrypt('12345678'),
-            'status'         => 'Ativo',
-            'plano'          => 'Teste',
-            'credito'        => 0.00,
-            'empresa_id'     => 2,
-            'last_login_at'  => '2026-01-01 01:01:01',
-        ]);
-
-        User::create([
-            'id'             => 3,
-            'name'           => 'Usuario',
-            'email'          => 'usuario@gmail.com',
-            'cpf'            => '99999999990',
-            'rg'            => '9999999997',
-            'telefone'       => '51999999999',
-            'nivel_acesso'   => 'Administrador',
-            'password' => bcrypt('12345678'),
-            'status'         => 'Ativo',
-            'plano'          => 'Teste',
-            'credito'        => 0.00,
-            'empresa_id'     => 3,
-            'last_login_at'  => '2026-01-01 01:01:01',
-        ]);
-
-
-}
+        // 2. Criar o Usuário Anderson vinculado à Empresa criada acima
+        User::updateOrCreate(
+            ['email' => 'andersonqipoa@gmail.com'],
+            [
+                'name'          => 'Anderson',
+                'cpf'           => '013.887.090-07',
+                'rg'            => '1080692153',
+                'telefone'      => '(51)9.99137.7276',
+                'nivel_acesso'  => 'Administrador',
+                'password'      => Hash::make('12345678'),
+                'status'        => 'Ativo',
+                'plano'         => 'Pro',
+                'credito'       => 0.00,
+                'empresa_id'    => $empresa->id, // Chave estrangeira dinâmica
+            ]
+        );
+    }
 }

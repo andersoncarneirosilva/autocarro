@@ -146,47 +146,52 @@
             <div class="card-body">
                     <h5 class="mb-4 text-uppercase bg-light p-2"><i class="mdi mdi-account-circle me-1"></i> Informações pessoais</h5>
                     <div class="row">
-                        <div class="col-md-6">
-                            <div class="mb-3">
-                                <label class="form-label">Nome: <span style="color: red;">*</span></label>
-                                <input type="text" class="form-control" name="nome" id="nome_cliente" required>
-                            </div>
-                        </div>
-                        <div class="col-md-3">
-                            <div class="mb-3">
-                                <label class="form-label">RG: <span style="color: red;">*</span></label>
-                                <input type="text" class="form-control" name="rg" id="rg" maxlength="10" required>
-                            </div>
-                        </div>
-                        <div class="col-md-3">
-                            <div class="mb-3">
-                                <label class="form-label">CPF: <span style="color: red;">*</span></label>
-                                <input type="text" class="form-control" name="cpf" id="cpf" maxlength="14" required>
-                            </div>
-                        </div>
-                    </div>
+    <div class="col-md-4">
+        <div class="mb-3">
+            <label class="form-label">Nome: <span class="text-danger">*</span></label>
+            <input type="text" class="form-control" name="nome" id="nome_cliente" required>
+        </div>
+    </div>
+    <div class="col-md-4">
+        <div class="mb-3">
+            <label class="form-label">Fone/Whatsapp: <span class="text-danger">*</span></label>
+            <input type="text" class="form-control" name="fone" id="fone" onkeyup="handlePhone(event)" required/>
+        </div>
+    </div>
+    <div class="col-md-4">
+        <div class="mb-3">
+            <label class="form-label">Email</label>
+            <input type="email" class="form-control" name="email" id="email_cliente">
+        </div>
+    </div>
+</div>
 
-                    <div class="row">
-                        <div class="col-md-6">
-                            <div class="mb-3">
-                                <label class="form-label">Fone/Whatsapp: <span style="color: red;">*</span></label>
-                                <input type="text" class="form-control" name="fone" id="fone" onkeyup="handlePhone(event)" required/>
-                            </div>
-                        </div>
-                        <div class="col-md-6">
-                            <div class="mb-3">
-                                <label class="form-label">Email: <span style="color: red;">*</span></label>
-                                <input type="text" class="form-control" name="email" id="email_cliente" required>
-                            </div>
-                        </div>
-                    </div> <!-- end row -->
+<div class="row">
+    <div class="col-md-4">
+        <div class="mb-3">
+            <label class="form-label">Data de nascimento:</label>
+            <input type="date" class="form-control" name="data_nascimento">
+        </div>
+    </div>
+    <div class="col-md-4">
+        <div class="mb-3">
+            <label class="form-label">Gênero</label>
+            <select class="form-control select2" name="genero">
+                <option value="">Selecione...</option>
+                <option value="Masculino">Masculino</option>
+                <option value="Feminino">Feminino</option>
+                <option value="Outro">Outro</option>
+            </select>
+        </div>
+    </div>
+</div>
 
 
                     <h5 class="mb-3 text-uppercase bg-light p-2"><i class="mdi mdi-earth me-1"></i> Endereço</h5>
                     <div class="row g-3">
                         <!-- CEP -->
                         <div class="col-md-3 col-lg-2">
-                            <label for="cep" class="form-label">CEP: <span style="color: red;">*</span></label>
+                            <label for="cep" class="form-label">CEP:</label>
                             <div class="input-group">
                                 <input type="text" class="form-control" name="cep" id="cep" onblur="pesquisacep(this.value);" required>
                             </div>
@@ -194,7 +199,7 @@
                     
                         <!-- Logradouro -->
                         <div class="col-md-6 col-lg-4">
-                            <label for="rua" class="form-label">Logradouro: <span style="color: red;">*</span></label>
+                            <label for="rua" class="form-label">Logradouro:</label>
                             <div class="input-group">
                                 <input type="text" name="endereco" id="rua" class="form-control" required>
                             </div>
@@ -202,7 +207,7 @@
                     
                         <!-- Número -->
                         <div class="col-md-3 col-lg-2">
-                            <label for="numero" class="form-label">Número: <span style="color: red;">*</span></label>
+                            <label for="numero" class="form-label">Número:</label>
                             <div class="input-group">
                                 <input type="text" name="numero" id="numero" class="form-control" required>
                             </div>
@@ -210,7 +215,7 @@
                     
                         <!-- Bairro -->
                         <div class="col-md-6 col-lg-4">
-                            <label for="bairro" class="form-label">Bairro: <span style="color: red;">*</span></label>
+                            <label for="bairro" class="form-label">Bairro:</label>
                             <div class="input-group">
                                 <input type="text" name="bairro" id="bairro" class="form-control" required>
                             </div>
@@ -218,7 +223,7 @@
                     
                         <!-- Cidade -->
                         <div class="col-md-4 col-lg-3">
-                            <label for="cidade" class="form-label">Cidade: <span style="color: red;">*</span></label>
+                            <label for="cidade" class="form-label">Cidade:</label>
                             <div class="input-group">
                                 <input type="text" name="cidade" id="cidade" class="form-control" required>
                             </div>
@@ -226,7 +231,7 @@
                     
                         <!-- Estado -->
                         <div class="col-md-2 col-lg-3">
-                            <label for="uf" class="form-label">Estado: <span style="color: red;">*</span></label>
+                            <label for="uf" class="form-label">Estado:</label>
                             <div class="input-group">
                                 <input type="text" name="estado" id="uf" class="form-control" maxlength="2" required>
                             </div>
@@ -253,8 +258,8 @@
                             <button type="submit" class="btn btn-success btn-sm">Cadastrar</button>
                         </div>
                     </div>
-            </div> <!-- end card body -->
-        </div> <!-- end card -->
+            </div>
+        </div>
         
     </div>
     

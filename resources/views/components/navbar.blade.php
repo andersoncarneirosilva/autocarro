@@ -5,7 +5,7 @@
             <!-- Topbar Brand Logo -->
             <div class="logo-topbar">
                 <!-- Logo light -->
-                <a href="{{ route('veiculos.index') }}" class="logo-light">
+                <a href="{{ route('dashboard.index') }}" class="logo-light">
                     <span class="logo-lg">
                         <img src="{{ asset('frontend/images/logo_alcecar.png') }}" alt="logo">
                     </span>
@@ -15,7 +15,7 @@
                 </a>
 
                 <!-- Logo Dark -->
-                <a href="{{ route('veiculos.index') }}" class="logo-dark">
+                <a href="{{ route('dashboard.index') }}" class="logo-dark">
                     <span class="logo-lg">
                         <img src="{{ asset('frontend/images/logo_alcecar.png') }}" alt="dark logo">
                     </span>
@@ -41,9 +41,9 @@
             
             <!-- Verifica se estamos na página de usuários antes de mostrar o formulário -->
                 
-            @if(request()->routeIs('veiculos.index'))
+            @if(request()->routeIs('dashboard.index'))
                 <div class="app-search dropdown d-none d-lg-block">
-                    <form action="{{ route('veiculos.index') }}" method="GET">
+                    <form action="{{ route('dashboard.index') }}" method="GET">
                         <div class="input-group">
                             <input type="text" name="search" placeholder="Informe a placa" class="form-control">
                             <span class="mdi mdi-magnify search-icon"></span>
@@ -74,9 +74,9 @@
                 </form>
             </div>
 
-            @elseif(request()->routeIs('veiculos.arquivados'))
+            @elseif(request()->routeIs('dashboard.arquivados'))
             <div class="app-search dropdown d-none d-lg-block">
-                <form action="{{ route('veiculos.arquivados') }}" method="GET">
+                <form action="{{ route('dashboard.arquivados') }}" method="GET">
                     <div class="input-group">
                         <input type="text" name="search" placeholder="Informe a placa..." class="form-control">
                         <span class="mdi mdi-magnify search-icon"></span>
@@ -85,7 +85,17 @@
                 </form>
             </div>
             @endif
-
+@if(auth()->user()->empresa && auth()->user()->empresa->slug)
+    <a href="{{ route('vitrine.salao', ['slug' => auth()->user()->empresa->slug]) }}" 
+       target="_blank" 
+       class="btn btn-primary">
+        Ver Meu Salão
+    </a>
+@else
+    <button class="btn btn-secondary" disabled title="Slug não gerado">
+        Vitrine Indisponível
+    </button>
+@endif
         </div>
 
         {{-- Notificações --- HABILITAR notificaçoes.js --}}
@@ -117,14 +127,14 @@ observer.observe(document.body, { childList: true, subtree: true });
         </script> --}}
         
         <ul class="topbar-menu d-flex align-items-center gap-3">
-            @if(request()->routeIs('veiculos.index'))
+            @if(request()->routeIs('dashboard.index'))
             <li class="dropdown d-lg-none">
                 <a class="nav-link dropdown-toggle arrow-none" data-bs-toggle="dropdown" href="#" role="button" aria-haspopup="false" aria-expanded="false">
                     <i class="ri-search-line font-22"></i>
                 </a>
                 
                 <div class="dropdown-menu dropdown-menu-animated dropdown-lg p-0" style="">
-                    <form action="{{ route('veiculos.index') }}" method="GET" class="p-3">
+                    <form action="{{ route('dashboard.index') }}" method="GET" class="p-3">
                         <div class="input-group">
                             <input type="text" name="search" placeholder="Informe a placa" class="form-control" required>
                             <button type="submit" class="btn btn-primary"><i class="ri-search-line font-22"></i></button>

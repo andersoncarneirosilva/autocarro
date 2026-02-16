@@ -1,0 +1,29 @@
+
+   INFO  Running migrations.  
+
+  2026_02_12_133432_create_funcionario_horarios_table ................................................................................. 38.06ms FAIL
+
+   Illuminate\Database\QueryException 
+
+  SQLSTATE[HY000]: General error: 1215 Cannot add foreign key constraint (Connection: mysql, Host: mysql, Port: 3306, Database: agendarosa, SQL: alter table `funcionario_horarios` add constraint `funcionario_horarios_funcionario_id_foreign` foreign key (`funcionario_id`) references `funcionarios` (`id`) on delete cascade)
+
+  at vendor/laravel/framework/src/Illuminate/Database/Connection.php:838
+    834▕             $exceptionType = $this->isUniqueConstraintError($e)
+    835▕                 ? UniqueConstraintViolationException::class
+    836▕                 : QueryException::class;
+    837▕ 
+  ➜ 838▕             throw new $exceptionType(
+    839▕                 $this->getNameWithReadWriteType(),
+    840▕                 $query,
+    841▕                 $this->prepareBindings($bindings),
+    842▕                 $e,
+
+      [2m+9 vendor frames [22m
+
+  10  database/migrations/2026_02_12_133432_create_funcionario_horarios_table.php:14
+      Illuminate\Support\Facades\Facade::__callStatic("create")
+      [2m+25 vendor frames [22m
+
+  36  artisan:35
+      Illuminate\Foundation\Console\Kernel::handle(Object(Symfony\Component\Console\Input\ArgvInput), Object(Symfony\Component\Console\Output\ConsoleOutput))
+

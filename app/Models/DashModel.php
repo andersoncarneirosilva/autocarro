@@ -11,13 +11,5 @@ use App\Traits\MultiTenantModelTrait;
 class DashModel extends Model
 {
     use HasFactory, MultiTenantModelTrait;
-
-    /* public function getUsersDash(){
-
-        //$users = User::count();
-        $users = DB::table('users')->where('perfil', 'Administrador')->count();
-        return $users;
-    } */
-
     
 }

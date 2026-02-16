@@ -1,54 +1,100 @@
 <?php
 
+use Illuminate\Support\Facades\Route;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Broadcast;
+
 use App\Http\Controllers\AssinaturaController;
 use App\Http\Controllers\ClientesController;
-use App\Http\Controllers\ConfiguracoesController;
-use App\Http\Controllers\ContatoController;
 use App\Http\Controllers\DashController;
-use App\Http\Controllers\ModeloProcuracoesController;
-use App\Http\Controllers\NotificationController;
-use App\Http\Controllers\OutorgadoController;
 use App\Http\Controllers\PasswordResetController;
 use App\Http\Controllers\PaymentController;
 use App\Http\Controllers\PerfilController;
-use App\Http\Controllers\RelatoriosController;
 use App\Http\Controllers\UserController;
-use App\Http\Controllers\VeiculoController;
-use App\Http\Controllers\DocumentoController;
+use App\Http\Controllers\ProfissionalController;
+use App\Http\Controllers\ServicosController;
+use App\Http\Controllers\AgendaController;
 use App\Http\Controllers\LojaController;
-use App\Http\Controllers\ModeloProcuracaoController;
-use App\Http\Controllers\VeiculoGastoController;
+use App\Http\Controllers\VitrineController;
+use App\Http\Controllers\GaleriaController;
+use App\Http\Controllers\SiteController;
+use App\Http\Controllers\FinanceiroController;
+use App\Http\Controllers\ProdutoController;
+use App\Http\Controllers\WhatsappInstanceController;
+use App\Http\Controllers\Public\PublicAgendamentoController;
+use App\Http\Controllers\EmpresaController;
 
-use Illuminate\Support\Facades\Route;
-use Livewire\Livewire;
-use App\Http\Livewire\Chat;
-use Illuminate\Http\Request;
-use App\Models\Message;
-use App\Events\NewMessage;
-use Illuminate\Support\Facades\Broadcast;
-use Illuminate\Support\Facades\Mail;
-use App\Models\Infracao;
-use App\Http\Controllers\OcrTesteController;
 
 Route::middleware(['auth', 'trial'])->group(function () {
 
     Broadcast::routes(['middleware' => ['auth:sanctum']]);
 
-    Route::get('/ocr-teste', [OcrTesteController::class, 'index']);
-Route::post('/ocr-processar', [OcrTesteController::class, 'processar'])->name('ocr.processar');
 
-    // routes/web.php
-Route::get('/consultar-infracao/{codigo}', function ($codigo) {
-    // Tenta encontrar o código exatamente como digitado
-    // Ou tenta encontrar removendo qualquer hífen que o usuário tenha esquecido
-    $infracao = App\Models\Infracao::where('codigo', $codigo)
-        ->orWhere('codigo', str_replace('-', '', $codigo)) 
-        ->first();
+// Rotas do Alcecar
+Route::resource('agenda', AgendaController::class);
 
-    if (!$infracao) return response()->json(null, 404);
 
-    return response()->json($infracao);
+Route::prefix('financeiro')->group(function () {
+    // Dashboard Geral
+    Route::get('/', [FinanceiroController::class, 'index'])->name('financeiro.index');
+
+    // Contas a Receber
+    Route::get('/receber', [FinanceiroController::class, 'receber'])->name('financeiro.receber');
+    
+    // Contas a Pagar
+    Route::get('/pagar', [FinanceiroController::class, 'pagar'])->name('financeiro.pagar');
+
+    // Ações comuns
+    Route::post('/store', [FinanceiroController::class, 'store'])->name('financeiro.store');
+    Route::delete('/destroy/{id}', [FinanceiroController::class, 'destroy'])->name('financeiro.destroy');
 });
+
+Route::prefix('estoque')->group(function () {
+    Route::get('/', [ProdutoController::class, 'index'])->name('estoque.index');
+    Route::post('/store', [ProdutoController::class, 'store'])->name('estoque.store');
+    Route::put('/update/{id}', [ProdutoController::class, 'update'])->name('estoque.update');
+    Route::delete('/destroy/{id}', [ProdutoController::class, 'destroy'])->name('estoque.destroy');
+});
+
+Route::prefix('empresa')->group(function () {
+    Route::get('/', [EmpresaController::class, 'index'])->name('empresa.index');
+    Route::delete('/foto/delete/{id}', [EmpresaController::class, 'deleteFoto'])->name('empresa.foto.delete');
+    Route::put('/update-galeria/{id}', [EmpresaController::class, 'updateGaleria'])->name('empresa.update.galeria');
+    Route::put('/update/{id}', [EmpresaController::class, 'update'])->name('empresa.update');
+});
+Route::prefix('whatsapp')->group(function () {
+    // Note que agora o NOME da rota de criação é 'whatsapp.store'
+    Route::post('/create', [WhatsappInstanceController::class, 'store'])->name('whatsapp.store');
+    
+    // Rota de mensagens que adicionamos
+    Route::post('/update-messages', [WhatsappInstanceController::class, 'updateMessages'])->name('whatsapp.update-messages');
+    
+    // ... as outras rotas seguem o mesmo padrão
+    Route::get('/', [WhatsappInstanceController::class, 'index'])->name('whatsapp.index');
+    Route::get('/connect/{name}', [WhatsappInstanceController::class, 'connect'])->name('whatsapp.connect');
+    Route::get('/sync/{name}', [WhatsappInstanceController::class, 'syncStatus'])->name('whatsapp.sync');
+    Route::post('/send-test', [WhatsappInstanceController::class, 'sendTest'])->name('whatsapp.send-test');
+    Route::post('/logout/{name}', [WhatsappInstanceController::class, 'logout'])->name('whatsapp.logout');
+    Route::delete('/delete/{id}', [WhatsappInstanceController::class, 'destroy'])->name('whatsapp.delete');
+    Route::get('/connected-success', [WhatsappInstanceController::class, 'connectedSuccess'])->name('whatsapp.connected.success');
+});
+
+// Listagem das fotos
+    Route::get('/galeria', [GaleriaController::class, 'index'])->name('galeria.index');
+    
+    // Processar upload
+    Route::post('/galeria', [GaleriaController::class, 'store'])->name('galeria.store');
+    
+    // Remover foto
+    Route::delete('/galeria/{galeria}', [GaleriaController::class, 'destroy'])->name('galeria.destroy');
+
+Route::post('/agenda/concluir', [AgendaController::class, 'concluirAtendimento'])->name('agenda.concluir');
+Route::get('profissional/{id}/horarios', [AgendaController::class, 'getHorariosProfissional']);
+Route::get('api/agenda/eventos', [AgendaController::class, 'getEventos'])->name('agenda.api');
+// Rota Principal de Funcionários (Resource)
+    Route::resource('profissionais', ProfissionalController::class);
+
+    Route::resource('servicos', ServicosController::class);
 
     Route::get('/gastos', [VeiculoGastoController::class, 'index'])->name('gastos.index');
 
@@ -103,10 +149,6 @@ Route::get('/consultar-infracao/{codigo}', function ($codigo) {
     // Rota para a página pendente (quando o pagamento ficar pendente)
     Route::get('/pagamento-pendente', [PaymentController::class, 'paymentPending'])->name('pagamentos.pendente');
 
-    Route::post('/notifications/mark-as-read', [NotificationController::class, 'markAsRead'])->middleware('auth');
-
-    Route::get('/notifications', [NotificationController::class, 'getNotifications'])->middleware('auth');
-    // USUARIOS
     /* Route::delete('/users', [UserController::class, 'deleteAll'])->name('users.delete'); */
     Route::delete('/users/{id}', [UserController::class, 'destroy'])->name('users.destroy');
     Route::put('/users/{id}', [UserController::class, 'update'])->name('users.update');
@@ -126,17 +168,6 @@ Route::get('/consultar-infracao/{codigo}', function ($codigo) {
     Route::get('/perfil', [PerfilController::class, 'index'])->name('perfil.index');
 
 
-
-    Route::post('/outorgados/store-or-update', [ConfiguracoesController::class, 'storeOrUpdate'])->name('outorgados.storeOrUpdate');
-    
-
-    Route::get('/outorgados/{id}', [OutorgadoController::class, 'show'])->name('outorgados.show');
-    Route::put('/outorgados/{id}', [OutorgadoController::class, 'update'])->name('outorgados.update');
-    Route::delete('/outorgados/{id}', [OutorgadoController::class, 'destroy'])->name('outorgados.destroy');
-    Route::post('/outorgados', [OutorgadoController::class, 'store'])->name('outorgados.store');
-    Route::get('/outorgados', [OutorgadoController::class, 'index'])->name('outorgados.index');
-
-
     Route::put('/clientes/{id}', [ClientesController::class, 'update'])->name('clientes.update');
     Route::delete('/clientes/{id}', [ClientesController::class, 'destroy'])->name('clientes.destroy');
     Route::post('/clientes', [ClientesController::class, 'store'])->name('clientes.store');
@@ -147,129 +178,20 @@ Route::get('/consultar-infracao/{codigo}', function ($codigo) {
     Route::get('/clientes/{id}', [ClientesController::class, 'show'])->name('clientes.show');
 
 
-    Route::POST('/rel-procs', [RelatoriosController::class, 'gerarPdfProcs'])->name('rel-procs');
-    Route::POST('/rel-clientes', [RelatoriosController::class, 'gerarPdfClientes'])->name('rel-clientes');
-    Route::POST('/rel-veiculos', [RelatoriosController::class, 'gerarPdfVeiculos'])->name('rel-veiculos');
-
-    Route::post('/relatorios', [RelatoriosController::class, 'gerarRelatoriosSelect'])->name('relatorio.gerar');
-
-    Route::get('/relatorios', [RelatoriosController::class, 'index'])->name('relatorios.index');
-    Route::get('/relatorios/clientes/exportar-pdf', [RelatoriosController::class, 'exportarPdf'])->name('relatorios.clientes.pdf');
-
-    Route::get('/relatorio-ordens', [RelatoriosController::class, 'gerarRelatorioOrdens'])->name('relatorio-ordens');
-    Route::get('/relatorio-clientes', [RelatoriosController::class, 'gerarRelatorioClientes'])->name('relatorio-clientes');
-    Route::get('/relatorio-veiculos', [RelatoriosController::class, 'gerarRelatorioVeiculos'])->name('relatorio-veiculos');
-    Route::get('/relatorio-procuracoes', [RelatoriosController::class, 'gerarRelatorioProc'])->name('relatorio-procuracoes');
-
-
-    Route::get('/modeloprocs/{id}', [ModeloProcuracoesController::class, 'show'])->name('modeloprocs.show');
-    Route::put('/modeloprocs/{id}', [ModeloProcuracoesController::class, 'update'])->name('modeloprocs.update');
-    Route::post('/modeloprocs', [ModeloProcuracoesController::class, 'store'])->name('modeloprocs.store');
-
-    Route::get('/modeloprocuracoes/create', [ModeloProcuracoesController::class, 'create'])->name('modeloprocuracoes.create');
-    Route::post('/modeloprocuracoes/store', [ModeloProcuracoesController::class, 'store'])->name('modeloprocuracoes.store');
-    Route::get('/modeloprocuracoes/select/{id}', [ModeloProcuracoesController::class, 'select'])->name('modeloprocuracoes.select');
-    Route::post('/modeloprocuracoes/confirm/{id}', [ModeloProcuracoesController::class, 'confirm'])->name('modeloprocuracoes.confirm');
-
-    // ROTA PARA A PÁGINA DE CONFIGURAÇÕES (Index e Salvar Modelo)
-Route::post('/modelo-procuracoes/store', [ModeloProcuracaoController::class, 'store'])->name('modeloprocuracao.store');
-Route::get('/modeloprocs/{id}', [ModeloProcuracaoController::class, 'show'])->name('modeloprocuracoes.show');
-
-Route::prefix('configuracoes')->group(function () {
-    // Página Principal de Configurações
-    Route::get('/', [ConfiguracoesController::class, 'index'])->name('configuracoes.index');
-    
-    // --- MÓDULO: PROCURAÇÃO ---
-    Route::post('/procuracao/salvar', [ConfiguracoesController::class, 'saveProcuracao'])->name('configuracoes.procuracao.save');
-    Route::get('/procuracao/detalhes/{id}', [ConfiguracoesController::class, 'showProcuracao'])->name('configuracoes.procuracao.show');
-    Route::delete('/procuracao/excluir/{id}', [ConfiguracoesController::class, 'deleteProcuracao'])->name('configuracoes.procuracao.delete');
-    Route::post('/procuracao/gerar/{id}', [ConfiguracoesController::class, 'gerarProc'])->name('configuracoes.gerarProc');
-
-    // --- MÓDULO: SOLICITAÇÃO ATPVe ---
-    // Designer / Index da Solicitação
-    Route::get('/solicitacao', [ConfiguracoesController::class, 'indexAtpve'])->name('configuracoes.solicitacao');
-    Route::get('/comunicacao', [ConfiguracoesController::class, 'indexComunicacao'])->name('configuracoes.comunicacao');
-    // Salvar o conteúdo do Designer
-    Route::post('/comunicacao/salvar', [ConfiguracoesController::class, 'saveComunicacao'])->name('configuracoes.comunicacao.save');
-    Route::post('/solicitacao/salvar', [ConfiguracoesController::class, 'saveAtpve'])->name('configuracoes.solicitacao.save');
 });
+// 1. Rotas Fixas primeiro
+Route::get('/', [SiteController::class, 'index'])->name('site.index');
+Route::get('/plano', [LojaController::class, 'planos'])->name('site.planos');
 
-
-///////////////////////////////
-    //                          //
-    //          VEICULOS        //
-    //                          //
-    //////////////////////////////
-    Route::post('/veiculos/cadastro-rapido', [VeiculoController::class, 'cadastroRapido'])->name('veiculos.cadastro-rapido');
-    // Rota para exibir o formulário de cadastro manual
-    Route::get('/veiculos/cadastro-manual', [VeiculoController::class, 'cadastroManual'])->name('veiculos.cadastro-manual');
-
-    // Rota para processar o envio do formulário (POST)
-    Route::post('/veiculos/cadastro-manual/store', [VeiculoController::class, 'storeManual'])->name('veiculos.store-manual');
-
-    Route::get('/veiculos/vendidos', [VeiculoController::class, 'indexVendidos'])->name('veiculos.vendidos');
-    Route::get('/veiculos/manutencao', [VeiculoController::class, 'indexManutencao'])->name('veiculos.manutencao');
-    Route::get('/veiculos/arquivados', [VeiculoController::class, 'indexArquivados'])->name('veiculos.arquivados');
-    Route::get('/veiculos/create', [VeiculoController::class, 'create'])->name('veiculos.create');
-    Route::post('/veiculos', [VeiculoController::class, 'store'])->name('veiculos.store');
-
-    // --- 2. ROTAS COM AÇÕES ESPECÍFICAS ---
-    Route::put('/veiculos/desarquivar/{id}', [VeiculoController::class, 'desarquivar'])->name('veiculos.desarquivar');
-    Route::put('/veiculos/arquivar/{id}', [VeiculoController::class, 'arquivar'])->name('veiculos.arquivar');
-
-    // 2. AGORA coloque a sua rota (específica por ter o sufixo /update-info-basica)
-    // Adicione esta linha junto com as outras rotas de anúncios
-    Route::put('/veiculos/update-info/{id}', [VeiculoController::class, 'updateInfo'])->name('veiculos.update-info');
-    Route::post('/veiculos/{id}/set-main/{index}', [VeiculoController::class, 'setMainFoto'])->name('veiculos.setMainFoto');
-    //Route::post('/veiculos/{id}/foto-principal/{index}', [VeiculoController::class, 'setMainFoto'])->name('veiculos.setMainFoto');
-    Route::patch('/veiculos/{id}/remover-publicacao', [VeiculoController::class, 'removerPublicacao'])->name('veiculos.remover');
-    Route::patch('/veiculos/{id}/publicar', [VeiculoController::class, 'publicar'])->name('veiculos.publicar');
-    Route::put('/veiculos/{id}/upload-fotos', [VeiculoController::class, 'uploadFotos'])->name('veiculos.uploadFotos');
-    Route::delete('/veiculos/{id}/foto/{index}', [VeiculoController::class, 'deleteFoto'])->name('veiculos.deleteFoto');
-    Route::put('/veiculos/{id}/update-descricao', [VeiculoController::class, 'updateDescricao'])->name('veiculos.updateDescricao');
-    Route::put('/veiculos/{id}/update-adicionais', [VeiculoController::class, 'updateAdicionais'])->name('veiculos.updateAdicionais');
-    Route::put('/veiculos/{id}/update-modificacoes', [VeiculoController::class, 'updateModificacoes'])->name('veiculos.updateModificacoes');
-    Route::put('/veiculos/{id}/update-opcionais', [VeiculoController::class, 'updateOpcionais'])->name('veiculos.updateOpcionais');
-    Route::put('/veiculos/{id}/update-precos', [VeiculoController::class, 'updatePrecos'])->name('veiculos.updatePrecos');
-    Route::put('/veiculos/{id}/update-crv', [VeiculoController::class, 'updateCrv'])->name('veiculos.updateCrv');
-    Route::post('/veiculos/{id}/upload-crlv', [VeiculoController::class, 'uploadCrlv'])->name('veiculos.upload-crlv');
-    Route::patch('/veiculos/{id}/status', [VeiculoController::class, 'atualizarStatus'])->name('veiculos.status.update');
-    // Rota para salvar o gasto
-    Route::post('/veiculos/gastos', [VeiculoGastoController::class, 'store'])->name('veiculos.gastos.store');
-    
-    // Rota rápida para marcar como pago/não pago
-    Route::patch('/veiculos/gastos/{id}/alternar-pagamento', [VeiculoGastoController::class, 'alternarPagamento'])->name('veiculos.gastos.alternar');
-    
-    // Rota para deletar
-    Route::delete('/veiculos/gastos/{id}', [VeiculoGastoController::class, 'destroy'])->name('veiculos.gastos.destroy');
-
-    Route::get('/veiculos', [VeiculoController::class, 'index'])->name('veiculos.index');
-    Route::get('/veiculos/{id}', [VeiculoController::class, 'show'])->name('veiculos.show');
-    Route::delete('/veiculos/{id}', [VeiculoController::class, 'destroy'])->name('veiculos.destroy');
-    
-    Route::prefix('documentos')->group(function () {
-        Route::post('/gerar-procuracao/{veiculo_id}', [DocumentoController::class, 'gerarProcuracao'])
-            ->name('documentos.gerar.procuracao');
-
-        Route::get('/gerar-atpve/{veiculo_id}', [DocumentoController::class, 'gerarAtpve'])
-            ->name('documentos.gerar.atpve');
-            
-        Route::post('/upload/{veiculo_id}', [DocumentoController::class, 'store'])
-            ->name('documentos.upload');
-    });
-
-
-    Route::post('/veiculos/{id}/vender', [VeiculoController::class, 'vender'])->name('veiculos.vender');
-
-
-});
-
+// 2. Esqueci a senha
 Route::get('/reset-password/{token}', [PasswordResetController::class, 'showResetForm'])->name('password.reset');
 Route::post('/reset-password', [PasswordResetController::class, 'reset'])->name('password.update');
 
-Route::post('/enviar-contato', [ContatoController::class, 'enviarEmail'])->name('contato.enviar');
+// 3. Processamento do agendamento
+Route::post('/agendamento/confirmar', [VitrineController::class, 'agendar'])->name('agendamento.publico.store');
 
-Route::get('/', [LojaController::class, 'index'])->name('site.index');
-Route::get('/plano', [LojaController::class, 'planos'])->name('site.planos');
-
+// 4. Autenticação (Dashboard, etc)
 require __DIR__.'/auth.php';
+Route::get('profissional/{id}/horarios', [VitrineController::class, 'getHorariosProfissional']);
+// 5. A ÚLTIMA: Vitrine (O slug precisa estar no fim para não interceptar as rotas acima)
+Route::get('/{slug}', [VitrineController::class, 'show'])->name('vitrine.salao');

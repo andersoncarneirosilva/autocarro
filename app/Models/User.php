@@ -60,52 +60,38 @@ class User extends Authenticatable
         'password_changed_at' => 'datetime',
     ];
 
-    public function scopeVendedores($query)
-{
-    return $query->where('nivel_acesso', 'Vendedor');
-}
+// No arquivo App\Models\User.php
 
+public function empresa()
+{
+    /**
+     * belongsTo(Classe, chave_estrangeira_nesta_tabela, chave_primaria_na_outra_tabela)
+     * Como empresa_id está na tabela 'users', usamos belongsTo.
+     */
+    return $this->belongsTo(Empresa::class, 'empresa_id', 'id');
+}
 
     public function assinaturas()
     {
         return $this->hasMany(Assinatura::class, 'user_id');
     }
 
-    public function veiculos()
-    {
-        return $this->hasMany(Veiculo::class);
-    }
 
     public function clientes()
     {
         return $this->hasMany(Cliente::class);
     }
 
-    public function getUsers(?string $search = null)
-    {
+    // Verifica se é o dono do salão
+public function isSalao()
+{
+    return $this->nivel_acesso === 'salao';
+}
 
-        $users = $this->where(function ($query) use ($search) {
-            if ($search) {
-                $query->where('email', 'LIKE', "%{$search}%");
-                $query->orWhere('name', 'LIKE', "%{$search}%");
-            }
-        })->paginate(10);
+// Verifica se é um cliente final
+public function isCliente()
+{
+    return $this->nivel_acesso === 'cliente';
+}
 
-        // dd($users);
-        return $users;
-    }
-
-    public function getEmail(?string $search = null)
-    {
-
-        $email = $this->where(function ($query) use ($search) {
-            if ($search) {
-                $query->where('email', $search);
-                $query->orWhere('name', 'LIKE', "%{$search}%");
-            }
-        });
-
-        // dd($email);
-        return $email;
-    }
 }

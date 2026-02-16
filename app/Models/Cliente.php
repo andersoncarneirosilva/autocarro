@@ -19,19 +19,23 @@ class Cliente extends Model
      */
     protected $fillable = [
         'nome',
-        'cpf',
-        'rg',
         'fone',
         'email',
+        'genero',
         'cep',
         'endereco',
         'numero',
         'bairro',
         'cidade',
         'estado',
-        'complemento',
+        'complemtento',
+        'data_nascimento',
         'user_id',
         'empresa_id'
+    ];
+
+    protected $casts = [
+        'data_nascimento' => 'date',
     ];
 
     public function getClientes(string $search = null, $empresaId) 

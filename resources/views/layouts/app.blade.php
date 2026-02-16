@@ -30,15 +30,9 @@
 
     <link rel="stylesheet" href="{{ url('backend/css/app-saas.css') }}?v={{ time() }}" type="text/css" id="app-style">
 
-    <link rel="stylesheet" href="{{ url('backend/css/chat.css') }}?v={{ time() }}" type="text/css">
-
-    <script src="https://cdn.jsdelivr.net/npm/apexcharts@3.41.0"></script>
-
     <!-- Icons css -->
     <link href="{{ url('backend/css/icons.min.css') }}" rel="stylesheet" type="text/css" />
-    <link href="{{ url('backend/vendor/bootstrap-datepicker/css/bootstrap-datepicker.min.css') }}" rel="stylesheet"
-        type="text/css" />
-    {{-- <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" /> --}}
+    <link href="{{ url('backend/vendor/bootstrap-datepicker/css/bootstrap-datepicker.min.css') }}" rel="stylesheet" type="text/css" />
 
     <script src="https://cdn.socket.io/4.7.2/socket.io.min.js"></script>
     
@@ -539,11 +533,13 @@
     <script src="{{ url('backend/vendor/handlebars/handlebars.min.js') }}"></script>
     <script src="{{ url('backend/vendor/typeahead.js/typeahead.bundle.min.js') }}"></script>
     <script src="{{ url('backend/vendor/jquery-toast-plugin/jquery.toast.min.js') }}"></script>
-    <script src="https://cdn.jsdelivr.net/npm/fullcalendar@5.11.0/main.min.js"></script>
+    <script src='https://cdn.jsdelivr.net/npm/fullcalendar@6.1.10/index.global.min.js'></script>
 
+
+<script src="{{ url('backend/vendor/apexcharts/apexcharts.min.js') }}"></script>
     <script src="https://cdn.socket.io/4.0.0/socket.io.min.js"></script>
     
-    <script src="{{ url('backend/js_custom/tabela-fipe.js') }}"></script>
+    <script src="{{ url('backend/js_custom/agenda.js') }}"></script>
     
 </body>
 
